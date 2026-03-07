@@ -45,6 +45,14 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - When you make a mistake → document it so future-you doesn't repeat it
 - **Text > Brain** 📝
 
+### 🔁 Memory Candidate Loop (simple, mandatory)
+
+After significant discussions:
+1. Propose a short **Memory Candidate** block.
+2. Wait for explicit user **approve/reject**.
+3. Only after approval, write to `DECISIONS.md` and/or `STATE.md`.
+4. Keep daily narrative and raw notes in `memory/YYYY-MM-DD.md`.
+
 ## Safety
 
 - Don't exfiltrate private data. Ever.
