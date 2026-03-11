@@ -500,7 +500,7 @@ section { position: relative; z-index: 1; }
 /* ══════════════════════════════════════
    PRODUCTS
 ══════════════════════════════════════ */
-.products { padding: 100px 0; }
+.products { padding: 100px 0; background: var(--ink1); border-top: 1px solid var(--wire); border-bottom: 1px solid var(--wire); }
 
 .products-grid {
   display: grid;
@@ -669,7 +669,7 @@ section { position: relative; z-index: 1; }
 /* ══════════════════════════════════════
    TECHNOLOGIES
 ══════════════════════════════════════ */
-.technologies { padding: 80px 0; }
+.technologies { padding: 80px 0; background: var(--ink1); border-top: 1px solid var(--wire); border-bottom: 1px solid var(--wire); }
 
 .tech-grid {
   display: grid;
@@ -711,7 +711,6 @@ section { position: relative; z-index: 1; }
 ══════════════════════════════════════ */
 .partners {
   padding: 100px 0;
-  background: var(--ink1);
   border-top: 1px solid var(--wire);
 }
 
@@ -916,9 +915,11 @@ section { position: relative; z-index: 1; }
    FOOTER
 ══════════════════════════════════════ */
 footer {
-  background: var(--ink);
+  background: var(--ink1);
   border-top: 1px solid var(--wire);
   padding: 60px 0 32px;
+  position: relative;
+  z-index: 1;
 }
 .footer-grid {
   display: grid;
@@ -1058,6 +1059,36 @@ footer {
   .tech-grid { grid-template-columns: 1fr; }
   .cta-btns { flex-direction: column; }
 }
+/* Catalog */
+.catalog-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px;background:var(--wire); }
+.cat-card { background:var(--ink1);padding:28px 24px;position:relative;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;text-decoration:none;display:block;overflow:hidden;border:1px solid transparent; }
+.cat-card::after { content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--volt);transform:scaleX(0);transform-origin:left;transition:transform .3s; }
+.cat-card:hover { border-color:var(--wire2);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5); }
+.cat-card:hover::after { transform:scaleX(1); }
+.cat-card-bg { position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--volt-lo),transparent 70%);opacity:0;transition:opacity .3s; }
+.cat-card:hover .cat-card-bg { opacity:1; }
+.cat-icon { margin-bottom:20px;position:relative;z-index:1; }
+.cat-count { position:absolute;top:16px;right:16px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);z-index:1; }
+.cat-name { font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:8px;position:relative;z-index:1;transition:color .2s; }
+.cat-card:hover .cat-name { color:var(--volt); }
+.cat-sub { font-size:13px;font-weight:300;color:var(--text2);line-height:1.5;position:relative;z-index:1; }
+.cat-cta { display:flex;flex-direction:column;align-items:center;justify-content:center; }
+@media(max-width:900px) { .catalog-grid { grid-template-columns:1fr 1fr; } }
+@media(max-width:480px) { .catalog-grid { grid-template-columns:1fr; } }
+
+/* Global grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--wire) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire) 1px, transparent 1px);
+  background-size: 80px 80px;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
 </style>
 </head>
 <body>
@@ -1082,7 +1113,6 @@ footer {
 
 <!-- ══ HERO ══ -->
 <section class="hero" id="hero">
-  <div class="hero-grid"></div>
   <div class="hero-orb"></div>
   <canvas class="hero-particles" id="particles-canvas"></canvas>
 
@@ -1150,7 +1180,7 @@ footer {
         <div class="stat-note">российских разработчика</div>
       </div>
       <div class="stat-block">
-        <div class="stat-val">24<span class="u">/7</span></div>
+        <div class="stat-val">8<span class="u">/7</span></div>
         <div class="stat-name">Поддержка</div>
         <div class="stat-note">техническая помощь</div>
       </div>
@@ -1159,7 +1189,7 @@ footer {
 </section>
 
 <!-- ══ WHY US ══ -->
-<section class="why-us" style="padding:100px 0;position:relative;">
+<section class="why-us" style="padding:100px 0;position:relative;border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);">
   <div class="container">
     <div class="section-tag"><span>// Почему мы</span></div>
     <h2 class="section-title">Полный цикл<br><span>поставок</span></h2>
@@ -1237,7 +1267,7 @@ footer {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           </div>
           <div>
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поддержка 24/7</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поддержка 8/7</div>
             <div style="color:var(--text2);font-size:13px;line-height:1.5;">Выделенная линия для критических инцидентов. SLA 15 минут для Enterprise клиентов.</div>
           </div>
         </div>
@@ -1362,10 +1392,131 @@ footer {
   </div>
 </section>
 
-<!-- ══ CAPABILITIES ══ -->
-<section class="capabilities" id="capabilities">
+<!-- ══ CATALOG ══ -->
+<section style="padding:100px 0;border-top:1px solid var(--wire);" id="catalog">
   <div class="container">
+    <div class="section-tag"><span>// Каталог</span></div>
+    <h2 class="section-title">Разделы<br><span>каталога</span></h2>
 
+    <div class="catalog-grid">
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">47 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="4" y="7" width="28" height="20" rx="2" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <polyline points="7,21 10,17 13,19 16,14 19,17 22,11 27,14" stroke="var(--lime)" stroke-width="1.2" fill="none"/>
+            <circle cx="27" cy="11" r="2" fill="var(--lime)" opacity="0.6"/>
+            <rect x="13" y="29" width="10" height="3" rx="1" fill="var(--wire)"/>
+          </svg>
+        </div>
+        <div class="cat-name">SCADA-системы</div>
+        <div class="cat-sub">Диспетчерское управление, мнемосхемы, трендинг</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">34 продукта</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="6" y="8" width="16" height="22" rx="1.5" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <rect x="4" y="6" width="20" height="4" rx="1" fill="var(--wire)" stroke="var(--volt)" stroke-width="0.8"/>
+            <circle cx="10" cy="14" r="1.2" fill="var(--lime)"/>
+            <circle cx="15" cy="14" r="1.2" fill="var(--flame)"/>
+            <rect x="14" y="17.5" width="4" height="3" rx="0.5" stroke="var(--volt)" stroke-width="0.8" fill="none"/>
+          </svg>
+        </div>
+        <div class="cat-name">ПЛК и контроллеры</div>
+        <div class="cat-sub">Среды программирования, конфигураторы, отладчики</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">28 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="4" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <path d="M18 8v4M18 24v4M8 18h4M24 18h4M11 11l2.8 2.8M22.2 22.2l2.8 2.8M11 25l2.8-2.8M22.2 13.8l2.8-2.8" stroke="var(--volt)" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="cat-name">Датчики и КИПиА</div>
+        <div class="cat-sub">ПО для калибровки, конфигурирования, диагностики</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">22 продукта</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="8" y="5" width="20" height="26" rx="2" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <line x1="18" y1="27" x2="18" y2="27.01" stroke="var(--volt)" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="11" y="8" width="14" height="14" rx="1" fill="var(--volt-lo)" stroke="var(--volt)" stroke-width="0.6"/>
+          </svg>
+        </div>
+        <div class="cat-name">HMI-интерфейсы</div>
+        <div class="cat-sub">Разработка панелей оператора, визуализация процессов</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">19 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="9" cy="9" r="3.5" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <circle cx="27" cy="9" r="3.5" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <circle cx="9" cy="27" r="3.5" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <circle cx="27" cy="27" r="3.5" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <line x1="12.5" y1="9" x2="23.5" y2="9" stroke="var(--volt)" stroke-width="0.8"/>
+            <line x1="9" y1="12.5" x2="9" y2="23.5" stroke="var(--volt)" stroke-width="0.8"/>
+            <line x1="27" y1="12.5" x2="27" y2="23.5" stroke="var(--volt)" stroke-width="0.8"/>
+            <line x1="12.5" y1="27" x2="23.5" y2="27" stroke="var(--volt)" stroke-width="0.8"/>
+            <circle cx="18" cy="18" r="2" fill="var(--lime)" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="cat-name">Промышленные сети</div>
+        <div class="cat-sub">OPC-серверы, конвертеры протоколов, сетевые анализаторы</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">31 продукт</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M5 8h10a5 5 0 015 5v15a4 4 0 00-4-4H5z" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+            <path d="M31 8H21a5 5 0 00-5 5v15a4 4 0 014-4h11z" stroke="var(--volt)" stroke-width="1.2" fill="none"/>
+          </svg>
+        </div>
+        <div class="cat-name">Инженерное ПО</div>
+        <div class="cat-sub">CAD, моделирование, расчёт трубопроводов, электрика</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">15 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <path d="M27 28V14" stroke="var(--volt)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 28V8" stroke="var(--lime)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M9 28v-8" stroke="var(--flame)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="cat-name">MES / Аналитика</div>
+        <div class="cat-sub">Управление производством, historian, BI для промышленности</div>
+      </a>
+
+      <a href="#products" class="cat-card cat-cta">
+        <div class="cat-card-bg"></div>
+        <div style="width:48px;height:48px;border:2px solid var(--volt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+        <div class="cat-name" style="color:var(--volt);">Смотреть все</div>
+        <div class="cat-sub">200+ продуктов в каталоге</div>
+      </a>
+
+    </div>
+  </div>
+</section>
 
 <!-- ══ TECHNOLOGIES ══ -->
 <section class="technologies" id="tech">
@@ -1466,7 +1617,6 @@ footer {
 
 <!-- ══ CTA ══ -->
 <section class="cta-section" id="contact">
-  <div class="cta-grid-bg"></div>
   <div class="container">
     <div class="cta-inner">
       <div class="cta-sup">// Готовы начать?</div>
