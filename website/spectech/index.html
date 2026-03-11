@@ -1165,7 +1165,7 @@ body::before {
   <div class="container">
     <div class="stats-row">
       <div class="stat-block">
-        <div class="stat-val" data-count="15">0<span class="u">+</span></div>
+        <div class="stat-val" data-count="8">0<span class="u">+</span></div>
         <div class="stat-name">Лет опыта</div>
         <div class="stat-note">на рынке АСУ ТП</div>
       </div>
@@ -1605,7 +1605,7 @@ body::before {
           <span class="partner-brand-text">Атомик Софт</span>
         </div>
         <h3>АО «Атомик Софт»</h3>
-        <p>Разработчик SCADA-систем семейства Alpha. Ведущий российский производитель программного обеспечения для промышленной автоматизации с более чем 15-летним опытом на рынке.</p>
+        <p>Разработчик SCADA-систем семейства Alpha. Ведущий российский производитель программного обеспечения для промышленной автоматизации с более чем 8-летним опытом на рынке.</p>
         <a href="https://automiq.ru" target="_blank" class="partner-link">automiq.ru →</a>
       </div>
       
@@ -1902,15 +1902,16 @@ function animateCounter(element) {
     const duration = 2000;
     const step = target / (duration / 16);
     let current = 0;
-    const suffix = element.innerHTML.includes('+') ? '+' : '';
+    const spanEl = element.querySelector('span');
+    const spanHTML = spanEl ? spanEl.outerHTML : '';
 
     const timer = setInterval(() => {
         current += step;
         if (current >= target) {
-            element.innerHTML = target + (element.querySelector('span') ? element.querySelector('span').outerHTML : '') + suffix;
+            element.innerHTML = target + spanHTML;
             clearInterval(timer);
         } else {
-            element.innerHTML = Math.floor(current) + (element.querySelector('span') ? element.querySelector('span').outerHTML : '') + suffix;
+            element.innerHTML = Math.floor(current) + spanHTML;
         }
     }, 16);
 }
