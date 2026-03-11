@@ -650,29 +650,45 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                   <div class="prod-label-base">Распределённая, мультисерверная диспетчерская система</div>
                 </label>
               </div>
-              <div class="prod-option">
-                <input type="radio" name="product" id="p4" value="alpha-historian" onchange="updateSliderRange();calcUpdate()">
-                <label class="prod-label" for="p4">
-                  <div class="prod-check">
-                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
-                  </div>
-                  <div class="prod-label-name">Alpha.Historian</div>
-                  <div class="prod-label-vendor">Атомик Софт · Архивирование</div>
-                  <div class="prod-label-base">Данные процесса</div>
+            </div>
+
+            <!-- Дополнительные продукты -->
+            <div style="margin-top:16px; border-top:1px solid var(--wire); padding-top:12px">
+              <div style="font-size:11px; color:var(--text3); font-family:var(--ff-mono); margin-bottom:8px">// дополнительно к основному продукту</div>
+              
+              <div class="addon-product" style="margin-bottom:10px">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
+                  <span class="addon-hint">Архивирование данных процесса</span>
                 </label>
+                <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="hist-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
+                  <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
               </div>
-              <div class="prod-option">
-                <input type="radio" name="product" id="p5" value="alpha-reports" onchange="updateSliderRange();calcUpdate()">
-                <label class="prod-label" for="p5">
-                  <div class="prod-check">
-                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
-                  </div>
-                  <div class="prod-label-name">Alpha.Reports</div>
-                  <div class="prod-label-vendor">Атомик Софт · Отчётность</div>
-                  <div class="prod-label-base">Генерация отчётов и аналитика</div>
+
+              <div class="addon-product">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
+                  <span class="addon-hint">Генерация отчётов и аналитика</span>
                 </label>
+                <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="rpt-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
+                  <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -705,6 +721,15 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
               <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
                 <span>Бессрочная</span><span>1 год</span><span>3 года</span>
               </div>
+            </div>
+
+            <!-- Резервный сервер (SCADA only) -->
+            <div class="field-row" id="reserve-row" style="display:none;margin-top:12px">
+              <label class="addon-check" style="font-size:13px">
+                <input type="checkbox" id="addon-reserve" onchange="calcUpdate()">
+                <span style="color:var(--text)">Резервный сервер</span>
+                <span class="addon-hint" style="margin-left:8px">Отдельная лицензия на тот же теговый уровень (резервная пара)</span>
+              </label>
             </div>
 
           </div>
@@ -841,6 +866,14 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div class="result-line">
             <div class="r-name">Тип лицензии</div>
             <div class="r-val" id="r-term">Бессрочная</div>
+          </div>
+          <div class="result-line" id="r-historian-row" style="display:none">
+            <div class="r-name">+ Historian</div>
+            <div class="r-val" id="r-historian">—</div>
+          </div>
+          <div class="result-line" id="r-reports-row" style="display:none">
+            <div class="r-name">+ Reports</div>
+            <div class="r-val" id="r-reports">—</div>
           </div>
           <div class="result-line" id="r-addons-row" style="display:none">
             <div class="r-name">Доп. модули</div>
@@ -1387,6 +1420,9 @@ function updateSliderRange() {
     labels = [...new Set(idxs)].map(i => formatTags(vr[i].tags));
   }
   labelsEl.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+  // Show reserve checkbox only for SCADA
+  const resRow = document.getElementById('reserve-row');
+  if (resRow) resRow.style.display = (prod === 'alpha-scada') ? 'block' : 'none';
 }
 
 function formatTags(n) {
@@ -1443,14 +1479,25 @@ function calcUpdate() {
   const slaVal = document.getElementById('addon-sla')?.value;
   if (slaVal && slaVal !== 'SLA-BASE') { addonsCount++; addonsList.push(slaVal); }
   // Checkboxes
-  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal'].forEach(id => {
-    if (document.getElementById(id)?.checked) { addonsCount++; addonsList.push(id.replace('addon-','').toUpperCase()); }
+  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal','addon-reserve'].forEach(id => {
+    if (document.getElementById(id)?.checked) { addonsCount++; addonsList.push(id === 'addon-reserve' ? 'Резервный сервер' : id.replace('addon-','').toUpperCase()); }
   });
 
   document.getElementById('r-product').textContent = p.name;
   document.getElementById('r-sku').textContent = bestSku ? bestSku.sku : '—';
   document.getElementById('r-qty').textContent = qty.toLocaleString('ru-RU') + ' тегов';
   document.getElementById('r-term').textContent = terms[term - 1];
+
+  // Historian/Reports in result
+  const hist = getSelectedHistorian();
+  const histRow = document.getElementById('r-historian-row');
+  if (hist) { histRow.style.display = 'flex'; document.getElementById('r-historian').textContent = hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
+  else { histRow.style.display = 'none'; }
+  
+  const rpt = getSelectedReports();
+  const rptRow = document.getElementById('r-reports-row');
+  if (rpt) { rptRow.style.display = 'flex'; document.getElementById('r-reports').textContent = rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
+  else { rptRow.style.display = 'none'; }
 
   const addRow = document.getElementById('r-addons-row');
   if (addonsCount > 0) {
@@ -1500,6 +1547,7 @@ function sendConfigEmail() {
   Object.entries(chkAddons).forEach(([id, name]) => {
     if (document.getElementById(id)?.checked) addons.push(name);
   });
+  if (document.getElementById('addon-reserve')?.checked) addons.push('Резервный сервер (доп. лицензия)');
 
   const subject = encodeURIComponent('Запрос КП: конфигурация Альфа платформы');
   const body = encodeURIComponent(
@@ -1509,12 +1557,78 @@ function sendConfigEmail() {
     `АРТИКУЛ: ${bestSku ? bestSku.sku : '—'}\n` +
     `КОЛИЧЕСТВО ТЕГОВ: ${qty}\n` +
     `ТИП ЛИЦЕНЗИИ: ${terms[term - 1]}\n` +
+    (getSelectedHistorian() ? `\n+ Alpha.Historian: ${getSelectedHistorian().sku} (${getSelectedHistorian().tags === 999999 ? 'Безлимит' : getSelectedHistorian().tags + ' тегов'})\n` : '') +
+    (getSelectedReports() ? `+ Alpha.Reports: ${getSelectedReports().sku} (${getSelectedReports().tags === 999999 ? 'Безлимит' : getSelectedReports().tags + ' тегов'})\n` : '') +
     (addons.length > 0 ? `\nДОПОЛНИТЕЛЬНЫЕ МОДУЛИ:\n${addons.map(a => '• ' + a).join('\n')}\n` : '') +
     `\n---\nСформировано через калькулятор на specialtechnology.ru\n` +
     `Дата: ${new Date().toLocaleDateString('ru-RU')}`
   );
   
   window.location.href = `mailto:sales@special-tech.ru?subject=${subject}&body=${body}`;
+}
+
+/* ─── ADDON PRODUCT SLIDERS (Historian, Reports) ─── */
+const histVariants = alphaProducts['alpha-historian'].variants;
+const rptVariants = alphaProducts['alpha-reports'].variants;
+
+function toggleAddonProduct(which) {
+  const wrap = document.getElementById(which === 'historian' ? 'historian-slider-wrap' : 'reports-slider-wrap');
+  const chk = document.getElementById(which === 'historian' ? 'add-historian' : 'add-reports');
+  wrap.style.display = chk.checked ? 'block' : 'none';
+  if (chk.checked) {
+    if (which === 'historian') initHistSlider();
+    else initRptSlider();
+  }
+}
+
+function initHistSlider() {
+  const s = document.getElementById('hist-slider');
+  s.max = histVariants.length - 1;
+  histSliderChanged();
+  updateAddonLabels('hist-slider-labels', histVariants);
+}
+function histSliderChanged() {
+  const idx = +document.getElementById('hist-slider').value;
+  const v = histVariants[idx];
+  document.getElementById('hist-qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function initRptSlider() {
+  const s = document.getElementById('rpt-slider');
+  s.max = rptVariants.length - 1;
+  rptSliderChanged();
+  updateAddonLabels('rpt-slider-labels', rptVariants);
+}
+function rptSliderChanged() {
+  const idx = +document.getElementById('rpt-slider').value;
+  const v = rptVariants[idx];
+  document.getElementById('rpt-qty-val').textContent = v.tags === 999999 ? 'Безлимит' : formatTags(v.tags);
+  calcUpdate();
+}
+
+function updateAddonLabels(elId, variants) {
+  const el = document.getElementById(elId);
+  const vr = variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => v.tags === 999999 ? '∞' : formatTags(v.tags));
+  } else {
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => vr[i].tags === 999999 ? '∞' : formatTags(vr[i].tags));
+  }
+  el.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+}
+
+function getSelectedHistorian() {
+  if (!document.getElementById('add-historian')?.checked) return null;
+  const idx = +document.getElementById('hist-slider').value;
+  return histVariants[idx];
+}
+function getSelectedReports() {
+  if (!document.getElementById('add-reports')?.checked) return null;
+  const idx = +document.getElementById('rpt-slider').value;
+  return rptVariants[idx];
 }
 
 updateSliderRange();
