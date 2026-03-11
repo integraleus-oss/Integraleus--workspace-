@@ -1801,7 +1801,8 @@ function submitWizard() {
     'alpha-platform':'Alpha.Platform', 'alpha-historian':'Alpha.Historian',
     'alpha-reports':'Alpha.Reports', 'alpha-modules':'Дополнительные модули'
   };
-  const prodName = document.getElementById('wiz-product-name')?.value || catMap[cat] || cat;
+  const prodName = catMap[cat] || cat;
+  const prodSku = document.getElementById('wiz-product-name')?.value || '';
   const qty = document.getElementById('wiz-qty')?.value || '';
   const licType = document.querySelector('.wiz-select')?.value || 'Бессрочная';
   const urg = document.querySelector('input[name=urgency]:checked')?.value || '';
@@ -1847,7 +1848,7 @@ function submitWizard() {
   const fd = new FormData();
   fd.append('tid', tid);
   fd.append('product', prodName);
-  fd.append('sku', prodName);
+  fd.append('sku', prodSku || prodName);
   fd.append('tags', qty);
   fd.append('term', licType);
   fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
