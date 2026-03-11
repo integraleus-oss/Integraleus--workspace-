@@ -1352,39 +1352,36 @@ body::before {
         </ul>
       </div>
 
-      <!-- ПЛК -->
+      <!-- MES -->
       <div class="product-card fade-in">
         <div class="product-icon">
           <svg viewBox="0 0 52 52" fill="none">
-            <rect x="8" y="10" width="36" height="32" rx="2" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
-            <!-- левая сторона - клеммы -->
-            <rect x="5" y="16" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
-            <rect x="5" y="22" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
-            <rect x="5" y="28" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
-            <!-- правая сторона -->
-            <rect x="42" y="16" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
-            <rect x="42" y="22" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
-            <rect x="42" y="28" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
-            <!-- CPU блок -->
-            <rect x="14" y="16" width="24" height="20" rx="1" fill="rgba(0,200,255,0.08)" stroke="#0066aa" stroke-width="1"/>
-            <!-- индикаторы -->
-            <circle cx="18" cy="20" r="1.5" fill="#00ff9d" class="blink"/>
-            <circle cx="22" cy="20" r="1.5" fill="#f0c040"/>
-            <circle cx="26" cy="20" r="1.5" fill="#ff4466" opacity="0.4"/>
-            <!-- чип -->
-            <rect x="20" y="24" width="12" height="8" rx="1" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="0.8"/>
-            <line x1="22" y1="22" x2="22" y2="24" stroke="#0066aa" stroke-width="0.8"/>
-            <line x1="26" y1="22" x2="26" y2="24" stroke="#0066aa" stroke-width="0.8"/>
-            <line x1="30" y1="22" x2="30" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+            <!-- дашборд -->
+            <rect x="6" y="8" width="40" height="28" rx="2" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+            <!-- разделители -->
+            <line x1="6" y1="16" x2="46" y2="16" stroke="#0066aa" stroke-width="0.8"/>
+            <line x1="24" y1="16" x2="24" y2="36" stroke="#0066aa" stroke-width="0.8"/>
+            <!-- заголовок -->
+            <text x="14" y="14" font-family="monospace" font-size="4" fill="#00c8ff">MES · ERP · BI</text>
+            <!-- левая панель - график -->
+            <polyline points="10,30 14,26 18,28 22,22" stroke="#1de9b6" stroke-width="1.2" fill="none"/>
+            <circle cx="22" cy="22" r="1.5" fill="#1de9b6" opacity="0.6"/>
+            <!-- правая панель - бары -->
+            <rect x="28" y="28" width="3" height="7" fill="#ff6b35" opacity="0.7"/>
+            <rect x="33" y="24" width="3" height="11" fill="#00c8ff" opacity="0.7"/>
+            <rect x="38" y="20" width="3" height="15" fill="#1de9b6" opacity="0.7"/>
+            <!-- подставка -->
+            <rect x="20" y="38" width="12" height="3" fill="#192d48"/>
+            <rect x="16" y="41" width="20" height="2" rx="1" fill="#192d48"/>
           </svg>
         </div>
-        <div class="product-name">ПЛК</div>
-        <div class="product-desc">Программируемые логические контроллеры — подбор, поставка и интеграция с системами АСУ ТП.</div>
+        <div class="product-name">MES-системы</div>
+        <div class="product-desc">Управление производством в реальном времени — мониторинг, аналитика, интеграция с ERP и SCADA.</div>
         <ul class="product-features">
-          <li>Подбор по техническим требованиям</li>
-          <li>Поставка и настройка</li>
-          <li>Техническая поддержка</li>
-          <li>Интеграция с существующими системами</li>
+          <li>Оперативное планирование производства</li>
+          <li>Отслеживание и контроль качества</li>
+          <li>Интеграция с ERP (1С, SAP)</li>
+          <li>Аналитика и отчётность (BI)</li>
         </ul>
       </div>
 
@@ -1572,11 +1569,21 @@ body::before {
       <div class="tech-item fade-in">
         <div class="tech-icon">
           <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke="currentColor" stroke-width="2"/>
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10c2.5-3 4-6.5 4-10s-1.5-7-4-10z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M3 9h18M3 15h18" stroke="currentColor" stroke-width="1.5"/>
           </svg>
         </div>
-        Кроссплатформенность
+        Linux
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M3 3l8 8M13 3l8 8M3 13l8 8M13 13l8 8" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        Windows
       </div>
     </div>
   </div>
@@ -1706,7 +1713,7 @@ body::before {
         <ul class="footer-links">
           <li><a href="#products">Альфа платформа</a></li>
           <li><a href="#products">CAE WeRTSim</a></li>
-          <li><a href="#products">ПЛК</a></li>
+          <li><a href="#products">MES</a></li>
           <li><a href="#capabilities">Возможности SCADA</a></li>
         </ul>
       </div>
