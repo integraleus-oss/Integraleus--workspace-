@@ -530,6 +530,19 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .wizard-steps { position: static; }
   .cat-select-grid { grid-template-columns: 1fr 1fr; }
   .wiz-row { grid-template-columns: 1fr; }
+  .container { padding: 0 20px; }
+  .page-header { padding: 32px 0 40px; }
+  .page-title { font-size: 28px; }
+  .tabs { flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 10px 16px; }
+}
+@media (max-width: 480px) {
+  .product-select-grid { grid-template-columns: 1fr; }
+  .cat-select-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 24px; }
+  .page-sub { font-size: 13px; }
+  nav { padding: 12px 16px; }
+  .logo-text { font-size: 16px; }
 }
 </style>
 </head>
@@ -584,7 +597,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div class="calc-body">
             <div class="product-select-grid">
               <div class="prod-option">
-                <input type="radio" name="product" id="p1" value="alpha-one" checked onchange="calcUpdate()">
+                <input type="radio" name="product" id="p1" value="alpha-one" checked onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p1">
                   <div class="prod-check">
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -595,7 +608,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 </label>
               </div>
               <div class="prod-option">
-                <input type="radio" name="product" id="p2" value="alpha-scada" onchange="calcUpdate()">
+                <input type="radio" name="product" id="p2" value="alpha-scada" onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p2">
                   <div class="prod-check">
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -606,7 +619,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 </label>
               </div>
               <div class="prod-option">
-                <input type="radio" name="product" id="p3" value="alpha-platform" onchange="calcUpdate()">
+                <input type="radio" name="product" id="p3" value="alpha-platform" onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p3">
                   <div class="prod-check">
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -617,7 +630,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 </label>
               </div>
               <div class="prod-option">
-                <input type="radio" name="product" id="p4" value="alpha-historian" onchange="calcUpdate()">
+                <input type="radio" name="product" id="p4" value="alpha-historian" onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p4">
                   <div class="prod-check">
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -645,9 +658,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <div class="field-val" id="qty-val">1500</div>
               </div>
               <input type="range" min="150" max="50000" value="1500" id="qty-slider" 
-                     step="50" oninput="document.getElementById('qty-val').textContent=this.value; calcUpdate()">
-              <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
-                <span>150</span><span>1k</span><span>5k</span><span>15k</span><span>50k+</span>
+                     step="1" oninput="sliderChanged()" >
+              <div id="slider-labels" style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
               </div>
             </div>
 
@@ -1209,7 +1221,11 @@ const alphaProducts = {
       { sku: 'AP-25k', tags: 25000 },
       { sku: 'AP-50k', tags: 50000 },
       { sku: 'AP-100k', tags: 100000 },
-      { sku: 'AP-200k', tags: 200000 }
+      { sku: 'AP-200k', tags: 200000 },
+      { sku: 'AP-300k', tags: 300000 },
+      { sku: 'AP-500k', tags: 500000 },
+      { sku: 'AP-1M', tags: 1000000 },
+      { sku: 'AP-2M', tags: 2000000 }
     ]
   },
   'alpha-historian': {
@@ -1234,9 +1250,72 @@ function findBestSku(product, targetTags) {
   return suitable.length > 0 ? suitable[0] : variants[variants.length - 1];
 }
 
+function updateSliderRange() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const slider = document.getElementById('qty-slider');
+  const steps = p.variants.length - 1;
+  slider.min = 0;
+  slider.max = steps;
+  slider.step = 1;
+  // Find closest variant to current displayed value
+  const curVal = parseInt(document.getElementById('qty-val').textContent) || p.variants[0].tags;
+  let bestIdx = 0;
+  let bestDist = Infinity;
+  p.variants.forEach((v, i) => {
+    const d = Math.abs(v.tags - curVal);
+    if (d < bestDist) { bestDist = d; bestIdx = i; }
+  });
+  slider.value = bestIdx;
+  document.getElementById('qty-val').textContent = formatTags(p.variants[bestIdx].tags);
+  // Update labels
+  const labelsEl = document.getElementById('slider-labels');
+  const vr = p.variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => formatTags(v.tags));
+  } else {
+    // Show first, ~25%, ~50%, ~75%, last
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => formatTags(vr[i].tags));
+  }
+  labelsEl.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+}
+
+function formatTags(n) {
+  if (n >= 1000000) return (n/1000000) + ' M';
+  if (n >= 1000) return (n/1000).toLocaleString('ru-RU') + ' k';
+  return n.toString();
+}
+
+// Update slider on product change
+document.addEventListener('change', function(e) {
+  if (e.target.name === 'product') { updateSliderRange(); calcUpdate(); }
+});
+
+function sliderChanged() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  document.getElementById('qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function getSelectedTags() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return 1500;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  return v.tags;
+}
+
 function calcUpdate() {
   const prod = document.querySelector('input[name=product]:checked').value;
-  const qty = +document.getElementById('qty-slider').value;
+  const qty = getSelectedTags();
   const term = +document.getElementById('term-slider').value;
   const p = alphaProducts[prod];
   
@@ -1266,7 +1345,7 @@ function calcUpdate() {
 
   document.getElementById('r-product').textContent = p.name;
   document.getElementById('r-sku').textContent = bestSku ? bestSku.sku : '—';
-  document.getElementById('r-qty').textContent = qty + ' точек';
+  document.getElementById('r-qty').textContent = qty.toLocaleString('ru-RU') + ' тегов';
   document.getElementById('r-term').textContent = terms[term - 1];
 
   const addRow = document.getElementById('r-addons-row');
@@ -1285,7 +1364,7 @@ function calcUpdate() {
 
 function sendConfigEmail() {
   const prod = document.querySelector('input[name=product]:checked').value;
-  const qty = document.getElementById('qty-slider').value;
+  const qty = getSelectedTags();
   const term = document.getElementById('term-slider').value;
   const p = alphaProducts[prod];
   const bestSku = findBestSku(prod, qty);
@@ -1323,6 +1402,7 @@ function sendConfigEmail() {
   window.location.href = `mailto:sales@special-tech.ru?subject=${subject}&body=${body}`;
 }
 
+updateSliderRange();
 calcUpdate();
 
 /* ─── TABS ─── */
@@ -1467,7 +1547,7 @@ function prefillWizard() {
   // Switch to wizard and prefill from calculator
   setTimeout(() => {
     const prod = document.querySelector('input[name=product]:checked').value;
-    const qty = document.getElementById('qty-slider').value;
+    const qty = getSelectedTags();
     const bestSku = findBestSku(prod, qty);
     
     // Set category radio
