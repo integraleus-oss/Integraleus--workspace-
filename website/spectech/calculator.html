@@ -249,6 +249,24 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .check-addon { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-left: auto; }
 .check-item input:checked + .check-lbl .check-addon { color: var(--text3); }
 
+.addon-row { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--wire); }
+.addon-row:last-child { border-bottom: none; }
+.addon-label { flex: 0 0 200px; font-size: 13px; font-weight: 500; color: var(--text); padding-top: 6px; }
+.addon-ctrl { flex: 1; }
+.addon-select {
+  width: 100%; padding: 8px 12px; background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: 3px; color: var(--text); font-family: var(--ff-mono); font-size: 12px;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300c8f0'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  cursor: pointer; transition: border-color .2s;
+}
+.addon-select:focus { outline: none; border-color: var(--volt); }
+.addon-select option { background: var(--ink1); color: var(--text); }
+.addon-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: var(--ff-mono); }
+.addon-check input[type=checkbox] { accent-color: var(--lime); width: 14px; height: 14px; cursor: pointer; }
+.addon-hint { font-size: 10px; color: var(--text3); }
+
 /* ── RESULT PANEL ── */
 .result-panel {
   background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px;
@@ -532,6 +550,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .cat-select-grid { grid-template-columns: 1fr 1fr; }
   .wiz-row { grid-template-columns: 1fr; }
   .container { padding: 0 20px; }
+  .addon-row { flex-direction: column; gap: 6px; }
+  .addon-label { flex: none; padding-top: 0; }
   .page-header { padding: 32px 0 40px; }
   .page-title { font-size: 28px; }
   .tabs { flex-wrap: wrap; }
@@ -697,66 +717,102 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             <span>// step 3 of 3</span>
           </div>
           <div class="calc-body">
-            <div class="check-grid">
-              <div class="check-item">
-                <input type="checkbox" id="addon-client" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-client">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  Клиент полный (CL-F)
-                  <span class="check-addon">доп.модуль</span>
-                </label>
+            <!-- Клиенты -->
+            <div class="addon-row">
+              <div class="addon-label">Полный клиент (CL-F)</div>
+              <div class="addon-ctrl">
+                <select id="addon-client" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужен</option>
+                  <option value="CL-F:1">1 клиент</option>
+                  <option value="CL-F:2">2 клиента</option>
+                  <option value="CL-F:3">3 клиента</option>
+                  <option value="CL-F:5">5 клиентов</option>
+                </select>
               </div>
-              <div class="check-item">
-                <input type="checkbox" id="addon-web" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-web">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  WEB-клиенты (CL-RO25)
-                  <span class="check-addon">25 чтений</span>
-                </label>
+            </div>
+
+            <!-- WEB-клиенты -->
+            <div class="addon-row">
+              <div class="addon-label">WEB-клиенты «без управления»</div>
+              <div class="addon-ctrl">
+                <select id="addon-web" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужны</option>
+                  <option value="CL-RO10">10 клиентов (CL-RO10)</option>
+                  <option value="CL-RO25">25 клиентов (CL-RO25)</option>
+                  <option value="CL-RO50">50 клиентов (CL-RO50)</option>
+                  <option value="CL-RO100">100 клиентов (CL-RO100)</option>
+                  <option value="AP-CL-RO250">250 клиентов (AP-CL-RO250)</option>
+                  <option value="AP-CL-ROUNL">Безлимит (AP-CL-ROUNL)</option>
+                </select>
               </div>
-              <div class="check-item">
-                <input type="checkbox" id="addon-energy" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-energy">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  Драйверы ENERGY
-                  <span class="check-addon">DRV-PACK</span>
-                </label>
+            </div>
+
+            <!-- Клиенты Reports -->
+            <div class="addon-row">
+              <div class="addon-label">Клиенты Alpha.Reports</div>
+              <div class="addon-ctrl">
+                <select id="addon-rpt-cl" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужны</option>
+                  <option value="RPT-CL1">1 пользователь (RPT-CL1)</option>
+                  <option value="RPT-CL5">5 пользователей (RPT-CL5)</option>
+                  <option value="RPT-CL10">10 пользователей (RPT-CL10)</option>
+                  <option value="RPT-CL25">25 пользователей (RPT-CL25)</option>
+                  <option value="RPT-CL50">50 пользователей (RPT-CL50)</option>
+                  <option value="RPT-CL100">100 пользователей (RPT-CL100)</option>
+                </select>
               </div>
-              <div class="check-item">
-                <input type="checkbox" id="addon-industry" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-industry">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  Драйверы INDUSTRY
-                  <span class="check-addon">DRV-PACK</span>
-                </label>
+            </div>
+
+            <!-- Драйверы -->
+            <div class="addon-row">
+              <div class="addon-label">Пакеты драйверов</div>
+              <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-energy" onchange="calcUpdate()"> DRV-PACK-ENERGY <span class="addon-hint">МЭК 61850, ТЭМ-104</span></label>
+                <label class="addon-check"><input type="checkbox" id="addon-industry" onchange="calcUpdate()"> DRV-PACK-INDUSTRY <span class="addon-hint">BACnet, S7, Ethernet/IP, FINS</span></label>
               </div>
-              <div class="check-item">
-                <input type="checkbox" id="addon-portal" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-portal">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  WEB-портал
-                  <span class="check-addon">WEB-PORTAL</span>
-                </label>
+            </div>
+
+            <!-- OPC DA -->
+            <div class="addon-row">
+              <div class="addon-label">OPC DA (доп. Windows ПК)</div>
+              <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-cl" onchange="calcUpdate()"> OPC DA клиент (DRV-OPCDA-CL)</label>
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-srv" onchange="calcUpdate()"> OPC DA сервер (DRV-OPCDA-SRV)</label>
               </div>
-              <div class="check-item">
-                <input type="checkbox" id="addon-sla" onchange="calcUpdate()">
-                <label class="check-lbl" for="addon-sla">
-                  <div class="check-box">
-                    <svg class="check-tick" width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="2" stroke-linecap="round"/></svg>
-                  </div>
-                  SLA поддержка
-                  <span class="check-addon">SLA-STD</span>
-                </label>
+            </div>
+
+            <!-- WEB-портал -->
+            <div class="addon-row">
+              <div class="addon-label">WEB-портал</div>
+              <div class="addon-ctrl">
+                <label class="addon-check"><input type="checkbox" id="addon-portal" onchange="calcUpdate()"> WEB-PORTAL <span class="addon-hint">IIS / Apache</span></label>
+              </div>
+            </div>
+
+            <!-- Доп. сервер Platform -->
+            <div class="addon-row">
+              <div class="addon-label">Доп. сервер Platform</div>
+              <div class="addon-ctrl">
+                <select id="addon-iosrv" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужен</option>
+                  <option value="AP-IOSRV:1">1 сервер (AP-IOSRV)</option>
+                  <option value="AP-IOSRV:2">2 сервера</option>
+                  <option value="AP-IOSRV:3">3 сервера</option>
+                  <option value="AP-IOSRV:5">5 серверов</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- SLA -->
+            <div class="addon-row">
+              <div class="addon-label">SLA-сертификат</div>
+              <div class="addon-ctrl">
+                <select id="addon-sla" class="addon-select" onchange="calcUpdate()">
+                  <option value="SLA-BASE">Базовый (бесплатно, входит в лицензию)</option>
+                  <option value="SLA-STD">Стандартный (10% от лицензий / год)</option>
+                  <option value="SLA-OPT">Оптимальный (15% от лицензий / год)</option>
+                  <option value="SLA-PRM">Премиальный (25% от лицензий / год)</option>
+                </select>
               </div>
             </div>
           </div>
@@ -1374,23 +1430,21 @@ function calcUpdate() {
   const bestSku = findBestSku(prod, qty);
   const terms = ['Бессрочная', '1 год', '3 года'];
 
-  // Count selected addons
+  // Collect addons from selects and checkboxes
   let addonsCount = 0;
   let addonsList = [];
-  const addonNames = {
-    'addon-client': 'CL-F',
-    'addon-web': 'CL-RO25',
-    'addon-energy': 'DRV-PACK-ENERGY',
-    'addon-industry': 'DRV-PACK-INDUSTRY',
-    'addon-portal': 'WEB-PORTAL',
-    'addon-sla': 'SLA-STD'
-  };
   
-  Object.keys(addonNames).forEach(id => {
-    if (document.getElementById(id)?.checked) {
-      addonsCount++;
-      addonsList.push(addonNames[id]);
-    }
+  // Selects
+  ['addon-client','addon-web','addon-rpt-cl','addon-iosrv'].forEach(id => {
+    const v = document.getElementById(id)?.value;
+    if (v) { addonsCount++; addonsList.push(v.split(':')[0]); }
+  });
+  // SLA
+  const slaVal = document.getElementById('addon-sla')?.value;
+  if (slaVal && slaVal !== 'SLA-BASE') { addonsCount++; addonsList.push(slaVal); }
+  // Checkboxes
+  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal'].forEach(id => {
+    if (document.getElementById(id)?.checked) { addonsCount++; addonsList.push(id.replace('addon-','').toUpperCase()); }
   });
 
   document.getElementById('r-product').textContent = p.name;
@@ -1421,19 +1475,30 @@ function sendConfigEmail() {
   const terms = ['Бессрочная', '1 год', '3 года'];
   
   let addons = [];
-  const addonNames = {
-    'addon-client': 'Клиент полный (CL-F)',
-    'addon-web': 'WEB-клиенты (CL-RO25)',
-    'addon-energy': 'Драйверы ENERGY (DRV-PACK-ENERGY)',
-    'addon-industry': 'Драйверы INDUSTRY (DRV-PACK-INDUSTRY)',
-    'addon-portal': 'WEB-портал (WEB-PORTAL)',
-    'addon-sla': 'SLA поддержка (SLA-STD)'
+  // Selects
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
   };
-  
-  Object.keys(addonNames).forEach(id => {
-    if (document.getElementById(id)?.checked) {
-      addons.push(addonNames[id]);
-    }
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addons.push(name + ' (' + el.options[el.selectedIndex].text + ')');
+  });
+  // SLA
+  const slaEl = document.getElementById('addon-sla');
+  if (slaEl) addons.push('SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  // Checkboxes
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY (МЭК 61850, ТЭМ-104)',
+    'addon-industry': 'DRV-PACK-INDUSTRY (BACnet, S7, Ethernet/IP)',
+    'addon-opcda-cl': 'OPC DA клиент (DRV-OPCDA-CL)',
+    'addon-opcda-srv': 'OPC DA сервер (DRV-OPCDA-SRV)',
+    'addon-portal': 'WEB-портал (WEB-PORTAL)'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addons.push(name);
   });
 
   const subject = encodeURIComponent('Запрос КП: конфигурация Альфа платформы');
