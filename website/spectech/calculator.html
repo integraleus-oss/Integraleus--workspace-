@@ -162,7 +162,7 @@ nav {
 .prod-option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
 .prod-label {
   display: flex; flex-direction: column; gap: 4px;
-  padding: 14px 16px;
+  padding: 14px 16px; height: 110px;
   background: var(--ink2); border: 1px solid var(--wire);
   border-radius: 3px; cursor: pointer; transition: border-color .2s, background .2s;
   position: relative; overflow: hidden;
@@ -185,6 +185,7 @@ nav {
 }
 .prod-label-base {
   font-family: var(--mono); font-size: 11px; color: var(--volt); margin-top: 4px;
+  line-height: 1.4;
 }
 .prod-check {
   position: absolute; top: 10px; right: 10px;
@@ -603,8 +604,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.One+</div>
-                  <div class="prod-label-vendor">АльфаПром · SCADA/MES/IoT</div>
-                  <div class="prod-label-base">Однопользовательский</div>
+                  <div class="prod-label-vendor">Атомик Софт · SCADA/MES/IoT</div>
+                  <div class="prod-label-base">Однопользовательский комплект без функции резервирования и дополнительных клиентов</div>
                 </label>
               </div>
               <div class="prod-option">
@@ -614,8 +615,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.SCADA</div>
-                  <div class="prod-label-vendor">АльфаПром · Мониторинг</div>
-                  <div class="prod-label-base">Серверная версия</div>
+                  <div class="prod-label-vendor">Атомик Софт · Мониторинг</div>
+                  <div class="prod-label-base">Клиент-серверная версия</div>
                 </label>
               </div>
               <div class="prod-option">
@@ -625,8 +626,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.Platform</div>
-                  <div class="prod-label-vendor">АльфаПром · Полный комплект</div>
-                  <div class="prod-label-base">С драйверами</div>
+                  <div class="prod-label-vendor">Атомик Софт · Полный комплект</div>
+                  <div class="prod-label-base">Распределённая, мультисерверная диспетчерская система</div>
                 </label>
               </div>
               <div class="prod-option">
@@ -636,8 +637,19 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                     <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.Historian</div>
-                  <div class="prod-label-vendor">АльфаПром · Архивирование</div>
+                  <div class="prod-label-vendor">Атомик Софт · Архивирование</div>
                   <div class="prod-label-base">Данные процесса</div>
+                </label>
+              </div>
+              <div class="prod-option">
+                <input type="radio" name="product" id="p5" value="alpha-reports" onchange="updateSliderRange();calcUpdate()">
+                <label class="prod-label" for="p5">
+                  <div class="prod-check">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="prod-label-name">Alpha.Reports</div>
+                  <div class="prod-label-vendor">Атомик Софт · Отчётность</div>
+                  <div class="prod-label-base">Генерация отчётов и аналитика</div>
                 </label>
               </div>
             </div>
@@ -959,8 +971,18 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                   </label>
                 </div>
                 <div class="cat-opt">
-                  <input type="radio" name="wiz-cat" id="wc5" value="alpha-modules">
+                  <input type="radio" name="wiz-cat" id="wc5" value="alpha-reports">
                   <label class="cat-opt-lbl" for="wc5">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="7" y="4" width="18" height="24" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><line x1="10" y1="10" x2="22" y2="10" stroke="#192d48" stroke-width="0.8"/><line x1="10" y1="14" x2="22" y2="14" stroke="#192d48" stroke-width="0.8"/><line x1="10" y1="18" x2="18" y2="18" stroke="#192d48" stroke-width="0.8"/><rect x="17" y="20" width="5" height="4" rx="0.5" fill="#1de9b6" opacity="0.3"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.Reports</div>
+                    <div class="cat-opt-sub">Отчётность</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc6" value="alpha-modules">
+                  <label class="cat-opt-lbl" for="wc6">
                     <div class="cat-opt-icon">
                       <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="18" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><line x1="4" y1="14" x2="28" y2="14" stroke="#192d48" stroke-width="0.8"/><line x1="16" y1="14" x2="16" y2="25" stroke="#192d48" stroke-width="0.8"/><rect x="6" y="16" width="8" height="4" rx="0.5" fill="#192d48" stroke="#1de9b6" stroke-width="0.7"/><polyline points="18,21 20,18 22,20 24,16 26,18" stroke="#ff6b35" stroke-width="1" fill="none"/></svg>
                     </div>
@@ -1238,7 +1260,35 @@ const alphaProducts = {
       { sku: 'HIST-S700', tags: 700 },
       { sku: 'HIST-S1k', tags: 1000 },
       { sku: 'HIST-S2k', tags: 2000 },
-      { sku: 'HIST-S3k', tags: 3000 }
+      { sku: 'HIST-S3k', tags: 3000 },
+      { sku: 'HIST-S5k', tags: 5000 },
+      { sku: 'HIST-S7k', tags: 7000 },
+      { sku: 'HIST-S10k', tags: 10000 },
+      { sku: 'HIST-S15k', tags: 15000 },
+      { sku: 'HIST-S20k', tags: 20000 },
+      { sku: 'HIST-S30k', tags: 30000 },
+      { sku: 'HIST-S50k', tags: 50000 },
+      { sku: 'HIST-S100k', tags: 100000 },
+      { sku: 'HIST-S150k', tags: 150000 },
+      { sku: 'HIST-S200k', tags: 200000 },
+      { sku: 'HIST-S300k', tags: 300000 },
+      { sku: 'HIST-S500k', tags: 500000 },
+      { sku: 'HIST-S1M', tags: 1000000 },
+      { sku: 'HIST-S2M', tags: 2000000 }
+    ]
+  },
+  'alpha-reports': {
+    name: 'Alpha.Reports',
+    variants: [
+      { sku: 'RPT-E50', tags: 50 },
+      { sku: 'RPT-E100', tags: 100 },
+      { sku: 'RPT-E250', tags: 250 },
+      { sku: 'RPT-E500', tags: 500 },
+      { sku: 'RPT-E1k', tags: 1000 },
+      { sku: 'RPT-E2k', tags: 2000 },
+      { sku: 'RPT-E5k', tags: 5000 },
+      { sku: 'RPT-E10k', tags: 10000 },
+      { sku: 'RPT-EUNL', tags: 999999 }
     ]
   }
 };
@@ -1479,6 +1529,7 @@ function fillSummary() {
     'alpha-scada':'Alpha.SCADA', 
     'alpha-platform':'Alpha.Platform', 
     'alpha-historian':'Alpha.Historian',
+    'alpha-reports':'Alpha.Reports',
     'alpha-modules':'Дополнительные модули'
   };
   
