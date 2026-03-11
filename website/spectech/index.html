@@ -2031,5 +2031,311 @@ document.querySelector('form').addEventListener('submit', function(e) {
 });
 </script>
 
+<!-- ══ TERMINAL AI ASSISTANT ══ -->
+<style>
+.ai-toggle {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 56px;
+  height: 56px;
+  background: var(--steel);
+  border: 1px solid var(--wire);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,200,240,0.1);
+  transition: transform .2s, box-shadow .2s;
+}
+.ai-toggle:hover { transform: scale(1.08); box-shadow: 0 4px 32px rgba(0,200,240,0.2); }
+.ai-toggle svg { width: 24px; height: 24px; }
+.ai-toggle .ai-close { display: none; }
+.ai-toggle.open .ai-icon { display: none; }
+.ai-toggle.open .ai-close { display: block; }
+
+.ai-terminal {
+  position: fixed;
+  bottom: 96px;
+  right: 28px;
+  width: 420px;
+  max-height: 500px;
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  border-radius: 4px;
+  overflow: hidden;
+  z-index: 9998;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,200,240,0.05);
+  font-family: var(--ff-mono);
+  font-size: 12px;
+}
+.ai-terminal.open { display: flex; }
+
+.ai-bar {
+  background: var(--steel);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--wire);
+  flex-shrink: 0;
+}
+.ai-bar .t-dot { width: 8px; height: 8px; border-radius: 50%; }
+.ai-bar-title {
+  font-size: 10px;
+  color: var(--text3);
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+
+.ai-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  line-height: 1.8;
+  max-height: 380px;
+}
+.ai-body::-webkit-scrollbar { width: 4px; }
+.ai-body::-webkit-scrollbar-thumb { background: var(--wire); border-radius: 2px; }
+
+.ai-line { margin-bottom: 4px; }
+.ai-line .prompt { color: var(--lime); }
+.ai-line .cmd { color: var(--text); }
+.ai-line .out { color: var(--text2); padding-left: 16px; display: block; }
+.ai-line .out-ok { color: var(--lime); }
+.ai-line .out-volt { color: var(--volt); }
+
+.ai-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--wire);
+  background: var(--ink1);
+  flex-shrink: 0;
+}
+.ai-input-wrap .prompt { color: var(--lime); flex-shrink: 0; }
+.ai-input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  outline: none;
+}
+.ai-input::placeholder { color: var(--text3); }
+
+.ai-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--wire);
+  background: var(--ink1);
+}
+.ai-sug {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--volt);
+  border: 1px solid var(--wire);
+  padding: 4px 10px;
+  cursor: pointer;
+  background: none;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.ai-sug:hover { background: var(--volt); color: var(--ink); }
+
+@media(max-width:480px) {
+  .ai-terminal { width: calc(100vw - 20px); right: 10px; bottom: 80px; }
+  .ai-toggle { bottom: 16px; right: 16px; }
+}
+</style>
+
+<div class="ai-toggle" onclick="toggleAI()">
+  <svg class="ai-icon" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="1.5">
+    <rect x="3" y="4" width="18" height="14" rx="2"/>
+    <path d="M7 8h2M7 12h4"/>
+    <rect x="14" y="8" width="3" height="6" rx="0.5" fill="var(--volt)" opacity="0.3"/>
+    <line x1="7" y1="22" x2="17" y2="22" stroke="var(--volt)" stroke-width="1.5"/>
+    <line x1="12" y1="18" x2="12" y2="22" stroke="var(--volt)" stroke-width="1.5"/>
+  </svg>
+  <svg class="ai-close" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2">
+    <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+  </svg>
+</div>
+
+<div class="ai-terminal" id="aiTerminal">
+  <div class="ai-bar">
+    <div class="t-dot" style="background:var(--crimson);opacity:.6"></div>
+    <div class="t-dot" style="background:var(--amber);opacity:.6"></div>
+    <div class="t-dot" style="background:var(--lime);opacity:.6"></div>
+    <div class="ai-bar-title">spectech-ai v1.0</div>
+  </div>
+  <div class="ai-body" id="aiBody">
+    <div class="ai-line"><span class="out-volt">СПЕЦТЕХ AI-ассистент</span></div>
+    <div class="ai-line"><span class="out">Помогу с подбором ПО, лицензиями и техническими вопросами.</span></div>
+    <div class="ai-line"><span class="out">Введите запрос или выберите тему ниже.</span></div>
+  </div>
+  <div class="ai-suggestions" id="aiSugs">
+    <button class="ai-sug" onclick="aiAsk('scada')">SCADA</button>
+    <button class="ai-sug" onclick="aiAsk('mes')">MES</button>
+    <button class="ai-sug" onclick="aiAsk('license')">Лицензии</button>
+    <button class="ai-sug" onclick="aiAsk('price')">Цены</button>
+    <button class="ai-sug" onclick="aiAsk('support')">Поддержка</button>
+    <button class="ai-sug" onclick="aiAsk('contact')">Контакты</button>
+  </div>
+  <div class="ai-input-wrap">
+    <span class="prompt">›</span>
+    <input class="ai-input" id="aiInput" placeholder="Введите запрос..." autocomplete="off">
+  </div>
+</div>
+
+<script>
+function toggleAI() {
+  const t = document.getElementById('aiTerminal');
+  const btn = document.querySelector('.ai-toggle');
+  t.classList.toggle('open');
+  btn.classList.toggle('open');
+  if (t.classList.contains('open')) document.getElementById('aiInput').focus();
+}
+
+document.getElementById('aiInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && this.value.trim()) {
+    aiAsk(this.value.trim());
+    this.value = '';
+  }
+});
+
+const aiResponses = {
+  scada: {
+    q: 'scada --info',
+    lines: [
+      '✓ <span class="out-volt">SCADA-системы</span>',
+      '  Alpha.SCADA — мониторинг реального времени, до 2 000 000 тегов',
+      '  Alpha.One+ — платформа SCADA/MES/IoT',
+      '  Поддержка OPC UA, OPC DA, Modbus TCP/RTU',
+      '  <span class="out-ok">Лицензии в наличии</span> · Поставка от 3 дней',
+      '  → Оставьте заявку: <span class="out-volt">info@special-tech.ru</span>'
+    ]
+  },
+  mes: {
+    q: 'mes --info',
+    lines: [
+      '✓ <span class="out-volt">MES-системы</span>',
+      '  Управление производством в реальном времени',
+      '  Интеграция с ERP (1С, SAP), SCADA, Historian',
+      '  Оперативное планирование, контроль качества, BI-аналитика',
+      '  <span class="out-ok">Внедрение под ключ</span> · Обучение персонала',
+      '  → Запрос КП: <span class="out-volt">sales@special-tech.ru</span>'
+    ]
+  },
+  license: {
+    q: 'license --status',
+    lines: [
+      '✓ <span class="out-volt">Лицензирование</span>',
+      '  Официальный дистрибьютор Атомик Софт (Alpha платформа)',
+      '  Партнёр ЮМОСС (CAE WeRTSim)',
+      '  Типы: именные, плавающие, серверные, подписка',
+      '  <span class="out-ok">Гарантия подлинности</span> · Продление и миграция',
+      '  → Проверить лицензию: <span class="out-volt">+7 (495) 760 09 39</span>'
+    ]
+  },
+  price: {
+    q: 'catalog --pricing',
+    lines: [
+      '✓ <span class="out-volt">Ценообразование</span>',
+      '  Цены зависят от конфигурации и количества лицензий',
+      '  Alpha.SCADA — от 150 000 ₽ (32 тега)',
+      '  Alpha.One+ — индивидуальный расчёт',
+      '  CAE WeRTSim — по запросу',
+      '  <span class="out-ok">Скидки от 3+ лицензий</span>',
+      '  → Запрос КП: <span class="out-volt">sales@special-tech.ru</span>'
+    ]
+  },
+  support: {
+    q: 'support --info',
+    lines: [
+      '✓ <span class="out-volt">Техническая поддержка</span>',
+      '  Режим работы: Пн-Пт 9:00-17:00 (Москва)',
+      '  SLA: критические инциденты — <span class="out-ok">&lt; 15 мин</span>',
+      '  Удалённая диагностика и выезд инженера',
+      '  Обучение и консалтинг',
+      '  → Горячая линия: <span class="out-volt">+7 (495) 760 09 39</span>'
+    ]
+  },
+  contact: {
+    q: 'contact --show',
+    lines: [
+      '✓ <span class="out-volt">АО СПЕЦТЕХ</span>',
+      '  ☎ +7 (495) 760 09 39',
+      '  ✉ info@special-tech.ru | sales@special-tech.ru',
+      '  ⌂ 141301, Моск. обл., Сергиев Посад',
+      '    ш. Новоугличское, д.75, офис 308',
+      '  <span class="out-ok">Пн-Пт 9:00-17:00</span>'
+    ]
+  }
+};
+
+function aiAsk(key) {
+  const body = document.getElementById('aiBody');
+  const k = key.toLowerCase().trim();
+
+  // Find matching response
+  let resp = null;
+  let matchedKey = null;
+  for (const [rk, rv] of Object.entries(aiResponses)) {
+    if (k === rk || k.includes(rk)) { resp = rv; matchedKey = rk; break; }
+  }
+
+  // Keyword matching
+  if (!resp) {
+    if (/scada|скада|альфа|alpha|мониторинг/i.test(k)) { resp = aiResponses.scada; matchedKey = 'scada'; }
+    else if (/mes|мес|erp|производств|аналитик/i.test(k)) { resp = aiResponses.mes; matchedKey = 'mes'; }
+    else if (/лиценз|license|ключ|активац/i.test(k)) { resp = aiResponses.license; matchedKey = 'license'; }
+    else if (/цен|стоим|price|прайс|сколько|купить/i.test(k)) { resp = aiResponses.price; matchedKey = 'price'; }
+    else if (/поддерж|support|помощ|инженер|sla|ремонт/i.test(k)) { resp = aiResponses.support; matchedKey = 'support'; }
+    else if (/контакт|телефон|адрес|почта|email|звонок|связ/i.test(k)) { resp = aiResponses.contact; matchedKey = 'contact'; }
+    else if (/привет|здравст|добр|hello|hi|хай/i.test(k)) {
+      resp = { q: 'hello', lines: ['<span class="out-ok">Добро пожаловать!</span>', 'Я AI-ассистент СПЕЦТЕХ. Чем могу помочь?', 'Темы: SCADA, MES, лицензии, цены, поддержка, контакты'] };
+    }
+    else if (/opc|modbus|протокол|iec|мэк/i.test(k)) {
+      resp = { q: 'protocols --list', lines: ['✓ <span class="out-volt">Поддерживаемые протоколы</span>', '  OPC UA / OPC DA — полная поддержка', '  Modbus TCP / RTU — все устройства', '  IEC 60870-5 / МЭК 61850 — энергетика', '  MQTT, AMQP — IoT интеграция', '  → Консультация: <span class="out-volt">info@special-tech.ru</span>'] };
+    }
+    else if (/wertsim|юмосс|umoss|cae|моделиров/i.test(k)) {
+      resp = { q: 'cae --info', lines: ['✓ <span class="out-volt">CAE WeRTSim</span>', '  Имитационное моделирование технологических процессов', '  Разработчик: ЮМОСС (umoss.ru)', '  Обучение операторов на виртуальных тренажёрах', '  <span class="out-ok">Официальный партнёр</span>', '  → Запрос: <span class="out-volt">sales@special-tech.ru</span>'] };
+    }
+  }
+
+  if (!resp) {
+    resp = { q: key, lines: ['<span style="color:var(--amber)">⚠ Не нашёл точного ответа</span>', 'Попробуйте: SCADA, MES, лицензии, цены, поддержка', 'Или позвоните: <span class="out-volt">+7 (495) 760 09 39</span>'] };
+  }
+
+  // Render command
+  const cmdLine = document.createElement('div');
+  cmdLine.className = 'ai-line';
+  cmdLine.innerHTML = '<span class="prompt">›</span> <span class="cmd">' + (typeof key === 'string' && key.length < 30 ? key : resp.q) + '</span>';
+  body.appendChild(cmdLine);
+
+  // Render response with typing effect
+  resp.lines.forEach((line, i) => {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'ai-line';
+      el.innerHTML = '<span class="out">' + line + '</span>';
+      body.appendChild(el);
+      body.scrollTop = body.scrollHeight;
+    }, 150 * (i + 1));
+  });
+
+  setTimeout(() => { body.scrollTop = body.scrollHeight; }, 150 * (resp.lines.length + 1));
+}
+</script>
+
 </body>
 </html>
