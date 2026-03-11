@@ -1076,6 +1076,40 @@ footer {
 @media(max-width:900px) { .catalog-grid { grid-template-columns:1fr 1fr; } }
 @media(max-width:480px) { .catalog-grid { grid-template-columns:1fr; } }
 
+/* Ticker */
+.ticker {
+  height: 40px;
+  background: var(--steel);
+  border-top: 1px solid var(--wire);
+  border-bottom: 1px solid var(--wire);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+.ticker-inner {
+  display: flex;
+  gap: 60px;
+  animation: ticker-scroll 30s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+.ticker-item .t-name { color: var(--text2); }
+.ticker-item .t-val { color: var(--lime); }
+.ticker-item .t-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--lime); flex-shrink: 0; }
+.ticker-item .t-dot-flame { width: 5px; height: 5px; border-radius: 50%; background: var(--flame); flex-shrink: 0; }
+
 /* Global grid background */
 body::before {
   content: '';
@@ -1159,6 +1193,29 @@ body::before {
 
 
 </section>
+
+<!-- ══ PRODUCT TICKER ══ -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.SCADA</span><span class="t-val">✓ В наличии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.One+</span><span class="t-val">✓ Лицензии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.Historian</span><span class="t-val">✓ Поставка</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">CAE WeRTSim</span><span class="t-val">✓ Партнёр</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Regul R500</span><span class="t-val">✓ В наличии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Modbus TCP/RTU</span><span class="t-val">✓ Поддержка</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OPC UA Server</span><span class="t-val">✓ Лицензии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MES-системы</span><span class="t-val">✓ Интеграция</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.SCADA</span><span class="t-val">✓ В наличии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.One+</span><span class="t-val">✓ Лицензии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.Historian</span><span class="t-val">✓ Поставка</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">CAE WeRTSim</span><span class="t-val">✓ Партнёр</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Regul R500</span><span class="t-val">✓ В наличии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Modbus TCP/RTU</span><span class="t-val">✓ Поддержка</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OPC UA Server</span><span class="t-val">✓ Лицензии</span></div>
+    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MES-системы</span><span class="t-val">✓ Интеграция</span></div>
+  </div>
+</div>
 
 <!-- ══ ABOUT ══ -->
 <section id="about" class="stats">
@@ -1621,6 +1678,29 @@ body::before {
     </div>
   </div>
 </section>
+
+<!-- ══ CLIENTS TICKER ══ -->
+<div class="ticker" style="animation-direction:reverse;">
+  <div class="ticker-inner" style="animation-duration:25s;">
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">СИБУР</span><span class="t-val">нефтехимия</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Газпром</span><span class="t-val">энергетика</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Газпромнефть</span><span class="t-val">нефтедобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Полюс</span><span class="t-val">золотодобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Норильский Никель</span><span class="t-val">металлургия</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Роснефть</span><span class="t-val">нефтедобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">ЛУКОЙЛ</span><span class="t-val">нефтепереработка</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">РусГидро</span><span class="t-val">энергетика</span></div>
+    <!-- duplicate -->
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">СИБУР</span><span class="t-val">нефтехимия</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Газпром</span><span class="t-val">энергетика</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Газпромнефть</span><span class="t-val">нефтедобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Полюс</span><span class="t-val">золотодобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Норильский Никель</span><span class="t-val">металлургия</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">Роснефть</span><span class="t-val">нефтедобыча</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">ЛУКОЙЛ</span><span class="t-val">нефтепереработка</span></div>
+    <div class="ticker-item"><div class="t-dot-flame"></div><span class="t-name">РусГидро</span><span class="t-val">энергетика</span></div>
+  </div>
+</div>
 
 <!-- ══ CTA ══ -->
 <section class="cta-section" id="contact">
