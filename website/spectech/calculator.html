@@ -744,14 +744,14 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div class="calc-body">
             <!-- Клиенты -->
             <div class="addon-row">
-              <div class="addon-label">Полный клиент (CL-F)</div>
+              <div class="addon-label">Полный клиент (CL-F) <span id="clf-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">1 включён в Platform</span></div>
               <div class="addon-ctrl">
                 <select id="addon-client" class="addon-select" onchange="calcUpdate()">
                   <option value="">— не нужен</option>
-                  <option value="CL-F:1">1 клиент</option>
-                  <option value="CL-F:2">2 клиента</option>
-                  <option value="CL-F:3">3 клиента</option>
-                  <option value="CL-F:5">5 клиентов</option>
+                  <option value="CL-F:1">1 клиент (CL-F ×1)</option>
+                  <option value="CL-F:2">2 клиента (CL-F ×2)</option>
+                  <option value="CL-F:3">3 клиента (CL-F ×3)</option>
+                  <option value="CL-F:5">5 клиентов (CL-F ×5)</option>
                 </select>
               </div>
             </div>
@@ -790,7 +790,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
             <!-- Драйверы -->
             <div class="addon-row">
-              <div class="addon-label">Пакеты драйверов</div>
+              <div class="addon-label">Пакеты драйверов <span id="drv-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">включены в Platform</span></div>
               <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
                 <label class="addon-check"><input type="checkbox" id="addon-energy" onchange="calcUpdate()"> DRV-PACK-ENERGY <span class="addon-hint">МЭК 61850, ТЭМ-104</span></label>
                 <label class="addon-check"><input type="checkbox" id="addon-industry" onchange="calcUpdate()"> DRV-PACK-INDUSTRY <span class="addon-hint">BACnet, S7, Ethernet/IP, FINS</span></label>
@@ -1434,6 +1434,43 @@ function updateSliderRange() {
   // Show reserve checkbox only for SCADA
   const resRow = document.getElementById('reserve-row');
   if (resRow) resRow.style.display = (prod === 'alpha-scada') ? 'block' : 'none';
+  
+  // Driver packs included by product:
+  // SCADA: Base + ENERGY
+  // Platform: Base + ENERGY + INDUSTRY
+  const isPlatform = (prod === 'alpha-platform');
+  const isScada = (prod === 'alpha-scada');
+  const drvEnergy = document.getElementById('addon-energy');
+  const drvIndustry = document.getElementById('addon-industry');
+  if (drvEnergy) {
+    if (isPlatform || isScada) { drvEnergy.checked = true; drvEnergy.disabled = true; }
+    else { drvEnergy.disabled = false; }
+  }
+  if (drvIndustry) {
+    if (isPlatform) { drvIndustry.checked = true; drvIndustry.disabled = true; }
+    else { drvIndustry.disabled = false; }
+  }
+  const drvNote = document.getElementById('drv-note');
+  if (drvNote) {
+    if (isPlatform) { drvNote.textContent = 'включены в Platform'; drvNote.style.display = 'inline'; }
+    else if (isScada) { drvNote.textContent = 'ENERGY включён в SCADA'; drvNote.style.display = 'inline'; }
+    else { drvNote.style.display = 'none'; }
+  }
+  
+  // Platform includes 1 full client
+  const clientSel = document.getElementById('addon-client');
+  if (clientSel) {
+    if (isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
+  }
+  const clfNote = document.getElementById('clf-note');
+  if (clfNote) clfNote.style.display = isPlatform ? 'inline' : 'none';
+  
+  // IOSRV only for Platform
+  const iosrvRow = document.getElementById('addon-iosrv')?.closest('.addon-row');
+  if (iosrvRow) {
+    iosrvRow.style.display = isPlatform ? '' : 'none';
+    if (!isPlatform) document.getElementById('addon-iosrv').value = '';
+  }
 }
 
 function formatTags(n) {
