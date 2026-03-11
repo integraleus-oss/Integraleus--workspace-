@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>АО «СПЕЦТЕХ» — Российские технологии для промышленной автоматизации</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════ */
+:root {
+  --ink:        #05080f;
+  --ink1:       #080d1a;
+  --ink2:       #0c1525;
+  --steel:      #111e35;
+  --wire:       #192d48;
+  --wire2:      #1f3a5f;
+
+  --volt:       #00c8f0;
+  --volt-lo:    rgba(0,200,240,0.08);
+  --volt-glow:  rgba(0,200,240,0.4);
+  --flame:      #ff6b35;
+  --flame-lo:   rgba(255,107,53,0.1);
+  --lime:       #1de9b6;
+  --lime-lo:    rgba(29,233,182,0.08);
+  --crimson:    #ff3d57;
+  --amber:      #ffb800;
+
+  --text:       #ccd9ea;
+  --text2:      #6a8aaa;
+  --text3:      #2d4a6a;
+
+  --ff-head:    'Exo 2', sans-serif;
+  --ff-mono:    'JetBrains Mono', monospace;
+
+  --ease:       cubic-bezier(.22,.68,0,1.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff-head);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink1); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 2px; }
+
+/* ══════════════════════════════════════
+   NOISE OVERLAY
+══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.12) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.12) 60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(5,8,15,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  height: 44px;
+  display: block;
+}
+
+.nav-logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  transition: color .2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--volt);
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+.nav-links a:hover { color: var(--volt); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-volt {
+  background: var(--volt);
+  color: var(--ink);
+  padding: 11px 24px;
+  font-size: 12px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: 0 0 24px var(--volt-glow);
+}
+.btn-volt:hover {
+  background: #33d5f7;
+  box-shadow: 0 0 40px var(--volt-glow);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--volt);
+  padding: 10px 22px;
+  font-size: 12px;
+  border: 1px solid var(--volt);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: inset 0 0 16px var(--volt-lo);
+}
+.btn-outline:hover {
+  background: var(--volt-lo);
+  box-shadow: 0 0 24px var(--volt-lo), inset 0 0 20px var(--volt-lo);
+  transform: translateY(-1px);
+}
+
+.btn-flame {
+  background: var(--flame);
+  color: #fff;
+  padding: 14px 32px;
+  font-size: 14px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  box-shadow: 0 0 30px rgba(255,107,53,0.4);
+}
+.btn-flame:hover {
+  background: #ff8054;
+  box-shadow: 0 0 50px rgba(255,107,53,0.5);
+  transform: translateY(-2px);
+}
+
+.btn-lg {
+  padding: 16px 42px;
+  font-size: 14px;
+}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 48px 80px;
+  overflow: hidden;
+}
+
+/* Particles canvas */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Animated grid bg */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--wire) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 80%);
+  opacity: 0.25;
+}
+
+/* Glowing orb */
+.hero-orb {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,240,0.07) 0%, rgba(0,200,240,0.03) 40%, transparent 70%);
+  animation: orb-pulse 6s ease-in-out infinite;
+}
+@keyframes orb-pulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.08); opacity: 0.7; }
+}
+
+/* Diagonal accent line */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 180px;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--volt) 30%, var(--volt) 70%, transparent);
+  opacity: 0.15;
+}
+
+.hero-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  animation: slide-up .7s var(--ease) both;
+}
+.hero-eyebrow-line {
+  width: 40px;
+  height: 1px;
+  background: var(--volt);
+  box-shadow: 0 0 8px var(--volt-glow);
+}
+.hero-eyebrow span {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--volt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: var(--text);
+  margin-bottom: 24px;
+  animation: slide-up .7s .1s var(--ease) both;
+}
+.hero-title .accent { color: var(--volt); }
+.hero-title .outline {
+  -webkit-text-stroke: 1px var(--text2);
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  animation: slide-up .7s .2s var(--ease) both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: slide-up .7s .3s var(--ease) both;
+}
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  height: 400px;
+  animation: slide-up .7s .4s var(--ease) both;
+}
+
+.hero-visual-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--steel), var(--wire));
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.hero-visual-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(0,200,240,0.1) 10px,
+    rgba(0,200,240,0.1) 20px
+  );
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.hero-visual svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+/* Hero stat pills */
+.hero-stats {
+  position: absolute;
+  right: 48px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slide-up .7s .5s var(--ease) both;
+}
+.stat-pill {
+  background: var(--steel);
+  border: 1px solid var(--wire);
+  border-left: 3px solid var(--volt);
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+}
+.stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.stat-num span { font-size: 16px; color: var(--volt); }
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+/* ══════════════════════════════════════
+   SECTION COMMONS
+══════════════════════════════════════ */
+section { position: relative; z-index: 1; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--volt);
+  box-shadow: 0 0 6px var(--volt-glow);
+}
+.section-tag span {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--volt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.section-title span { color: var(--volt); }
+
+/* ══════════════════════════════════════
+   STATS
+══════════════════════════════════════ */
+.stats {
+  padding: 60px 0;
+  background: var(--steel);
+  border-top: 1px solid var(--wire);
+  border-bottom: 1px solid var(--wire);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--wire);
+}
+.stat-block {
+  background: var(--ink1);
+  padding: 40px 32px;
+  text-align: center;
+}
+.stat-val {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-val .u { font-size: 24px; color: var(--volt); }
+.stat-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.stat-note {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ══════════════════════════════════════
+   PRODUCTS
+══════════════════════════════════════ */
+.products { padding: 100px 0; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+  background: var(--wire);
+}
+
+.product-card {
+  background: var(--ink1);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background .25s;
+}
+.product-card:hover { background: var(--ink2); }
+
+/* Top accent */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--wire2);
+  transition: background .25s, box-shadow .25s;
+}
+.product-card:hover::before {
+  background: var(--volt);
+  box-shadow: 0 0 12px var(--volt-glow);
+}
+
+/* Hover glow */
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--volt-lo);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.product-card:hover::after { opacity: 1; }
+
+.product-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-brand-text {
+  font-size: 0.95rem;
+  color: var(--volt);
+  font-weight: 500;
+  font-family: var(--ff-head);
+}
+
+.product-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-features {
+  list-style: none;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-features li {
+  color: var(--text2);
+  margin-bottom: 0.5rem;
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.product-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--lime);
+  font-weight: bold;
+}
+
+/* ══════════════════════════════════════
+   CAPABILITIES
+══════════════════════════════════════ */
+.capabilities {
+  padding: 100px 0;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  border-bottom: 1px solid var(--wire);
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.capability-card {
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  padding: 32px 24px;
+  position: relative;
+  transition: border-color .2s;
+  text-align: center;
+}
+.capability-card:hover { border-color: var(--wire2); }
+
+.capability-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 20px;
+}
+
+.capability-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.capability-card p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   TECHNOLOGIES
+══════════════════════════════════════ */
+.technologies { padding: 80px 0; }
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.tech-item {
+  background: var(--steel);
+  border: 1px solid var(--wire);
+  padding: 20px 16px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 60px;
+}
+
+.tech-item:hover {
+  background: var(--volt);
+  color: var(--ink);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px var(--volt-glow);
+}
+
+.tech-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   PARTNERS
+══════════════════════════════════════ */
+.partners {
+  padding: 100px 0;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+  margin-top: 60px;
+}
+
+.partner-card {
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  padding: 32px;
+  transition: border-color .2s, transform .2s;
+}
+.partner-card:hover {
+  border-color: var(--wire2);
+  transform: translateY(-4px);
+}
+
+.partner-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.partner-brand-text {
+  font-size: 1rem;
+  color: var(--volt);
+  font-weight: 500;
+}
+
+.partner-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.partner-card p {
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.partner-link {
+  color: var(--volt);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.partner-link:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 8px var(--volt-glow);
+}
+
+/* ══════════════════════════════════════
+   CONTACT
+══════════════════════════════════════ */
+.contact { padding: 100px 0; }
+
+.contact-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 60px;
+}
+
+.contact-form {
+  background: var(--steel);
+  padding: 32px;
+  border: 1px solid var(--wire);
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--volt);
+  box-shadow: 0 0 8px var(--volt-lo);
+}
+
+.form-group textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.contact-info h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.contact-item {
+  margin-bottom: 24px;
+}
+
+.contact-item h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--volt);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.contact-item p {
+  color: var(--text2);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ══════════════════════════════════════
+   CTA SECTION
+══════════════════════════════════════ */
+.cta-section {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0,200,240,0.06) 0%, transparent 70%);
+}
+.cta-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--wire) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.2;
+}
+.cta-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.cta-sup {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--volt);
+  text-transform: uppercase;
+}
+.cta-title {
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--text);
+  line-height: 1;
+}
+.cta-title span { color: var(--volt); }
+.cta-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text2);
+  max-width: 480px;
+  line-height: 1.6;
+}
+.cta-btns { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer {
+  background: var(--ink);
+  border-top: 1px solid var(--wire);
+  padding: 60px 0 32px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.footer-brand p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-top: 16px;
+  max-width: 280px;
+}
+.footer-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text2);
+  transition: color .15s;
+}
+.footer-links a:hover { color: var(--volt); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28px;
+  border-top: 1px solid var(--wire);
+}
+.footer-copy {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+.footer-badges { display: flex; gap: 12px; }
+.f-badge {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  padding: 4px 10px;
+  border: 1px solid var(--wire2);
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════ */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Fade-in animation observer */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cascade delay for cards */
+.fade-in:nth-child(1) { transition-delay: 0.1s; }
+.fade-in:nth-child(2) { transition-delay: 0.2s; }
+.fade-in:nth-child(3) { transition-delay: 0.3s; }
+.fade-in:nth-child(4) { transition-delay: 0.4s; }
+.fade-in:nth-child(5) { transition-delay: 0.5s; }
+.fade-in:nth-child(6) { transition-delay: 0.6s; }
+
+/* SVG animations */
+@keyframes pulse-ring {
+  0%   { transform: scale(0.92); opacity: 1; }
+  100% { transform: scale(1.08); opacity: 0; }
+}
+.pulse-dot {
+  animation: pulse-ring 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+  transform-origin: center;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin { animation: spin-slow 8s linear infinite; transform-origin: center; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.blink { animation: blink 2s ease-in-out infinite; }
+
+@keyframes flow { 0%{stroke-dashoffset:40} 100%{stroke-dashoffset:0} }
+.flow { animation: flow 2s linear infinite; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 80px; }
+  .hero-container { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+  .hero-stats { position: relative; right: auto; bottom: auto; margin-top: 40px; }
+  .hero::after { display: none; }
+  .why-us [style*="grid-template-columns:1.2fr"] { grid-template-columns: 1fr !important; }
+  .why-us [style*="font-size:13px"] { font-size: 12px !important; }
+  .container { padding: 0 24px; }
+  .products-grid { grid-template-columns: 1fr; }
+  .capabilities-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .partners-grid { grid-template-columns: 1fr; }
+  .contact-container { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-actions { flex-direction: column; width: 100%; }
+  .stats-row { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .cta-btns { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">О компании</a></li>
+    <li><a href="#products">Продукты</a></li>
+    <li><a href="#capabilities">Возможности</a></li>
+    <li><a href="#tech">Технологии</a></li>
+    <li><a href="#partners">Партнёры</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <canvas class="hero-particles" id="particles-canvas"></canvas>
+
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Российский дистрибьютор ПО</span>
+      </div>
+
+      <h1 class="hero-title">
+        Российские<br>
+        <span class="accent">технологии</span><br>
+        для <span class="outline">АСУ ТП</span>
+      </h1>
+
+      <p class="hero-sub">
+        Подбор и внедрение SCADA-систем, MES, ПЛК и инженерного ПО 
+        для промышленных предприятий. Официальный дистрибьютор 
+        российских разработчиков.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#products" class="btn btn-volt btn-lg">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/></svg>
+          Наши продукты
+        </a>
+        <a href="#contact" class="btn btn-outline btn-lg">Получить консультацию</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-visual-bg"></div>
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="80" stroke="white" stroke-width="2" opacity="0.5"/>
+        <circle cx="100" cy="100" r="60" stroke="white" stroke-width="2" opacity="0.7"/>
+        <circle cx="100" cy="100" r="40" stroke="white" stroke-width="2" opacity="0.9"/>
+        <circle cx="100" cy="100" r="20" fill="white" opacity="0.3"/>
+        <rect x="90" y="90" width="20" height="20" fill="white" opacity="0.8"/>
+        <polyline points="70,100 85,85 100,100 115,75 130,90 145,70" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
+      </svg>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" class="stats">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="stat-val" data-count="15">0<span class="u">+</span></div>
+        <div class="stat-name">Лет опыта</div>
+        <div class="stat-note">на рынке АСУ ТП</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val" data-count="50">0<span class="u">+</span></div>
+        <div class="stat-name">Проектов</div>
+        <div class="stat-note">по всей России</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">3</div>
+        <div class="stat-name">Партнёра</div>
+        <div class="stat-note">российских разработчика</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-val">24<span class="u">/7</span></div>
+        <div class="stat-name">Поддержка</div>
+        <div class="stat-note">техническая помощь</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY US ══ -->
+<section class="why-us" style="padding:100px 0;position:relative;">
+  <div class="container">
+    <div class="section-tag"><span>// Почему мы</span></div>
+    <h2 class="section-title">Полный цикл<br><span>поставок</span></h2>
+
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:48px;margin-top:60px;align-items:start;">
+      <!-- Terminal wrapper -->
+      <div style="position:relative;margin-bottom:30px;">
+      <div style="background:var(--ink);border:1px solid var(--wire);border-radius:4px;overflow:hidden;font-family:var(--ff-mono);font-size:12px;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(0,200,240,0.05);">
+        <div style="background:var(--steel);padding:10px 16px;display:flex;align-items:center;gap:8px;">
+          <span style="width:12px;height:12px;border-radius:50%;background:#ff3d57;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#ffb800;display:inline-block;"></span>
+          <span style="width:12px;height:12px;border-radius:50%;background:#1de9b6;display:inline-block;"></span>
+          <span style="color:var(--text2);font-size:11px;margin-left:12px;">spectech-portal v1.0</span>
+        </div>
+        <div style="padding:20px;line-height:1.9;">
+          <div><span style="color:var(--lime);">›</span> <span style="color:var(--text2);">license check --vendor=atomiq --sku=ALPHA-SCADA-128</span></div>
+          <div style="color:var(--lime);">  ✓ <span style="color:var(--text);">license active</span></div>
+          <div style="color:var(--text2);">  Продукт: <span style="color:var(--text);">Alpha.SCADA v4.2</span>  |  Узлов: <span style="color:var(--text);">128</span>  |  До: <span style="color:var(--text);">2027-12</span></div>
+          <br>
+          <div><span style="color:var(--lime);">›</span> <span style="color:var(--text2);">order status ORD-2026-0847</span></div>
+          <div style="color:var(--lime);">  ✓ <span style="color:var(--text);">в пути</span> <span style="color:var(--text2);">  ETA 18 марта 2026</span></div>
+          <div style="color:var(--text2);">  Трекинг: <span style="color:var(--text);">CDEK-78451290</span>  |  <span style="color:var(--text2);">Сортировочный центр</span></div>
+          <br>
+          <div><span style="color:var(--lime);">›</span> <span style="color:var(--text2);">support ticket --priority=critical</span></div>
+          <div style="color:var(--lime);">  ✓ <span style="color:var(--text);">инженер назначен</span></div>
+          <div style="color:var(--text2);">  Специалист: <span style="color:var(--text);">Сергеев А.В.</span>  |  Ответ: <span style="color:var(--lime);">&lt; 15 мин</span></div>
+          <br>
+          <div><span style="color:var(--lime);">›</span> <span style="color:var(--text2);">catalog search --category=scada --limit=5</span></div>
+          <div style="color:var(--text);">  <span style="color:var(--text2);">[1]</span> Alpha.One+         <span style="color:var(--lime);">SCADA/MES/IoT платформа</span></div>
+          <div style="color:var(--text);">  <span style="color:var(--text2);">[2]</span> Alpha.SCADA        <span style="color:var(--lime);">мониторинг реального времени</span></div>
+          <div style="color:var(--text);">  <span style="color:var(--text2);">[3]</span> Alpha.Historian     <span style="color:var(--lime);">архивирование данных</span></div>
+          <div style="color:var(--text);">  <span style="color:var(--text2);">[4]</span> CAE WeRTSim        <span style="color:var(--flame);">имитационное моделирование</span></div>
+          <div style="color:var(--text);">  <span style="color:var(--text2);">[5]</span> ПЛК                <span style="color:var(--amber);">промышленные контроллеры</span></div>
+          <br>
+          <div><span style="color:var(--lime);">›</span> <span style="display:inline-block;width:8px;height:15px;background:var(--volt);animation:blink 1s infinite;vertical-align:middle;"></span></div>
+        </div>
+      </div><!-- end terminal -->
+      <div style="position:absolute;bottom:-20px;right:-20px;background:var(--steel);border:1px solid var(--wire);border-left:3px solid var(--lime);padding:14px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.5);z-index:10;">
+        <div style="font-family:var(--ff-mono);font-size:9px;color:var(--text2);letter-spacing:2px;margin-bottom:4px;">Среднее время ответа</div>
+        <div style="font-size:22px;font-weight:800;color:var(--lime);">14 мин</div>
+      </div>
+      </div><!-- end wrapper -->
+
+      <!-- Features -->
+      <div style="display:flex;flex-direction:column;gap:28px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--volt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Официальные лицензии</div>
+            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Оригинальное лицензированное ПО напрямую от российских разработчиков. Реестр отечественного ПО.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--flame);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поставка за 1–5 дней</div>
+            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Электронные лицензии — мгновенно. Физическая поставка оборудования по всей России и СНГ.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Техническое внедрение</div>
+            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Сертифицированные инженеры. Интеграция с существующими системами АСУ ТП на вашем предприятии.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поддержка 24/7</div>
+            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Выделенная линия для критических инцидентов. SLA 15 минут для Enterprise клиентов.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS ══ -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="section-tag"><span>// Наши продукты</span></div>
+    <h2 class="section-title">Российские<br><span>решения</span></h2>
+  </div>
+
+  <div style="margin-top:60px">
+    <div class="products-grid">
+
+      <!-- Alpha Platform -->
+      <div class="product-card fade-in">
+        <div class="product-icon">
+          <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
+            <rect x="4" y="8" width="44" height="30" rx="3" stroke="#00c8f0" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+            <rect x="8" y="12" width="36" height="22" rx="1.5" fill="rgba(0,200,255,0.08)" stroke="#0066aa" stroke-width="1"/>
+            <polyline points="10,30 16,22 21,26 27,18 33,24 38,16" stroke="#00c8f0" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="38" cy="16" r="2" fill="#00c8f0"/>
+            <rect x="22" y="38" width="8" height="3" rx="1" fill="#0066aa"/>
+            <rect x="18" y="41" width="16" height="2" rx="1" fill="#004488"/>
+            <rect x="10" y="28" width="6" height="2" rx="0.5" fill="rgba(0,200,255,0.3)" class="blink"/>
+          </svg>
+        </div>
+        <div class="product-brand">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="14" stroke="#4A9E8E" stroke-width="2.2" fill="none"/>
+            <text x="18" y="24" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#00c8f0">a</text>
+          </svg>
+          <span class="product-brand-text">Атомик Софт</span>
+        </div>
+        <div class="product-name">Альфа платформа</div>
+        <div class="product-desc">Российская SCADA для разработки АСУ ТП любого масштаба — от HMI до многоуровневых систем диспетчеризации.</div>
+        <ul class="product-features">
+          <li>Alpha.One+ — единая платформа SCADA/MES/IoT</li>
+          <li>Alpha.SCADA — мониторинг и управление в реальном времени</li>
+          <li>Alpha.Historian — сбор и хранение данных</li>
+          <li>До 2 000 000 тегов, кроссплатформенность</li>
+        </ul>
+      </div>
+
+      <!-- CAE WeRTSim -->
+      <div class="product-card fade-in">
+        <div class="product-icon">
+          <svg viewBox="0 0 52 52" fill="none">
+            <!-- экран -->
+            <rect x="6" y="8" width="40" height="28" rx="2" fill="rgba(255,107,53,0.05)" stroke="#ff6b35" stroke-width="1.5"/>
+            <!-- виртуальная среда -->
+            <rect x="10" y="12" width="32" height="20" rx="1" fill="rgba(255,107,53,0.08)"/>
+            <!-- осциллограмма -->
+            <path d="M12 22 L16 22 L16 16 L20 16 L20 22 L24 22 L24 18 L28 18 L28 22 L32 22 L32 14 L36 14 L36 22 L40 22" stroke="#ff6b35" stroke-width="1.5" fill="none" stroke-linecap="square"/>
+            <!-- метки SIM -->
+            <rect x="10" y="12" width="10" height="4" rx="0.5" fill="rgba(255,107,53,0.3)"/>
+            <text x="11.5" y="15.5" fill="#ff6b35" font-size="4" font-family="Share Tech Mono,monospace">SIM</text>
+            <!-- подставка -->
+            <line x1="26" y1="36" x2="26" y2="40" stroke="#aa3300" stroke-width="2"/>
+            <rect x="18" y="40" width="16" height="3" rx="1" fill="#aa3300" stroke="#ff6b35" stroke-width="0.8"/>
+            <!-- кнопка Play -->
+            <circle cx="40" cy="38" r="5" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1"/>
+            <polygon points="38.5,36 38.5,40 42.5,38" fill="#ff6b35"/>
+          </svg>
+        </div>
+        <div class="product-brand">
+          <svg width="28" height="32" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L0.279297 80.1172C0.280797 88.3224 1.843 96.1304 4.96875 103.424L4.97266 103.43L4.97461 103.436C8.07432 110.599 12.31 116.926 17.6445 122.33L17.6602 122.346L17.6777 122.363C23.0815 127.698 29.4066 131.934 36.5703 135.033L36.5762 135.037L36.582 135.039C43.879 138.166 51.6928 139.73 59.9024 139.73C68.1076 139.73 75.8876 138.168 83.1231 135.039C90.3528 131.941 96.7176 127.705 102.127 122.365L102.135 122.354L102.145 122.346C107.55 116.941 111.826 110.608 114.93 103.436L114.932 103.43L114.934 103.424C118.058 96.1347 119.655 88.3185 119.625 80.0918L119.334 0H84.002L84.2656 80.1035C84.2649 83.4693 83.6217 86.5452 82.332 89.4609L82.3203 89.4883L82.3086 89.5156C81.0511 92.4879 79.3414 95.0316 77.1348 97.2383C74.9305 99.4426 72.3462 101.191 69.293 102.518C66.3721 103.75 63.2816 104.367 59.9043 104.367C56.5319 104.367 53.4033 103.75 50.4082 102.512C47.4325 101.19 44.8789 99.4453 42.6719 97.2383C40.4615 95.0279 38.7174 92.47 37.3945 89.4883C36.166 86.5745 35.5518 83.4833 35.543 80.0957L35.3379 0H0Z" fill="#00c8f0"/></svg>
+          <span class="product-brand-text">ЮМОСС</span>
+        </div>
+        <div class="product-name">CAE WeRTSim</div>
+        <div class="product-desc">Российская платформа для имитационного моделирования машиностроительных технологий.</div>
+        <ul class="product-features">
+          <li>Сварка и наплавка</li>
+          <li>Резка и пайка</li>
+          <li>Напыление и упрочнение</li>
+          <li>Термическая правка и гибка</li>
+          <li>Аддитивные технологии</li>
+        </ul>
+      </div>
+
+      <!-- ПЛК -->
+      <div class="product-card fade-in">
+        <div class="product-icon">
+          <svg viewBox="0 0 52 52" fill="none">
+            <rect x="8" y="10" width="36" height="32" rx="2" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+            <!-- левая сторона - клеммы -->
+            <rect x="5" y="16" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+            <rect x="5" y="22" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+            <rect x="5" y="28" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+            <!-- правая сторона -->
+            <rect x="42" y="16" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+            <rect x="42" y="22" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+            <rect x="42" y="28" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+            <!-- CPU блок -->
+            <rect x="14" y="16" width="24" height="20" rx="1" fill="rgba(0,200,255,0.08)" stroke="#0066aa" stroke-width="1"/>
+            <!-- индикаторы -->
+            <circle cx="18" cy="20" r="1.5" fill="#00ff9d" class="blink"/>
+            <circle cx="22" cy="20" r="1.5" fill="#f0c040"/>
+            <circle cx="26" cy="20" r="1.5" fill="#ff4466" opacity="0.4"/>
+            <!-- чип -->
+            <rect x="20" y="24" width="12" height="8" rx="1" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="0.8"/>
+            <line x1="22" y1="22" x2="22" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+            <line x1="26" y1="22" x2="26" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+            <line x1="30" y1="22" x2="30" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+          </svg>
+        </div>
+        <div class="product-name">ПЛК</div>
+        <div class="product-desc">Программируемые логические контроллеры — подбор, поставка и интеграция с системами АСУ ТП.</div>
+        <ul class="product-features">
+          <li>Подбор по техническим требованиям</li>
+          <li>Поставка и настройка</li>
+          <li>Техническая поддержка</li>
+          <li>Интеграция с существующими системами</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAPABILITIES ══ -->
+<section class="capabilities" id="capabilities">
+  <div class="container">
+
+
+<!-- ══ TECHNOLOGIES ══ -->
+<section class="technologies" id="tech">
+  <div class="container">
+    <div class="section-tag"><span>// Технологии</span></div>
+    <h2 class="section-title">Протоколы и<br><span>стандарты</span></h2>
+
+    <div class="tech-grid">
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 10h10M7 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        OPC UA
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 9V3M12 21v-6M21 12h-6M9 12H3" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        OPC DA
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M6 10h12M6 14h8" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        Modbus TCP/RTU
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        IEC 60870-5
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        МЭК 61850
+      </div>
+      <div class="tech-item fade-in">
+        <div class="tech-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M9 3v18M15 3v18M3 9h18M3 15h18" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        Кроссплатформенность
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARTNERS ══ -->
+<section class="partners" id="partners">
+  <div class="container">
+    <div class="section-tag"><span>// Наши партнёры</span></div>
+    <h2 class="section-title">Российские<br><span>разработчики</span></h2>
+
+    <div class="partners-grid">
+      <div class="partner-card fade-in">
+        <div class="partner-brand">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="14" stroke="#4A9E8E" stroke-width="2.2" fill="none"/>
+            <text x="18" y="24" text-anchor="middle" font-family="Inter,sans-serif" font-size="18" font-weight="600" fill="#00c8f0">a</text>
+          </svg>
+          <span class="partner-brand-text">Атомик Софт</span>
+        </div>
+        <h3>АО «Атомик Софт»</h3>
+        <p>Разработчик SCADA-систем семейства Alpha. Ведущий российский производитель программного обеспечения для промышленной автоматизации с более чем 15-летним опытом на рынке.</p>
+        <a href="https://automiq.ru" target="_blank" class="partner-link">automiq.ru →</a>
+      </div>
+      
+      <div class="partner-card fade-in">
+        <div class="partner-brand">
+          <svg width="28" height="32" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L0.279297 80.1172C0.280797 88.3224 1.843 96.1304 4.96875 103.424L4.97266 103.43L4.97461 103.436C8.07432 110.599 12.31 116.926 17.6445 122.33L17.6602 122.346L17.6777 122.363C23.0815 127.698 29.4066 131.934 36.5703 135.033L36.5762 135.037L36.582 135.039C43.879 138.166 51.6928 139.73 59.9024 139.73C68.1076 139.73 75.8876 138.168 83.1231 135.039C90.3528 131.941 96.7176 127.705 102.127 122.365L102.135 122.354L102.145 122.346C107.55 116.941 111.826 110.608 114.93 103.436L114.932 103.43L114.934 103.424C118.058 96.1347 119.655 88.3185 119.625 80.0918L119.334 0H84.002L84.2656 80.1035C84.2649 83.4693 83.6217 86.5452 82.332 89.4609L82.3203 89.4883L82.3086 89.5156C81.0511 92.4879 79.3414 95.0316 77.1348 97.2383C74.9305 99.4426 72.3462 101.191 69.293 102.518C66.3721 103.75 63.2816 104.367 59.9043 104.367C56.5319 104.367 53.4033 103.75 50.4082 102.512C47.4325 101.19 44.8789 99.4453 42.6719 97.2383C40.4615 95.0279 38.7174 92.47 37.3945 89.4883C36.166 86.5745 35.5518 83.4833 35.543 80.0957L35.3379 0H0Z" fill="white"/></svg>
+          <span class="partner-brand-text">ЮМОСС</span>
+        </div>
+        <h3>Компания ЮМОСС</h3>
+        <p>Разработчик CAE WeRTSim — российской программной платформы для имитационного моделирования промышленных процессов. Специализируется на сварочных и аддитивных технологиях.</p>
+        <a href="https://umoss.ru" target="_blank" class="partner-link">umoss.ru →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" id="contact">
+  <div class="cta-grid-bg"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-sup">// Готовы начать?</div>
+      <h2 class="cta-title">Свяжитесь с<br><span>нашими</span><br>экспертами</h2>
+      <p class="cta-sub">Получите консультацию по выбору ПО, расчет стоимости и план внедрения российских технологий для вашего производства.</p>
+      <div class="cta-btns">
+        <a href="mailto:info@special-tech.ru" class="btn btn-flame btn-lg">Написать письмо</a>
+        <a href="tel:+74957600939" class="btn btn-outline btn-lg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.12 1.18 2 2 0 012.1.01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.45-.45a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" stroke="currentColor" stroke-width="1.5"/></svg>
+          +7 (495) 760-09-39
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section class="contact">
+  <div class="container">
+    <div class="contact-container">
+      <div class="contact-form fade-in">
+        <h3 style="color: var(--text); margin-bottom: 24px; font-size: 20px;">Отправить сообщение</h3>
+        <form action="/send_form.php" method="POST">
+          <div class="form-group">
+            <label for="name">Имя</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          <div class="form-group">
+            <label for="message">Сообщение</label>
+            <textarea id="message" name="message" placeholder="Расскажите о вашем проекте" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-volt" style="width: 100%;">Отправить сообщение</button>
+        </form>
+      </div>
+      
+      <div class="contact-info fade-in">
+        <h3>Контактная информация</h3>
+        <div class="contact-item">
+          <h4>Телефон</h4>
+          <p>+7 (495) 760 09 39</p>
+        </div>
+        <div class="contact-item">
+          <h4>Email</h4>
+          <p>info@special-tech.ru</p>
+          <p>sales@special-tech.ru</p>
+        </div>
+        <div class="contact-item">
+          <h4>Адрес</h4>
+          <p>141301, Московская обл., Сергиево-Посадский г.о.,<br>
+          г. Сергиев Посад, ш. Новоугличское, д.75, офис 308</p>
+        </div>
+        <div class="contact-item">
+          <h4>Режим работы</h4>
+          <p>Понедельник-Пятница: 9:00-17:00</p>
+          <p style="font-size: 12px; color: var(--volt); margin-top: 8px;">Техническая поддержка 24/7</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div style="font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: 2px;">СПЕЦТЕХ</div>
+        </div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="#products">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">ПЛК</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="#about">О компании</a></li>
+          <li><a href="#tech">Технологии</a></li>
+          <li><a href="#partners">Партнёры</a></li>
+          <li><a href="#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--ff-mono);font-size:11px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Particles System
+class ParticlesSystem {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.connections = [];
+        this.resize();
+        this.init();
+        
+        window.addEventListener('resize', () => this.resize());
+    }
+    
+    resize() {
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+    }
+    
+    init() {
+        const particleCount = Math.floor((this.canvas.width * this.canvas.height) / 15000);
+        this.particles = [];
+        
+        for (let i = 0; i < particleCount; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                vx: (Math.random() - 0.5) * 0.3,
+                vy: (Math.random() - 0.5) * 0.3,
+                size: Math.random() * 2 + 1
+            });
+        }
+    }
+    
+    update() {
+        this.particles.forEach(particle => {
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            
+            if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+            if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+        });
+        
+        this.connections = [];
+        for (let i = 0; i < this.particles.length; i++) {
+            for (let j = i + 1; j < this.particles.length; j++) {
+                const dx = this.particles[i].x - this.particles[j].x;
+                const dy = this.particles[i].y - this.particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 120) {
+                    this.connections.push({
+                        a: this.particles[i],
+                        b: this.particles[j],
+                        opacity: (120 - distance) / 120
+                    });
+                }
+            }
+        }
+    }
+    
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw connections
+        this.connections.forEach(connection => {
+            this.ctx.beginPath();
+            this.ctx.moveTo(connection.a.x, connection.a.y);
+            this.ctx.lineTo(connection.b.x, connection.b.y);
+            this.ctx.strokeStyle = `rgba(0, 200, 240, ${connection.opacity * 0.2})`;
+            this.ctx.lineWidth = 0.5;
+            this.ctx.stroke();
+        });
+        
+        // Draw particles
+        this.particles.forEach(particle => {
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            this.ctx.fillStyle = 'rgba(0, 200, 240, 0.4)';
+            this.ctx.fill();
+        });
+    }
+    
+    animate() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Initialize particles
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('particles-canvas');
+    if (canvas) {
+        const particlesSystem = new ParticlesSystem(canvas);
+        particlesSystem.animate();
+    }
+});
+
+// Scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            const isInGrid = entry.target.parentElement.classList.contains('products-grid') ||
+                           entry.target.parentElement.classList.contains('capabilities-grid') ||
+                           entry.target.parentElement.classList.contains('partners-grid') ||
+                           entry.target.parentElement.classList.contains('stats-row');
+            
+            if (isInGrid) {
+                const children = Array.from(entry.target.parentElement.children);
+                const elementIndex = children.indexOf(entry.target);
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, elementIndex * 150);
+            } else {
+                entry.target.classList.add('visible');
+            }
+            
+            // Trigger counter animation for stats
+            if (entry.target.classList.contains('stat-block') || entry.target.classList.contains('stat-pill')) {
+                setTimeout(() => {
+                    const counterEl = entry.target.querySelector('[data-count]');
+                    if (counterEl) animateCounter(counterEl);
+                }, 300);
+            }
+        }
+    });
+}, observerOptions);
+
+// Observe all elements with fade-in class
+document.querySelectorAll('.fade-in').forEach(el => {
+    observer.observe(el);
+});
+
+// Observe stat blocks
+document.querySelectorAll('.stat-block, .stat-pill').forEach(el => {
+    observer.observe(el);
+});
+
+// Counter animation
+function animateCounter(element) {
+    if (element.dataset.animated) return;
+    element.dataset.animated = 'true';
+    
+    const target = parseInt(element.dataset.count);
+    if (isNaN(target)) return;
+    
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    const suffix = element.innerHTML.includes('+') ? '+' : '';
+
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+            element.innerHTML = target + (element.querySelector('span') ? element.querySelector('span').outerHTML : '') + suffix;
+            clearInterval(timer);
+        } else {
+            element.innerHTML = Math.floor(current) + (element.querySelector('span') ? element.querySelector('span').outerHTML : '') + suffix;
+        }
+    }, 16);
+}
+
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const headerOffset = 80;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// Form submission
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Отправляется...';
+    btn.style.opacity = '0.7';
+    
+    setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.opacity = '1';
+        alert('Спасибо! Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.');
+        e.target.reset();
+    }, 1500);
+});
+</script>
+
+</body>
+</html>
