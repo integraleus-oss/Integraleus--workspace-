@@ -294,7 +294,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
 .result-line:last-of-type { border-bottom: none; }
 .r-name { font-size: 12px; color: var(--text2); line-height: 1.4; }
-.r-val  { font-family: var(--mono); font-size: 12px; color: var(--text); white-space: nowrap; }
+.r-val  { font-family: var(--mono); font-size: 12px; color: var(--text); word-break: break-word; }
 .r-val.accent { color: var(--volt); }
 .r-val.muted  { color: var(--text3); }
 
@@ -652,43 +652,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
               </div>
             </div>
 
-            <!-- Дополнительные продукты -->
-            <div style="margin-top:16px; border-top:1px solid var(--wire); padding-top:12px">
-              <div style="font-size:11px; color:var(--text3); font-family:var(--ff-mono); margin-bottom:8px">// дополнительно к основному продукту</div>
-              
-              <div class="addon-product" style="margin-bottom:10px">
-                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
-                  <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
-                  <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
-                  <span class="addon-hint">Архивирование данных процесса</span>
-                </label>
-                <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
-                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="hist-qty-val">1 k</span>
-                  </div>
-                  <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
-                  <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
-                </div>
-              </div>
-
-              <div class="addon-product">
-                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
-                  <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
-                  <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
-                  <span class="addon-hint">Генерация отчётов и аналитика</span>
-                </label>
-                <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
-                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="rpt-qty-val">1 k</span>
-                  </div>
-                  <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
-                  <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -730,6 +693,43 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <span style="color:var(--text)">Резервный сервер</span>
                 <span class="addon-hint" style="margin-left:8px">Отдельная лицензия на тот же теговый уровень (резервная пара)</span>
               </label>
+            </div>
+
+            <!-- Дополнительные продукты -->
+            <div style="margin-top:16px; border-top:1px solid var(--wire); padding-top:12px">
+              <div style="font-size:11px; color:var(--text3); font-family:var(--ff-mono); margin-bottom:8px">// дополнительно к основному продукту</div>
+              
+              <div class="addon-product" style="margin-bottom:10px">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
+                  <span class="addon-hint">Архивирование данных процесса</span>
+                </label>
+                <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="hist-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
+                  <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
+              </div>
+
+              <div class="addon-product">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
+                  <span class="addon-hint">Генерация отчётов и аналитика</span>
+                </label>
+                <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="rpt-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
+                  <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -866,6 +866,10 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div class="result-line">
             <div class="r-name">Тип лицензии</div>
             <div class="r-val" id="r-term">Бессрочная</div>
+          </div>
+          <div class="result-line" id="r-reserve-row" style="display:none">
+            <div class="r-name">Резерв</div>
+            <div class="r-val" style="color:var(--lime)">Да (резервная пара)</div>
           </div>
           <div class="result-line" id="r-historian-row" style="display:none">
             <div class="r-name">+ Historian</div>
@@ -1488,6 +1492,10 @@ function calcUpdate() {
   document.getElementById('r-qty').textContent = qty.toLocaleString('ru-RU') + ' тегов';
   document.getElementById('r-term').textContent = terms[term - 1];
 
+  // Reserve in result
+  const resRow2 = document.getElementById('r-reserve-row');
+  if (resRow2) resRow2.style.display = document.getElementById('addon-reserve')?.checked ? 'flex' : 'none';
+
   // Historian/Reports in result
   const hist = getSelectedHistorian();
   const histRow = document.getElementById('r-historian-row');
@@ -1521,7 +1529,7 @@ function sendConfigEmail() {
   const bestSku = findBestSku(prod, qty);
   const terms = ['Бессрочная', '1 год', '3 года'];
   
-  let addons = [];
+  let addonLines = [];
   // Selects
   const selAddons = {
     'addon-client': 'Полный клиент',
@@ -1531,11 +1539,11 @@ function sendConfigEmail() {
   };
   Object.entries(selAddons).forEach(([id, name]) => {
     const el = document.getElementById(id);
-    if (el?.value) addons.push(name + ' (' + el.options[el.selectedIndex].text + ')');
+    if (el?.value) addonLines.push('• ' + name + ' (' + el.options[el.selectedIndex].text + ')');
   });
   // SLA
   const slaEl = document.getElementById('addon-sla');
-  if (slaEl) addons.push('SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  if (slaEl) addonLines.push('• SLA: ' + slaEl.options[slaEl.selectedIndex].text);
   // Checkboxes
   const chkAddons = {
     'addon-energy': 'DRV-PACK-ENERGY (МЭК 61850, ТЭМ-104)',
@@ -1545,26 +1553,49 @@ function sendConfigEmail() {
     'addon-portal': 'WEB-портал (WEB-PORTAL)'
   };
   Object.entries(chkAddons).forEach(([id, name]) => {
-    if (document.getElementById(id)?.checked) addons.push(name);
+    if (document.getElementById(id)?.checked) addonLines.push('• ' + name);
   });
-  if (document.getElementById('addon-reserve')?.checked) addons.push('Резервный сервер (доп. лицензия)');
+  if (document.getElementById('addon-reserve')?.checked) addonLines.push('• Резервный сервер (доп. лицензия)');
 
-  const subject = encodeURIComponent('Запрос КП: конфигурация Альфа платформы');
-  const body = encodeURIComponent(
-    `Добрый день!\n\n` +
-    `Прошу подготовить коммерческое предложение на следующую конфигурацию:\n\n` +
-    `ПРОДУКТ: ${p.name}\n` +
-    `АРТИКУЛ: ${bestSku ? bestSku.sku : '—'}\n` +
-    `КОЛИЧЕСТВО ТЕГОВ: ${qty}\n` +
-    `ТИП ЛИЦЕНЗИИ: ${terms[term - 1]}\n` +
-    (getSelectedHistorian() ? `\n+ Alpha.Historian: ${getSelectedHistorian().sku} (${getSelectedHistorian().tags === 999999 ? 'Безлимит' : getSelectedHistorian().tags + ' тегов'})\n` : '') +
-    (getSelectedReports() ? `+ Alpha.Reports: ${getSelectedReports().sku} (${getSelectedReports().tags === 999999 ? 'Безлимит' : getSelectedReports().tags + ' тегов'})\n` : '') +
-    (addons.length > 0 ? `\nДОПОЛНИТЕЛЬНЫЕ МОДУЛИ:\n${addons.map(a => '• ' + a).join('\n')}\n` : '') +
-    `\n---\nСформировано через калькулятор на specialtechnology.ru\n` +
-    `Дата: ${new Date().toLocaleDateString('ru-RU')}`
-  );
-  
-  window.location.href = `mailto:sales@special-tech.ru?subject=${subject}&body=${body}`;
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('product', p.name);
+  fd.append('sku', bestSku ? bestSku.sku : '—');
+  fd.append('tags', qty);
+  fd.append('term', terms[term - 1]);
+  fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
+  fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' : '');
+  fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
+  fd.append('addons', addonLines.join('\n'));
+
+  // Show sending state
+  const btn = document.querySelector('.result-total-block .btn');
+  const origText = btn.textContent;
+  btn.textContent = 'Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (data.ok) {
+        btn.textContent = '✓ Отправлено!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+      } else {
+        btn.textContent = '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+      }
+    })
+    .catch(() => {
+      btn.textContent = '✗ Ошибка сети';
+      setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
+    });
 }
 
 /* ─── ADDON PRODUCT SLIDERS (Historian, Reports) ─── */
