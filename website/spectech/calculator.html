@@ -890,19 +890,26 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             <div class="result-total-note" id="r-note">Цены предоставляются по запросу. Отправьте конфигурацию — мы подготовим КП в течение 4 рабочих часов.</div>
           </div>
 
+                    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
+            <div style="font-size:11px;color:var(--text3);font-family:var(--ff-mono);margin-bottom:8px">// ваши контакты</div>
+            <input class="addon-select" id="calc-name" placeholder="Имя / Компания *" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
+          </div>
+
           <div class="result-actions">
-            <button class="btn btn-volt" onclick="switchTab('wizard', document.querySelectorAll('.tab')[1]); prefillWizard()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
-              Запросить КП
-            </button>
-            <button class="btn btn-outline" onclick="sendConfigEmail()">
+            <button class="btn btn-volt" id="btn-send-calc" onclick="sendConfigEmail()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
-              Отправить конфигурацию
+              Отправить КП
+            </button>
+            <button class="btn btn-outline" onclick="switchTab('wizard', document.querySelectorAll('.tab')[1]); prefillWizard()">
+              Расширенный запрос
             </button>
           </div>
 
           <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--wire)">
             <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
+              <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
               АО СПЕЦТЕХ<br>sales@special-tech.ru<br>+7 (495) 760 09 39<br>
               <span style="color:var(--volt)" id="r-date"></span>
             </div>
@@ -1560,9 +1567,27 @@ function sendConfigEmail() {
   const hist = getSelectedHistorian();
   const rpt = getSelectedReports();
 
+  // Get contact fields
+  const cName = document.getElementById('calc-name').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+
+  if (!cName || !cEmail) {
+    alert('Заполните имя и email');
+    if (!cName) document.getElementById('calc-name').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
   // Send via PHP
   const fd = new FormData();
+  fd.append('tid', calcTid);
   fd.append('product', p.name);
+  fd.append('name', cName);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
   fd.append('sku', bestSku ? bestSku.sku : '—');
   fd.append('tags', qty);
   fd.append('term', terms[term - 1]);
@@ -1572,7 +1597,7 @@ function sendConfigEmail() {
   fd.append('addons', addonLines.join('\n'));
 
   // Show sending state
-  const btn = document.querySelector('.result-total-block .btn');
+  const btn = document.getElementById('btn-send-calc');
   const origText = btn.textContent;
   btn.textContent = 'Отправка...';
   btn.disabled = true;
@@ -1661,6 +1686,10 @@ function getSelectedReports() {
   const idx = +document.getElementById('rpt-slider').value;
   return rptVariants[idx];
 }
+
+// Generate ticket ID
+const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+document.getElementById('r-tid').textContent = calcTid;
 
 updateSliderRange();
 calcUpdate();
@@ -1761,14 +1790,83 @@ function fillSummary() {
 function fillSummaryBeforeSend() { fillSummary(); }
 
 function submitWizard() {
-  // Here you would normally send data to /send_calc.php
-  // For now, we'll just show success
-  
   const card = document.getElementById('wizard-form-card');
   const success = document.getElementById('success-state');
   const footer = document.getElementById('wiz-footer');
   
-  // Hide all step panels & heads & footer
+  // Collect wizard data
+  const cat = document.querySelector('input[name=wiz-cat]:checked')?.value || '';
+  const catMap = {
+    'alpha-one':'Alpha.One+', 'alpha-scada':'Alpha.SCADA',
+    'alpha-platform':'Alpha.Platform', 'alpha-historian':'Alpha.Historian',
+    'alpha-reports':'Alpha.Reports', 'alpha-modules':'Дополнительные модули'
+  };
+  const prodName = document.getElementById('wiz-product-name')?.value || catMap[cat] || cat;
+  const qty = document.getElementById('wiz-qty')?.value || '';
+  const licType = document.querySelector('.wiz-select')?.value || 'Бессрочная';
+  const urg = document.querySelector('input[name=urgency]:checked')?.value || '';
+  const urgMap = { asap:'ASAP (24–48 ч)', week:'Неделя', month:'Месяц', plan:'Плановый' };
+  const desc = document.querySelector('.wiz-textarea')?.value || '';
+  const name = document.getElementById('wiz-name')?.value || '';
+  const email = document.getElementById('wiz-email')?.value || '';
+  const phone = document.getElementById('wiz-phone')?.value || '';
+  const company = document.getElementById('wiz-company')?.value || '';
+
+  // Ticket ID
+  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+  // Collect addons from calculator (if prefilled)
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+  
+  let wizAddons = [];
+  // Selects from calc
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, n]) => {
+    const el = document.getElementById(id);
+    if (el?.value) wizAddons.push('• ' + n + ' (' + el.options[el.selectedIndex].text + ')');
+  });
+  const slaEl = document.getElementById('addon-sla');
+  if (slaEl) wizAddons.push('• SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY', 'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'OPC DA клиент', 'addon-opcda-srv': 'OPC DA сервер',
+    'addon-portal': 'WEB-портал'
+  };
+  Object.entries(chkAddons).forEach(([id, n]) => {
+    if (document.getElementById(id)?.checked) wizAddons.push('• ' + n);
+  });
+  if (document.getElementById('addon-reserve')?.checked) wizAddons.push('• Резервный сервер');
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', tid);
+  fd.append('product', prodName);
+  fd.append('sku', prodName);
+  fd.append('tags', qty);
+  fd.append('term', licType);
+  fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
+  fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' : '');
+  fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
+  fd.append('addons', wizAddons.join('\n'));
+  fd.append('name', name);
+  fd.append('email', email);
+  fd.append('phone', phone);
+  fd.append('comment', 'Компания: ' + company + '\nСрочность: ' + (urgMap[urg]||urg) + '\nОписание: ' + desc);
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (!data.ok) console.error('Mail send failed');
+    })
+    .catch(e => console.error('Wizard submit error:', e));
+
+  // Show success UI
   for (let i = 1; i <= totalSteps; i++) {
     const sp = document.getElementById('sp-' + i);
     const sh = document.getElementById('wiz-head-' + i);
@@ -1777,12 +1875,9 @@ function submitWizard() {
   }
   if (footer) footer.style.display = 'none';
   
-  // Ticket ID
-  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
   document.getElementById('ticket-id').textContent = tid;
   success.classList.add('show');
   
-  // Update sidebar — all done
   for (let i = 1; i <= totalSteps; i++) {
     const si = document.getElementById('si-' + i);
     if (si) { si.classList.remove('active'); si.classList.add('done'); }
