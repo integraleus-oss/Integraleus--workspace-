@@ -748,10 +748,16 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
               <div class="addon-ctrl">
                 <select id="addon-client" class="addon-select" onchange="calcUpdate()">
                   <option value="">— не нужен</option>
-                  <option value="CL-F:1">1 клиент (CL-F ×1)</option>
-                  <option value="CL-F:2">2 клиента (CL-F ×2)</option>
-                  <option value="CL-F:3">3 клиента (CL-F ×3)</option>
-                  <option value="CL-F:5">5 клиентов (CL-F ×5)</option>
+                  <option value="CL-F:1">1 клиент</option>
+                  <option value="CL-F:2">2 клиента</option>
+                  <option value="CL-F:3">3 клиента</option>
+                  <option value="CL-F:4">4 клиента</option>
+                  <option value="CL-F:5">5 клиентов</option>
+                  <option value="CL-F:6">6 клиентов</option>
+                  <option value="CL-F:7">7 клиентов</option>
+                  <option value="CL-F:8">8 клиентов</option>
+                  <option value="CL-F:9">9 клиентов</option>
+                  <option value="CL-F:10">10 клиентов</option>
                 </select>
               </div>
             </div>
@@ -820,10 +826,16 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
               <div class="addon-ctrl">
                 <select id="addon-iosrv" class="addon-select" onchange="calcUpdate()">
                   <option value="">— не нужен</option>
-                  <option value="AP-IOSRV:1">1 сервер (AP-IOSRV)</option>
+                  <option value="AP-IOSRV:1">1 сервер</option>
                   <option value="AP-IOSRV:2">2 сервера</option>
                   <option value="AP-IOSRV:3">3 сервера</option>
+                  <option value="AP-IOSRV:4">4 сервера</option>
                   <option value="AP-IOSRV:5">5 серверов</option>
+                  <option value="AP-IOSRV:6">6 серверов</option>
+                  <option value="AP-IOSRV:7">7 серверов</option>
+                  <option value="AP-IOSRV:8">8 серверов</option>
+                  <option value="AP-IOSRV:9">9 серверов</option>
+                  <option value="AP-IOSRV:10">10 серверов</option>
                 </select>
               </div>
             </div>
@@ -884,10 +896,14 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             <div class="r-val" id="r-addons">0 модулей</div>
           </div>
 
+
           <div class="result-total-block">
-            <div class="result-total-label">Конфигурация готова</div>
-            <div class="result-total-val" id="r-total">Запросить КП</div>
-            <div class="result-total-note" id="r-note">Цены предоставляются по запросу. Отправьте конфигурацию — мы подготовим КП в течение 4 рабочих часов.</div>
+            <div class="result-total-label">Ориентировочная стоимость</div>
+            <div class="result-total-val" id="r-total" style="font-size:22px">—</div>
+            <div class="result-total-note" id="r-note">без НДС · ориентировочная стоимость</div>
+            <div style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--wire);border-radius:4px;font-size:11px;line-height:1.5;color:var(--text3)">
+              Расчёт является предварительным и не является публичной офертой (ст. 437 ГК РФ). Окончательная стоимость определяется в коммерческом предложении. Для уточнения цен и условий обращайтесь к&nbsp;менеджерам: <a href="mailto:sales@special-tech.ru" style="color:var(--volt);text-decoration:none">sales@special-tech.ru</a>
+            </div>
           </div>
 
                     <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
@@ -1395,6 +1411,48 @@ const alphaProducts = {
   }
 };
 
+/* ─── PRICE MAP (SKU → RUB, без НДС, 2026) ─── */
+const skuPrices = {
+  // Alpha.One+
+  'ONE-N150':149000,'ONE-N300':200800,'ONE-N500':263100,'ONE-N1k':333000,
+  'ONE-N1k5':410700,'ONE-N3k':498000,'ONE-N5k':578000,'ONE-N15k':673800,'ONE-N50k':778700,
+  // Alpha.SCADA
+  'SCADA-SRV500':340600,'SCADA-SRV1k':438000,'SCADA-SRV1k5':550500,'SCADA-SRV3k':682900,
+  'SCADA-SRV5k':848700,'SCADA-SRV15k':1049400,'SCADA-SRV50k':1294200,
+  'SCADA-SRV100k':1574100,'SCADA-SRV150k':2361900,
+  // Alpha.Platform
+  'AP-1k5':1837200,'AP-3k':2361900,'AP-5k':2763500,'AP-15k':3332200,
+  'AP-25k':3847800,'AP-50k':4897300,'AP-100k':8745100,'AP-200k':16790500,
+  'AP-300k':24136300,'AP-500k':38478200,'AP-1M':71604300,'AP-2M':138784400,
+  // Alpha.Historian
+  'HIST-S100':28900,'HIST-S200':57800,'HIST-S300':86700,'HIST-S500':144400,
+  'HIST-S700':202300,'HIST-S1k':260000,'HIST-S2k':404600,'HIST-S3k':605400,
+  'HIST-S5k':865400,'HIST-S7k':1154400,'HIST-S10k':1443400,'HIST-S15k':1732200,
+  'HIST-S20k':2308700,'HIST-S30k':3271400,'HIST-S50k':4810600,'HIST-S100k':7888800,
+  'HIST-S150k':10600700,'HIST-S200k':12506100,'HIST-S300k':19239000,'HIST-S500k':28858600,
+  'HIST-S1M':48097700,'HIST-S2M':76956300,
+  // Alpha.Reports
+  'RPT-E50':193200,'RPT-E100':279800,'RPT-E250':384800,'RPT-E500':550500,
+  'RPT-E1k':752800,'RPT-E2k':1084300,'RPT-E5k':1469100,'RPT-E10k':2187100,'RPT-EUNL':3498100,
+  // Драйверы
+  'DRV-PACK-ENERGY':88200,'DRV-PACK-INDUSTRY':209900,
+  'DRV-OPCDA-CL':123200,'DRV-OPCDA-SRV':209900,
+  // Клиенты
+  'CL-F':174900,'CL-RO10':655500,'CL-RO25':984100,'CL-RO50':1262400,'CL-RO100':1530000,
+  // Прочее
+  'WEB-PORTAL':174900,'AP-IOSRV':380200,
+  // Reports клиенты
+  'RPT-CL1':79100,'RPT-CL5':349800
+};
+
+const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
+const termMultipliers = { 1:1.0, 2:0.4, 3:0.85 }; // 1=Бессрочная, 2=1 год, 3=3 года
+
+function formatPrice(n) {
+  if (!n && n !== 0) return '—';
+  return n.toLocaleString('ru-RU') + ' ₽';
+}
+
 function findBestSku(product, targetTags) {
   const variants = alphaProducts[product]?.variants || [];
   // Find the smallest SKU that can handle the target tags
@@ -1515,23 +1573,114 @@ function calcUpdate() {
   
   const bestSku = findBestSku(prod, qty);
   const terms = ['Бессрочная', '1 год', '3 года'];
+  const termMul = termMultipliers[term] || 1.0;
 
-  // Collect addons from selects and checkboxes
-  let addonsCount = 0;
-  let addonsList = [];
-  
-  // Selects
-  ['addon-client','addon-web','addon-rpt-cl','addon-iosrv'].forEach(id => {
-    const v = document.getElementById(id)?.value;
-    if (v) { addonsCount++; addonsList.push(v.split(':')[0]); }
+  /* ─── PRICE CALCULATION ─── */
+  let basePrice = bestSku ? (skuPrices[bestSku.sku] || 0) : 0;
+  let reservePrice = 0;
+  let histPrice = 0;
+  let rptPrice = 0;
+  let addonsPrice = 0;
+  let addonDetails = [];
+
+  // Reserve server = same price as base product
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  if (hasReserve) {
+    reservePrice = basePrice;
+  }
+
+  // Historian
+  const hist = getSelectedHistorian();
+  if (hist) {
+    histPrice = skuPrices[hist.sku] || 0;
+  }
+
+  // Reports
+  const rpt = getSelectedReports();
+  if (rpt) {
+    rptPrice = skuPrices[rpt.sku] || 0;
+  }
+
+  // Addon selects
+  const clientVal = document.getElementById('addon-client')?.value;
+  if (clientVal) {
+    const parts = clientVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    const total = unitPrice * count;
+    addonsPrice += total;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  const webVal = document.getElementById('addon-web')?.value;
+  if (webVal) {
+    const sku = webVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const rptClVal = document.getElementById('addon-rpt-cl')?.value;
+  if (rptClVal) {
+    const sku = rptClVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const iosrvVal = document.getElementById('addon-iosrv')?.value;
+  if (iosrvVal) {
+    const parts = iosrvVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    addonsPrice += unitPrice * count;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  // Checkbox addons
+  const chkMap = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'DRV-OPCDA-CL',
+    'addon-opcda-srv': 'DRV-OPCDA-SRV',
+    'addon-portal': 'WEB-PORTAL'
+  };
+  Object.entries(chkMap).forEach(([id, sku]) => {
+    if (document.getElementById(id)?.checked) {
+      // If included in product (disabled checkbox), don't charge extra
+      const el = document.getElementById(id);
+      if (!el.disabled) {
+        addonsPrice += skuPrices[sku] || 0;
+      }
+      addonDetails.push(sku);
+    }
   });
+
   // SLA
-  const slaVal = document.getElementById('addon-sla')?.value;
-  if (slaVal && slaVal !== 'SLA-BASE') { addonsCount++; addonsList.push(slaVal); }
-  // Checkboxes
-  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal','addon-reserve'].forEach(id => {
-    if (document.getElementById(id)?.checked) { addonsCount++; addonsList.push(id === 'addon-reserve' ? 'Резервный сервер' : id.replace('addon-','').toUpperCase()); }
-  });
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  const slaCoeff = slaCoeffs[slaVal] || 0;
+  // SLA base = sum of all license prices (before term multiplier)
+  const licensesTotal = basePrice + reservePrice + histPrice + rptPrice + addonsPrice;
+  const slaPrice = Math.round(slaCoeff * licensesTotal);
+
+  // Term multiplier applies to licenses, SLA is yearly and independent
+  const licensesWithTerm = Math.round(licensesTotal * termMul);
+  // For yearly terms, SLA is included; for perpetual, SLA is separate yearly cost
+  let totalPrice;
+  if (term === 1) {
+    // Бессрочная: licenses × 1.0 + SLA (yearly)
+    totalPrice = licensesWithTerm + slaPrice;
+  } else {
+    // Yearly terms: licenses × multiplier + SLA
+    totalPrice = licensesWithTerm + slaPrice;
+  }
+
+  /* ─── UPDATE SUMMARY DISPLAY ─── */
+  // Collect addons list for display
+  let addonsCount = addonDetails.length;
+  if (slaVal !== 'SLA-BASE') addonsCount++;
 
   document.getElementById('r-product').textContent = p.name;
   document.getElementById('r-sku').textContent = bestSku ? bestSku.sku : '—';
@@ -1540,26 +1689,28 @@ function calcUpdate() {
 
   // Reserve in result
   const resRow2 = document.getElementById('r-reserve-row');
-  if (resRow2) resRow2.style.display = document.getElementById('addon-reserve')?.checked ? 'flex' : 'none';
+  if (resRow2) resRow2.style.display = hasReserve ? 'flex' : 'none';
 
   // Historian/Reports in result
-  const hist = getSelectedHistorian();
   const histRow = document.getElementById('r-historian-row');
   if (hist) { histRow.style.display = 'flex'; document.getElementById('r-historian').textContent = hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
   else { histRow.style.display = 'none'; }
-  
-  const rpt = getSelectedReports();
+
   const rptRow = document.getElementById('r-reports-row');
   if (rpt) { rptRow.style.display = 'flex'; document.getElementById('r-reports').textContent = rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
   else { rptRow.style.display = 'none'; }
 
   const addRow = document.getElementById('r-addons-row');
-  if (addonsCount > 0) {
+  if (addonDetails.length > 0) {
     addRow.style.display = 'flex';
-    document.getElementById('r-addons').textContent = addonsList.join(', ');
+    document.getElementById('r-addons').textContent = addonDetails.join(', ');
   } else {
     addRow.style.display = 'none';
   }
+
+  /* ─── TOTAL PRICE (single number, SLA included) ─── */
+  document.getElementById('r-total').textContent = formatPrice(totalPrice);
+  document.getElementById('r-note').textContent = 'без НДС';
 
   // Update date
   const now = new Date();
@@ -1636,6 +1787,7 @@ function sendConfigEmail() {
   fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' : '');
   fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
   fd.append('addons', addonLines.join('\n'));
+  fd.append('total_price', document.getElementById('r-total')?.textContent || '');
 
   // Show sending state
   const btn = document.getElementById('btn-send-calc');
