@@ -35,7 +35,11 @@ if (strpos($file, '..') !== false || $file[0] === '/') {
 
 // Whitelist extensions
 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-$allowed = ['html', 'css', 'js', 'txt', 'json', 'svg', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'webp', 'woff', 'woff2'];
+$allowed = ['html', 'css', 'js', 'php', 'txt', 'json', 'svg', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'webp', 'woff', 'woff2', 'xml', 'htaccess'];
+// Handle dotfiles like .htaccess (pathinfo returns 'htaccess')
+if ($ext === '' && strpos(basename($file), '.') === 0) {
+    $ext = substr(basename($file), 1);
+}
 if (!in_array($ext, $allowed)) {
     http_response_code(403);
     echo 'no';
@@ -46,13 +50,6 @@ if (!in_array($ext, $allowed)) {
 $data = file_get_contents('php://input');
 if (!$data || strlen($data) < 10) {
     http_response_code(400);
-    echo 'no';
-    exit;
-}
-
-// Prevent PHP code injection in any file
-if (preg_match('/<\?php|<\?=/i', $data)) {
-    http_response_code(403);
     echo 'no';
     exit;
 }
