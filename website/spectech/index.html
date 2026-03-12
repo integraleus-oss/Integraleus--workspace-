@@ -363,36 +363,46 @@ nav {
   overflow: hidden;
 }
 
-.hero-visual-bg::before {
-  content: '';
+.hero-carousel {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 10px,
-    rgba(0,200,240,0.1) 10px,
-    rgba(0,200,240,0.1) 20px
-  );
-  animation: rotate 20s linear infinite;
+  inset: 0;
+  border-radius: 20px;
+  overflow: hidden;
 }
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.hero-visual svg {
+.hero-slide {
   position: absolute;
-  top: 50%;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  padding: 32px;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide svg { width: 100%; height: 100%; }
+
+.hero-dots {
+  position: absolute;
+  bottom: 16px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  opacity: 0.6;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
+}
+.hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  cursor: pointer;
+  transition: all .3s;
+}
+.hero-dot.active {
+  background: var(--volt);
+  box-shadow: 0 0 8px var(--volt);
+}
   z-index: 1;
 }
 
@@ -1159,6 +1169,7 @@ nav.scrolled {
   .hero-stats { position: relative; right: auto; bottom: auto; margin-top: 40px; }
   .hero::after { display: none; }
   .why-us [style*="grid-template-columns:1.2fr"] { grid-template-columns: 1fr !important; }
+  .why-us .fade-left { display: none !important; }
   .why-us [style*="font-size:13px"] { font-size: 12px !important; }
   .container { padding: 0 24px; }
   .products-grid { grid-template-columns: 1fr; }
@@ -1305,14 +1316,170 @@ body::before {
 
     <div class="hero-visual">
       <div class="hero-visual-bg"></div>
-      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="100" cy="100" r="80" stroke="white" stroke-width="2" opacity="0.5"/>
-        <circle cx="100" cy="100" r="60" stroke="white" stroke-width="2" opacity="0.7"/>
-        <circle cx="100" cy="100" r="40" stroke="white" stroke-width="2" opacity="0.9"/>
-        <circle cx="100" cy="100" r="20" fill="white" opacity="0.3"/>
-        <rect x="90" y="90" width="20" height="20" fill="white" opacity="0.8"/>
-        <polyline points="70,100 85,85 100,100 115,75 130,90 145,70" stroke="white" stroke-width="2" fill="none" opacity="0.6"/>
-      </svg>
+      <div class="hero-carousel">
+
+        <!-- Slide 1: SCADA Dashboard -->
+        <div class="hero-slide active">
+          <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Window frame -->
+            <rect x="16" y="16" width="448" height="288" rx="8" stroke="rgba(0,200,240,0.3)" stroke-width="1" fill="rgba(0,20,40,0.5)"/>
+            <rect x="16" y="16" width="448" height="32" rx="8" fill="rgba(0,40,60,0.6)"/>
+            <circle cx="36" cy="32" r="5" fill="#ff3d57" opacity="0.7"/><circle cx="52" cy="32" r="5" fill="#ffb800" opacity="0.7"/><circle cx="68" cy="32" r="5" fill="#1de9b6" opacity="0.7"/>
+            <text x="240" y="36" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="11" font-family="monospace">Alpha.HMI — Мнемосхема</text>
+            <!-- Reactor vessel -->
+            <rect x="180" y="80" width="120" height="160" rx="12" stroke="var(--volt)" stroke-width="1.5" fill="rgba(0,200,240,0.05)"/>
+            <text x="240" y="130" text-anchor="middle" fill="var(--volt)" font-size="10" font-family="monospace">РЕАКТОР</text>
+            <text x="240" y="150" text-anchor="middle" fill="var(--lime)" font-size="18" font-family="monospace" font-weight="700">78.4°C</text>
+            <text x="240" y="170" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">давление 2.4 bar</text>
+            <!-- Level bar -->
+            <rect x="200" y="185" width="80" height="12" rx="2" stroke="rgba(0,200,240,0.3)" stroke-width="0.5" fill="rgba(0,20,40,0.8)"/>
+            <rect x="200" y="185" width="56" height="12" rx="2" fill="rgba(0,200,240,0.25)"/>
+            <text x="240" y="194" text-anchor="middle" fill="white" font-size="8" font-family="monospace">70%</text>
+            <!-- Pipes left -->
+            <line x1="40" y1="120" x2="180" y2="120" stroke="rgba(0,200,240,0.3)" stroke-width="2"/>
+            <line x1="40" y1="200" x2="180" y2="200" stroke="rgba(0,200,240,0.3)" stroke-width="2"/>
+            <!-- Pumps left -->
+            <circle cx="80" cy="120" r="14" stroke="var(--volt)" stroke-width="1" fill="rgba(0,200,240,0.08)"/>
+            <text x="80" y="124" text-anchor="middle" fill="var(--lime)" font-size="8" font-family="monospace">P-01</text>
+            <circle cx="80" cy="200" r="14" stroke="var(--volt)" stroke-width="1" fill="rgba(0,200,240,0.08)"/>
+            <text x="80" y="204" text-anchor="middle" fill="var(--lime)" font-size="8" font-family="monospace">P-02</text>
+            <!-- Pipes right -->
+            <line x1="300" y1="140" x2="440" y2="140" stroke="rgba(0,200,240,0.3)" stroke-width="2"/>
+            <line x1="300" y1="200" x2="440" y2="200" stroke="rgba(0,200,240,0.3)" stroke-width="2"/>
+            <!-- Heat exchanger right -->
+            <rect x="370" y="110" width="60" height="60" rx="4" stroke="var(--flame)" stroke-width="1" fill="rgba(255,107,53,0.05)"/>
+            <text x="400" y="138" text-anchor="middle" fill="var(--flame)" font-size="8" font-family="monospace">HX-01</text>
+            <text x="400" y="154" text-anchor="middle" fill="white" font-size="10" font-family="monospace">42.1°C</text>
+            <!-- Tank right -->
+            <rect x="370" y="185" width="60" height="40" rx="4" stroke="var(--lime)" stroke-width="1" fill="rgba(30,233,182,0.05)"/>
+            <text x="400" y="205" text-anchor="middle" fill="var(--lime)" font-size="8" font-family="monospace">TK-03</text>
+            <text x="400" y="218" text-anchor="middle" fill="white" font-size="9" font-family="monospace">89%</text>
+            <!-- Status bar -->
+            <rect x="32" y="262" width="416" height="24" rx="4" fill="rgba(0,40,60,0.6)"/>
+            <circle cx="48" cy="274" r="4" fill="var(--lime)"/><text x="58" y="278" fill="var(--lime)" font-size="9" font-family="monospace">ONLINE</text>
+            <text x="160" y="278" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Теги: 12 480</text>
+            <text x="300" y="278" fill="rgba(255,255,255,0.4)" font-size="9" font-family="monospace">Цикл: 250 мс</text>
+          </svg>
+        </div>
+
+        <!-- Slide 2: Architecture -->
+        <div class="hero-slide">
+          <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="240" y="40" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="12" font-family="monospace" letter-spacing="3">АРХИТЕКТУРА ПЛАТФОРМЫ</text>
+            <!-- Server block -->
+            <rect x="170" y="60" width="140" height="50" rx="6" stroke="var(--volt)" stroke-width="1.5" fill="rgba(0,200,240,0.08)"/>
+            <text x="240" y="82" text-anchor="middle" fill="var(--volt)" font-size="12" font-family="monospace" font-weight="700">Alpha.Server</text>
+            <text x="240" y="100" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="9" font-family="monospace">Сбор · Обработка · Управление</text>
+            <!-- Lines down -->
+            <line x1="180" y1="110" x2="100" y2="150" stroke="rgba(0,200,240,0.3)" stroke-width="1"/>
+            <line x1="240" y1="110" x2="240" y2="150" stroke="rgba(0,200,240,0.3)" stroke-width="1"/>
+            <line x1="300" y1="110" x2="380" y2="150" stroke="rgba(0,200,240,0.3)" stroke-width="1"/>
+            <!-- HMI -->
+            <rect x="40" y="150" width="120" height="45" rx="6" stroke="var(--lime)" stroke-width="1" fill="rgba(30,233,182,0.05)"/>
+            <text x="100" y="172" text-anchor="middle" fill="var(--lime)" font-size="11" font-family="monospace" font-weight="700">Alpha.HMI</text>
+            <text x="100" y="187" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">Визуализация</text>
+            <!-- Historian -->
+            <rect x="180" y="150" width="120" height="45" rx="6" stroke="var(--amber)" stroke-width="1" fill="rgba(255,184,0,0.05)"/>
+            <text x="240" y="172" text-anchor="middle" fill="var(--amber)" font-size="11" font-family="monospace" font-weight="700">Historian</text>
+            <text x="240" y="187" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">1.6М чтений/сек</text>
+            <!-- Reports -->
+            <rect x="320" y="150" width="120" height="45" rx="6" stroke="var(--flame)" stroke-width="1" fill="rgba(255,107,53,0.05)"/>
+            <text x="380" y="172" text-anchor="middle" fill="var(--flame)" font-size="11" font-family="monospace" font-weight="700">Reports</text>
+            <text x="380" y="187" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">Шаблоны · Excel</text>
+            <!-- Protocols row -->
+            <line x1="60" y1="210" x2="60" y2="250" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+            <line x1="160" y1="210" x2="160" y2="250" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+            <line x1="240" y1="210" x2="240" y2="250" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+            <line x1="320" y1="210" x2="320" y2="250" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+            <line x1="420" y1="210" x2="420" y2="250" stroke="rgba(0,200,240,0.2)" stroke-width="1"/>
+            <!-- Protocol boxes -->
+            <rect x="30" y="250" width="60" height="30" rx="4" stroke="rgba(0,200,240,0.3)" stroke-width="0.8" fill="rgba(0,200,240,0.05)"/>
+            <text x="60" y="270" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="monospace">Modbus</text>
+            <rect x="110" y="250" width="60" height="30" rx="4" stroke="rgba(0,200,240,0.3)" stroke-width="0.8" fill="rgba(0,200,240,0.05)"/>
+            <text x="140" y="270" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="monospace">OPC UA</text>
+            <rect x="200" y="250" width="70" height="30" rx="4" stroke="rgba(0,200,240,0.3)" stroke-width="0.8" fill="rgba(0,200,240,0.05)"/>
+            <text x="235" y="270" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="monospace">IEC 60870</text>
+            <rect x="290" y="250" width="60" height="30" rx="4" stroke="rgba(0,200,240,0.3)" stroke-width="0.8" fill="rgba(0,200,240,0.05)"/>
+            <text x="320" y="270" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="monospace">MQTT</text>
+            <rect x="370" y="250" width="80" height="30" rx="4" stroke="rgba(0,200,240,0.3)" stroke-width="0.8" fill="rgba(0,200,240,0.05)"/>
+            <text x="410" y="270" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" font-family="monospace">IEC 61850</text>
+            <!-- Bottom label -->
+            <text x="240" y="305" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">20+ протоколов · Linux/Windows · до 1 000 000 тегов</text>
+          </svg>
+        </div>
+
+        <!-- Slide 3: Real-time trends -->
+        <div class="hero-slide">
+          <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="240" y="36" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="12" font-family="monospace" letter-spacing="3">HISTORIAN · ТРЕНДЫ</text>
+            <!-- Chart area -->
+            <rect x="60" y="50" width="380" height="200" rx="4" stroke="rgba(0,200,240,0.15)" stroke-width="0.5" fill="rgba(0,20,40,0.4)"/>
+            <!-- Grid lines -->
+            <line x1="60" y1="100" x2="440" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <line x1="60" y1="150" x2="440" y2="150" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <line x1="60" y1="200" x2="440" y2="200" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <line x1="155" y1="50" x2="155" y2="250" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <line x1="250" y1="50" x2="250" y2="250" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <line x1="345" y1="50" x2="345" y2="250" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+            <!-- Y axis labels -->
+            <text x="52" y="105" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="8" font-family="monospace">80°</text>
+            <text x="52" y="155" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="8" font-family="monospace">60°</text>
+            <text x="52" y="205" text-anchor="end" fill="rgba(255,255,255,0.3)" font-size="8" font-family="monospace">40°</text>
+            <!-- Trend line 1 - temperature (cyan) -->
+            <polyline points="60,180 90,175 120,160 150,155 180,140 210,145 240,130 270,120 300,125 330,110 360,105 390,115 420,100 440,95" stroke="var(--volt)" stroke-width="2" fill="none" opacity="0.9"/>
+            <!-- Trend line 2 - pressure (green) -->
+            <polyline points="60,200 90,195 120,190 150,185 180,190 210,180 240,175 270,185 300,170 330,175 360,165 390,170 420,160 440,155" stroke="var(--lime)" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <!-- Trend line 3 - flow (orange) -->
+            <polyline points="60,140 90,150 120,145 150,160 180,155 210,165 240,150 270,160 300,145 330,155 360,140 390,145 420,135 440,140" stroke="var(--flame)" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <!-- Legend -->
+            <line x1="100" y1="272" x2="130" y2="272" stroke="var(--volt)" stroke-width="2"/>
+            <text x="135" y="276" fill="var(--volt)" font-size="10" font-family="monospace">Температура</text>
+            <line x1="230" y1="272" x2="260" y2="272" stroke="var(--lime)" stroke-width="1.5"/>
+            <text x="265" y="276" fill="var(--lime)" font-size="10" font-family="monospace">Давление</text>
+            <line x1="340" y1="272" x2="370" y2="272" stroke="var(--flame)" stroke-width="1.5"/>
+            <text x="375" y="276" fill="var(--flame)" font-size="10" font-family="monospace">Расход</text>
+            <!-- Stats -->
+            <text x="240" y="302" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">1.6M чтений/сек · 50+ лет хранения · сжатие 10:1</text>
+          </svg>
+        </div>
+
+        <!-- Slide 4: Cross-platform -->
+        <div class="hero-slide">
+          <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="240" y="36" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="12" font-family="monospace" letter-spacing="3">КРОССПЛАТФОРМЕННОСТЬ</text>
+            <!-- Windows -->
+            <rect x="40" y="70" width="120" height="90" rx="8" stroke="var(--volt)" stroke-width="1" fill="rgba(0,200,240,0.05)"/>
+            <text x="100" y="105" text-anchor="middle" fill="var(--volt)" font-size="28">⊞</text>
+            <text x="100" y="130" text-anchor="middle" fill="var(--volt)" font-size="11" font-family="monospace">Windows</text>
+            <text x="100" y="148" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">10 / 11 / Server</text>
+            <!-- Linux -->
+            <rect x="180" y="70" width="120" height="90" rx="8" stroke="var(--lime)" stroke-width="1" fill="rgba(30,233,182,0.05)"/>
+            <text x="240" y="105" text-anchor="middle" fill="var(--lime)" font-size="28">🐧</text>
+            <text x="240" y="130" text-anchor="middle" fill="var(--lime)" font-size="11" font-family="monospace">Linux</text>
+            <text x="240" y="148" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">Ubuntu · Astra · ALT</text>
+            <!-- Web -->
+            <rect x="320" y="70" width="120" height="90" rx="8" stroke="var(--flame)" stroke-width="1" fill="rgba(255,107,53,0.05)"/>
+            <text x="380" y="105" text-anchor="middle" fill="var(--flame)" font-size="28">🌐</text>
+            <text x="380" y="130" text-anchor="middle" fill="var(--flame)" font-size="11" font-family="monospace">Web</text>
+            <text x="380" y="148" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="8" font-family="monospace">Любой браузер</text>
+            <!-- Arrow down -->
+            <line x1="240" y1="175" x2="240" y2="200" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <polygon points="235,200 245,200 240,210" fill="rgba(255,255,255,0.2)"/>
+            <!-- Certifications -->
+            <rect x="80" y="215" width="320" height="70" rx="8" stroke="rgba(0,200,240,0.2)" stroke-width="1" fill="rgba(0,200,240,0.03)"/>
+            <text x="240" y="238" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="10" font-family="monospace" letter-spacing="2">РЕЕСТР РОССИЙСКОГО ПО</text>
+            <text x="240" y="260" text-anchor="middle" fill="var(--volt)" font-size="14" font-family="monospace" font-weight="700">№ 1187</text>
+            <text x="240" y="278" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="9" font-family="monospace">Импортозамещение · Сертифицировано · Поддержка ФСТЭК</text>
+          </svg>
+        </div>
+
+      </div><!-- end carousel -->
+      <div class="hero-dots">
+        <div class="hero-dot active" data-slide="0"></div>
+        <div class="hero-dot" data-slide="1"></div>
+        <div class="hero-dot" data-slide="2"></div>
+        <div class="hero-dot" data-slide="3"></div>
+      </div>
     </div>
   </div>
 
@@ -1326,7 +1493,6 @@ body::before {
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.One+</span><span class="t-val">✓ Лицензии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.Historian</span><span class="t-val">✓ Поставка</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">CAE WeRTSim</span><span class="t-val">✓ Партнёр</span></div>
-    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Regul R500</span><span class="t-val">✓ В наличии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Modbus TCP/RTU</span><span class="t-val">✓ Поддержка</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OPC UA Server</span><span class="t-val">✓ Лицензии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MES-системы</span><span class="t-val">✓ Интеграция</span></div>
@@ -1335,7 +1501,6 @@ body::before {
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.One+</span><span class="t-val">✓ Лицензии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Alpha.Historian</span><span class="t-val">✓ Поставка</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">CAE WeRTSim</span><span class="t-val">✓ Партнёр</span></div>
-    <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Regul R500</span><span class="t-val">✓ В наличии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Modbus TCP/RTU</span><span class="t-val">✓ Поддержка</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OPC UA Server</span><span class="t-val">✓ Лицензии</span></div>
     <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MES-системы</span><span class="t-val">✓ Интеграция</span></div>
@@ -2049,6 +2214,28 @@ class ParticlesSystem {
 
 // Initialize particles
 document.addEventListener('DOMContentLoaded', () => {
+    // Hero carousel
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    let currentSlide = 0;
+    let carouselTimer;
+    function showSlide(n) {
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      currentSlide = (n + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+    function nextSlide() { showSlide(currentSlide + 1); }
+    if (slides.length > 0) {
+      carouselTimer = setInterval(nextSlide, 4000);
+      dots.forEach(d => d.addEventListener('click', () => {
+        clearInterval(carouselTimer);
+        showSlide(parseInt(d.dataset.slide));
+        carouselTimer = setInterval(nextSlide, 4000);
+      }));
+    }
+
     const canvas = document.getElementById('particles-canvas');
     if (canvas) {
         const particlesSystem = new ParticlesSystem(canvas);
