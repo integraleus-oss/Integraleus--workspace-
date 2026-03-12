@@ -1995,14 +1995,18 @@ body::before {
   <div class="container">
     <div class="contact-container">
       <div class="contact-form fade-in">
-        <h3 style="color: var(--text); margin-bottom: 24px; font-size: 20px;">Отправить сообщение</h3>
+        <h3 style="color: var(--text); margin-bottom: 24px; font-size: 20px;">Отправить заявку</h3>
         <form action="/send_form.php" method="POST">
           <div class="form-group">
-            <label for="name">Имя</label>
+            <label for="name">Имя *</label>
             <input type="text" id="name" name="name" required>
           </div>
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="company">Компания</label>
+            <input type="text" id="company" name="company" placeholder="Название организации">
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
             <input type="email" id="email" name="email" required>
           </div>
           <div class="form-group">
@@ -2010,10 +2014,42 @@ body::before {
             <input type="tel" id="phone" name="phone">
           </div>
           <div class="form-group">
-            <label for="message">Сообщение</label>
-            <textarea id="message" name="message" placeholder="Расскажите о вашем проекте" required></textarea>
+            <label for="industry">Отрасль</label>
+            <select id="industry" name="industry" style="width:100%;padding:10px 12px;background:var(--ink);border:1px solid var(--wire);border-radius:3px;color:var(--text);font-family:var(--ff-body);font-size:14px">
+              <option value="">— Выберите отрасль —</option>
+              <option value="energy">Энергетика</option>
+              <option value="oil-gas">Нефть и газ</option>
+              <option value="chemistry">Химия и нефтехимия</option>
+              <option value="metals">Металлургия</option>
+              <option value="mining">Горнодобыча</option>
+              <option value="water">Водоснабжение и ЖКХ</option>
+              <option value="food">Пищевая промышленность</option>
+              <option value="pharma">Фармацевтика</option>
+              <option value="building">Строительство и BMS</option>
+              <option value="transport">Транспорт и логистика</option>
+              <option value="integrator">Системный интегратор</option>
+              <option value="other">Другое</option>
+            </select>
           </div>
-          <button type="submit" class="btn btn-volt" style="width: 100%;">Отправить сообщение</button>
+          <div class="form-group">
+            <label for="scale">Масштаб проекта (теги)</label>
+            <select id="scale" name="scale" style="width:100%;padding:10px 12px;background:var(--ink);border:1px solid var(--wire);border-radius:3px;color:var(--text);font-family:var(--ff-body);font-size:14px">
+              <option value="">— Примерный объём —</option>
+              <option value="small">до 500 тегов</option>
+              <option value="medium">500 – 5 000 тегов</option>
+              <option value="large">5 000 – 50 000 тегов</option>
+              <option value="enterprise">50 000+ тегов</option>
+              <option value="unknown">Пока не определён</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Сообщение</label>
+            <textarea id="message" name="message" placeholder="Расскажите о вашем проекте: задачи, сроки, текущая система"></textarea>
+          </div>
+          <button type="submit" class="btn btn-volt" style="width: 100%;">Отправить заявку</button>
+          <div style="text-align:center;margin-top:12px">
+            <a href="calculator.html" style="font-family:var(--ff-mono);font-size:12px;color:var(--volt);text-decoration:none;letter-spacing:0.5px">Или рассчитайте стоимость в калькуляторе →</a>
+          </div>
         </form>
       </div>
       
