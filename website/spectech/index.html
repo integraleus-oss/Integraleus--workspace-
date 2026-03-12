@@ -1585,7 +1585,7 @@ body::before {
       <div class="fade-right" style="display:flex;flex-direction:column;gap:28px;">
         <div style="display:flex;gap:16px;align-items:flex-start;">
           <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--volt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06"/><path d="M15 19l2 2l4 -4"/></svg>
           </div>
           <div>
             <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Официальные лицензии</div>
@@ -1594,7 +1594,7 @@ body::before {
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
           <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--flame);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.984 12.53a9 9 0 1 0 -7.552 8.355"/><path d="M12 7v5l3 3"/><path d="M19 16l-2 3h4l-2 3"/></svg>
           </div>
           <div>
             <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Поставка за 1–5 дней</div>
@@ -1603,7 +1603,7 @@ body::before {
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
           <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5"/></svg>
           </div>
           <div>
             <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Техническое внедрение</div>
@@ -1612,7 +1612,7 @@ body::before {
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
           <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-3a8 8 0 1 1 16 0v3"/><path d="M18 19c0 1.657 -2.686 3 -6 3"/><path d="M4 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3"/><path d="M15 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3"/></svg>
           </div>
           <div>
             <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Поддержка 8/7</div>
@@ -1875,63 +1875,56 @@ body::before {
     <div class="tech-grid">
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M7 10h10M7 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 12l5 5l-1.5 1.5a3.536 3.536 0 1 1 -5 -5l1.5 -1.5"/><path d="M17 12l-5 -5l1.5 -1.5a3.536 3.536 0 1 1 5 5l-1.5 1.5"/><path d="M3 21l2.5 -2.5"/><path d="M18.5 5.5l2.5 -2.5"/><path d="M10 11l-2 2"/><path d="M13 14l-2 2"/>
           </svg>
         </div>
         OPC UA
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-            <path d="M12 9V3M12 21v-6M21 12h-6M9 12H3" stroke="currentColor" stroke-width="2"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M18 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M10 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M6 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M18 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M14 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M22 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M6 12h4"/><path d="M14 12h4"/><path d="M15 7l-2 3"/><path d="M9 7l2 3"/><path d="M11 14l-2 3"/><path d="M13 14l2 3"/>
           </svg>
         </div>
         OPC DA
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M6 10h12M6 14h8" stroke="currentColor" stroke-width="2"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M16 4a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M16 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M11 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M21 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0"/><path d="M5.058 18.306l2.88 -4.606"/><path d="M10.061 10.303l2.877 -4.604"/><path d="M10.065 13.705l2.876 4.6"/><path d="M15.063 5.7l2.881 4.61"/>
           </svg>
         </div>
         Modbus TCP/RTU
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18.364 19.364a9 9 0 1 0 -12.728 0"/><path d="M15.536 16.536a5 5 0 1 0 -7.072 0"/><path d="M11 13a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/>
           </svg>
         </div>
         IEC 60870-5
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/>
           </svg>
         </div>
         МЭК 61850
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10c2.5-3 4-6.5 4-10s-1.5-7-4-10z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <path d="M3 9h18M3 15h18" stroke="currentColor" stroke-width="1.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 12l0 .01"/><path d="M14.828 9.172a4 4 0 0 1 0 5.656"/><path d="M17.657 6.343a8 8 0 0 1 0 11.314"/><path d="M9.168 14.828a4 4 0 0 1 0 -5.656"/><path d="M6.337 17.657a8 8 0 0 1 0 -11.314"/>
           </svg>
         </div>
         Linux
       </div>
       <div class="tech-item fade-in">
         <div class="tech-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M3 3l8 8M13 3l8 8M3 13l8 8M13 13l8 8" stroke="currentColor" stroke-width="1.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.8 20l-12 -1.5c-1 -.1 -1.8 -.9 -1.8 -1.9v-9.2c0 -1 .8 -1.8 1.8 -1.9l12 -1.5c1.2 -.1 2.2 .8 2.2 1.9v12.1c0 1.2 -1.1 2.1 -2.2 1.9l0 .1"/><path d="M12 5l0 14"/><path d="M4 12l16 0"/>
           </svg>
         </div>
         Windows
