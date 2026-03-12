@@ -3,12 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Альфа платформа — Инструментальное ПО для разработки HMI, SCADA и АСУ ТП | АО «Атомик Софт»</title>
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Альфа платформа v6.4 — SCADA-система от АО «Атомик Софт» | СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════
-   ROOT TOKENS
-══════════════════════════════════════ */
 :root {
   --ink:        #05080f;
   --ink1:       #080d1a;
@@ -19,8 +16,7 @@
 
   --volt:       #00c8f0;
   --volt-lo:    rgba(0,200,240,0.08);
-  --volt-med:   rgba(0,200,240,0.18);
-  --volt-glow:  rgba(0,200,240,0.35);
+  --volt-glow:  rgba(0,200,240,0.4);
   --flame:      #ff6b35;
   --flame-lo:   rgba(255,107,53,0.1);
   --lime:       #1de9b6;
@@ -34,6 +30,7 @@
 
   --ff-head:    'Exo 2', sans-serif;
   --ff-mono:    'JetBrains Mono', monospace;
+  --ff-serif:   'Bitter', serif;
 
   --ease:       cubic-bezier(.22,.68,0,1.2);
 }
@@ -99,8 +96,8 @@ nav {
 }
 
 .nav-logo-text {
-  font-size: 19px;
-  font-weight: 900;
+  font-size: 22px;
+  font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text);
@@ -109,360 +106,349 @@ nav {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 32px;
+  list-style: none;
 }
-
-.nav-link {
-  font-size: 12px;
-  font-weight: 700;
+.nav-links a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text2);
-  text-decoration: none;
-  padding: 12px 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  cursor: pointer;
-  background: transparent;
-  transition: all 0.25s var(--ease);
-  white-space: nowrap;
+  transition: color .2s;
+  position: relative;
 }
-
-.nav-link:hover {
-  color: var(--text);
-  border-color: var(--wire);
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--volt);
+  transform: scaleX(0);
+  transition: transform .2s;
 }
+.nav-links a:hover { color: var(--volt); }
+.nav-links a:hover::after { transform: scaleX(1); }
 
-.nav-link.active {
-  color: var(--volt);
-  border-color: var(--volt);
-  background: var(--volt-lo);
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ══════════════════════════════════════
-   HERO
+   BUTTONS
 ══════════════════════════════════════ */
-.hero {
-  padding: 120px 0 60px;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-volt {
+  background: var(--volt);
+  color: var(--ink);
+  padding: 14px 28px;
+  font-size: 16px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: 0 0 24px var(--volt-glow);
+}
+.btn-volt:hover {
+  background: #33d5f7;
+  box-shadow: 0 0 40px var(--volt-glow);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--volt);
+  padding: 13px 26px;
+  font-size: 16px;
+  border: 1px solid var(--volt);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: inset 0 0 16px var(--volt-lo);
+}
+.btn-outline:hover {
+  background: var(--volt-lo);
+  box-shadow: 0 0 24px var(--volt-lo), inset 0 0 20px var(--volt-lo);
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   CONTAINER
+══════════════════════════════════════ */
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* ══════════════════════════════════════
+   PRODUCT PAGE STYLES
+══════════════════════════════════════ */
+.product-hero {
+  padding: 84px 0 40px;
   background: var(--ink1);
   border-bottom: 1px solid var(--wire);
   position: relative;
   overflow: hidden;
 }
 
-/* Parallax glow orbs */
-.hero::before {
+.product-hero::before {
   content: '';
   position: absolute;
-  top: -150px;
-  right: -200px;
-  width: 600px;
-  height: 600px;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,200,240,0.08), transparent 70%);
-  animation: float 20s infinite ease-in-out;
+  background: radial-gradient(circle, rgba(0,200,240,0.06), transparent 70%);
 }
 
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -100px;
-  left: -100px;
-  width: 400px;
-  height: 400px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,107,53,0.06), transparent 70%);
-  animation: float 15s infinite ease-in-out reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(1deg); }
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 48px;
+.product-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: start;
   position: relative;
   z-index: 1;
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 64px;
-  align-items: start;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 16px;
   color: var(--text3);
 }
-
 .breadcrumb a {
   color: var(--text3);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color .15s;
 }
-
 .breadcrumb a:hover {
   color: var(--volt);
 }
-
 .breadcrumb-sep {
   color: var(--wire2);
 }
-
 .breadcrumb-cur {
   color: var(--text2);
 }
 
-.vendor-badge {
+.product-vendor-badge {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding: 8px 16px;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 5px 12px;
   background: var(--steel);
   border: 1px solid var(--wire2);
-  border-radius: 4px;
-  animation: slideInLeft 0.6s ease 0.1s both;
+  border-radius: 2px;
 }
 
-.vendor-logo {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.vendor-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.vendor-logo svg {
+  width: 20px;
+  height: 20px;
 }
 
 .vendor-name {
   font-family: var(--ff-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 1px;
+  font-size: 16px;
+  letter-spacing: 2px;
   color: var(--text2);
 }
 
 .vendor-official {
   font-family: var(--ff-mono);
-  font-size: 9px;
+  font-size: 15px;
   color: var(--lime);
-  letter-spacing: 1px;
+  margin-left: 6px;
 }
 
 .product-name {
-  font-size: clamp(32px, 5vw, 64px);
+  font-size: clamp(26px, 4vw, 48px);
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   color: var(--text);
-  line-height: 0.9;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.product-version {
+  font-family: var(--ff-mono);
+  font-size: 16px;
+  color: var(--text3);
   margin-bottom: 16px;
-  animation: slideInLeft 0.8s ease 0.2s both;
 }
 
 .product-tagline {
-  font-size: 18px;
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-size: 16px;
   color: var(--text2);
   line-height: 1.6;
-  max-width: 580px;
-  margin-bottom: 32px;
-  animation: slideInLeft 0.8s ease 0.3s both;
+  max-width: 520px;
+  margin-bottom: 24px;
 }
 
-.stats-pills {
+.product-pills {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 40px;
-  animation: slideInLeft 0.8s ease 0.4s both;
+  margin-bottom: 28px;
 }
 
-.stat-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 20px;
-  background: var(--ink2);
-  border: 1px solid var(--wire);
-  border-radius: 6px;
-  min-width: 120px;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.stat-pill:hover {
-  border-color: var(--volt);
-  transform: translateY(-2px);
-}
-
-.stat-number {
+.ppill {
   font-family: var(--ff-mono);
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--volt);
-  line-height: 1;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--wire2);
+  color: var(--text3);
+  border-radius: 2px;
+}
+
+/* Product CTA card */
+.product-cta-card {
+  background: var(--ink2);
+  border: 1px solid var(--wire2);
+  border-radius: 4px;
+  overflow: hidden;
+  position: sticky;
+  top: 82px;
+}
+
+.cta-card-head {
+  padding: 16px 20px;
+  background: var(--steel);
+  border-bottom: 1px solid var(--wire);
+}
+
+.cta-price-label {
+  font-family: var(--ff-mono);
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text3);
   margin-bottom: 4px;
 }
 
-.stat-label {
-  font-size: 11px;
-  color: var(--text2);
-  text-align: center;
-  letter-spacing: 0.5px;
+.cta-price {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
 }
 
-.hero-cta {
+.cta-price span {
+  font-size: 16px;
+  color: var(--volt);
+  margin-left: 4px;
+}
+
+.cta-price-note {
+  font-family: var(--ff-mono);
+  font-size: 16px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.cta-card-body {
+  padding: 16px 20px;
   display: flex;
-  gap: 16px;
-  animation: slideInLeft 0.8s ease 0.5s both;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.btn {
-  padding: 16px 32px;
-  font-family: var(--ff-head);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s var(--ease);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s;
-}
-
-.btn:hover::before {
-  transform: translateX(100%);
-}
-
-.btn-primary {
+.btn-cta-primary {
   background: var(--volt);
   color: var(--ink);
-}
-
-.btn-primary:hover {
-  background: #33d5f7;
-  box-shadow: 0 8px 32px var(--volt-glow);
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--volt);
-  border: 2px solid var(--volt);
-}
-
-.btn-secondary:hover {
-  background: var(--volt-lo);
-  border-color: #33d5f7;
-}
-
-/* CTA Card */
-.cta-card {
-  background: var(--ink2);
-  border: 1px solid var(--wire2);
-  border-radius: 8px;
-  overflow: hidden;
-  position: sticky;
-  top: 88px;
-  animation: slideInRight 0.8s ease 0.3s both;
-}
-
-.cta-header {
-  padding: 24px 28px;
-  background: var(--steel);
-  border-bottom: 1px solid var(--wire);
-  text-align: center;
-}
-
-.cta-title {
+  border: none;
+  padding: 13px 20px;
+  font-family: var(--ff-head);
   font-size: 16px;
   font-weight: 700;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.cta-subtitle {
-  font-size: 12px;
-  color: var(--text3);
-}
-
-.cta-body {
-  padding: 28px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
 
-.cta-highlight {
-  padding: 16px;
-  background: var(--volt-lo);
-  border: 1px solid var(--volt);
-  border-radius: 4px;
-  text-align: center;
+.btn-cta-primary:hover {
+  background: #33d5f7;
+  box-shadow: 0 0 24px var(--volt-glow);
+  transform: translateY(-1px);
 }
 
-.cta-highlight-text {
-  font-family: var(--ff-mono);
-  font-size: 12px;
+.btn-cta-secondary {
+  background: transparent;
   color: var(--volt);
-  letter-spacing: 1px;
+  border: 1px solid var(--volt);
+  padding: 11px 20px;
+  font-family: var(--ff-head);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .2s;
+  text-decoration: none;
 }
 
-.cta-features {
+.btn-cta-secondary:hover {
+  background: var(--volt-lo);
+}
+
+.cta-card-features {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-top: 16px;
+  gap: 6px;
+  padding-top: 10px;
   border-top: 1px solid var(--wire);
 }
 
-.cta-feature {
+.cta-feat {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--text2);
+  gap: 8px;
+  font-family: var(--ff-mono);
+  font-size: 16px;
+  color: var(--text3);
 }
 
-.cta-feature svg {
+.cta-feat svg {
   flex-shrink: 0;
-  color: var(--lime);
 }
 
-/* ══════════════════════════════════════
-   TABS
-══════════════════════════════════════ */
-.tabs-nav {
+/* Product tabs */
+.product-tabs-nav {
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--wire);
@@ -472,9 +458,9 @@ nav {
   z-index: 50;
 }
 
-.tab {
-  padding: 20px 32px;
-  font-size: 13px;
+.ptab {
+  padding: 16px 24px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -482,693 +468,593 @@ nav {
   cursor: pointer;
   border: none;
   background: transparent;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s var(--ease);
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
   white-space: nowrap;
 }
 
-.tab:hover {
+.ptab:hover {
   color: var(--text);
-  background: var(--ink2);
 }
 
-.tab.active {
+.ptab.active {
   color: var(--volt);
   border-bottom-color: var(--volt);
-  background: var(--ink2);
 }
 
-.tab-content {
-  padding: 64px 0;
+.product-tab-content {
+  padding: 48px 0;
 }
 
-.tab-panel {
+.ptab-panel {
   display: none;
 }
 
-.tab-panel.active {
+.ptab-panel.active {
   display: block;
-  animation: fadeUp 0.4s ease both;
+  animation: fadeUp .3s ease;
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-32px); }
-  to { opacity: 1; transform: none; }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(32px); }
-  to { opacity: 1; transform: none; }
-}
-
-/* ══════════════════════════════════════
-   OVERVIEW TAB
-══════════════════════════════════════ */
+/* Overview tab */
 .overview-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  margin-bottom: 64px;
+  gap: 32px;
+  margin-bottom: 48px;
 }
 
-.overview-section h3 {
+.ovb-title {
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text2);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.overview-section h3::before {
+.ovb-title::before {
   content: '';
-  width: 24px;
+  width: 20px;
   height: 2px;
   background: var(--volt);
-  box-shadow: 0 0 8px var(--volt-glow);
 }
 
 .feature-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
 }
 
-.feature-item {
+.feat-line {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  font-size: 14px;
+  gap: 10px;
+  font-size: 15px;
   color: var(--text2);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-.feature-item svg {
+.feat-line svg {
   flex-shrink: 0;
   margin-top: 2px;
 }
 
-/* ══════════════════════════════════════
-   MODULES GRID
-══════════════════════════════════════ */
-.modules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 24px;
-  margin-bottom: 48px;
-}
-
-.module-card {
+.industries {
+  margin-top: 32px;
+  padding: 20px;
   background: var(--ink1);
   border: 1px solid var(--wire);
-  border-radius: 6px;
-  padding: 24px;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.module-card:hover {
-  border-color: var(--volt);
-  transform: translateY(-4px);
-}
-
-.module-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.module-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--volt-lo);
-  border: 1px solid var(--volt);
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.module-name {
-  font-size: 18px;
+.industries-title {
+  font-size: 16px;
   font-weight: 700;
+  color: var(--text2);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.industries-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.industry-pill {
+  font-family: var(--ff-mono);
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  background: var(--steel);
+  border: 1px solid var(--wire2);
+  border-radius: 2px;
+  color: var(--text3);
+}
+
+.arch-diagram {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.arch-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text2);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+/* Specs table */
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  max-width: 700px;
+}
+
+.specs-table tr {
+  border-bottom: 1px solid rgba(25,45,72,0.6);
+}
+
+.specs-table tr:hover {
+  background: var(--ink2);
+}
+
+.specs-table td {
+  padding: 11px 16px;
+  font-size: 15px;
+}
+
+.specs-table td:first-child {
+  font-family: var(--ff-mono);
+  font-size: 15px;
+  color: var(--text3);
+  letter-spacing: 1px;
+  width: 40%;
+  background: var(--ink1);
+}
+
+.specs-table td:last-child {
   color: var(--text);
+}
+
+.spec-val-hi {
+  color: var(--volt);
   font-family: var(--ff-mono);
 }
 
-.module-desc {
-  font-size: 14px;
+.specs-note {
+  font-size: 16px;
   color: var(--text2);
   line-height: 1.6;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+  max-width: 600px;
 }
 
-.module-features {
-  font-family: var(--ff-mono);
-  font-size: 12px;
-  color: var(--text3);
-  line-height: 1.5;
-}
-
-/* ══════════════════════════════════════
-   LICENSES TAB
-══════════════════════════════════════ */
-.license-grid {
+/* Pricing cards */
+.pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 32px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 24px;
 }
 
-.license-card {
+.price-card {
   background: var(--ink1);
-  border: 2px solid var(--wire);
-  border-radius: 8px;
+  border: 1px solid var(--wire);
+  border-radius: 4px;
   overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s;
+  transition: border-color .2s, transform .2s;
+}
+
+.price-card:hover {
+  border-color: var(--volt);
+  transform: translateY(-2px);
+}
+
+.price-card.featured {
+  border-color: var(--volt);
   position: relative;
 }
 
-.license-card:hover {
-  border-color: var(--volt);
-  transform: translateY(-4px);
-}
-
-.license-card.popular {
-  border-color: var(--flame);
-  transform: scale(1.05);
-}
-
-.license-card.popular::before {
-  content: '🔥 Популярный';
+.price-card.featured::before {
+  content: 'ПОПУЛЯРНО';
   position: absolute;
   top: -1px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--flame);
-  color: white;
-  padding: 4px 16px;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 0 0 8px 8px;
+  background: var(--volt);
+  color: var(--ink);
+  font-family: var(--ff-mono);
+  font-size: 15px;
+  letter-spacing: 2px;
+  padding: 4px 12px;
+  border-radius: 0 0 3px 3px;
 }
 
-.license-header {
-  padding: 24px 28px;
+.price-card-head {
+  padding: 20px;
   background: var(--steel);
-  border-bottom: 1px solid var(--wire);
   text-align: center;
 }
 
-.license-name {
-  font-size: 20px;
-  font-weight: 700;
+.price-card-name {
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text);
   margin-bottom: 8px;
 }
 
-.license-price {
-  font-size: 32px;
+.price-card-price {
+  font-size: 28px;
   font-weight: 900;
   color: var(--volt);
   margin-bottom: 4px;
 }
 
-.license-price span {
+.price-card-note {
+  font-family: var(--ff-mono);
   font-size: 16px;
   color: var(--text3);
 }
 
-.license-note {
-  font-size: 11px;
-  color: var(--text3);
+.price-card-body {
+  padding: 20px;
 }
 
-.license-body {
-  padding: 28px;
-}
-
-.license-features {
+.price-features {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 8px;
 }
 
-.license-feature {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--text2);
-}
-
-/* ══════════════════════════════════════
-   PROTOCOLS GRID
-══════════════════════════════════════ */
-.protocols-intro {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.protocols-intro h3 {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 16px;
-}
-
-.protocols-intro p {
-  font-size: 16px;
-  color: var(--text2);
-  line-height: 1.6;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.protocol-packages {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.protocol-package {
-  background: var(--ink1);
-  border: 1px solid var(--wire);
-  border-radius: 8px;
-  padding: 32px;
-}
-
-.package-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.package-icon {
-  width: 48px;
-  height: 48px;
-  background: var(--volt-lo);
-  border: 2px solid var(--volt);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.package-info h4 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.package-desc {
-  font-size: 14px;
-  color: var(--text3);
-}
-
-.protocol-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-}
-
-.protocol-item {
+.price-feat {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
-  background: var(--ink2);
-  border: 1px solid var(--wire2);
-  border-radius: 4px;
-  font-family: var(--ff-mono);
-  font-size: 12px;
+  font-size: 16px;
   color: var(--text2);
 }
 
-.protocol-item svg {
-  color: var(--lime);
-  flex-shrink: 0;
-}
-
-/* ══════════════════════════════════════
-   SUPPORT TAB
-══════════════════════════════════════ */
-.support-intro {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.support-levels {
+/* Protocol packages */
+.protocol-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-bottom: 48px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 24px;
 }
 
-.support-level {
+.protocol-card {
   background: var(--ink1);
   border: 1px solid var(--wire);
-  border-radius: 6px;
-  padding: 24px;
-  text-align: center;
+  border-radius: 4px;
+  padding: 20px;
 }
 
-.support-level.premium {
-  border-color: var(--flame);
-  background: var(--flame-lo);
+.protocol-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.protocol-desc {
+  font-family: var(--ff-mono);
+  font-size: 15px;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+
+.protocol-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.protocol-item {
+  font-size: 16px;
+  color: var(--text2);
+}
+
+/* Support levels */
+.support-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.support-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
 }
 
 .support-name {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 8px;
 }
 
 .support-desc {
-  font-size: 14px;
-  color: var(--text2);
-  margin-bottom: 16px;
+  font-size: 15px;
+  color: var(--text3);
+  line-height: 1.4;
 }
 
-.support-features {
+/* Implementations */
+.impl-grid {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 12px;
-  color: var(--text3);
+  gap: 16px;
+  margin-bottom: 32px;
 }
 
-.clients-section {
+.impl-card {
   background: var(--ink1);
   border: 1px solid var(--wire);
-  border-radius: 8px;
-  padding: 32px;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.impl-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.impl-desc {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.client-logos {
+  margin-top: 32px;
+  padding: 24px;
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 4px;
+}
+
+.logos-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text2);
+  margin-bottom: 16px;
   text-align: center;
 }
 
-.clients-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 24px;
-}
-
-.clients-grid {
+.logos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  align-items: center;
 }
 
-.client-item {
-  padding: 12px 16px;
-  background: var(--ink2);
+.logo-item {
+  padding: 12px;
+  background: var(--steel);
   border: 1px solid var(--wire2);
-  border-radius: 4px;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 15px;
+  color: var(--text3);
   font-weight: 600;
-  color: var(--text2);
-  font-size: 13px;
-  transition: all 0.3s;
+  transition: border-color .2s;
 }
 
-.client-item:hover {
+.logo-item:hover {
   border-color: var(--volt);
-  color: var(--volt);
+  color: var(--text2);
 }
 
-/* ══════════════════════════════════════
-   FOOTER
-══════════════════════════════════════ */
+/* Footer */
 footer {
-  background: var(--ink);
+  background: var(--ink1);
   border-top: 1px solid var(--wire);
-  padding: 64px 0 32px;
-  margin-top: 80px;
+  padding: 60px 0 40px;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 48px;
-  margin-bottom: 48px;
+  grid-template-columns: 1fr 200px 200px 200px;
+  gap: 40px;
+  margin-bottom: 40px;
 }
 
-.footer-section h4 {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.footer-brand {
+  margin-bottom: 16px;
+}
+
+.footer-brand div {
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text);
+  letter-spacing: 2px;
+}
+
+footer p {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.6;
   margin-bottom: 20px;
 }
 
-.footer-section ul {
+.f-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background: var(--steel);
+  border: 1px solid var(--wire2);
+  border-radius: 2px;
+  font-family: var(--ff-mono);
+  font-size: 15px;
+  color: var(--text3);
+  margin-right: 8px;
+}
+
+.footer-col-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.footer-links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
-.footer-section a {
-  color: var(--text3);
+.footer-links a {
+  font-size: 16px;
+  color: var(--text2);
   text-decoration: none;
-  font-size: 14px;
-  transition: color 0.2s;
+  transition: color .2s;
 }
 
-.footer-section a:hover {
+.footer-links a:hover {
   color: var(--volt);
 }
 
-.footer-bottom {
-  border-top: 1px solid var(--wire);
-  padding-top: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: var(--text3);
-}
-
-/* ══════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════ */
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 32px;
-  }
-  
-  .hero-grid {
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .product-hero-grid {
     grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  
-  .cta-card {
-    position: static;
-  }
-  
-  .overview-grid {
-    grid-template-columns: 1fr;
-    gap: 48px;
-  }
-  
-  .modules-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .license-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 32px;
   }
-}
-
-@media (max-width: 768px) {
-  nav {
-    padding: 0 24px;
-    height: 64px;
+  .product-cta-card {
+    position: static;
   }
-  
-  .container {
-    padding: 0 24px;
-  }
-  
-  .hero {
-    padding: 100px 0 48px;
-  }
-  
-  .tabs-nav {
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .tabs-nav::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .tab {
-    padding: 16px 24px;
-    font-size: 12px;
-  }
-  
-  .stats-pills {
-    justify-content: center;
-  }
-  
-  .protocol-list {
+  .overview-grid {
     grid-template-columns: 1fr;
   }
-  
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .protocol-grid {
+    grid-template-columns: 1fr;
+  }
+  .support-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 24px;
   }
-  
-  .footer-bottom {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
+  nav {
+    padding: 0 20px;
+  }
+  .nav-links {
+    display: none;
   }
 }
 </style>
 </head>
-<body>
 
-<!-- NAV -->
+<body>
+<!-- ══════════ NAV ══════════ -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <img src="data:image/svg+xml,%3Csvg viewBox='0 0 120 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='30' fill='%2300c8f0' font-family='Exo 2' font-weight='900' font-size='18' letter-spacing='2'%3EСПЕЦТЕХ%3C/text%3E%3C/svg%3E" alt="СПЕЦТЕХ">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
   </a>
-  <div class="nav-links">
-    <a href="index.html" class="nav-link">Главная</a>
-    <a href="#" class="nav-link active">Продукты</a>
-    <a href="calculator.html" class="nav-link">Калькулятор</a>
-    <a href="#" class="nav-link">Протоколы</a>
-    <a href="#" class="nav-link">Контакты</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="#products">Продукты</a></li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#contact" class="btn btn-volt">Консультация</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
+<!-- ══════════ PRODUCT PAGE ══════════ -->
+<div class="product-hero">
   <div class="container">
-    <div class="hero-grid">
+    <div class="product-hero-grid">
       <div>
         <div class="breadcrumb">
           <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
-          <a href="#">Продукты</a><span class="breadcrumb-sep">/</span>
-          <a href="#">Российское ПО</a><span class="breadcrumb-sep">/</span>
+          <a href="#products">Каталог</a><span class="breadcrumb-sep">/</span>
+          <a href="#scada">SCADA</a><span class="breadcrumb-sep">/</span>
           <span class="breadcrumb-cur">Альфа платформа</span>
         </div>
-
-        <div class="vendor-badge">
-          <div class="vendor-logo">
-            <svg width="32" height="32" viewBox="0 0 149 149" xmlns="http://www.w3.org/2000/svg"><path d="M25.6,111.6H9.9c12.9,22.4,37,37.4,64.6,37.4c10.9,0,21.2-2.4,30.5-6.6v-14.7c-9,5.2-19.4,8.2-30.5,8.2C54.5,135.9,36.8,126.3,25.6,111.6z M144.9,50.1h-14.1c3.2,7.5,5,15.7,5,24.4c0,16.8-6.8,32-17.7,43.1v17.2c18.7-13.5,30.8-35.5,30.8-60.3C149,66,147.5,57.8,144.9,50.1z" fill="#82C444"/><path d="M0,74.5c0,8.4,1.4,16.4,4,23.9h14c-3.1-7.4-4.8-15.4-4.8-23.9c0-18.8,8.5-35.7,21.9-46.9V11.4C14,24.5,0,47.9,0,74.5z M81.1,0.3C78.9,0.1,76.7,0,74.5,0c-2.2,0-4.4,0.1-6.6,0.3C61,0.9,54.4,2.5,48.1,4.8v14.3c8-3.8,16.9-6,26.4-6c19.8,0,37.3,9.3,48.6,23.9h15.8C127,16.7,105.8,2.5,81.1,0.3z" fill="#0997C8"/><path d="M91.5,37.6H35v12.1h55.8c8.4,0,15.2,6.8,15.2,15.2v2.5H52.2c-12,0-21.8,9.7-22,21.6c0,0.1,0,0.3,0,0.4v0c0,3.6,0.9,6.9,2.4,9.9c3.7,7.2,11.1,12.1,19.6,12.1h39.3c14.7,0,26.7-12,26.7-26.7V64.3C118.2,49.5,106.2,37.6,91.5,37.6z M106.1,84.2c0,8.4-6.9,15.2-15.2,15.2H52.2c-5.5,0-9.9-4.5-9.9-9.9v0c0-5.5,4.5-9.9,9.9-9.9h53.9V84.2z" fill="#FFFFFF"/></svg>
-          </div>
-          <div class="vendor-info">
-            <div class="vendor-name">АО «Атомик Софт»</div>
-            <div class="vendor-official">✓ Официальный партнер</div>
-          </div>
+        
+        <div class="product-vendor-badge">
+          <svg width="20" height="20" viewBox="0 0 149 149" xmlns="http://www.w3.org/2000/svg"><path d="M25.6,111.6H9.9c12.9,22.4,37,37.4,64.6,37.4c10.9,0,21.2-2.4,30.5-6.6v-14.7c-9,5.2-19.4,8.2-30.5,8.2C54.5,135.9,36.8,126.3,25.6,111.6z M144.9,50.1h-14.1c3.2,7.5,5,15.7,5,24.4c0,16.8-6.8,32-17.7,43.1v17.2c18.7-13.5,30.8-35.5,30.8-60.3C149,66,147.5,57.8,144.9,50.1z" fill="#82C444"/><path d="M0,74.5c0,8.4,1.4,16.4,4,23.9h14c-3.1-7.4-4.8-15.4-4.8-23.9c0-18.8,8.5-35.7,21.9-46.9V11.4C14,24.5,0,47.9,0,74.5z M81.1,0.3C78.9,0.1,76.7,0,74.5,0c-2.2,0-4.4,0.1-6.6,0.3C61,0.9,54.4,2.5,48.1,4.8v14.3c8-3.8,16.9-6,26.4-6c19.8,0,37.3,9.3,48.6,23.9h15.8C127,16.7,105.8,2.5,81.1,0.3z" fill="#0997C8"/><path d="M91.5,37.6H35v12.1h55.8c8.4,0,15.2,6.8,15.2,15.2v2.5H52.2c-12,0-21.8,9.7-22,21.6c0,0.1,0,0.3,0,0.4v0c0,3.6,0.9,6.9,2.4,9.9c3.7,7.2,11.1,12.1,19.6,12.1h39.3c14.7,0,26.7-12,26.7-26.7V64.3C118.2,49.5,106.2,37.6,91.5,37.6z M106.1,84.2c0,8.4-6.9,15.2-15.2,15.2H52.2c-5.5,0-9.9-4.5-9.9-9.9v0c0-5.5,4.5-9.9,9.9-9.9h53.9V84.2z" fill="#FFFFFF"/></svg>
+          <span class="vendor-name">Разработчик: АО «Атомик Софт»</span>
+          <span class="vendor-official">✓ Дистрибьютор: АО «СПЕЦТЕХ»</span>
         </div>
-
-        <h1 class="product-name">Альфа<br>платформа</h1>
-
-        <p class="product-tagline">
-          Инструментальное ПО для разработки HMI, SCADA и АСУ ТП любого масштаба
-        </p>
-
-        <div class="stats-pills">
-          <div class="stat-pill">
-            <div class="stat-number">1M</div>
-            <div class="stat-label">тегов на узел</div>
-          </div>
-          <div class="stat-pill">
-            <div class="stat-number">6500+</div>
-            <div class="stat-label">инсталляций</div>
-          </div>
-          <div class="stat-pill">
-            <div class="stat-number">100+</div>
-            <div class="stat-label">заказчиков</div>
-          </div>
-          <div class="stat-pill">
-            <div class="stat-number">24/7</div>
-            <div class="stat-label">техподдержка</div>
-          </div>
-        </div>
-
-        <div class="hero-cta">
-          <a href="#licenses" class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="2"/>
-              <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            Получить КП
-          </a>
-          <a href="#overview" class="btn btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Подробнее
-          </a>
+        
+        <h1 class="product-name">Альфа платформа</h1>
+        <div class="product-version">v6.4 · Реестр ПО №1187 · Актуальна</div>
+        <p class="product-tagline">Программная платформа для создания SCADA и многоуровневых систем диспетчеризации</p>
+        
+        <div class="product-pills">
+          <span class="ppill">SCADA</span>
+          <span class="ppill">HMI</span>
+          <span class="ppill">OPC-UA</span>
+          <span class="ppill">Modbus</span>
+          <span class="ppill">Linux</span>
+          <span class="ppill">АСУ ТП</span>
         </div>
       </div>
-
+      
       <!-- CTA Card -->
-      <div class="cta-card">
-        <div class="cta-header">
-          <div class="cta-title">Начните сегодня</div>
-          <div class="cta-subtitle">Российская альтернатива Wonderware</div>
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Цена за лицензию</div>
+          <div class="cta-price">от 149 000<span>₽</span></div>
+          <div class="cta-price-note">Alpha.One+ · без НДС · бессрочная</div>
         </div>
-        <div class="cta-body">
-          <div class="cta-highlight">
-            <div class="cta-highlight-text">Реестр ПО Минцифры №1187</div>
-          </div>
-          <a href="#licenses" class="btn btn-primary" style="width: 100%; justify-content: center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Скачать демо
+        <div class="cta-card-body">
+          <a href="#contact" class="btn-cta-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+            Запросить КП
           </a>
-          <div class="cta-features">
-            <div class="cta-feature">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Полнофункциональная 30-дневная версия
+          <a href="/calculator.html" class="btn-cta-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="1.5"/><line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="1.5"/></svg>
+            Калькулятор лицензий
+          </a>
+          <div class="cta-card-features">
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Электронная лицензия
             </div>
-            <div class="cta-feature">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Техподдержка и консультации
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Официальный сертификат
             </div>
-            <div class="cta-feature">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Примеры проектов и документация
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Техподдержка
             </div>
-            <div class="cta-feature">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Лицензия ФСТЭК для СКЗИ
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Скидка от 5 лицензий
             </div>
           </div>
         </div>
@@ -1177,771 +1063,362 @@ footer {
   </div>
 </div>
 
-<!-- TABS NAVIGATION -->
-<div class="tabs-nav">
-  <div class="container" style="display: flex;">
-    <button class="tab active" onclick="showTab('overview')">Обзор</button>
-    <button class="tab" onclick="showTab('features')">Возможности</button>
-    <button class="tab" onclick="showTab('licenses')">Лицензии</button>
-    <button class="tab" onclick="showTab('protocols')">Протоколы</button>
-    <button class="tab" onclick="showTab('support')">Поддержка</button>
+<!-- Tabs nav -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('specs',this)">Характеристики</button>
+    <button class="ptab" onclick="showPTab('licensing',this)">Лицензии</button>
+    <button class="ptab" onclick="showPTab('protocols',this)">Протоколы</button>
+    <button class="ptab" onclick="showPTab('support',this)">Поддержка</button>
+    <button class="ptab" onclick="showPTab('implementations',this)">Внедрения</button>
   </div>
 </div>
 
-<!-- TAB CONTENT -->
-<div class="tab-content">
+<!-- Tab content -->
+<div class="product-tab-content">
   <div class="container">
 
-    <!-- OVERVIEW TAB -->
-    <div id="overview" class="tab-panel active">
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
       <div class="overview-grid">
-        <div class="overview-section">
-          <h3>Ключевые преимущества</h3>
+        <div class="overview-block">
+          <div class="ovb-title">Ключевые возможности</div>
           <div class="feature-list">
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Российское ПО в реестре Минцифры №1187
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              До 1 000 000 тегов на узел
             </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              До 1 000 000 тегов на узел исполнения
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Кроссплатформенность (Linux + Windows)
             </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Поддержка российских ОС (Astra Linux, РЕД ОС, Альт СП)
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Горячее резервирование серверов
             </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Совместимость с СКЗИ (PT ICS, KICS, Dr.Web Industrial)
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Собственный NoSQL историан Alpha.Historian
             </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              КИИ категория 2-3, лицензия ФСТЭК
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Alpha.Reports — автоматическая генерация отчётов
+            </div>
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Web-клиент Alpha.WebViewer
+            </div>
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Скриптинг: Alpha.Om + JavaScript
+            </div>
+            <div class="feat-line">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
+              Лицензия ФСТЭК на СЗКИ
             </div>
           </div>
         </div>
-
-        <div class="overview-section">
-          <h3>О компании</h3>
-          <div class="feature-list">
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="3" stroke="#1de9b6" stroke-width="2"/>
-                <path d="m12 1 3 6 6 3-6 3-3 6-3-6-6-3 6-3z" stroke="#1de9b6" stroke-width="2"/>
-              </svg>
-              Основана в 2015 году в Томске
-            </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="#1de9b6" stroke-width="2"/>
-                <circle cx="9" cy="7" r="4" stroke="#1de9b6" stroke-width="2"/>
-                <path d="m22 21-3-3" stroke="#1de9b6" stroke-width="2"/>
-                <circle cx="17" cy="17" r="3" stroke="#1de9b6" stroke-width="2"/>
-              </svg>
-              120+ сотрудников в 4 офисах
-            </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="#1de9b6" stroke-width="2"/>
-                <polyline points="9,22 9,12 15,12 15,22" stroke="#1de9b6" stroke-width="2"/>
-              </svg>
-              1600+ объектов, 100+ заказчиков
-            </div>
-            <div class="feature-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="#1de9b6" stroke-width="2"/>
-                <path d="m12 6 0 6 4 0" stroke="#1de9b6" stroke-width="2"/>
-              </svg>
-              Техподдержка 24/7
+        
+        <div class="overview-block">
+          <div class="ovb-title">Для каких отраслей</div>
+          <div class="industries">
+            <div class="industries-list">
+              <div class="industry-pill">Нефтегаз</div>
+              <div class="industry-pill">Энергетика</div>
+              <div class="industry-pill">Металлургия</div>
+              <div class="industry-pill">Химическая промышленность</div>
+              <div class="industry-pill">Транспорт</div>
+              <div class="industry-pill">ЖКХ/BMS</div>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="overview-section">
-        <h3>Технологический стек</h3>
-        <div style="background: var(--ink1); border: 1px solid var(--wire); border-radius: 8px; padding: 24px; font-family: var(--ff-mono); font-size: 14px; color: var(--text2); line-height: 1.8;">
-          <strong style="color: var(--volt);">Языки программирования:</strong> C/C++, STL/Boost, Qt<br>
-          <strong style="color: var(--volt);">Операционные системы:</strong> Astra Linux, РЕД ОС, Альт СП, Ubuntu, Windows<br>
-          <strong style="color: var(--volt);">Категория КИИ:</strong> 2-3 (сертификат ФСТЭК)<br>
-          <strong style="color: var(--volt);">СКЗИ совместимость:</strong> KICS, PT ICS, Dr.Web Industrial, InfoDiode
+      
+      <div class="arch-diagram">
+        <div class="arch-title">Архитектура платформы</div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 40px; font-family: var(--ff-mono); font-size: 16px; color: var(--text2);">
+          <div style="padding: 12px 16px; background: var(--steel); border: 1px solid var(--wire2); border-radius: 3px;">Alpha.Server</div>
+          <div style="color: var(--volt);">→</div>
+          <div style="padding: 12px 16px; background: var(--steel); border: 1px solid var(--wire2); border-radius: 3px;">Alpha.HMI</div>
+          <div style="color: var(--volt);">→</div>
+          <div style="padding: 12px 16px; background: var(--steel); border: 1px solid var(--wire2); border-radius: 3px;">Alpha.Historian</div>
         </div>
       </div>
     </div>
 
-    <!-- FEATURES TAB -->
-    <div id="features" class="tab-panel">
-      <div class="modules-grid">
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="2" y="3" width="20" height="14" rx="2" stroke="#00c8f0" stroke-width="2"/>
-                <line x1="8" y1="21" x2="16" y2="21" stroke="#00c8f0" stroke-width="2"/>
-                <line x1="12" y1="17" x2="12" y2="21" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Server</div>
-          </div>
-          <div class="module-desc">
-            Сервер сбора данных, обработки и буферизации информации от полевых устройств и систем.
-          </div>
-          <div class="module-features">
-            Протоколы: Modbus RTU/TCP, IEC 101/104, OPC DA/UA, MQTT, SNMP, BACnet, S7, EtherNet/IP, FINS, МЭК 61850
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#00c8f0" stroke-width="2"/>
-                <rect x="7" y="7" width="3" height="9" fill="#00c8f0"/>
-                <rect x="14" y="7" width="3" height="5" fill="#00c8f0"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.HMI 2.0</div>
-          </div>
-          <div class="module-desc">
-            Система визуализации и управления с поддержкой мнемосхем, скриптинга Alpha.Om + JavaScript.
-          </div>
-          <div class="module-features">
-            Возможности: пользовательские типы (ООП), кадры, графики, таблицы, деревья. Данные через OPC DA (Windows) или TCP/Alpha.Link
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#00c8f0" stroke-width="2"/>
-                <polyline points="14,2 14,8 20,8" stroke="#00c8f0" stroke-width="2"/>
-                <line x1="16" y1="13" x2="8" y2="13" stroke="#00c8f0" stroke-width="2"/>
-                <line x1="16" y1="17" x2="8" y2="17" stroke="#00c8f0" stroke-width="2"/>
-                <polyline points="10,9 9,9 8,9" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Historian 4.0</div>
-          </div>
-          <div class="module-desc">
-            Историзатор временных рядов на базе NoSQL СУБД. Высокопроизводительное хранение данных.
-          </div>
-          <div class="module-features">
-            Производительность: 1,600,000 чтений/сек, 800,000 записей/сек. Форматы 3x и 4x. Сжатие LZMA (0.2-0.5). Linux+Windows. CLI инструменты
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="#00c8f0" stroke-width="2"/>
-                <polyline points="14,2 14,8 20,8" stroke="#00c8f0" stroke-width="2"/>
-                <line x1="16" y1="13" x2="8" y2="13" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Reports</div>
-          </div>
-          <div class="module-desc">
-            Система генерации отчетов на основе оперативных и исторических данных.
-          </div>
-          <div class="module-features">
-            Возможности: шаблоны отчетов, планировщик, email-рассылка, экспорт в папки
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="m21 16-4 4-4-4" stroke="#00c8f0" stroke-width="2"/>
-                <path d="M17 20V4h4" stroke="#00c8f0" stroke-width="2"/>
-                <path d="m3 8 4-4 4 4" stroke="#00c8f0" stroke-width="2"/>
-                <path d="M7 4v16H3" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Alarms 3.30</div>
-          </div>
-          <div class="module-desc">
-            Система управления тревогами и событиями с расширенными возможностями.
-          </div>
-          <div class="module-features">
-            Приоритетные группы (1-1000), подтверждение, подавление, фильтрация, агрегация, эскалация. Оперативная таблица тревог
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#00c8f0" stroke-width="2"/>
-                <rect x="9" y="9" width="6" height="6" fill="#00c8f0"/>
-                <path d="m9 1 3 3 3-3" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.DevStudio</div>
-          </div>
-          <div class="module-desc">
-            Интегрированная среда разработки. Кроссплатформенная (Linux нативно с 2025 г.).
-          </div>
-          <div class="module-features">
-            Управление проектами, конфигурация сигналов, развертывание систем
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M3 3v18h18" stroke="#00c8f0" stroke-width="2"/>
-                <path d="m19 9-5 5-4-4-3 3" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Trends</div>
-          </div>
-          <div class="module-desc">
-            Визуализация трендов, исторических и оперативных данных.
-          </div>
-          <div class="module-features">
-            Поддержка всех типов графиков и диаграмм
-          </div>
-        </div>
-
-        <div class="module-card">
-          <div class="module-header">
-            <div class="module-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke="#00c8f0" stroke-width="2"/>
-                <circle cx="12" cy="12" r="3" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="module-name">Alpha.Security</div>
-          </div>
-          <div class="module-desc">
-            Система управления доступом и правами пользователей.
-          </div>
-          <div class="module-features">
-            Контроль доступа, управление правами
-          </div>
-        </div>
+    <!-- SPECS -->
+    <div id="ptab-specs" class="ptab-panel">
+      <div class="specs-note">
+        <strong>Альфа платформа</strong> состоит из модульной архитектуры, включающей серверные компоненты, клиентские приложения и инструменты разработки.
+      </div>
+      
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Alpha.Server</td><td>Сбор и обработка данных, буферизация</td></tr>
+          <tr><td>Alpha.HMI 2.0</td><td>Визуализация, мнемосхемы, Alpha.Om + JavaScript</td></tr>
+          <tr><td>Alpha.Historian 4.0</td><td class="spec-val-hi">NoSQL БД, 1.6M reads/sec, 800K writes/sec, LZMA сжатие</td></tr>
+          <tr><td>Alpha.Reports</td><td>Отчёты, шаблоны, рассылка по email</td></tr>
+          <tr><td>Alpha.Alarms 3.30</td><td>Тревоги и события, приоритеты 1-1000, квитирование</td></tr>
+          <tr><td>Alpha.DevStudio</td><td class="spec-val-hi">IDE, Linux native с 2025</td></tr>
+          <tr><td>Alpha.Trends</td><td>Тренды, история и реалтайм</td></tr>
+          <tr><td>Alpha.WebViewer</td><td>Веб-клиент</td></tr>
+          <tr><td>Alpha.Security</td><td>Управление доступом</td></tr>
+        </tbody>
+      </table>
+      
+      <div style="margin-top: 40px;">
+        <div class="ovb-title">Системные требования</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>ОС (Сервер)</td><td>Astra Linux, РЕД ОС, Альт СП, Ubuntu LTS, Windows Server</td></tr>
+            <tr><td>ОС (Клиент)</td><td>Windows 10/11, Linux Desktop</td></tr>
+            <tr><td>Память</td><td>Минимум 4 ГБ, рекомендуется 16 ГБ+</td></tr>
+            <tr><td>Процессор</td><td>x64, ARM64 (экспериментально)</td></tr>
+            <tr><td>База данных</td><td>Alpha.Historian (встроенная), PostgreSQL, Oracle</td></tr>
+            <tr><td>Безопасность</td><td class="spec-val-hi">KICS, PT ICS, Dr. Web Industrial, InfoDiode</td></tr>
+            <tr><td>КИИ</td><td class="spec-val-hi">Категория 2-3</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- LICENSES TAB -->
-    <div id="licenses" class="tab-panel">
-      <div style="text-align: center; margin-bottom: 48px;">
-        <h2 style="font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 16px;">Линейка лицензий</h2>
-        <p style="font-size: 16px; color: var(--text2); line-height: 1.6; max-width: 600px; margin: 0 auto;">
-          Выберите подходящую конфигурацию в зависимости от масштаба и требований вашего проекта
-        </p>
-      </div>
-
-      <div class="license-grid">
-        <div class="license-card">
-          <div class="license-header">
-            <div class="license-name">Alpha.One+</div>
-            <div class="license-price">149 000 <span>₽</span></div>
-            <div class="license-note">от 149 000 ₽ за лицензию</div>
+    <!-- LICENSING -->
+    <div id="ptab-licensing" class="ptab-panel">
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-card-head">
+            <div class="price-card-name">Alpha.One+</div>
+            <div class="price-card-price">от 149 000 ₽</div>
+            <div class="price-card-note">без НДС</div>
           </div>
-          <div class="license-body">
-            <div class="license-features">
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Одноместная лицензия
+          <div class="price-card-body">
+            <div class="price-features">
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                До 50 000 тегов
               </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                До 50 000 внешних тегов
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                1 Web-клиент
               </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                1 Web-клиент для мониторинга
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Локальное использование на одном ПК
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Данные в Alpha.Historian или реляционную БД
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <x x1="18" y1="6" x2="6" y2="18" stroke="#ff3d57" stroke-width="2"/>
-                  <x x1="6" y1="6" x2="18" y2="18" stroke="#ff3d57" stroke-width="2"/>
-                </svg>
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
                 Без резервирования
               </div>
             </div>
-            <button class="btn btn-secondary" style="width: 100%; justify-content: center;">
-              Выбрать пакет
-            </button>
           </div>
         </div>
-
-        <div class="license-card popular">
-          <div class="license-header">
-            <div class="license-name">Alpha.SCADA</div>
-            <div class="license-price">515 500 <span>₽</span></div>
-            <div class="license-note">от 515 500 ₽ за лицензию</div>
+        
+        <div class="price-card featured">
+          <div class="price-card-head">
+            <div class="price-card-name">Alpha.SCADA</div>
+            <div class="price-card-price">от 515 500 ₽</div>
+            <div class="price-card-note">без НДС</div>
           </div>
-          <div class="license-body">
-            <div class="license-features">
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Клиент-сервер с резервированием
+          <div class="price-card-body">
+            <div class="price-features">
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                До 150 000 тегов
               </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                До 150 000 внешних тегов
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                До 100 станций
               </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                До 100 операторских станций
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                Резервирование
               </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Серверное резервирование
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Клиентское ПО отдельно или совмещенное
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Пакет "Энергетика" включен
-              </div>
-            </div>
-            <button class="btn btn-primary" style="width: 100%; justify-content: center;">
-              Выбрать пакет
-            </button>
-          </div>
-        </div>
-
-        <div class="license-card">
-          <div class="license-header">
-            <div class="license-name">Alpha.Platform</div>
-            <div class="license-price">1 837 200 <span>₽</span></div>
-            <div class="license-note">от 1 837 200 ₽ за лицензию</div>
-          </div>
-          <div class="license-body">
-            <div class="license-features">
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Распределенная многосерверная диспетчеризация
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                До 1 000 000 тегов на узел
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Неограниченное количество экземпляров Alpha.Server
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Многоуровневые распределенные системы
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Центральный пункт управления
-              </div>
-              <div class="license-feature">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                Все пакеты протоколов включены
-              </div>
-            </div>
-            <button class="btn btn-secondary" style="width: 100%; justify-content: center;">
-              Выбрать пакет
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PROTOCOLS TAB -->
-    <div id="protocols" class="tab-panel">
-      <div class="protocols-intro">
-        <h3>Пакеты протоколов</h3>
-        <p>Альфа платформа поддерживает широкий спектр промышленных протоколов через три пакета</p>
-      </div>
-
-      <div class="protocol-packages">
-        <div class="protocol-package">
-          <div class="package-header">
-            <div class="package-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="#00c8f0" stroke-width="2"/>
-                <polyline points="12,6 12,12 16,14" stroke="#00c8f0" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="package-info">
-              <h4>Базовый пакет</h4>
-              <div class="package-desc">Включен во все лицензии</div>
-            </div>
-          </div>
-          <div class="protocol-list">
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Modbus RTU/TCP Master+Slave
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              IEC 101/104 Master+Slave
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              MQTT
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Syslog
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              OPC DA
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              OPC UA
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              SNMP Manager
             </div>
           </div>
         </div>
-
-        <div class="protocol-package">
-          <div class="package-header">
-            <div class="package-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="2"/>
-                <rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="2"/>
-                <rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="2"/>
-                <rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="package-info">
-              <h4>Промышленный пакет</h4>
-              <div class="package-desc">Включен в Platform, опционально для One+/SCADA</div>
-            </div>
+        
+        <div class="price-card">
+          <div class="price-card-head">
+            <div class="price-card-name">Alpha.Platform</div>
+            <div class="price-card-price">от 1 837 200 ₽</div>
+            <div class="price-card-note">без НДС</div>
           </div>
-          <div class="protocol-list">
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              BACnet
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              S7
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Ethernet/IP
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              FINS
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              RP 570 Master
-            </div>
-          </div>
-        </div>
-
-        <div class="protocol-package">
-          <div class="package-header">
-            <div class="package-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="m13 2-2 2.5h6l-2-2.5z" fill="#ffb800"/>
-                <path d="M13 7h6l2 2-2 2h-6l-2-2 2-2z" stroke="#ffb800" stroke-width="2"/>
-                <path d="m12 14 8-4-8-4v8z" stroke="#ffb800" stroke-width="2"/>
-                <circle cx="5" cy="6" r="3" stroke="#ffb800" stroke-width="2"/>
-                <circle cx="5" cy="18" r="3" stroke="#ffb800" stroke-width="2"/>
-                <line x1="8" y1="18" x2="13" y2="13" stroke="#ffb800" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="package-info">
-              <h4>Энергетика пакет</h4>
-              <div class="package-desc">Включен в SCADA+Platform, опционально для One+</div>
-            </div>
-          </div>
-          <div class="protocol-list">
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              МЭК 61850 Client
-            </div>
-            <div class="protocol-item">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <polyline points="4,12 9,17 20,6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              ТЭМ 104 Master
+          <div class="price-card-body">
+            <div class="price-features">
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                До 1 000 000 тегов
+              </div>
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                Мультисерверная
+              </div>
+              <div class="price-feat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+                Распределённая
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- SUPPORT TAB -->
-    <div id="support" class="tab-panel">
-      <div class="support-intro">
-        <h3>Уровни технической поддержки</h3>
-        <p>Выберите подходящий уровень поддержки для вашего проекта</p>
+    <!-- PROTOCOLS -->
+    <div id="ptab-protocols" class="ptab-panel">
+      <div class="protocol-grid">
+        <div class="protocol-card">
+          <div class="protocol-name">Базовый пакет</div>
+          <div class="protocol-desc">Доступно для всех редакций</div>
+          <div class="protocol-list">
+            <div class="protocol-item">• Modbus RTU/TCP</div>
+            <div class="protocol-item">• IEC 101/104</div>
+            <div class="protocol-item">• MQTT</div>
+            <div class="protocol-item">• OPC DA/UA</div>
+            <div class="protocol-item">• SNMP</div>
+            <div class="protocol-item">• Syslog</div>
+          </div>
+        </div>
+        
+        <div class="protocol-card">
+          <div class="protocol-name">Промышленный пакет</div>
+          <div class="protocol-desc">Platform (включён), опционально для One+/SCADA</div>
+          <div class="protocol-list">
+            <div class="protocol-item">• BACnet</div>
+            <div class="protocol-item">• Siemens S7</div>
+            <div class="protocol-item">• Ethernet/IP</div>
+            <div class="protocol-item">• FINS (Omron)</div>
+            <div class="protocol-item">• РП 570</div>
+          </div>
+        </div>
+        
+        <div class="protocol-card">
+          <div class="protocol-name">Энергетика</div>
+          <div class="protocol-desc">SCADA+Platform (включён), опционально для One+</div>
+          <div class="protocol-list">
+            <div class="protocol-item">• МЭК 61850</div>
+            <div class="protocol-item">• ТЭМ 104</div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="support-levels">
-        <div class="support-level">
+    <!-- SUPPORT -->
+    <div id="ptab-support" class="ptab-panel">
+      <div class="support-grid">
+        <div class="support-card">
           <div class="support-name">Base</div>
-          <div class="support-desc">Включена в лицензию</div>
-          <div class="support-features">
-            <div>• Стандартное время ответа</div>
-            <div>• Email поддержка</div>
-            <div>• База знаний</div>
-            <div>• Обновления ПО</div>
-          </div>
+          <div class="support-desc">Включён в лицензию</div>
         </div>
-
-        <div class="support-level">
+        
+        <div class="support-card">
           <div class="support-name">Standard</div>
-          <div class="support-desc">Ускоренный ответ</div>
-          <div class="support-features">
-            <div>• Приоритетная обработка</div>
-            <div>• Телефонная поддержка</div>
-            <div>• Удаленная диагностика</div>
-            <div>• Консультации по внедрению</div>
-          </div>
+          <div class="support-desc">Расширенная поддержка</div>
         </div>
-
-        <div class="support-level">
+        
+        <div class="support-card">
           <div class="support-name">Optimum</div>
-          <div class="support-desc">Приоритет + выезды</div>
-          <div class="support-features">
-            <div>• Выезд специалиста на объект</div>
-            <div>• Проектное сопровождение</div>
-            <div>• Обучение персонала</div>
-            <div>• Настройка системы</div>
-          </div>
+          <div class="support-desc">Приоритетная поддержка</div>
         </div>
-
-        <div class="support-level premium">
+        
+        <div class="support-card">
           <div class="support-name">Premium</div>
-          <div class="support-desc">Критическая поддержка</div>
-          <div class="support-features">
-            <div>• Реакция 1 час (критические вопросы)</div>
-            <div>• Выезд в течение 24 часов</div>
-            <div>• Персональный инженер</div>
-            <div>• Горячая линия 24/7</div>
-          </div>
+          <div class="support-desc">1h критичные, 24h выезд</div>
         </div>
       </div>
+    </div>
 
-      <div class="clients-section">
-        <h3 class="clients-title">Ключевые заказчики</h3>
-        <div class="clients-grid">
-          <div class="client-item">Газпром</div>
-          <div class="client-item">Транснефть</div>
-          <div class="client-item">Газпромнефть</div>
-          <div class="client-item">ЛУКОЙЛ</div>
-          <div class="client-item">НОВАТЭК</div>
-          <div class="client-item">Роснефть</div>
-          <div class="client-item">Росатом</div>
-          <div class="client-item">РусГидро</div>
-          <div class="client-item">ФосАгро</div>
-          <div class="client-item">СИБУР</div>
-          <div class="client-item">Норникель</div>
-          <div class="client-item">Иркутская нефть</div>
-          <div class="client-item">Татнефть</div>
-          <div class="client-item">Полюс</div>
-          <div class="client-item">Сбербанк</div>
-          <div class="client-item">Московский метро</div>
-          <div class="client-item">АЛРОСА</div>
-          <div class="client-item">Т Плюс</div>
-          <div class="client-item">СУЭК</div>
-        </div>
+    <!-- IMPLEMENTATIONS -->
+    <div id="ptab-implementations" class="ptab-panel">
+      <div class="impl-stats">
+        <div class="impl-stat"><span class="impl-num">6 500+</span><span class="impl-label">инсталляций</span></div>
+        <div class="impl-stat"><span class="impl-num">1 600+</span><span class="impl-label">объектов</span></div>
+        <div class="impl-stat"><span class="impl-num">100+</span><span class="impl-label">заказчиков</span></div>
       </div>
+      <div class="impl-industries">
+        <div class="impl-industry"><span style="color:var(--volt)">⬡</span> Нефтегазовая отрасль</div>
+        <div class="impl-industry"><span style="color:var(--flame)">⬡</span> Энергетика и генерация</div>
+        <div class="impl-industry"><span style="color:var(--lime)">⬡</span> Металлургия и горнодобыча</div>
+        <div class="impl-industry"><span style="color:var(--amber)">⬡</span> Химическая промышленность</div>
+        <div class="impl-industry"><span style="color:var(--volt)">⬡</span> Транспорт и инфраструктура</div>
+        <div class="impl-industry"><span style="color:var(--flame)">⬡</span> Пищевая промышленность</div>
+        <div class="impl-industry"><span style="color:var(--lime)">⬡</span> ЖКХ и BMS</div>
+      </div>
+      <p style="color:var(--text2);font-size:13px;margin-top:24px;">Подробные кейсы внедрения — по запросу. Источник: <a href="http://automiq.ru/stories/" target="_blank" style="color:var(--volt)">automiq.ru/stories</a></p>
     </div>
 
   </div>
 </div>
 
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 <footer>
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-section">
-        <h4>Продукты</h4>
-        <ul>
-          <li><a href="#">Альфа платформа</a></li>
-          <li><a href="#">Системы мониторинга</a></li>
-          <li><a href="#">Промышленные ПК</a></li>
-          <li><a href="#">Модули ввода-вывода</a></li>
+      <div>
+        <div class="footer-brand">
+          <div>СПЕЦТЕХ</div>
+        </div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="#products">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
         </ul>
       </div>
-      <div class="footer-section">
-        <h4>Услуги</h4>
-        <ul>
-          <li><a href="#">Проектирование АСУ ТП</a></li>
-          <li><a href="#">Интеграция систем</a></li>
-          <li><a href="#">Техническая поддержка</a></li>
-          <li><a href="#">Обучение</a></li>
+
+      <div>
+        <div class="footer-col-title">Услуги</div>
+        <ul class="footer-links">
+          <li><a href="#services">Консультации</a></li>
+          <li><a href="#services">Внедрение</a></li>
+          <li><a href="#services">Техподдержка</a></li>
+          <li><a href="#services">Обучение</a></li>
         </ul>
       </div>
-      <div class="footer-section">
-        <h4>Компания</h4>
-        <ul>
-          <li><a href="#">О нас</a></li>
-          <li><a href="#">Новости</a></li>
-          <li><a href="#">Карьера</a></li>
-          <li><a href="#">Контакты</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4>Поддержка</h4>
-        <ul>
-          <li><a href="#">Документация</a></li>
-          <li><a href="#">База знаний</a></li>
-          <li><a href="#">Форум</a></li>
-          <li><a href="#">Скачать ПО</a></li>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#careers">Карьера</a></li>
+          <li><a href="#contact">Контакты</a></li>
+          <li><a href="#blog">Блог</a></li>
         </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <div>© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
-      <div>Альфа платформа — российское решение для промышленной автоматизации</div>
+
+    <div style="border-top: 1px solid var(--wire); padding-top: 24px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-family: var(--ff-mono); font-size: 15px; color: var(--text3);">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--ff-mono);font-size:11px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
     </div>
   </div>
 </footer>
 
 <script>
-function showTab(tabId) {
-  // Hide all tab panels
-  document.querySelectorAll('.tab-panel').forEach(panel => {
+function showPTab(tabId, button) {
+  // Hide all panels
+  document.querySelectorAll('.ptab-panel').forEach(panel => {
     panel.classList.remove('active');
   });
   
-  // Remove active class from all tabs
-  document.querySelectorAll('.tab').forEach(tab => {
+  // Remove active state from all tabs
+  document.querySelectorAll('.ptab').forEach(tab => {
     tab.classList.remove('active');
   });
   
-  // Show selected tab panel
-  document.getElementById(tabId).classList.add('active');
+  // Show selected panel
+  document.getElementById('ptab-' + tabId).classList.add('active');
   
-  // Add active class to clicked tab
-  event.target.classList.add('active');
-  
-  // Smooth scroll to tab content
-  document.querySelector('.tab-content').scrollIntoView({
-    behavior: 'smooth',
-    block: 'start'
-  });
+  // Add active state to clicked tab
+  button.classList.add('active');
 }
-
-// Smooth scrolling for anchor links
-document.addEventListener('DOMContentLoaded', function() {
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-  
-  anchorLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const targetId = this.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
-      
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-});
-
-// Add parallax effect to hero orbs
-document.addEventListener('mousemove', function(e) {
-  const mouseX = e.clientX / window.innerWidth;
-  const mouseY = e.clientY / window.innerHeight;
-  
-  const hero = document.querySelector('.hero');
-  if (hero) {
-    const moveX = (mouseX - 0.5) * 20;
-    const moveY = (mouseY - 0.5) * 20;
-    
-    hero.style.backgroundPosition = `${moveX}px ${moveY}px`;
-  }
-});
 </script>
 
 </body>

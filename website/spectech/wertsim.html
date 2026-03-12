@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAE WeRTSim — Платформа цифровых двойников сварочных технологий | СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:        #05080f;
+  --ink1:       #080d1a;
+  --ink2:       #0c1525;
+  --steel:      #111e35;
+  --wire:       #192d48;
+  --wire2:      #1f3a5f;
+
+  --volt:       #00c8f0;
+  --volt-lo:    rgba(0,200,240,0.08);
+  --volt-glow:  rgba(0,200,240,0.4);
+  --flame:      #ff6b35;
+  --flame-lo:   rgba(255,107,53,0.1);
+  --lime:       #1de9b6;
+  --lime-lo:    rgba(29,233,182,0.08);
+  --crimson:    #ff3d57;
+  --amber:      #ffb800;
+
+  --text:       #e2eaf4;
+  --text2:      #94b3d0;
+  --text3:      #4a6d8f;
+
+  --ff-head:    'Exo 2', sans-serif;
+  --ff-mono:    'JetBrains Mono', monospace;
+  --ff-serif:   'Bitter', serif;
+
+  --ease:       cubic-bezier(.22,.68,0,1.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff-head);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink1); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 2px; }
+
+/* ══════════════════════════════════════
+   NOISE OVERLAY
+══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.12) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.12) 60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 72px;
+  background: rgba(5,8,15,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+  transition: height 0.3s ease, background 0.3s ease;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-logo-text {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text2);
+  transition: color .2s;
+  position: relative;
+  padding: 8px 0;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--flame);
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+
+.nav-links a:hover { color: var(--flame); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: -12px;
+  min-width: 200px;
+  background: rgba(5,8,15,0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  padding: 12px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.2s ease;
+  z-index: 200;
+}
+
+.nav-item:hover .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.nav-dropdown a {
+  display: block;
+  padding: 8px 16px;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  color: var(--text2);
+  border-left: 2px solid transparent;
+}
+
+.nav-dropdown a::after {
+  display: none;
+}
+
+.nav-dropdown a:hover {
+  color: var(--flame);
+  background: var(--flame-lo);
+  border-left-color: var(--flame);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-volt {
+  background: var(--volt);
+  color: var(--ink);
+}
+
+.btn-flame {
+  background: var(--flame);
+  color: var(--text);
+}
+
+.btn-cta-primary {
+  background: var(--flame);
+  color: var(--text);
+  font-size: 16px;
+  padding: 12px 20px;
+  width: 100%;
+  justify-content: center;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-cta-primary:hover {
+  background: #ff8559;
+  transform: translateY(-1px);
+}
+
+.btn-cta-secondary {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--wire2);
+  font-size: 16px;
+  padding: 12px 20px;
+  width: 100%;
+  justify-content: center;
+  font-weight: 600;
+  border-radius: 8px;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-cta-secondary:hover {
+  border-color: var(--flame);
+  color: var(--flame);
+}
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ══════════════════════════════════════
+   PRODUCT PAGE
+══════════════════════════════════════ */
+.product-hero {
+  padding-top: 120px;
+  padding-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  align-items: start;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--text3);
+}
+
+.breadcrumb a {
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: var(--flame);
+}
+
+.breadcrumb-sep {
+  color: var(--text3);
+  margin: 0 4px;
+}
+
+.breadcrumb-cur {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.product-vendor-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.vendor-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--flame);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 16px;
+  border-radius: 6px;
+}
+
+.vendor-name {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.vendor-official {
+  color: var(--lime);
+  font-size: 16px;
+  margin-left: auto;
+}
+
+.product-name {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.product-version {
+  font-family: var(--ff-mono);
+  font-size: 16px;
+  color: var(--text3);
+  margin-bottom: 16px;
+}
+
+.product-tagline {
+  font-family: var(--ff-serif);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--text2);
+  margin-bottom: 24px;
+  max-width: 600px;
+}
+
+.product-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.ppill {
+  background: var(--flame-lo);
+  color: var(--flame);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255,107,53,0.2);
+}
+
+.product-cta-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  overflow: hidden;
+  position: sticky;
+  top: 100px;
+}
+
+.cta-card-head {
+  padding: 24px;
+  text-align: center;
+  border-bottom: 1px solid var(--wire);
+}
+
+.cta-price-label {
+  font-size: 16px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.cta-price {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.cta-price-note {
+  font-size: 15px;
+  color: var(--text3);
+}
+
+.cta-card-body {
+  padding: 24px;
+}
+
+.cta-card-features {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--wire);
+}
+
+.cta-feat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+/* ══════════════════════════════════════
+   TABS
+══════════════════════════════════════ */
+.product-tabs-nav {
+  position: sticky;
+  top: 72px;
+  background: rgba(5,8,15,0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+  padding: 16px 0;
+  z-index: 90;
+}
+
+.product-tabs-nav .container {
+  display: flex;
+  gap: 32px;
+}
+
+.ptab {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  font-family: var(--ff-head);
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.ptab::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--flame);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+
+.ptab:hover,
+.ptab.active {
+  color: var(--flame);
+}
+
+.ptab.active::after {
+  transform: scaleX(1);
+}
+
+.product-tab-content {
+  padding: 48px 0 80px;
+}
+
+.ptab-panel {
+  display: none;
+}
+
+.ptab-panel.active {
+  display: block;
+}
+
+/* ══════════════════════════════════════
+   TAB CONTENT STYLES
+══════════════════════════════════════ */
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.overview-block {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.ovb-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feat-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.4;
+}
+
+.industries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.industry-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s;
+}
+
+.industry-card:hover {
+  border-color: var(--flame);
+  background: var(--flame-lo);
+}
+
+.industry-icon {
+  font-size: 16px;
+}
+
+.industry-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.capability-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s;
+}
+
+.capability-card:hover {
+  border-color: var(--flame);
+  background: var(--flame-lo);
+}
+
+.cap-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--flame);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 16px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.cap-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.cap-desc {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.4;
+}
+
+.processes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.process-item {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.process-item:hover {
+  border-color: var(--flame);
+  background: var(--flame-lo);
+}
+
+.process-abbr {
+  font-family: var(--ff-mono);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--flame);
+  margin-bottom: 8px;
+}
+
+.process-name {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.3;
+}
+
+.related-tech {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.related-tech h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.related-item {
+  font-size: 16px;
+  color: var(--text2);
+  padding-left: 16px;
+  position: relative;
+}
+
+.related-item::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--flame);
+}
+
+.applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.app-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s;
+}
+
+.app-card:hover {
+  border-color: var(--flame);
+  background: var(--flame-lo);
+}
+
+.app-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-desc {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.4;
+}
+
+.integration-section {
+  margin-bottom: 48px;
+}
+
+.integration-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.integration-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.integration-example {
+  font-family: var(--ff-mono);
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 15px;
+  color: var(--text3);
+  margin-top: 16px;
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer {
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  padding: 48px 0 24px;
+  margin-top: 80px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 200px 200px 200px;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-brand {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.footer-col-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--flame);
+}
+
+.f-badge {
+  background: var(--flame-lo);
+  color: var(--flame);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,107,53,0.3);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .product-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  nav {
+    padding: 0 24px;
+  }
+  
+  .nav-links {
+    gap: 16px;
+  }
+  
+  .product-name {
+    font-size: 36px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li class="nav-item">
+      <a href="#products">Продукты</a>
+      <div class="nav-dropdown">
+        <a href="alpha-platform.html">Альфа платформа</a>
+        <a href="wertsim.html">CAE WeRTSim</a>
+      </div>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#contact" class="btn btn-flame">Консультация</a>
+  </div>
+</nav>
+
+<!-- ══════════ PRODUCT PAGE ══════════ -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="#products">Каталог</a><span class="breadcrumb-sep">/</span>
+          <a href="#cae">CAE</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">WeRTSim</span>
+        </div>
+        
+        <div class="product-vendor-badge">
+          <div class="vendor-logo">ЮМОСС</div>
+          <span class="vendor-name">АО «Юмосс» (UMOSS)</span>
+          <span class="vendor-official">✓ Дистрибьютор: АО «СПЕЦТЕХ»</span>
+        </div>
+        
+        <h1 class="product-name">CAE WeRTSim</h1>
+        <div class="product-version">Computer-Aided Engineering «Welding and Related Technologies Simulation»</div>
+        <p class="product-tagline">Инновационное ПО для быстрого инженерного анализа в области сварки и родственных технологий — платформа цифровых двойников сварочных и родственных технологий</p>
+        
+        <div class="product-pills">
+          <span class="ppill">CAE</span>
+          <span class="ppill">Сварка</span>
+          <span class="ppill">Моделирование</span>
+          <span class="ppill">Цифровые двойники</span>
+          <span class="ppill">Импортозамещение</span>
+        </div>
+      </div>
+      
+      <!-- CTA Card -->
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">клиент-серверная архитектура · частное облако</div>
+        </div>
+        <div class="cta-card-body">
+          <button class="btn-cta-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+            Запросить демо
+          </button>
+          <button class="btn-cta-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Связаться
+          </button>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Полностью отечественная разработка</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>50+ лет исследований (1973-2025)</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Расчёт от минут до часа</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Без спецобучения</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Интеграция с CAD, FEM, роботами</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs nav -->
+<div class="product-tabs-nav">
+  <div class="container">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('capabilities',this)">Возможности</button>
+    <button class="ptab" onclick="showPTab('processes',this)">Процессы</button>
+    <button class="ptab" onclick="showPTab('applications',this)">Области применения</button>
+    <button class="ptab" onclick="showPTab('integration',this)">Интеграция</button>
+  </div>
+</div>
+
+<!-- Tab content -->
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Ключевые возможности</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Моделирование высокотемпературных процессов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Автоматическая генерация расчётной сетки</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Многопроходная сварка</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Моделирование разнородных материалов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Расчёт параметров источника Голдака</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Простой интерфейс для технологов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Верифицированные алгоритмы (Applied Physics)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Формирование отчётных документов</div>
+          </div>
+        </div>
+        <div class="overview-block">
+          <div class="ovb-title">Целевые отрасли</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Машиностроение</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Авиа-/ракетостроение</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Автомобилестроение</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Кораблестроение</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Нефтегаз и химпром</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Учебные заведения</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="industries-grid">
+        <div class="industry-card">
+          <div class="industry-icon">🏭</div>
+          <div class="industry-name">Машиностроение</div>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">✈️</div>
+          <div class="industry-name">Авиа-/ракетостроение</div>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🚗</div>
+          <div class="industry-name">Автомобилестроение</div>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">⚓</div>
+          <div class="industry-name">Кораблестроение</div>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">⚕️</div>
+          <div class="industry-name">Медицинская промышленность</div>
+        </div>
+        <div class="industry-card">
+          <div class="industry-icon">🏫</div>
+          <div class="industry-name">Учебные заведения</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAPABILITIES -->
+    <div id="ptab-capabilities" class="ptab-panel">
+      <div class="capabilities-grid">
+        <div class="capability-card">
+          <div class="cap-number">1</div>
+          <div class="cap-title">Термодинамический анализ</div>
+          <div class="cap-desc">Геометрия зоны сварки (ванна, шов) и зоны термического влияния (ЗТВ)</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">2</div>
+          <div class="cap-title">Термомеханический анализ</div>
+          <div class="cap-desc">Остаточные пластические деформации и напряжения в сварном соединении</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">3</div>
+          <div class="cap-title">Фазовый анализ</div>
+          <div class="cap-desc">Фазовый состав материала (аустенит, мартенсит, феррит) в зоне сварки</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">4</div>
+          <div class="cap-title">Предиктивная аналитика</div>
+          <div class="cap-desc">Прогнозирование качества сварки при отклонениях входных параметров</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">5</div>
+          <div class="cap-title">Диагностика</div>
+          <div class="cap-desc">Сравнение качества сварного шва при различных технологических факторах</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">6</div>
+          <div class="cap-title">Параметрический синтез</div>
+          <div class="cap-desc">Определение неизвестного входного параметра по известным параметрам</div>
+        </div>
+
+        <div class="capability-card">
+          <div class="cap-number">7</div>
+          <div class="cap-title">Параметрическая оптимизация</div>
+          <div class="cap-desc">Поиск оптимального сочетания технологических параметров сварки</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROCESSES -->
+    <div id="ptab-processes" class="ptab-panel">
+      <h3 style="color: var(--text); margin-bottom: 24px; font-size: 20px;">Поддерживаемые процессы сварки</h3>
+      
+      <div class="processes-grid">
+        <div class="process-item">
+          <div class="process-abbr">MIG/MAG</div>
+          <div class="process-name">Металлическим электродом в среде защитных газов</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">SAW</div>
+          <div class="process-name">Дуговая сварка под флюсом</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">TIG</div>
+          <div class="process-name">Вольфрамовым электродом в среде инертных газов</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">LaW</div>
+          <div class="process-name">Лазерная сварка</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">EBW</div>
+          <div class="process-name">Электронно-лучевая сварка</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">RSW</div>
+          <div class="process-name">Точечная сварка сопротивлением</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">RPW</div>
+          <div class="process-name">Рельефная сварка</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">FBW</div>
+          <div class="process-name">Стыковая сварка оплавлением</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">FW</div>
+          <div class="process-name">Фрикционная сварка</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">FSW</div>
+          <div class="process-name">Сварка трением с перемешиванием</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">WAAM</div>
+          <div class="process-name">Аддитивное производство дуговой наплавкой</div>
+        </div>
+        
+        <div class="process-item">
+          <div class="process-abbr">LMD</div>
+          <div class="process-name">Лазерное наращивание металла</div>
+        </div>
+      </div>
+
+      <div class="related-tech">
+        <h3>Родственные технологии</h3>
+        <div class="related-list">
+          <div class="related-item">Поверхностная закалка</div>
+          <div class="related-item">Плазменная наплавка</div>
+          <div class="related-item">Пайка</div>
+          <div class="related-item">Поверхностное напыление легирующих элементов</div>
+          <div class="related-item">Дуговая/лучевая/плазменная резка</div>
+          <div class="related-item">Сверление, испарение, гравировка</div>
+          <div class="related-item">Аддитивные технологии для 3D-печати металлом</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div id="ptab-applications" class="ptab-panel">
+      <div class="applications-grid">
+        <div class="app-card">
+          <div class="app-title">
+            <span>🎓</span>
+            Обучение студентов
+          </div>
+          <div class="app-desc">Интерактивная обучающая среда для изучения процессов сварки, демонстрация влияния параметров на качество шва, виртуальные лабораторные работы.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-title">
+            <span>🏭</span>
+            Технологическая подготовка производства
+          </div>
+          <div class="app-desc">Разработка технологических карт сварки, расчёт режимов, определение последовательности операций, планирование производственного процесса.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-title">
+            <span>⚙️</span>
+            Адаптация и оптимизация проектов
+          </div>
+          <div class="app-desc">Адаптация существующих технологий под новые материалы и конструкции, оптимизация параметров для повышения качества и снижения затрат.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-title">
+            <span>🧠</span>
+            Экспертная система выбора материалов
+          </div>
+          <div class="app-desc">Автоматизированный выбор оптимальных материалов и сварочного оборудования на основе требований к конечному изделию.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-title">
+            <span>🤖</span>
+            Управление сварочными роботами
+          </div>
+          <div class="app-desc">Интеграция с роботизированными сварочными комплексами для управления в режиме реального времени с учётом обратной связи.</div>
+        </div>
+
+        <div class="app-card">
+          <div class="app-title">
+            <span>📊</span>
+            Цифровизация производства
+          </div>
+          <div class="app-desc">Внедрение цифровых двойников сварочных процессов, создание единой информационной среды для управления качеством.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATION -->
+    <div id="ptab-integration" class="ptab-panel">
+      <div class="integration-section">
+        <h3>Интеграция с FEM-системами</h3>
+        <div class="integration-card">
+          <p style="color: var(--text2); margin-bottom: 16px;">WeRTSim может работать в связке с конечно-элементными системами для комплексного анализа сварных конструкций. Пример интеграции с Ansys:</p>
+          <div class="integration-example">
+# Пример экспорта температурных полей из WeRTSim в Ansys
+/PREP7
+*DIM,TEMP_FIELD,ARRAY,1000,3
+*VREAD,TEMP_FIELD(1,1),wertsim_temp_export.txt
+(3F10.3)
+/SOLU
+BF,ALL,TEMP,%TEMP_FIELD%
+          </div>
+          <p style="color: var(--text3); font-size: 15px; margin-top: 12px;">Температурные поля из WeRTSim используются как граничные условия в Ansys для анализа напряжений и деформаций всей конструкции.</p>
+        </div>
+      </div>
+
+      <div class="integration-section">
+        <h3>Интеграция с CAD-системами</h3>
+        <div class="integration-card">
+          <p style="color: var(--text2); margin-bottom: 16px;">Прямой импорт геометрии сварных соединений из популярных CAD-пакетов:</p>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>SolidWorks (*.sldprt, *.sldasm)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Autodesk Inventor (*.ipt, *.iam)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>KOMPAS-3D (*.m3d, *.a3d)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Стандартные форматы (STEP, IGES, Parasolid)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="integration-section">
+        <h3>Управление роботизированными комплексами</h3>
+        <div class="integration-card">
+          <p style="color: var(--text2); margin-bottom: 16px;">WeRTSim может генерировать управляющие программы для сварочных роботов с учётом рассчитанных оптимальных параметров:</p>
+          <div class="integration-example">
+// Пример G-кода для робота ABB с параметрами из WeRTSim
+PROC WeldSeam_001()
+    MoveL p100, v200, z1, gun1;
+    ArcLStart;
+    ! Параметры из WeRTSim: I=180A, U=28V, v=6mm/s
+    SetWeldData WD_180_28_6;
+    MoveL p101, v6, z1, gun1;
+    ArcLEnd;
+ENDPROC
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div>СПЕЦТЕХ</div>
+        </div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Услуги</div>
+        <ul class="footer-links">
+          <li><a href="#services">Консультации</a></li>
+          <li><a href="#services">Внедрение</a></li>
+          <li><a href="#services">Техподдержка</a></li>
+          <li><a href="#services">Обучение</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#careers">Карьера</a></li>
+          <li><a href="#contact">Контакты</a></li>
+          <li><a href="#blog">Блог</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--wire); padding-top: 24px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-family: var(--ff-mono); font-size: 15px; color: var(--text3);">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--ff-mono);font-size:11px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(tabId, button) {
+  // Hide all panels
+  document.querySelectorAll('.ptab-panel').forEach(panel => {
+    panel.classList.remove('active');
+  });
+  
+  // Remove active state from all tabs
+  document.querySelectorAll('.ptab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show selected panel
+  document.getElementById('ptab-' + tabId).classList.add('active');
+  
+  // Add active state to clicked tab
+  button.classList.add('active');
+}
+</script>
+
+</body>
+</html>

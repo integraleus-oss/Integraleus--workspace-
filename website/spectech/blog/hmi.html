@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Визуализация в Alpha.HMI 2.0: мнемосхемы и скрипты — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-visual{color:var(--lime);border-color:var(--lime);background:var(--lime-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--lime);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.script-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.script-box .info-box-title{color:var(--amber);}
+
+/* Mode comparison */
+.mode-comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:30px 0;}
+.mode-item{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;padding:20px;}
+.mode-title{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--lime);margin-bottom:12px;letter-spacing:1px;}
+.mode-desc{color:var(--text2);font-size:15px;line-height:1.5;}
+
+/* Component grid */
+.component-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:24px 0;}
+.component-item{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:16px;text-align:center;}
+.component-name{font-family:var(--mono);font-size:14px;color:var(--lime);margin-bottom:6px;}
+.component-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .mode-comparison{grid-template-columns:1fr;}
+  .component-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Визуализация в Alpha.HMI 2.0: мнемосхемы и скрипты</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-visual">Визуализация</span>
+            <span class="article-date">28 февр. 2026</span>
+            <span class="article-read">15 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Визуализация в Alpha.HMI 2.0: мнемосхемы и скрипты</h1>
+          <p class="article-subtitle">Исчерпывающий обзор Alpha.HMI 2.0 — среды разработки и исполнения человеко-машинного интерфейса. Рассматриваем два режима работы, систему скриптинга и богатый набор графических компонентов.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>Alpha.HMI 2.0 — это среда разработки и исполнения человеко-машинного интерфейса (HMI/SCADA), разработанная АО «Атомик Софт» для создания мнемосхем и панелей визуализации промышленных процессов. Система поддерживает Windows и Linux, включая российские дистрибутивы.</p>
+
+          <h2>Два режима работы</h2>
+
+          <p>Alpha.HMI построена по принципу разделения процессов разработки и исполнения проектов:</p>
+
+          <div class="mode-comparison">
+            <div class="mode-item">
+              <div class="mode-title">🛠️ Designer (Дизайнер)</div>
+              <div class="mode-desc">Интегрированная среда разработки (IDE) для создания мнемосхем, настройки компонентов и программирования логики управления.</div>
+            </div>
+            <div class="mode-item">
+              <div class="mode-title">🖥️ Visualizer (Визуализатор)</div>
+              <div class="mode-desc">Среда исполнения проектов для отображения данных в реальном времени и обеспечения взаимодействия оператора с системой.</div>
+            </div>
+          </div>
+
+          <h2>Система скриптинга</h2>
+
+          <p>Alpha.HMI поддерживает два языка программирования для создания интерактивной логики:</p>
+
+          <h3>Alpha.Om</h3>
+          <p>Специализированный язык для промышленной автоматизации с поддержкой <strong>относительной адресации</strong> объектов:</p>
+
+          <ul>
+            <li><em>me/this</em> — ссылка на текущий объект</li>
+            <li><em>parent</em> — обращение к родительскому элементу</li>
+            <li><em>here</em> — ссылка на текущую форму</li>
+          </ul>
+
+          <pre><code>// Пример скрипта Alpha.Om для управления насосом
+procedure OnPumpStart() {
+  // Проверка условий запуска
+  if (me.signals.PressureOK.Value && !parent.MaintenanceMode.Value) {
+    me.commands.StartPump.Execute();
+    here.statusIndicator.SetText("Насос запущен");
+    here.statusIndicator.SetColor("#1de9b6");
+  } else {
+    here.alarmPanel.ShowMessage("Запуск невозможен: проверьте условия");
+  }
+}</code></pre>
+
+          <h3>JavaScript</h3>
+          <p>Стандартный JavaScript для сложной бизнес-логики и интеграции с внешними системами. Поддерживается вызов <strong>пользовательских функций с аргументами</strong> и обращение к <strong>внешним функциям из DLL/SO</strong>.</p>
+
+          <div class="script-box">
+            <div class="info-box-title">Гибкость программирования</div>
+            <p>Относительная адресация позволяет создавать универсальные компоненты, которые могут использоваться в разных частях проекта без изменения кода.</p>
+          </div>
+
+          <h2>Экранные формы и навигация</h2>
+
+          <p>Система форм Alpha.HMI обеспечивает структурированную организацию интерфейса:</p>
+
+          <h3>Структура проекта</h3>
+          <ul>
+            <li><strong>Папки</strong> — группировка форм по функциональному назначению</li>
+            <li><strong>Главная форма</strong> — точка входа в приложение</li>
+            <li><strong>Размеры форм</strong> — ручная настройка или автоподбор</li>
+          </ul>
+
+          <h3>Фреймы</h3>
+          <p><em>Фреймы</em> — это формы внутри форм с поддержкой масштабирования. Они позволяют создавать модульную архитектуру интерфейса и переиспользовать компоненты.</p>
+
+          <h3>Навигация</h3>
+          <ul>
+            <li><strong>Открытие по UUID</strong> — уникальная идентификация форм</li>
+            <li><strong>Межоконное взаимодействие</strong> — SendToAll(), SendMessageByID()</li>
+          </ul>
+
+          <pre><code>// Пример навигации между формами
+function openTankForm(tankId) {
+  var formUUID = "tank-detail-" + tankId;
+  here.NavigateToForm(formUUID, {
+    tankId: tankId,
+    mode: "monitoring"
+  });
+}</code></pre>
+
+          <h2>Графические компоненты</h2>
+
+          <p>Alpha.HMI предоставляет богатый набор графических элементов для создания профессиональных интерфейсов:</p>
+
+          <h3>Примитивы</h3>
+          <div class="component-grid">
+            <div class="component-item">
+              <div class="component-name">Прямоугольник</div>
+              <div class="component-desc">Базовая геометрическая фигура</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Эллипс</div>
+              <div class="component-desc">Круги и овалы</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Линия</div>
+              <div class="component-desc">Прямые соединения</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Кривая</div>
+              <div class="component-desc">Сложные траектории</div>
+            </div>
+          </div>
+
+          <h3>UI-элементы</h3>
+          <div class="component-grid">
+            <div class="component-item">
+              <div class="component-name">Кнопка</div>
+              <div class="component-desc">Элементы управления</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Флажок</div>
+              <div class="component-desc">Логические значения</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Ползунок</div>
+              <div class="component-desc">Аналоговые значения</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Список</div>
+              <div class="component-desc">Выбор из вариантов</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Прогресс-бар</div>
+              <div class="component-desc">Отображение процентов</div>
+            </div>
+            <div class="component-item">
+              <div class="component-name">Гистограмма</div>
+              <div class="component-desc">Индикаторы уровней</div>
+            </div>
+          </div>
+
+          <h3>Эффекты и анимация</h3>
+          <ul>
+            <li><em>Градиенты</em> — линейные и радиальные переходы цветов</li>
+            <li><em>Мигание</em> — привлечение внимания к критическим элементам</li>
+            <li><em>Звуковые уведомления</em> — аудиосигналы событий</li>
+            <li><em>Таймеры</em> — периодическое выполнение действий</li>
+          </ul>
+
+          <h2>Типизация и ООП</h2>
+
+          <p>Alpha.HMI поддерживает концепции объектно-ориентированного программирования:</p>
+
+          <h3>Пользовательские типы</h3>
+          <p>Создание собственных типов компонентов (аналог классов) с возможностью создания <strong>экземпляров с индивидуальными свойствами</strong>.</p>
+
+          <h3>Параметры инициализации</h3>
+          <p>Передача начальных значений при создании экземпляров объектов.</p>
+
+          <h3>Глобальные объекты</h3>
+          <p>Объекты, доступные из любой части проекта для обеспечения межкомпонентного взаимодействия.</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Типы данных</div>
+            <p>Поддерживаются типы: <strong>bool, int1-int8, uint1-uint8, float, double, string, timestamp, variant</strong> с возможностью создания массивов.</p>
+          </div>
+
+          <h2>Источники данных</h2>
+
+          <p>Alpha.HMI поддерживает различные способы подключения к источникам данных:</p>
+
+          <h3>OPC DA (только Windows)</h3>
+          <ul>
+            <li><em>Источник OPC</em> — подключение к OPC-серверу</li>
+            <li><em>Элемент OPC &lt;T&gt;</em> — типизированные элементы данных</li>
+          </ul>
+
+          <h3>TCP (кроссплатформенно)</h3>
+          <ul>
+            <li><em>Источник AP</em> — подключение к AccessPoint (порт 4388, история 4950)</li>
+            <li><em>Элемент AP &lt;T&gt;</em> — типизированные элементы</li>
+            <li><em>Учётные данные AP</em> — авторизация с хэшированием паролей</li>
+            <li><em>Запрос алармов</em> — оперативные и исторические тревоги (20+ полей)</li>
+            <li><em>Браузер источника AP</em> — навигация по дереву сигналов</li>
+          </ul>
+
+          <h3>SQL-источники</h3>
+          <p>Подключение к реляционным БД через ODBC:</p>
+          <ul>
+            <li><em>PostgreSQL</em> — открытая СУБД</li>
+            <li><em>MySQL</em> — популярная СУБД</li>
+            <li><em>MS SQL Server</em> — корпоративная СУБД Microsoft</li>
+            <li><em>Oracle</em> — промышленная СУБД</li>
+          </ul>
+
+          <pre><code>// Пример SQL-запроса
+SELECT 
+  equipment_id,
+  temperature,
+  pressure,
+  timestamp
+FROM sensor_data 
+WHERE timestamp > NOW() - INTERVAL '1 hour'
+ORDER BY timestamp DESC;</code></pre>
+
+          <h2>Графики и тренды</h2>
+
+          <p>Встроенная библиотека <em>alpha.hmi.charts</em> обеспечивает мощные возможности визуализации данных:</p>
+
+          <ul>
+            <li><strong>Поле графика</strong> — настраиваемая область отображения</li>
+            <li><strong>Оси координат</strong> — автомасштабирование и ручная настройка</li>
+            <li><strong>Линии данных</strong> — множественные ряды с индивидуальным стилем</li>
+            <li><strong>Реперные линии</strong> — установка границ и уставок</li>
+            <li><strong>Оперативные данные</strong> — отображение в реальном времени</li>
+            <li><strong>Исторические данные</strong> — анализ трендов</li>
+          </ul>
+
+          <h2>Таблицы и деревья</h2>
+
+          <h3>Библиотека alpha.hmi.tables</h3>
+          <ul>
+            <li><em>Модель данных</em> — структурированное представление</li>
+            <li><em>Столбцы</em> — настраиваемые колонки с типизацией</li>
+            <li><em>Декораторы</em> — форматирование отображения</li>
+            <li><em>Итераторы</em> — навигация по данным</li>
+          </ul>
+
+          <h3>Компонент «Дерево»</h3>
+          <ul>
+            <li><em>Источник данных</em> — привязка к внешним источникам</li>
+            <li><em>Колонки</em> — многоколоночные деревья</li>
+            <li><em>Заполнение</em> — из источника, скриптом, автогенерация</li>
+          </ul>
+
+          <h2>Интеграция и расширения</h2>
+
+          <h3>WebViewer</h3>
+          <p>Развёртывание проектов как веб-приложений с поддержкой:</p>
+          <ul>
+            <li><em>IIS, Apache, Nginx</em> — популярные веб-серверы</li>
+            <li><em>WebSocket</em> — двусторонняя связь в реальном времени</li>
+            <li><em>SSL</em> — защищённые соединения</li>
+            <li><em>Восстановление сессий</em> — при разрыве соединения</li>
+          </ul>
+
+          <h3>Встраиваемые компоненты</h3>
+          <ul>
+            <li><em>Alpha.Alarms</em> — система тревог (только Windows)</li>
+            <li><em>Alpha.Trends</em> — расширенные графики (только Windows)</li>
+            <li><em>.NET библиотеки</em> — интеграция с .NET-компонентами</li>
+            <li><em>Qt-плагины</em> — собственные расширения (CMake + Qt 5.15.2)</li>
+          </ul>
+
+          <h2>Безопасность и управление</h2>
+
+          <p>Alpha.HMI интегрируется с подсистемой <em>Alpha.Security</em> для обеспечения:</p>
+          <ul>
+            <li><strong>Авторизации пользователей</strong> — контроль доступа к функциям</li>
+            <li><strong>Управления правами</strong> — гранулярные разрешения</li>
+            <li><strong>Аудита действий</strong> — журналирование операций</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">CLI и автоматизация</div>
+            <p>Утилита <strong>alpha.hmi.cli</strong> обеспечивает автоматизацию процессов компиляции и выгрузки метаинформации проектов.</p>
+          </div>
+
+          <p>Alpha.HMI 2.0 представляет собой мощную платформу для создания современных человеко-машинных интерфейсов с поддержкой передовых технологий визуализации и богатыми возможностями интеграции с промышленными системами.</p>
+
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#два-режима-работы">Два режима работы</a></li>
+              <li><a href="#система-скриптинга">Система скриптинга</a></li>
+              <li class="toc-h3"><a href="#alpha-om">Alpha.Om</a></li>
+              <li class="toc-h3"><a href="#javascript">JavaScript</a></li>
+              <li><a href="#экранные-формы-и-навигация">Экранные формы</a></li>
+              <li class="toc-h3"><a href="#фреймы">Фреймы</a></li>
+              <li class="toc-h3"><a href="#навигация">Навигация</a></li>
+              <li><a href="#графические-компоненты">Графические компоненты</a></li>
+              <li class="toc-h3"><a href="#примитивы">Примитивы</a></li>
+              <li class="toc-h3"><a href="#ui-элементы">UI-элементы</a></li>
+              <li><a href="#типизация-и-ооп">Типизация и ООП</a></li>
+              <li><a href="#источники-данных">Источники данных</a></li>
+              <li class="toc-h3"><a href="#sql-источники">SQL-источники</a></li>
+              <li><a href="#графики-и-тренды">Графики и тренды</a></li>
+              <li><a href="#таблицы-и-деревья">Таблицы и деревья</a></li>
+              <li><a href="#интеграция-и-расширения">Интеграция</a></li>
+              <li><a href="#безопасность-и-управление">Безопасность</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="alarms.html" class="related-item">
+                <div class="related-item-title">Система тревог Alpha.Alarms</div>
+                <div class="related-item-meta">SCADA · 9 мин</div>
+              </a>
+              <a href="reports.html" class="related-item">
+                <div class="related-item-title">Alpha.Reports: отчёты</div>
+                <div class="related-item-meta">Гайды · 6 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alpha.Reports: автоматическая генерация отчётов — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-guides{color:var(--amber);border-color:var(--amber);background:rgba(255,184,0,0.08);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--volt);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Alpha.Reports: автоматическая генерация отчётов</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-guides">Гайды</span>
+            <span class="article-date">8 марта 2026</span>
+            <span class="article-read">6 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Alpha.Reports: автоматическая генерация отчётов</h1>
+          <p class="article-subtitle">Модуль Alpha.Reports обеспечивает автоматизацию процесса создания отчётности в SCADA-системах. Рассказываем о возможностях модуля: от редактора шаблонов до планировщика и интеграции с Alpha.HMI.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>Alpha.Reports — специализированный модуль Альфа платформы для <strong>автоматической генерации отчётов</strong> на основе данных промышленной автоматизации. Модуль интегрируется с Alpha.Server и Alpha.Historian, предоставляя инструменты для создания, планирования и распространения отчётности.</p>
+
+          <h2>Архитектура модуля отчётности</h2>
+
+          <p>Alpha.Reports работает по принципу <em>шаблон-данные-отчёт</em>, объединяя информацию из различных источников:</p>
+
+          <ul>
+            <li><strong>Alpha.Historian</strong> — исторические данные за любой период</li>
+            <li><strong>Alpha.Server</strong> — оперативные данные в реальном времени</li>
+            <li><strong>Внешние БД</strong> — дополнительная информация через ODBC/OLE DB</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Поток генерации отчёта</div>
+            <p><strong>Шаблон</strong> + <strong>Данные</strong> → <strong>Обработка</strong> → <strong>Экспорт</strong> → <strong>Распространение</strong></p>
+            <p>Каждый отчёт создаётся на основе заранее настроенного шаблона с автоматическим заполнением актуальными данными.</p>
+          </div>
+
+          <h2>Редактор шаблонов</h2>
+
+          <p>Встроенный <strong>Template Editor</strong> предоставляет визуальную среду для создания отчётов с поддержкой:</p>
+
+          <h3>Элементы оформления</h3>
+          <ul>
+            <li><em>Таблицы данных</em> с автоматическим заполнением из источников</li>
+            <li><em>Графики и диаграммы</em> на основе трендов Alpha.Historian</li>
+            <li><em>Изображения мнемосхем</em> с текущими значениями параметров</li>
+            <li><em>Текстовые блоки</em> с переменными и формулами расчёта</li>
+          </ul>
+
+          <h3>Источники данных в шаблонах</h3>
+          <p>Шаблоны поддерживают гибкую настройку источников:</p>
+
+          <pre><code>// Пример SQL-запроса для отчёта
+SELECT 
+  timestamp, 
+  temperature, 
+  pressure, 
+  flow_rate
+FROM historian_data 
+WHERE timestamp BETWEEN ${start_date} AND ${end_date}
+  AND quality = 'GOOD'
+ORDER BY timestamp</code></pre>
+
+          <h2>Планировщик автоматической генерации</h2>
+
+          <p>Alpha.Reports включает мощный <strong>планировщик задач</strong> для автоматического создания отчётов по расписанию:</p>
+
+          <h3>Типы расписаний</h3>
+          <ul>
+            <li><strong>Периодические</strong> — ежедневно, еженедельно, ежемесячно</li>
+            <li><strong>По триггерам</strong> — по событиям в системе или изменению параметров</li>
+            <li><strong>По запросу</strong> — генерация по требованию через API</li>
+            <li><strong>Условные</strong> — только при выполнении заданных условий</li>
+          </ul>
+
+          <h3>Настройка периодов данных</h3>
+          <p>Планировщик автоматически подстраивает периоды выборки данных:</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Примеры автоматических периодов</div>
+            <p><strong>Дневной отчёт</strong> — данные за вчера с 00:00 до 23:59</p>
+            <p><strong>Недельный отчёт</strong> — данные за прошлую неделю (понедельник-воскресенье)</p>
+            <p><strong>Месячный отчёт</strong> — данные за прошлый календарный месяц</p>
+          </div>
+
+          <h2>Email-рассылка отчётов</h2>
+
+          <p>Модуль поддерживает <strong>автоматическую рассылку</strong> готовых отчётов по списку адресатов:</p>
+
+          <h3>Возможности рассылки</h3>
+          <ul>
+            <li><em>SMTP-интеграция</em> с корпоративными почтовыми серверами</li>
+            <li><em>Список рассылки</em> с группировкой по типам отчётов</li>
+            <li><em>Персонализация</em> — различные отчёты для разных ролей</li>
+            <li><em>Условная рассылка</em> — только при обнаружении аварий или отклонений</li>
+          </ul>
+
+          <h3>Форматы вложений</h3>
+          <p>Отчёты автоматически конвертируются в нужный формат перед отправкой:</p>
+          <ul>
+            <li><strong>PDF</strong> — для архивного хранения и подписи</li>
+            <li><strong>Excel (XLSX)</strong> — для дальнейшей обработки данных</li>
+            <li><strong>HTML</strong> — для просмотра в браузере</li>
+            <li><strong>RTF</strong> — для редактирования в текстовых процессорах</li>
+          </ul>
+
+          <h2>Экспорт в папки</h2>
+
+          <p><strong>Автоматический экспорт</strong> позволяет сохранять отчёты в файловой системе для интеграции с внешними системами документооборота:</p>
+
+          <h3>Сценарии использования</h3>
+          <ul>
+            <li><em>Архивирование</em> — автоматическое сохранение в сетевое хранилище</li>
+            <li><em>Интеграция с СЭД</em> — экспорт в папки систем электронного документооборота</li>
+            <li><em>FTP-передача</em> — автоматическая отправка в удалённые системы</li>
+            <li><em>Резервное копирование</em> — дублирование отчётов в облачные сервисы</li>
+          </ul>
+
+          <h3>Именование файлов</h3>
+          <p>Поддерживается гибкое именование экспортируемых файлов:</p>
+
+          <pre><code>// Шаблон имени файла
+report_${report_type}_${yyyy}-${MM}-${dd}_${HH}${mm}.pdf
+
+// Результат:
+report_daily_production_2026-03-08_0600.pdf</code></pre>
+
+          <h2>Интеграция с Alpha.HMI</h2>
+
+          <p>Alpha.Reports тесно интегрирован с модулем визуализации <strong>Alpha.HMI</strong>, обеспечивая:</p>
+
+          <h3>Интерактивные отчёты</h3>
+          <ul>
+            <li><strong>Встроенный просмотр</strong> — отчёты как часть мнемосхем HMI</li>
+            <li><strong>Параметризация</strong> — изменение периода и параметров отчёта из интерфейса</li>
+            <li><strong>Экспорт по требованию</strong> — кнопки генерации отчётов в HMI</li>
+            <li><strong>Предварительный просмотр</strong> — проверка отчёта перед отправкой</li>
+          </ul>
+
+          <h3>Визуальные элементы в HMI</h3>
+          <p>Компоненты Alpha.Reports доступны в дизайнере HMI:</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Элементы интерфейса</div>
+            <p><strong>ReportViewer</strong> — компонент для отображения готовых отчётов</p>
+            <p><strong>ReportButton</strong> — кнопка генерации отчёта с настраиваемыми параметрами</p>
+            <p><strong>ReportStatus</strong> — индикатор статуса выполнения фоновых задач генерации</p>
+          </div>
+
+          <h2>Производительность и ограничения</h2>
+
+          <p>Alpha.Reports оптимизирован для работы с большими объёмами промышленных данных:</p>
+
+          <h3>Характеристики производительности</h3>
+          <ul>
+            <li><strong>Параллельная генерация</strong> — до 8 отчётов одновременно</li>
+            <li><strong>Потоковая обработка</strong> — обработка данных частями при больших выборках</li>
+            <li><strong>Кэширование запросов</strong> — ускорение повторных запросов к Historian</li>
+            <li><strong>Сжатие вложений</strong> — автоматическое сжатие больших файлов перед рассылкой</li>
+          </ul>
+
+          <h3>Рекомендации по использованию</h3>
+          <p>Для оптимальной работы модуля рекомендуется:</p>
+          <ul>
+            <li>Планировать тяжёлые отчёты на ночное время</li>
+            <li>Использовать фильтрацию данных по качеству сигналов</li>
+            <li>Группировать отчёты по расписанию для снижения нагрузки</li>
+            <li>Настраивать timeout для длительных запросов к Historian</li>
+          </ul>
+
+          <p>Alpha.Reports превращает процесс создания отчётности из рутинной задачи в автоматизированный процесс, обеспечивая своевременное информирование всех заинтересованных сторон о состоянии промышленного оборудования.</p>
+
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#архитектура-модуля">Архитектура модуля отчётности</a></li>
+              <li><a href="#редактор-шаблонов">Редактор шаблонов</a></li>
+              <li class="toc-h3"><a href="#элементы-оформления">Элементы оформления</a></li>
+              <li class="toc-h3"><a href="#источники-данных">Источники данных в шаблонах</a></li>
+              <li><a href="#планировщик">Планировщик автоматической генерации</a></li>
+              <li class="toc-h3"><a href="#типы-расписаний">Типы расписаний</a></li>
+              <li class="toc-h3"><a href="#настройка-периодов">Настройка периодов данных</a></li>
+              <li><a href="#email-рассылка">Email-рассылка отчётов</a></li>
+              <li class="toc-h3"><a href="#возможности-рассылки">Возможности рассылки</a></li>
+              <li class="toc-h3"><a href="#форматы-вложений">Форматы вложений</a></li>
+              <li><a href="#экспорт-в-папки">Экспорт в папки</a></li>
+              <li><a href="#интеграция-с-hmi">Интеграция с Alpha.HMI</a></li>
+              <li><a href="#производительность">Производительность и ограничения</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="historian.html" class="related-item">
+                <div class="related-item-title">Alpha.Historian 4.0: NoSQL для промышленных данных</div>
+                <div class="related-item-meta">Архивирование · 10 мин</div>
+              </a>
+              <a href="scaling.html" class="related-item">
+                <div class="related-item-title">Масштабирование SCADA</div>
+                <div class="related-item-meta">SCADA · 10 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

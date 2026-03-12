@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Архитектура Альфа платформы: от сбора данных до визуализации — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-scada{color:var(--volt);border-color:var(--volt);background:var(--volt-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--volt);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+/* Architecture diagram */
+.arch-diagram{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;padding:30px;margin:30px 0;text-align:center;}
+.arch-diagram svg{max-width:100%;height:auto;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Архитектура Альфа платформы</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-scada">SCADA</span>
+            <span class="article-date">10 марта 2026</span>
+            <span class="article-read">12 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Архитектура Альфа платформы: от сбора данных до визуализации</h1>
+          <p class="article-subtitle">Подробный разбор архитектуры российской SCADA-системы Альфа. Рассматриваем ключевые компоненты: Alpha.Server для сбора данных, Alpha.HMI для визуализации, Alpha.Historian для архивирования и Alpha.Reports для отчётности.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>Альфа платформа — это российская SCADA-система, разработанная АО «Атомик Софт» (Automiq) для промышленной автоматизации. В этой статье разберём архитектуру платформы и узнаем, как данные проходят путь от промышленных контроллеров до экранов операторов.</p>
+
+          <div class="arch-diagram">
+            <svg width="700" height="400" viewBox="0 0 700 400" fill="none">
+              <!-- Industrial Equipment -->
+              <rect x="50" y="50" width="80" height="60" rx="4" stroke="#1de9b6" stroke-width="1.5" fill="var(--ink2)"/>
+              <text x="90" y="75" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="#1de9b6">ПЛК</text>
+              <text x="90" y="90" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#1de9b6">Modicon</text>
+              
+              <rect x="50" y="130" width="80" height="60" rx="4" stroke="#1de9b6" stroke-width="1.5" fill="var(--ink2)"/>
+              <text x="90" y="155" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="#1de9b6">РТУ</text>
+              <text x="90" y="170" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#1de9b6">IEC 104</text>
+              
+              <rect x="50" y="210" width="80" height="60" rx="4" stroke="#1de9b6" stroke-width="1.5" fill="var(--ink2)"/>
+              <text x="90" y="235" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="#1de9b6">OPC</text>
+              <text x="90" y="250" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#1de9b6">Server</text>
+
+              <!-- Protocols -->
+              <text x="180" y="85" font-family="JetBrains Mono" font-size="10" fill="#a78bfa">Modbus TCP</text>
+              <text x="180" y="165" font-family="JetBrains Mono" font-size="10" fill="#a78bfa">IEC 60870-5-104</text>
+              <text x="180" y="245" font-family="JetBrains Mono" font-size="10" fill="#a78bfa">OPC DA/UA</text>
+
+              <!-- Alpha.Server Core -->
+              <rect x="320" y="140" width="140" height="80" rx="6" stroke="#00c8f0" stroke-width="2" fill="var(--ink1)"/>
+              <text x="390" y="165" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#00c8f0" font-weight="bold">Alpha.Server</text>
+              <text x="390" y="180" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00c8f0">Ядро платформы</text>
+              <text x="390" y="195" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00c8f0">Сбор данных</text>
+              <text x="390" y="208" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#00c8f0">Обработка сигналов</text>
+
+              <!-- AccessPoint -->
+              <rect x="340" y="250" width="100" height="40" rx="3" stroke="#ffb800" stroke-width="1" fill="var(--ink2)"/>
+              <text x="390" y="268" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#ffb800">AccessPoint</text>
+              <text x="390" y="280" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#ffb800">Унифицированный шлюз</text>
+
+              <!-- Data Flow Arrows -->
+              <line x1="130" y1="80" x2="320" y2="160" stroke="#00c8f0" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+              <line x1="130" y1="160" x2="320" y2="180" stroke="#00c8f0" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+              <line x1="130" y1="240" x2="320" y2="200" stroke="#00c8f0" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+              <!-- Alpha.HMI -->
+              <rect x="520" y="80" width="120" height="70" rx="4" stroke="#ff6b35" stroke-width="1.5" fill="var(--ink1)"/>
+              <text x="580" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#ff6b35" font-weight="bold">Alpha.HMI</text>
+              <text x="580" y="120" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#ff6b35">Визуализация</text>
+              <text x="580" y="133" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#ff6b35">Управление</text>
+              <text x="580" y="145" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#ff6b35">TCP:4388</text>
+
+              <!-- Alpha.Historian -->
+              <rect x="520" y="180" width="120" height="70" rx="4" stroke="#ffb800" stroke-width="1.5" fill="var(--ink1)"/>
+              <text x="580" y="205" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#ffb800" font-weight="bold">Alpha.Historian</text>
+              <text x="580" y="220" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#ffb800">Архивирование</text>
+              <text x="580" y="233" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#ffb800">NoSQL БД</text>
+              <text x="580" y="245" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#ffb800">История сигналов</text>
+
+              <!-- Alpha.Reports -->
+              <rect x="520" y="280" width="120" height="50" rx="4" stroke="#a78bfa" stroke-width="1.5" fill="var(--ink1)"/>
+              <text x="580" y="300" text-anchor="middle" font-family="JetBrains Mono" font-size="13" fill="#a78bfa" font-weight="bold">Alpha.Reports</text>
+              <text x="580" y="315" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#a78bfa">Отчёты</text>
+              <text x="580" y="325" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#a78bfa">Планировщик</text>
+
+              <!-- Connection lines -->
+              <line x1="460" y1="170" x2="520" y2="120" stroke="#ff6b35" stroke-width="1.2" marker-end="url(#arrowhead-orange)"/>
+              <line x1="460" y1="190" x2="520" y2="215" stroke="#ffb800" stroke-width="1.2" marker-end="url(#arrowhead-yellow)"/>
+              <line x1="390" y1="250" x2="390" y2="220" stroke="#ffb800" stroke-width="1" stroke-dasharray="3 2"/>
+              
+              <!-- From Historian to Reports -->
+              <line x1="580" y1="250" x2="580" y2="280" stroke="#a78bfa" stroke-width="1" marker-end="url(#arrowhead-purple)"/>
+
+              <!-- Arrows -->
+              <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#00c8f0"/>
+                </marker>
+                <marker id="arrowhead-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#ff6b35"/>
+                </marker>
+                <marker id="arrowhead-yellow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#ffb800"/>
+                </marker>
+                <marker id="arrowhead-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+                </marker>
+              </defs>
+
+              <!-- Data flow indicators -->
+              <circle cx="240" cy="120" r="3" fill="#00c8f0" opacity="0.8">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="490" cy="145" r="3" fill="#ff6b35" opacity="0.8">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="490" cy="202" r="3" fill="#ffb800" opacity="0.8">
+                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="1s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+          </div>
+
+          <h2>Alpha.Server — ядро платформы</h2>
+
+          <p>Alpha.Server выступает центральным компонентом архитектуры, отвечающим за <strong>сбор данных от промышленного оборудования</strong>. Сервер поддерживает широкий спектр протоколов связи:</p>
+
+          <ul>
+            <li><em>Modbus RTU/TCP</em> — для подключения к ПЛК и измерительных устройств</li>
+            <li><em>IEC 60870-5-101/104</em> — телемеханические протоколы для энергетики</li>
+            <li><em>OPC DA/UA</em> — промышленные стандарты обмена данными</li>
+            <li><em>MQTT</em> — для IoT-устройств и распределённых систем</li>
+            <li><em>SNMP</em> — мониторинг сетевого оборудования</li>
+          </ul>
+
+          <h3>Обработка сигналов</h3>
+
+          <p>Внутри Alpha.Server реализован <strong>конвейер обработки сигналов</strong>:</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Схема потока данных</div>
+            <p><strong>Источник</strong> → <strong>Буфер</strong> → <strong>Обработка</strong> → <strong>Архивирование</strong></p>
+            <p>Каждый сигнал проходит через фильтрацию, масштабирование и проверку качества перед передачей в другие компоненты системы.</p>
+          </div>
+
+          <h2>Alpha.HMI — визуализация и управление</h2>
+
+          <p>Alpha.HMI подключается к Alpha.Server через <em>TCP-соединение на порту 4388</em> (в Windows также поддерживается OPC DA). Компонент состоит из двух режимов:</p>
+
+          <h3>Designer (Дизайнер)</h3>
+          <p>Интегрированная среда разработки для создания мнемосхем с поддержкой языков <em>Alpha.Om</em> и <em>JavaScript</em>. Предоставляет богатый набор графических примитивов, UI-элементов и встроенную систему трендов.</p>
+
+          <h3>Visualizer (Визуализатор)</h3>
+          <p>Среда исполнения проектов с поддержкой фреймов (формы внутри форм), относительной адресации объектов и пользовательских типов данных.</p>
+
+          <pre><code>// Пример скрипта Alpha.Om
+function updateTankLevel() {
+  var level = me.signals.WaterLevel.Value;
+  if (level > 90) {
+    parent.alarmIndicator.SetColor("red");
+    here.soundAlert.Play();
+  }
+}</code></pre>
+
+          <h2>Alpha.Historian — архивирование данных</h2>
+
+          <p>Alpha.Historian обеспечивает <strong>долговременное хранение исторических данных</strong> в формате NoSQL. Модуль получает данные от Alpha.Server через специализированный модуль истории.</p>
+
+          <h3>Производительность</h3>
+          <ul>
+            <li><strong>1,600,000 чтений/сек</strong> — максимальная скорость чтения данных</li>
+            <li><strong>800,000 записей/сек</strong> — максимальная скорость записи</li>
+            <li><strong>LZMA-сжатие</strong> с коэффициентом 0.2-0.5 для формата 3x</li>
+          </ul>
+
+          <h3>Форматы хранения</h3>
+          <p>Поддерживаются два формата БД:</p>
+          <ul>
+            <li><em>Формат 4x</em> (новый) — журнал транзакций, фрагменты, слияние данных</li>
+            <li><em>Формат 3x</em> (совместимость) — активная/архивная области с суточными фрагментами</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Кроссплатформенность</div>
+            <p>Alpha.Historian работает на Windows и Linux (Astra Linux SE, РЕД ОС, Альт СП, Ubuntu). В Linux распространяется в виде deb/rpm пакетов с поддержкой systemctl.</p>
+          </div>
+
+          <h2>Alpha.Reports — генерация отчётов</h2>
+
+          <p>Alpha.Reports автоматизирует создание отчётности на основе данных из Alpha.Historian и оперативных данных Alpha.Server. Модуль поддерживает:</p>
+
+          <ul>
+            <li><strong>Шаблоны отчётов</strong> с настраиваемым форматированием</li>
+            <li><strong>Планировщик</strong> для автоматической генерации по расписанию</li>
+            <li><strong>Email-рассылка</strong> готовых отчётов заинтересованным лицам</li>
+            <li><strong>Экспорт в папки</strong> для интеграции с внешними системами</li>
+          </ul>
+
+          <h2>AccessPoint — унифицированный шлюз</h2>
+
+          <p><em>AccessPoint</em> выступает промежуточным звеном, обеспечивающим <strong>унифицированный доступ к данным</strong> для всех клиентских приложений. Это позволяет Alpha.HMI, Alpha.Reports и сторонним системам работать с едиными API независимо от источников данных.</p>
+
+          <h3>Преимущества архитектуры</h3>
+          <ul>
+            <li><strong>Модульность</strong> — каждый компонент выполняет свою функцию</li>
+            <li><strong>Масштабируемость</strong> — возможность горизонтального расширения</li>
+            <li><strong>Отказоустойчивость</strong> — поддержка резервирования ключевых узлов</li>
+            <li><strong>Кроссплатформенность</strong> — работа на Windows и Linux</li>
+          </ul>
+
+          <p>Такая архитектура обеспечивает надёжную работу промышленных систем автоматизации от небольших установок до крупных технологических комплексов.</p>
+
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#alpha-server">Alpha.Server — ядро платформы</a></li>
+              <li class="toc-h3"><a href="#обработка-сигналов">Обработка сигналов</a></li>
+              <li><a href="#alpha-hmi">Alpha.HMI — визуализация</a></li>
+              <li class="toc-h3"><a href="#designer">Designer (Дизайнер)</a></li>
+              <li class="toc-h3"><a href="#visualizer">Visualizer (Визуализатор)</a></li>
+              <li><a href="#alpha-historian">Alpha.Historian — архивирование</a></li>
+              <li class="toc-h3"><a href="#производительность">Производительность</a></li>
+              <li class="toc-h3"><a href="#форматы-хранения">Форматы хранения</a></li>
+              <li><a href="#alpha-reports">Alpha.Reports — отчёты</a></li>
+              <li><a href="#accesspoint">AccessPoint — шлюз</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="historian.html" class="related-item">
+                <div class="related-item-title">Alpha.Historian 4.0: NoSQL для промышленных данных</div>
+                <div class="related-item-meta">Архивирование · 10 мин</div>
+              </a>
+              <a href="hmi.html" class="related-item">
+                <div class="related-item-title">Визуализация в Alpha.HMI 2.0</div>
+                <div class="related-item-meta">Визуализация · 15 мин</div>
+              </a>
+              <a href="scaling.html" class="related-item">
+                <div class="related-item-title">Масштабирование SCADA</div>
+                <div class="related-item-meta">SCADA · 10 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

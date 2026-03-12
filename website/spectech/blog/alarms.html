@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Система тревог Alpha.Alarms 3.30 — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-scada{color:var(--volt);border-color:var(--volt);background:var(--volt-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--crimson);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.priority-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.priority-box .info-box-title{color:var(--amber);}
+
+/* Priority scale */
+.priority-scale{background:var(--ink1);border:1px solid var(--wire);border-radius:6px;padding:20px;margin:24px 0;}
+.priority-scale-title{font-family:var(--mono);font-size:16px;color:var(--volt);margin-bottom:16px;text-align:center;}
+.priority-range{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.priority-item{text-align:center;padding:12px;border-radius:4px;}
+.priority-other{background:rgba(148,179,208,0.1);border:1px solid var(--text3);}
+.priority-significant{background:rgba(255,184,0,0.1);border:1px solid var(--amber);}
+.priority-important{background:rgba(255,107,53,0.1);border:1px solid var(--flame);}
+.priority-critical{background:rgba(255,61,87,0.1);border:1px solid var(--crimson);}
+.priority-number{font-family:var(--mono);font-size:14px;font-weight:600;margin-bottom:4px;}
+.priority-other .priority-number{color:var(--text3);}
+.priority-significant .priority-number{color:var(--amber);}
+.priority-important .priority-number{color:var(--flame);}
+.priority-critical .priority-number{color:var(--crimson);}
+.priority-label{font-size:13px;color:var(--text2);}
+
+/* Mode comparison */
+.mode-comparison{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:30px 0;}
+.mode-item{background:var(--ink1);border:1px solid var(--wire);border-radius:6px;padding:20px;}
+.mode-title{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--crimson);margin-bottom:12px;}
+.mode-desc{color:var(--text2);font-size:15px;line-height:1.5;margin-bottom:12px;}
+.mode-features{list-style:none;padding:0;}
+.mode-features li{color:var(--text3);font-size:14px;margin-bottom:6px;padding-left:16px;position:relative;}
+.mode-features li::before{content:'•';color:var(--crimson);position:absolute;left:0;}
+
+/* Action buttons */
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:24px 0;}
+.action-item{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:16px;text-align:center;}
+.action-name{font-family:var(--mono);font-size:14px;color:var(--crimson);margin-bottom:6px;font-weight:600;}
+.action-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .mode-comparison{grid-template-columns:1fr;}
+  .priority-range{grid-template-columns:repeat(2,1fr);}
+  .action-grid{grid-template-columns:1fr;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Система тревог Alpha.Alarms 3.30</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-scada">SCADA</span>
+            <span class="article-date">08 февр. 2026</span>
+            <span class="article-read">9 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Система тревог Alpha.Alarms 3.30</h1>
+          <p class="article-subtitle">Полный обзор системы управления тревогами Alpha.Alarms 3.30. Рассматриваем группы приоритетов, режимы работы, функции квитирования и подавления тревог в промышленных системах автоматизации.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>Alpha.Alarms 3.30 — программный модуль для управления тревогами и событиями в системах промышленной автоматизации, входящий в состав Альфа платформы. Система обеспечивает операторов критически важной информацией о состоянии технологических процессов.</p>
+
+          <h2>Группы важности событий</h2>
+
+          <p>Система тревог использует <strong>шкалу приоритетов от 1 до 1000</strong>, позволяя гибко настраивать важность различных типов событий:</p>
+
+          <div class="priority-scale">
+            <div class="priority-scale-title">ШКАЛА ПРИОРИТЕТОВ 1-1000</div>
+            <div class="priority-range">
+              
+              <div class="priority-item priority-other">
+                <div class="priority-number">1-333</div>
+                <div class="priority-label">Прочие</div>
+              </div>
+
+              <div class="priority-item priority-significant">
+                <div class="priority-number">334-666</div>
+                <div class="priority-label">Значительные</div>
+              </div>
+
+              <div class="priority-item priority-important">
+                <div class="priority-number">667-999</div>
+                <div class="priority-label">Особой важности</div>
+              </div>
+
+              <div class="priority-item priority-critical">
+                <div class="priority-number">1000</div>
+                <div class="priority-label">Критические</div>
+              </div>
+
+            </div>
+          </div>
+
+          <h3>Настройка групп приоритетов</h3>
+          <p>Пользователь может <strong>переопределить диапазоны</strong> для каждой группы важности и создавать собственные категории:</p>
+
+          <ul>
+            <li><em>Прочие</em> — события низкой важности, информационные сообщения</li>
+            <li><em>Значительные</em> — отклонения от нормы, требующие внимания</li>
+            <li><em>Особой важности</em> — критические ситуации, требующие немедленного реагирования</li>
+            <li><em>Пользовательские группы</em> — дополнительные категории по необходимости</li>
+          </ul>
+
+          <div class="priority-box">
+            <div class="info-box-title">Цветовая индикация</div>
+            <p>Каждая группа важности имеет свою <strong>цветовую сигнализацию</strong> с возможностью мигания для привлечения внимания оператора к критическим событиям.</p>
+          </div>
+
+          <h2>Режимы работы</h2>
+
+          <div class="mode-comparison">
+            
+            <div class="mode-item">
+              <div class="mode-title">🔄 ОПЕРАТИВНЫЙ РЕЖИМ</div>
+              <div class="mode-desc">Отображение событий в режиме реального времени с немедленным уведомлением операторов</div>
+              <ul class="mode-features">
+                <li>Поступление событий онлайн</li>
+                <li>Звуковая сигнализация</li>
+                <li>Автоматическое обновление</li>
+                <li>Слежение за последним событием</li>
+              </ul>
+            </div>
+
+            <div class="mode-item">
+              <div class="mode-title">📊 ИСТОРИЧЕСКИЙ РЕЖИМ</div>
+              <div class="mode-desc">Анализ событий за выбранный период времени для расследования инцидентов</div>
+              <ul class="mode-features">
+                <li>Задание интервала времени</li>
+                <li>Расширенная фильтрация</li>
+                <li>Экспорт данных</li>
+                <li>Статистический анализ</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <h3>Режимы отображения оперативных событий</h3>
+          <ul>
+            <li><strong>Журнал</strong> — хронологический список всех событий</li>
+            <li><strong>Список активных условий</strong> — только текущие активные тревоги</li>
+          </ul>
+
+          <h2>Управление тревогами</h2>
+
+          <h3>Лимит строк</h3>
+          <p>Настраиваемое ограничение отображаемых записей: <em>50-100,000 строк</em>. При этом <strong>неквитированные события особой важности не подчиняются лимиту</strong> — они всегда остаются видимыми до квитирования.</p>
+
+          <div class="action-grid">
+            
+            <div class="action-item">
+              <div class="action-name">Квитирование</div>
+              <div class="action-desc">Подтверждение оператором получения и осознания тревоги</div>
+            </div>
+
+            <div class="action-item">
+              <div class="action-name">Подавление</div>
+              <div class="action-desc">Временное скрытие событий от определённого источника или объекта</div>
+            </div>
+
+            <div class="action-item">
+              <div class="action-name">Блокирование</div>
+              <div class="action-desc">Полное отключение генерации событий от источника</div>
+            </div>
+
+            <div class="action-item">
+              <div class="action-name">Звуковые уведомления</div>
+              <div class="action-desc">Аудиосигналы различной тональности для разных типов событий</div>
+            </div>
+
+          </div>
+
+          <h3>Квитирование (Acknowledgment)</h3>
+          <p>Квитирование — это процедура <strong>подтверждения получения тревоги оператором</strong>. После квитирования:</p>
+          <ul>
+            <li>Прекращается звуковая сигнализация</li>
+            <li>Изменяется визуальное отображение события</li>
+            <li>Фиксируется время и пользователь, выполнивший квитирование</li>
+            <li>Возможно добавление комментария оператора</li>
+          </ul>
+
+          <pre><code>// Пример API для квитирования
+Alpha.Alarms.AckSelected();           // Квитировать выбранные
+Alpha.Alarms.AckAll();               // Квитировать все
+Alpha.Alarms.GetUnacknowledgedEventsCount(); // Количество неквитированных</code></pre>
+
+          <h3>Подавление тревог</h3>
+          <p><em>Подавление (Suppression)</em> позволяет временно скрыть события от определённых источников без их фактического отключения. Это полезно при:</p>
+          <ul>
+            <li>Плановом техническом обслуживании</li>
+            <li>Известных неисправностях в процессе устранения</li>
+            <li>Настройке оборудования</li>
+          </ul>
+
+          <h2>Фильтрация и поиск</h2>
+
+          <p>Alpha.Alarms предоставляет мощные инструменты для работы с большими объёмами событий:</p>
+
+          <h3>Типы фильтров</h3>
+          <ul>
+            <li><strong>Предустановленные фильтры</strong> — создание, редактирование, импорт/экспорт (XML)</li>
+            <li><strong>Фильтр пользователя</strong> — временная фильтрация на текущий сеанс</li>
+            <li><strong>Расширенные фильтры</strong> — программная настройка через параметры запуска</li>
+            <li><strong>Серверная фильтрация</strong> — по зонам, тегам, маскам имён</li>
+            <li><strong>Фильтрация по объекту</strong> — из дерева сигналов</li>
+            <li><strong>Фильтрация по событию</strong> — по конкретному сигналу-источнику</li>
+          </ul>
+
+          <h3>Логические операторы</h3>
+          <p>Поддерживаются логические связки <em>И/ИЛИ/НЕ</em> для создания сложных условий фильтрации.</p>
+
+          <pre><code># Пример расширенного фильтра
+SetAdvancedFilter "Importance>=334 AND Source LIKE 'PUMP*' AND NOT Acknowledged"</code></pre>
+
+          <h2>Настройка отображения</h2>
+
+          <h3>Столбцы таблицы событий</h3>
+          <ul>
+            <li><em>Время генерации</em> — когда событие возникло</li>
+            <li><em>Время срабатывания</em> — когда система зарегистрировала событие</li>
+            <li><em>Время деактивации</em> — когда условие перестало быть активным</li>
+            <li><em>Сообщение</em> — текстовое описание события</li>
+            <li><em>Источник</em> — сигнал или объект, сгенерировавший событие</li>
+            <li><em>Важность</em> — числовой приоритет</li>
+            <li><em>Квитирование</em> — статус и время квитирования</li>
+            <li><em>Пользователь</em> — кто выполнил квитирование</li>
+            <li><em>Комментарий</em> — дополнительная информация</li>
+            <li><em>Значение/качество сигнала</em> — техническая информация</li>
+          </ul>
+
+          <h3>Сортировка</h3>
+          <p>Поддерживается сортировка по клику на заголовок столбца, а также создание <strong>пользовательских правил сортировки с приоритетами</strong>.</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Подсветка в дереве сигналов</div>
+            <p>Неквитированные тревоги <strong>подсвечиваются в дереве сигналов</strong>, позволяя операторам быстро определять проблемные области системы.</p>
+          </div>
+
+          <h2>Дополнительные возможности</h2>
+
+          <h3>Экспорт и интеграция</h3>
+          <ul>
+            <li><em>Экспорт</em> — .xlsx, .xml, .csv форматы</li>
+            <li><em>Интеграция с Alpha.Trends</em> — просмотр графиков сигналов</li>
+            <li><em>Просмотр экранных форм</em> — интеграция с ПК «Лоцман»</li>
+            <li><em>Печать</em> — таблица событий, реал-тайм на матричном принтере</li>
+          </ul>
+
+          <h3>Встраиваемый компонент</h3>
+          <p>Alpha.Alarms может использоваться как <strong>компонент в проектах Alpha.HMI</strong> с богатым API для программного управления:</p>
+
+          <ul>
+            <li>30+ свойств для настройки отображения</li>
+            <li>Функции квитирования, очистки, фильтрации</li>
+            <li>Управление звуковыми уведомлениями</li>
+            <li>Интеграция с Alpha.Security для разграничения прав</li>
+          </ul>
+
+          <h2>Варианты запуска</h2>
+
+          <h3>Стандартное приложение</h3>
+          <p>Запуск через меню Пуск или <code>Alpha.Alarms.App.exe</code></p>
+
+          <h3>Командная строка</h3>
+          <p>Гибкая настройка через параметры запуска:</p>
+
+          <pre><code># Примеры запуска
+Alpha.Alarms.App.exe mode operative
+Alpha.Alarms.App.exe mode historical Begin "01.01.2026-00:00:00" End "31.01.2026-23:59:59"
+Alpha.Alarms.App.exe ActiveViewMode ActiveConditions
+Alpha.Alarms.App.exe SetAdvancedFilter "Importance>=667"</code></pre>
+
+          <h3>Встраивание в Alpha.HMI</h3>
+          <p>Интеграция панели тревог непосредственно в мнемосхемы операторских станций.</p>
+
+          <h2>Безопасность и аудит</h2>
+
+          <ul>
+            <li><strong>Интеграция с Alpha.Security</strong> — управление правами доступа</li>
+            <li><strong>Аудит операций</strong> — журналирование всех действий операторов</li>
+            <li><strong>Разграничение функций</strong> — настройка доступности операций по ролям</li>
+            <li><strong>Защищённое хранение</strong> — целостность данных о событиях</li>
+          </ul>
+
+          <p>Alpha.Alarms 3.30 обеспечивает операторов надёжной системой управления тревогами, соответствующей требованиям промышленных стандартов безопасности и эффективности.</p>
+
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#группы-важности-событий">Группы важности</a></li>
+              <li class="toc-h3"><a href="#настройка-групп">Настройка групп</a></li>
+              <li><a href="#режимы-работы">Режимы работы</a></li>
+              <li class="toc-h3"><a href="#режимы-отображения">Режимы отображения</a></li>
+              <li><a href="#управление-тревогами">Управление тревогами</a></li>
+              <li class="toc-h3"><a href="#лимит-строк">Лимит строк</a></li>
+              <li class="toc-h3"><a href="#квитирование">Квитирование</a></li>
+              <li class="toc-h3"><a href="#подавление-тревог">Подавление тревог</a></li>
+              <li><a href="#фильтрация-и-поиск">Фильтрация и поиск</a></li>
+              <li class="toc-h3"><a href="#типы-фильтров">Типы фильтров</a></li>
+              <li><a href="#настройка-отображения">Настройка отображения</a></li>
+              <li class="toc-h3"><a href="#столбцы-таблицы">Столбцы таблицы</a></li>
+              <li><a href="#дополнительные-возможности">Дополнительные возможности</a></li>
+              <li><a href="#варианты-запуска">Варианты запуска</a></li>
+              <li><a href="#безопасность-и-аудит">Безопасность</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="hmi.html" class="related-item">
+                <div class="related-item-title">Визуализация в Alpha.HMI 2.0</div>
+                <div class="related-item-meta">Визуализация · 15 мин</div>
+              </a>
+              <a href="historian.html" class="related-item">
+                <div class="related-item-title">Alpha.Historian 4.0: NoSQL</div>
+                <div class="related-item-meta">Архивирование · 10 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

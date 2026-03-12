@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кроссплатформенность: Альфа на Linux и Windows — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-scada{color:var(--volt);border-color:var(--volt);background:var(--volt-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--volt);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.security-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.security-box .info-box-title{color:var(--crimson);}
+
+/* OS comparison */
+.os-comparison{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:30px 0;}
+.os-item{background:var(--ink1);border:1px solid var(--wire);border-radius:6px;padding:24px;}
+.os-title{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--volt);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.os-desc{color:var(--text2);font-size:15px;line-height:1.5;margin-bottom:16px;}
+.os-features{list-style:none;padding:0;}
+.os-features li{color:var(--text3);font-size:14px;margin-bottom:8px;padding-left:20px;position:relative;}
+.os-features li::before{content:'✓';color:var(--lime);position:absolute;left:0;font-weight:bold;}
+
+/* Linux distro grid */
+.distro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:24px 0;}
+.distro-item{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:16px;text-align:center;}
+.distro-name{font-family:var(--mono);font-size:14px;color:var(--lime);margin-bottom:6px;font-weight:600;}
+.distro-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+
+/* Component support table */
+.component-support{background:var(--ink1);border:1px solid var(--wire);border-radius:6px;overflow:hidden;margin:24px 0;}
+.support-header{background:var(--steel);padding:12px 20px;border-bottom:1px solid var(--wire);}
+.support-title{font-family:var(--mono);font-size:16px;color:var(--volt);margin:0;}
+.support-row{display:grid;grid-template-columns:2fr 1fr 1fr;padding:12px 20px;border-bottom:1px solid var(--wire);}
+.support-row:last-child{border-bottom:none;}
+.support-component{color:var(--text);font-weight:500;}
+.support-status{font-family:var(--mono);font-size:13px;text-align:center;}
+.support-yes{color:var(--lime);}
+.support-partial{color:var(--amber);}
+.support-no{color:var(--text3);}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .os-comparison{grid-template-columns:1fr;}
+  .distro-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+  .support-row{grid-template-columns:1fr;gap:8px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Кроссплатформенность: Альфа на Linux и Windows</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-scada">SCADA</span>
+            <span class="article-date">15 февр. 2026</span>
+            <span class="article-read">7 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Кроссплатформенность: Альфа на Linux и Windows</h1>
+          <p class="article-subtitle">Обзор кроссплатформенных возможностей Альфа платформы. Рассматриваем поддержку российских дистрибутивов Linux, особенности развёртывания и требования безопасности.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>Альфа платформа обеспечивает полноценную кроссплатформенную поддержку, работая как на Windows, так и на Linux. Это критически важно для российских предприятий, переходящих на отечественные операционные системы в соответствии с требованиями импортозамещения.</p>
+
+          <h2>Поддерживаемые операционные системы</h2>
+
+          <div class="os-comparison">
+            
+            <div class="os-item">
+              <div class="os-title">
+                🪟 Windows
+              </div>
+              <div class="os-desc">Полная поддержка всех компонентов платформы с максимальной функциональностью</div>
+              <ul class="os-features">
+                <li>Windows 10/11</li>
+                <li>Windows Server 2012-2022</li>
+                <li>Поддержка OPC DA</li>
+                <li>Alpha.Alarms (встраиваемый)</li>
+                <li>Alpha.Trends (встраиваемый)</li>
+                <li>Полная интеграция с .NET</li>
+              </ul>
+            </div>
+
+            <div class="os-item">
+              <div class="os-title">
+                🐧 Linux
+              </div>
+              <div class="os-desc">Кроссплатформенная архитектура с поддержкой российских дистрибутивов</div>
+              <ul class="os-features">
+                <li>Astra Linux SE</li>
+                <li>РЕД ОС</li>
+                <li>Альт СП</li>
+                <li>Ubuntu LTS</li>
+                <li>TCP/Alpha.Link</li>
+                <li>Системная интеграция (systemctl)</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <h2>Российские дистрибутивы Linux</h2>
+
+          <p>Альфа платформа сертифицирована для работы с российскими операционными системами, что обеспечивает соответствие требованиям информационной безопасности:</p>
+
+          <div class="distro-grid">
+            
+            <div class="distro-item">
+              <div class="distro-name">Astra Linux SE</div>
+              <div class="distro-desc">Специальная редакция с усиленной защитой информации</div>
+            </div>
+
+            <div class="distro-item">
+              <div class="distro-name">РЕД ОС</div>
+              <div class="distro-desc">Российская операционная система на базе Red Hat Enterprise Linux</div>
+            </div>
+
+            <div class="distro-item">
+              <div class="distro-name">Альт СП</div>
+              <div class="distro-desc">Альт Сервер Платформа для серверных задач</div>
+            </div>
+
+            <div class="distro-item">
+              <div class="distro-name">Ubuntu LTS</div>
+              <div class="distro-desc">Long Term Support для стабильной работы</div>
+            </div>
+
+          </div>
+
+          <h2>Особенности работы в Linux</h2>
+
+          <h3>Alpha.HMI и TCP/Alpha.Link</h3>
+          <p>В Linux-системах Alpha.HMI использует протокол <em>TCP/Alpha.Link</em> для подключения к Alpha.Server вместо OPC DA. Это обеспечивает:</p>
+
+          <ul>
+            <li><strong>Удалённый доступ</strong> — HMI может находиться на отдельной машине</li>
+            <li><strong>Кроссплатформенность</strong> — Windows HMI может подключаться к Linux серверу</li>
+            <li><strong>Порты подключения</strong> — 4388 для оперативных данных, 4950 для истории</li>
+            <li><strong>Безопасность</strong> — аутентификация с хэшированием паролей</li>
+          </ul>
+
+          <pre><code># Конфигурация подключения Alpha.HMI к Linux-серверу
+[AlphaLink]
+ServerAddress = "192.168.1.100"
+OperativePort = 4388
+HistoryPort = 4950
+Username = "operator"
+PasswordHash = "sha256:..."
+ConnectionTimeout = 30
+</code></pre>
+
+          <h3>Alpha.Historian в Linux</h3>
+          <p>Архивный сервер распространяется в виде <em>deb/rpm пакетов</em> с полной интеграцией в Linux-систему:</p>
+
+          <pre><code># Установка и настройка Alpha.Historian в Linux
+sudo dpkg -i alpha-historian_4.0_amd64.deb
+sudo systemctl enable alpha.historian.server
+sudo systemctl start alpha.historian.server
+
+# Мониторинг статуса
+sudo systemctl status alpha.historian.server
+journalctl -u alpha.historian.server -f</code></pre>
+
+          <h3>Alpha.DevStudio на Linux</h3>
+          <p>С 2025 года среда разработки <em>Alpha.DevStudio</em> полностью поддерживает Linux, обеспечивая:</p>
+
+          <ul>
+            <li><strong>Нативную производительность</strong> — без слоёв совместимости</li>
+            <li><strong>Системную интеграцию</strong> — использование Linux-инструментов</li>
+            <li><strong>CLI-автоматизацию</strong> — интеграция в CI/CD процессы</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Миграция с Windows</div>
+            <p>Проекты, созданные в Windows, полностью совместимы с Linux. Требуется только пересборка конфигураций для изменения типов источников данных с OPC DA на TCP/Alpha.Link.</p>
+          </div>
+
+          <h2>Поддержка компонентов по платформам</h2>
+
+          <div class="component-support">
+            <div class="support-header">
+              <h3 class="support-title">Матрица совместимости</h3>
+            </div>
+            <div class="support-row">
+              <div class="support-component"><strong>Компонент</strong></div>
+              <div class="support-status"><strong>Windows</strong></div>
+              <div class="support-status"><strong>Linux</strong></div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.Server</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ Полная</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.HMI Designer</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ С 2025</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.HMI Visualizer</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ TCP/Link</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.Historian</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ deb/rpm</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.DevStudio</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ С 2025</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.Reports</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-yes">✓ Полная</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">OPC DA</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-no">✗ Недоступно</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.Alarms (встр.)</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-no">✗ Недоступно</div>
+            </div>
+            <div class="support-row">
+              <div class="support-component">Alpha.Trends (встр.)</div>
+              <div class="support-status support-yes">✓ Полная</div>
+              <div class="support-status support-no">✗ Недоступно</div>
+            </div>
+          </div>
+
+          <h2>Безопасность и сертификация</h2>
+
+          <p>Кроссплатформенная поддержка Альфа платформы включает соответствие требованиям информационной безопасности:</p>
+
+          <div class="security-box">
+            <div class="info-box-title">Сертификация безопасности</div>
+            <p><strong>ФСТЭК России</strong> — соответствие требованиям по защите информации</p>
+            <p><strong>КИИ категории 2-3</strong> — применение на объектах критической информационной инфраструктуры</p>
+            <p><strong>Российские дистрибутивы</strong> — сертифицированы для госсектора</p>
+          </div>
+
+          <h3>Требования безопасности</h3>
+          <ul>
+            <li><strong>Шифрование трафика</strong> — защита данных при передаче по TCP/Alpha.Link</li>
+            <li><strong>Аутентификация</strong> — строгая проверка учётных данных</li>
+            <li><strong>Аудит доступа</strong> — журналирование всех операций</li>
+            <li><strong>Изоляция процессов</strong> — использование системных механизмов безопасности Linux</li>
+          </ul>
+
+          <h2>Преимущества кроссплатформенности</h2>
+
+          <h3>Гибкость развёртывания</h3>
+          <ul>
+            <li><strong>Смешанные среды</strong> — Windows-операторы с Linux-серверами</li>
+            <li><strong>Поэтапная миграция</strong> — постепенный переход на Linux</li>
+            <li><strong>Выбор платформы</strong> — под конкретные требования проекта</li>
+          </ul>
+
+          <h3>Экономические выгоды</h3>
+          <ul>
+            <li><strong>Снижение TCO</strong> — отсутствие лицензионных платежей за ОС</li>
+            <li><strong>Импортозамещение</strong> — соответствие государственным требованиям</li>
+            <li><strong>Независимость</strong> — снижение зависимости от зарубежных поставщиков</li>
+          </ul>
+
+          <h3>Технические преимущества</h3>
+          <ul>
+            <li><strong>Стабильность Linux</strong> — высокое время безотказной работы серверов</li>
+            <li><strong>Производительность</strong> — эффективное использование ресурсов</li>
+            <li><strong>Масштабируемость</strong> — горизонтальное расширение в облаке</li>
+          </ul>
+
+          <pre><code># Пример развёртывания в смешанной среде
+# Linux-сервер (Alpha.Server + Alpha.Historian)
+sudo systemctl start alpha.server
+sudo systemctl start alpha.historian.server
+
+# Windows-операторы (Alpha.HMI)
+# Подключение через TCP/Alpha.Link к Linux-серверу
+# IP: 10.0.1.100, Port: 4388</code></pre>
+
+          <div class="info-box">
+            <div class="info-box-title">Рекомендации по развёртыванию</div>
+            <p><strong>Серверные компоненты</strong> — Linux для высокой стабильности и безопасности. <strong>АРМ операторов</strong> — Windows или Linux в зависимости от предпочтений пользователей. <strong>Разработка</strong> — любая платформа с Alpha.DevStudio.</p>
+          </div>
+
+          <p>Кроссплатформенная поддержка Альфа платформы обеспечивает гибкость выбора технологического стека при сохранении полной функциональности и соответствии требованиям информационной безопасности.</p>
+
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#поддерживаемые-операционные">Поддерживаемые ОС</a></li>
+              <li><a href="#российские-дистрибутивы">Российские дистрибутивы</a></li>
+              <li><a href="#особенности-работы-в-linux">Особенности Linux</a></li>
+              <li class="toc-h3"><a href="#alpha-hmi-и-tcp">Alpha.HMI и TCP</a></li>
+              <li class="toc-h3"><a href="#alpha-historian-в-linux">Alpha.Historian в Linux</a></li>
+              <li class="toc-h3"><a href="#alpha-devstudio-на-linux">Alpha.DevStudio на Linux</a></li>
+              <li><a href="#поддержка-компонентов">Поддержка компонентов</a></li>
+              <li><a href="#безопасность-и-сертификация">Безопасность</a></li>
+              <li class="toc-h3"><a href="#требования-безопасности">Требования</a></li>
+              <li><a href="#преимущества-кроссплатформенности">Преимущества</a></li>
+              <li class="toc-h3"><a href="#гибкость-развёртывания">Гибкость развёртывания</a></li>
+              <li class="toc-h3"><a href="#экономические-выгоды">Экономические выгоды</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="historian.html" class="related-item">
+                <div class="related-item-title">Alpha.Historian 4.0: NoSQL</div>
+                <div class="related-item-meta">Архивирование · 10 мин</div>
+              </a>
+              <a href="scaling.html" class="related-item">
+                <div class="related-item-title">Масштабирование SCADA</div>
+                <div class="related-item-meta">SCADA · 10 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

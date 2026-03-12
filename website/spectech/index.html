@@ -132,6 +132,13 @@ nav {
 }
 .nav-links a:hover { color: var(--volt); }
 .nav-links a:hover::after { transform: scaleX(1); }
+.nav-links li { position: relative; }
+.nav-dropdown { display:none; position:absolute; top:100%; left:0; background:var(--ink1); border:1px solid var(--wire); border-radius:8px; padding:8px 0; min-width:200px; z-index:1000; box-shadow:0 8px 24px rgba(0,0,0,0.4); }
+.nav-dropdown li { list-style:none; }
+.nav-dropdown a { display:block; padding:8px 16px; font-size:13px; color:var(--text2); white-space:nowrap; }
+.nav-dropdown a:hover { color:var(--volt); background:rgba(0,200,240,0.05); }
+.nav-dropdown a::after { display:none; }
+.nav-links li:hover > .nav-dropdown { display:block; }
 
 .nav-cta {
   display: flex;
@@ -1236,10 +1243,16 @@ body::before {
   </a>
   <ul class="nav-links">
     <li><a href="#about">О компании</a></li>
-    <li><a href="#products">Продукты</a></li>
+    <li><a href="#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+      </ul>
+    </li>
     <li><a href="/calculator.html">Калькулятор</a></li>
     <li><a href="#tech">Технологии</a></li>
     <li><a href="#partners">Партнёры</a></li>
+    <li><a href="blog.html">Блог</a></li>
     <li><a href="#contact">Контакты</a></li>
   </ul>
   <div class="nav-cta">
@@ -1449,7 +1462,7 @@ body::before {
     <div class="products-grid">
 
       <!-- Alpha Platform -->
-      <div class="product-card fade-in">
+      <a href="alpha-platform.html" class="product-card fade-in" style="text-decoration:none;color:inherit;display:block">
         <div class="product-icon">
           <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
             <rect x="4" y="8" width="44" height="30" rx="3" stroke="#00c8f0" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
@@ -1478,10 +1491,10 @@ body::before {
           <li>Alpha.Historian — архивирование данных процесса</li>
           <li>Alpha.Reports — генерация отчётов и аналитика</li>
         </ul>
-      </div>
+      </a>
 
       <!-- CAE WeRTSim -->
-      <div class="product-card fade-in">
+      <a href="wertsim.html" class="product-card fade-in" style="text-decoration:none;color:inherit;display:block">
         <div class="product-icon">
           <svg viewBox="0 0 52 52" fill="none">
             <!-- экран -->
@@ -1514,7 +1527,7 @@ body::before {
           <li>Термическая правка и гибка</li>
           <li>Аддитивные технологии</li>
         </ul>
-      </div>
+      </a>
 
       <!-- MES -->
       <div class="product-card fade-in">
@@ -1899,8 +1912,8 @@ body::before {
       <div>
         <div class="footer-col-title">Продукты</div>
         <ul class="footer-links">
-          <li><a href="#products">Альфа платформа</a></li>
-          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
           <li><a href="#products">MES</a></li>
           <li><a href="#capabilities">Возможности SCADA</a></li>
         </ul>
@@ -1912,6 +1925,7 @@ body::before {
           <li><a href="#about">О компании</a></li>
           <li><a href="#tech">Технологии</a></li>
           <li><a href="#partners">Партнёры</a></li>
+          <li><a href="blog.html">Блог</a></li>
           <li><a href="#contact">Контакты</a></li>
         </ul>
       </div>

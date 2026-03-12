@@ -1,13 +1,13 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-12T04:31:00Z",
-    "openclaw_health": "2026-03-12T11:57:00Z",
+    "openclaw_health": "2026-03-12T13:58:00Z",
     "system_changes": "2026-03-12T04:31:00Z",
-    "cron_review": "2026-03-12T11:57:00Z",
-    "cron_resources": null
+    "cron_review": "2026-03-12T13:58:00Z",
+    "cron_resources": "2026-03-12T12:58:00Z"
   },
-  "lastHeartbeat": "2026-03-12T11:57:00Z",
-  "notes": "2026-03-12 14:57 MSK: Telegram OK (217ms). All crons green. No issues.",
+  "lastHeartbeat": "2026-03-12T13:58:00Z",
+  "notes": "2026-03-12 16:58 MSK: Telegram OK (230ms). All crons green. Nothing changed since last check.",
   "knownUserIPs": ["157.22.180.83", "31.10.95.23"],
   "sshConfig": {
     "main": "permitrootlogin=without-password passwordauthentication=no",
@@ -15,15 +15,25 @@
     "vpn": "permitrootlogin=without-password passwordauthentication=no"
   },
   "telegramHealth": {
-    "lastCheck": "2026-03-12T11:57:00Z",
+    "lastCheck": "2026-03-12T13:58:00Z",
     "status": "OK",
-    "responseMs": 217,
+    "responseMs": 230,
     "consecutiveFailures": 0
   },
   "cronUsage": {
     "system_monitor_daily": {
-      "lastTokens": 21173,
-      "lastDuration": "43s",
+      "lastTokens": 17793,
+      "lastDuration": "26s",
+      "lastStatus": "ok"
+    },
+    "bbq_daily_digest": {
+      "lastTokens": 29914,
+      "lastDuration": "93s",
+      "lastStatus": "ok"
+    },
+    "daily_server_monitoring": {
+      "lastTokens": 19852,
+      "lastDuration": "77s",
       "lastStatus": "ok"
     }
   }
