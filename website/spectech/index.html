@@ -27,9 +27,9 @@
   --crimson:    #ff3d57;
   --amber:      #ffb800;
 
-  --text:       #ccd9ea;
-  --text2:      #6a8aaa;
-  --text3:      #2d4a6a;
+  --text:       #e2eaf4;
+  --text2:      #94b3d0;
+  --text3:      #4a6d8f;
 
   --ff-head:    'Exo 2', sans-serif;
   --ff-mono:    'JetBrains Mono', monospace;
@@ -78,7 +78,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 0 48px;
-  height: 64px;
+  height: 72px;
   background: rgba(5,8,15,0.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
@@ -97,7 +97,7 @@ nav {
 }
 
 .nav-logo-text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -112,9 +112,9 @@ nav {
 }
 .nav-links a {
   text-decoration: none;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text2);
   transition: color .2s;
@@ -159,8 +159,8 @@ nav {
 .btn-volt {
   background: var(--volt);
   color: var(--ink);
-  padding: 11px 24px;
-  font-size: 12px;
+  padding: 14px 28px;
+  font-size: 14px;
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
   box-shadow: 0 0 24px var(--volt-glow);
 }
@@ -173,8 +173,8 @@ nav {
 .btn-outline {
   background: transparent;
   color: var(--volt);
-  padding: 10px 22px;
-  font-size: 12px;
+  padding: 13px 26px;
+  font-size: 14px;
   border: 1px solid var(--volt);
   clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
   box-shadow: inset 0 0 16px var(--volt-lo);
@@ -188,8 +188,8 @@ nav {
 .btn-flame {
   background: var(--flame);
   color: #fff;
-  padding: 14px 32px;
-  font-size: 14px;
+  padding: 16px 36px;
+  font-size: 15px;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   box-shadow: 0 0 30px rgba(255,107,53,0.4);
 }
@@ -200,8 +200,8 @@ nav {
 }
 
 .btn-lg {
-  padding: 16px 42px;
-  font-size: 14px;
+  padding: 18px 48px;
+  font-size: 15px;
 }
 
 /* ══════════════════════════════════════
@@ -265,7 +265,7 @@ nav {
 }
 
 .hero-container {
-  max-width: 1180px;
+  max-width: 1400px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -294,9 +294,9 @@ nav {
 }
 .hero-eyebrow span {
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--volt);
-  letter-spacing: 3px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
 }
 
@@ -316,8 +316,8 @@ nav {
 }
 
 .hero-sub {
-  font-size: 17px;
-  font-weight: 300;
+  font-size: 19px;
+  font-weight: 400;
   color: var(--text2);
   line-height: 1.7;
   margin-bottom: 32px;
@@ -408,9 +408,9 @@ nav {
 }
 .stat-num span { font-size: 16px; color: var(--volt); }
 .stat-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text2);
 }
@@ -420,7 +420,7 @@ nav {
 ══════════════════════════════════════ */
 section { position: relative; z-index: 1; }
 
-.container { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 64px; }
 
 .section-tag {
   display: inline-flex;
@@ -438,9 +438,9 @@ section { position: relative; z-index: 1; }
 }
 .section-tag span {
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--volt);
-  letter-spacing: 3px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
 }
 
@@ -484,16 +484,16 @@ section { position: relative; z-index: 1; }
 }
 .stat-val .u { font-size: 24px; color: var(--volt); }
 .stat-name {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text2);
   margin-bottom: 4px;
 }
 .stat-note {
   font-family: var(--ff-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--text3);
 }
 
@@ -512,7 +512,7 @@ section { position: relative; z-index: 1; }
 
 .product-card {
   background: var(--ink1);
-  padding: 36px 32px;
+  padding: 40px 36px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -572,7 +572,7 @@ section { position: relative; z-index: 1; }
 }
 
 .product-name {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -583,8 +583,8 @@ section { position: relative; z-index: 1; }
 }
 
 .product-desc {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 16px;
+  font-weight: 400;
   color: var(--text2);
   line-height: 1.6;
   margin-bottom: 24px;
@@ -604,8 +604,8 @@ section { position: relative; z-index: 1; }
   margin-bottom: 0.5rem;
   position: relative;
   padding-left: 1.5rem;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
   word-break: normal;
   overflow-wrap: break-word;
 }
@@ -652,7 +652,7 @@ section { position: relative; z-index: 1; }
 }
 
 .capability-card h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -661,7 +661,7 @@ section { position: relative; z-index: 1; }
 }
 
 .capability-card p {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text2);
   line-height: 1.6;
 }
@@ -798,18 +798,18 @@ section { position: relative; z-index: 1; }
   margin-bottom: 8px;
   font-weight: 600;
   color: var(--text);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 14px 18px;
   background: var(--ink);
   border: 1px solid var(--wire);
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 15px;
   transition: all 0.3s ease;
 }
 
@@ -837,7 +837,7 @@ section { position: relative; z-index: 1; }
 }
 
 .contact-item h4 {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--volt);
   margin-bottom: 6px;
@@ -888,8 +888,8 @@ section { position: relative; z-index: 1; }
 }
 .cta-sup {
   font-family: var(--ff-mono);
-  font-size: 11px;
-  letter-spacing: 4px;
+  font-size: 14px;
+  letter-spacing: 3px;
   color: var(--volt);
   text-transform: uppercase;
 }
@@ -903,8 +903,8 @@ section { position: relative; z-index: 1; }
 }
 .cta-title span { color: var(--volt); }
 .cta-sub {
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 400;
   color: var(--text2);
   max-width: 480px;
   line-height: 1.6;
@@ -934,17 +934,17 @@ footer {
   margin-bottom: 16px;
 }
 .footer-brand p {
-  font-size: 13px;
-  font-weight: 300;
+  font-size: 15px;
+  font-weight: 400;
   color: var(--text2);
   line-height: 1.7;
   margin-top: 16px;
   max-width: 280px;
 }
 .footer-col-title {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--text3);
   margin-bottom: 20px;
@@ -952,7 +952,7 @@ footer {
 .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .footer-links a {
   text-decoration: none;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   color: var(--text2);
   transition: color .15s;
@@ -968,14 +968,14 @@ footer {
 }
 .footer-copy {
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text3);
 }
 .footer-badges { display: flex; gap: 12px; }
 .f-badge {
   font-family: var(--ff-mono);
-  font-size: 9px;
-  padding: 4px 10px;
+  font-size: 11px;
+  padding: 5px 12px;
   border: 1px solid var(--wire2);
   color: var(--text3);
   letter-spacing: 1px;
@@ -1061,24 +1061,24 @@ footer {
 }
 /* Catalog */
 .catalog-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px;background:var(--wire); }
-.cat-card { background:var(--ink1);padding:28px 24px;position:relative;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;text-decoration:none;display:block;overflow:hidden;border:1px solid transparent; }
+.cat-card { background:var(--ink1);padding:32px 28px;position:relative;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s;text-decoration:none;display:block;overflow:hidden;border:1px solid transparent; }
 .cat-card::after { content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--volt);transform:scaleX(0);transform-origin:left;transition:transform .3s; }
 .cat-card:hover { border-color:var(--wire2);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,0.5); }
 .cat-card:hover::after { transform:scaleX(1); }
 .cat-card-bg { position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--volt-lo),transparent 70%);opacity:0;transition:opacity .3s; }
 .cat-card:hover .cat-card-bg { opacity:1; }
 .cat-icon { margin-bottom:20px;position:relative;z-index:1; }
-.cat-count { position:absolute;top:16px;right:16px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);z-index:1; }
-.cat-name { font-size:15px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:8px;position:relative;z-index:1;transition:color .2s; }
+.cat-count { position:absolute;top:16px;right:16px;font-family:var(--ff-mono);font-size:12px;color:var(--text3);z-index:1; }
+.cat-name { font-size:17px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text);margin-bottom:8px;position:relative;z-index:1;transition:color .2s; }
 .cat-card:hover .cat-name { color:var(--volt); }
-.cat-sub { font-size:13px;font-weight:300;color:var(--text2);line-height:1.5;position:relative;z-index:1; }
+.cat-sub { font-size:15px;font-weight:300;color:var(--text2);line-height:1.5;position:relative;z-index:1; }
 .cat-cta { display:flex;flex-direction:column;align-items:center;justify-content:center; }
 @media(max-width:900px) { .catalog-grid { grid-template-columns:1fr 1fr; } }
 @media(max-width:480px) { .catalog-grid { grid-template-columns:1fr; } }
 
 /* Ticker */
 .ticker {
-  height: 40px;
+  height: 48px;
   background: var(--steel);
   border-top: 1px solid var(--wire);
   border-bottom: 1px solid var(--wire);
@@ -1101,7 +1101,7 @@ footer {
   align-items: center;
   gap: 10px;
   font-family: var(--ff-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text3);
   flex-shrink: 0;
 }
@@ -1297,8 +1297,8 @@ body::before {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
           </div>
           <div>
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Официальные лицензии</div>
-            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Оригинальное лицензированное ПО напрямую от российских разработчиков. Реестр отечественного ПО.</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Официальные лицензии</div>
+            <div style="color:var(--text2);font-size:15px;line-height:1.6;">Оригинальное лицензированное ПО напрямую от российских разработчиков. Реестр отечественного ПО.</div>
           </div>
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
@@ -1306,8 +1306,8 @@ body::before {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
           </div>
           <div>
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поставка за 1–5 дней</div>
-            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Электронные лицензии — мгновенно. Физическая поставка оборудования по всей России и СНГ.</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Поставка за 1–5 дней</div>
+            <div style="color:var(--text2);font-size:15px;line-height:1.6;">Электронные лицензии — мгновенно. Физическая поставка оборудования по всей России и СНГ.</div>
           </div>
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
@@ -1315,8 +1315,8 @@ body::before {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
           </div>
           <div>
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Техническое внедрение</div>
-            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Сертифицированные инженеры. Интеграция с существующими системами АСУ ТП на вашем предприятии.</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Техническое внедрение</div>
+            <div style="color:var(--text2);font-size:15px;line-height:1.6;">Сертифицированные инженеры. Интеграция с существующими системами АСУ ТП на вашем предприятии.</div>
           </div>
         </div>
         <div style="display:flex;gap:16px;align-items:flex-start;">
@@ -1324,8 +1324,8 @@ body::before {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           </div>
           <div>
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:14px;letter-spacing:1px;">Поддержка 8/7</div>
-            <div style="color:var(--text2);font-size:13px;line-height:1.5;">Выделенная линия для критических инцидентов. SLA 15 минут для Enterprise клиентов.</div>
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px;text-transform:uppercase;font-size:16px;letter-spacing:1px;">Поддержка 8/7</div>
+            <div style="color:var(--text2);font-size:15px;line-height:1.6;">Выделенная линия для критических инцидентов. SLA 15 минут для Enterprise клиентов.</div>
           </div>
         </div>
       </div>
