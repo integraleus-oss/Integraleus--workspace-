@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HP-HMI SVG Library — Промышленная библиотека символов</title>
+<style>
+:root {
+  --bg: #1e1e2e;
+  --panel: #262640;
+  --card: #2a2a48;
+  --border: #3a3a5e;
+  --accent: #5b9bd5;
+  --text: #d4d4e8;
+  --dim: #7a7a9e;
+  --hmi-bg: #808080;
+  --hmi-equipment: #b0b0b0;
+  --hmi-pipe: #999999;
+  --hmi-running: #00b050;
+  --hmi-stopped: #999999;
+  --hmi-fault: #ff3333;
+  --hmi-alarm-h: #ffcc00;
+  --hmi-alarm-hh: #ff3333;
+  --hmi-alarm-l: #ffcc00;
+  --hmi-alarm-ll: #ff3333;
+  --hmi-bypass: #ffcc00;
+  --hmi-text: #e0e0e0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); }
+
+.header {
+  background: #1a1a30;
+  padding: 16px 24px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header h1 { font-size:20px; color:var(--accent); }
+.header .subtitle { font-size:12px; color:var(--dim); }
+.header .actions { display:flex; gap:8px; }
+.btn {
+  padding:6px 16px;
+  border:1px solid var(--accent);
+  background:transparent;
+  color:var(--accent);
+  border-radius:4px;
+  cursor:pointer;
+  font-size:12px;
+  transition:all 0.2s;
+}
+.btn:hover { background:var(--accent); color:#fff; }
+.btn.primary { background:var(--accent); color:#fff; }
+
+.info-bar {
+  background:#1a1a30;
+  padding:10px 24px;
+  border-bottom:1px solid var(--border);
+  font-size:11px;
+  color:var(--dim);
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+.info-bar b { color:var(--text); }
+
+.tabs {
+  display:flex;
+  background:#1a1a30;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.tab {
+  padding:10px 20px;
+  border:none;
+  background:transparent;
+  color:var(--dim);
+  font-size:12px;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+  transition:all 0.2s;
+}
+.tab:hover { color:var(--text); background:rgba(91,155,213,0.1); }
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+.content { padding:20px 24px; }
+
+.category { display:none; }
+.category.active { display:block; }
+.category h2 { font-size:16px; color:var(--accent); margin-bottom:4px; }
+.category .cat-desc { font-size:12px; color:var(--dim); margin-bottom:16px; }
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+  gap:16px;
+}
+
+.symbol-card {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  overflow:hidden;
+  transition:all 0.2s;
+  cursor:pointer;
+}
+.symbol-card:hover {
+  border-color:var(--accent);
+  transform:translateY(-2px);
+  box-shadow:0 4px 16px rgba(91,155,213,0.2);
+}
+.symbol-preview {
+  background:#707070;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  min-height:120px;
+}
+.symbol-preview svg { max-width:100%; max-height:100px; }
+.symbol-info { padding:10px 12px; }
+.symbol-name { font-size:13px; font-weight:600; color:var(--text); }
+.symbol-tag { font-size:10px; color:var(--dim); margin-top:2px; }
+.symbol-states {
+  display:flex;
+  gap:4px;
+  margin-top:6px;
+  flex-wrap:wrap;
+}
+.state-badge {
+  font-size:9px;
+  padding:1px 6px;
+  border-radius:8px;
+  border:1px solid;
+}
+.state-badge.run { color:#00b050; border-color:#00b050; background:rgba(0,176,80,0.1); }
+.state-badge.stop { color:#999; border-color:#999; background:rgba(153,153,153,0.1); }
+.state-badge.fault { color:#ff3333; border-color:#ff3333; background:rgba(255,51,51,0.1); }
+.state-badge.alarm { color:#ffcc00; border-color:#ffcc00; background:rgba(255,204,0,0.1); }
+
+/* Modal */
+.modal-overlay {
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.7);
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  width:90%;
+  max-width:700px;
+  max-height:90vh;
+  overflow-y:auto;
+}
+.modal-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+}
+.modal-header h3 { color:var(--accent); font-size:16px; }
+.modal-close {
+  background:none; border:none; color:var(--dim);
+  font-size:20px; cursor:pointer;
+}
+.modal-body { padding:20px; }
+.modal-preview {
+  background:#707070;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  margin-bottom:16px;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.modal-preview svg { max-height:80px; }
+.modal-preview .state-label {
+  text-align:center;
+  font-size:10px;
+  color:#ddd;
+  margin-top:4px;
+}
+.svg-code {
+  background:#1a1a2e;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:12px;
+  font-family:'Courier New',monospace;
+  font-size:11px;
+  color:#8be9fd;
+  overflow-x:auto;
+  white-space:pre;
+  max-height:200px;
+  overflow-y:auto;
+  position:relative;
+}
+.copy-btn {
+  position:absolute;
+  top:6px;right:6px;
+  padding:3px 10px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  border-radius:3px;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.guidelines {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.guidelines h3 { color:var(--accent); font-size:14px; margin-bottom:10px; }
+.guidelines ul { padding-left:18px; }
+.guidelines li { font-size:12px; margin-bottom:6px; color:var(--text); line-height:1.5; }
+.guidelines code {
+  background:rgba(91,155,213,0.15);
+  padding:1px 4px;
+  border-radius:3px;
+  font-size:11px;
+  color:var(--accent);
+}
+
+.color-palette {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  gap:8px;
+  margin-top:12px;
+}
+.color-swatch {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  background:rgba(0,0,0,0.2);
+  border-radius:4px;
+}
+.swatch-box {
+  width:24px; height:24px;
+  border-radius:4px;
+  border:1px solid rgba(255,255,255,0.2);
+  flex-shrink:0;
+}
+.swatch-info { font-size:11px; }
+.swatch-info .hex { color:var(--accent); font-family:'Courier New'; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>🏭 HP-HMI SVG Symbol Library</h1>
+    <div class="subtitle">ISA-101 / ASM Consortium — Библиотека символов для промышленных мнемосхем</div>
+  </div>
+  <div class="actions">
+    <button class="btn" onclick="downloadAll()">📦 Скачать все SVG</button>
+    <button class="btn primary" onclick="showTab('guidelines')">📖 Руководство</button>
+  </div>
+</div>
+
+<div class="info-bar">
+  <span>Стандарт: <b>ISA-101.01 / ASM Consortium HP-HMI</b></span>
+  <span>Символов: <b id="total-count">0</b></span>
+  <span>Палитра: <b>Gray-16 + Status Colors</b></span>
+  <span>Формат: <b>SVG (векторный)</b></span>
+  <span>ViewBox: <b>нормализован</b></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+<div class="content" id="content"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">—</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  HP-HMI SVG SYMBOL DEFINITIONS
+//  Color philosophy:
+//    - Equipment body: #b0b0b0 (gray) — ALWAYS in normal state
+//    - Running indicator: #00b050 (green) — small fill or indicator only
+//    - Stopped: #808080
+//    - Fault/Alarm: #ff3333 / #ffcc00
+//    - Pipes: #999999 stroke
+//    - Background: #707070 (ISA-101 recommended)
+//    - Text: #e0e0e0
+//    - Minimal detail — NO 3D, NO gradients, NO shadows
+// ============================================================
+
+const CATEGORIES = [
+  {
+    id: 'guidelines',
+    name: '📖 Руководство',
+    desc: 'Принципы HP-HMI и цветовая палитра',
+    isGuide: true
+  },
+  {
+    id: 'pumps',
+    name: 'Насосы',
+    desc: 'Центробежные, поршневые, дозировочные насосы',
+    symbols: [
+      {
+        id: 'pump-centrifugal',
+        name: 'Насос центробежный',
+        tag: 'P-XXX',
+        desc: 'Стандартный центробежный насос. Круг + треугольник направления потока.',
+        states: ['stop','run','fault'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60">
+  <circle cx="30" cy="30" r="22" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <polygon points="30,12 50,30 30,48" fill="#707070" stroke="#606060" stroke-width="1.5"/>
+  <line x1="52" y1="30" x2="75" y2="30" stroke="#999" stroke-width="3"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <rect x="0" y="50" width="60" height="10" rx="2" fill="none"/>
+  <text x="30" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ccc">STOPPED</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60">
+  <circle cx="30" cy="30" r="22" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <polygon points="30,12 50,30 30,48" fill="#00b050" stroke="#008040" stroke-width="1.5"/>
+  <line x1="52" y1="30" x2="75" y2="30" stroke="#999" stroke-width="3"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="30" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#00b050">RUNNING</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60">
+  <circle cx="30" cy="30" r="22" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <polygon points="30,12 50,30 30,48" fill="#ff3333" stroke="#cc0000" stroke-width="1.5"/>
+  <line x1="52" y1="30" x2="75" y2="30" stroke="#999" stroke-width="3"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="30" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ff3333">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pump-positive',
+        name: 'Насос поршневой',
+        tag: 'P-XXX',
+        desc: 'Поршневой/плунжерный насос. Круг + прямоугольник цилиндра.',
+        states: ['stop','run','fault'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60">
+  <circle cx="30" cy="30" r="22" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <rect x="52" y="18" width="30" height="24" rx="2" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <line x1="67" y1="18" x2="67" y2="42" stroke="#606060" stroke-width="2"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="40" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ccc">STOPPED</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60">
+  <circle cx="30" cy="30" r="22" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <rect x="52" y="18" width="30" height="24" rx="2" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <line x1="67" y1="18" x2="67" y2="42" stroke="#00b050" stroke-width="2.5"/>
+  <circle cx="30" cy="30" r="5" fill="#00b050"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="40" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#00b050">RUNNING</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 60">
+  <circle cx="30" cy="30" r="22" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <rect x="52" y="18" width="30" height="24" rx="2" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <circle cx="30" cy="30" r="5" fill="#ff3333"/>
+  <line x1="5" y1="30" x2="8" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="40" y="58" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ff3333">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pump-dosing',
+        name: 'Насос дозировочный',
+        tag: 'P-XXX',
+        desc: 'Мембранный/дозировочный насос для реагентов.',
+        states: ['stop','run'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60">
+  <circle cx="30" cy="30" r="20" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <text x="30" y="34" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="bold" fill="#606060">D</text>
+  <line x1="50" y1="30" x2="75" y2="30" stroke="#999" stroke-width="3"/>
+  <line x1="5" y1="30" x2="10" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="30" y="57" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ccc">STOPPED</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60">
+  <circle cx="30" cy="30" r="20" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <text x="30" y="34" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="bold" fill="#00b050">D</text>
+  <line x1="50" y1="30" x2="75" y2="30" stroke="#999" stroke-width="3"/>
+  <line x1="5" y1="30" x2="10" y2="30" stroke="#999" stroke-width="3"/>
+  <text x="30" y="57" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#00b050">RUNNING</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pump-submersible',
+        name: 'Насос погружной (ЭЦН)',
+        tag: 'P-XXX',
+        desc: 'Электроцентробежный погружной насос для скважин.',
+        states: ['stop','run','fault'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 90">
+  <rect x="10" y="5" width="40" height="60" rx="4" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <polygon points="30,15 42,30 30,45" fill="#707070" stroke="#606060" stroke-width="1"/>
+  <line x1="30" y1="65" x2="30" y2="85" stroke="#999" stroke-width="3"/>
+  <circle cx="30" cy="72" r="3" fill="#606060"/>
+  <text x="30" y="82" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">STOP</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 90">
+  <rect x="10" y="5" width="40" height="60" rx="4" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <polygon points="30,15 42,30 30,45" fill="#00b050" stroke="#008040" stroke-width="1"/>
+  <line x1="30" y1="65" x2="30" y2="85" stroke="#999" stroke-width="3"/>
+  <circle cx="30" cy="72" r="3" fill="#00b050"/>
+  <text x="30" y="82" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#00b050">RUN</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 90">
+  <rect x="10" y="5" width="40" height="60" rx="4" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <polygon points="30,15 42,30 30,45" fill="#ff3333" stroke="#cc0000" stroke-width="1"/>
+  <line x1="30" y1="65" x2="30" y2="85" stroke="#999" stroke-width="3"/>
+  <text x="30" y="82" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">FAULT</text>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'valves',
+    name: 'Арматура',
+    desc: 'Запорная, регулирующая, предохранительная арматура',
+    symbols: [
+      {
+        id: 'valve-gate',
+        name: 'Задвижка (запорная)',
+        tag: 'XV-XXX / HV-XXX',
+        desc: 'Запорная арматура. Два треугольника навстречу.',
+        states: ['open','closed'],
+        svg: {
+          open: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 50">
+  <polygon points="5,10 30,25 5,40" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <polygon points="55,10 30,25 55,40" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="25" x2="30" y2="5" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="22" y="2" width="16" height="6" rx="1" fill="#b0b0b0" stroke="#808080" stroke-width="1"/>
+  <text x="30" y="48" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#00b050">OPEN</text>
+</svg>`,
+          closed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 50">
+  <polygon points="5,10 30,25 5,40" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <polygon points="55,10 30,25 55,40" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <line x1="30" y1="25" x2="30" y2="5" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="22" y="2" width="16" height="6" rx="1" fill="#b0b0b0" stroke="#808080" stroke-width="1"/>
+  <text x="30" y="48" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">CLOSED</text>
+</svg>`
+        }
+      },
+      {
+        id: 'valve-control',
+        name: 'Клапан регулирующий',
+        tag: 'CV-XXX / FCV / TCV / PCV / LCV',
+        desc: 'Регулирующий клапан с позиционером. Показывает % открытия.',
+        states: ['open','closed','fault'],
+        svg: {
+          open: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <polygon points="5,15 30,30 5,45" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <polygon points="55,15 30,30 55,45" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="30" x2="30" y2="10" stroke="#b0b0b0" stroke-width="2"/>
+  <circle cx="30" cy="7" r="5" fill="none" stroke="#b0b0b0" stroke-width="1.5"/>
+  <text x="30" y="9" text-anchor="middle" font-family="Courier New" font-size="6" fill="#00b050">62</text>
+  <text x="30" y="56" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">CV-101</text>
+</svg>`,
+          closed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <polygon points="5,15 30,30 5,45" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <polygon points="55,15 30,30 55,45" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <line x1="30" y1="30" x2="30" y2="10" stroke="#b0b0b0" stroke-width="2"/>
+  <circle cx="30" cy="7" r="5" fill="none" stroke="#b0b0b0" stroke-width="1.5"/>
+  <text x="30" y="9" text-anchor="middle" font-family="Courier New" font-size="6" fill="#ccc">0</text>
+  <text x="30" y="56" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">CLOSED</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <polygon points="5,15 30,30 5,45" fill="none" stroke="#ff3333" stroke-width="2.5"/>
+  <polygon points="55,15 30,30 55,45" fill="none" stroke="#ff3333" stroke-width="2.5"/>
+  <line x1="30" y1="30" x2="30" y2="10" stroke="#ff3333" stroke-width="2"/>
+  <circle cx="30" cy="7" r="5" fill="none" stroke="#ff3333" stroke-width="1.5"/>
+  <text x="30" y="9" text-anchor="middle" font-family="Courier New" font-size="6" fill="#ff3333">?</text>
+  <text x="30" y="56" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id: 'valve-check',
+        name: 'Клапан обратный',
+        tag: '',
+        desc: 'Обратный клапан. Не управляемый — только направление потока.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 40">
+  <polygon points="5,5 5,35 35,20" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="35" y1="5" x2="35" y2="35" stroke="#b0b0b0" stroke-width="2"/>
+</svg>`
+        }
+      },
+      {
+        id: 'valve-safety',
+        name: 'Клапан предохранительный (PSV)',
+        tag: 'PSV-XXX',
+        desc: 'Предохранительный клапан. Пружинный, на сброс давления.',
+        states: ['normal','open'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 70">
+  <polygon points="10,40 25,25 40,40" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="25" y1="25" x2="25" y2="10" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="15" y1="10" x2="35" y2="10" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="25" y1="40" x2="25" y2="55" stroke="#b0b0b0" stroke-width="2"/>
+  <path d="M20,13 L25,17 L30,13 L25,9 Z" fill="#b0b0b0" stroke="none"/>
+  <text x="25" y="66" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">PSV</text>
+</svg>`,
+          open: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 70">
+  <polygon points="10,40 25,25 40,40" fill="none" stroke="#ff3333" stroke-width="2.5"/>
+  <line x1="25" y1="25" x2="25" y2="10" stroke="#ff3333" stroke-width="2"/>
+  <line x1="15" y1="10" x2="35" y2="10" stroke="#ff3333" stroke-width="2"/>
+  <line x1="25" y1="40" x2="25" y2="55" stroke="#ff3333" stroke-width="2"/>
+  <path d="M20,13 L25,17 L30,13 L25,9 Z" fill="#ff3333" stroke="none"/>
+  <text x="25" y="66" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">RELIEF</text>
+</svg>`
+        }
+      },
+      {
+        id: 'valve-shutoff',
+        name: 'Клапан отсечной (ESD)',
+        tag: 'XV-XXX / SDV-XXX',
+        desc: 'Отсечной клапан SIS/ESD. Fail-close.',
+        states: ['open','closed','trip'],
+        svg: {
+          open: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 55">
+  <polygon points="5,12 30,27 5,42" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <polygon points="55,12 30,27 55,42" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="27" x2="30" y2="7" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="20" y="2" width="20" height="8" rx="1" fill="#b0b0b0" stroke="#808080" stroke-width="1"/>
+  <text x="30" y="8" text-anchor="middle" font-family="Segoe UI" font-size="5" font-weight="bold" fill="#333">SIS</text>
+  <text x="30" y="52" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#00b050">OPEN</text>
+</svg>`,
+          closed: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 55">
+  <polygon points="5,12 30,27 5,42" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <polygon points="55,12 30,27 55,42" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <line x1="30" y1="27" x2="30" y2="7" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="20" y="2" width="20" height="8" rx="1" fill="#b0b0b0" stroke="#808080" stroke-width="1"/>
+  <text x="30" y="8" text-anchor="middle" font-family="Segoe UI" font-size="5" font-weight="bold" fill="#333">SIS</text>
+  <text x="30" y="52" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">CLOSED</text>
+</svg>`,
+          trip: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 55">
+  <polygon points="5,12 30,27 5,42" fill="#ff3333" stroke="#cc0000" stroke-width="2"/>
+  <polygon points="55,12 30,27 55,42" fill="#ff3333" stroke="#cc0000" stroke-width="2"/>
+  <line x1="30" y1="27" x2="30" y2="7" stroke="#ff3333" stroke-width="2"/>
+  <rect x="20" y="2" width="20" height="8" rx="1" fill="#ff3333" stroke="#cc0000" stroke-width="1"/>
+  <text x="30" y="8" text-anchor="middle" font-family="Segoe UI" font-size="5" font-weight="bold" fill="#fff">SIS</text>
+  <text x="30" y="52" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">TRIP</text>
+</svg>`
+        }
+      },
+      {
+        id: 'valve-3way',
+        name: 'Клапан трёхходовой',
+        tag: 'CV-XXX',
+        desc: 'Трёхходовой регулирующий клапан.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+  <polygon points="5,15 30,30 5,45" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <polygon points="55,15 30,30 55,45" fill="none" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="30" x2="30" y2="55" stroke="#999" stroke-width="3"/>
+  <line x1="30" y1="30" x2="30" y2="10" stroke="#b0b0b0" stroke-width="2"/>
+  <circle cx="30" cy="7" r="5" fill="none" stroke="#b0b0b0" stroke-width="1.5"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'vessels',
+    name: 'Ёмкости и сосуды',
+    desc: 'Сепараторы, ёмкости, резервуары, колонны',
+    symbols: [
+      {
+        id: 'vessel-horiz',
+        name: 'Сепаратор горизонтальный',
+        tag: 'V-XXX',
+        desc: 'Горизонтальный сосуд. Уровень отображается заливкой.',
+        states: ['normal','alarm'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70">
+  <path d="M20,10 L100,10 Q115,10 115,25 L115,45 Q115,60 100,60 L20,60 Q5,60 5,45 L5,25 Q5,10 20,10 Z" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="5" y="35" width="110" height="25" rx="0" fill="rgba(0,176,80,0.25)"/>
+  <path d="M5,45 L5,45 Q5,60 20,60 L100,60 Q115,60 115,45 L115,45 Z" fill="rgba(0,176,80,0.15)"/>
+  <line x1="5" y1="35" x2="115" y2="35" stroke="#00b050" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="60" y="28" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#e0e0e0">V-101</text>
+  <text x="60" y="50" text-anchor="middle" font-family="Courier New" font-size="10" fill="#00b050">52%</text>
+</svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70">
+  <path d="M20,10 L100,10 Q115,10 115,25 L115,45 Q115,60 100,60 L20,60 Q5,60 5,45 L5,25 Q5,10 20,10 Z" fill="#888" stroke="#ffcc00" stroke-width="2.5"/>
+  <rect x="5" y="20" width="110" height="40" rx="0" fill="rgba(255,204,0,0.2)"/>
+  <line x1="5" y1="20" x2="115" y2="20" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="60" y="15" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ffcc00">⚠ H ALARM</text>
+  <text x="60" y="45" text-anchor="middle" font-family="Courier New" font-size="11" fill="#ffcc00">82%</text>
+</svg>`
+        }
+      },
+      {
+        id: 'vessel-vert',
+        name: 'Ёмкость вертикальная',
+        tag: 'V-XXX / E-XXX',
+        desc: 'Вертикальный сосуд: буферная ёмкость, отстойник.',
+        states: ['normal','alarm'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
+  <path d="M10,15 Q10,5 30,5 Q50,5 50,15 L50,80 Q50,95 30,95 Q10,95 10,80 Z" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="10" y="50" width="40" height="45" rx="0" fill="rgba(0,176,80,0.2)"/>
+  <path d="M10,80 Q10,95 30,95 Q50,95 50,80 Z" fill="rgba(0,176,80,0.15)"/>
+  <line x1="10" y1="50" x2="50" y2="50" stroke="#00b050" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="30" y="35" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#e0e0e0">E-201</text>
+  <text x="30" y="72" text-anchor="middle" font-family="Courier New" font-size="10" fill="#00b050">45%</text>
+</svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
+  <path d="M10,15 Q10,5 30,5 Q50,5 50,15 L50,80 Q50,95 30,95 Q10,95 10,80 Z" fill="#888" stroke="#ff3333" stroke-width="2.5"/>
+  <rect x="10" y="20" width="40" height="75" rx="0" fill="rgba(255,51,51,0.2)"/>
+  <line x1="10" y1="20" x2="50" y2="20" stroke="#ff3333" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="30" y="15" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">⚠ HH</text>
+  <text x="30" y="55" text-anchor="middle" font-family="Courier New" font-size="11" fill="#ff3333">92%</text>
+</svg>`
+        }
+      },
+      {
+        id: 'tank-storage',
+        name: 'Резервуар (РВС)',
+        tag: 'TK-XXX',
+        desc: 'Вертикальный стальной резервуар для хранения нефти/воды.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <rect x="10" y="15" width="60" height="55" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <ellipse cx="40" cy="15" rx="30" ry="8" fill="#777" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="10" y="40" width="60" height="30" fill="rgba(0,176,80,0.2)"/>
+  <line x1="10" y1="40" x2="70" y2="40" stroke="#00b050" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="40" y="30" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#e0e0e0">TK-301</text>
+  <text x="40" y="58" text-anchor="middle" font-family="Courier New" font-size="10" fill="#00b050">4250 м³</text>
+</svg>`
+        }
+      },
+      {
+        id: 'column',
+        name: 'Колонна',
+        tag: 'K-XXX / C-XXX',
+        desc: 'Ректификационная / стабилизационная колонна с тарелками.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 130">
+  <path d="M10,15 Q10,5 25,5 Q40,5 40,15 L40,115 Q40,125 25,125 Q10,125 10,115 Z" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="12" y1="30" x2="38" y2="30" stroke="#999" stroke-width="1"/>
+  <line x1="12" y1="50" x2="38" y2="50" stroke="#999" stroke-width="1"/>
+  <line x1="12" y1="70" x2="38" y2="70" stroke="#999" stroke-width="1"/>
+  <line x1="12" y1="90" x2="38" y2="90" stroke="#999" stroke-width="1"/>
+  <text x="25" y="112" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">K-401</text>
+  <line x1="40" y1="25" x2="50" y2="25" stroke="#999" stroke-width="2"/>
+  <line x1="40" y1="60" x2="50" y2="60" stroke="#999" stroke-width="2"/>
+  <line x1="0" y1="80" x2="10" y2="80" stroke="#999" stroke-width="2"/>
+  <line x1="40" y1="105" x2="50" y2="105" stroke="#999" stroke-width="2"/>
+</svg>`
+        }
+      },
+      {
+        id: 'vessel-3phase',
+        name: 'Сепаратор трёхфазный',
+        tag: 'V-XXX',
+        desc: 'Трёхфазный сепаратор: газ/нефть/вода с двумя уровнями.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 75">
+  <path d="M20,8 L110,8 Q125,8 125,23 L125,52 Q125,67 110,67 L20,67 Q5,67 5,52 L5,23 Q5,8 20,8 Z" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <rect x="5" y="48" width="120" height="19" rx="0" fill="rgba(33,150,243,0.25)"/>
+  <rect x="5" y="32" width="120" height="16" rx="0" fill="rgba(139,195,74,0.2)"/>
+  <line x1="5" y1="48" x2="125" y2="48" stroke="#2196f3" stroke-width="1" stroke-dasharray="2,2"/>
+  <line x1="5" y1="32" x2="125" y2="32" stroke="#8bc34a" stroke-width="1" stroke-dasharray="2,2"/>
+  <text x="65" y="22" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ffc107">ГАЗ</text>
+  <text x="65" y="43" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#8bc34a">НЕФТЬ</text>
+  <text x="65" y="60" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#2196f3">ВОДА</text>
+  <line x1="65" y1="0" x2="65" y2="8" stroke="#ffc107" stroke-width="2"/>
+  <line x1="125" y1="40" x2="130" y2="40" stroke="#8bc34a" stroke-width="2"/>
+  <line x1="125" y1="55" x2="130" y2="55" stroke="#2196f3" stroke-width="2"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'heat',
+    name: 'Теплообмен',
+    desc: 'Теплообменники, печи, конденсаторы, АВО',
+    symbols: [
+      {
+        id: 'hex-shelltube',
+        name: 'Теплообменник кожухотрубный',
+        tag: 'E-XXX / HE-XXX',
+        desc: 'Кожухотрубный теплообменник. Стандартный символ.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
+  <circle cx="50" cy="25" r="20" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="25" x2="70" y2="25" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="5" y1="25" x2="30" y2="25" stroke="#999" stroke-width="3"/>
+  <line x1="70" y1="25" x2="95" y2="25" stroke="#999" stroke-width="3"/>
+  <line x1="50" y1="5" x2="50" y2="0" stroke="#999" stroke-width="3"/>
+  <line x1="50" y1="45" x2="50" y2="50" stroke="#999" stroke-width="3"/>
+  <text x="50" y="28" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">E-101</text>
+</svg>`
+        }
+      },
+      {
+        id: 'furnace',
+        name: 'Печь (Fire Heater)',
+        tag: 'H-XXX / F-XXX',
+        desc: 'Трубчатая печь нагрева нефти.',
+        states: ['off','running','alarm'],
+        svg: {
+          off: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70">
+  <rect x="10" y="10" width="60" height="45" rx="3" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <path d="M25,50 Q28,38 31,50" stroke="#606060" stroke-width="1.5" fill="none"/>
+  <path d="M38,50 Q41,35 44,50" stroke="#606060" stroke-width="1.5" fill="none"/>
+  <path d="M51,50 Q54,38 57,50" stroke="#606060" stroke-width="1.5" fill="none"/>
+  <text x="40" y="66" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ccc">OFF</text>
+</svg>`,
+          running: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70">
+  <rect x="10" y="10" width="60" height="45" rx="3" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <path d="M25,50 Q28,34 31,50" stroke="#ff6600" stroke-width="2" fill="none"/>
+  <path d="M38,50 Q41,28 44,50" stroke="#ff4400" stroke-width="2" fill="none"/>
+  <path d="M51,50 Q54,34 57,50" stroke="#ff6600" stroke-width="2" fill="none"/>
+  <circle cx="34" cy="43" r="2" fill="#ffcc00"/>
+  <circle cx="48" cy="40" r="2" fill="#ffcc00"/>
+  <line x1="5" y1="32" x2="10" y2="32" stroke="#999" stroke-width="3"/>
+  <line x1="70" y1="32" x2="75" y2="32" stroke="#999" stroke-width="3"/>
+  <text x="40" y="66" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#00b050">FIRING</text>
+</svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70">
+  <rect x="10" y="10" width="60" height="45" rx="3" fill="#888" stroke="#ff3333" stroke-width="3"/>
+  <path d="M25,50 Q28,34 31,50" stroke="#ff3333" stroke-width="2" fill="none"/>
+  <path d="M38,50 Q41,28 44,50" stroke="#ff3333" stroke-width="2" fill="none"/>
+  <path d="M51,50 Q54,34 57,50" stroke="#ff3333" stroke-width="2" fill="none"/>
+  <text x="40" y="66" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#ff3333">ALARM</text>
+</svg>`
+        }
+      },
+      {
+        id: 'aircooler',
+        name: 'АВО (аппарат воздушного охлаждения)',
+        tag: 'AC-XXX / EA-XXX',
+        desc: 'Аппарат воздушного охлаждения с вентиляторами.',
+        states: ['off','running'],
+        svg: {
+          off: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60">
+  <rect x="10" y="5" width="80" height="25" rx="2" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="10" y1="12" x2="90" y2="12" stroke="#999" stroke-width="1"/>
+  <line x1="10" y1="18" x2="90" y2="18" stroke="#999" stroke-width="1"/>
+  <line x1="10" y1="24" x2="90" y2="24" stroke="#999" stroke-width="1"/>
+  <polygon points="35,32 25,52 45,52" fill="none" stroke="#808080" stroke-width="1.5"/>
+  <polygon points="65,32 55,52 75,52" fill="none" stroke="#808080" stroke-width="1.5"/>
+  <text x="50" y="58" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ccc">OFF</text>
+</svg>`,
+          running: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60">
+  <rect x="10" y="5" width="80" height="25" rx="2" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="10" y1="12" x2="90" y2="12" stroke="#999" stroke-width="1"/>
+  <line x1="10" y1="18" x2="90" y2="18" stroke="#999" stroke-width="1"/>
+  <line x1="10" y1="24" x2="90" y2="24" stroke="#999" stroke-width="1"/>
+  <polygon points="35,32 25,52 45,52" fill="none" stroke="#00b050" stroke-width="2"/>
+  <polygon points="65,32 55,52 75,52" fill="none" stroke="#00b050" stroke-width="2"/>
+  <text x="50" y="58" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#00b050">RUNNING</text>
+</svg>`
+        }
+      },
+      {
+        id: 'condenser',
+        name: 'Конденсатор',
+        tag: 'E-XXX',
+        desc: 'Конденсатор верхнего продукта колонны.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 50">
+  <circle cx="40" cy="25" r="20" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <path d="M28,15 L52,35" stroke="#b0b0b0" stroke-width="1.5"/>
+  <path d="M28,35 L52,15" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="5" y1="25" x2="20" y2="25" stroke="#999" stroke-width="3"/>
+  <line x1="60" y1="25" x2="75" y2="25" stroke="#999" stroke-width="3"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'instruments',
+    name: 'Приборы КИПиА',
+    desc: 'Датчики, индикаторы, контроллеры (ISA S5.1)',
+    symbols: [
+      {
+        id: 'inst-field',
+        name: 'Прибор полевой',
+        tag: 'xT/xE-XXX',
+        desc: 'Полевой датчик/трансмиттер. Круг — в поле, квадрат — на панели.',
+        states: ['normal','alarm','fault'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 55">
+  <circle cx="25" cy="20" r="16" fill="#888" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="7" y1="20" x2="43" y2="20" stroke="#b0b0b0" stroke-width="1"/>
+  <text x="25" y="17" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">PT</text>
+  <text x="25" y="27" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">101</text>
+  <line x1="25" y1="36" x2="25" y2="45" stroke="#999" stroke-width="1.5"/>
+  <text x="25" y="53" text-anchor="middle" font-family="Courier New" font-size="8" fill="#00b050">0.62</text>
+</svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 55">
+  <circle cx="25" cy="20" r="16" fill="#888" stroke="#ffcc00" stroke-width="2.5"/>
+  <line x1="7" y1="20" x2="43" y2="20" stroke="#ffcc00" stroke-width="1"/>
+  <text x="25" y="17" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ffcc00">PT</text>
+  <text x="25" y="27" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ffcc00">101</text>
+  <line x1="25" y1="36" x2="25" y2="45" stroke="#999" stroke-width="1.5"/>
+  <text x="25" y="53" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ffcc00">0.72</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 55">
+  <circle cx="25" cy="20" r="16" fill="#888" stroke="#ff3333" stroke-width="2.5"/>
+  <line x1="7" y1="20" x2="43" y2="20" stroke="#ff3333" stroke-width="1"/>
+  <text x="25" y="17" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">PT</text>
+  <text x="25" y="27" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ff3333">101</text>
+  <line x1="25" y1="36" x2="25" y2="45" stroke="#999" stroke-width="1.5"/>
+  <text x="25" y="53" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ff3333">BAD</text>
+</svg>`
+        }
+      },
+      {
+        id: 'inst-dcs',
+        name: 'Функция в DCS (на панели)',
+        tag: 'xIC/xRC-XXX',
+        desc: 'Функция, выполняемая в DCS/SCADA. Квадрат с линией.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <rect x="7" y="4" width="36" height="32" rx="0" fill="#888" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="7" y1="20" x2="43" y2="20" stroke="#b0b0b0" stroke-width="1"/>
+  <text x="25" y="16" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">FIC</text>
+  <text x="25" y="30" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">101</text>
+  <line x1="25" y1="36" x2="25" y2="45" stroke="#999" stroke-width="1.5"/>
+</svg>`
+        }
+      },
+      {
+        id: 'inst-sis',
+        name: 'Функция в SIS',
+        tag: 'xSH/xSL/xSHH/xSLL',
+        desc: 'Функция в системе ПАЗ (SIS). Ромб.',
+        states: ['normal','trip'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 55">
+  <polygon points="25,4 46,22 25,40 4,22" fill="#888" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="4" y1="22" x2="46" y2="22" stroke="#b0b0b0" stroke-width="1"/>
+  <text x="25" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#e0e0e0">PSHH</text>
+  <text x="25" y="30" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#e0e0e0">101</text>
+  <line x1="25" y1="40" x2="25" y2="49" stroke="#999" stroke-width="1.5"/>
+</svg>`,
+          trip: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 55">
+  <polygon points="25,4 46,22 25,40 4,22" fill="#888" stroke="#ff3333" stroke-width="2.5"/>
+  <line x1="4" y1="22" x2="46" y2="22" stroke="#ff3333" stroke-width="1"/>
+  <text x="25" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ff3333">PSHH</text>
+  <text x="25" y="30" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ff3333">101</text>
+  <line x1="25" y1="40" x2="25" y2="49" stroke="#ff3333" stroke-width="1.5"/>
+  <text x="25" y="53" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ff3333">TRIP</text>
+</svg>`
+        }
+      },
+      {
+        id: 'faceplate-mini',
+        name: 'Фейсплейт PID-контура',
+        tag: 'xIC-XXX',
+        desc: 'Мини-фейсплейт: PV, SP, OUT, режим. Встраивается в мнемосхему.',
+        states: ['auto','man'],
+        svg: {
+          auto: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 55">
+  <rect x="2" y="2" width="86" height="51" rx="3" fill="#555" stroke="#888" stroke-width="1"/>
+  <text x="45" y="12" text-anchor="middle" font-family="Segoe UI" font-size="7" font-weight="bold" fill="#5b9bd5">FIC-101</text>
+  <rect x="66" y="4" width="20" height="10" rx="2" fill="rgba(0,176,80,0.2)"/>
+  <text x="76" y="12" text-anchor="middle" font-family="Segoe UI" font-size="6" font-weight="bold" fill="#00b050">AUTO</text>
+  <text x="8" y="25" font-family="Segoe UI" font-size="6" fill="#aaa">PV</text>
+  <text x="8" y="35" font-family="Segoe UI" font-size="6" fill="#aaa">SP</text>
+  <text x="8" y="45" font-family="Segoe UI" font-size="6" fill="#aaa">OUT</text>
+  <text x="50" y="25" text-anchor="middle" font-family="Courier New" font-size="8" fill="#00b050">285.2</text>
+  <text x="50" y="35" text-anchor="middle" font-family="Courier New" font-size="8" fill="#5b9bd5">280.0</text>
+  <text x="50" y="45" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ccc">62%</text>
+  <rect x="4" y="48" width="62" height="3" rx="1" fill="#444"/>
+  <rect x="4" y="48" width="44" height="3" rx="1" fill="#00b050"/>
+  <rect x="46" y="47" width="1" height="5" fill="#5b9bd5"/>
+</svg>`,
+          man: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 55">
+  <rect x="2" y="2" width="86" height="51" rx="3" fill="#555" stroke="#888" stroke-width="1"/>
+  <text x="45" y="12" text-anchor="middle" font-family="Segoe UI" font-size="7" font-weight="bold" fill="#5b9bd5">FIC-101</text>
+  <rect x="66" y="4" width="20" height="10" rx="2" fill="rgba(255,145,0,0.2)"/>
+  <text x="76" y="12" text-anchor="middle" font-family="Segoe UI" font-size="6" font-weight="bold" fill="#ff9100">MAN</text>
+  <text x="8" y="25" font-family="Segoe UI" font-size="6" fill="#aaa">PV</text>
+  <text x="8" y="35" font-family="Segoe UI" font-size="6" fill="#aaa">SP</text>
+  <text x="8" y="45" font-family="Segoe UI" font-size="6" fill="#aaa">OUT</text>
+  <text x="50" y="25" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ff9100">292.1</text>
+  <text x="50" y="35" text-anchor="middle" font-family="Courier New" font-size="8" fill="#888">280.0</text>
+  <text x="50" y="45" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ccc">68%</text>
+  <rect x="4" y="48" width="62" height="3" rx="1" fill="#444"/>
+  <rect x="4" y="48" width="48" height="3" rx="1" fill="#ff9100"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'motors',
+    name: 'Электрооборудование',
+    desc: 'Двигатели, ЧРП, электродегидраторы',
+    symbols: [
+      {
+        id: 'motor',
+        name: 'Электродвигатель',
+        tag: 'M-XXX',
+        desc: 'Стандартный электродвигатель с индикацией состояния.',
+        states: ['stop','run','fault'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <circle cx="25" cy="25" r="18" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <text x="25" y="29" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="bold" fill="#606060">M</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <circle cx="25" cy="25" r="18" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <text x="25" y="29" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="bold" fill="#00b050">M</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <circle cx="25" cy="25" r="18" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <text x="25" y="29" text-anchor="middle" font-family="Segoe UI" font-size="14" font-weight="bold" fill="#ff3333">M</text>
+</svg>`
+        }
+      },
+      {
+        id: 'vfd',
+        name: 'ЧРП (VFD)',
+        tag: 'VFD-XXX',
+        desc: 'Частотно-регулируемый привод с индикацией частоты.',
+        states: ['stop','run'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 50">
+  <rect x="8" y="8" width="44" height="34" rx="3" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <text x="30" y="22" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#606060">VFD</text>
+  <text x="30" y="34" text-anchor="middle" font-family="Courier New" font-size="9" fill="#606060">0 Hz</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 50">
+  <rect x="8" y="8" width="44" height="34" rx="3" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <text x="30" y="22" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#333">VFD</text>
+  <text x="30" y="34" text-anchor="middle" font-family="Courier New" font-size="9" fill="#00b050">48.5 Hz</text>
+</svg>`
+        }
+      },
+      {
+        id: 'edg',
+        name: 'Электродегидратор',
+        tag: 'EDG-XXX',
+        desc: 'Электродегидратор для обессоливания нефти.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 70">
+  <path d="M20,8 L100,8 Q115,8 115,23 L115,47 Q115,62 100,62 L20,62 Q5,62 5,47 L5,23 Q5,8 20,8 Z" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="30" y1="18" x2="30" y2="52" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="60" y1="18" x2="60" y2="52" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="90" y1="18" x2="90" y2="52" stroke="#ffcc00" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <text x="60" y="38" text-anchor="middle" font-family="Segoe UI" font-size="8" fill="#e0e0e0">22.5 кВ</text>
+  <text x="60" y="58" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ccc">⚡ EDG-301</text>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'pipes',
+    name: 'Трубопроводы',
+    desc: 'Трубопроводы, потоки, соединения, стрелки',
+    symbols: [
+      {
+        id: 'pipe-oil',
+        name: 'Трубопровод — нефть',
+        tag: '',
+        desc: 'Нефтяная линия. Зелёный оттенок для быстрой идентификации.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 20">
+  <line x1="5" y1="10" x2="115" y2="10" stroke="#8bc34a" stroke-width="4"/>
+  <polygon points="108,5 115,10 108,15" fill="#8bc34a"/>
+  <text x="60" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#8bc34a">НЕФТЬ</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pipe-gas',
+        name: 'Трубопровод — газ',
+        tag: '',
+        desc: 'Газовая линия. Жёлтый.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 20">
+  <line x1="5" y1="10" x2="115" y2="10" stroke="#ffc107" stroke-width="4"/>
+  <polygon points="108,5 115,10 108,15" fill="#ffc107"/>
+  <text x="60" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ffc107">ГАЗ</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pipe-water',
+        name: 'Трубопровод — вода',
+        tag: '',
+        desc: 'Водяная линия. Синий.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 20">
+  <line x1="5" y1="10" x2="115" y2="10" stroke="#2196f3" stroke-width="4"/>
+  <polygon points="108,5 115,10 108,15" fill="#2196f3"/>
+  <text x="60" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#2196f3">ВОДА</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pipe-steam',
+        name: 'Трубопровод — пар',
+        tag: '',
+        desc: 'Паровая линия. Красно-оранжевый.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 20">
+  <line x1="5" y1="10" x2="115" y2="10" stroke="#ff5722" stroke-width="4" stroke-dasharray="12,4"/>
+  <polygon points="108,5 115,10 108,15" fill="#ff5722"/>
+  <text x="60" y="19" text-anchor="middle" font-family="Segoe UI" font-size="6" fill="#ff5722">ПАР</text>
+</svg>`
+        }
+      },
+      {
+        id: 'pipe-neutral',
+        name: 'Трубопровод — нейтральный',
+        tag: '',
+        desc: 'Общий трубопровод без цветовой кодировки.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 15">
+  <line x1="5" y1="7" x2="115" y2="7" stroke="#999" stroke-width="3"/>
+  <polygon points="108,3 115,7 108,11" fill="#999"/>
+</svg>`
+        }
+      },
+      {
+        id: 'pipe-junction',
+        name: 'Тройник / отвод',
+        tag: '',
+        desc: 'Соединение трубопроводов.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <line x1="0" y1="25" x2="50" y2="25" stroke="#999" stroke-width="3"/>
+  <line x1="25" y1="25" x2="25" y2="50" stroke="#999" stroke-width="3"/>
+  <circle cx="25" cy="25" r="4" fill="#999"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'misc',
+    name: 'Прочее',
+    desc: 'Фильтры, компрессоры, факел, дренаж',
+    symbols: [
+      {
+        id: 'filter',
+        name: 'Фильтр / Стрейнер',
+        tag: 'F-XXX / S-XXX',
+        desc: 'Фильтр грубой/тонкой очистки.',
+        states: ['clean','dirty'],
+        svg: {
+          clean: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <polygon points="25,5 45,45 5,45" fill="#888" stroke="#b0b0b0" stroke-width="2"/>
+  <line x1="15" y1="30" x2="35" y2="30" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="20" y1="38" x2="30" y2="38" stroke="#b0b0b0" stroke-width="1"/>
+  <text x="25" y="28" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#e0e0e0">F</text>
+</svg>`,
+          dirty: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <polygon points="25,5 45,45 5,45" fill="#888" stroke="#ffcc00" stroke-width="2.5"/>
+  <line x1="15" y1="30" x2="35" y2="30" stroke="#ffcc00" stroke-width="1.5"/>
+  <line x1="20" y1="38" x2="30" y2="38" stroke="#ffcc00" stroke-width="1"/>
+  <text x="25" y="28" text-anchor="middle" font-family="Segoe UI" font-size="7" fill="#ffcc00">F</text>
+</svg>`
+        }
+      },
+      {
+        id: 'compressor',
+        name: 'Компрессор',
+        tag: 'C-XXX / K-XXX',
+        desc: 'Газовый компрессор.',
+        states: ['stop','run','fault'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 50">
+  <polygon points="5,5 65,15 65,35 5,45" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <text x="35" y="30" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#606060">K</text>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 50">
+  <polygon points="5,5 65,15 65,35 5,45" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <text x="35" y="30" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#00b050">K</text>
+</svg>`,
+          fault: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 50">
+  <polygon points="5,5 65,15 65,35 5,45" fill="#b0b0b0" stroke="#ff3333" stroke-width="3"/>
+  <text x="35" y="30" text-anchor="middle" font-family="Segoe UI" font-size="9" fill="#ff3333">K</text>
+</svg>`
+        }
+      },
+      {
+        id: 'flare',
+        name: 'Факельная установка',
+        tag: 'FL-XXX',
+        desc: 'Факельная установка / свеча рассеивания.',
+        states: ['idle','burning'],
+        svg: {
+          idle: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 80">
+  <line x1="20" y1="75" x2="20" y2="25" stroke="#b0b0b0" stroke-width="3"/>
+  <line x1="10" y1="75" x2="30" y2="75" stroke="#b0b0b0" stroke-width="2"/>
+  <circle cx="20" cy="22" r="4" fill="#808080" stroke="#606060" stroke-width="1"/>
+</svg>`,
+          burning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 80">
+  <line x1="20" y1="75" x2="20" y2="25" stroke="#b0b0b0" stroke-width="3"/>
+  <line x1="10" y1="75" x2="30" y2="75" stroke="#b0b0b0" stroke-width="2"/>
+  <path d="M14,22 Q20,2 26,22 Q22,16 20,22 Q18,16 14,22 Z" fill="#ff6600" stroke="#ff4400" stroke-width="1"/>
+  <path d="M17,20 Q20,10 23,20" fill="#ffcc00" stroke="none"/>
+</svg>`
+        }
+      },
+      {
+        id: 'fan',
+        name: 'Вентилятор',
+        tag: 'FN-XXX',
+        desc: 'Вентилятор: вытяжной, приточный, аварийной вентиляции.',
+        states: ['stop','run'],
+        svg: {
+          stop: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <circle cx="25" cy="25" r="20" fill="#808080" stroke="#606060" stroke-width="2"/>
+  <path d="M25,25 L25,8" stroke="#606060" stroke-width="2"/>
+  <path d="M25,25 L38,38" stroke="#606060" stroke-width="2"/>
+  <path d="M25,25 L12,38" stroke="#606060" stroke-width="2"/>
+  <circle cx="25" cy="25" r="3" fill="#606060"/>
+</svg>`,
+          run: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+  <circle cx="25" cy="25" r="20" fill="#b0b0b0" stroke="#808080" stroke-width="2"/>
+  <path d="M25,25 L25,8" stroke="#00b050" stroke-width="2.5"/>
+  <path d="M25,25 L38,38" stroke="#00b050" stroke-width="2.5"/>
+  <path d="M25,25 L12,38" stroke="#00b050" stroke-width="2.5"/>
+  <circle cx="25" cy="25" r="3" fill="#00b050"/>
+</svg>`
+        }
+      },
+      {
+        id: 'mixer',
+        name: 'Смеситель статический',
+        tag: '',
+        desc: 'Статический смеситель в трубопроводе.',
+        states: ['normal'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30">
+  <rect x="10" y="3" width="40" height="24" rx="2" fill="#888" stroke="#b0b0b0" stroke-width="1.5"/>
+  <path d="M18,7 L42,23 M18,23 L42,7" stroke="#b0b0b0" stroke-width="1.5"/>
+  <line x1="0" y1="15" x2="10" y2="15" stroke="#999" stroke-width="3"/>
+  <line x1="50" y1="15" x2="60" y2="15" stroke="#999" stroke-width="3"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id: 'indicators',
+    name: 'Индикаторы и виджеты',
+    desc: 'Баргафы, индикаторы статуса, аларм-баннеры для L1–L4',
+    symbols: [
+      {
+        id: 'bargraph',
+        name: 'Баргаф с уставками',
+        tag: '',
+        desc: 'Вертикальный баргаф с лимитами HH/H/SP/L/LL.',
+        states: ['normal','alarm'],
+        svg: {
+          normal: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 100">
+  <rect x="10" y="5" width="20" height="80" rx="2" fill="#555" stroke="#888" stroke-width="1"/>
+  <rect x="10" y="43" width="20" height="42" rx="0" fill="#00b050"/>
+  <line x1="8" y1="13" x2="32" y2="13" stroke="#ff3333" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="8" y1="25" x2="32" y2="25" stroke="#ffcc00" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="8" y1="43" x2="32" y2="43" stroke="#00b050" stroke-width="1.5"/>
+  <line x1="8" y1="63" x2="32" y2="63" stroke="#ffcc00" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="8" y1="75" x2="32" y2="75" stroke="#ff3333" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="36" y="15" font-family="Segoe UI" font-size="5" fill="#ff3333">HH</text>
+  <text x="36" y="27" font-family="Segoe UI" font-size="5" fill="#ffcc00">H</text>
+  <text x="36" y="45" font-family="Segoe UI" font-size="5" fill="#00b050">SP</text>
+  <text x="36" y="65" font-family="Segoe UI" font-size="5" fill="#ffcc00">L</text>
+  <text x="36" y="77" font-family="Segoe UI" font-size="5" fill="#ff3333">LL</text>
+  <text x="20" y="96" text-anchor="middle" font-family="Courier New" font-size="8" fill="#00b050">52%</text>
+</svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 100">
+  <rect x="10" y="5" width="20" height="80" rx="2" fill="#555" stroke="#ffcc00" stroke-width="2"/>
+  <rect x="10" y="18" width="20" height="67" rx="0" fill="#ffcc00"/>
+  <line x1="8" y1="13" x2="32" y2="13" stroke="#ff3333" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="8" y1="25" x2="32" y2="25" stroke="#ffcc00" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="36" y="15" font-family="Segoe UI" font-size="5" fill="#ff3333">HH</text>
+  <text x="36" y="27" font-family="Segoe UI" font-size="5" fill="#ffcc00">H</text>
+  <text x="20" y="96" text-anchor="middle" font-family="Courier New" font-size="8" fill="#ffcc00">83%</text>
+</svg>`
+        }
+      },
+      {
+        id: 'status-indicator',
+        name: 'Индикатор статуса',
+        tag: '',
+        desc: 'Компактный индикатор состояния оборудования.',
+        states: ['ok','warn','alarm','off'],
+        svg: {
+          ok: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#00b050" stroke="#008040" stroke-width="1"/></svg>`,
+          warn: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#ffcc00" stroke="#cc9900" stroke-width="1"/></svg>`,
+          alarm: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#ff3333" stroke="#cc0000" stroke-width="1"/></svg>`,
+          off: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6" fill="#808080" stroke="#606060" stroke-width="1"/></svg>`
+        }
+      },
+      {
+        id: 'alarm-banner',
+        name: 'Аларм-баннер',
+        tag: '',
+        desc: 'Аварийный баннер для размещения на мнемосхеме.',
+        states: ['hi','hihi'],
+        svg: {
+          hi: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 24">
+  <rect x="1" y="1" width="118" height="22" rx="3" fill="rgba(255,204,0,0.15)" stroke="#ffcc00" stroke-width="1.5"/>
+  <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#ffcc00">⚠</text>
+  <text x="28" y="15" font-family="Segoe UI" font-size="8" fill="#ffcc00">PT-101 HIGH — 0.72 МПа</text>
+</svg>`,
+          hihi: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 24">
+  <rect x="1" y="1" width="118" height="22" rx="3" fill="rgba(255,51,51,0.15)" stroke="#ff3333" stroke-width="1.5"/>
+  <text x="14" y="16" font-family="Segoe UI" font-size="9" fill="#ff3333">🔴</text>
+  <text x="30" y="15" font-family="Segoe UI" font-size="8" fill="#ff3333">LT-401 HI-HI — 92%</text>
+</svg>`
+        }
+      }
+    ]
+  }
+];
+
+// ============================================================
+//  RENDERING
+// ============================================================
+let totalSymbols = 0;
+
+function buildTabs() {
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = CATEGORIES.map((c, i) => `
+    <button class="tab ${i===0?'active':''}" onclick="showTab('${c.id}')">${c.name}</button>
+  `).join('');
+}
+
+function buildContent() {
+  const contentEl = document.getElementById('content');
+  let html = '';
+
+  // Guidelines tab
+  html += `<div class="category ${CATEGORIES[0].id === 'guidelines' ? 'active' : ''}" id="cat-guidelines">
+    <div class="guidelines">
+      <h3>🎨 Цветовая палитра HP-HMI (ISA-101)</h3>
+      <p style="font-size:12px;color:var(--dim);margin-bottom:12px;">
+        Цвет в HP-HMI используется <b style="color:var(--text)">только для передачи статуса</b>. Нормальное состояние — серые тона. Цвет привлекает внимание к отклонениям.
+      </p>
+      <div class="color-palette">
+        <div class="color-swatch"><div class="swatch-box" style="background:#707070"></div><div class="swatch-info">Фон мнемосхемы<br><span class="hex">#707070</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#888888"></div><div class="swatch-info">Тело оборудования<br><span class="hex">#888888</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#b0b0b0"></div><div class="swatch-info">Контур / обводка<br><span class="hex">#B0B0B0</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#999999"></div><div class="swatch-info">Трубопроводы<br><span class="hex">#999999</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#e0e0e0"></div><div class="swatch-info">Текст / метки<br><span class="hex">#E0E0E0</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#808080"></div><div class="swatch-info">Остановлено (Stopped)<br><span class="hex">#808080</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#00b050"></div><div class="swatch-info">В работе (Running)<br><span class="hex">#00B050</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ffcc00"></div><div class="swatch-info">Предупреждение (H / L)<br><span class="hex">#FFCC00</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ff3333"></div><div class="swatch-info">Авария (HH / LL / Fault)<br><span class="hex">#FF3333</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ff9100"></div><div class="swatch-info">Ручной режим (MAN)<br><span class="hex">#FF9100</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#5b9bd5"></div><div class="swatch-info">Информация / уставка<br><span class="hex">#5B9BD5</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#8bc34a"></div><div class="swatch-info">Нефть (поток)<br><span class="hex">#8BC34A</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ffc107"></div><div class="swatch-info">Газ (поток)<br><span class="hex">#FFC107</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#2196f3"></div><div class="swatch-info">Вода (поток)<br><span class="hex">#2196F3</span></div></div>
+        <div class="color-swatch"><div class="swatch-box" style="background:#ff5722"></div><div class="swatch-info">Пар (поток)<br><span class="hex">#FF5722</span></div></div>
+      </div>
+    </div>
+
+    <div class="guidelines">
+      <h3>📐 Принципы построения HP-HMI мнемосхем</h3>
+      <ul>
+        <li><b>Серый = нормально.</b> Оборудование в нормальном состоянии всегда серое. Цвет появляется ТОЛЬКО при отклонении или для индикации статуса работы.</li>
+        <li><b>Никаких 3D-эффектов, градиентов, теней.</b> Плоские символы, чистые линии. Минимум деталей — максимум читаемости.</li>
+        <li><b>Уровень детализации = уровень мнемосхемы.</b> L1 — только карточки и KPI. L2 — упрощённая схема. L3 — детальные параметры. L4 — тренды и диагностика.</li>
+        <li><b>Консистентность.</b> Одинаковые символы для одинакового оборудования по всему проекту. Не изобретать новые обозначения.</li>
+        <li><b>Контраст текста.</b> Текст всегда читаем на сером фоне: <code>#E0E0E0</code> для основного, <code>#AAAAAA</code> для вторичного.</li>
+        <li><b>Размер шрифтов.</b> Минимум 10px для DPI стандартного монитора оператора. Теги — жирные, значения — моноширинный шрифт.</li>
+        <li><b>Анимация.</b> Только для индикации работающего оборудования (пульсация насоса, вращение). Никаких декоративных анимаций.</li>
+        <li><b>Направление потока.</b> Слева направо или сверху вниз. Стрелки на трубопроводах при необходимости.</li>
+      </ul>
+    </div>
+
+    <div class="guidelines">
+      <h3>📋 Минимальный набор элементов для УПН</h3>
+      <ul>
+        <li><b>Насосы (4):</b> центробежный, поршневой, дозировочный, погружной (ЭЦН)</li>
+        <li><b>Арматура (6):</b> задвижка, регулирующий клапан, обратный, предохранительный (PSV), отсечной (ESD), трёхходовой</li>
+        <li><b>Ёмкости (5):</b> горизонтальный сепаратор, вертикальная ёмкость, резервуар (РВС), колонна, трёхфазный сепаратор</li>
+        <li><b>Теплообмен (4):</b> кожухотрубный ТО, печь, АВО, конденсатор</li>
+        <li><b>Приборы (4):</b> полевой датчик, функция DCS, функция SIS, мини-фейсплейт</li>
+        <li><b>Электрооборудование (3):</b> двигатель, ЧРП (VFD), электродегидратор</li>
+        <li><b>Трубопроводы (6):</b> нефть, газ, вода, пар, нейтральный, тройник</li>
+        <li><b>Прочее (5):</b> фильтр, компрессор, факел, вентилятор, статический смеситель</li>
+        <li><b>Индикаторы (3):</b> баргаф с уставками, индикатор статуса, аларм-баннер</li>
+        <li style="margin-top:8px;color:var(--accent)"><b>Итого: 40 символов × множество состояний = полный комплект для проекта УПН</b></li>
+      </ul>
+    </div>
+  </div>`;
+
+  // Category tabs
+  CATEGORIES.forEach(cat => {
+    if (cat.isGuide) return;
+    const symbols = cat.symbols || [];
+    totalSymbols += symbols.length;
+
+    html += `<div class="category" id="cat-${cat.id}">
+      <h2>${cat.name}</h2>
+      <div class="cat-desc">${cat.desc} — ${symbols.length} символов</div>
+      <div class="grid">
+        ${symbols.map(s => {
+          const firstState = Object.keys(s.svg)[0];
+          return `
+            <div class="symbol-card" onclick="openModal('${cat.id}','${s.id}')">
+              <div class="symbol-preview">${s.svg[firstState]}</div>
+              <div class="symbol-info">
+                <div class="symbol-name">${s.name}</div>
+                <div class="symbol-tag">${s.tag || '—'}</div>
+                <div class="symbol-states">
+                  ${s.states.map(st => {
+                    const cls = st === 'run' || st === 'running' || st === 'burning' || st === 'auto' ? 'run' :
+                                st === 'fault' || st === 'trip' || st === 'alarm' || st === 'hihi' ? 'fault' :
+                                st === 'warn' || st === 'dirty' || st === 'bypass' || st === 'man' || st === 'hi' || st === 'open' ? 'alarm' : 'stop';
+                    return `<span class="state-badge ${cls}">${st}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+
+  contentEl.innerHTML = html;
+  document.getElementById('total-count').textContent = totalSymbols;
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+  const idx = CATEGORIES.findIndex(c => c.id === id);
+  if (idx >= 0) document.querySelectorAll('.tab')[idx].classList.add('active');
+  const cat = document.getElementById('cat-' + id);
+  if (cat) cat.classList.add('active');
+}
+
+function openModal(catId, symId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  const sym = cat.symbols.find(s => s.id === symId);
+  if (!sym) return;
+
+  document.getElementById('modal-title').textContent = sym.name;
+
+  let html = `<p style="font-size:12px;color:var(--dim);margin-bottom:12px;">${sym.desc}</p>`;
+  if (sym.tag) html += `<p style="font-size:11px;margin-bottom:12px;">Тег: <code style="color:var(--accent)">${sym.tag}</code></p>`;
+
+  html += `<div class="modal-preview">`;
+  Object.entries(sym.svg).forEach(([state, svg]) => {
+    html += `<div><div>${svg}</div><div class="state-label">${state.toUpperCase()}</div></div>`;
+  });
+  html += `</div>`;
+
+  // SVG code for each state
+  Object.entries(sym.svg).forEach(([state, svg]) => {
+    const escaped = svg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    html += `
+      <p style="font-size:11px;color:var(--dim);margin:8px 0 4px;">SVG код — <b style="color:var(--text)">${state}</b>:</p>
+      <div class="svg-code" style="position:relative">
+        <button class="copy-btn" onclick="copySVG(this, '${sym.id}', '${state}')">Копировать</button>
+        ${escaped}
+      </div>
+    `;
+  });
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function copySVG(btn, symId, state) {
+  let svg = '';
+  CATEGORIES.forEach(cat => {
+    if (!cat.symbols) return;
+    const sym = cat.symbols.find(s => s.id === symId);
+    if (sym && sym.svg[state]) svg = sym.svg[state];
+  });
+  navigator.clipboard.writeText(svg.trim()).then(() => {
+    btn.textContent = '✓ Скопировано';
+    setTimeout(() => btn.textContent = 'Копировать', 1500);
+  });
+}
+
+function downloadAll() {
+  // Generate a combined SVG with all symbols as <defs>
+  let allSvgs = '<!-- HP-HMI SVG Symbol Library -->\n<!-- ISA-101 / ASM Consortium Standard -->\n<!-- Generated: ' + new Date().toISOString() + ' -->\n\n';
+
+  CATEGORIES.forEach(cat => {
+    if (!cat.symbols) return;
+    allSvgs += `\n<!-- ======== ${cat.name} ======== -->\n`;
+    cat.symbols.forEach(sym => {
+      Object.entries(sym.svg).forEach(([state, svg]) => {
+        allSvgs += `\n<!-- ${sym.name} — ${state} (${sym.id}-${state}) -->\n`;
+        allSvgs += svg.trim().replace('<svg ', `<svg id="${sym.id}-${state}" `) + '\n';
+      });
+    });
+  });
+
+  const blob = new Blob([allSvgs], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'hphmi-symbols-library.svg';
+  a.click();
+}
+
+// Init
+buildTabs();
+buildContent();
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>

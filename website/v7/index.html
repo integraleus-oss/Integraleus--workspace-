@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INTEGRALEUS — ИИ-агенты для промышленности и бизнеса</title>
+    <meta name="description" content="Создаём интеллектуальных ИИ-агентов для автоматизации промышленных и бизнес-процессов. Подключаем. Автоматизируем. Масштабируем.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #00d4ff;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+            --accent-green: #00ff88;
+            --gradient-1: linear-gradient(135deg, #00d4ff, #0099ff);
+            --gradient-2: linear-gradient(135deg, #00ff88, #00d4ff);
+            --border: #222222;
+            --radius: 16px;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            background: var(--gradient-1);
+            color: #000 !important;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: opacity 0.3s;
+        }
+
+        .nav-cta:hover {
+            opacity: 0.85;
+        }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient-1);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-primary);
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background: var(--bg-card);
+        }
+
+        /* === SECTIONS === */
+        section {
+            padding: 120px 0;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.15;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* === FEATURES BADGES === */
+        .features-bar {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0;
+        }
+
+        .features-grid-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .feature-badge {
+            text-align: center;
+        }
+
+        .feature-badge-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .feature-badge h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .feature-badge p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* === PROCESS (Connect → Automate → Scale) === */
+        .process-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .process-step:last-child {
+            border-bottom: none;
+        }
+
+        .process-step.reverse {
+            direction: rtl;
+        }
+
+        .process-step.reverse > * {
+            direction: ltr;
+        }
+
+        .process-number {
+            font-size: 8rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(180deg, #333 0%, #111 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+        }
+
+        .process-content h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .process-content p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .process-features {
+            list-style: none;
+        }
+
+        .process-features li {
+            padding: 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .process-features li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .process-visual {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 70%);
+        }
+
+        .process-visual-icon {
+            font-size: 6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === QUOTE === */
+        .quote-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-top: 32px;
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .quote-author strong {
+            color: var(--text-secondary);
+        }
+
+        /* === NUMBERS === */
+        .numbers {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .number-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .number-value {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            font-weight: 900;
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .number-label {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .number-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* === TECH STACK === */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent);
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+        }
+
+        .tech-item-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .tech-item-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .tech-item-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* === SERVICES CARDS === */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* === CONTACT === */
+        .contact {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .contact-info-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-info-item h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .contact-info-item p,
+        .contact-info-item a {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .contact-info-item a:hover {
+            color: var(--accent);
+        }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* === ANIMATIONS === */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 0 24px;
+            }
+
+            .nav-inner {
+                padding: 0 24px;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+
+            .features-grid-bar {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .process-step {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .process-step.reverse {
+                direction: ltr;
+            }
+
+            .process-visual {
+                min-height: 250px;
+            }
+
+            .numbers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .numbers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo">INTEGRAL<span>EUS</span></a>
+            <ul class="nav-links">
+                <li><a href="#process">Как это работает</a></li>
+                <li><a href="#services">Услуги</a></li>
+                <li><a href="#tech">Технологии</a></li>
+                <li><a href="#contact" class="nav-cta">Связаться</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                Принимаем заявки на внедрение
+            </div>
+            <h1>
+                ИИ-агенты<br>для <span class="gradient-text">промышленности<br>и бизнеса</span>
+            </h1>
+            <p class="hero-description">
+                Создаём интеллектуальных агентов, которые автоматизируют процессы, 
+                мониторят системы и принимают решения — без участия человека.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary">Обсудить проект →</a>
+                <a href="#process" class="btn-secondary">Как это работает</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES BAR -->
+    <div class="features-bar">
+        <div class="container">
+            <div class="features-grid-bar">
+                <div class="feature-badge">
+                    <div class="feature-badge-icon">🔗</div>
+                    <h4>Интеграция</h4>
+                    <p>OPC UA, MQTT, REST API, SQL</p>
+                </div>
+                <div class="feature-badge">
+                    <div class="feature-badge-icon">🧠</div>
+                    <h4>ИИ на борту</h4>
+                    <p>Claude, GPT, собственные модели</p>
+                </div>
+                <div class="feature-badge">
+                    <div class="feature-badge-icon">🔒</div>
+                    <h4>Безопасность</h4>
+                    <p>Локальное развёртывание, шифрование</p>
+                </div>
+                <div class="feature-badge">
+                    <div class="feature-badge-icon">📡</div>
+                    <h4>Мониторинг 24/7</h4>
+                    <p>Непрерывный контроль и алертинг</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROCESS -->
+    <section id="process">
+        <div class="container">
+            <div class="section-label">Как это работает</div>
+            <h2 class="section-title">Подключаем. Автоматизируем.<br>Масштабируем.</h2>
+            <p class="section-subtitle">Три шага от идеи до работающего ИИ-агента на вашем предприятии.</p>
+
+            <!-- Step 1 -->
+            <div class="process-step fade-in">
+                <div class="process-content">
+                    <div class="process-number">01</div>
+                    <h3>Подключаем</h3>
+                    <p>
+                        ИИ-агент интегрируется с вашими системами — SCADA, MES, ERP, 
+                        базами данных и оборудованием. Один агент — единая точка доступа 
+                        ко всем данным предприятия.
+                    </p>
+                    <ul class="process-features">
+                        <li>OPC UA, Modbus, MQTT протоколы</li>
+                        <li>SQL, REST API, вебхуки</li>
+                        <li>Любые SCADA-системы и контроллеры</li>
+                        <li>Облачные и локальные развёртывания</li>
+                    </ul>
+                    <div class="quote-block">
+                        <p class="quote-text">«Агент объединил данные из трёх разных SCADA-систем в единый дашборд за две недели.»</p>
+                        <p class="quote-author"><strong>Алексей К.</strong> — Главный инженер, нефтепереработка</p>
+                    </div>
+                </div>
+                <div class="process-visual">
+                    <div class="process-visual-icon">🔗</div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="process-step reverse fade-in">
+                <div class="process-content">
+                    <div class="process-number">02</div>
+                    <h3>Автоматизируем</h3>
+                    <p>
+                        Агент анализирует данные в реальном времени, выявляет аномалии, 
+                        прогнозирует отказы и автоматизирует рутинные операции — от 
+                        формирования отчётов до управления техпроцессами.
+                    </p>
+                    <ul class="process-features">
+                        <li>Предиктивная аналитика и диагностика</li>
+                        <li>Автоматическое формирование отчётов</li>
+                        <li>Алертинг и эскалация инцидентов</li>
+                        <li>Оптимизация производственных параметров</li>
+                    </ul>
+                    <div class="quote-block">
+                        <p class="quote-text">«Время реакции на аварийные ситуации сократилось с 40 минут до 2.»</p>
+                        <p class="quote-author"><strong>Дмитрий М.</strong> — Директор по производству, энергетика</p>
+                    </div>
+                </div>
+                <div class="process-visual">
+                    <div class="process-visual-icon">⚡</div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="process-step fade-in">
+                <div class="process-content">
+                    <div class="process-number">03</div>
+                    <h3>Масштабируем</h3>
+                    <p>
+                        Начните с одного агента на одном участке — и масштабируйте 
+                        на всё предприятие. Агенты работают в связке, обмениваются 
+                        данными и обучаются на опыте друг друга.
+                    </p>
+                    <ul class="process-features">
+                        <li>Мультиагентные архитектуры</li>
+                        <li>Горизонтальное масштабирование</li>
+                        <li>Передача знаний между агентами</li>
+                        <li>Единая панель управления</li>
+                    </ul>
+                    <div class="quote-block">
+                        <p class="quote-text">«Начали с мониторинга одного цеха. Через полгода агенты управляют всеми четырьмя площадками.»</p>
+                        <p class="quote-author"><strong>Елена С.</strong> — CTO, машиностроение</p>
+                    </div>
+                </div>
+                <div class="process-visual">
+                    <div class="process-visual-icon">🚀</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NUMBERS -->
+    <section class="numbers">
+        <div class="container">
+            <div class="numbers-grid">
+                <div class="number-item fade-in">
+                    <div class="number-value">24/7</div>
+                    <div class="number-label">Непрерывная работа</div>
+                    <div class="number-desc">Агенты не спят, не болеют, не уходят в отпуск</div>
+                </div>
+                <div class="number-item fade-in">
+                    <div class="number-value">&lt;2</div>
+                    <div class="number-label">Недели до запуска</div>
+                    <div class="number-desc">От первой встречи до рабочего прототипа</div>
+                </div>
+                <div class="number-item fade-in">
+                    <div class="number-value">99.9%</div>
+                    <div class="number-label">Аптайм</div>
+                    <div class="number-desc">Резервирование и автоматический failover</div>
+                </div>
+                <div class="number-item fade-in">
+                    <div class="number-value">10×</div>
+                    <div class="number-label">Быстрее человека</div>
+                    <div class="number-desc">Анализ, отчёты, реакция на инциденты</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services">
+        <div class="container">
+            <div class="section-label">Услуги</div>
+            <h2 class="section-title">Сложные задачи.<br>Элегантные решения.</h2>
+            <p class="section-subtitle">Мы создаём ИИ-агентов под конкретные задачи вашего бизнеса.</p>
+
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🏭</div>
+                    <h3>Промышленная автоматизация</h3>
+                    <p>ИИ-агенты для SCADA-систем, мониторинга оборудования и предиктивного обслуживания. Интеграция с OPC UA, Modbus и промышленными контроллерами.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📊</div>
+                    <h3>Бизнес-аналитика</h3>
+                    <p>Автоматический сбор данных из разрозненных источников, формирование отчётов и дашбордов. Агент видит то, что пропускает человек.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🤖</div>
+                    <h3>Чат-боты и ассистенты</h3>
+                    <p>Интеллектуальные ассистенты для техподдержки, HR, продаж. Понимают контекст, работают с внутренними системами и базами знаний.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔍</div>
+                    <h3>Мониторинг и алертинг</h3>
+                    <p>Непрерывный мониторинг серверов, сетей и приложений. Агент обнаруживает проблемы до того, как они станут критическими.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">📄</div>
+                    <h3>Работа с документами</h3>
+                    <p>Автоматизация документооборота: создание, проверка, согласование. ИИ-агент работает с ТЗ, договорами, регламентами и отчётами.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔧</div>
+                    <h3>Кастомная разработка</h3>
+                    <p>Уникальный агент под вашу задачу. От архитектуры до развёртывания — полный цикл создания ИИ-решения.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TECH -->
+    <section id="tech" style="background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-label">Технологии</div>
+            <h2 class="section-title">Проверенный стек</h2>
+            <p class="section-subtitle">Мы используем лучшие технологии для создания надёжных ИИ-агентов.</p>
+
+            <div class="tech-grid">
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🧠</div>
+                    <div class="tech-item-name">Claude / GPT</div>
+                    <div class="tech-item-desc">Языковые модели</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🐍</div>
+                    <div class="tech-item-name">Python</div>
+                    <div class="tech-item-desc">Основной язык</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🐳</div>
+                    <div class="tech-item-name">Docker</div>
+                    <div class="tech-item-desc">Контейнеризация</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🔌</div>
+                    <div class="tech-item-name">OPC UA</div>
+                    <div class="tech-item-desc">Промышленный протокол</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">📡</div>
+                    <div class="tech-item-name">MQTT</div>
+                    <div class="tech-item-desc">IoT-протокол</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🗄️</div>
+                    <div class="tech-item-name">PostgreSQL</div>
+                    <div class="tech-item-desc">База данных</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">📊</div>
+                    <div class="tech-item-name">Grafana</div>
+                    <div class="tech-item-desc">Визуализация</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🤖</div>
+                    <div class="tech-item-name">OpenClaw</div>
+                    <div class="tech-item-desc">Агентная платформа</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">🏗️</div>
+                    <div class="tech-item-name">SCADA</div>
+                    <div class="tech-item-desc">Промышленные системы</div>
+                </div>
+                <div class="tech-item fade-in">
+                    <div class="tech-item-icon">☁️</div>
+                    <div class="tech-item-name">Linux / Cloud</div>
+                    <div class="tech-item-desc">Инфраструктура</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-label">Контакты</div>
+            <h2 class="section-title">Обсудим ваш проект</h2>
+            <p class="section-subtitle" style="margin-bottom: 48px;">Расскажите о задаче — мы предложим решение и оценим сроки.</p>
+
+            <div class="contact-grid">
+                <form class="contact-form" id="contactForm" action="/send_form.php" method="POST">
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" name="name" placeholder="Как к вам обращаться?" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Компания</label>
+                        <input type="text" name="company" placeholder="Название компании">
+                    </div>
+                    <div class="form-group">
+                        <label>Расскажите о задаче</label>
+                        <textarea name="message" placeholder="Какую проблему хотите решить с помощью ИИ-агента?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: fit-content;">Отправить заявку →</button>
+                </form>
+
+                <div>
+                    <div class="contact-info-item">
+                        <h4>Email</h4>
+                        <a href="mailto:mail@integraleus.ru">mail@integraleus.ru</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <h4>Telegram</h4>
+                        <a href="https://t.me/Integraleus" target="_blank">@Integraleus</a>
+                    </div>
+                    <div class="contact-info-item">
+                        <h4>Время ответа</h4>
+                        <p>В течение 24 часов</p>
+                    </div>
+                    <div class="contact-info-item">
+                        <h4>О компании</h4>
+                        <p>Integraleus — разработчик ИИ-агентов для промышленности и бизнеса. Создаём интеллектуальные системы, которые работают автономно, обучаются и масштабируются.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-copy">© 2025 INTEGRALEUS. Все права защищены.</div>
+                <div class="footer-links">
+                    <a href="mailto:mail@integraleus.ru">Email</a>
+                    <a href="https://t.me/Integraleus" target="_blank">Telegram</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- CHAT WIDGET -->
+    <style>
+    .chat-btn{position:fixed;bottom:24px;right:24px;z-index:1000;width:60px;height:60px;border-radius:50%;background:var(--gradient-1);border:none;cursor:pointer;font-size:1.6rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,212,255,0.35);transition:transform .3s;animation:chatPulse 1.5s ease-in-out 3}
+    .chat-btn:hover{transform:scale(1.08)}
+    @keyframes chatPulse{0%,100%{box-shadow:0 4px 24px rgba(0,212,255,0.35)}50%{box-shadow:0 4px 40px rgba(0,212,255,0.6)}}
+    .chat-win{position:fixed;bottom:96px;right:24px;width:380px;height:520px;z-index:999;background:rgba(10,10,10,0.97);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 64px rgba(0,0,0,0.5);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:scale(0.85) translateY(20px);pointer-events:none;transition:opacity .3s,transform .3s}
+    .chat-win.open{opacity:1;transform:scale(1) translateY(0);pointer-events:auto}
+    .chat-hdr{padding:16px 20px;background:var(--bg-card);border-bottom:1px solid var(--border);font-weight:700;display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .chat-dot{color:#00ff88;font-size:0.7rem}
+    .chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent}
+    .chat-m{max-width:85%;padding:10px 14px;border-radius:12px;font-size:.9rem;line-height:1.55;animation:cmIn .3s ease;white-space:pre-wrap}
+    @keyframes cmIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .chat-m.b{align-self:flex-start;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary)}
+    .chat-m.u{align-self:flex-end;background:var(--gradient-1);color:#000;font-weight:500}
+    .chat-m.t{align-self:flex-start;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);font-size:1.2rem;letter-spacing:2px}
+    .chat-qb{display:flex;flex-wrap:wrap;gap:8px;animation:cmIn .3s ease}
+    .chat-q{padding:8px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:20px;color:var(--accent);font-size:.82rem;cursor:pointer;transition:all .2s;font-family:inherit}
+    .chat-q:hover{background:rgba(0,212,255,0.1);border-color:var(--accent)}
+    .chat-ia{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+    .chat-i{flex:1;padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:.9rem;font-family:inherit;outline:none}
+    .chat-i:focus{border-color:var(--accent)}
+    .chat-i::placeholder{color:var(--text-muted)}
+    .chat-s{width:40px;height:40px;border-radius:10px;background:var(--gradient-1);border:none;color:#000;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s}
+    .chat-s:hover{transform:scale(1.06)}
+    @media(max-width:480px){.chat-win{width:calc(100% - 16px);right:8px;bottom:88px;height:70vh}.chat-btn{right:16px;bottom:16px}}
+    </style>
+
+    <button class="chat-btn" id="cBtn">💬</button>
+    <div class="chat-win" id="cWin">
+        <div class="chat-hdr">✨ Integraleus AI <span class="chat-dot">●</span></div>
+        <div class="chat-msgs" id="cMsgs"></div>
+        <div class="chat-ia">
+            <input class="chat-i" id="cIn" type="text" placeholder="Напишите сообщение..." autocomplete="off">
+            <button class="chat-s" id="cSnd">➤</button>
+        </div>
+    </div>
+
+    <script>
+    (function(){
+        var open=false,first=true,B=document.getElementById('cBtn'),W=document.getElementById('cWin'),M=document.getElementById('cMsgs'),I=document.getElementById('cIn'),S=document.getElementById('cSnd');
+        function tog(){open=!open;W.classList.toggle('open',open);B.textContent=open?'✕':'💬';if(open&&first){first=false;typing(function(){bot('Привет! 👋 Я ассистент Integraleus.\nЗадайте вопрос или выберите тему:');btns(['Услуги и цены','Как это работает','Оставить заявку']);})}if(open)I.focus()}
+        B.onclick=tog;
+        function scr(){setTimeout(function(){M.scrollTop=M.scrollHeight},50)}
+        function bot(t){var d=document.createElement('div');d.className='chat-m b';d.textContent=t;M.appendChild(d);scr()}
+        function usr(t){var d=document.createElement('div');d.className='chat-m u';d.textContent=t;M.appendChild(d);scr()}
+        function typing(cb){var d=document.createElement('div');d.className='chat-m t';d.textContent='•••';d.id='cTyp';M.appendChild(d);scr();setTimeout(function(){var e=document.getElementById('cTyp');if(e)e.remove();cb()},700)}
+        function rmb(){M.querySelectorAll('.chat-qb').forEach(function(b){b.remove()})}
+        function btns(a){var w=document.createElement('div');w.className='chat-qb';a.forEach(function(l){var b=document.createElement('button');b.className='chat-q';b.textContent=l;b.onclick=function(){rmb();handle(l)};w.appendChild(b)});M.appendChild(w);scr()}
+        function resp(t,b){typing(function(){bot(t);if(b)btns(b)})}
+        function handle(l){
+            usr(l);
+            if(l==='Услуги и цены')resp('Мы создаём ИИ-агентов под задачу:\n\n• Telegram/WhatsApp бот — от 50 000 ₽\n• Агент мониторинга — от 100 000 ₽\n• Бизнес-автоматизация — от 200 000 ₽\n• Интеграция с АСУ ТП — индивидуально\n\nТочная стоимость зависит от задачи.',['Обсудить проект','Другой вопрос']);
+            else if(l==='Как это работает')resp('1️⃣ Обсуждаем задачу\n2️⃣ Проектируем агента\n3️⃣ Разрабатываем и тестируем\n4️⃣ Запускаем и сопровождаем\n\nОт идеи до запуска — 1-4 недели.',['Оставить заявку','Ещё вопросы']);
+            else if(l==='Оставить заявку'||l==='Обсудить проект')resp('Напишите на mail@integraleus.ru\nили в Telegram: @Integraleus\n\nИли заполните форму на сайте 👇',['Перейти к форме','Другой вопрос']);
+            else if(l==='Перейти к форме'){open=false;W.classList.remove('open');B.textContent='💬';document.getElementById('contact').scrollIntoView({behavior:'smooth'})}
+            else resp('О чём хотите узнать?',['Услуги и цены','Как это работает','Оставить заявку'])
+        }
+        function match(t){
+            var l=t.toLowerCase();
+            if(/услуг|цен|стои|прайс|сколько/.test(l))return{t:'• Telegram/WhatsApp бот — от 50 000 ₽\n• Мониторинг — от 100 000 ₽\n• Бизнес-автоматизация — от 200 000 ₽\n• АСУ ТП — индивидуально',b:['Обсудить проект']};
+            if(/работа|процесс|этап|как\b/.test(l))return{t:'1️⃣ Обсуждаем → 2️⃣ Проектируем → 3️⃣ Разрабатываем → 4️⃣ Запускаем\nСроки: 1-4 недели.',b:['Оставить заявку']};
+            if(/заявк|связ|контакт|написа|обсуд|позвон/.test(l))return{t:'Напишите на mail@integraleus.ru или в Telegram: @Integraleus 👇',b:['Перейти к форме']};
+            if(/срок|времени|долго|быстр/.test(l))return{t:'Простой агент — 1-2 недели.\nСредний проект — 2-4 недели.\nСложные решения — от 1 месяца.',b:null};
+            if(/гарант/.test(l))return{t:'Работаем поэтапно с демонстрацией. Оплата по этапам. Дорабатываем до результата.',b:null};
+            if(/привет|здравств|добр/.test(l))return{t:'Привет! Чем могу помочь?',b:['Услуги и цены','Как это работает','Оставить заявку']};
+            if(/scada|скада|асу|opc|plc|контроллер/.test(l))return{t:'Мы интегрируемся с любыми SCADA-системами через OPC UA, Modbus, MQTT. Агент мониторит оборудование 24/7 и предсказывает отказы.',b:['Обсудить проект']};
+            if(/бот|чат-бот|телеграм|whatsapp/.test(l))return{t:'Создаём умных ботов для Telegram, WhatsApp и веба. Интегрируем с CRM, базами знаний и внутренними системами.',b:['Обсудить проект']};
+            return{t:'Интересный вопрос! Для подробного ответа лучше связаться напрямую — расскажем всё детально.',b:['Оставить заявку','Другой вопрос']}
+        }
+        function send(){var t=I.value.trim();if(!t)return;I.value='';rmb();usr(t);var r=match(t);resp(r.t,r.b)}
+        S.onclick=send;I.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();send()}}
+    })();
+    </script>
+
+    <script>
+        // Navbar scroll
+        window.addEventListener('scroll',function(){document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50)});
+        // Fade-in
+        var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.1});
+        document.querySelectorAll('.fade-in').forEach(function(el){obs.observe(el)});
+        // Form
+        document.getElementById('contactForm').addEventListener('submit',function(e){
+            e.preventDefault();var f=this;
+            fetch('/send_form.php',{method:'POST',body:new FormData(f)})
+            .then(function(){f.innerHTML='<div style="text-align:center;padding:60px 0"><div style="font-size:3rem;margin-bottom:16px">✅</div><h3 style="margin-bottom:8px">Заявка отправлена!</h3><p style="color:var(--text-secondary)">Мы свяжемся с вами в ближайшее время.</p></div>'})
+            .catch(function(){alert('Ошибка. Напишите на mail@integraleus.ru')})
+        });
+    </script>
+</body>
+</html>

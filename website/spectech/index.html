@@ -82,6 +82,7 @@ nav {
   background: rgba(5,8,15,0.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
+  transition: height 0.3s ease, background 0.3s ease;
 }
 
 .nav-logo {
@@ -691,6 +692,7 @@ section { position: relative; z-index: 1; }
   justify-content: center;
   gap: 12px;
   min-height: 60px;
+  white-space: nowrap;
 }
 
 .tech-item:hover {
@@ -992,13 +994,113 @@ footer {
 /* Fade-in animation observer */
 .fade-in {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);
 }
 
 .fade-in.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Slide from left */
+.fade-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);
+}
+.fade-left.visible { opacity: 1; transform: translateX(0); }
+
+/* Slide from right */
+.fade-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);
+}
+.fade-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Scale up */
+.fade-scale {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.8s cubic-bezier(.16,1,.3,1), transform 0.8s cubic-bezier(.16,1,.3,1);
+}
+.fade-scale.visible { opacity: 1; transform: scale(1); }
+
+/* Parallax backgrounds */
+.parallax-section { position: relative; overflow: hidden; }
+.parallax-bg {
+  position: absolute;
+  inset: -120px 0;
+  z-index: 0;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Floating glow orbs for section depth */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Icon hover animations */
+.tech-item:hover .tech-icon {
+  transform: scale(1.3) rotate(5deg);
+  transition: transform 0.3s ease;
+}
+
+/* Product card enhanced hover */
+.product-card {
+  transition: all 0.4s cubic-bezier(.16,1,.3,1) !important;
+}
+.product-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 20px 60px rgba(0,200,240,0.15) !important;
+}
+
+/* Catalog card hover lift */
+.cat-card { transition: all 0.4s cubic-bezier(.16,1,.3,1) !important; }
+.cat-card:hover { transform: translateY(-6px) !important; }
+
+/* Stat counter glow pulse */
+@keyframes counter-glow {
+  0% { text-shadow: 0 0 0 transparent; }
+  50% { text-shadow: 0 0 30px var(--volt-glow); }
+  100% { text-shadow: 0 0 0 transparent; }
+}
+.stat-animated { animation: counter-glow 1s ease-out; }
+
+/* Section titles animate in */
+.section-title {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.section-title.visible { opacity: 1; transform: translateY(0); }
+
+/* Section tags animate */
+.section-tag {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.section-tag.visible { opacity: 1; transform: translateX(0); }
+
+/* Hero floating animation */
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.hero-float { animation: float-gentle 4s ease-in-out infinite; }
+
+/* Nav shrink on scroll */
+nav.scrolled {
+  height: 56px !important;
+  background: rgba(5,8,15,0.95) !important;
 }
 
 /* Cascade delay for cards */
@@ -1146,9 +1248,11 @@ body::before {
 </nav>
 
 <!-- ══ HERO ══ -->
-<section class="hero" id="hero">
-  <div class="hero-orb"></div>
+<section class="hero parallax-section" id="hero">
+  <div class="hero-orb hero-float"></div>
   <canvas class="hero-particles" id="particles-canvas"></canvas>
+  <div class="glow-orb" style="width:800px;height:800px;background:var(--volt);top:-200px;left:-200px;"></div>
+  <div class="glow-orb" style="width:500px;height:500px;background:var(--flame);bottom:-100px;right:-150px;opacity:0.03;"></div>
 
   <div class="hero-container">
     <div class="hero-content">
@@ -1253,7 +1357,7 @@ body::before {
 
     <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:48px;margin-top:60px;align-items:start;">
       <!-- Terminal wrapper -->
-      <div style="position:relative;margin-bottom:30px;">
+      <div class="fade-left" style="position:relative;margin-bottom:30px;">
       <div style="background:var(--ink);border:1px solid var(--wire);border-radius:4px;overflow:hidden;font-family:var(--ff-mono);font-size:12px;box-shadow:0 24px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(0,200,240,0.05);">
         <div style="background:var(--steel);padding:10px 16px;display:flex;align-items:center;gap:8px;">
           <span style="width:12px;height:12px;border-radius:50%;background:#ff3d57;display:inline-block;"></span>
@@ -1291,7 +1395,7 @@ body::before {
       </div><!-- end wrapper -->
 
       <!-- Features -->
-      <div style="display:flex;flex-direction:column;gap:28px;">
+      <div class="fade-right" style="display:flex;flex-direction:column;gap:28px;">
         <div style="display:flex;gap:16px;align-items:flex-start;">
           <div style="width:48px;height:48px;border-radius:50%;border:2px solid var(--volt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
@@ -1334,7 +1438,8 @@ body::before {
 </section>
 
 <!-- ══ PRODUCTS ══ -->
-<section class="products" id="products">
+<section class="products parallax-section" id="products">
+  <div class="glow-orb" style="width:600px;height:600px;background:var(--volt);top:50%;right:-200px;transform:translateY(-50%);"></div>
   <div class="container">
     <div class="section-tag"><span>// Наши продукты</span></div>
     <h2 class="section-title">Российские<br><span>решения</span></h2>
@@ -1647,7 +1752,8 @@ body::before {
 </section>
 
 <!-- ══ PARTNERS ══ -->
-<section class="partners" id="partners">
+<section class="partners parallax-section" id="partners">
+  <div class="glow-orb" style="width:500px;height:500px;background:var(--lime);bottom:-100px;left:-100px;"></div>
   <div class="container">
     <div class="section-tag"><span>// Наши партнёры</span></div>
     <h2 class="section-title">Российские<br><span>разработчики</span></h2>
@@ -1662,7 +1768,7 @@ body::before {
           <span class="partner-brand-text">Атомик Софт</span>
         </div>
         <h3>АО «Атомик Софт»</h3>
-        <p>Разработчик SCADA-систем семейства Alpha. Ведущий российский производитель программного обеспечения для промышленной автоматизации с более чем 8-летним опытом на рынке.</p>
+        <p>Российский разработчик ПО для автоматизации промышленных и гражданских объектов. Основана в 2015 году в Томске. 120+ сотрудников, 6500+ инсталляций, 1600+ объектов. Флагманский продукт — Альфа платформа.</p>
         <a href="https://automiq.ru" target="_blank" class="partner-link">automiq.ru →</a>
       </div>
       
@@ -1703,7 +1809,8 @@ body::before {
 </div>
 
 <!-- ══ CTA ══ -->
-<section class="cta-section" id="contact">
+<section class="cta-section parallax-section" id="contact">
+  <div class="glow-orb" style="width:700px;height:700px;background:var(--flame);top:-200px;left:50%;transform:translateX(-50%);"></div>
   <div class="container">
     <div class="cta-inner">
       <div class="cta-sup">// Готовы начать?</div>
@@ -1989,12 +2096,60 @@ function animateCounter(element) {
         current += step;
         if (current >= target) {
             element.innerHTML = target + spanHTML;
+            element.classList.add('stat-animated');
             clearInterval(timer);
         } else {
             element.innerHTML = Math.floor(current) + spanHTML;
         }
     }, 16);
 }
+
+// ── PARALLAX ──
+const parallaxSections = document.querySelectorAll('.parallax-section');
+const glowOrbs = document.querySelectorAll('.glow-orb');
+
+function updateParallax() {
+  const scrollY = window.pageYOffset;
+  
+  // Parallax glow orbs - subtle depth movement
+  glowOrbs.forEach(orb => {
+    const section = orb.closest('section');
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const speed = 0.05;
+    const yOffset = rect.top * speed;
+    orb.style.transform = (orb.style.transform || '').replace(/translateY\([^)]*\)/g, '') + ` translateY(${yOffset}px)`;
+  });
+
+  // Hero grid parallax
+  const heroGrid = document.querySelector('.hero-grid');
+  if (heroGrid) {
+    heroGrid.style.transform = `translateY(${scrollY * 0.15}px)`;
+  }
+
+  // Nav shrink
+  const nav = document.querySelector('nav');
+  if (nav) {
+    if (scrollY > 80) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  }
+}
+
+window.addEventListener('scroll', updateParallax, { passive: true });
+updateParallax();
+
+// ── OBSERVE section titles & tags ──
+document.querySelectorAll('.section-title, .section-tag').forEach(el => {
+  observer.observe(el);
+});
+
+// ── OBSERVE fade-left, fade-right, fade-scale ──
+document.querySelectorAll('.fade-left, .fade-right, .fade-scale').forEach(el => {
+  observer.observe(el);
+});
 
 // Smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

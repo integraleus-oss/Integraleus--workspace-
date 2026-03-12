@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INTEGRALEUS — ИИ-агенты для бизнеса</title>
+<meta name="description" content="Integraleus — создаём автономных ИИ-агентов для бизнеса и жизни. Персональные ассистенты, автоматизация, интеграция с АСУ ТП.">
+<meta name="keywords" content="ИИ агенты, AI agents, автоматизация, искусственный интеллект, SCADA, АСУ ТП, Telegram бот, бизнес автоматизация">
+<!-- Open Graph -->
+<meta property="og:title" content="INTEGRALEUS — ИИ-агенты для бизнеса">
+<meta property="og:description" content="Создаём автономных ИИ-агентов для бизнеса и жизни. Персональные ассистенты, автоматизация, интеграция с АСУ ТП.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://integraleus.ru">
+<meta property="og:locale" content="ru_RU">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="INTEGRALEUS — ИИ-агенты для бизнеса">
+<meta name="twitter:description" content="Создаём автономных ИИ-агентов для бизнеса и жизни. Персональные ассистенты, автоматизация, интеграция с АСУ ТП.">
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0f'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2300d4ff'/%3E%3Cstop offset='100%25' stop-color='%2300ffaa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='18' fill='url(%23g)'%3EIN%3C/text%3E%3C/svg%3E">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-card: rgba(255,255,255,0.03);
+  --accent1: #00d4ff;
+  --accent2: #00ffaa;
+  --text: #ffffff;
+  --text-dim: #b0b0c0;
+  --text-muted: #6a6a80;
+  --border: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-dim);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* Utility */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section base */
+section { padding: 100px 0; position: relative; }
+section::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.section-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  margin-bottom: 56px;
+  max-width: 560px;
+}
+
+/* Animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 18px 0;
+  background: rgba(10,10,15,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s;
+}
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+.logo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: var(--text);
+}
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--accent1); }
+.nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; gap: 0;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 16px 24px; display: block; border-top: 1px solid var(--border); }
+  .nav-toggle { display: block; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 80px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(rgba(10,10,15,0.55), rgba(10,10,15,0.70)), url('img/hero-ai.jpg') center/cover no-repeat;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%; left: 50%; transform: translateX(-50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+#hero-particles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero .container { position: relative; z-index: 1; }
+.hero-brand {
+  font-size: clamp(1.8rem, 6vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  word-break: break-word;
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+.hero-tagline {
+  font-size: clamp(1rem, 2.5vw, 1.45rem);
+  padding: 0 8px;
+  color: var(--text);
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+.hero-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding: 0 8px;
+  margin-bottom: 48px;
+}
+.btn {
+  display: inline-block;
+  padding: 16px 40px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,212,255,0.3);
+}
+
+/* ─── FEATURES (Что такое ИИ-агент) ─── */
+.about-layout {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  margin-bottom: 48px;
+}
+.about-text {
+  flex: 1;
+}
+.about-image {
+  flex: 0 0 320px;
+  position: relative;
+}
+.about-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 40px rgba(0,212,255,0.08);
+  display: block;
+}
+@media (max-width: 768px) {
+  .about-layout {
+    flex-direction: column-reverse;
+    gap: 32px;
+  }
+  .about-image {
+    flex: none;
+    width: 100%;
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.feature-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 36px 28px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,212,255,0.2);
+  box-shadow: 0 8px 40px rgba(0,212,255,0.06);
+}
+.feature-icon { font-size: 2.2rem; margin-bottom: 16px; display: block; }
+.feature-card h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 8px; font-weight: 600; }
+.feature-card p { font-size: 0.92rem; line-height: 1.6; }
+
+/* ─── SERVICES (Что мы делаем) — IMAGE CARDS ─── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.service-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.service-card:hover {
+  transform: scale(1.02);
+  border-color: rgba(0,255,170,0.25);
+  box-shadow: 0 8px 40px rgba(0,255,170,0.08);
+}
+.service-card-img {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+.service-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.service-card-img::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(10,10,15,0.7));
+  pointer-events: none;
+}
+.service-card-body {
+  padding: 24px 24px 28px;
+}
+.service-card-body p {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ─── ABOUT US (О нас) ─── */
+.about-us-layout {
+  display: flex;
+  gap: 48px;
+  align-items: center;
+}
+.about-us-image {
+  flex: 0 0 400px;
+}
+.about-us-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 40px rgba(0,212,255,0.08);
+  display: block;
+}
+.about-us-text {
+  flex: 1;
+}
+.about-us-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+.about-us-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+@media (max-width: 768px) {
+  .about-us-layout {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .about-us-image {
+    flex: none;
+    width: 100%;
+  }
+  .about-us-card {
+    padding: 24px;
+  }
+}
+
+/* ─── STATS (В цифрах) ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+.stat-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 40px 28px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,212,255,0.2);
+  box-shadow: 0 8px 40px rgba(0,212,255,0.06);
+}
+.stat-value {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 900;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.stat-label {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ─── PROCESS (Как это работает) ─── */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  position: relative;
+}
+.step {
+  text-align: center;
+  position: relative;
+}
+.step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--glass-border);
+  font-size: 1.3rem; font-weight: 700;
+  margin-bottom: 20px;
+  background: var(--glass);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.step:hover .step-num {
+  border-color: var(--accent1);
+  box-shadow: 0 0 24px rgba(0,212,255,0.15);
+}
+.step h3 { color: var(--text); font-size: 1rem; margin-bottom: 8px; font-weight: 600; }
+.step p { font-size: 0.88rem; }
+.step-arrow {
+  display: none;
+  position: absolute;
+  right: -20px; top: 28px;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+@media (min-width: 769px) {
+  .step-arrow { display: block; }
+  .step:last-child .step-arrow { display: none; }
+}
+
+/* ─── TECH ─── */
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tech-badge {
+  padding: 10px 22px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s, color 0.3s;
+}
+.tech-badge:hover {
+  border-color: rgba(0,212,255,0.25);
+  color: var(--accent1);
+}
+
+/* ─── FAQ ─── */
+.faq-list {
+  max-width: 740px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.faq-item {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.faq-item:hover {
+  border-color: rgba(0,212,255,0.15);
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  user-select: none;
+  transition: color 0.3s;
+}
+.faq-question:hover { color: var(--accent1); }
+.faq-toggle {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.faq-item.active .faq-toggle {
+  transform: rotate(45deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+}
+.faq-answer-inner {
+  padding: 0 24px 20px;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+.faq-item.active .faq-answer {
+  max-height: 300px;
+}
+
+/* ─── CONTACT ─── */
+.contact-section { text-align: center; }
+.contact-section .section-subtitle { margin-left: auto; margin-right: auto; }
+
+/* Contact Form */
+.contact-form {
+  max-width: 520px;
+  margin: 0 auto 32px;
+  text-align: left;
+}
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  resize: vertical;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: rgba(0,212,255,0.4);
+  box-shadow: 0 0 16px rgba(0,212,255,0.08);
+}
+.form-group textarea {
+  min-height: 120px;
+}
+.form-submit {
+  display: inline-block;
+  padding: 16px 40px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+.form-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,212,255,0.3);
+}
+.contact-alt {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 24px;
+}
+.contact-alt a {
+  color: var(--accent1);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.contact-alt a:hover {
+  color: var(--accent2);
+}
+
+/* ─── NEWS & REVIEWS GRID RESPONSIVE ─── */
+#news .reveal[style*="grid"], #reviews .reveal[style*="grid"] {
+  /* desktop handled by inline style */
+}
+@media (max-width: 768px) {
+  #news .reveal[style*="grid"],
+  #reviews .reveal[style*="grid"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* News card border-image fix for rounded corners */
+#news .reveal[style*="grid"] > div {
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(180deg, var(--accent1), var(--accent2)) 1;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  border-top: 1px solid var(--border);
+}
+footer p + p { margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <div class="logo gradient-text">INTEGRALEUS</div>
+    <button class="nav-toggle" aria-label="Меню">☰</button>
+    <ul class="nav-links">
+      <li><a href="#about">ИИ-агенты</a></li>
+      <li><a href="#services">Услуги</a></li>
+      <li><a href="#process">Процесс</a></li>
+      <li><a href="#tech">Технологии</a></li>
+      <li><a href="#contact">Контакты</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-particles"></canvas>
+  <div class="container">
+    <div class="hero-brand gradient-text">INTEGRALEUS</div>
+    <p class="hero-tagline">Создаём ИИ-агентов, которые работают за вас</p>
+    <p class="hero-sub">Автономные цифровые сотрудники для бизнеса и жизни</p>
+    <a href="#contact" class="btn">Обсудить проект</a>
+  </div>
+</section>
+
+<!-- ЧТО ТАКОЕ ИИ-АГЕНТ -->
+<section id="about">
+  <div class="container">
+    <div class="reveal">
+      <div class="about-layout">
+        <div class="about-text">
+          <h2 class="section-title">Что такое <span class="gradient-text">ИИ-агент?</span></h2>
+          <p class="section-subtitle">Это автономная программа на базе искусственного интеллекта, способная самостоятельно выполнять задачи, принимать решения и взаимодействовать с внешним миром.</p>
+        </div>
+        <div class="about-image">
+          <img src="img/robot.jpg" alt="Робот с искусственным интеллектом" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <h3>Автономность</h3>
+        <p>Агент сам принимает решения и выполняет задачи без постоянного контроля</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔄</span>
+        <h3>Непрерывная работа</h3>
+        <p>24/7 без перерывов, выходных и больничных</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🧠</span>
+        <h3>Обучаемость</h3>
+        <p>Адаптируется под ваши процессы и становится эффективнее со временем</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔗</span>
+        <h3>Интеграция</h3>
+        <p>Работает с вашими системами, API и инструментами</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ЧТО МЫ ДЕЛАЕМ -->
+<section id="services">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Что мы <span class="gradient-text">делаем</span></h2>
+      <p class="section-subtitle">Разрабатываем ИИ-агентов под конкретные задачи — от персональных ассистентов до промышленной автоматизации.</p>
+    </div>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="service-card-img">
+          <img src="img/chat.jpg" alt="Интерфейс чата с ИИ-ассистентом" loading="lazy">
+        </div>
+        <div class="service-card-body">
+          <p>Персональные ИИ-ассистенты для Telegram, WhatsApp и Discord</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-img">
+          <img src="img/servers.jpg" alt="Серверная комната для мониторинга" loading="lazy">
+        </div>
+        <div class="service-card-body">
+          <p>Агенты для мониторинга и автоматизации серверов</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-img">
+          <img src="img/business.jpg" alt="Бизнес-команда работает с ИИ" loading="lazy">
+        </div>
+        <div class="service-card-body">
+          <p>ИИ-агенты для бизнес-процессов — отчёты, аналитика, поддержка клиентов</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-img">
+          <img src="img/industrial.jpg" alt="Промышленные системы и АСУ ТП" loading="lazy">
+        </div>
+        <div class="service-card-body">
+          <p>Интеграция с АСУ ТП и промышленными системами</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-img">
+          <img src="img/code.jpg" alt="Программный код на экране" loading="lazy">
+        </div>
+        <div class="service-card-body">
+          <p>Разработка специализированных агентов под вашу уникальную задачу</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- В ЦИФРАХ -->
+<section id="stats">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">В <span class="gradient-text">цифрах</span></h2>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-card">
+        <div class="stat-value gradient-text">24/7</div>
+        <div class="stat-label">Агенты работают без перерывов</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value gradient-text">&lt; 2 нед</div>
+        <div class="stat-label">Среднее время разработки агента</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value gradient-text">99.9%</div>
+        <div class="stat-label">Uptime наших решений</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КАК ЭТО РАБОТАЕТ -->
+<section id="process">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Как это <span class="gradient-text">работает</span></h2>
+      <p class="section-subtitle">Четыре шага от идеи до работающего агента.</p>
+    </div>
+    <div class="process-steps reveal">
+      <div class="step">
+        <div class="step-num gradient-text">1</div>
+        <span class="step-arrow">→</span>
+        <h3>Обсуждаем задачу</h3>
+        <p>Разбираемся в ваших процессах и целях</p>
+      </div>
+      <div class="step">
+        <div class="step-num gradient-text">2</div>
+        <span class="step-arrow">→</span>
+        <h3>Проектируем агента</h3>
+        <p>Определяем архитектуру, инструменты и интеграции</p>
+      </div>
+      <div class="step">
+        <div class="step-num gradient-text">3</div>
+        <span class="step-arrow">→</span>
+        <h3>Разрабатываем и тестируем</h3>
+        <p>Создаём, обучаем и проверяем в реальных условиях</p>
+      </div>
+      <div class="step">
+        <div class="step-num gradient-text">4</div>
+        <h3>Запускаем и сопровождаем</h3>
+        <p>Деплой, мониторинг и постоянное улучшение</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ТЕХНОЛОГИИ -->
+<section id="tech">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title"><span class="gradient-text">Технологии</span></h2>
+      <p class="section-subtitle">Используем лучшие инструменты для создания надёжных и производительных агентов.</p>
+    </div>
+    <div class="tech-grid reveal">
+      <span class="tech-badge">Claude</span>
+      <span class="tech-badge">GPT</span>
+      <span class="tech-badge">Open-source LLM</span>
+      <span class="tech-badge">OpenClaw</span>
+      <span class="tech-badge">LangChain</span>
+      <span class="tech-badge">Custom Frameworks</span>
+      <span class="tech-badge">Python</span>
+      <span class="tech-badge">Node.js</span>
+      <span class="tech-badge">Docker</span>
+      <span class="tech-badge">OPC UA</span>
+      <span class="tech-badge">SCADA</span>
+      <span class="tech-badge">REST API</span>
+    </div>
+  </div>
+</section>
+
+<!-- О НАС -->
+<section id="about-us">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Мы — <span class="gradient-text">Integraleus</span></h2>
+    </div>
+    <div class="about-us-card reveal">
+      <div class="about-us-layout">
+        <div class="about-us-image">
+          <img src="img/team.jpg" alt="Команда Integraleus" loading="lazy">
+        </div>
+        <div class="about-us-text">
+          <p>Мы — команда инженеров и разработчиков, увлечённых искусственным интеллектом. Наша специализация — создание автономных ИИ-агентов, которые решают реальные задачи: от автоматизации бизнес-процессов до интеграции с промышленными системами.</p>
+          <p style="margin-top: 16px;">Мы верим, что ИИ-агенты — это не будущее, а настоящее. И мы делаем это настоящее доступным.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- НОВОСТИ -->
+<section id="news">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title"><span class="gradient-text">Новости</span></h2>
+      <p class="section-subtitle">Следим за развитием ИИ-технологий</p>
+    </div>
+    <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+      <!-- Card 1 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-left:3px solid transparent;border-image:linear-gradient(180deg,var(--accent1),var(--accent2)) 1;border-image-slice:1;border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;overflow:hidden;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <span style="position:absolute;top:16px;right:16px;padding:4px 12px;font-size:0.72rem;font-weight:600;color:var(--accent1);border:1px solid;border-image:linear-gradient(135deg,var(--accent1),var(--accent2)) 1;border-radius:20px;letter-spacing:0.03em;">Новое</span>
+        <span style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:12px;">10 марта 2026</span>
+        <h3 style="color:var(--text);font-size:1.1rem;font-weight:600;margin-bottom:10px;">Запуск Integraleus</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-dim);">Мы официально запустили наш сайт и начинаем принимать заявки на разработку ИИ-агентов. Первым клиентам — скидка 20% на все услуги.</p>
+      </div>
+      <!-- Card 2 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-left:3px solid transparent;border-image:linear-gradient(180deg,var(--accent1),var(--accent2)) 1;border-image-slice:1;border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;overflow:hidden;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <span style="position:absolute;top:16px;right:16px;padding:4px 12px;font-size:0.72rem;font-weight:600;color:var(--accent2);border:1px solid;border-image:linear-gradient(135deg,var(--accent2),var(--accent1)) 1;border-radius:20px;letter-spacing:0.03em;">Кейс</span>
+        <span style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:12px;">5 марта 2026</span>
+        <h3 style="color:var(--text);font-size:1.1rem;font-weight:600;margin-bottom:10px;">ИИ-агент для мониторинга серверов</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-dim);">Завершили разработку автономного агента, который следит за безопасностью серверов 24/7 — проверяет SSH, firewall, обновления и оповещает в Telegram.</p>
+      </div>
+      <!-- Card 3 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-left:3px solid transparent;border-image:linear-gradient(180deg,var(--accent1),var(--accent2)) 1;border-image-slice:1;border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:relative;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;overflow:hidden;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <span style="position:absolute;top:16px;right:16px;padding:4px 12px;font-size:0.72rem;font-weight:600;color:var(--accent1);border:1px solid;border-image:linear-gradient(135deg,var(--accent1),var(--accent2)) 1;border-radius:20px;letter-spacing:0.03em;">Разработка</span>
+        <span style="font-size:0.78rem;color:var(--text-muted);display:block;margin-bottom:12px;">28 февраля 2026</span>
+        <h3 style="color:var(--text);font-size:1.1rem;font-weight:600;margin-bottom:10px;">Интеграция с промышленными системами</h3>
+        <p style="font-size:0.92rem;line-height:1.6;color:var(--text-dim);">Начали работу над интеграцией ИИ-агентов с протоколом OPC UA для автоматизации АСУ ТП. Первые результаты — в ближайших публикациях.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ОТЗЫВЫ -->
+<section id="reviews">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Что говорят <span class="gradient-text">клиенты</span></h2>
+      <p class="section-subtitle">Отзывы наших партнёров</p>
+    </div>
+    <div class="reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+      <!-- Review 1 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform 0.3s,box-shadow 0.3s;position:relative;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.08)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#0a0a0f;flex-shrink:0;">АМ</div>
+          <div>
+            <div style="color:var(--text);font-weight:600;font-size:0.95rem;">Алексей М.</div>
+            <div style="color:var(--text-muted);font-size:0.82rem;">Логистическая компания</div>
+          </div>
+        </div>
+        <div style="color:#FFD700;font-size:1rem;margin-bottom:12px;letter-spacing:2px;">★★★★★</div>
+        <div style="position:relative;padding-left:4px;">
+          <span style="position:absolute;top:-8px;left:-4px;font-size:2.2rem;color:var(--text-muted);opacity:0.2;font-family:Georgia,serif;line-height:1;">„</span>
+          <p style="font-size:0.92rem;line-height:1.65;color:var(--text-dim);padding-left:16px;">Агент полностью заменил ночную смену мониторинга. Реагирует на инциденты за секунды, а не за часы. Экономия — более 200 000 ₽ в месяц.</p>
+        </div>
+      </div>
+      <!-- Review 2 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform 0.3s,box-shadow 0.3s;position:relative;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.08)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent1));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#0a0a0f;flex-shrink:0;">ДК</div>
+          <div>
+            <div style="color:var(--text);font-weight:600;font-size:0.95rem;">Дмитрий К.</div>
+            <div style="color:var(--text-muted);font-size:0.82rem;">IT-консалтинг</div>
+          </div>
+        </div>
+        <div style="color:#FFD700;font-size:1rem;margin-bottom:12px;letter-spacing:2px;">★★★★★</div>
+        <div style="position:relative;padding-left:4px;">
+          <span style="position:absolute;top:-8px;left:-4px;font-size:2.2rem;color:var(--text-muted);opacity:0.2;font-family:Georgia,serif;line-height:1;">„</span>
+          <p style="font-size:0.92rem;line-height:1.65;color:var(--text-dim);padding-left:16px;">Заказывали Telegram-бота для поддержки клиентов. Бот закрывает 80% типовых обращений без участия оператора. Окупился за первый месяц.</p>
+        </div>
+      </div>
+      <!-- Review 3 -->
+      <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:32px 24px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform 0.3s,box-shadow 0.3s;position:relative;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 8px 40px rgba(0,212,255,0.08)';" onmouseout="this.style.transform='';this.style.boxShadow='';">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#0a0a0f;flex-shrink:0;">ЕС</div>
+          <div>
+            <div style="color:var(--text);font-weight:600;font-size:0.95rem;">Елена С.</div>
+            <div style="color:var(--text-muted);font-size:0.82rem;">Производственный холдинг</div>
+          </div>
+        </div>
+        <div style="color:#FFD700;font-size:1rem;margin-bottom:12px;letter-spacing:2px;">★★★★★</div>
+        <div style="position:relative;padding-left:4px;">
+          <span style="position:absolute;top:-8px;left:-4px;font-size:2.2rem;color:var(--text-muted);opacity:0.2;font-family:Georgia,serif;line-height:1;">„</span>
+          <p style="font-size:0.92rem;line-height:1.65;color:var(--text-dim);padding-left:16px;">Интеграция с нашей SCADA-системой прошла гладко. Агент предупреждает о нештатных ситуациях раньше, чем их замечает оператор. Впечатляет.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ЧАСТЫЕ ВОПРОСЫ -->
+<section id="faq">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Частые <span class="gradient-text">вопросы</span></h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Сколько стоит разработка ИИ-агента?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Стоимость зависит от сложности задачи. Простой Telegram-бот — от 50 000 ₽. Комплексный агент с интеграциями — от 200 000 ₽. Напишите нам для точной оценки.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Сколько времени занимает разработка?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Простой агент — 1-2 недели. Средний проект — 2-4 недели. Сложные решения с интеграцией в существующую инфраструктуру — от 1 месяца.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Что нужно от меня для начала работы?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Описание задачи, которую должен решать агент. Доступы к системам для интеграции (если нужно). Всё остальное — на нас.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Вы поддерживаете агента после запуска?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Да, мы обеспечиваем мониторинг, обновления и техническую поддержку. Агент продолжает учиться и улучшаться.</div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Какие гарантии?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-inner">Мы работаем поэтапно с демонстрацией результатов. Оплата привязана к этапам. Если результат не устраивает — дорабатываем.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КОНТАКТЫ -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Напишите <span class="gradient-text">нам</span></h2>
+      <p class="section-subtitle">Обсудим вашу задачу и предложим решение.</p>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" id="contactForm" onsubmit="return submitForm(event)">
+        <div class="form-group">
+          <label for="name">Имя</label>
+          <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="message">Сообщение</label>
+          <textarea id="message" name="message" placeholder="Расскажите о вашей задаче..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="formBtn">Отправить</button>
+        <div id="formStatus" style="margin-top:12px;text-align:center;font-size:0.95rem;"></div>
+      </form>
+      <script>
+      function submitForm(e) {
+        e.preventDefault();
+        var btn = document.getElementById('formBtn');
+        var status = document.getElementById('formStatus');
+        var form = document.getElementById('contactForm');
+        btn.disabled = true;
+        btn.textContent = 'Отправка...';
+        status.textContent = '';
+        var data = new FormData(form);
+        fetch('/send_form.php', { method: 'POST', body: data })
+          .then(function(r) { return r.json(); })
+          .then(function(d) {
+            if (d.success) {
+              status.style.color = '#00ffaa';
+              status.textContent = '✅ Сообщение отправлено! Мы ответим в течение 24 часов.';
+              form.reset();
+            } else {
+              status.style.color = '#ff6b6b';
+              status.textContent = '❌ ' + (d.error || 'Ошибка отправки');
+            }
+            btn.disabled = false;
+            btn.textContent = 'Отправить';
+          })
+          .catch(function() {
+            status.style.color = '#ff6b6b';
+            status.textContent = '❌ Ошибка соединения. Напишите на mail@integraleus.ru';
+            btn.disabled = false;
+            btn.textContent = 'Отправить';
+          });
+        return false;
+      }
+      </script>
+      <p class="contact-alt">Или напишите напрямую: <a href="mailto:mail@integraleus.ru">mail@integraleus.ru</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>© 2026 Integraleus</p>
+    <p>Москва, Россия</p>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle
+document.querySelector('.nav-toggle').addEventListener('click', function() {
+  document.querySelector('.nav-links').classList.toggle('open');
+});
+
+// Close nav on link click
+document.querySelectorAll('.nav-links a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+
+// Scroll reveal
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(function(el) { observer.observe(el); });
+
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(function(q) {
+  q.addEventListener('click', function() {
+    var item = this.parentElement;
+    var wasActive = item.classList.contains('active');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(function(i) {
+      i.classList.remove('active');
+    });
+    // Toggle clicked
+    if (!wasActive) {
+      item.classList.add('active');
+    }
+  });
+});
+
+// Hero particles
+(function() {
+  var canvas = document.getElementById('hero-particles');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var count = 35;
+
+  function resize() {
+    var hero = canvas.parentElement;
+    canvas.width = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+  }
+
+  function createParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: canvas.height + Math.random() * 20,
+      r: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.4 + 0.15,
+      opacity: Math.random() * 0.12 + 0.04,
+      drift: (Math.random() - 0.5) * 0.3
+    };
+  }
+
+  function init() {
+    resize();
+    particles = [];
+    for (var i = 0; i < count; i++) {
+      var p = createParticle();
+      p.y = Math.random() * canvas.height;
+      particles.push(p);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,212,255,' + p.opacity + ')';
+      ctx.fill();
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.y < -10) {
+        particles[i] = createParticle();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  init();
+  draw();
+  window.addEventListener('resize', function() {
+    resize();
+  });
+})();
+</script>
+
+<!-- Замените 00000000 на ваш номер счётчика Яндекс.Метрики -->
+<script type="text/javascript">
+  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+  m[i].l=1*new Date();
+  for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+  (window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+  ym(00000000,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/00000000" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+
+<!-- CHAT WIDGET -->
+<style>
+/* ─── CHAT WIDGET ─── */
+.chat-widget-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #00ffaa);
+  border: none;
+  cursor: pointer;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0, 212, 255, 0.35);
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: chatPulse 1.5s ease-in-out 3;
+}
+.chat-widget-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 32px rgba(0, 212, 255, 0.5);
+}
+@keyframes chatPulse {
+  0%, 100% { box-shadow: 0 4px 24px rgba(0, 212, 255, 0.35); }
+  50% { box-shadow: 0 4px 40px rgba(0, 212, 255, 0.6), 0 0 60px rgba(0, 255, 170, 0.2); }
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 380px;
+  height: 500px;
+  z-index: 999;
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.5), 0 0 32px rgba(0, 212, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.85) translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.chat-window.open {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+.chat-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(15, 15, 25, 0.98), rgba(20, 20, 35, 0.95));
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.chat-header-dot {
+  color: #00ffaa;
+  font-size: 0.7rem;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.chat-msg {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  animation: chatMsgIn 0.3s ease;
+  white-space: pre-wrap;
+}
+@keyframes chatMsgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.chat-msg.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #00d4ff, #00ffaa);
+  color: #0a0a0f;
+  font-weight: 500;
+}
+.chat-msg.typing {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+}
+
+.chat-quick-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  animation: chatMsgIn 0.3s ease;
+}
+.chat-quick-btn {
+  padding: 8px 14px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  color: var(--accent1);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  font-family: inherit;
+}
+.chat-quick-btn:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--text);
+}
+
+.chat-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.chat-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+}
+.chat-input::placeholder { color: var(--text-muted); }
+.chat-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00d4ff, #00ffaa);
+  border: none;
+  color: #0a0a0f;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.chat-send-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+}
+
+@media (max-width: 480px) {
+  .chat-window {
+    width: calc(100% - 16px);
+    right: 8px;
+    bottom: 88px;
+    height: 70vh;
+  }
+  .chat-widget-btn {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+</style>
+
+<button class="chat-widget-btn" id="chatToggle" aria-label="Открыть чат">💬</button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    ✨ Integraleus AI <span class="chat-header-dot">●</span>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chatInput" type="text" placeholder="Напишите сообщение..." autocomplete="off">
+    <button class="chat-send-btn" id="chatSend" aria-label="Отправить">➤</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var isOpen = false;
+  var firstOpen = true;
+  var toggleBtn = document.getElementById('chatToggle');
+  var chatWin = document.getElementById('chatWindow');
+  var msgArea = document.getElementById('chatMessages');
+  var chatInput = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('chatSend');
+
+  function toggleChat() {
+    isOpen = !isOpen;
+    chatWin.classList.toggle('open', isOpen);
+    toggleBtn.textContent = isOpen ? '✕' : '💬';
+    if (isOpen && firstOpen) {
+      firstOpen = false;
+      showBotTyping(function() {
+        addBotMsg('Привет! 👋 Я ИИ-ассистент Integraleus. Чем могу помочь?');
+        showInitialButtons();
+      });
+    }
+    if (isOpen) chatInput.focus();
+  }
+
+  toggleBtn.addEventListener('click', toggleChat);
+
+  function scrollBottom() {
+    setTimeout(function() { msgArea.scrollTop = msgArea.scrollHeight; }, 50);
+  }
+
+  function addBotMsg(text) {
+    var div = document.createElement('div');
+    div.className = 'chat-msg bot';
+    div.textContent = text;
+    msgArea.appendChild(div);
+    scrollBottom();
+  }
+
+  function addUserMsg(text) {
+    var div = document.createElement('div');
+    div.className = 'chat-msg user';
+    div.textContent = text;
+    msgArea.appendChild(div);
+    scrollBottom();
+  }
+
+  function showBotTyping(cb) {
+    var div = document.createElement('div');
+    div.className = 'chat-msg typing';
+    div.textContent = '•••';
+    div.id = 'chatTyping';
+    msgArea.appendChild(div);
+    scrollBottom();
+    setTimeout(function() {
+      var t = document.getElementById('chatTyping');
+      if (t) t.remove();
+      cb();
+    }, 800);
+  }
+
+  function removeQuickBtns() {
+    var btns = msgArea.querySelectorAll('.chat-quick-btns');
+    btns.forEach(function(b) { b.remove(); });
+  }
+
+  function showButtons(labels) {
+    var wrap = document.createElement('div');
+    wrap.className = 'chat-quick-btns';
+    labels.forEach(function(label) {
+      var btn = document.createElement('button');
+      btn.className = 'chat-quick-btn';
+      btn.textContent = label;
+      btn.addEventListener('click', function() {
+        removeQuickBtns();
+        handleQuickBtn(label);
+      });
+      wrap.appendChild(btn);
+    });
+    msgArea.appendChild(wrap);
+    scrollBottom();
+  }
+
+  function showInitialButtons() {
+    showButtons(['Услуги и цены', 'Как это работает', 'Оставить заявку']);
+  }
+
+  function respondWithTyping(text, buttons) {
+    showBotTyping(function() {
+      addBotMsg(text);
+      if (buttons) showButtons(buttons);
+    });
+  }
+
+  function handleQuickBtn(label) {
+    addUserMsg(label);
+    if (label === 'Услуги и цены') {
+      respondWithTyping('Мы создаём ИИ-агентов под задачу:\n\n• Telegram/WhatsApp бот — от 50 000 ₽\n• Агент мониторинга серверов — от 100 000 ₽\n• Бизнес-автоматизация — от 200 000 ₽\n• Интеграция с АСУ ТП — индивидуально\n\nТочная стоимость зависит от задачи. Хотите обсудить ваш проект?', ['Да, обсудить', 'Другой вопрос']);
+    } else if (label === 'Как это работает') {
+      respondWithTyping('Всё просто:\n\n1️⃣ Обсуждаем вашу задачу\n2️⃣ Проектируем агента\n3️⃣ Разрабатываем и тестируем\n4️⃣ Запускаем и сопровождаем\n\nСреднее время — 1-4 недели. Хотите начать?', ['Оставить заявку', 'Ещё вопросы']);
+    } else if (label === 'Оставить заявку' || label === 'Да, обсудить') {
+      respondWithTyping('Отлично! Напишите нам на mail@integraleus.ru или заполните форму ниже на сайте 👇\n\nМы ответим в течение 24 часов.', ['Перейти к форме']);
+    } else if (label === 'Перейти к форме') {
+      isOpen = false;
+      chatWin.classList.remove('open');
+      toggleBtn.textContent = '💬';
+      var el = document.getElementById('contact');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (label === 'Другой вопрос' || label === 'Ещё вопросы') {
+      respondWithTyping('О чём хотите узнать?', ['Услуги и цены', 'Как это работает', 'Оставить заявку']);
+    }
+  }
+
+  function matchText(input) {
+    var t = input.toLowerCase();
+    if (/услуг|цен|стои|прайс/.test(t)) {
+      return { text: 'Мы создаём ИИ-агентов под задачу:\n\n• Telegram/WhatsApp бот — от 50 000 ₽\n• Агент мониторинга серверов — от 100 000 ₽\n• Бизнес-автоматизация — от 200 000 ₽\n• Интеграция с АСУ ТП — индивидуально\n\nТочная стоимость зависит от задачи. Хотите обсудить ваш проект?', buttons: ['Да, обсудить', 'Другой вопрос'] };
+    }
+    if (/работа|процесс|этап|как/.test(t)) {
+      return { text: 'Всё просто:\n\n1️⃣ Обсуждаем вашу задачу\n2️⃣ Проектируем агента\n3️⃣ Разрабатываем и тестируем\n4️⃣ Запускаем и сопровождаем\n\nСреднее время — 1-4 недели. Хотите начать?', buttons: ['Оставить заявку', 'Ещё вопросы'] };
+    }
+    if (/заявк|связ|контакт|написа|обсуд/.test(t)) {
+      return { text: 'Отлично! Напишите нам на mail@integraleus.ru или заполните форму ниже на сайте 👇\n\nМы ответим в течение 24 часов.', buttons: ['Перейти к форме'] };
+    }
+    if (/гарант/.test(t)) {
+      return { text: 'Мы работаем поэтапно с демонстрацией результатов. Оплата привязана к этапам. Если результат не устраивает — дорабатываем. Никаких скрытых платежей.', buttons: null };
+    }
+    if (/сроки|времени|долго|быстр/.test(t)) {
+      return { text: 'Простой агент — 1-2 недели. Средний проект — 2-4 недели. Сложные решения — от 1 месяца. Точнее скажем после обсуждения задачи.', buttons: null };
+    }
+    return { text: 'Интересный вопрос! Для подробного ответа лучше связаться с нами напрямую. Написать на mail@integraleus.ru?', buttons: ['Оставить заявку', 'Другой вопрос'] };
+  }
+
+  function sendMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    removeQuickBtns();
+    addUserMsg(text);
+    var resp = matchText(text);
+    respondWithTyping(resp.text, resp.buttons);
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
+  });
+})();
+</script>
+
+</body>
+</html>

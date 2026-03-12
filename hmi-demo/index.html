@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HMI Мнемосхемы — Установка подготовки нефти</title>
+<style>
+:root {
+  --bg-dark: #1a1a2e;
+  --bg-panel: #16213e;
+  --bg-card: #0f3460;
+  --accent: #00d4ff;
+  --green: #00e676;
+  --yellow: #ffc107;
+  --red: #ff1744;
+  --orange: #ff9100;
+  --text: #e0e0e0;
+  --text-dim: #8899aa;
+  --border: #2a3a5e;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  background: #0d1b2a;
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-btn {
+  flex: 1;
+  padding: 14px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-bottom: 3px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.nav-btn:hover { background: rgba(0,212,255,0.1); }
+.nav-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(0,212,255,0.05);
+}
+.nav-label { display: block; font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+/* Header bar */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: #0d1b2a;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.header-bar .plant-name { color: var(--accent); font-weight: 700; font-size: 14px; }
+.header-bar .clock { color: var(--yellow); font-family: 'Courier New', monospace; font-size: 14px; }
+
+/* Level containers */
+.level { display: none; padding: 16px; min-height: calc(100vh - 90px); }
+.level.active { display: block; }
+
+/* ============ LEVEL 1 ============ */
+.l1-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.unit-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+.unit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,212,255,0.15);
+}
+.unit-card .status-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  top: 16px; right: 16px;
+  box-shadow: 0 0 8px currentColor;
+}
+.unit-card h3 { font-size: 16px; color: var(--accent); margin-bottom: 4px; }
+.unit-card .unit-desc { font-size: 11px; color: var(--text-dim); margin-bottom: 12px; }
+.kpi-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+.kpi-row:last-child { border-bottom: none; }
+.kpi-label { color: var(--text-dim); }
+.kpi-value { font-weight: 700; font-family: 'Courier New', monospace; }
+.load-bar-container {
+  margin-top: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+}
+.load-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s ease;
+}
+.load-label { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+
+/* Alarm banner */
+.alarm-banner {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.alarm-banner h4 { font-size: 13px; color: var(--text-dim); margin-bottom: 8px; }
+.alarm-summary { display: flex; gap: 16px; margin-bottom: 10px; }
+.alarm-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.alarm-badge.critical { background: rgba(255,23,68,0.2); color: var(--red); border: 1px solid var(--red); }
+.alarm-badge.high { background: rgba(255,145,0,0.2); color: var(--orange); border: 1px solid var(--orange); }
+.alarm-badge.medium { background: rgba(255,193,7,0.2); color: var(--yellow); border: 1px solid var(--yellow); }
+.alarm-badge.low { background: rgba(0,230,118,0.2); color: var(--green); border: 1px solid var(--green); }
+.alarm-list { font-size: 12px; }
+.alarm-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.alarm-item .alarm-pri {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.alarm-item .alarm-time { color: var(--text-dim); font-family: 'Courier New', monospace; min-width: 50px; }
+.alarm-item .alarm-tag { color: var(--accent); min-width: 70px; }
+
+/* ============ LEVEL 2 ============ */
+.l2-container { display: flex; gap: 16px; height: calc(100vh - 120px); }
+.l2-schematic {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.l2-schematic canvas { width: 100%; height: 100%; }
+.l2-faceplates {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+.faceplate {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  flex-shrink: 0;
+}
+.faceplate .fp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.faceplate .fp-tag { font-size: 13px; font-weight: 700; color: var(--accent); }
+.faceplate .fp-mode {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.fp-mode.auto { background: rgba(0,230,118,0.2); color: var(--green); }
+.fp-mode.man { background: rgba(255,145,0,0.2); color: var(--orange); }
+.fp-mode.cas { background: rgba(0,212,255,0.2); color: var(--accent); }
+.faceplate .fp-desc { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; }
+.fp-params { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.fp-param {
+  text-align: center;
+  padding: 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+.fp-param-label { font-size: 9px; color: var(--text-dim); }
+.fp-param-value { font-size: 14px; font-weight: 700; font-family: 'Courier New', monospace; }
+.fp-bar-container {
+  margin-top: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  position: relative;
+}
+.fp-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s;
+}
+.fp-sp-marker {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 10px;
+  background: white;
+  border-radius: 1px;
+}
+
+/* ============ LEVEL 3 ============ */
+.l3-container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.l3-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.l3-panel h4 {
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.l3-param-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.l3-param-box {
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+}
+.l3-param-box .param-tag { font-size: 10px; color: var(--text-dim); }
+.l3-param-box .param-name { font-size: 10px; color: var(--text-dim); margin-bottom: 4px; }
+.l3-param-box .param-val {
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+.l3-param-box .param-unit { font-size: 10px; color: var(--text-dim); }
+
+/* Bargraph */
+.bargraph {
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+  margin-top: 8px;
+  padding: 0 4px;
+}
+.bargraph-bar-wrap {
+  width: 40px;
+  height: 100%;
+  position: relative;
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bargraph-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 4px;
+  transition: height 1s ease;
+}
+.bargraph-limit {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  left: 0;
+  z-index: 2;
+}
+.bargraph-limit::after {
+  content: attr(data-label);
+  position: absolute;
+  right: -30px;
+  top: -6px;
+  font-size: 8px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.bargraph-limit.hh { border-top: 2px dashed var(--red); }
+.bargraph-limit.h { border-top: 1px dashed var(--orange); }
+.bargraph-limit.sp { border-top: 2px solid var(--green); }
+.bargraph-limit.l { border-top: 1px dashed var(--orange); }
+.bargraph-limit.ll { border-top: 2px dashed var(--red); }
+
+/* Interlock table */
+.interlock-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.interlock-table th {
+  text-align: left;
+  padding: 6px 8px;
+  background: rgba(0,0,0,0.3);
+  color: var(--text-dim);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.interlock-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.interlock-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+}
+.interlock-status.ok { background: rgba(0,230,118,0.15); color: var(--green); }
+.interlock-status.trip { background: rgba(255,23,68,0.15); color: var(--red); animation: blink 0.8s infinite; }
+.interlock-status.bypass { background: rgba(255,193,7,0.15); color: var(--yellow); }
+
+/* ============ LEVEL 4 ============ */
+.l4-container { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; }
+.l4-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.l4-panel h4 {
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.trend-canvas { width: 100%; height: 200px; border-radius: 4px; }
+.diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.diag-item {
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+  padding: 8px;
+}
+.diag-item .d-label { font-size: 10px; color: var(--text-dim); }
+.diag-item .d-value { font-size: 13px; font-weight: 600; font-family: 'Courier New', monospace; }
+
+.event-log {
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+.event-item {
+  display: flex;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+.event-time { color: var(--text-dim); font-family: 'Courier New', monospace; min-width: 60px; flex-shrink: 0; }
+.event-type {
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.event-type.alarm { background: rgba(255,23,68,0.2); color: var(--red); }
+.event-type.info { background: rgba(0,212,255,0.2); color: var(--accent); }
+.event-type.warn { background: rgba(255,193,7,0.2); color: var(--yellow); }
+.event-type.oper { background: rgba(0,230,118,0.2); color: var(--green); }
+
+/* Animations */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 4px var(--green); }
+  50% { box-shadow: 0 0 12px var(--green); }
+}
+
+/* Tooltip */
+.tooltip {
+  display: none;
+  position: absolute;
+  background: #0d1b2a;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 11px;
+  z-index: 200;
+  max-width: 200px;
+  pointer-events: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Responsive */
+@media (max-width: 800px) {
+  .l2-container { flex-direction: column; height: auto; }
+  .l2-faceplates { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .faceplate { min-width: 200px; flex: 1; }
+  .l3-container, .l4-container { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header-bar">
+  <span class="plant-name">⛽ УПН «Установка подготовки нефти» — Куст 7</span>
+  <span style="color:var(--text-dim)">Оператор: <b style="color:var(--text)">Иванов А.С.</b> &nbsp; Смена: <b style="color:var(--green)">Б</b></span>
+  <span class="clock" id="clock">--:--:--</span>
+</div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showLevel(1)">
+    Level 1
+    <span class="nav-label">Обзор установки</span>
+  </button>
+  <button class="nav-btn" onclick="showLevel(2)">
+    Level 2
+    <span class="nav-label">Unit Control</span>
+  </button>
+  <button class="nav-btn" onclick="showLevel(3)">
+    Level 3
+    <span class="nav-label">Оборудование V-101</span>
+  </button>
+  <button class="nav-btn" onclick="showLevel(4)">
+    Level 4
+    <span class="nav-label">Диагностика</span>
+  </button>
+</nav>
+
+<!-- ===================== LEVEL 1 ===================== -->
+<div class="level active" id="level-1">
+  <div class="l1-grid" id="unit-cards"></div>
+  <div class="alarm-banner">
+    <h4>⚠️ АКТИВНЫЕ АВАРИЙНЫЕ СООБЩЕНИЯ</h4>
+    <div class="alarm-summary" id="alarm-summary"></div>
+    <div class="alarm-list" id="alarm-list"></div>
+  </div>
+</div>
+
+<!-- ===================== LEVEL 2 ===================== -->
+<div class="level" id="level-2">
+  <div class="l2-container">
+    <div class="l2-schematic">
+      <canvas id="l2-canvas"></canvas>
+    </div>
+    <div class="l2-faceplates" id="faceplates"></div>
+  </div>
+</div>
+
+<!-- ===================== LEVEL 3 ===================== -->
+<div class="level" id="level-3">
+  <div style="text-align:center;margin-bottom:12px;">
+    <span style="font-size:18px;font-weight:700;color:var(--accent)">V-101 — Нефтегазовый сепаратор (1-я ступень)</span>
+    <span style="font-size:12px;color:var(--text-dim);margin-left:12px;">P<sub>раб</sub>=0.6 МПа &nbsp; T<sub>раб</sub>=45°C &nbsp; V=25 м³</span>
+  </div>
+  <div class="l3-container">
+    <div class="l3-panel">
+      <h4>📊 Параметры процесса</h4>
+      <div class="l3-param-grid" id="l3-params"></div>
+    </div>
+    <div class="l3-panel">
+      <h4>📊 Баргафы с уставками</h4>
+      <div style="display:flex;gap:24px;justify-content:center;" id="l3-bargraphs"></div>
+    </div>
+    <div class="l3-panel">
+      <h4>🔄 Контуры регулирования</h4>
+      <div id="l3-loops"></div>
+    </div>
+    <div class="l3-panel">
+      <h4>🛡️ Интерлоки SIS</h4>
+      <table class="interlock-table" id="l3-interlocks">
+        <thead>
+          <tr><th>Тег</th><th>Описание</th><th>Уставка</th><th>Текущее</th><th>Статус</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LEVEL 4 ===================== -->
+<div class="level" id="level-4">
+  <div style="text-align:center;margin-bottom:12px;">
+    <span style="font-size:18px;font-weight:700;color:var(--accent)">Диагностика: LT-101 / PT-101</span>
+  </div>
+  <div class="l4-container">
+    <div class="l4-panel">
+      <h4>📈 Тренд LT-101 (Уровень) — 24 часа</h4>
+      <canvas class="trend-canvas" id="trend-lt101"></canvas>
+    </div>
+    <div class="l4-panel">
+      <h4>📈 Тренд PT-101 (Давление) — 24 часа</h4>
+      <canvas class="trend-canvas" id="trend-pt101"></canvas>
+    </div>
+    <div class="l4-panel">
+      <h4>🔧 Диагностика LT-101 — Rosemount 5300</h4>
+      <div class="diag-grid" id="diag-lt101"></div>
+    </div>
+    <div class="l4-panel">
+      <h4>🔧 Диагностика PT-101 — Yokogawa EJA530E</h4>
+      <div class="diag-grid" id="diag-pt101"></div>
+    </div>
+    <div class="l4-panel" style="grid-column: 1 / -1;">
+      <h4>📋 Журнал событий — последние 12 часов</h4>
+      <div class="event-log" id="event-log"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// =============== UTILITIES ===============
+function showLevel(n) {
+  document.querySelectorAll('.level').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('level-' + n).classList.add('active');
+  document.querySelectorAll('.nav-btn')[n - 1].classList.add('active');
+  if (n === 2) initL2Canvas();
+  if (n === 4) { drawTrend('trend-lt101', trendDataLT, 'Уровень, %', 0, 100, {hh:90,h:80,sp:50,l:20,ll:10}); drawTrend('trend-pt101', trendDataPT, 'Давление, МПа', 0, 1.0, {hh:0.75,h:0.65,sp:0.6}); }
+}
+
+function rand(min, max) { return min + Math.random() * (max - min); }
+function jitter(val, pct) { return val * (1 + (Math.random() - 0.5) * 2 * pct / 100); }
+
+// Clock
+function updateClock() {
+  const d = new Date();
+  document.getElementById('clock').textContent = d.toLocaleTimeString('ru-RU');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// =============== LEVEL 1 DATA ===============
+const units = [
+  {
+    id: 'U-100', name: 'Unit 100 — Сепарация', desc: 'Трёхфазная сепарация нефти, газа и воды',
+    status: 'green',
+    kpis: [
+      { label: 'Расход нефти', value: 285, unit: 'м³/ч', color: '#00e676' },
+      { label: 'Давление сеп.', value: 0.62, unit: 'МПа', color: '#00d4ff' },
+      { label: 'Уровень V-101', value: 52, unit: '%', color: '#00d4ff' }
+    ],
+    load: 78
+  },
+  {
+    id: 'U-200', name: 'Unit 200 — Нагрев', desc: 'Печи и теплообменники подогрева нефти',
+    status: 'yellow',
+    kpis: [
+      { label: 'Темп. на выходе', value: 65, unit: '°C', color: '#ffc107' },
+      { label: 'Расход топ. газа', value: 120, unit: 'нм³/ч', color: '#00d4ff' },
+      { label: 'Давление топлива', value: 0.18, unit: 'МПа', color: '#00e676' }
+    ],
+    load: 92
+  },
+  {
+    id: 'U-300', name: 'Unit 300 — Обессоливание', desc: 'Электродегидраторы, промывка',
+    status: 'green',
+    kpis: [
+      { label: 'Содержание солей', value: 18, unit: 'мг/л', color: '#00e676' },
+      { label: 'Расход пресн. воды', value: 12, unit: 'м³/ч', color: '#00d4ff' },
+      { label: 'Напряжение ЭДГ', value: 22.5, unit: 'кВ', color: '#00d4ff' }
+    ],
+    load: 65
+  },
+  {
+    id: 'U-400', name: 'Unit 400 — Стабилизация', desc: 'Колонна стабилизации, конденсация',
+    status: 'red',
+    kpis: [
+      { label: 'Давление верха', value: 0.45, unit: 'МПа', color: '#ff1744' },
+      { label: 'Темп. низа', value: 142, unit: '°C', color: '#00d4ff' },
+      { label: 'Уровень куба', value: 88, unit: '%', color: '#ff9100' }
+    ],
+    load: 95
+  }
+];
+
+const alarms = [
+  { time: '11:42', tag: 'LT-401', desc: 'Высокий уровень куба K-401', pri: 'critical' },
+  { time: '11:38', tag: 'PT-401', desc: 'Давление верха K-401 ниже нормы', pri: 'critical' },
+  { time: '11:15', tag: 'TT-201', desc: 'Темп. на выходе печи Н-201 выше уставки H', pri: 'high' },
+  { time: '10:52', tag: 'FT-101', desc: 'Расход нефти отклонение от уставки >5%', pri: 'medium' },
+  { time: '10:30', tag: 'AT-301', desc: 'Содержание солей приближается к уставке', pri: 'low' },
+  { time: '09:45', tag: 'PT-102', desc: 'Давление газа сепарации — отклонение', pri: 'medium' },
+];
+
+function renderL1() {
+  const grid = document.getElementById('unit-cards');
+  grid.innerHTML = units.map(u => {
+    const statusColor = u.status === 'green' ? 'var(--green)' : u.status === 'yellow' ? 'var(--yellow)' : 'var(--red)';
+    const loadColor = u.load > 90 ? 'var(--red)' : u.load > 75 ? 'var(--yellow)' : 'var(--green)';
+    return `
+      <div class="unit-card" onclick="showLevel(2)">
+        <div class="status-dot" style="color:${statusColor};background:${statusColor};"></div>
+        <h3>${u.name}</h3>
+        <div class="unit-desc">${u.desc}</div>
+        ${u.kpis.map(k => `
+          <div class="kpi-row">
+            <span class="kpi-label">${k.label}</span>
+            <span class="kpi-value" style="color:${k.color}">${k.value} <small style="color:var(--text-dim)">${k.unit}</small></span>
+          </div>
+        `).join('')}
+        <div class="load-bar-container">
+          <div class="load-bar" style="width:${u.load}%;background:${loadColor};"></div>
+        </div>
+        <div class="load-label">Загрузка: ${u.load}%</div>
+      </div>
+    `;
+  }).join('');
+
+  // Alarm summary
+  const counts = { critical: 0, high: 0, medium: 0, low: 0 };
+  alarms.forEach(a => counts[a.pri]++);
+  document.getElementById('alarm-summary').innerHTML = `
+    <span class="alarm-badge critical">🔴 Критические: ${counts.critical}</span>
+    <span class="alarm-badge high">🟠 Высокие: ${counts.high}</span>
+    <span class="alarm-badge medium">🟡 Средние: ${counts.medium}</span>
+    <span class="alarm-badge low">🟢 Низкие: ${counts.low}</span>
+  `;
+  document.getElementById('alarm-list').innerHTML = alarms.map(a => {
+    const color = a.pri === 'critical' ? 'var(--red)' : a.pri === 'high' ? 'var(--orange)' : a.pri === 'medium' ? 'var(--yellow)' : 'var(--green)';
+    return `
+      <div class="alarm-item" ${a.pri === 'critical' ? 'style="animation:blink 1s infinite"' : ''}>
+        <span class="alarm-pri" style="background:${color}"></span>
+        <span class="alarm-time">${a.time}</span>
+        <span class="alarm-tag">${a.tag}</span>
+        <span>${a.desc}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// =============== LEVEL 2 ===============
+const faceplates = [
+  { tag: 'FIC-101', desc: 'Расход нефти на вход V-101', mode: 'auto', pv: 285, sp: 280, out: 62, unit: 'м³/ч', range: [0, 400] },
+  { tag: 'LIC-101', desc: 'Уровень нефти в V-101', mode: 'auto', pv: 52, sp: 50, out: 45, unit: '%', range: [0, 100] },
+  { tag: 'PIC-101', desc: 'Давление в V-101', mode: 'cas', pv: 0.62, sp: 0.60, out: 38, unit: 'МПа', range: [0, 1.0] },
+  { tag: 'TIC-101', desc: 'Температура нефти после Н-101', mode: 'auto', pv: 44.5, sp: 45.0, out: 72, unit: '°C', range: [0, 100] },
+  { tag: 'LIC-102', desc: 'Уровень воды в V-101', mode: 'man', pv: 18, sp: 15, out: 30, unit: '%', range: [0, 100] },
+  { tag: 'FIC-102', desc: 'Расход газа из V-101', mode: 'auto', pv: 1850, sp: 1800, out: 55, unit: 'нм³/ч', range: [0, 3000] },
+];
+
+function renderFaceplates() {
+  const container = document.getElementById('faceplates');
+  container.innerHTML = faceplates.map((f, i) => {
+    const pvPct = ((f.pv - f.range[0]) / (f.range[1] - f.range[0]) * 100).toFixed(0);
+    const spPct = ((f.sp - f.range[0]) / (f.range[1] - f.range[0]) * 100).toFixed(0);
+    const barColor = Math.abs(f.pv - f.sp) / f.sp > 0.05 ? 'var(--yellow)' : 'var(--green)';
+    return `
+      <div class="faceplate">
+        <div class="fp-header">
+          <span class="fp-tag">${f.tag}</span>
+          <span class="fp-mode ${f.mode}">${f.mode.toUpperCase()}</span>
+        </div>
+        <div class="fp-desc">${f.desc}</div>
+        <div class="fp-params">
+          <div class="fp-param">
+            <div class="fp-param-label">PV</div>
+            <div class="fp-param-value" style="color:var(--green)" id="fp-pv-${i}">${f.pv}</div>
+          </div>
+          <div class="fp-param">
+            <div class="fp-param-label">SP</div>
+            <div class="fp-param-value" style="color:var(--accent)">${f.sp}</div>
+          </div>
+          <div class="fp-param">
+            <div class="fp-param-label">OUT%</div>
+            <div class="fp-param-value" id="fp-out-${i}">${f.out}</div>
+          </div>
+        </div>
+        <div class="fp-bar-container">
+          <div class="fp-bar" style="width:${pvPct}%;background:${barColor}" id="fp-bar-${i}"></div>
+          <div class="fp-sp-marker" style="left:${spPct}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// L2 Canvas — animated P&ID
+let l2Anim;
+function initL2Canvas() {
+  const canvas = document.getElementById('l2-canvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+  const ctx = canvas.getContext('2d');
+  let t = 0;
+
+  if (l2Anim) cancelAnimationFrame(l2Anim);
+
+  function draw() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    t += 0.02;
+
+    // Scale factors
+    const sx = W / 900, sy = H / 500;
+
+    ctx.save();
+    ctx.scale(sx, sy);
+
+    // Background grid
+    ctx.strokeStyle = 'rgba(42,58,94,0.3)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < 900; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 500); ctx.stroke(); }
+    for (let y = 0; y < 500; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(900, y); ctx.stroke(); }
+
+    // Title
+    ctx.font = 'bold 16px Segoe UI';
+    ctx.fillStyle = '#00d4ff';
+    ctx.fillText('Unit 100 — Сепарация нефти (1-я ступень)', 20, 30);
+
+    // ---- PIPES (animated flow) ----
+    function drawPipe(points, color, flowDir) {
+      ctx.strokeStyle = color || '#446688';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(points[0][0], points[0][1]);
+      for (let i = 1; i < points.length; i++) ctx.lineTo(points[i][0], points[i][1]);
+      ctx.stroke();
+
+      // Flow arrows
+      ctx.fillStyle = color || '#446688';
+      const totalLen = [];
+      let cumLen = 0;
+      for (let i = 1; i < points.length; i++) {
+        const dx = points[i][0] - points[i-1][0], dy = points[i][1] - points[i-1][1];
+        cumLen += Math.sqrt(dx*dx + dy*dy);
+        totalLen.push(cumLen);
+      }
+      const numArrows = 3;
+      for (let a = 0; a < numArrows; a++) {
+        let pos = ((t * 30 * flowDir + a * cumLen / numArrows) % cumLen + cumLen) % cumLen;
+        let seg = 0;
+        while (seg < totalLen.length - 1 && totalLen[seg] < pos) seg++;
+        const prevLen = seg > 0 ? totalLen[seg - 1] : 0;
+        const segLen = totalLen[seg] - prevLen;
+        const frac = (pos - prevLen) / segLen;
+        const px = points[seg][0] + (points[seg+1][0] - points[seg][0]) * frac;
+        const py = points[seg][1] + (points[seg+1][1] - points[seg][1]) * frac;
+        const angle = Math.atan2(points[seg+1][1] - points[seg][1], points[seg+1][0] - points[seg][0]);
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(6, 0);
+        ctx.lineTo(-4, -3);
+        ctx.lineTo(-4, 3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Input pipe (from left)
+    drawPipe([[0, 220], [100, 220], [160, 220]], '#8BC34A', 1);
+    // Pipe to heater
+    drawPipe([[160, 220], [220, 220]], '#8BC34A', 1);
+    // Heater to separator
+    drawPipe([[320, 220], [420, 220]], '#FF9800', 1);
+    // Oil out (bottom)
+    drawPipe([[560, 300], [560, 380], [700, 380], [850, 380]], '#8BC34A', 1);
+    // Water out
+    drawPipe([[500, 340], [500, 430], [700, 430], [850, 430]], '#2196F3', 1);
+    // Gas out (top)
+    drawPipe([[520, 140], [520, 80], [700, 80], [850, 80]], '#FFC107', 1);
+
+    // ---- HEATER (H-101) ----
+    ctx.fillStyle = '#2a1a0a';
+    ctx.strokeStyle = '#FF5722';
+    ctx.lineWidth = 2;
+    // Heater body
+    const hx = 220, hy = 180;
+    ctx.fillRect(hx, hy, 100, 80);
+    ctx.strokeRect(hx, hy, 100, 80);
+    // Flames
+    for (let i = 0; i < 5; i++) {
+      const fx = hx + 15 + i * 18;
+      const fh = 15 + Math.sin(t * 3 + i) * 8;
+      ctx.fillStyle = `hsl(${25 + Math.sin(t*2+i)*15}, 100%, ${55 + Math.sin(t*4+i)*10}%)`;
+      ctx.beginPath();
+      ctx.moveTo(fx - 5, hy + 75);
+      ctx.quadraticCurveTo(fx, hy + 75 - fh, fx + 5, hy + 75);
+      ctx.fill();
+    }
+    ctx.font = 'bold 11px Segoe UI';
+    ctx.fillStyle = '#FF9800';
+    ctx.fillText('Н-101', hx + 25, hy + 50);
+    ctx.font = '9px Segoe UI';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('Печь', hx + 32, hy + 62);
+
+    // ---- SEPARATOR (V-101) ----
+    const vx = 420, vy = 120, vw = 180, vh = 230;
+    // Body
+    ctx.fillStyle = '#1a2a4a';
+    ctx.strokeStyle = '#4488aa';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(vx + 20, vy);
+    ctx.lineTo(vx + vw - 20, vy);
+    ctx.quadraticCurveTo(vx + vw, vy, vx + vw, vy + 20);
+    ctx.lineTo(vx + vw, vy + vh - 20);
+    ctx.quadraticCurveTo(vx + vw, vy + vh, vx + vw - 20, vy + vh);
+    ctx.lineTo(vx + 20, vy + vh);
+    ctx.quadraticCurveTo(vx, vy + vh, vx, vy + vh - 20);
+    ctx.lineTo(vx, vy + 20);
+    ctx.quadraticCurveTo(vx, vy, vx + 20, vy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    // Water level (bottom 25%)
+    const waterH = vh * 0.20;
+    ctx.fillStyle = 'rgba(33,150,243,0.3)';
+    ctx.fillRect(vx + 3, vy + vh - waterH - 3, vw - 6, waterH);
+
+    // Oil level (middle ~35%)
+    const oilH = vh * 0.35;
+    ctx.fillStyle = 'rgba(139,195,74,0.2)';
+    ctx.fillRect(vx + 3, vy + vh - waterH - oilH - 3, vw - 6, oilH);
+
+    // Gas space (top) — bubbles
+    for (let i = 0; i < 12; i++) {
+      const bx = vx + 20 + (i % 4) * 40 + Math.sin(t * 2 + i) * 8;
+      const by = vy + vh - waterH - oilH - 10 - ((t * 20 + i * 30) % (vh - waterH - oilH - 20));
+      const br = 2 + Math.sin(t + i) * 1;
+      ctx.beginPath();
+      ctx.arc(bx, by, br, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,193,7,${0.3 + Math.sin(t + i) * 0.15})`;
+      ctx.fill();
+    }
+
+    ctx.font = 'bold 13px Segoe UI';
+    ctx.fillStyle = '#00d4ff';
+    ctx.fillText('V-101', vx + 60, vy + 25);
+    ctx.font = '9px Segoe UI';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('Сепаратор', vx + 55, vy + 38);
+    ctx.fillText('1-я ступень', vx + 52, vy + 50);
+
+    // Labels on phases
+    ctx.font = '9px Segoe UI';
+    ctx.fillStyle = '#FFC107';
+    ctx.fillText('ГАЗ', vx + 80, vy + 75);
+    ctx.fillStyle = '#8BC34A';
+    ctx.fillText('НЕФТЬ', vx + 75, vy + vh - waterH - oilH/2);
+    ctx.fillStyle = '#2196F3';
+    ctx.fillText('ВОДА', vx + 78, vy + vh - waterH/2);
+
+    // ---- PUMP (P-101) on oil outlet ----
+    const px = 640, py = 365;
+    ctx.save();
+    ctx.translate(px, py);
+    // Pump body
+    ctx.beginPath();
+    ctx.arc(0, 0, 18, 0, Math.PI * 2);
+    ctx.fillStyle = '#1a2a4a';
+    ctx.strokeStyle = '#4488aa';
+    ctx.lineWidth = 2;
+    ctx.fill();
+    ctx.stroke();
+    // Rotating impeller
+    ctx.save();
+    ctx.rotate(t * 3);
+    ctx.strokeStyle = '#00d4ff';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 4; i++) {
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(Math.cos(i * Math.PI / 2) * 13, Math.sin(i * Math.PI / 2) * 13);
+      ctx.stroke();
+    }
+    ctx.restore();
+    ctx.restore();
+
+    ctx.font = '9px Segoe UI';
+    ctx.fillStyle = '#00d4ff';
+    ctx.fillText('P-101', px - 12, py + 30);
+
+    // ---- INSTRUMENT TAGS ----
+    function drawTag(x, y, tag, value, unit) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.strokeStyle = 'rgba(0,212,255,0.5)';
+      ctx.lineWidth = 1;
+      const tw = 72, th = 28;
+      ctx.fillRect(x, y, tw, th);
+      ctx.strokeRect(x, y, tw, th);
+      ctx.font = 'bold 9px Courier New';
+      ctx.fillStyle = '#00d4ff';
+      ctx.fillText(tag, x + 4, y + 11);
+      ctx.font = 'bold 11px Courier New';
+      ctx.fillStyle = '#00e676';
+      ctx.fillText(value + ' ' + unit, x + 4, y + 23);
+    }
+
+    drawTag(90, 180, 'FT-101', (285 + Math.sin(t) * 3).toFixed(1), 'м³/ч');
+    drawTag(330, 160, 'TT-101', (44.5 + Math.sin(t*0.7) * 0.5).toFixed(1), '°C');
+    drawTag(620, 100, 'PT-101', (0.62 + Math.sin(t*0.5) * 0.01).toFixed(2), 'МПа');
+    drawTag(430, vy + vh + 10, 'LT-101', (52 + Math.sin(t*0.3) * 2).toFixed(1), '%');
+    drawTag(710, 60, 'FT-102', (1850 + Math.sin(t*0.8) * 30).toFixed(0), 'нм³/ч');
+
+    // Output labels
+    ctx.font = 'bold 10px Segoe UI';
+    ctx.fillStyle = '#8BC34A';
+    ctx.fillText('→ Нефть на нагрев', 750, 375);
+    ctx.fillStyle = '#2196F3';
+    ctx.fillText('→ Вода на КОС', 755, 425);
+    ctx.fillStyle = '#FFC107';
+    ctx.fillText('→ Газ на ГПЗ', 765, 75);
+    ctx.fillStyle = '#8BC34A';
+    ctx.fillText('Сырая нефть →', 5, 215);
+
+    // Control valve symbol on gas line
+    const cvx = 650, cvy = 80;
+    ctx.save();
+    ctx.translate(cvx, cvy);
+    ctx.strokeStyle = '#4488aa';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-10, -8); ctx.lineTo(10, 0); ctx.lineTo(-10, 8); ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(10, -8); ctx.lineTo(-10, 0); ctx.lineTo(10, 8); ctx.closePath();
+    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -8); ctx.lineTo(0, -18); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, -24, 6, 0, Math.PI*2); ctx.stroke();
+    ctx.restore();
+    ctx.font = '8px Segoe UI';
+    ctx.fillStyle = '#aaa';
+    ctx.fillText('CV-101', cvx - 14, cvy + 16);
+
+    ctx.restore();
+    l2Anim = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// =============== LEVEL 3 ===============
+const l3Params = [
+  { tag: 'PT-101', name: 'Давление', val: 0.62, unit: 'МПа', color: 'var(--green)' },
+  { tag: 'TT-101A', name: 'Темп. нефти', val: 44.5, unit: '°C', color: 'var(--green)' },
+  { tag: 'TT-101B', name: 'Темп. газа', val: 42.1, unit: '°C', color: 'var(--green)' },
+  { tag: 'LT-101', name: 'Уровень нефти', val: 52, unit: '%', color: 'var(--green)' },
+  { tag: 'LT-102', name: 'Уровень воды', val: 18, unit: '%', color: 'var(--accent)' },
+  { tag: 'FT-101', name: 'Расход входной', val: 285, unit: 'м³/ч', color: 'var(--green)' },
+  { tag: 'FT-102', name: 'Расход газа', val: 1850, unit: 'нм³/ч', color: 'var(--green)' },
+  { tag: 'FT-103', name: 'Расход воды', val: 42, unit: 'м³/ч', color: 'var(--accent)' },
+];
+
+function renderL3Params() {
+  document.getElementById('l3-params').innerHTML = l3Params.map((p, i) => `
+    <div class="l3-param-box">
+      <div class="param-tag">${p.tag}</div>
+      <div class="param-name">${p.name}</div>
+      <div class="param-val" style="color:${p.color}" id="l3p-${i}">${p.val}</div>
+      <div class="param-unit">${p.unit}</div>
+    </div>
+  `).join('');
+}
+
+function renderL3Bargraphs() {
+  const bars = [
+    { tag: 'LT-101', name: 'Уровень', val: 52, unit: '%', ll: 10, l: 20, sp: 50, h: 80, hh: 90, range: [0, 100] },
+    { tag: 'PT-101', name: 'Давление', val: 62, unit: '%', ll: 5, l: 15, sp: 60, h: 75, hh: 90, range: [0, 100] },
+    { tag: 'TT-101A', name: 'Темп.', val: 45, unit: '%', ll: null, l: 10, sp: 45, h: 70, hh: 85, range: [0, 100] },
+  ];
+
+  document.getElementById('l3-bargraphs').innerHTML = bars.map(b => {
+    const pct = b.val;
+    const barColor = pct > b.hh || (b.ll !== null && pct < b.ll) ? 'var(--red)' :
+                     pct > b.h || pct < b.l ? 'var(--yellow)' : 'var(--green)';
+    return `
+      <div style="text-align:center;width:100px;">
+        <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:4px;">${b.tag}</div>
+        <div class="bargraph">
+          <div class="bargraph-bar-wrap">
+            <div class="bargraph-fill" style="height:${pct}%;background:${barColor};"></div>
+            ${b.hh !== null ? `<div class="bargraph-limit hh" data-label="HH ${b.hh}" style="bottom:${b.hh}%"></div>` : ''}
+            ${b.h !== null ? `<div class="bargraph-limit h" data-label="H ${b.h}" style="bottom:${b.h}%"></div>` : ''}
+            <div class="bargraph-limit sp" data-label="SP ${b.sp}" style="bottom:${b.sp}%"></div>
+            ${b.l !== null ? `<div class="bargraph-limit l" data-label="L ${b.l}" style="bottom:${b.l}%"></div>` : ''}
+            ${b.ll !== null ? `<div class="bargraph-limit ll" data-label="LL ${b.ll}" style="bottom:${b.ll}%"></div>` : ''}
+          </div>
+        </div>
+        <div style="font-size:18px;font-weight:700;font-family:Courier New;margin-top:4px;color:${barColor}">${b.val}</div>
+        <div style="font-size:10px;color:var(--text-dim)">${b.name}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderL3Loops() {
+  const loops = [
+    { tag: 'LIC-101', desc: 'Уровень нефти → CV-103', pv: 52, sp: 50, out: 45, mode: 'AUTO', status: 'ok' },
+    { tag: 'PIC-101', desc: 'Давление → CV-101', pv: 0.62, sp: 0.60, out: 38, mode: 'CAS', status: 'ok' },
+    { tag: 'LIC-102', desc: 'Уровень воды → CV-104', pv: 18, sp: 15, out: 30, mode: 'MAN', status: 'warn' },
+  ];
+  document.getElementById('l3-loops').innerHTML = `
+    <table class="interlock-table">
+      <thead><tr><th>Контур</th><th>Описание</th><th>PV</th><th>SP</th><th>OUT%</th><th>Режим</th></tr></thead>
+      <tbody>
+        ${loops.map(l => {
+          const modeClass = l.mode === 'AUTO' ? 'ok' : l.mode === 'MAN' ? 'bypass' : 'ok';
+          return `<tr>
+            <td style="color:var(--accent);font-weight:700">${l.tag}</td>
+            <td>${l.desc}</td>
+            <td style="font-family:Courier New">${l.pv}</td>
+            <td style="font-family:Courier New">${l.sp}</td>
+            <td style="font-family:Courier New">${l.out}</td>
+            <td><span class="interlock-status ${modeClass}">${l.mode}</span></td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderL3Interlocks() {
+  const interlocks = [
+    { tag: 'LSHH-101', desc: 'Уровень нефти оч. высокий', setpoint: '90%', current: '52%', status: 'ok' },
+    { tag: 'LSLL-101', desc: 'Уровень нефти оч. низкий', setpoint: '10%', current: '52%', status: 'ok' },
+    { tag: 'PSHH-101', desc: 'Давление оч. высокое', setpoint: '0.75 МПа', current: '0.62 МПа', status: 'ok' },
+    { tag: 'PSV-101', desc: 'Предохр. клапан', setpoint: '0.85 МПа', current: '—', status: 'ok' },
+    { tag: 'LSHH-102', desc: 'Уровень воды оч. высокий', setpoint: '35%', current: '18%', status: 'ok' },
+    { tag: 'ESD-101', desc: 'Аварийная остановка V-101', setpoint: '—', current: '—', status: 'ok' },
+    { tag: 'XV-101', desc: 'Отсечной клапан входа', setpoint: '—', current: 'OPEN', status: 'ok' },
+    { tag: 'XV-102', desc: 'Отсечной клапан газа', setpoint: '—', current: 'OPEN', status: 'bypass' },
+  ];
+  document.querySelector('#l3-interlocks tbody').innerHTML = interlocks.map(il => `
+    <tr>
+      <td style="color:var(--accent);font-weight:700">${il.tag}</td>
+      <td>${il.desc}</td>
+      <td style="font-family:Courier New">${il.setpoint}</td>
+      <td style="font-family:Courier New">${il.current}</td>
+      <td><span class="interlock-status ${il.status}">${il.status === 'ok' ? 'НОРМА' : il.status === 'trip' ? 'СРАБОТАЛ' : 'BYPASS'}</span></td>
+    </tr>
+  `).join('');
+}
+
+// =============== LEVEL 4 ===============
+// Generate trend data
+function generateTrend(baseVal, noise, points) {
+  const data = [];
+  let v = baseVal;
+  for (let i = 0; i < points; i++) {
+    v += (Math.random() - 0.5) * noise;
+    v = v * 0.98 + baseVal * 0.02; // mean revert
+    data.push(v);
+  }
+  return data;
+}
+const trendDataLT = generateTrend(52, 4, 288); // 5-min intervals, 24h
+const trendDataPT = generateTrend(0.62, 0.02, 288);
+
+function drawTrend(canvasId, data, ylabel, ymin, ymax, limits) {
+  const canvas = document.getElementById(canvasId);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width - 28;
+  canvas.height = 200;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const pad = { top: 20, bottom: 30, left: 50, right: 20 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+
+  // Background
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.fillRect(pad.left, pad.top, plotW, plotH);
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= 6; i++) {
+    const y = pad.top + plotH * i / 6;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    const val = ymax - (ymax - ymin) * i / 6;
+    ctx.fillStyle = '#667';
+    ctx.font = '10px Courier New';
+    ctx.fillText(val.toFixed(val >= 1 ? 0 : 2), 5, y + 3);
+  }
+  // Time labels
+  ctx.fillStyle = '#667';
+  ctx.font = '9px Courier New';
+  for (let i = 0; i <= 24; i += 4) {
+    const x = pad.left + plotW * i / 24;
+    const h = (new Date().getHours() - 24 + i + 24) % 24;
+    ctx.fillText(String(h).padStart(2, '0') + ':00', x - 12, H - 5);
+  }
+
+  // Limit lines
+  Object.entries(limits).forEach(([key, val]) => {
+    const y = pad.top + plotH * (1 - (val - ymin) / (ymax - ymin));
+    const color = key.includes('hh') || key.includes('ll') ? '#ff1744' : key.includes('h') || key.includes('l') ? '#ff9100' : '#00e676';
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.setLineDash(key === 'sp' ? [] : [4, 4]);
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.font = 'bold 9px Courier New';
+    ctx.fillText(key.toUpperCase(), W - pad.right + 2, y + 3);
+  });
+
+  // Data line
+  ctx.strokeStyle = '#00d4ff';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = pad.left + plotW * i / (data.length - 1);
+    const y = pad.top + plotH * (1 - (v - ymin) / (ymax - ymin));
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Gradient fill
+  const gradient = ctx.createLinearGradient(0, pad.top, 0, pad.top + plotH);
+  gradient.addColorStop(0, 'rgba(0,212,255,0.15)');
+  gradient.addColorStop(1, 'rgba(0,212,255,0)');
+  ctx.lineTo(pad.left + plotW, pad.top + plotH);
+  ctx.lineTo(pad.left, pad.top + plotH);
+  ctx.closePath();
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  // Y-axis label
+  ctx.save();
+  ctx.translate(12, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = '#889';
+  ctx.font = '10px Segoe UI';
+  ctx.fillText(ylabel, -30, 0);
+  ctx.restore();
+}
+
+function renderL4Diag() {
+  const diagLT = [
+    { label: 'HART статус', value: 'GOOD', color: 'var(--green)' },
+    { label: 'Тип прибора', value: 'Rosemount 5300', color: 'var(--text)' },
+    { label: 'Сигнал мА', value: '12.42 mA', color: 'var(--green)' },
+    { label: 'Диапазон', value: '4–20 mA', color: 'var(--text-dim)' },
+    { label: 'Наработка', value: '14 280 ч', color: 'var(--text)' },
+    { label: 'SIL уровень', value: 'SIL 2', color: 'var(--accent)' },
+    { label: 'Калибровка', value: '2025-09-15', color: 'var(--text)' },
+    { label: 'След. калибр.', value: '2026-09-15', color: 'var(--yellow)' },
+    { label: 'Серийный №', value: '2847593', color: 'var(--text-dim)' },
+    { label: 'Прошивка', value: 'v4.2.1', color: 'var(--text-dim)' },
+    { label: 'Темп. электр.', value: '38°C', color: 'var(--green)' },
+    { label: 'Эхо-сигнал', value: '94.2 дБ', color: 'var(--green)' },
+  ];
+  const diagPT = [
+    { label: 'HART статус', value: 'GOOD', color: 'var(--green)' },
+    { label: 'Тип прибора', value: 'EJA530E', color: 'var(--text)' },
+    { label: 'Сигнал мА', value: '14.88 mA', color: 'var(--green)' },
+    { label: 'Диапазон', value: '4–20 mA', color: 'var(--text-dim)' },
+    { label: 'Наработка', value: '11 640 ч', color: 'var(--text)' },
+    { label: 'SIL уровень', value: 'SIL 2', color: 'var(--accent)' },
+    { label: 'Калибровка', value: '2025-11-20', color: 'var(--text)' },
+    { label: 'След. калибр.', value: '2026-11-20', color: 'var(--green)' },
+    { label: 'Серийный №', value: '6193847', color: 'var(--text-dim)' },
+    { label: 'Прошивка', value: 'v3.8.0', color: 'var(--text-dim)' },
+    { label: 'Темп. электр.', value: '35°C', color: 'var(--green)' },
+    { label: 'Мембрана', value: 'OK', color: 'var(--green)' },
+  ];
+
+  document.getElementById('diag-lt101').innerHTML = diagLT.map(d => `
+    <div class="diag-item">
+      <div class="d-label">${d.label}</div>
+      <div class="d-value" style="color:${d.color}">${d.value}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('diag-pt101').innerHTML = diagPT.map(d => `
+    <div class="diag-item">
+      <div class="d-label">${d.label}</div>
+      <div class="d-value" style="color:${d.color}">${d.value}</div>
+    </div>
+  `).join('');
+}
+
+function renderEventLog() {
+  const events = [
+    { time: '11:42', type: 'alarm', desc: 'LT-401 HH Alarm — Уровень куба K-401 = 92%' },
+    { time: '11:38', type: 'alarm', desc: 'PT-401 L Alarm — Давление верха K-401 = 0.38 МПа' },
+    { time: '11:35', type: 'oper', desc: 'Оператор Иванов: LIC-102 переведён в MAN, OUT=30%' },
+    { time: '11:15', type: 'warn', desc: 'TT-201 H Alarm — Темп. выхода печи = 68°C' },
+    { time: '11:10', type: 'info', desc: 'PIC-101 переведён в CAS от APC' },
+    { time: '10:52', type: 'warn', desc: 'FT-101 Deviation — Δ=5.2% от уставки' },
+    { time: '10:45', type: 'oper', desc: 'Оператор Петров: запуск P-101B (резервный насос)' },
+    { time: '10:30', type: 'info', desc: 'AT-301 приближается к уставке H (18 мг/л → 20 мг/л)' },
+    { time: '10:15', type: 'info', desc: 'Автокалибровка FT-102 завершена, Δ=0.1%' },
+    { time: '09:55', type: 'oper', desc: 'Оператор Иванов: SP LIC-101 изменён 48→50%' },
+    { time: '09:45', type: 'warn', desc: 'PT-102 Deviation — газ сепарации Δ=3.1%' },
+    { time: '09:30', type: 'info', desc: 'Смена Б приняла вахту. Начальник смены: Сидоров В.К.' },
+    { time: '09:15', type: 'oper', desc: 'Проверка ESD-101 — тест пройден успешно' },
+    { time: '08:45', type: 'info', desc: 'HART диагностика LT-101 — статус GOOD' },
+    { time: '08:30', type: 'info', desc: 'Плановый обход выполнен — замечаний нет' },
+    { time: '08:00', type: 'oper', desc: 'SP FIC-101 изменён 275→280 м³/ч (план. увеличение)' },
+    { time: '07:30', type: 'info', desc: 'Суточный рапорт сформирован, отправлен в LIMS' },
+    { time: '06:15', type: 'warn', desc: 'XV-102 обходной режим включён (плановое обслуживание)' },
+    { time: '05:00', type: 'info', desc: 'Ночная смена — без замечаний' },
+    { time: '00:00', type: 'info', desc: 'Суточная архивация трендов выполнена' },
+  ];
+
+  document.getElementById('event-log').innerHTML = events.map(e => `
+    <div class="event-item">
+      <span class="event-time">${e.time}</span>
+      <span class="event-type ${e.type}">${e.type === 'alarm' ? 'ALARM' : e.type === 'warn' ? 'WARN' : e.type === 'oper' ? 'OPER' : 'INFO'}</span>
+      <span>${e.desc}</span>
+    </div>
+  `).join('');
+}
+
+// =============== LIVE UPDATE SIMULATION ===============
+function liveUpdate() {
+  // Update faceplate PVs
+  faceplates.forEach((f, i) => {
+    const el = document.getElementById('fp-pv-' + i);
+    if (!el) return;
+    f.pv = jitter(f.pv, 0.5);
+    if (typeof f.pv === 'number') {
+      el.textContent = f.pv < 10 ? f.pv.toFixed(2) : f.pv < 100 ? f.pv.toFixed(1) : Math.round(f.pv);
+    }
+    const pvPct = ((f.pv - f.range[0]) / (f.range[1] - f.range[0]) * 100);
+    const bar = document.getElementById('fp-bar-' + i);
+    if (bar) bar.style.width = pvPct.toFixed(1) + '%';
+    const out = document.getElementById('fp-out-' + i);
+    if (out) {
+      f.out = Math.max(0, Math.min(100, f.out + (Math.random() - 0.5) * 2));
+      out.textContent = Math.round(f.out);
+    }
+  });
+
+  // Update L3 params
+  l3Params.forEach((p, i) => {
+    const el = document.getElementById('l3p-' + i);
+    if (!el) return;
+    p.val = jitter(p.val, 0.3);
+    el.textContent = p.val < 10 ? p.val.toFixed(2) : p.val < 100 ? p.val.toFixed(1) : Math.round(p.val);
+  });
+}
+setInterval(liveUpdate, 2000);
+
+// =============== INIT ===============
+renderL1();
+renderFaceplates();
+renderL3Params();
+renderL3Bargraphs();
+renderL3Loops();
+renderL3Interlocks();
+renderL4Diag();
+renderEventLog();
+</script>
+</body>
+</html>

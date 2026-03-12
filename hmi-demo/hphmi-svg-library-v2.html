@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVG Symbol Library — АСУ ТП / SCADA</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #080c14;
+  --bg1:       #0d1524;
+  --bg2:       #111e35;
+  --surface:   #0f1d30;
+  --border:    #1a2e4a;
+  --border-hi: #234060;
+  --cyan:      #00d4ff;
+  --cyan-dim:  rgba(0,212,255,0.12);
+  --cyan-glow: rgba(0,212,255,0.35);
+  --orange:    #f97316;
+  --orange-dim:rgba(249,115,22,0.12);
+  --green:     #22d3a0;
+  --green-dim: rgba(34,211,160,0.12);
+  --red:       #ff4454;
+  --yellow:    #fbbf24;
+  --text:      #d8e8f8;
+  --text2:     #7a9bc0;
+  --text3:     #3d5a7a;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-ui:   'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --r:  3px;
+  --r2: 6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.5;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 47px,rgba(26,46,74,0.15) 48px),repeating-linear-gradient(90deg,transparent,transparent 47px,rgba(26,46,74,0.15) 48px);pointer-events:none;z-index:0}
+
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:48px 32px 100px}
+
+/* Header */
+.kit-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;padding-bottom:28px;border-bottom:1px solid var(--border);position:relative}
+.kit-header::after{content:'';position:absolute;bottom:-1px;left:0;width:180px;height:1px;background:var(--cyan);}
+.kit-title{font-family:var(--font-ui);font-size:42px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--text);line-height:1}
+.kit-title span{color:var(--cyan)}
+.kit-sub{font-family:var(--font-ui);font-size:22px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);line-height:1;margin-top:4px}
+.kit-meta{font-family:var(--font-mono);font-size:11px;color:var(--text3);text-align:right;line-height:2}
+
+/* Section */
+.section{margin-bottom:56px;animation:fadeUp .5s ease both}
+.section-label{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.section-label::before{content:'';display:block;width:4px;height:28px;background:var(--cyan);}
+.section-label h2{font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--text2)}
+.section-label span{font-family:var(--font-mono);font-size:10px;color:var(--text3)}
+.sep{border:none;border-top:1px solid var(--border);margin:0 0 56px}
+
+/* Stats bar */
+.stats-bar{display:flex;gap:24px;flex-wrap:wrap;padding:12px 20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:32px;font-family:var(--font-mono);font-size:11px;color:var(--text3)}
+.stats-bar b{color:var(--cyan)}
+
+/* Tabs */
+.nav-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:24px}
+.nav-tab{padding:8px 18px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;border-radius:var(--r)}
+.nav-tab:hover{color:var(--text);background:var(--bg2);border-color:var(--border-hi)}
+.nav-tab.active{color:var(--cyan);background:var(--cyan-dim);border-color:var(--cyan);}
+
+/* Symbol grid */
+.sym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.cat-panel{display:none}
+.cat-panel.active{display:block}
+.cat-desc{font-size:13px;color:var(--text3);margin-bottom:20px;font-family:var(--font-body)}
+
+/* Symbol card — matches reference card style */
+.sym-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .2s;cursor:pointer;position:relative}
+.sym-card:hover{border-color:var(--border-hi);box-shadow:0 8px 40px rgba(0,0,0,0.5),0 0 0 1px var(--border-hi);transform:translateY(-2px)}
+.sym-card .card-bar{height:3px;background:var(--border)}
+.sym-card .card-bar.cyan{background:linear-gradient(90deg,var(--cyan),transparent);}
+.sym-card .card-bar.green{background:linear-gradient(90deg,var(--green),transparent)}
+.sym-card .card-bar.orange{background:linear-gradient(90deg,var(--orange),transparent)}
+.sym-card .card-bar.red{background:linear-gradient(90deg,var(--red),transparent)}
+
+.sym-preview{background:var(--bg1);display:flex;align-items:center;justify-content:center;padding:20px;min-height:110px;position:relative;border-bottom:1px solid var(--border)}
+.sym-preview svg{max-width:100%;max-height:80px;}
+.sym-preview::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(26,46,74,0.1) 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(26,46,74,0.1) 20px);pointer-events:none}
+
+.sym-info{padding:12px 14px}
+.sym-name{font-family:var(--font-ui);font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text)}
+.sym-tag{font-family:var(--font-mono);font-size:10px;color:var(--text3);margin-top:2px}
+.sym-states{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+
+/* Badges — from reference */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;font-family:var(--font-ui);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:2px;border:1px solid currentColor;white-space:nowrap}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.badge.st-run{color:var(--green);background:var(--green-dim)}
+.badge.st-stop{color:var(--text2);background:rgba(122,155,192,0.1);border-color:var(--border)}
+.badge.st-fault{color:var(--red);background:rgba(255,68,84,0.1)}
+.badge.st-alarm{color:var(--yellow);background:rgba(251,191,36,0.1)}
+.badge.st-open{color:var(--cyan);background:var(--cyan-dim)}
+.badge.st-closed{color:var(--text2);background:rgba(122,155,192,0.1);border-color:var(--border)}
+.badge.st-man{color:var(--orange);background:var(--orange-dim)}
+.badge.st-auto{color:var(--green);background:var(--green-dim)}
+.badge.st-trip{color:var(--red);background:rgba(255,68,84,0.1)}
+.badge.st-bypass{color:var(--yellow);background:rgba(251,191,36,0.1)}
+.badge.st-normal{color:var(--text2);background:rgba(122,155,192,0.1);border-color:var(--border)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r2);width:92%;max-width:750px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border)}
+.modal-header h3{font-family:var(--font-ui);font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
+.modal-close{background:none;border:1px solid var(--border);color:var(--text2);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--r);cursor:pointer;font-size:16px;transition:all .2s}
+.modal-close:hover{color:var(--red);border-color:var(--red)}
+.modal-body{padding:22px}
+.modal-states{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;padding:24px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:20px;position:relative}
+.modal-states::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(26,46,74,0.08) 20px),repeating-linear-gradient(90deg,transparent,transparent 19px,rgba(26,46,74,0.08) 20px);pointer-events:none;border-radius:var(--r2)}
+.modal-state-item{text-align:center;position:relative;z-index:1}
+.modal-state-item svg{max-height:80px;}
+.modal-state-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-top:8px}
+
+.code-block{position:relative;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);margin-top:12px;overflow:hidden}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border)}
+.code-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.code-copy{padding:3px 12px;background:var(--cyan);color:var(--bg);border:none;border-radius:var(--r);font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.code-copy:hover{background:#33ddff;}
+.code-body{padding:14px;font-family:var(--font-mono);font-size:11px;color:var(--cyan);overflow-x:auto;white-space:pre;max-height:180px;overflow-y:auto;line-height:1.6}
+
+.modal-desc{font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6}
+.modal-tag-row{display:flex;gap:8px;align-items:center;margin-bottom:16px}
+.modal-tag-label{font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.modal-tag-val{font-family:var(--font-mono);font-size:12px;color:var(--cyan)}
+
+/* Color palette in guidelines */
+.palette-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.pal-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);transition:border-color .2s}
+.pal-item:hover{border-color:var(--border-hi)}
+.pal-swatch{width:32px;height:32px;border-radius:var(--r);border:1px solid rgba(255,255,255,0.06);flex-shrink:0;position:relative;overflow:hidden}
+.pal-swatch::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,transparent 60%)}
+.pal-info{display:flex;flex-direction:column}
+.pal-name{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:1px;color:var(--text2)}
+.pal-hex{font-family:var(--font-mono);font-size:10px;color:var(--cyan)}
+
+/* Guidelines box */
+.guide-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:22px;margin-bottom:20px}
+.guide-box h3{font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+.guide-box ul{padding-left:18px}
+.guide-box li{font-size:13px;margin-bottom:8px;color:var(--text);line-height:1.6}
+.guide-box li b{color:var(--cyan)}
+.guide-box code{background:var(--cyan-dim);padding:1px 6px;border-radius:2px;font-family:var(--font-mono);font-size:11px;color:var(--cyan)}
+
+/* Download btn */
+.dl-bar{display:flex;gap:10px;margin-bottom:28px}
+.btn-dl{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;font-family:var(--font-ui);font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;border-radius:var(--r)}
+.btn-dl.primary{background:var(--cyan);color:var(--bg);}
+.btn-dl.primary:hover{background:#33ddff;transform:translateY(-1px)}
+.btn-dl.ghost{background:transparent;color:var(--cyan);border:1px solid var(--cyan);}
+.btn-dl.ghost:hover{background:var(--cyan-dim);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes blink-r{0%,100%{opacity:1}50%{opacity:0.2}}
+
+@media(max-width:700px){
+  .sym-grid{grid-template-columns:1fr}
+  .kit-header{flex-direction:column;gap:12px}
+  .palette-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="kit-header">
+  <div>
+    <div class="kit-title">SVG <span>SYMBOLS</span></div>
+    <div class="kit-sub">АСУ ТП / Мнемосхемы</div>
+  </div>
+  <div class="kit-meta">
+    v2.0.0 · 2026<br>
+    ISA-101 / HP-HMI Standard<br>
+    Dark Industrial Theme
+  </div>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+<div class="dl-bar">
+  <button class="btn-dl primary" onclick="downloadAll()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Скачать все SVG
+  </button>
+  <button class="btn-dl ghost" onclick="showCat('guide')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" stroke="currentColor" stroke-width="1.5"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" stroke="currentColor" stroke-width="1.5"/></svg>
+    Руководство
+  </button>
+</div>
+<div class="nav-tabs" id="nav-tabs"></div>
+<div id="panels"></div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">—</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  SVG SYMBOL DEFINITIONS
+//  Color scheme matches the SCADA UI Kit:
+//   Equipment body: stroke #234060, fill #0f1d30
+//   Running/active: #22d3a0 (green)
+//   Stopped/idle: #3d5a7a (dim)
+//   Fault: #ff4454 (red)
+//   Alarm: #fbbf24 (yellow)
+//   Bypass/Manual: #f97316 (orange)
+//   Pipes: #1a2e4a stroke, colored by medium
+//   Accents: #00d4ff (cyan)
+//   Text on symbols: #d8e8f8 / #7a9bc0
+// ═══════════════════════════════════════════════════
+
+const C = {
+  body:'#0f1d30', stroke:'#234060', strokeHi:'#00d4ff',
+  run:'#22d3a0', stop:'#3d5a7a', fault:'#ff4454', alarm:'#fbbf24', bypass:'#f97316',
+  text:'#d8e8f8', dim:'#7a9bc0', dark:'#3d5a7a',
+  pipe:'#1a2e4a', cyan:'#00d4ff', cyanDim:'rgba(0,212,255,0.2)',
+  oil:'#22d3a0', gas:'#fbbf24', water:'#00d4ff', steam:'#f97316'
+};
+
+const CATS = [
+  {
+    id:'guide', name:'📖 Руководство', desc:'Дизайн-токены, палитра и принципы HP-HMI', isGuide:true
+  },
+  {
+    id:'pumps', name:'Насосы', desc:'Центробежные, поршневые, дозировочные, погружные — 4 типа',
+    bar:'cyan',
+    symbols:[
+      {
+        id:'pump-centrifugal', name:'Насос центробежный', tag:'P-XXX',
+        desc:'Стандартный центробежный насос. Основной элемент любой технологической схемы.',
+        states:['stop','run','fault'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80">
+  <circle cx="40" cy="38" r="26" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="40,16 66,38 40,60" fill="none" stroke="${C.stop}" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="66" y1="38" x2="95" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <line x1="5" y1="38" x2="14" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <text x="40" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.stop}">STOPPED</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80">
+  <circle cx="40" cy="38" r="26" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="40" cy="38" r="26" fill="none" stroke="${C.run}" stroke-width="1" opacity="0.3"/>
+  <polygon points="40,16 66,38 40,60" fill="${C.run}" fill-opacity="0.15" stroke="${C.run}" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="40" cy="38" r="4" fill="${C.run}" opacity="0.8"/>
+  <line x1="66" y1="38" x2="95" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <line x1="5" y1="38" x2="14" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <text x="40" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.run}">RUNNING</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80">
+  <circle cx="40" cy="38" r="26" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <polygon points="40,16 66,38 40,60" fill="${C.fault}" fill-opacity="0.15" stroke="${C.fault}" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="32" y1="30" x2="48" y2="46" stroke="${C.fault}" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="48" y1="30" x2="32" y2="46" stroke="${C.fault}" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="66" y1="38" x2="95" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <line x1="5" y1="38" x2="14" y2="38" stroke="${C.pipe}" stroke-width="4" stroke-linecap="round"/>
+  <text x="40" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.fault}">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id:'pump-positive', name:'Насос поршневой', tag:'P-XXX',
+        desc:'Поршневой/плунжерный насос для перекачки вязких сред.',
+        states:['stop','run','fault'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 80">
+  <circle cx="36" cy="38" r="24" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="60" y="20" width="34" height="36" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="77" y1="20" x2="77" y2="56" stroke="${C.stop}" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="5" y1="38" x2="12" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="55" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.stop}">STOPPED</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 80">
+  <circle cx="36" cy="38" r="24" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="36" cy="38" r="5" fill="${C.run}" opacity="0.7"/>
+  <rect x="60" y="20" width="34" height="36" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="77" y1="20" x2="77" y2="56" stroke="${C.run}" stroke-width="2"/>
+  <line x1="5" y1="38" x2="12" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="55" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.run}">RUNNING</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 80">
+  <circle cx="36" cy="38" r="24" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <circle cx="36" cy="38" r="5" fill="${C.fault}"/>
+  <rect x="60" y="20" width="34" height="36" rx="3" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="5" y1="38" x2="12" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="55" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.fault}">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id:'pump-dosing', name:'Насос дозировочный', tag:'P-XXX',
+        desc:'Мембранный/плунжерный дозировочный насос для реагентов.',
+        states:['stop','run'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <circle cx="38" cy="38" r="24" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <text x="38" y="43" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="18" font-weight="bold" fill="${C.stop}">D</text>
+  <line x1="62" y1="38" x2="85" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="5" y1="38" x2="14" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="38" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.stop}">STOPPED</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <circle cx="38" cy="38" r="24" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <text x="38" y="43" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="18" font-weight="bold" fill="${C.run}">D</text>
+  <line x1="62" y1="38" x2="85" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="5" y1="38" x2="14" y2="38" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="38" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.run}">RUNNING</text>
+</svg>`
+        }
+      },
+      {
+        id:'pump-submersible', name:'Насос погружной (ЭЦН)', tag:'P-XXX',
+        desc:'Электроцентробежный погружной насос для скважин.',
+        states:['stop','run','fault'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
+  <rect x="10" y="5" width="40" height="62" rx="5" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="30,18 44,36 30,54" fill="none" stroke="${C.stop}" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="30" y1="67" x2="30" y2="88" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="30" y="96" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.stop}">STOP</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
+  <rect x="10" y="5" width="40" height="62" rx="5" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="30,18 44,36 30,54" fill="${C.run}" fill-opacity="0.15" stroke="${C.run}" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="30" cy="36" r="3" fill="${C.run}"/>
+  <line x1="30" y1="67" x2="30" y2="88" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="30" y="96" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.run}">RUN</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
+  <rect x="10" y="5" width="40" height="62" rx="5" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <polygon points="30,18 44,36 30,54" fill="${C.fault}" fill-opacity="0.15" stroke="${C.fault}" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="30" y1="67" x2="30" y2="88" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="30" y="96" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.fault}">FAULT</text>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'valves', name:'Арматура', desc:'Запорная, регулирующая, предохранительная, отсечная — 6 типов',
+    bar:'orange',
+    symbols:[
+      {
+        id:'valve-gate', name:'Задвижка', tag:'XV-XXX / HV-XXX',
+        desc:'Запорная арматура. Заполненные треугольники = закрыто, пустые = открыто.',
+        states:['open','closed'],
+        svg:{
+          open:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 60">
+  <polygon points="8,12 35,30 8,48" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,12 35,30 62,48" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="30" x2="35" y2="8" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="25" y="3" width="20" height="8" rx="2" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="35" y="56" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.run}">OPEN</text>
+</svg>`,
+          closed:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 60">
+  <polygon points="8,12 35,30 8,48" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,12 35,30 62,48" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="30" x2="35" y2="8" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="25" y="3" width="20" height="8" rx="2" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="35" y="56" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.dim}">CLOSED</text>
+</svg>`
+        }
+      },
+      {
+        id:'valve-control', name:'Клапан регулирующий', tag:'CV / FCV / TCV / PCV / LCV',
+        desc:'Регулирующий клапан с позиционером. Отображает % открытия в кружке.',
+        states:['open','closed','fault'],
+        svg:{
+          open:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <polygon points="8,18 35,36 8,54" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,18 35,36 62,54" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="36" x2="35" y2="14" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="35" cy="10" r="8" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="35" y="13" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.run}">62</text>
+  <text x="35" y="66" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="${C.dim}">CV-101</text>
+</svg>`,
+          closed:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <polygon points="8,18 35,36 8,54" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,18 35,36 62,54" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="36" x2="35" y2="14" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="35" cy="10" r="8" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="35" y="13" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.stop}">0</text>
+  <text x="35" y="66" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.dim}">CLOSED</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <polygon points="8,18 35,36 8,54" fill="none" stroke="${C.fault}" stroke-width="2.5"/>
+  <polygon points="62,18 35,36 62,54" fill="none" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="35" y1="36" x2="35" y2="14" stroke="${C.fault}" stroke-width="2"/>
+  <circle cx="35" cy="10" r="8" fill="${C.body}" stroke="${C.fault}" stroke-width="2"/>
+  <text x="35" y="13" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.fault}">?</text>
+  <text x="35" y="66" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.fault}">FAULT</text>
+</svg>`
+        }
+      },
+      {
+        id:'valve-check', name:'Клапан обратный', tag:'—',
+        desc:'Обратный клапан. Не управляемый — только направление потока.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 45">
+  <polygon points="8,6 8,39 40,22.5" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="40" y1="6" x2="40" y2="39" stroke="${C.stroke}" stroke-width="2.5"/>
+</svg>`
+        }
+      },
+      {
+        id:'valve-safety', name:'Клапан предохранительный', tag:'PSV-XXX',
+        desc:'Предохранительный пружинный клапан на сброс давления.',
+        states:['normal','open'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 78">
+  <polygon points="12,45 28,28 44,45" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="28" y1="28" x2="28" y2="12" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="16" y1="12" x2="40" y2="12" stroke="${C.stroke}" stroke-width="2"/>
+  <path d="M22,15 L28,20 L34,15" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <line x1="28" y1="45" x2="28" y2="60" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="28" y="72" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.dim}">PSV</text>
+</svg>`,
+          open:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 78">
+  <polygon points="12,45 28,28 44,45" fill="none" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="28" y1="28" x2="28" y2="12" stroke="${C.fault}" stroke-width="2"/>
+  <line x1="16" y1="12" x2="40" y2="12" stroke="${C.fault}" stroke-width="2"/>
+  <path d="M22,15 L28,20 L34,15" fill="${C.fault}" fill-opacity="0.3" stroke="${C.fault}" stroke-width="1.5"/>
+  <line x1="28" y1="45" x2="28" y2="60" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="28" y="72" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.fault}">RELIEF</text>
+</svg>`
+        }
+      },
+      {
+        id:'valve-shutoff', name:'Клапан отсечной (ESD)', tag:'XV-XXX / SDV-XXX',
+        desc:'Отсечной клапан SIS/ESD. Fail-close. Маркировка SIS на штоке.',
+        states:['open','closed','trip'],
+        svg:{
+          open:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 64">
+  <polygon points="8,16 35,34 8,52" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,16 35,34 62,52" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="34" x2="35" y2="10" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="23" y="2" width="24" height="11" rx="2" fill="${C.body}" stroke="${C.cyan}" stroke-width="1.5"/>
+  <text x="35" y="10" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="${C.cyan}">SIS</text>
+  <text x="35" y="62" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.run}">OPEN</text>
+</svg>`,
+          closed:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 64">
+  <polygon points="8,16 35,34 8,52" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,16 35,34 62,52" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="34" x2="35" y2="10" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="23" y="2" width="24" height="11" rx="2" fill="${C.body}" stroke="${C.cyan}" stroke-width="1.5"/>
+  <text x="35" y="10" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="${C.cyan}">SIS</text>
+  <text x="35" y="62" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.dim}">CLOSED</text>
+</svg>`,
+          trip:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 64">
+  <polygon points="8,16 35,34 8,52" fill="${C.fault}" fill-opacity="0.15" stroke="${C.fault}" stroke-width="2.5"/>
+  <polygon points="62,16 35,34 62,52" fill="${C.fault}" fill-opacity="0.15" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="35" y1="34" x2="35" y2="10" stroke="${C.fault}" stroke-width="2"/>
+  <rect x="23" y="2" width="24" height="11" rx="2" fill="${C.fault}" fill-opacity="0.2" stroke="${C.fault}" stroke-width="1.5"/>
+  <text x="35" y="10" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="${C.fault}">SIS</text>
+  <text x="35" y="62" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.fault}">TRIP</text>
+</svg>`
+        }
+      },
+      {
+        id:'valve-3way', name:'Клапан трёхходовой', tag:'CV-XXX',
+        desc:'Трёхходовой регулирующий клапан с отводом.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
+  <polygon points="8,16 35,34 8,52" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <polygon points="62,16 35,34 62,52" fill="none" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="34" x2="35" y2="65" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="35" y1="34" x2="35" y2="12" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="35" cy="8" r="7" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'vessels', name:'Ёмкости', desc:'Сепараторы, ёмкости, резервуары, колонны — 5 типов',
+    bar:'green',
+    symbols:[
+      {
+        id:'vessel-horiz', name:'Сепаратор горизонтальный', tag:'V-XXX',
+        desc:'Горизонтальный сосуд с индикацией уровня заливкой.',
+        states:['normal','alarm'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
+  <path d="M22,8 L118,8 Q132,8 132,24 L132,52 Q132,68 118,68 L22,68 Q8,68 8,52 L8,24 Q8,8 22,8 Z" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="8" y="40" width="124" height="28" rx="0" fill="${C.run}" fill-opacity="0.1"/>
+  <path d="M8,52 Q8,68 22,68 L118,68 Q132,68 132,52 Z" fill="${C.run}" fill-opacity="0.06"/>
+  <line x1="8" y1="40" x2="132" y2="40" stroke="${C.run}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <text x="70" y="30" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.text}">V-101</text>
+  <text x="70" y="56" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="${C.run}">52%</text>
+</svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 80">
+  <path d="M22,8 L118,8 Q132,8 132,24 L132,52 Q132,68 118,68 L22,68 Q8,68 8,52 L8,24 Q8,8 22,8 Z" fill="${C.body}" stroke="${C.alarm}" stroke-width="2.5"/>
+  <rect x="8" y="22" width="124" height="46" rx="0" fill="${C.alarm}" fill-opacity="0.08"/>
+  <line x1="8" y1="22" x2="132" y2="22" stroke="${C.alarm}" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="70" y="16" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.alarm}">⚠ H ALARM</text>
+  <text x="70" y="52" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="13" fill="${C.alarm}">82%</text>
+</svg>`
+        }
+      },
+      {
+        id:'vessel-vert', name:'Ёмкость вертикальная', tag:'V-XXX / E-XXX',
+        desc:'Вертикальный сосуд: буферная ёмкость, отстойник.',
+        states:['normal','alarm'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 110">
+  <path d="M14,18 Q14,6 35,6 Q56,6 56,18 L56,88 Q56,102 35,102 Q14,102 14,88 Z" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="14" y="55" width="42" height="47" rx="0" fill="${C.run}" fill-opacity="0.1"/>
+  <line x1="14" y1="55" x2="56" y2="55" stroke="${C.run}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <text x="35" y="38" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.text}">E-201</text>
+  <text x="35" y="78" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="${C.run}">45%</text>
+</svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 110">
+  <path d="M14,18 Q14,6 35,6 Q56,6 56,18 L56,88 Q56,102 35,102 Q14,102 14,88 Z" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <rect x="14" y="20" width="42" height="82" rx="0" fill="${C.fault}" fill-opacity="0.08"/>
+  <line x1="14" y1="20" x2="56" y2="20" stroke="${C.fault}" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="35" y="14" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="${C.fault}">⚠ HH</text>
+  <text x="35" y="60" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="12" fill="${C.fault}">92%</text>
+</svg>`
+        }
+      },
+      {
+        id:'tank-storage', name:'Резервуар (РВС)', tag:'TK-XXX',
+        desc:'Вертикальный стальной резервуар для хранения нефти/воды.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
+  <rect x="12" y="18" width="66" height="60" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <ellipse cx="45" cy="18" rx="33" ry="10" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="12" y="46" width="66" height="32" fill="${C.run}" fill-opacity="0.08"/>
+  <line x1="12" y1="46" x2="78" y2="46" stroke="${C.run}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <text x="45" y="36" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.text}">TK-301</text>
+  <text x="45" y="64" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.run}">4250 м³</text>
+</svg>`
+        }
+      },
+      {
+        id:'column', name:'Колонна', tag:'K-XXX / C-XXX',
+        desc:'Ректификационная / стабилизационная колонна с тарелками.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 140">
+  <path d="M12,18 Q12,6 28,6 Q44,6 44,18 L44,122 Q44,134 28,134 Q12,134 12,122 Z" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="14" y1="35" x2="42" y2="35" stroke="${C.dark}" stroke-width="1" opacity="0.6"/>
+  <line x1="14" y1="55" x2="42" y2="55" stroke="${C.dark}" stroke-width="1" opacity="0.6"/>
+  <line x1="14" y1="75" x2="42" y2="75" stroke="${C.dark}" stroke-width="1" opacity="0.6"/>
+  <line x1="14" y1="95" x2="42" y2="95" stroke="${C.dark}" stroke-width="1" opacity="0.6"/>
+  <text x="28" y="120" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="${C.text}">K-401</text>
+  <line x1="44" y1="28" x2="56" y2="28" stroke="${C.pipe}" stroke-width="3"/>
+  <line x1="44" y1="65" x2="56" y2="65" stroke="${C.pipe}" stroke-width="3"/>
+  <line x1="0" y1="85" x2="12" y2="85" stroke="${C.pipe}" stroke-width="3"/>
+  <line x1="44" y1="110" x2="56" y2="110" stroke="${C.pipe}" stroke-width="3"/>
+</svg>`
+        }
+      },
+      {
+        id:'vessel-3phase', name:'Сепаратор трёхфазный', tag:'V-XXX',
+        desc:'Трёхфазный сепаратор: газ/нефть/вода с двумя уровнями.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 80">
+  <path d="M22,8 L128,8 Q142,8 142,22 L142,56 Q142,70 128,70 L22,70 Q8,70 8,56 L8,22 Q8,8 22,8 Z" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <rect x="8" y="50" width="134" height="20" rx="0" fill="${C.water}" fill-opacity="0.08"/>
+  <rect x="8" y="34" width="134" height="16" rx="0" fill="${C.oil}" fill-opacity="0.08"/>
+  <line x1="8" y1="50" x2="142" y2="50" stroke="${C.water}" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <line x1="8" y1="34" x2="142" y2="34" stroke="${C.oil}" stroke-width="1" stroke-dasharray="3,2" opacity="0.5"/>
+  <text x="75" y="24" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.gas}">ГАЗ</text>
+  <text x="75" y="45" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.oil}">НЕФТЬ</text>
+  <text x="75" y="64" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.water}">ВОДА</text>
+  <line x1="75" y1="0" x2="75" y2="8" stroke="${C.gas}" stroke-width="3"/>
+  <line x1="142" y1="42" x2="150" y2="42" stroke="${C.oil}" stroke-width="3"/>
+  <line x1="142" y1="58" x2="150" y2="58" stroke="${C.water}" stroke-width="3"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'heat', name:'Теплообмен', desc:'Теплообменники, печи, АВО, конденсаторы — 4 типа',
+    bar:'orange',
+    symbols:[
+      {
+        id:'hex-shelltube', name:'Теплообменник', tag:'E-XXX / HE-XXX',
+        desc:'Кожухотрубный теплообменник.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 60">
+  <circle cx="55" cy="30" r="24" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="31" y1="30" x2="79" y2="30" stroke="${C.dark}" stroke-width="1.5"/>
+  <line x1="5" y1="30" x2="31" y2="30" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="79" y1="30" x2="105" y2="30" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="55" y1="6" x2="55" y2="0" stroke="${C.pipe}" stroke-width="3"/>
+  <line x1="55" y1="54" x2="55" y2="60" stroke="${C.pipe}" stroke-width="3"/>
+  <text x="55" y="33" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="${C.dim}">E-101</text>
+</svg>`
+        }
+      },
+      {
+        id:'furnace', name:'Печь', tag:'H-XXX / F-XXX',
+        desc:'Трубчатая печь нагрева нефти.',
+        states:['off','running','alarm'],
+        svg:{
+          off:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <rect x="12" y="10" width="66" height="50" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <path d="M28,55 Q32,40 36,55" stroke="${C.stop}" stroke-width="1.5" fill="none"/>
+  <path d="M42,55 Q46,35 50,55" stroke="${C.stop}" stroke-width="1.5" fill="none"/>
+  <path d="M56,55 Q60,40 64,55" stroke="${C.stop}" stroke-width="1.5" fill="none"/>
+  <text x="45" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.stop}">OFF</text>
+</svg>`,
+          running:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <rect x="12" y="10" width="66" height="50" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <path d="M28,55 Q32,36 36,55" stroke="${C.bypass}" stroke-width="2" fill="none"/>
+  <path d="M42,55 Q46,28 50,55" stroke="${C.fault}" stroke-width="2" fill="none"/>
+  <path d="M56,55 Q60,36 64,55" stroke="${C.bypass}" stroke-width="2" fill="none"/>
+  <circle cx="38" cy="48" r="2" fill="${C.alarm}" opacity="0.7"/>
+  <circle cx="53" cy="45" r="2" fill="${C.alarm}" opacity="0.7"/>
+  <line x1="5" y1="35" x2="12" y2="35" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="78" y1="35" x2="85" y2="35" stroke="${C.pipe}" stroke-width="4"/>
+  <text x="45" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.run}">FIRING</text>
+</svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 80">
+  <rect x="12" y="10" width="66" height="50" rx="4" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <path d="M28,55 Q32,36 36,55" stroke="${C.fault}" stroke-width="2" fill="none"/>
+  <path d="M42,55 Q46,28 50,55" stroke="${C.fault}" stroke-width="2" fill="none"/>
+  <path d="M56,55 Q60,36 64,55" stroke="${C.fault}" stroke-width="2" fill="none"/>
+  <text x="45" y="74" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.fault}">ALARM</text>
+</svg>`
+        }
+      },
+      {
+        id:'aircooler', name:'АВО', tag:'AC-XXX / EA-XXX',
+        desc:'Аппарат воздушного охлаждения с вентиляторами.',
+        states:['off','running'],
+        svg:{
+          off:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 65">
+  <rect x="12" y="5" width="86" height="28" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="12" y1="14" x2="98" y2="14" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <line x1="12" y1="20" x2="98" y2="20" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <line x1="12" y1="26" x2="98" y2="26" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <polygon points="38,35 26,56 50,56" fill="none" stroke="${C.stop}" stroke-width="1.5"/>
+  <polygon points="72,35 60,56 84,56" fill="none" stroke="${C.stop}" stroke-width="1.5"/>
+  <text x="55" y="63" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.stop}">OFF</text>
+</svg>`,
+          running:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 65">
+  <rect x="12" y="5" width="86" height="28" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="12" y1="14" x2="98" y2="14" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <line x1="12" y1="20" x2="98" y2="20" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <line x1="12" y1="26" x2="98" y2="26" stroke="${C.dark}" stroke-width="1" opacity="0.4"/>
+  <polygon points="38,35 26,56 50,56" fill="none" stroke="${C.run}" stroke-width="2"/>
+  <polygon points="72,35 60,56 84,56" fill="none" stroke="${C.run}" stroke-width="2"/>
+  <text x="55" y="63" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="700" letter-spacing="2" fill="${C.run}">RUNNING</text>
+</svg>`
+        }
+      },
+      {
+        id:'condenser', name:'Конденсатор', tag:'E-XXX',
+        desc:'Конденсатор верхнего продукта колонны.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 55">
+  <circle cx="45" cy="27" r="22" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <path d="M32,16 L58,38" stroke="${C.dark}" stroke-width="1.5"/>
+  <path d="M32,38 L58,16" stroke="${C.dark}" stroke-width="1.5"/>
+  <line x1="5" y1="27" x2="23" y2="27" stroke="${C.pipe}" stroke-width="4"/>
+  <line x1="67" y1="27" x2="85" y2="27" stroke="${C.pipe}" stroke-width="4"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'instruments', name:'Приборы КИПиА', desc:'Полевые датчики, функции DCS/SIS, мини-фейсплейты — 4 типа',
+    bar:'cyan',
+    symbols:[
+      {
+        id:'inst-field', name:'Полевой прибор', tag:'xT/xE-XXX',
+        desc:'Полевой датчик/трансмиттер — круг по ISA S5.1.',
+        states:['normal','alarm','fault'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 65">
+  <circle cx="30" cy="24" r="19" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="9" y1="24" x2="51" y2="24" stroke="${C.dark}" stroke-width="1"/>
+  <text x="30" y="20" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.text}">PT</text>
+  <text x="30" y="32" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.dim}">101</text>
+  <line x1="30" y1="43" x2="30" y2="52" stroke="${C.dark}" stroke-width="1.5"/>
+  <text x="30" y="62" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.run}">0.62</text>
+</svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 65">
+  <circle cx="30" cy="24" r="19" fill="${C.body}" stroke="${C.alarm}" stroke-width="2.5"/>
+  <line x1="9" y1="24" x2="51" y2="24" stroke="${C.alarm}" stroke-width="1" opacity="0.5"/>
+  <text x="30" y="20" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.alarm}">PT</text>
+  <text x="30" y="32" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.alarm}">101</text>
+  <line x1="30" y1="43" x2="30" y2="52" stroke="${C.dark}" stroke-width="1.5"/>
+  <text x="30" y="62" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.alarm}">0.72</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 65">
+  <circle cx="30" cy="24" r="19" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="9" y1="24" x2="51" y2="24" stroke="${C.fault}" stroke-width="1" opacity="0.5"/>
+  <text x="30" y="20" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.fault}">PT</text>
+  <text x="30" y="32" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.fault}">101</text>
+  <line x1="30" y1="43" x2="30" y2="52" stroke="${C.dark}" stroke-width="1.5"/>
+  <text x="30" y="62" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.fault}">BAD</text>
+</svg>`
+        }
+      },
+      {
+        id:'inst-dcs', name:'Функция в DCS', tag:'xIC/xRC-XXX',
+        desc:'Функция, выполняемая в DCS/SCADA — квадрат по ISA S5.1.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 58">
+  <rect x="8" y="5" width="44" height="38" rx="0" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="8" y1="24" x2="52" y2="24" stroke="${C.dark}" stroke-width="1"/>
+  <text x="30" y="20" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.text}">FIC</text>
+  <text x="30" y="36" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.dim}">101</text>
+  <line x1="30" y1="43" x2="30" y2="52" stroke="${C.dark}" stroke-width="1.5"/>
+</svg>`
+        }
+      },
+      {
+        id:'inst-sis', name:'Функция в SIS', tag:'xSHH/xSLL',
+        desc:'Функция в системе ПАЗ (SIS) — ромб по ISA S5.1.',
+        states:['normal','trip'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 65">
+  <polygon points="30,5 55,27 30,49 5,27" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="5" y1="27" x2="55" y2="27" stroke="${C.dark}" stroke-width="1"/>
+  <text x="30" y="23" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="${C.text}">PSHH</text>
+  <text x="30" y="35" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="${C.dim}">101</text>
+  <line x1="30" y1="49" x2="30" y2="58" stroke="${C.dark}" stroke-width="1.5"/>
+</svg>`,
+          trip:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 65">
+  <polygon points="30,5 55,27 30,49 5,27" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <line x1="5" y1="27" x2="55" y2="27" stroke="${C.fault}" stroke-width="1" opacity="0.5"/>
+  <text x="30" y="23" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="${C.fault}">PSHH</text>
+  <text x="30" y="35" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="8" fill="${C.fault}">101</text>
+  <line x1="30" y1="49" x2="30" y2="58" stroke="${C.dark}" stroke-width="1.5"/>
+  <text x="30" y="64" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="2" fill="${C.fault}">TRIP</text>
+</svg>`
+        }
+      },
+      {
+        id:'faceplate-mini', name:'Мини-фейсплейт PID', tag:'xIC-XXX',
+        desc:'Компактный фейсплейт PID-контура для встраивания в мнемосхему.',
+        states:['auto','man'],
+        svg:{
+          auto:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 62">
+  <rect x="2" y="2" width="106" height="58" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="50" y="14" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.cyan}">FIC-101</text>
+  <rect x="80" y="5" width="25" height="12" rx="2" fill="${C.run}" fill-opacity="0.15"/>
+  <text x="92" y="14" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="${C.run}">AUTO</text>
+  <text x="10" y="28" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">PV</text>
+  <text x="10" y="38" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">SP</text>
+  <text x="10" y="48" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">OUT</text>
+  <text x="62" y="28" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.run}">285.2</text>
+  <text x="62" y="38" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.cyan}">280.0</text>
+  <text x="62" y="48" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.dim}">62%</text>
+  <rect x="5" y="53" width="76" height="4" rx="2" fill="${C.dark}" opacity="0.3"/>
+  <rect x="5" y="53" width="54" height="4" rx="2" fill="${C.run}"/>
+  <rect x="56" y="51" width="2" height="8" rx="1" fill="${C.cyan}"/>
+</svg>`,
+          man:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 62">
+  <rect x="2" y="2" width="106" height="58" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <text x="50" y="14" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="1" fill="${C.cyan}">FIC-101</text>
+  <rect x="80" y="5" width="25" height="12" rx="2" fill="${C.bypass}" fill-opacity="0.15"/>
+  <text x="92" y="14" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="1" fill="${C.bypass}">MAN</text>
+  <text x="10" y="28" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">PV</text>
+  <text x="10" y="38" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">SP</text>
+  <text x="10" y="48" font-family="Barlow Condensed,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="${C.dark}">OUT</text>
+  <text x="62" y="28" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.bypass}">292.1</text>
+  <text x="62" y="38" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.dark}">280.0</text>
+  <text x="62" y="48" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.dim}">68%</text>
+  <rect x="5" y="53" width="76" height="4" rx="2" fill="${C.dark}" opacity="0.3"/>
+  <rect x="5" y="53" width="60" height="4" rx="2" fill="${C.bypass}"/>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'motors', name:'Электрооборудование', desc:'Двигатели, ЧРП, электродегидраторы — 3 типа',
+    bar:'cyan',
+    symbols:[
+      {
+        id:'motor', name:'Электродвигатель', tag:'M-XXX',
+        desc:'Стандартный электродвигатель.',
+        states:['stop','run','fault'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+  <circle cx="28" cy="28" r="22" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <text x="28" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="18" font-weight="800" fill="${C.stop}">M</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+  <circle cx="28" cy="28" r="22" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <circle cx="28" cy="28" r="22" fill="none" stroke="${C.run}" stroke-width="1" opacity="0.3"/>
+  <text x="28" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="18" font-weight="800" fill="${C.run}">M</text>
+</svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+  <circle cx="28" cy="28" r="22" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/>
+  <text x="28" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="18" font-weight="800" fill="${C.fault}">M</text>
+</svg>`
+        }
+      },
+      {
+        id:'vfd', name:'ЧРП (VFD)', tag:'VFD-XXX',
+        desc:'Частотно-регулируемый привод с индикацией частоты.',
+        states:['stop','run'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 56">
+  <rect x="8" y="8" width="54" height="40" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <text x="35" y="26" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.stop}">VFD</text>
+  <text x="35" y="40" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="${C.stop}">0 Hz</text>
+</svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 56">
+  <rect x="8" y="8" width="54" height="40" rx="4" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <text x="35" y="26" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="${C.dim}">VFD</text>
+  <text x="35" y="40" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11" fill="${C.run}">48.5 Hz</text>
+</svg>`
+        }
+      },
+      {
+        id:'edg', name:'Электродегидратор', tag:'EDG-XXX',
+        desc:'Электродегидратор для обессоливания нефти.',
+        states:['normal'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 76">
+  <path d="M22,8 L118,8 Q132,8 132,22 L132,52 Q132,66 118,66 L22,66 Q8,66 8,52 L8,22 Q8,8 22,8 Z" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/>
+  <line x1="35" y1="18" x2="35" y2="56" stroke="${C.alarm}" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="70" y1="18" x2="70" y2="56" stroke="${C.alarm}" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+  <line x1="105" y1="18" x2="105" y2="56" stroke="${C.alarm}" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>
+  <text x="70" y="40" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.text}">22.5 кВ</text>
+  <text x="70" y="62" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="7" fill="${C.dim}">⚡ EDG-301</text>
+</svg>`
+        }
+      }
+    ]
+  },
+  {
+    id:'pipes', name:'Трубопроводы', desc:'Цветовая кодировка по средам: нефть, газ, вода, пар — 6 элементов',
+    bar:'green',
+    symbols:[
+      {
+        id:'pipe-oil', name:'Нефть', tag:'—',
+        desc:'Нефтяная линия — зелёный по палитре.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 24"><line x1="5" y1="12" x2="120" y2="12" stroke="${C.oil}" stroke-width="4" stroke-linecap="round"/><polygon points="116,6 125,12 116,18" fill="${C.oil}"/><text x="60" y="22" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="3" fill="${C.oil}">НЕФТЬ</text></svg>`}
+      },
+      {
+        id:'pipe-gas', name:'Газ', tag:'—',
+        desc:'Газовая линия — жёлтый.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 24"><line x1="5" y1="12" x2="120" y2="12" stroke="${C.gas}" stroke-width="4" stroke-linecap="round"/><polygon points="116,6 125,12 116,18" fill="${C.gas}"/><text x="60" y="22" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="3" fill="${C.gas}">ГАЗ</text></svg>`}
+      },
+      {
+        id:'pipe-water', name:'Вода', tag:'—',
+        desc:'Водяная линия — cyan.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 24"><line x1="5" y1="12" x2="120" y2="12" stroke="${C.water}" stroke-width="4" stroke-linecap="round"/><polygon points="116,6 125,12 116,18" fill="${C.water}"/><text x="60" y="22" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="3" fill="${C.water}">ВОДА</text></svg>`}
+      },
+      {
+        id:'pipe-steam', name:'Пар', tag:'—',
+        desc:'Паровая линия — orange, штриховая.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 24"><line x1="5" y1="12" x2="120" y2="12" stroke="${C.steam}" stroke-width="4" stroke-linecap="round" stroke-dasharray="14,5"/><polygon points="116,6 125,12 116,18" fill="${C.steam}"/><text x="60" y="22" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="7" font-weight="700" letter-spacing="3" fill="${C.steam}">ПАР</text></svg>`}
+      },
+      {
+        id:'pipe-neutral', name:'Нейтральный', tag:'—',
+        desc:'Общий трубопровод без цветовой кодировки.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 18"><line x1="5" y1="9" x2="120" y2="9" stroke="${C.pipe}" stroke-width="3" stroke-linecap="round"/><polygon points="116,4 125,9 116,14" fill="${C.dark}"/></svg>`}
+      },
+      {
+        id:'pipe-junction', name:'Тройник', tag:'—',
+        desc:'Соединение трубопроводов.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55"><line x1="0" y1="27" x2="55" y2="27" stroke="${C.pipe}" stroke-width="3"/><line x1="27" y1="27" x2="27" y2="55" stroke="${C.pipe}" stroke-width="3"/><circle cx="27" cy="27" r="4" fill="${C.dark}" stroke="${C.stroke}" stroke-width="1.5"/></svg>`}
+      }
+    ]
+  },
+  {
+    id:'misc', name:'Прочее', desc:'Фильтры, компрессоры, факел, вентиляторы, индикаторы — 8 элементов',
+    bar:'orange',
+    symbols:[
+      {
+        id:'filter', name:'Фильтр / Стрейнер', tag:'F-XXX / S-XXX',
+        desc:'Фильтр грубой/тонкой очистки.',
+        states:['clean','dirty'],
+        svg:{
+          clean:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55"><polygon points="27,5 50,50 4,50" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/><line x1="14" y1="34" x2="40" y2="34" stroke="${C.dark}" stroke-width="1.5"/><line x1="19" y1="42" x2="35" y2="42" stroke="${C.dark}" stroke-width="1"/><text x="27" y="30" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="10" font-weight="700" fill="${C.dim}">F</text></svg>`,
+          dirty:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 55"><polygon points="27,5 50,50 4,50" fill="${C.body}" stroke="${C.alarm}" stroke-width="2.5"/><line x1="14" y1="34" x2="40" y2="34" stroke="${C.alarm}" stroke-width="1.5" opacity="0.5"/><line x1="19" y1="42" x2="35" y2="42" stroke="${C.alarm}" stroke-width="1" opacity="0.5"/><text x="27" y="30" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="10" font-weight="700" fill="${C.alarm}">F</text></svg>`
+        }
+      },
+      {
+        id:'compressor', name:'Компрессор', tag:'C-XXX / K-XXX',
+        desc:'Газовый компрессор.',
+        states:['stop','run','fault'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56"><polygon points="8,6 72,16 72,40 8,50" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/><text x="40" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="12" font-weight="800" fill="${C.stop}">K</text></svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56"><polygon points="8,6 72,16 72,40 8,50" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/><text x="40" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="12" font-weight="800" fill="${C.run}">K</text></svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 56"><polygon points="8,6 72,16 72,40 8,50" fill="${C.body}" stroke="${C.fault}" stroke-width="2.5"/><text x="40" y="33" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="12" font-weight="800" fill="${C.fault}">K</text></svg>`
+        }
+      },
+      {
+        id:'flare', name:'Факельная установка', tag:'FL-XXX',
+        desc:'Факельная установка / свеча.',
+        states:['idle','burning'],
+        svg:{
+          idle:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 85"><line x1="22" y1="80" x2="22" y2="28" stroke="${C.stroke}" stroke-width="3"/><line x1="12" y1="80" x2="32" y2="80" stroke="${C.stroke}" stroke-width="2"/><circle cx="22" cy="25" r="5" fill="${C.body}" stroke="${C.stop}" stroke-width="1.5"/></svg>`,
+          burning:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 85"><line x1="22" y1="80" x2="22" y2="28" stroke="${C.stroke}" stroke-width="3"/><line x1="12" y1="80" x2="32" y2="80" stroke="${C.stroke}" stroke-width="2"/><path d="M15,26 Q22,4 29,26 Q25,18 22,26 Q19,18 15,26 Z" fill="${C.bypass}" stroke="${C.fault}" stroke-width="1"/><path d="M18,23 Q22,10 26,23" fill="${C.alarm}" stroke="none"/></svg>`
+        }
+      },
+      {
+        id:'fan', name:'Вентилятор', tag:'FN-XXX',
+        desc:'Вентилятор: вытяжной, приточный, аварийный.',
+        states:['stop','run'],
+        svg:{
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/><path d="M28,28 L28,9" stroke="${C.stop}" stroke-width="2.5" stroke-linecap="round"/><path d="M28,28 L43,43" stroke="${C.stop}" stroke-width="2.5" stroke-linecap="round"/><path d="M28,28 L13,43" stroke="${C.stop}" stroke-width="2.5" stroke-linecap="round"/><circle cx="28" cy="28" r="3.5" fill="${C.stop}"/></svg>`,
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="${C.body}" stroke="${C.stroke}" stroke-width="2"/><circle cx="28" cy="28" r="22" fill="none" stroke="${C.run}" stroke-width="1" opacity="0.3"/><path d="M28,28 L28,9" stroke="${C.run}" stroke-width="2.5" stroke-linecap="round"/><path d="M28,28 L43,43" stroke="${C.run}" stroke-width="2.5" stroke-linecap="round"/><path d="M28,28 L13,43" stroke="${C.run}" stroke-width="2.5" stroke-linecap="round"/><circle cx="28" cy="28" r="3.5" fill="${C.run}"/></svg>`
+        }
+      },
+      {
+        id:'bargraph', name:'Баргаф с уставками', tag:'—',
+        desc:'Вертикальный баргаф с лимитами HH/H/SP/L/LL для Level 3.',
+        states:['normal','alarm'],
+        svg:{
+          normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 110">
+  <rect x="12" y="5" width="24" height="85" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/>
+  <rect x="12" y="46" width="24" height="44" rx="0" fill="${C.run}" fill-opacity="0.3"/>
+  <line x1="10" y1="14" x2="38" y2="14" stroke="${C.fault}" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="10" y1="28" x2="38" y2="28" stroke="${C.alarm}" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="10" y1="46" x2="38" y2="46" stroke="${C.run}" stroke-width="1.5"/>
+  <line x1="10" y1="66" x2="38" y2="66" stroke="${C.alarm}" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="10" y1="78" x2="38" y2="78" stroke="${C.fault}" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <text x="43" y="17" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.fault}">HH</text>
+  <text x="43" y="31" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.alarm}">H</text>
+  <text x="43" y="49" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.run}">SP</text>
+  <text x="43" y="69" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.alarm}">L</text>
+  <text x="43" y="81" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.fault}">LL</text>
+  <text x="24" y="104" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.run}">52%</text>
+</svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 110">
+  <rect x="12" y="5" width="24" height="85" rx="3" fill="${C.body}" stroke="${C.alarm}" stroke-width="2"/>
+  <rect x="12" y="20" width="24" height="70" rx="0" fill="${C.alarm}" fill-opacity="0.2"/>
+  <line x1="10" y1="14" x2="38" y2="14" stroke="${C.fault}" stroke-width="1.5" stroke-dasharray="3,2"/>
+  <line x1="10" y1="28" x2="38" y2="28" stroke="${C.alarm}" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="43" y="17" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.fault}">HH</text>
+  <text x="43" y="31" font-family="Share Tech Mono,monospace" font-size="6" fill="${C.alarm}">H</text>
+  <text x="24" y="104" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="10" fill="${C.alarm}">83%</text>
+</svg>`
+        }
+      },
+      {
+        id:'status-indicator', name:'Индикатор статуса', tag:'—',
+        desc:'Компактный круглый индикатор для KPI-карточек.',
+        states:['run','stop','fault','alarm'],
+        svg:{
+          run:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${C.run}" opacity="0.8"/><circle cx="10" cy="10" r="7" fill="none" stroke="${C.run}" stroke-width="1" opacity="0.4"/></svg>`,
+          stop:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${C.stop}"/></svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${C.fault}"/><circle cx="10" cy="10" r="7" fill="none" stroke="${C.fault}" stroke-width="1" opacity="0.4"/></svg>`,
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7" fill="${C.alarm}"/></svg>`
+        }
+      },
+      {
+        id:'alarm-banner-h', name:'Аларм-баннер', tag:'—',
+        desc:'Аварийный баннер для размещения на мнемосхеме.',
+        states:['alarm','fault'],
+        svg:{
+          alarm:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 28"><rect x="1" y="1" width="138" height="26" rx="4" fill="${C.alarm}" fill-opacity="0.06" stroke="${C.alarm}" stroke-width="1.5"/><text x="16" y="18" font-family="Barlow Condensed,sans-serif" font-size="10" fill="${C.alarm}">⚠</text><text x="30" y="18" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.alarm}">PT-101 HIGH — 0.72 МПа</text></svg>`,
+          fault:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 28"><rect x="1" y="1" width="138" height="26" rx="4" fill="${C.fault}" fill-opacity="0.06" stroke="${C.fault}" stroke-width="1.5"/><circle cx="12" cy="14" r="4" fill="${C.fault}"/><text x="24" y="18" font-family="Share Tech Mono,monospace" font-size="9" fill="${C.fault}">LT-401 HI-HI — 92%</text></svg>`
+        }
+      },
+      {
+        id:'mixer', name:'Смеситель статический', tag:'—',
+        desc:'Статический смеситель в трубопроводе.',
+        states:['normal'],
+        svg:{normal:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 34"><rect x="12" y="3" width="46" height="28" rx="3" fill="${C.body}" stroke="${C.stroke}" stroke-width="1.5"/><path d="M20,8 L48,26 M20,26 L48,8" stroke="${C.dark}" stroke-width="1.5"/><line x1="0" y1="17" x2="12" y2="17" stroke="${C.pipe}" stroke-width="4"/><line x1="58" y1="17" x2="70" y2="17" stroke="${C.pipe}" stroke-width="4"/></svg>`}
+      }
+    ]
+  }
+];
+
+// ═══════════════════════════════════════
+//  RENDERING
+// ═══════════════════════════════════════
+let totalSymbols = 0;
+
+function init() {
+  CATS.forEach(c => { if(c.symbols) totalSymbols += c.symbols.length; });
+  document.getElementById('stats-bar').innerHTML = `
+    <span>Символов: <b>${totalSymbols}</b></span>
+    <span>Категорий: <b>${CATS.length - 1}</b></span>
+    <span>Палитра: <b>Dark Industrial (SCADA UI Kit)</b></span>
+    <span>Формат: <b>SVG inline</b></span>
+    <span>Стандарт: <b>ISA-101 / HP-HMI</b></span>
+  `;
+
+  // Tabs
+  document.getElementById('nav-tabs').innerHTML = CATS.map(c =>
+    `<button class="nav-tab" data-id="${c.id}" onclick="showCat('${c.id}')">${c.name}</button>`
+  ).join('');
+
+  // Panels
+  let html = '';
+
+  // Guide panel
+  html += `<div class="cat-panel" data-id="guide" id="panel-guide">
+    <div class="guide-box">
+      <h3>🎨 Цветовые токены дизайн-системы</h3>
+      <div class="palette-grid">
+        ${[
+          ['--bg','Фон','#080C14'],['--bg1','Фон панели','#0D1524'],['--surface','Поверхность','#0F1D30'],
+          ['--border','Граница','#1A2E4A'],['--border-hi','Граница hover','#234060'],
+          ['--cyan','Акцент / Cyan','#00D4FF'],['--green','В работе','#22D3A0'],['--red','Авария / Fault','#FF4454'],
+          ['--yellow','Предупреждение','#FBBF24'],['--orange','Ручной / Bypass','#F97316'],
+          ['--text','Основной текст','#D8E8F8'],['--text2','Вторичный','#7A9BC0'],['--text3','Приглушённый','#3D5A7A'],
+          ['Нефть','Поток нефти','#22D3A0'],['Газ','Поток газа','#FBBF24'],['Вода','Поток воды','#00D4FF'],['Пар','Поток пара','#F97316']
+        ].map(([name,desc,hex]) => `
+          <div class="pal-item">
+            <div class="pal-swatch" style="background:${hex}"></div>
+            <div class="pal-info"><span class="pal-name">${desc}</span><span class="pal-hex">${hex}</span></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="guide-box">
+      <h3>📐 Принципы построения</h3>
+      <ul>
+        <li><b>Тёмный фон + минимальный цвет.</b> Оборудование fill=<code>#0F1D30</code>, stroke=<code>#234060</code>. Цвет только для статуса.</li>
+        <li><b>Шрифты:</b> <code>Barlow Condensed 700</code> для меток и заголовков, <code>Share Tech Mono</code> для значений и тегов.</li>
+        <li><b>Stroke-based иконки.</b> Никаких заливок для декора. Без glow-эффектов. Статус только через цвет обводки и заливки.</li>
+        <li><b>Статус через обводку.</b> Normal = <code>#234060</code>. Alarm = <code>#FBBF24</code>. Fault = <code>#FF4454</code>. Running = внутренний элемент <code>#22D3A0</code>.</li>
+        <li><b>Консистентность.</b> Все символы используют единую палитру и стили текста.</li>
+        <li><b>Никаких градиентов и 3D.</b> Плоский дизайн, чистые линии, сетка на фоне.</li>
+      </ul>
+    </div>
+    <div class="guide-box">
+      <h3>📋 Состав библиотеки (${totalSymbols} символов)</h3>
+      <ul>
+        ${CATS.filter(c=>!c.isGuide).map(c => `<li><b>${c.name} (${c.symbols.length}):</b> ${c.symbols.map(s=>s.name).join(', ')}</li>`).join('')}
+      </ul>
+    </div>
+  </div>`;
+
+  // Category panels
+  CATS.filter(c=>!c.isGuide).forEach(c => {
+    html += `<div class="cat-panel" data-id="${c.id}">
+      <div class="cat-desc">${c.desc}</div>
+      <div class="sym-grid">
+        ${c.symbols.map(s => {
+          const first = Object.keys(s.svg)[0];
+          const barClass = c.bar || 'cyan';
+          return `
+            <div class="sym-card" onclick="openModal('${c.id}','${s.id}')">
+              <div class="card-bar ${barClass}"></div>
+              <div class="sym-preview">${s.svg[first]}</div>
+              <div class="sym-info">
+                <div class="sym-name">${s.name}</div>
+                <div class="sym-tag">${s.tag}</div>
+                <div class="sym-states">
+                  ${s.states.map(st => {
+                    let cls = 'st-normal';
+                    if(['run','running','burning','auto'].includes(st)) cls='st-run';
+                    else if(['fault','trip'].includes(st)) cls='st-fault';
+                    else if(['alarm','dirty','hihi'].includes(st)) cls='st-alarm';
+                    else if(['open'].includes(st)) cls='st-open';
+                    else if(['closed'].includes(st)) cls='st-closed';
+                    else if(['man','bypass'].includes(st)) cls='st-man';
+                    else if(['stop','off','idle'].includes(st)) cls='st-stop';
+                    return `<span class="badge ${cls}"><span class="badge-dot"></span>${st}</span>`;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('panels').innerHTML = html;
+  showCat(CATS[1].id); // Show first real category
+}
+
+function showCat(id) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.id === id));
+  document.querySelectorAll('.cat-panel').forEach(p => p.classList.toggle('active', p.dataset.id === id));
+}
+
+function openModal(catId, symId) {
+  const cat = CATS.find(c => c.id === catId);
+  const sym = cat.symbols.find(s => s.id === symId);
+  if (!sym) return;
+  document.getElementById('modal-title').textContent = sym.name;
+
+  let html = `<div class="modal-desc">${sym.desc}</div>`;
+  if (sym.tag && sym.tag !== '—') html += `<div class="modal-tag-row"><span class="modal-tag-label">Тег:</span><span class="modal-tag-val">${sym.tag}</span></div>`;
+
+  html += `<div class="modal-states">`;
+  Object.entries(sym.svg).forEach(([st, svg]) => {
+    html += `<div class="modal-state-item"><div>${svg}</div><div class="modal-state-label">${st}</div></div>`;
+  });
+  html += `</div>`;
+
+  Object.entries(sym.svg).forEach(([st, svg]) => {
+    const escaped = svg.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html += `<div class="code-block"><div class="code-header"><span class="code-label">${st}</span><button class="code-copy" onclick="copySVG(this,'${sym.id}','${st}')">Копировать</button></div><div class="code-body">${escaped}</div></div>`;
+  });
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function copySVG(btn, symId, state) {
+  let svg = '';
+  CATS.forEach(c => { if(!c.symbols) return; const s=c.symbols.find(x=>x.id===symId); if(s&&s.svg[state]) svg=s.svg[state]; });
+  navigator.clipboard.writeText(svg.trim()).then(() => { btn.textContent='✓ OK'; setTimeout(()=>btn.textContent='Копировать',1500); });
+}
+
+function downloadAll() {
+  let out = `<!-- SVG Symbol Library — АСУ ТП / SCADA -->\n<!-- Dark Industrial Theme · ${new Date().toISOString()} -->\n`;
+  CATS.forEach(c => {
+    if(!c.symbols) return;
+    out += `\n<!-- ══════ ${c.name.toUpperCase()} ══════ -->\n`;
+    c.symbols.forEach(s => {
+      Object.entries(s.svg).forEach(([st,svg]) => {
+        out += `\n<!-- ${s.name} · ${st} -->\n${svg.trim().replace('<svg ','<svg id="'+s.id+'-'+st+'" ')}\n`;
+      });
+    });
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([out],{type:'image/svg+xml'}));
+  a.download = 'scada-svg-symbols.svg';
+  a.click();
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+init();
+</script>
+</div>
+</body>
+</html>
