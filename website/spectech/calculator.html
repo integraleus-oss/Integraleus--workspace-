@@ -895,6 +895,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             <input class="addon-select" id="calc-name" placeholder="Имя / Компания *" style="margin-bottom:6px">
             <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
             <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
+            <!-- Honeypot — hidden from humans, bots fill it -->
+            <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
           </div>
 
           <div class="result-actions">
@@ -1620,6 +1622,8 @@ function sendConfigEmail() {
   // Send via PHP
   const fd = new FormData();
   fd.append('tid', calcTid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
   fd.append('product', p.name);
   fd.append('name', cName);
   fd.append('email', cEmail);
@@ -1640,7 +1644,10 @@ function sendConfigEmail() {
   btn.disabled = true;
 
   fetch('/send_calc.php', { method: 'POST', body: fd })
-    .then(r => r.json())
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
     .then(data => {
       if (data.ok) {
         btn.textContent = '✓ Отправлено!';
@@ -1648,15 +1655,17 @@ function sendConfigEmail() {
         btn.style.color = 'var(--lime)';
         setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
       } else {
-        btn.textContent = '✗ Ошибка';
+        btn.textContent = data.error || '✗ Ошибка';
         btn.style.borderColor = 'var(--crimson)';
         btn.style.color = 'var(--crimson)';
-        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
       }
     })
-    .catch(() => {
-      btn.textContent = '✗ Ошибка сети';
-      setTimeout(() => { btn.textContent = origText; btn.disabled = false; }, 3000);
+    .catch(e => {
+      btn.textContent = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
     });
 }
 
@@ -1726,6 +1735,7 @@ function getSelectedReports() {
 
 // Generate ticket ID
 const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+const calcLoadTs = Math.floor(Date.now() / 1000); // anti-bot timestamp
 document.getElementById('r-tid').textContent = calcTid;
 
 updateSliderRange();
@@ -1884,6 +1894,8 @@ function submitWizard() {
   // Send via PHP
   const fd = new FormData();
   fd.append('tid', tid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
   fd.append('product', prodName);
   fd.append('sku', prodSku || prodName);
   fd.append('tags', qty);
