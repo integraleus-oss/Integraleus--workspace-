@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Sitemap: https://specialtechnology.ru/sitemap.xml
+
+User-agent: *
+Disallow: /deploy.php
