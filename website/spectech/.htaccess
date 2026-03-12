@@ -1,3 +1,6 @@
+# Priority: index.html over index.php (WordPress)
+DirectoryIndex index.html index.php
+
 # Security headers
 <IfModule mod_headers.c>
     Header always set X-Frame-Options "SAMEORIGIN"
