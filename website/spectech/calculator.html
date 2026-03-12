@@ -908,7 +908,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
                     <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
             <div style="font-size:11px;color:var(--text3);font-family:var(--ff-mono);margin-bottom:8px">// ваши контакты</div>
-            <input class="addon-select" id="calc-name" placeholder="Имя / Компания *" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-name" placeholder="Имя *" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-company" placeholder="Компания *" style="margin-bottom:6px">
             <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
             <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
             <!-- Honeypot — hidden from humans, bots fill it -->
@@ -1759,13 +1760,15 @@ function sendConfigEmail() {
 
   // Get contact fields
   const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
   const cEmail = document.getElementById('calc-email').value.trim();
   const cPhone = document.getElementById('calc-phone').value.trim();
   const cComment = document.getElementById('calc-comment').value.trim();
 
-  if (!cName || !cEmail) {
-    alert('Заполните имя и email');
+  if (!cName || !cCompany || !cEmail) {
+    alert('Заполните имя, компанию и email');
     if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
     else document.getElementById('calc-email').focus();
     return;
   }
@@ -1777,6 +1780,7 @@ function sendConfigEmail() {
   fd.append('website', document.getElementById('hp-website')?.value || '');
   fd.append('product', p.name);
   fd.append('name', cName);
+  fd.append('company', cCompany);
   fd.append('email', cEmail);
   fd.append('phone', cPhone);
   fd.append('comment', cComment);
