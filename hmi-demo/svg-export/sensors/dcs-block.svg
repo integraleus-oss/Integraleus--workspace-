@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Блок DCS / ПЛК / DCS / PLC Function Block -->
+<!-- Category: sensors | Tags: ISA, HP-HMI, АСУ ТП -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 70 50" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="5" width="60" height="40" fill="none" stroke="#3d5a7a" stroke-width="2" rx="2"/>
+      <line x1="5" y1="18" x2="65" y2="18" stroke="#3d5a7a" stroke-width="1"/>
+      <text x="35" y="14" text-anchor="middle" font-size="9" font-family="Arial" fill="#3d5a7a">PIC-101</text>
+      <text x="35" y="34" text-anchor="middle" font-size="11" font-family="Arial" fill="#3d5a7a">AUTO</text>
+    </svg>

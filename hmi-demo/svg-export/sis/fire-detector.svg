@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Датчик пламени / Fire / Flame Detector -->
+<!-- Category: sis | Tags: SIS, безопасность, F&G -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,5 55,50 5,50" fill="none" stroke="#3d5a7a" stroke-width="2"/><path d="M26,42 Q30,22 34,42" fill="none" stroke="#3d5a7a" stroke-width="1.5"/><path d="M28,38 Q30,28 32,38" fill="none" stroke="#3d5a7a" stroke-width="1"/></svg>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Датчик загазованности / Gas Detector (LEL) -->
+<!-- Category: sis | Tags: SIS, безопасность, F&G -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><polygon points="30,5 55,50 5,50" fill="none" stroke="#3d5a7a" stroke-width="2"/><text x="30" y="32" text-anchor="middle" font-size="9" font-family="Arial" fill="#3d5a7a">GAS</text><text x="30" y="44" text-anchor="middle" font-size="8" font-family="Arial" fill="#3d5a7a">LEL</text></svg>

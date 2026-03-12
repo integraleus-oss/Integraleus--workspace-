@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Печь / Огневой нагреватель / Fired Heater -->
+<!-- Category: hx | Tags: P&ID, ISA, нефтехим -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 70 90" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="15" width="60" height="60" fill="none" stroke="#3d5a7a" stroke-width="2" rx="3"/>
+      <rect x="25" y="0" width="20" height="18" fill="none" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M15,55 Q15,35 25,35 Q35,35 35,55 Q35,35 45,35 Q55,35 55,55" fill="none" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M33,65 Q35,58 37,65" fill="none" stroke="#3d5a7a" stroke-width="1"/>
+      <line x1="0" y1="45" x2="5" y2="45" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="65" y1="45" x2="70" y2="45" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="35" y1="75" x2="35" y2="90" stroke="#3d5a7a" stroke-width="2"/>
+    </svg>

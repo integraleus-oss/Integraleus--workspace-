@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Вакуумный насос / Vacuum Pump -->
+<!-- Category: pumps | Tags: P&ID -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="30" r="18" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <polygon points="58,30 70,22 70,38" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="10" y1="30" x2="22" y2="30" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="70" y1="30" x2="80" y2="30" stroke="#3d5a7a" stroke-width="2"/>
+      <text x="40" y="34" text-anchor="middle" font-size="10" font-family="Arial" fill="#3d5a7a">V</text>
+    </svg>

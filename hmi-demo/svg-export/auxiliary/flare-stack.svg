@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Факельная установка / Flare Stack -->
+<!-- Category: auxiliary | Tags: P&ID, нефтехим -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 50 110" xmlns="http://www.w3.org/2000/svg"><line x1="25" y1="100" x2="25" y2="25" stroke="#3d5a7a" stroke-width="2"/><line x1="15" y1="100" x2="25" y2="80" stroke="#3d5a7a" stroke-width="1.5"/><line x1="35" y1="100" x2="25" y2="80" stroke="#3d5a7a" stroke-width="1.5"/><path d="M18,25 Q25,5 32,25" fill="none" stroke="#3d5a7a" stroke-width="1.5"/><path d="M21,20 Q25,10 29,20" fill="none" stroke="#3d5a7a" stroke-width="1"/></svg>

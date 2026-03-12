@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Центробежный вентилятор / Centrifugal Fan -->
+<!-- Category: fans | Tags: P&ID, ISA, вентиляция -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 80 65" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="32" r="20" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <path d="M40,32 L60,32" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M40,32 L40,12" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M40,32 L23,20" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M40,32 L23,44" stroke="#3d5a7a" stroke-width="1.5"/>
+      <path d="M40,32 L57,44" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="0" y1="32" x2="20" y2="32" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="40" y1="52" x2="40" y2="65" stroke="#3d5a7a" stroke-width="2"/>
+      <polygon points="60,32 72,24 72,40" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+    </svg>

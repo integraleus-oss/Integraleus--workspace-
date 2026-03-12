@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Переход (редуктор) / Reducer -->
+<!-- Category: piping | Tags: P&ID, трубопровод -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg"><polygon points="0,5 0,25 40,10 40,20" fill="none" stroke="#3d5a7a" stroke-width="2"/></svg>

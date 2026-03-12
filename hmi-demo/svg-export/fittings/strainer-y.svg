@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Фильтр Y-типа / Y-Strainer -->
+<!-- Category: fittings | Tags: P&ID, трубопровод -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="20" x2="25" y2="20" stroke="#3d5a7a" stroke-width="2"/><line x1="35" y1="20" x2="60" y2="20" stroke="#3d5a7a" stroke-width="2"/><polygon points="25,10 35,10 35,30 25,30" fill="none" stroke="#3d5a7a" stroke-width="2"/><line x1="30" y1="30" x2="30" y2="45" stroke="#3d5a7a" stroke-width="1.5"/><line x1="22" y1="45" x2="38" y2="45" stroke="#3d5a7a" stroke-width="1.5"/><line x1="27" y1="15" x2="33" y2="25" stroke="#3d5a7a" stroke-width="1"/><line x1="33" y1="15" x2="27" y2="25" stroke="#3d5a7a" stroke-width="1"/></svg>

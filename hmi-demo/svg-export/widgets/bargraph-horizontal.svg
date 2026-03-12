@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Баргаф горизонтальный / Horizontal Bargraph -->
+<!-- Category: widgets | Tags: HP-HMI, визуализация -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="100" height="16" fill="none" stroke="#3d5a7a" stroke-width="1.5" rx="2"/><rect x="7" y="7" width="55" height="12" fill="#3d5a7a" opacity="0.5" rx="1"/><line x1="80" y1="5" x2="80" y2="21" stroke="#ff4454" stroke-width="1.5"/><line x1="25" y1="5" x2="25" y2="21" stroke="#fbbf24" stroke-width="1.5"/><text x="112" y="17" text-anchor="end" font-size="8" font-family="Arial" fill="#3d5a7a">55%</text></svg>

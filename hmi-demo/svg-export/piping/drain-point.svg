@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Дренаж / Drain Point -->
+<!-- Category: piping | Tags: P&ID -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="0" x2="15" y2="25" stroke="#3d5a7a" stroke-width="2"/><polygon points="5,25 25,25 15,38" fill="none" stroke="#3d5a7a" stroke-width="1.5"/></svg>

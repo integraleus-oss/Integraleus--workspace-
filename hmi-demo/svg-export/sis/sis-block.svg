@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Блок SIS / SIS Logic Block -->
+<!-- Category: sis | Tags: SIS, безопасность, SIL -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="70" height="40" fill="none" stroke="#3d5a7a" stroke-width="2" rx="2"/><line x1="5" y1="18" x2="75" y2="18" stroke="#3d5a7a" stroke-width="1"/><text x="40" y="14" text-anchor="middle" font-size="8" font-family="Arial" fill="#3d5a7a">SIS</text><text x="40" y="34" text-anchor="middle" font-size="10" font-family="Arial" fill="#3d5a7a">SIF-001</text><rect x="2" y="2" width="76" height="46" fill="none" stroke="#3d5a7a" stroke-width="0.5" stroke-dasharray="3,2" rx="3"/></svg>

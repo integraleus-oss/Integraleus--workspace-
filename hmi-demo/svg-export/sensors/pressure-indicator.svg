@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Манометр (местный) / Pressure Indicator (PI) -->
+<!-- Category: sensors | Tags: ISA, P&ID, местный -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 55" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="25" r="18" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <text x="30" y="23" text-anchor="middle" font-size="12" font-family="Arial" fill="#3d5a7a">PI</text>
+      <line x1="20" y1="29" x2="40" y2="29" stroke="#3d5a7a" stroke-width="0.8"/>
+      <text x="30" y="38" text-anchor="middle" font-size="8" font-family="Arial" fill="#3d5a7a">101</text>
+      <line x1="30" y1="43" x2="30" y2="55" stroke="#3d5a7a" stroke-width="1.5"/>
+    </svg>

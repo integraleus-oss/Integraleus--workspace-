@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Дымовой извещатель / Smoke Detector -->
+<!-- Category: sis | Tags: SIS, безопасность, F&G -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="25" r="20" fill="none" stroke="#3d5a7a" stroke-width="2"/><path d="M22,30 Q26,20 30,30 Q34,40 38,30" fill="none" stroke="#3d5a7a" stroke-width="1.2"/><text x="30" y="18" text-anchor="middle" font-size="7" font-family="Arial" fill="#3d5a7a">SMOKE</text></svg>

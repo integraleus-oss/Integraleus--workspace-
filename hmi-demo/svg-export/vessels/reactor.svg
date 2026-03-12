@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Реактор / Reactor -->
+<!-- Category: vessels | Tags: P&ID, нефтехим -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10,18 Q10,5 30,5 Q50,5 50,18 L50,82 Q50,95 30,95 Q10,95 10,82 Z" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="30" y1="0" x2="30" y2="55" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="20" y1="45" x2="40" y2="55" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="40" y1="45" x2="20" y2="55" stroke="#3d5a7a" stroke-width="1.5"/>
+      <rect x="24" y="0" width="12" height="6" fill="none" stroke="#3d5a7a" stroke-width="1.5" rx="1"/>
+      <text x="30" y="5" text-anchor="middle" font-size="5" font-family="Arial" fill="#3d5a7a">M</text>
+      <line x1="0" y1="30" x2="10" y2="30" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="50" y1="75" x2="60" y2="75" stroke="#3d5a7a" stroke-width="2"/>
+      <path d="M8,25 L5,25 L5,80 L8,80" fill="none" stroke="#3d5a7a" stroke-width="1" stroke-dasharray="3,2"/>
+      <path d="M52,25 L55,25 L55,80 L52,80" fill="none" stroke="#3d5a7a" stroke-width="1" stroke-dasharray="3,2"/>
+    </svg>

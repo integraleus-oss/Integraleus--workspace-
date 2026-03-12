@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Автоматический выключатель / Circuit Breaker -->
+<!-- Category: electrical | Tags: электро, защита -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><line x1="25" y1="0" x2="25" y2="15" stroke="#3d5a7a" stroke-width="2"/><line x1="25" y1="15" x2="35" y2="30" stroke="#3d5a7a" stroke-width="2"/><line x1="25" y1="35" x2="25" y2="50" stroke="#3d5a7a" stroke-width="2"/><rect x="18" y="30" width="14" height="10" fill="none" stroke="#3d5a7a" stroke-width="1.5" rx="1"/></svg>

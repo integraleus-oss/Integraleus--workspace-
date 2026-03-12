@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Погружной насос / Submersible Pump -->
+<!-- Category: pumps | Tags: P&ID -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 80 70" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="35" r="18" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <polygon points="58,35 70,27 70,43" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="40" y1="17" x2="40" y2="5" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="70" y1="35" x2="80" y2="35" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="28" y1="60" x2="52" y2="60" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="32" y1="64" x2="48" y2="64" stroke="#3d5a7a" stroke-width="1.5"/>
+    </svg>

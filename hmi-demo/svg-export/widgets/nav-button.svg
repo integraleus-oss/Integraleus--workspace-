@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Кнопка навигации / Navigation Button -->
+<!-- Category: widgets | Tags: HP-HMI, навигация -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="96" height="26" fill="none" stroke="#3d5a7a" stroke-width="1.5" rx="3"/><text x="50" y="19" text-anchor="middle" font-size="10" font-family="Arial" fill="#3d5a7a">AREA-01 ▶</text></svg>

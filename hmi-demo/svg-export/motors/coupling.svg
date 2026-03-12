@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Муфта / Coupling -->
+<!-- Category: motors | Tags: P&ID, привод, механика -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="8" width="15" height="24" fill="none" stroke="#3d5a7a" stroke-width="2" rx="1"/>
+      <rect x="35" y="8" width="15" height="24" fill="none" stroke="#3d5a7a" stroke-width="2" rx="1"/>
+      <line x1="25" y1="12" x2="35" y2="12" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="25" y1="20" x2="35" y2="20" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="25" y1="28" x2="35" y2="28" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="0" y1="20" x2="10" y2="20" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="50" y1="20" x2="60" y2="20" stroke="#3d5a7a" stroke-width="2"/>
+    </svg>

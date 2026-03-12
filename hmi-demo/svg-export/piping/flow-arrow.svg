@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Стрелка потока / Flow Direction Arrow -->
+<!-- Category: piping | Tags: P&ID -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg"><polygon points="5,10 30,3 30,17" fill="#3d5a7a"/></svg>

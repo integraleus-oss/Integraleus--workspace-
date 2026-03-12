@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Осевой вентилятор / Axial Fan -->
+<!-- Category: fans | Tags: P&ID, ISA, вентиляция -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="40" cy="30" r="20" fill="none" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="28" y1="15" x2="52" y2="45" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="52" y1="15" x2="28" y2="45" stroke="#3d5a7a" stroke-width="1.5"/>
+      <line x1="0" y1="30" x2="20" y2="30" stroke="#3d5a7a" stroke-width="2"/>
+      <line x1="60" y1="30" x2="80" y2="30" stroke="#3d5a7a" stroke-width="2"/>
+    </svg>

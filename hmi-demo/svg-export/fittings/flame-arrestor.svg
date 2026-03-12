@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Пламегаситель / Flame Arrestor -->
+<!-- Category: fittings | Tags: P&ID, безопасность -->
+<!-- Color param: replace #3d5a7a with state color -->
+<!-- stopped=#3d5a7a running=#22d3a0 disabled=#2a3a5e alarm=#ff4454 -->
+<svg viewBox="0 0 50 40" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="5" width="30" height="30" fill="none" stroke="#3d5a7a" stroke-width="2" rx="2"/><line x1="15" y1="10" x2="35" y2="10" stroke="#3d5a7a" stroke-width="0.8"/><line x1="15" y1="15" x2="35" y2="15" stroke="#3d5a7a" stroke-width="0.8"/><line x1="15" y1="20" x2="35" y2="20" stroke="#3d5a7a" stroke-width="0.8"/><line x1="15" y1="25" x2="35" y2="25" stroke="#3d5a7a" stroke-width="0.8"/><line x1="15" y1="30" x2="35" y2="30" stroke="#3d5a7a" stroke-width="0.8"/><line x1="0" y1="20" x2="10" y2="20" stroke="#3d5a7a" stroke-width="2"/><line x1="40" y1="20" x2="50" y2="20" stroke="#3d5a7a" stroke-width="2"/></svg>
