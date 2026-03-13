@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДПП.УР — управление рецептурой производства | СПЕЦТЕХ</title>
+<meta name="description" content="ДатаПлат Производство.Управление рецептурой — программный модуль для автоматизации управления рецептурой продукта, формирования заданий на производство и контроля исполнения. Цифровизация процессов смешивания и рецептурного производства.">
+<meta name="keywords" content="ДПП УР, ДатаПлат, управление рецептурой, смешивание, ингредиенты, производство, задания на производство, MES, ИнфТех, СПЕЦТЕХ, импортозамещение, цифровой двойник">
+<meta property="og:title" content="ДПП.УР — управление рецептурой производства">
+<meta property="og:description" content="Автоматизация управления рецептурой продукта, формирования заданий на производство и контроля исполнения.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dpp-ur.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dpp-ur.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}.breadcrumb-cur{color:var(--text2)}
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-sub{font-size:18px;color:var(--text2);font-weight:300;margin-top:4px}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+.ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:28px;font-weight:900;color:var(--text)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}.ptab-panel.active{display:block}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.feat-line svg{flex-shrink:0;margin-top:3px}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:800px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px;text-align:center}
+.arch-level-name{font-weight:600;color:var(--text);min-width:220px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+.process-step{display:flex;align-items:flex-start;gap:16px;padding:16px;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;margin-bottom:8px}
+.step-num{font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--volt);min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:2px solid var(--volt);border-radius:50%;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.formula-block{background:var(--ink2);border:1px solid var(--wire);border-radius:8px;padding:20px 24px;margin:16px 0;font-family:var(--ff-mono);font-size:14px;color:var(--volt);line-height:1.8;overflow-x:auto}
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+.logo-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px;justify-content:center}
+.logo-badge{padding:8px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:8px;font-size:12px;color:var(--text2);font-weight:600}
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+  .arch-level-name{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">ДПП.УР</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">Разработчик: ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">ДПП.УР</h1>
+        <div class="product-sub">ДатаПлат Производство.Управление рецептурой</div>
+        <div class="product-version">Релиз 1.0 · Модуль платформы ДатаПлат</div>
+        <p class="product-tagline">Программный модуль для контроля и управления технологическими процессами производства готовой продукции из ингредиентов с использованием рецептов и режимов производства. Цифровизация процессов управления рецептурой и смешивания.</p>
+
+        <div class="product-pills">
+          <span class="ppill accent">Управление рецептурой</span>
+          <span class="ppill">MES</span>
+          <span class="ppill">Пищевая промышленность</span>
+          <span class="ppill">Смешивание</span>
+          <span class="ppill">IIoT</span>
+          <span class="ppill">Цифровой двойник</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">Модуль платформы ДатаПлат Производство</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="index.html#contact" class="btn-cta-primary">Запросить КП</a>
+          <a href="dataplat.html" class="btn-cta-secondary">Платформа ДатаПлат</a>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>100% отечественная разработка</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Веб-интерфейс, без установки на рабочие станции</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Машинное обучение и предиктивная аналитика</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Интеграция с АСУ ТП и ERP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('architecture',this)">Архитектура</button>
+    <button class="ptab" onclick="showPTab('functions',this)">Функции</button>
+    <button class="ptab" onclick="showPTab('process',this)">Применение</button>
+    <button class="ptab" onclick="showPTab('implementations',this)">Внедрения</button>
+  </div>
+</div>
+
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="specs-note">
+        ДПП.УР автоматизирует полный цикл управления рецептурой — от ведения справочников ингредиентов до контроля исполнения заданий на производство. Позволяет снизить затраты на сырьё на 5-20%, отходы на 8-25% и повысить производительность на 5-10%.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Назначение</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Ведение справочника ингредиентов и их характеристик</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Виртуальное и реальное управление продуктом и рецептурой</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Формирование и контроль заданий на производство</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Удаленный мониторинг технологического процесса</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Раннее обнаружение аномалий в процессе производства</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Предиктивная аналитика технологических показателей</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Функциональность</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Создание продукта с составом и параметрами качества</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Автоматический расчет требуемой массы ингредиентов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Передача параметров режима в оборудование</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Контроль статуса выполнения в реальном времени</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Многопараметрическая диагностика на основе ML</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Интеграция с корпоративными системами</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Эффект от цифровизации процессов управления рецептурой</div>
+        <div class="overview-grid">
+          <div class="overview-block" style="border-color:var(--lime)">
+            <div class="ovb-title" style="color:var(--lime)">Экономические результаты</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Снижение затрат на сырье на 5-20%</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Снижение отходов на 8-25%</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Повышение производительности на 5-10%</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Сокращение времени корректировки рецептов на 10-25%</div>
+            </div>
+          </div>
+          <div class="overview-block" style="border-color:var(--flame)">
+            <div class="ovb-title" style="color:var(--flame)">Операционные преимущества</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Исключение ошибок в расчетах ингредиентов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Автоматизация процессов смешивания</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Повышение качества продукции</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Быстрая адаптация к запросам рынка</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div id="ptab-architecture" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.УР реализован на базе цифровой платформы ДатаПлат и представляет собой цифровое решение промышленного интернета вещей для управления рецептурой. Архитектура включает компоненты для работы с цифровыми двойниками продуктов и технологических процессов.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">Архитектура ДПП.УР</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)"><span class="arch-level-num">1</span><span class="arch-level-name">Цифровая платформа ДатаПлат</span><span class="arch-level-desc">Ядро системы - сервер информационной модели с Web-порталом</span></div>
+          <div class="arch-level"><span class="arch-level-num">2</span><span class="arch-level-name">Модуль ДПП.УР</span><span class="arch-level-desc">Управление рецептурой и заданиями на производство</span></div>
+          <div class="arch-level"><span class="arch-level-num">3</span><span class="arch-level-name">Подсистема сбора данных</span><span class="arch-level-desc">Интеграция с АСУТП и сбор данных реального времени</span></div>
+          <div class="arch-level"><span class="arch-level-num">4</span><span class="arch-level-name">База данных реального времени</span><span class="arch-level-desc">БДРВ для хранения технологических и производственных данных</span></div>
+          <div class="arch-level"><span class="arch-level-num">5</span><span class="arch-level-name">Аналитические компоненты</span><span class="arch-level-desc">Машинное обучение, предиктивная аналитика, обнаружение аномалий</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Технологические компоненты</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Цифровой двойник</td><td class="spec-val-hi">«Цифровой двойник» продуктов и технологических процессов для работы с данными реального времени</td></tr>
+            <tr><td>Компоненты данных</td><td>Хранение и работа с историческими данными и данными реального времени по продуктам, технологическим процессам</td></tr>
+            <tr><td>Справочники</td><td>Инструменты ведения справочников ингредиентов, продуктов и их характеристик</td></tr>
+            <tr><td>Интеграция</td><td>Единый стек технологий для уровней АСУТП + MES — бесшовное взаимодействие</td></tr>
+            <tr><td>Аналитика</td><td>Единая среда сбора и подготовки данных, аналитики данных, дэшбордов, системы отчетности</td></tr>
+            <tr><td>API</td><td>Инструменты по работе с цифровыми двойниками для разработчиков (REST API)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Математический аппарат и технологии</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <div class="industry-pill">MSET</div>
+          <div class="industry-pill">SPRT</div>
+          <div class="industry-pill">Hotelling T²</div>
+          <div class="industry-pill">Correlation</div>
+          <div class="industry-pill">Машинное обучение</div>
+          <div class="industry-pill">Нейросетевые алгоритмы</div>
+          <div class="industry-pill">Предобработка данных</div>
+          <div class="industry-pill">Обучение моделей</div>
+          <div class="industry-pill">Индустрия 4.0</div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Системные требования</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Операционные системы</td><td class="spec-val-hi">Linux (рекомендуется), Microsoft Windows Server</td></tr>
+            <tr><td>Базовая платформа</td><td>ДатаПлат 3.0</td></tr>
+            <tr><td>Веб-доступ</td><td>HTTP/HTTPS через веб-браузер</td></tr>
+            <tr><td>Роли пользователей</td><td>Технолог, Оператор, Инженер</td></tr>
+            <tr><td>Виртуализация</td><td>Поддерживается</td></tr>
+            <tr><td>Режим работы</td><td>24×7, плановое обслуживание</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- FUNCTIONS -->
+    <div id="ptab-functions" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.УР реализует полный бизнес-процесс управления рецептурой — от ведения справочников ингредиентов до контроля исполнения заданий на производство. Система поддерживает различные роли пользователей с соответствующими правами доступа.
+      </div>
+
+      <div class="process-step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Ведение справочника ингредиентов</div><div class="step-desc">Загрузка базы ингредиентов из внешних источников, ведение базы ингредиентов, задание параметров качества и их нормативных значений.</div></div></div>
+
+      <div class="process-step" style="border-color:var(--lime)"><div class="step-num" style="border-color:var(--lime);color:var(--lime)">2</div><div class="step-content"><div class="step-title">Создание продукта</div><div class="step-desc">Определение состава ингредиентов, пропорций, параметров пищевой ценности, характеристик качества и параметров режима производства.</div></div></div>
+
+      <div class="process-step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Формирование заданий на производство</div><div class="step-desc">Выбор продукта, определение объема выпуска, автоматический расчет требуемой массы ингредиентов, определение параметров режима работы оборудования.</div></div></div>
+
+      <div class="process-step" style="border-color:var(--flame)"><div class="step-num" style="border-color:var(--flame);color:var(--flame)">4</div><div class="step-content"><div class="step-title">Передача в оборудование и запуск</div><div class="step-desc">Передача значений параметров режима в оборудование, запуск задания на производство, контроль статуса выполнения заказа в режиме реального времени.</div></div></div>
+
+      <div class="process-step"><div class="step-num">5</div><div class="step-content"><div class="step-title">Мониторинг технологического процесса</div><div class="step-desc">Удаленный запуск/останов оборудования, мониторинг параметров процесса, контроль наличия ингредиентов и показателей качества.</div></div></div>
+
+      <div class="process-step" style="border-color:var(--crimson)"><div class="step-num" style="border-color:var(--crimson);color:var(--crimson)">6</div><div class="step-content"><div class="step-title">Обнаружение аномалий</div><div class="step-desc">Выявление аномалий в технологическом процессе с использованием диагностических моделей на основе машинного обучения, определение причин аномалий.</div></div></div>
+
+      <div class="process-step"><div class="step-num">7</div><div class="step-content"><div class="step-title">Предиктивная аналитика</div><div class="step-desc">Прогнозирование времени до критических отклонений, бизнес-показателей, анализ технологических параметров для оптимизации.</div></div></div>
+
+      <div class="process-step"><div class="step-num">8</div><div class="step-content"><div class="step-title">Интеграция и отчетность</div><div class="step-desc">Формирование отчетов по производству, передача данных во внешние системы, прием плановых значений и заказов на производство.</div></div></div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Роли пользователей в системе</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Технолог</td><td class="spec-val-hi">Может создавать и редактировать ингредиенты и продукты. Может только просматривать задания на производство</td></tr>
+            <tr><td>Оператор</td><td>Может создавать и редактировать задания на производство. Может только просматривать ингредиенты и продукты</td></tr>
+            <tr><td>Инженер</td><td>Может только просматривать ингредиенты, продукты и задания на производство</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROCESS -->
+    <div id="ptab-process" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.УР предназначен для предприятий различных отраслей промышленности, где необходимо управление рецептурой и смешиванием ингредиентов. Система особенно эффективна на предприятиях с потоковыми процессами производства.
+      </div>
+
+      <div class="ovb-title">Области применения</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;margin-bottom:32px">
+        <div class="industry-pill">Пищевая промышленность</div>
+        <div class="industry-pill">Нефтегазовая отрасль</div>
+        <div class="industry-pill">Химическая промышленность</div>
+        <div class="industry-pill">Нефтехимия</div>
+        <div class="industry-pill">Фармацевтика</div>
+        <div class="industry-pill">Металлургия</div>
+        <div class="industry-pill">Производство стройматериалов</div>
+      </div>
+
+      <div class="ovb-title">Решаемые проблемы на производстве</div>
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--crimson)">Текущие проблемы</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Ошибки в расчетах ингредиентов — перерасход или нехватка материалов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Ручной ввод данных и контроль рецептур, ошибки в процессе смешивания</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Долгие временные затраты на корректировку рецептур вручную</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Несогласованность в смешивании и непроизводительные затраты</div>
+          </div>
+        </div>
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--lime)">Решения ДПП.УР</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Автоматический расчет точных дозировок ингредиентов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Цифровое управление процессами смешивания</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Быстрая адаптация рецептур под новые условия</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Оптимизация использования ресурсов и снижение потерь</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Типовые технологические задачи</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--volt)">Управление рецептурой</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Создание и ведение рецептур продуктов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Управление характеристиками ингредиентов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Контроль параметров качества</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Версионность рецептур</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--amber)">Производственный контроль</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Формирование производственных заданий</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Контроль исполнения в реальном времени</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Мониторинг технологических параметров</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Анализ отклонений и аномалий</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPLEMENTATIONS -->
+    <div id="ptab-implementations" class="ptab-panel">
+      <div class="specs-note">
+        Эффективность внедрения ДПП.УР подтверждена успешными кейсами крупных международных компаний. Система обеспечивает значительный экономический эффект за счет оптимизации использования ресурсов и повышения качества продукции.
+      </div>
+
+      <div class="ovb-title">Результаты внедрения на крупных предприятиях</div>
+      
+      <div class="impl-card">
+        <h4>Coca-Cola</h4>
+        <div class="impl-tag">НАПИТКИ</div>
+        <p><strong>Проблема:</strong> Высокие затраты на ингредиенты и неэффективное использование ресурсов при производстве напитков оказывало негативное влияние на рентабельность.</p>
+        <ul>
+          <li>Экономия до 5% на расходах на сырье за счет оптимизации расходования ингредиентов</li>
+          <li>Улучшение точности дозировок и снижение перерасхода</li>
+          <li>Уменьшение времени на выпуск новых рецептов на 25%</li>
+          <li>Быстрое реагирование на изменения потребительских предпочтений</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <h4>Unilever</h4>
+        <div class="impl-tag">FMCG</div>
+        <p><strong>Проблема:</strong> Ошибки в расчете дозировок и смешении часто приводили к перерасходу сырья и низкому качеству конечного продукта.</p>
+        <ul>
+          <li>Снижение отходов на 15-20% благодаря точному расчету дозировок</li>
+          <li>Снижение вариативности состава продуктов</li>
+          <li>Экономия до 12% на сырье благодаря оптимизации процессов смешивания</li>
+          <li>Уменьшение перерасхода материалов</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <h4>BASF</h4>
+        <div class="impl-tag">ХИМПРОМ</div>
+        <p><strong>Проблема:</strong> Производство сложных химических продуктов, где составы рецептур требуют высокой точности, а также соблюдения международных стандартов.</p>
+        <ul>
+          <li>Снижение отходов на 25% за счет точного расчета и контроля качества сырья</li>
+          <li>Увеличение производительности на 10% благодаря оптимизации смешивания</li>
+          <li>Повышение точности соблюдения стандартов качества</li>
+          <li>Улучшение контроля технологических процессов</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <h4>ExxonMobil</h4>
+        <div class="impl-tag">НЕФТЕПЕРЕРАБОТКА</div>
+        <p><strong>Проблема:</strong> Сложности с точностью состава различных бензиновых фракций, что приводило к несоответствию экологическим стандартам.</p>
+        <ul>
+          <li>Снижение расходов на катализаторы на 10-15%</li>
+          <li>Точный расчет необходимого количества катализаторов</li>
+          <li>Увеличение производительности на 5-7%</li>
+          <li>Повышение стабильности производственных процессов</li>
+        </ul>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Заказчики ИнфТех (ДПП.УР)</div>
+        <div class="logo-row">
+          <div class="logo-badge">Роснефть</div>
+          <div class="logo-badge">ЛУКОЙЛ</div>
+          <div class="logo-badge">Газпром нефть</div>
+          <div class="logo-badge">Татнефть</div>
+          <div class="logo-badge">Башнефть</div>
+          <div class="logo-badge">Данон</div>
+          <div class="logo-badge">PepsiCo</div>
+          <div class="logo-badge">Nestle</div>
+        </div>
+      </div>
+
+      <p style="color:var(--text3);font-size:13px;margin-top:24px;">Источники: Coca-Cola Case Study, Unilever Sustainability Report, BASF Digital Innovation, ExxonMobil Case Study. Подробные кейсы внедрения — по запросу.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

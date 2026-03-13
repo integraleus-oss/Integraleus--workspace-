@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИнфТех — Цифровая платформа ДатаПлат | АО «СПЕЦТЕХ»</title>
+<meta name="description" content="ИнфТех — российская IIoT-платформа ДатаПлат для цифровизации производства. Предиктивная аналитика iPredicta, MES-решения, цифровые двойники. Партнёр АО СПЕЦТЕХ.">
+<meta name="keywords" content="ИнфТех, ДатаПлат, DataPlat, iPredicta, IIoT, MES, цифровой двойник, предиктивная аналитика, СПЕЦТЕХ, импортозамещение, SCADA, АСУТП">
+<meta property="og:title" content="ИнфТех — Цифровая платформа ДатаПлат | АО «СПЕЦТЕХ»">
+<meta property="og:description" content="Российская IIoT-платформа для цифровизации производственных процессов. Предиктивная аналитика, MES, цифровые двойники.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/infteh.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/infteh.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;
+  --volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);
+  --flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);
+  --crimson:#ff3d57;--amber:#ffb800;
+  --text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;
+  --ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.22,.68,0,1.2);
+  --infteh-blue:#214aa0;--infteh-red:#c42034;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}
+a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+
+/* HERO */
+.partner-hero{padding:140px 0 80px;position:relative;overflow:hidden}
+.partner-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 30% 40%,rgba(33,74,160,0.15),transparent 70%)}
+.partner-hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.partner-logo-wrap{display:flex;align-items:center;justify-content:center}
+.partner-logo-wrap img{max-width:300px;border-radius:12px}
+.partner-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.pbadge{padding:6px 14px;font-size:12px;font-weight:600;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.2)}
+.pbadge.registry{background:var(--lime-lo);color:var(--lime);border-color:rgba(29,233,182,0.2)}
+h1.partner-title{font-size:38px;font-weight:800;line-height:1.2;margin-bottom:12px}
+.partner-tagline{font-size:18px;color:var(--text2);line-height:1.6;margin-bottom:24px}
+
+/* SECTIONS */
+.section{padding:80px 0}
+.section-dark{background:var(--ink1)}
+.section-title{font-size:28px;font-weight:700;margin-bottom:12px;text-align:center}
+.section-sub{font-size:15px;color:var(--text2);text-align:center;max-width:700px;margin:0 auto 48px}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.about-card{background:var(--ink2);border:1px solid var(--wire);border-radius:12px;padding:28px}
+.about-card h3{font-size:16px;font-weight:700;color:var(--volt);margin-bottom:12px}
+.about-card p,.about-card li{font-size:14px;color:var(--text2);line-height:1.7}
+.about-card ul{list-style:none;padding:0}
+.about-card li{padding:4px 0;padding-left:18px;position:relative}
+.about-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+
+/* PRODUCTS GRID */
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.prod-card{background:var(--ink2);border:1px solid var(--wire);border-radius:12px;padding:28px;transition:border-color .3s,transform .3s}
+.prod-card:hover{border-color:var(--volt);transform:translateY(-4px)}
+.prod-card-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.prod-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prod-icon.core{background:rgba(33,74,160,0.3);color:#6b9fff}
+.prod-icon.predict{background:rgba(255,59,87,0.15);color:var(--crimson)}
+.prod-icon.oil{background:rgba(255,107,53,0.15);color:var(--flame)}
+.prod-icon.balance{background:rgba(255,184,0,0.15);color:var(--amber)}
+.prod-icon.alarm{background:rgba(0,200,240,0.12);color:var(--volt)}
+.prod-icon.model{background:rgba(29,233,182,0.12);color:var(--lime)}
+.prod-icon.recipe{background:rgba(200,100,255,0.15);color:#c864ff}
+.prod-icon.report{background:rgba(0,200,240,0.12);color:var(--volt)}
+.prod-icon.queue{background:rgba(255,184,0,0.15);color:var(--amber)}
+.prod-icon.ui{background:rgba(29,233,182,0.12);color:var(--lime)}
+.prod-card h3{font-size:16px;font-weight:700;margin:0}
+.prod-card p{font-size:13px;color:var(--text2);line-height:1.6;margin:0}
+.prod-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.prod-pill{font-size:10px;padding:3px 8px;border-radius:10px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+
+/* REFERENCES */
+.ref-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.ref-card{background:var(--ink2);border:1px solid var(--wire);border-radius:12px;padding:24px;transition:border-color .3s}
+.ref-card:hover{border-color:var(--wire2)}
+.ref-card h4{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.ref-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.ref-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+
+/* INDUSTRIES */
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ind-card{background:var(--ink2);border:1px solid var(--wire);border-radius:10px;padding:20px;text-align:center;transition:border-color .3s}
+.ind-card:hover{border-color:var(--volt)}
+.ind-icon{font-size:28px;margin-bottom:10px}
+.ind-card span{font-size:13px;color:var(--text2);font-weight:500}
+
+/* PARTNERSHIP */
+.partner-section{background:linear-gradient(135deg,rgba(33,74,160,0.1),rgba(0,200,240,0.05));border:1px solid var(--wire);border-radius:16px;padding:48px;margin:0 auto;max-width:900px}
+.partner-section h3{font-size:22px;font-weight:700;margin-bottom:16px;text-align:center}
+.partner-points{list-style:none;padding:0}
+.partner-points li{font-size:14px;color:var(--text2);line-height:1.8;padding:6px 0;padding-left:24px;position:relative}
+.partner-points li::before{content:'✦';position:absolute;left:0;color:var(--volt)}
+
+/* CONTACTS */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.contact-card{background:var(--ink2);border:1px solid var(--wire);border-radius:12px;padding:24px}
+.contact-card h4{font-size:14px;font-weight:700;color:var(--volt);margin-bottom:12px}
+.contact-card p{font-size:13px;color:var(--text2);line-height:1.7}
+
+/* FOOTER */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}
+.footer-links li{margin-bottom:8px}
+.footer-links a{font-size:14px;color:var(--text2)}
+.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .container{padding:0 24px}
+  .partner-hero-grid{grid-template-columns:1fr;text-align:center}
+  .partner-logo-wrap{margin-bottom:20px}
+  .partner-badges{justify-content:center}
+  .about-grid{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:1fr}
+  .ref-grid{grid-template-columns:1fr}
+  .ind-grid{grid-template-columns:repeat(2,1fr)}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  h1.partner-title{font-size:28px}
+}
+@media(max-width:480px){
+  .ind-grid{grid-template-columns:1fr}
+  h1.partner-title{font-size:24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html" style="color:var(--volt)">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="index.html#contact">Связаться</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="partner-hero">
+  <div class="container">
+    <div class="partner-hero-grid">
+      <div>
+        <h1 class="partner-title">ИнфТех — Цифровая платформа ДатаПлат</h1>
+        <p class="partner-tagline">Российская IIoT-платформа для цифровизации производственных процессов. MES-решения, предиктивная аналитика, цифровые двойники.</p>
+        <div class="partner-badges">
+          <span class="pbadge">25+ лет на рынке</span>
+          <span class="pbadge">60+ специалистов</span>
+          <span class="pbadge">120+ проектов</span>
+          <span class="pbadge">30+ заказчиков</span>
+          <span class="pbadge registry">✓ Реестр Минцифры</span>
+          <span class="pbadge registry">✓ 100% отечественное ПО</span>
+        </div>
+      </div>
+      <div class="partner-logo-wrap">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='100' viewBox='0 0 280 100'%3E%3Crect fill='%23111e35' width='280' height='100' rx='12'/%3E%3Ctext x='50%25' y='38' text-anchor='middle' font-family='sans-serif' font-size='28' font-weight='bold' fill='%23214aa0'%3EИнфТех%3C/text%3E%3Ctext x='50%25' y='62' text-anchor='middle' font-family='sans-serif' font-size='11' fill='%2394b3d0'%3EИНФОРМАЦИОННЫЕ ТЕХНОЛОГИИ%3C/text%3E%3C/svg%3E" alt="ИнфТех логотип">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- О КОМПАНИИ -->
+<div class="section section-dark" id="about">
+  <div class="container">
+    <h2 class="section-title">О компании</h2>
+    <p class="section-sub">ООО «ИнфТех» — один из крупнейших российских MES-интеграторов с 25-летним опытом</p>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>Компетенции</h3>
+        <ul>
+          <li>Цифровая платформа управления производственными процессами ДатаПлат</li>
+          <li>Удалённый мониторинг и диагностика оборудования iPredicta</li>
+          <li>Проектирование, разработка и внедрение MES-систем</li>
+          <li>Интеграция САПР, BIM, СУИД, АСУТП, ERP и BI</li>
+          <li>Техническая поддержка и сопровождение</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>Особенности</h3>
+        <ul>
+          <li>Полностью российская разработка — без иностранного кода</li>
+          <li>Единый стек технологий АСУТП + MES</li>
+          <li>Лауреат национальной премии по импортозамещению</li>
+          <li>Офисы: Москва и Уфа</li>
+          <li>Основана в 2001 году</li>
+          <li>Член Союза Разработчиков ПО и ИТ ТЭК</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ПРОДУКТЫ -->
+<div class="section" id="products">
+  <div class="container">
+    <h2 class="section-title">Продукты</h2>
+    <p class="section-sub">Экосистема из 10+ продуктов для полного цикла цифровизации производства</p>
+    <div class="products-grid">
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon core">⬡</div>
+          <h3>Цифровая платформа ДатаПлат</h3>
+        </div>
+        <p>IIoT-платформа — ядро всей экосистемы. Цифровые двойники, БДРВ, 8-уровневая архитектура по MESA International. Единое информационное пространство, масштабируемая открытая архитектура.</p>
+        <div class="prod-pills"><span class="prod-pill">IIoT</span><span class="prod-pill">Digital Twin</span><span class="prod-pill">БДРВ</span><span class="prod-pill">OPC UA</span><span class="prod-pill">REST API</span></div>
+        <a href="dataplat.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon predict">⚡</div>
+          <h3>iPredicta</h3>
+        </div>
+        <p>Предиктивная аналитика и ранняя диагностика оборудования. Алгоритмы MSET, SPRT, Hotelling T², нейронные сети, корреляционный анализ. Срок службы +20-40%, поломки −30-35%.</p>
+        <div class="prod-pills"><span class="prod-pill">ML</span><span class="prod-pill">MSET</span><span class="prod-pill">SPRT</span><span class="prod-pill">Neural</span><span class="prod-pill">T²</span></div>
+        <a href="ipredicta.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon oil">🛢</div>
+          <h3>ДПП.Добыча</h3>
+        </div>
+        <p>Цифровое месторождение — мониторинг и управление нефтегазодобычей. 4-уровневая архитектура, поддержка ЭЦН, ШГН, фонтанных, газлифтных скважин. Веб-доступ, резервирование.</p>
+        <div class="prod-pills"><span class="prod-pill">SCADA</span><span class="prod-pill">ЭЦН</span><span class="prod-pill">ШГН</span><span class="prod-pill">ГЗУ</span></div>
+        <a href="dpp-dobycha.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon balance">⚖</div>
+          <h3>ДПП.Балансы</h3>
+        </div>
+        <p>Массовые материальные и энергетические балансы. Контроль потерь, учёт движения сырья и продукции в реальном времени.</p>
+        <div class="prod-pills"><span class="prod-pill">MES</span><span class="prod-pill">Балансы</span><span class="prod-pill">Учёт</span></div>
+        <a href="dpp-balance.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon alarm">🔔</div>
+          <h3>ДПП.Сервер тревог</h3>
+        </div>
+        <p>Управление алармами АСУТП — 8 видов аналитической обработки. Стандарты ISA-18.2 / IEC 62682. Унификация работы с тревогами независимо от SCADA.</p>
+        <div class="prod-pills"><span class="prod-pill">ISA-18.2</span><span class="prod-pill">OPC UA</span><span class="prod-pill">Alpha.Link</span></div>
+        <a href="dpp-alarms.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon model">📐</div>
+          <h3>ДПП.Технологическое моделирование</h3>
+        </div>
+        <p>Моделирование технологических процессов. Оптимизация режимов работы оборудования на основе математических моделей.</p>
+        <div class="prod-pills"><span class="prod-pill">Моделирование</span><span class="prod-pill">Оптимизация</span></div>
+        <a href="dpp-tm.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon recipe">🧪</div>
+          <h3>ДПП.Управление рецептурой</h3>
+        </div>
+        <p>Контроль и управление технологическими процессами производства продукции. 19 функциональных модулей. Пищевая промышленность, нефтегаз, химия.</p>
+        <div class="prod-pills"><span class="prod-pill">Batch</span><span class="prod-pill">Рецептуры</span><span class="prod-pill">Пищевое</span></div>
+        <a href="dpp-ur.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon report">📊</div>
+          <h3>ДатаПлат.Сервер отчетов</h3>
+        </div>
+        <p>Производственная отчётность АСУТП. Формирование в веб-браузере, экспорт XLSX/PDF, генерация по расписанию, рассылка по e-mail. Кроссплатформенный.</p>
+        <div class="prod-pills"><span class="prod-pill">OPC UA/DA/HDA</span><span class="prod-pill">XLSX</span><span class="prod-pill">PDF</span></div>
+        <a href="dataplat-reports.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon queue">🚛</div>
+          <h3>ЭОН — Электронная очередь налива</h3>
+        </div>
+        <p>Программно-аппаратный комплекс для автоналивных станций. Распознавание номеров, оптимизация очереди, SMS-оповещение, интеграция с АСУТП/MES/ERP.</p>
+        <div class="prod-pills"><span class="prod-pill">АНС</span><span class="prod-pill">SMS</span><span class="prod-pill">RFID</span></div>
+        <a href="https://infteh.ru/products/eon.html" target="_blank" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+      <div class="prod-card">
+        <div class="prod-card-head">
+          <div class="prod-icon ui">🎨</div>
+          <h3>КомпоГраф</h3>
+        </div>
+        <p>Веб-компоненты для создания пользовательских интерфейсов. Canvas, TypeScript. Графики, диаграммы, индикаторы, таблицы. Тёмная/светлая тема.</p>
+        <div class="prod-pills"><span class="prod-pill">Canvas</span><span class="prod-pill">TypeScript</span><span class="prod-pill">UI</span></div>
+        <a href="kompograf.html" style="display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--volt)">Подробнее →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- РЕФЕРЕНСЫ -->
+<div class="section section-dark" id="references">
+  <div class="container">
+    <h2 class="section-title">Проекты и внедрения</h2>
+    <p class="section-sub">Опыт реализации проектов для крупнейших промышленных компаний России</p>
+    <div class="ref-grid">
+
+      <div class="ref-card">
+        <span class="ref-tag">Нефтепереработка</span>
+        <h4>Туапсинский НПЗ (Роснефть)</h4>
+        <p>АСОУП на основе ДатаПлат. 7 300 объектов, 22 000 тегов, 190 мнемосхем, 30+ отчётов, 70+ пользователей. В эксплуатации с 2018 года. Интеграция с ЛИМС, 1С. Соответствие ФСТЭК №31.</p>
+      </div>
+
+      <div class="ref-card">
+        <span class="ref-tag">Атомная энергетика</span>
+        <h4>Нововоронежская АЭС (Росэнергоатом)</h4>
+        <p>Замена PI System — полностью импортонезависимое решение. Astra Linux + ДатаПлат + Альфа платформа + PostgresPro. 1 142 сигнала, OPC UA передача в ЦОД Москвы.</p>
+      </div>
+
+      <div class="ref-card">
+        <span class="ref-tag">Нефтегаз</span>
+        <h4>Диагностика ГПА</h4>
+        <p>Система раннего диагностирования газоперекачивающих агрегатов на базе iPredicta. Прогноз промывки ГТД, диагностика компрессора на основе корреляционного анализа.</p>
+      </div>
+
+      <div class="ref-card">
+        <span class="ref-tag">Металлургия</span>
+        <h4>Эксгаустер агломашины</h4>
+        <p>Определение аномалий для горно-металлургической компании. Диагностика методами MSET, SPRT и нейросетью. Расчёт остаточного ресурса до вероятного отказа.</p>
+      </div>
+
+      <div class="ref-card">
+        <span class="ref-tag">Горнодобыча</span>
+        <h4>Шаровая мельница мокрого помола</h4>
+        <p>Сравнительный пилот iPredicta vs AVEVA PRiSM. Результат: iPredicta обладает более широкой функциональностью и корректно выявила все аномалии.</p>
+      </div>
+
+      <div class="ref-card">
+        <span class="ref-tag">Транспорт</span>
+        <h4>Автоналивные станции</h4>
+        <p>Интегрированный ПК для товарно-транспортных операций и электронная очередь налива ЭОН. 5+ лет в эксплуатации, 10+ лет для ТТО.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ОТРАСЛИ -->
+<div class="section" id="industries">
+  <div class="container">
+    <h2 class="section-title">Отрасли</h2>
+    <p class="section-sub">Решения для ключевых секторов промышленности</p>
+    <div class="ind-grid">
+      <div class="ind-card"><div class="ind-icon">🛢</div><span>Нефтегазодобыча</span></div>
+      <div class="ind-card"><div class="ind-icon">🏭</div><span>Нефтепереработка</span></div>
+      <div class="ind-card"><div class="ind-icon">⚛️</div><span>Энергетика</span></div>
+      <div class="ind-card"><div class="ind-icon">⛏</div><span>Горнодобыча</span></div>
+      <div class="ind-card"><div class="ind-icon">🍞</div><span>Пищевое производство</span></div>
+      <div class="ind-card"><div class="ind-icon">🚚</div><span>Транспортировка</span></div>
+      <div class="ind-card"><div class="ind-icon">🖥</div><span>ЦОД</span></div>
+      <div class="ind-card"><div class="ind-icon">⚙️</div><span>Металлургия</span></div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- КОНТАКТЫ ИНФТЕХ -->
+<div class="section" id="contacts">
+  <div class="container">
+    <h2 class="section-title">Контакты ИнфТех</h2>
+    <p class="section-sub">Свяжитесь напрямую или через АО «СПЕЦТЕХ»</p>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h4>Москва</h4>
+        <p>109147, Марксистский пер., д.6<br>+7 (495) 912-66-81<br>+7 (495) 911-73-00</p>
+      </div>
+      <div class="contact-card">
+        <h4>Уфа</h4>
+        <p>450077, ул. К. Маркса, 20/1<br>+7 (347) 293-56-02</p>
+      </div>
+      <div class="contact-card">
+        <h4>Онлайн</h4>
+        <p><a href="mailto:input.mail.box@infteh.ru">input.mail.box@infteh.ru</a><br><a href="https://infteh.ru" target="_blank">infteh.ru</a><br><a href="https://ipredicta.ru" target="_blank">ipredicta.ru</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">
+        ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

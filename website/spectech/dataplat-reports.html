@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДатаПлат.Сервер отчётов — производственная отчётность | СПЕЦТЕХ</title>
+<meta name="description" content="ДатаПлат.Сервер отчётов — автоматизированная генерация производственных отчётов из промышленных источников данных. Конструктор шаблонов без программирования, OPC UA/DA/HDA.">
+<meta name="keywords" content="ДатаПлат Сервер отчётов, производственная отчётность, OPC UA, автоматические отчёты, Excel шаблоны, ИнфТех, СПЕЦТЕХ, промышленная автоматизация">
+<meta property="og:title" content="ДатаПлат.Сервер отчётов — производственная отчётность">
+<meta property="og:description" content="Автоматизированная генерация производственных отчётов из промышленных источников данных с поддержкой OPC UA/DA/HDA.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dataplat-reports.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dataplat-reports.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}.breadcrumb-cur{color:var(--text2)}
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-sub{font-size:18px;color:var(--text2);font-weight:300;margin-top:4px}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+.ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:28px;font-weight:900;color:var(--text)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}.ptab-panel.active{display:block}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.feat-line svg{flex-shrink:0;margin-top:3px}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:800px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px;text-align:center}
+.arch-level-name{font-weight:600;color:var(--text);min-width:220px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+.process-step{display:flex;align-items:flex-start;gap:16px;padding:16px;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;margin-bottom:8px}
+.step-num{font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--volt);min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:2px solid var(--volt);border-radius:50%;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.formula-block{background:var(--ink2);border:1px solid var(--wire);border-radius:8px;padding:20px 24px;margin:16px 0;font-family:var(--ff-mono);font-size:14px;color:var(--volt);line-height:1.8;overflow-x:auto}
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+.logo-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px;justify-content:center}
+.logo-badge{padding:8px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:8px;font-size:12px;color:var(--text2);font-weight:600}
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+  .arch-level-name{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">Сервер отчётов</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">ДатаПлат.Сервер отчётов</h1>
+        <div class="product-sub">Производственная отчётность</div>
+        <div class="product-version">Релиз 1.0 · ИнфТех</div>
+        <p class="product-tagline">Автоматизированная генерация производственных отчётов из промышленных источников данных. Конструктор шаблонов без программирования, планировщик задач, поддержка OPC UA/DA/HDA.</p>
+
+        <div class="product-pills">
+          <span class="ppill accent">АВТОМАТИЧЕСКИЕ ОТЧЁТЫ</span>
+          <span class="ppill">OPC UA/DA/HDA</span>
+          <span class="ppill">EXCEL-ШАБЛОНЫ</span>
+          <span class="ppill">КРОССПЛАТФОРМЕННОСТЬ</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">Российская разработка</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="infteh.html#contacts" class="btn-cta-primary">Запросить демо</a>
+          <a href="https://infteh.ru" class="btn-cta-secondary">Документация</a>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Без программирования и макросов</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Генерация по расписанию</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>OPC UA/DA/HDA</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Кроссплатформенность</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('components',this)">Компоненты</button>
+    <button class="ptab" onclick="showPTab('installation',this)">Установка</button>
+    <button class="ptab" onclick="showPTab('integration',this)">Интеграция</button>
+    <button class="ptab" onclick="showPTab('advantages',this)">Преимущества</button>
+    <button class="ptab" onclick="showPTab('specifications',this)">Спецификации</button>
+  </div>
+</div>
+
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="specs-note">
+        ДатаПлат.Сервер отчётов обеспечивает автоматизацию производственной отчётности с минимальными трудозатратами. Система построена на базе трёх основных компонентов и поддерживает создание Excel-шаблонов без программирования.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">3 основных компонента системы</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)">
+            <span class="arch-level-num">A</span>
+            <span class="arch-level-name">DataPlat.Reports.Base</span>
+            <span class="arch-level-desc">Базовый сервер — сбор данных, обработка, лицензирование</span>
+          </div>
+          <div class="arch-level" style="border-color:var(--lime)">
+            <span class="arch-level-num">B</span>
+            <span class="arch-level-name">Конфигуратор сервера отчётов</span>
+            <span class="arch-level-desc">Управление шаблонами, планировщик заданий, триггеры, просмотр отчётов</span>
+          </div>
+          <div class="arch-level" style="border-color:var(--flame)">
+            <span class="arch-level-num">C</span>
+            <span class="arch-level-name">Конструктор отчётов</span>
+            <span class="arch-level-desc">Проектирование шаблонов в формате Excel без макросов и программирования</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Ключевые возможности</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--volt)">Управление</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Управление шаблонами (XLSX)</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Планировщик заданий</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Триггеры (периодические/событийные/интервальные)</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Переменные и формулы</div>
+            </div>
+          </div>
+
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Функции</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Предварительный просмотр</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Работа с часовыми поясами</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Множественные источники данных</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Автоматическая генерация</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Преимущества решения</div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">ДатаПлат.Сервер отчётов устраняет рутинные операции по созданию производственной отчётности. Система автоматически собирает данные из промышленных источников, обрабатывает их согласно настроенным шаблонам и генерирует отчёты в формате Excel.</p>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7">Встроенный планировщик обеспечивает регулярную генерацию отчётов без участия оператора, а система триггеров позволяет создавать отчёты по событиям или в заданные временные интервалы.</p>
+      </div>
+    </div>
+
+    <!-- COMPONENTS -->
+    <div id="ptab-components" class="ptab-panel">
+      <div class="specs-note">
+        Система состоит из двух основных интерфейсов — Конструктора отчётов для создания шаблонов и Конфигуратора для управления заданиями и триггерами. Поддерживается 5 типов триггеров для различных сценариев генерации отчётов.
+      </div>
+
+      <div class="impl-card">
+        <h4>Конструктор отчётов</h4>
+        <div class="impl-tag">DESIGN</div>
+        <p>Визуальная среда для создания шаблонов Excel без программирования и макросов. Поддерживает переменные, списки, формулы и интеграцию с источниками данных.</p>
+        <ul>
+          <li>Создание шаблонов Excel</li>
+          <li>Переменные (добавление/удаление/редактирование)</li>
+          <li>Списки и выбор переменных</li>
+          <li>Текущие значения атрибутов</li>
+          <li>Значения на дату</li>
+          <li>Архивные значения</li>
+          <li>Пересчёт формул</li>
+          <li>Приостановка расчётов</li>
+          <li>Сохранение на сервер</li>
+          <li>Статус подключения</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <h4>Конфигуратор сервера отчётов</h4>
+        <div class="impl-tag">CONFIG</div>
+        <p>Центр управления системой отчётности. Обеспечивает управление шаблонами, создание заданий, настройку триггеров и просмотр сгенерированных отчётов.</p>
+        <ul>
+          <li>Управление шаблонами (добавление/редактирование/предпросмотр/удаление)</li>
+          <li>Задания (создание/редактирование/удаление/выполнение)</li>
+          <li>Триггеры (5 типов)</li>
+          <li>Сохранение отчётов</li>
+          <li>Просмотр отчётов</li>
+          <li>Статус подключения</li>
+        </ul>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">5 типов триггеров</div>
+        <div class="process-step" style="border-color:var(--volt)">
+          <div class="step-num" style="border-color:var(--volt);color:var(--volt)">1</div>
+          <div class="step-content">
+            <div class="step-title">Периодические триггеры</div>
+            <div class="step-desc">Генерация отчётов через фиксированные интервалы времени (каждые N минут, часов, дней).</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--lime)">
+          <div class="step-num" style="border-color:var(--lime);color:var(--lime)">2</div>
+          <div class="step-content">
+            <div class="step-title">Триггеры по событию</div>
+            <div class="step-desc">Запуск генерации отчёта при наступлении определённого события в системе или изменении значения переменной.</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--flame)">
+          <div class="step-num" style="border-color:var(--flame);color:var(--flame)">3</div>
+          <div class="step-content">
+            <div class="step-title">Триггеры по интервалу</div>
+            <div class="step-desc">Создание отчёта при достижении заданного интервала времени с момента последней генерации.</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--amber)">
+          <div class="step-num" style="border-color:var(--amber);color:var(--amber)">4</div>
+          <div class="step-content">
+            <div class="step-title">Триггеры по расписанию</div>
+            <div class="step-desc">Генерация отчётов в точно заданное время (например, каждый понедельник в 09:00).</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--crimson)">
+          <div class="step-num" style="border-color:var(--crimson);color:var(--crimson)">5</div>
+          <div class="step-content">
+            <div class="step-title">Комбинированные триггеры</div>
+            <div class="step-desc">Сложные условия, объединяющие несколько типов триггеров для гибкой настройки генерации.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Возможности работы с данными</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Текущие значения</td><td class="spec-val-hi">Актуальные данные на момент генерации отчёта</td></tr>
+            <tr><td>Исторические данные</td><td>Архивные значения за любой период времени</td></tr>
+            <tr><td>Расчётные показатели</td><td>Вычисляемые поля на основе формул Excel</td></tr>
+            <tr><td>Агрегированные данные</td><td>Сумма, среднее, минимум, максимум за период</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INSTALLATION -->
+    <div id="ptab-installation" class="ptab-panel">
+      <div class="specs-note">
+        ДатаПлат.Сервер отчётов поддерживает установку на Linux (Debian) и Windows. При обновлении автоматически создаётся бэкап ключевых конфигурационных файлов.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--volt)">Linux (Debian)</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Установка через dpkg/apt</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>PostgreSQL (>9)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>libc6-dev (>2.23)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>libgdiplus (>4.2)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Файлы в /opt/InfTeh/</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--lime)">Windows</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>MSI установщик</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>.NET Framework 4.6.2+</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>ASP.NET Core 2.2</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>PostgreSQL 9+</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Chrome/Edge рекомендованы</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Конфигурация</div>
+        <div class="process-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">appsettings.json</div>
+            <div class="step-desc">Основные параметры приложения, строки подключения к базе данных, настройки портов и безопасности.</div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">NLog.config</div>
+            <div class="step-desc">Конфигурация системы логирования — уровни детализации, файлы логов, ротация.</div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Jobs.xml</div>
+            <div class="step-desc">Настройки заданий и триггеров — расписания, шаблоны, параметры генерации отчётов.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Системные службы</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>DataPlat.Reports.Base</td><td class="spec-val-hi">Базовая служба сбора и обработки данных</td></tr>
+            <tr><td>DataPlat.Reports.Server</td><td>Веб-сервер для пользовательских интерфейсов</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Автоматический бэкап при обновлении</div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">При установке новой версии система автоматически создаёт резервные копии критически важных файлов конфигурации:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
+          <div class="industry-pill">Jobs.xml</div>
+          <div class="industry-pill">appsettings.json</div>
+          <div class="industry-pill">NLog.config</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATION -->
+    <div id="ptab-integration" class="ptab-panel">
+      <div class="specs-note">
+        ДатаПлат.Сервер отчётов интегрируется с промышленными системами через протоколы OPC UA, OPC DA и OPC HDA. Система коннекторов обеспечивает гибкую настройку подключений к различным источникам данных.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">Источники данных через систему коннекторов</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)">
+            <span class="arch-level-num">OPC UA</span>
+            <span class="arch-level-name">Современный стандарт</span>
+            <span class="arch-level-desc">Безопасная передача данных, структурированные типы, сервисы</span>
+          </div>
+          <div class="arch-level" style="border-color:var(--lime)">
+            <span class="arch-level-num">OPC DA</span>
+            <span class="arch-level-name">Классический протокол</span>
+            <span class="arch-level-desc">Обмен данными в реальном времени с АСУ ТП</span>
+          </div>
+          <div class="arch-level" style="border-color:var(--flame)">
+            <span class="arch-level-num">OPC HDA</span>
+            <span class="arch-level-name">Исторические данные</span>
+            <span class="arch-level-desc">Доступ к архивам производственных данных</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Управление коннекторами</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--volt)">Настройка подключений</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Добавление коннекторов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Загрузка файлов конфигурации</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Настройка параметров подключения</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Проверка соединения</div>
+            </div>
+          </div>
+
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Web-интерфейс</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Авторизация через секретную строку (Base64)</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>http://localhost:5000/Report/Configurator/</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Тонкий клиент</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>REST API для программного доступа</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Сценарии интеграции</div>
+        <div class="process-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Интеграция с SCADA</div>
+            <div class="step-desc">Подключение к системам диспетчерского управления через OPC DA для получения текущих данных с датчиков и контроллеров.</div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Доступ к историческим данным</div>
+            <div class="step-desc">Использование OPC HDA для извлечения архивных данных из промышленных баз данных и формирования отчётов за любой период.</div>
+          </div>
+        </div>
+
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Современные системы</div>
+            <div class="step-desc">Подключение к новым АСУ ТП через протокол OPC UA с поддержкой безопасности и структурированных данных.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Протоколы доступа</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>OPC UA</td><td class="spec-val-hi">Современный протокол с шифрованием и аутентификацией</td></tr>
+            <tr><td>OPC DA</td><td>Классический обмен данными в реальном времени</td></tr>
+            <tr><td>OPC HDA</td><td>Доступ к архивным данным промышленных систем</td></tr>
+            <tr><td>REST API</td><td>HTTP-интерфейс для интеграции с внешними системами</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADVANTAGES -->
+    <div id="ptab-advantages" class="ptab-panel">
+      <div class="specs-note">
+        ДатаПлат.Сервер отчётов устраняет необходимость в программировании и макросах Excel. Кроссплатформенная архитектура обеспечивает гибкость развёртывания, а PostgreSQL гарантирует надёжность хранения данных.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--lime)">Простота использования</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Без макросов и программирования — шаблоны создаются визуально</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Интуитивно понятный интерфейс</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Быстрое освоение персоналом</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Минимальные требования к квалификации</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--volt)">Техническая гибкость</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Кроссплатформенность: Linux + Windows</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Множественные протоколы OPC (UA/DA/HDA)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>СУБД PostgreSQL (открытая)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Веб-интерфейс (тонкий клиент)</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Автоматизация процессов</div>
+        <div class="process-step" style="border-color:var(--volt)">
+          <div class="step-num" style="border-color:var(--volt);color:var(--volt)">1</div>
+          <div class="step-content">
+            <div class="step-title">Генерация по расписанию с автоматической доставкой</div>
+            <div class="step-desc">Отчёты создаются автоматически в заданное время без участия оператора и могут быть переданы заинтересованным лицам.</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--lime)">
+          <div class="step-num" style="border-color:var(--lime);color:var(--lime)">2</div>
+          <div class="step-content">
+            <div class="step-title">Поддержка часовых поясов (клиент → UTC → сервер)</div>
+            <div class="step-desc">Система автоматически обрабатывает различия во времени между клиентами и сервером, обеспечивая корректность временных данных.</div>
+          </div>
+        </div>
+
+        <div class="process-step" style="border-color:var(--flame)">
+          <div class="step-num" style="border-color:var(--flame);color:var(--flame)">3</div>
+          <div class="step-content">
+            <div class="step-title">Множественные источники данных</div>
+            <div class="step-desc">Один отчёт может объединять данные из различных производственных систем через разные протоколы OPC.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Ключевые преимущества</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Экономия времени</td><td class="spec-val-hi">Автоматизация рутинных операций по созданию отчётности</td></tr>
+            <tr><td>Снижение ошибок</td><td>Исключение человеческого фактора при сборе и обработке данных</td></tr>
+            <tr><td>Стандартизация</td><td>Единые шаблоны и форматы отчётов для всего предприятия</td></tr>
+            <tr><td>Масштабируемость</td><td>Возможность создания неограниченного количества отчётов</td></tr>
+            <tr><td>Гибкость</td><td>Настройка под специфические требования предприятия</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SPECIFICATIONS -->
+    <div id="ptab-specifications" class="ptab-panel">
+      <div class="specs-note">
+        ДатаПлат.Сервер отчётов построен на основе современных технологий .NET Core и PostgreSQL. Система поддерживает развёртывание на Linux и Windows с доступом через веб-браузер.
+      </div>
+
+      <div class="ovb-title">Технические спецификации</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Платформа</td><td class="spec-val-hi">Linux (Debian-based), Windows</td></tr>
+          <tr><td>СУБД</td><td>PostgreSQL 9+</td></tr>
+          <tr><td>Runtime</td><td>.NET Core 2.2 / .NET Framework 4.6.2+</td></tr>
+          <tr><td>Протоколы данных</td><td>OPC UA, OPC DA, OPC HDA</td></tr>
+          <tr><td>Формат шаблонов</td><td>XLSX (Microsoft Excel)</td></tr>
+          <tr><td>Формат отчётов</td><td>XLSX</td></tr>
+          <tr><td>Интерфейс</td><td>Веб-портал (тонкий клиент)</td></tr>
+          <tr><td>Браузер</td><td>Google Chrome, Microsoft Edge (рекомендовано)</td></tr>
+          <tr><td>Авторизация</td><td>Секретная строка (Base64)</td></tr>
+          <tr><td>Реестр</td><td>Минцифры России</td></tr>
+          <tr><td>Разработчик</td><td>ООО «ИнфТех»</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Системные требования</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--volt)">Сервер</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>2+ ядра CPU, 4+ ГБ RAM</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>10+ ГБ свободного места</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Сетевое подключение</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>PostgreSQL 9+</div>
+            </div>
+          </div>
+
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Клиент</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Современный веб-браузер</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>JavaScript включён</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Разрешение 1024x768+</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Microsoft Excel (для просмотра отчётов)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Протоколы и интерфейсы</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Веб-интерфейс</td><td class="spec-val-hi">HTTP/HTTPS, порт 5000 (настраивается)</td></tr>
+            <tr><td>OPC UA</td><td>TCP/IP, порт 4840 (стандартный)</td></tr>
+            <tr><td>OPC DA</td><td>DCOM, порт 135 + динамические</td></tr>
+            <tr><td>OPC HDA</td><td>DCOM, порт 135 + динамические</td></tr>
+            <tr><td>База данных</td><td>PostgreSQL, порт 5432 (стандартный)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Лицензирование и поддержка</div>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">ДатаПлат.Сервер отчётов распространяется по коммерческой лицензии с включённой технической поддержкой. Система включена в реестр российского ПО Минцифры, что обеспечивает соответствие требованиям импортозамещения.</p>
+        <p style="font-size:14px;color:var(--text2);line-height:1.7">Разработчик ООО «ИнфТех» предоставляет техническую поддержку, обучение персонала и консультации по настройке системы под специфические требования заказчика.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

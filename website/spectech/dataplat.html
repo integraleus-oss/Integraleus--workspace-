@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Цифровая платформа ДатаПлат — IIoT, MES, цифровые двойники | СПЕЦТЕХ</title>
+<meta name="description" content="ДатаПлат — российская IIoT-платформа для цифровизации производства. Цифровые двойники, БДРВ, MES. Разработчик ИнфТех. Реестр Минцифры.">
+<meta name="keywords" content="ДатаПлат, DataPlat, IIoT, MES, цифровой двойник, БДРВ, ИнфТех, СПЕЦТЕХ, импортозамещение, SCADA, АСУТП, OPC UA">
+<meta property="og:title" content="Цифровая платформа ДатаПлат — IIoT, MES, цифровые двойники">
+<meta property="og:description" content="Российская IIoT-платформа для цифровизации производственных процессов. Цифровые двойники, БДРВ, MES.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dataplat.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dataplat.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}
+.breadcrumb-cur{color:var(--text2)}
+
+/* PRODUCT HERO */
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}
+.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+
+/* CTA CARD */
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:32px;font-weight:900;color:var(--text)}
+.cta-price span{font-size:16px;color:var(--text3)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+
+/* TABS */
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}
+.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}
+.ptab-panel.active{display:block}
+
+/* OVERVIEW */
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+
+/* ARCH DIAGRAM */
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:700px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px}
+.arch-level-name{font-weight:600;color:var(--text);min-width:200px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+
+/* SPECS TABLE */
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.price-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.price-card.featured{border-color:var(--volt)}
+.price-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.price-card-name{font-size:18px;font-weight:700;margin-bottom:8px}
+.price-card-price{font-size:24px;font-weight:800;color:var(--volt)}
+.price-card-note{font-size:12px;color:var(--text3);margin-top:4px}
+.price-card-body{padding:20px}
+.price-feat{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);padding:5px 0}
+
+/* IMPLEMENTATIONS */
+.impl-stats{display:flex;gap:40px;justify-content:center;margin-bottom:40px}
+.impl-stat{text-align:center}
+.impl-num{display:block;font-size:36px;font-weight:900;color:var(--volt)}
+.impl-label{font-size:13px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+
+/* FOOTER */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .impl-stats{flex-direction:column;gap:20px}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- PRODUCT HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">ДатаПлат</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">Разработчик: ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">Цифровая платформа ДатаПлат</h1>
+        <div class="product-version">v3.0 · Реестр ПО · февраль 2026</div>
+        <p class="product-tagline">Российская программная платформа промышленного интернета вещей (IIoT) для создания прикладных решений цифровизации производственных процессов</p>
+
+        <div class="product-pills">
+          <span class="ppill">IIoT</span>
+          <span class="ppill">MES</span>
+          <span class="ppill">Digital Twin</span>
+          <span class="ppill">БДРВ</span>
+          <span class="ppill">OPC UA</span>
+          <span class="ppill">Linux</span>
+          <span class="ppill">REST API</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">лицензируется по атрибутам ИМ + подключениям</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="index.html#contact" class="btn-cta-primary">Запросить КП</a>
+          <a href="infteh.html" class="btn-cta-secondary">Все продукты ИнфТех</a>
+          <div class="cta-card-features">
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              100% отечественная разработка
+            </div>
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Реестр Минцифры
+            </div>
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Без иностранного кода
+            </div>
+            <div class="cta-feat">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>
+              Пробные лицензии для партнёров
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS NAV -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('specs',this)">Подсистемы</button>
+    <button class="ptab" onclick="showPTab('modules',this)">Модули</button>
+    <button class="ptab" onclick="showPTab('licensing',this)">Лицензии</button>
+    <button class="ptab" onclick="showPTab('integrations',this)">Интеграция</button>
+    <button class="ptab" onclick="showPTab('implementations',this)">Внедрения</button>
+  </div>
+</div>
+
+<!-- TAB CONTENT -->
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Ключевые возможности</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Единое информационное пространство производственных объектов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Информационные модели предприятия, цифровые двойники</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>БДРВ — долговременное хранение производственных данных</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Визуализация: мнемосхемы, тренды, отчёты, географические карты</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Масштабируемая открытая архитектура, REST API</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Промышленные протоколы IIoT: OPC UA/DA/HDA, SQL, ClickHouse</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Самодиагностика и мониторинг ИТ-инфраструктуры</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Многоуровневая иерархия для крупных промышленных холдингов</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Для каких отраслей</div>
+          <div class="industries-list">
+            <div class="industry-pill">Нефтегазодобыча</div>
+            <div class="industry-pill">Нефтепереработка</div>
+            <div class="industry-pill">Атомная энергетика</div>
+            <div class="industry-pill">Горнодобыча</div>
+            <div class="industry-pill">Металлургия</div>
+            <div class="industry-pill">Пищевое производство</div>
+            <div class="industry-pill">Транспортировка</div>
+            <div class="industry-pill">ЦОД</div>
+          </div>
+
+          <div class="ovb-title" style="margin-top:24px">Решаемые задачи</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Основа для MES-систем (замена зарубежных)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Связь нижних уровней IIoT (1-4) и верхних (7-8)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Импортозамещение PI System и аналогов</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARCHITECTURE -->
+      <div class="arch-diagram">
+        <div class="arch-title">Эталонная модель IIoT (8 уровней по MESA International)</div>
+        <div class="arch-levels">
+          <div class="arch-level"><span class="arch-level-num">8</span><span class="arch-level-name">Клиентские сервисы</span><span class="arch-level-desc">Аналитика, информационные панели</span></div>
+          <div class="arch-level"><span class="arch-level-num">7</span><span class="arch-level-name">Прикладные сервисы</span><span class="arch-level-desc">Визуализация, моделирование, симуляция</span></div>
+          <div class="arch-level"><span class="arch-level-num">6</span><span class="arch-level-name">Абстрагирование данных</span><span class="arch-level-desc">ETL, агрегация, рабочие процессы</span></div>
+          <div class="arch-level"><span class="arch-level-num">5</span><span class="arch-level-name">Накопление данных</span><span class="arch-level-desc">Сбор, логирование, хранение, структурирование</span></div>
+          <div class="arch-level" style="border-color:var(--volt)"><span class="arch-level-num" style="color:var(--lime)">ДП</span><span class="arch-level-name" style="color:var(--volt)">ДатаПлат</span><span class="arch-level-desc" style="color:var(--text2)">Уровни 5-7 — ядро платформы</span></div>
+          <div class="arch-level"><span class="arch-level-num">4</span><span class="arch-level-name">Глобальная сеть</span><span class="arch-level-desc">Интернет-шлюз и платформа</span></div>
+          <div class="arch-level"><span class="arch-level-num">3</span><span class="arch-level-name">Периферийные вычисления</span><span class="arch-level-desc">M2M управление, преобразование данных</span></div>
+          <div class="arch-level"><span class="arch-level-num">2</span><span class="arch-level-name">Подключение к сети</span><span class="arch-level-desc">Bluetooth, LoRa, ZigBee, проводные</span></div>
+          <div class="arch-level"><span class="arch-level-num">1</span><span class="arch-level-name">Физические устройства</span><span class="arch-level-desc">Датчики, контроллеры, машины</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSYSTEMS (SPECS) -->
+    <div id="ptab-specs" class="ptab-panel">
+      <div class="specs-note">
+        <strong>Базовый сервер ДатаПлат</strong> — ядро платформы, состоит из 11 подсистем. Доступна стандартная и расширенная комплектация.
+      </div>
+
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Управление базовым сервером</td><td>Конфигурирование, настройка связи с дочерними серверами, управление модулями</td></tr>
+          <tr><td>Безопасность</td><td>Аутентификация и авторизация пользователей, информационная безопасность</td></tr>
+          <tr><td>Журналирование</td><td>Журнал действий пользователей, администраторов, межпрограммного взаимодействия</td></tr>
+          <tr><td>Самодиагностика</td><td class="spec-val-hi">Мониторинг работоспособности компонентов инфраструктуры (расширенная)</td></tr>
+          <tr><td>Управление ИМ</td><td>Конфигурирование объектно-ориентированных моделей (цифровых двойников) в виде иерархического дерева</td></tr>
+          <tr><td>Управление НСИ</td><td>Централизованное ведение справочников и нормативно-справочной информации</td></tr>
+          <tr><td>Предупреждения и уведомления</td><td class="spec-val-hi">Рассылка уведомлений о событиях жизненного цикла ИМ (расширенная)</td></tr>
+          <tr><td>Визуализация параметров</td><td>Мнемосхемы, тренды, таблицы, круговые диаграммы, географические карты</td></tr>
+          <tr><td>Единый информационный портал</td><td>Единая точка доступа ко всем модулям и подсистемам ДатаПлат</td></tr>
+          <tr><td>Интеграция и сбор данных</td><td class="spec-val-hi">OPC UA/DA/HDA, SQL, ClickHouse коннекторы</td></tr>
+          <tr><td>Хранение данных</td><td>Временные ряды и реляционная СУБД</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px;padding:16px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;font-size:13px;color:var(--text2)">
+        <strong style="color:var(--lime)">Расширенная комплектация</strong> включает: неограниченное количество библиотек расчётов + SDK для разработки новых функциональных модулей.
+      </div>
+    </div>
+
+    <!-- MODULES -->
+    <div id="ptab-modules" class="ptab-panel">
+      <div class="specs-note">
+        <strong>Модули мониторинга и работы с цифровыми двойниками</strong> — опциональные компоненты для визуализации, представления данных и управления бизнес-процессами.
+      </div>
+
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Управление бизнес-процессами</td><td>Моделирование, выполнение и мониторинг бизнес-процессов, формирование уведомлений</td></tr>
+          <tr><td>Производственная отчётность</td><td>Автоматизация создания и генерации производственных отчётов о состоянии оборудования</td></tr>
+          <tr><td>Конструктор мнемосхем</td><td>Создание и редактирование мнемосхем на основе данных информационной модели</td></tr>
+          <tr><td>Конструктор экранных форм</td><td>Создание пользовательских интерфейсов</td></tr>
+          <tr><td>Производственные расчёты</td><td>Выполнение расчётных процедур на основе данных ИМ (чтение, обработка, запись результатов)</td></tr>
+          <tr><td>Управление событиями</td><td>Настройка условий формирования событий, мониторинг в реальном времени, оповещение подписчиков</td></tr>
+          <tr><td>Ручной ввод данных</td><td>Ввод производственных показателей при отсутствии средств автоматизации</td></tr>
+          <tr><td>Имитация данных</td><td>Генерация тестовых данных для отладки и демонстрации</td></tr>
+          <tr><td>Экспертная база знаний</td><td>Накопление и управление экспертными правилами диагностики</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- LICENSING -->
+    <div id="ptab-licensing" class="ptab-panel">
+      <div class="specs-note">
+        Лицензирование ДатаПлат основано на двух параметрах: количество атрибутов информационной модели и количество одновременных подключений пользователей.
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-card-head">
+            <div class="price-card-name">Базовый сервер (по атрибутам)</div>
+            <div class="price-card-price">По запросу</div>
+            <div class="price-card-note">00012-ДП-БС-xxx</div>
+          </div>
+          <div class="price-card-body">
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Лицензия по количеству атрибутов ИМ</div>
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Стандартная или расширенная комплектация</div>
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Скидки на резервные серверы</div>
+          </div>
+        </div>
+
+        <div class="price-card">
+          <div class="price-card-head">
+            <div class="price-card-name">Базовый сервер (по подключениям)</div>
+            <div class="price-card-price">По запросу</div>
+            <div class="price-card-note">00012-ДП-БСК-xxx</div>
+          </div>
+          <div class="price-card-body">
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Лицензия по числу одновременных подключений</div>
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Пробные лицензии для партнёров бесплатно</div>
+            <div class="price-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Учебные лицензии для вузов</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;padding:16px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;font-size:13px;color:var(--text2)">
+        <strong style="color:var(--amber)">Пакет модулей</strong> (00032-ДП-МРПД) — опционально: конструктор мнемосхем, экранных форм, отчётность, расчёты, ручной ввод, бизнес-процессы, события, имитация данных, экспертная база.
+      </div>
+    </div>
+
+    <!-- INTEGRATIONS -->
+    <div id="ptab-integrations" class="ptab-panel">
+      <div class="specs-note">
+        ДатаПлат поддерживает широкий набор промышленных протоколов и интеграций. Архитектура соответствует рекомендациям Industrial Internet Consortium IIRA и RAMI 4.0.
+      </div>
+
+      <table class="specs-table">
+        <tbody>
+          <tr><td>OPC UA/DA/HDA</td><td class="spec-val-hi">Базовые промышленные протоколы</td></tr>
+          <tr><td>SQL</td><td>Реляционные СУБД</td></tr>
+          <tr><td>ClickHouse</td><td>Аналитическая СУБД</td></tr>
+          <tr><td>REST API</td><td class="spec-val-hi">Для разработчиков прикладных систем</td></tr>
+          <tr><td>Альфа платформа</td><td>Совместное использование на уровне SCADA</td></tr>
+          <tr><td>PostgresPro</td><td>Отечественная СУБД</td></tr>
+          <tr><td>Astra Linux</td><td>Сертифицированная ОС</td></tr>
+          <tr><td>ERP (1С, SAP)</td><td>Интеграция с верхним уровнем</td></tr>
+          <tr><td>EAM / CMMS</td><td>Системы управления активами</td></tr>
+          <tr><td>BI / Форсайт</td><td>Аналитические платформы</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px">
+        <div class="ovb-title">Технологические партнёры</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+          <div class="industry-pill">Альфа платформа (Атомик Софт)</div>
+          <div class="industry-pill">PostgresPro</div>
+          <div class="industry-pill">Arenadata</div>
+          <div class="industry-pill">Форсайт</div>
+          <div class="industry-pill">АПРОТЕХ (Касперского)</div>
+          <div class="industry-pill">Прософт-Системы</div>
+          <div class="industry-pill">Lexema</div>
+          <div class="industry-pill">РЕД СОФТ</div>
+          <div class="industry-pill">Базальт СПО</div>
+          <div class="industry-pill">ТРИМ (СпецТек)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPLEMENTATIONS -->
+    <div id="ptab-implementations" class="ptab-panel">
+      <div class="impl-stats">
+        <div class="impl-stat"><span class="impl-num">120+</span><span class="impl-label">проектов</span></div>
+        <div class="impl-stat"><span class="impl-num">30+</span><span class="impl-label">заказчиков</span></div>
+        <div class="impl-stat"><span class="impl-num">25+</span><span class="impl-label">лет на рынке</span></div>
+      </div>
+
+      <div class="impl-card">
+        <span class="impl-tag">Нефтепереработка</span>
+        <h4>Туапсинский НПЗ (Роснефть)</h4>
+        <p>Защищённая информационная платформа АСОУП, реализованная на компонентах ДатаПлат.</p>
+        <ul>
+          <li>Информационная модель: 7 300 объектов, 27 400 атрибутов, 22 000 тегов</li>
+          <li>190+ диспетчерских мнемосхем, 30+ производственных отчётов</li>
+          <li>70+ одновременно работающих пользователей</li>
+          <li>Вычисление расчётных показателей «на лету» с сохранением в БДРВ</li>
+          <li>Резервирование всех узлов, однонаправленная передача данных</li>
+          <li>Интеграция с ЛИМС, 1С, AD</li>
+          <li>Соответствие ФСТЭК №31</li>
+          <li>В эксплуатации с 2018 года</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <span class="impl-tag">Атомная энергетика</span>
+        <h4>Нововоронежская АЭС (Росэнергоатом)</h4>
+        <p>Пилотный проект импортозамещения PI System — полностью импортонезависимое решение.</p>
+        <ul>
+          <li>Шина данных турбогенератора Т3В-1200-2АУ3 блока №6</li>
+          <li>1 142 сигнала из двух источников (СВБУ + Ракурс)</li>
+          <li>Передача в ЦОД Москвы по OPC UA</li>
+          <li>Стек: Astra Linux + ДатаПлат + Альфа платформа + PostgresPro</li>
+          <li>Резервирование и катастрофоустойчивость</li>
+          <li>Реализация: 7 месяцев (2020)</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <span class="impl-tag">Нефтегаз</span>
+        <h4>Диагностика газоперекачивающих агрегатов</h4>
+        <p>Система раннего диагностирования ГПА на базе ДатаПлат + iPredicta.</p>
+        <ul>
+          <li>Цифровой двойник ГПА</li>
+          <li>Диагностика промывки ГТД</li>
+          <li>Автоматическая диагностика компрессора (корреляционный анализ)</li>
+          <li>Прогнозирование времени до промывки</li>
+        </ul>
+      </div>
+
+      <p style="color:var(--text3);font-size:13px;margin-top:24px;">Подробные кейсы и отзывы — по запросу. Источник: <a href="https://infteh.ru/experience/" target="_blank" style="color:var(--volt)">infteh.ru/experience</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

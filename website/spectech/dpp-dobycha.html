@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДПП.Добыча — автоматизация нефтегазодобычи, цифровое месторождение | СПЕЦТЕХ</title>
+<meta name="description" content="ДатаПлат Производство.Добыча — отечественный программный комплекс для автоматизации процессов нефтегазодобычи. Цифровое месторождение, мониторинг скважин, управление промысловым оборудованием.">
+<meta name="keywords" content="ДПП Добыча, ДатаПлат, нефтегазодобыча, цифровое месторождение, SCADA, ЭЦН, ШГН, мониторинг скважин, ИнфТех, СПЕЦТЕХ, импортозамещение, АСУ ТП">
+<meta property="og:title" content="ДПП.Добыча — автоматизация нефтегазодобычи">
+<meta property="og:description" content="Отечественный комплекс для цифрового месторождения. Мониторинг, управление, отчётность.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dpp-dobycha.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dpp-dobycha.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}.breadcrumb-cur{color:var(--text2)}
+
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-sub{font-size:18px;color:var(--text2);font-weight:300;margin-top:4px}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+.ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
+
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:28px;font-weight:900;color:var(--text)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}.ptab-panel.active{display:block}
+
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.feat-line svg{flex-shrink:0;margin-top:3px}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:800px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px;text-align:center}
+.arch-level-name{font-weight:600;color:var(--text);min-width:220px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+
+.hierarchy-tree{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:24px;margin-top:24px}
+.h-node{padding:6px 0 6px;font-size:14px;color:var(--text2)}
+.h-node.l0{color:var(--volt);font-weight:700;font-size:15px}
+.h-node.l1{padding-left:24px;color:var(--text)}
+.h-node.l2{padding-left:48px}
+
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+
+.logo-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px;justify-content:center}
+.logo-badge{padding:8px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:8px;font-size:12px;color:var(--text2);font-weight:600}
+
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+  .arch-level-name{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">ДПП.Добыча</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">Разработчик: ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">ДПП.Добыча</h1>
+        <div class="product-sub">ДатаПлат Производство.Добыча</div>
+        <div class="product-version">Реестр Минцифры №13866 · Свидетельства №2019617489, №2020660903 · Релиз 1.0</div>
+        <p class="product-tagline">Комплекс программных средств для автоматизации технологических процессов нефтегазодобычи на базе платформы ДатаПлат Производство и компонентов Альфа Платформы. Цифровое месторождение, мониторинг скважин, управление промысловым оборудованием.</p>
+
+        <div class="product-pills">
+          <span class="ppill accent">Нефтегазодобыча</span>
+          <span class="ppill">IIoT</span>
+          <span class="ppill">SCADA</span>
+          <span class="ppill">Digital Field</span>
+          <span class="ppill">OPC UA</span>
+          <span class="ppill">Modbus</span>
+          <span class="ppill">IEC 104</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">ДатаПлат + отраслевой шаблон нефтегазодобычи</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="index.html#contact" class="btn-cta-primary">Запросить КП</a>
+          <a href="dataplat.html" class="btn-cta-secondary">Платформа ДатаПлат</a>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>100% отечественная разработка</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Реестр Минцифры + ФОИВС</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Работает с российскими ПЛК</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Включён в реестр ПАО «ЛУКОЙЛ»</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('architecture',this)">Архитектура</button>
+    <button class="ptab" onclick="showPTab('components',this)">Компоненты</button>
+    <button class="ptab" onclick="showPTab('objects',this)">Объекты</button>
+    <button class="ptab" onclick="showPTab('advantages',this)">Преимущества</button>
+    <button class="ptab" onclick="showPTab('implementations',this)">Внедрения</button>
+  </div>
+</div>
+
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Ключевые задачи</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Повышение технологической дисциплины и достоверности данных</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Оперативный технический контроль за разработкой месторождения</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Дистанционный мониторинг кустов скважин и площадок</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Сокращение простоев — своевременная информация об остановках</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Увеличение межремонтного периода оборудования</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Предотвращение аварий и загрязнения окружающей среды</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Поддерживаемые процессы</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Сбор и хранение данных</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Визуализация технологического процесса</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Управление производственными объектами</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Сигнализация и контроль</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Формирование отчётности</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Инженерное обслуживание</div>
+          </div>
+
+          <div class="ovb-title" style="margin-top:20px">Функциональность</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Мнемосхемы на АРМ оператора</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Звуковая, цветовая и текстовая сигнализация</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Распознавание аварийных ситуаций</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Ведение оперативной документации (сводки, рапорты)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div id="ptab-architecture" class="ptab-panel">
+      <div class="specs-note">
+        Архитектура комплекса поддерживает информационную модель предприятия, ролевые модели и права доступа, удалённое подключение через веб-браузер, резервирование и надёжность работы, подключение разнообразных ПЛК.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">4-уровневая архитектура ДПП.Добыча</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)"><span class="arch-level-num">1</span><span class="arch-level-name">Уровень рабочих станций</span><span class="arch-level-desc">АРМ диспетчера, геолога, технолога, КИП, веб-пользователи</span></div>
+          <div class="arch-level"><span class="arch-level-num">2</span><span class="arch-level-name">Уровень серверов</span><span class="arch-level-desc">Информационная модель, сбор данных, хранение, расчёты (основной + резервный)</span></div>
+          <div class="arch-level"><span class="arch-level-num">3</span><span class="arch-level-name">Уровень ПЛК</span><span class="arch-level-desc">Опрос датчиков, управляющие алгоритмы, буферизация, коммуникация</span></div>
+          <div class="arch-level"><span class="arch-level-num">4</span><span class="arch-level-name">Уровень оборудования</span><span class="arch-level-desc">СУ БДР, СУ ШГН, СУ АНЗН, СУ ЭЦН — управляющие воздействия и съём данных</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Характеристики аппаратной части</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Внутренняя шина</td><td>Ethernet 100 Mbps</td></tr>
+            <tr><td>Резервирование</td><td class="spec-val-hi">100% резервирование ПЛК</td></tr>
+            <tr><td>Замена модулей</td><td>«Горячая» замена без перемонтажа полевых подключений</td></tr>
+            <tr><td>Протоколы</td><td class="spec-val-hi">Modbus RTU/TCP, IEC 60870-5-101/104, OPC DA/UA, SNMP, NTP</td></tr>
+            <tr><td>Датчики</td><td>HART в модулях аналогового ввода</td></tr>
+            <tr><td>Синхронизация времени</td><td>Встроенный GPS/ГЛОНАСС приёмник</td></tr>
+            <tr><td>Рабочая температура</td><td class="spec-val-hi">от −40°C до +60°C</td></tr>
+            <tr><td>Каналы связи</td><td>ВОЛС, УКВ, медные линии связи</td></tr>
+            <tr><td>Языки программирования</td><td>IEC 61131-3: SFC, LD, ST, FBD, CFC</td></tr>
+            <tr><td>Защита</td><td>Искрозащита, грозозащита «полевых» каналов</td></tr>
+            <tr><td>Автономность</td><td>Работа при перерывах электропитания + SD-карты до 32 ГБ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COMPONENTS -->
+    <div id="ptab-components" class="ptab-panel">
+      <div class="specs-note">
+        Программная архитектура строится на компонентах <strong>Альфа платформы</strong>, в среде которой разработаны элементы отраслевого шаблона нефтегазодобычи: мнемосхемы, отчёты, шаблоны алармов и трендов, алгоритмика работы с данными.
+      </div>
+
+      <div class="ovb-title">Пользовательские подсистемы</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Alpha.HMI</td><td>Мониторинг нефтегазодобычи: иерархические мнемосхемы ЭЦН, ШГН, ГЗУ, КНС, ВРГ; мониторинг дебитов, системы ППД, трубопроводов, катодной защиты</td></tr>
+          <tr><td>Alpha.Alarms</td><td>Сигнализация и контроль: визуальные и звуковые уведомления, сегментация по важности, фильтрация по участкам, работа с историческими событиями, выгрузка в файл</td></tr>
+          <tr><td>Alpha.Reports</td><td>Отчётность: конструктор без программирования (PDF/XLSX/DOCX), фильтры, версионность НСИ, рассылка по e-mail, формирование по расписанию и запросу</td></tr>
+          <tr><td>Alpha.Trends</td><td>Тренды: реальное время и ретроспектива, масштабирование, наложение графиков с разными диапазонами, предопределённые группы и шаблоны</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ovb-title" style="margin-top:32px">Серверные и интеграционные модули</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Alpha.Server</td><td>Среда исполнения проекта: приём данных с ПЛК, распаковка/предоставление по OPC DA/HDA, расчёты в реальном времени, резервирование</td></tr>
+          <tr><td>Alpha.Historian</td><td>Хранение данных: неограниченный объём БД, сжатие (~10 байт/запись), резервирование, автообслуживание архива, API + OPC HDA/UA + SQL</td></tr>
+          <tr><td>Alpha.AccessPoint</td><td class="spec-val-hi">Интеграция: OPC DA/UA, Modbus RTU/TCP, ГОСТ Р МЭК 60870-5-104, SNMP, Syslog, SQL, XLSX; буферизация при потере связи; горячее резервирование</td></tr>
+          <tr><td>Alpha.DevStudio</td><td>Конфигурация проекта: контроль версий, откат изменений, обновление «в один клик», управление пользователями и правами</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ovb-title" style="margin-top:32px">Отраслевой шаблон</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Типовые объекты</td><td>Предконфигурация шаблонов технологических объектов нефтегазодобычи, ПЛК и групп сигналов</td></tr>
+          <tr><td>Проект HMI</td><td>Шаблоны мнемосхем: обзорные, кустовые, скважинные, диагностические, настроечные окна</td></tr>
+          <tr><td>Группы трендов</td><td>Предварительно настроенные группы для ключевых технологических параметров</td></tr>
+          <tr><td>Отчёты</td><td>Производственные отчёты: суточные сводки, рапорты, акты замеров</td></tr>
+        </tbody>
+      </table>
+
+      <div class="ovb-title" style="margin-top:32px">Системные требования</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Операционные системы</td><td class="spec-val-hi">Microsoft Windows Server, Linux</td></tr>
+          <tr><td>СУБД</td><td>PostgreSQL</td></tr>
+          <tr><td>Исполнительная платформа</td><td>Альфа Платформа (ООО «Атомик Софт», Россия)</td></tr>
+          <tr><td>Веб-доступ</td><td>Доступ через любой веб-браузер, неограниченное количество пользователей</td></tr>
+          <tr><td>Виртуализация</td><td>Поддержка виртуализации серверов при необходимости</td></tr>
+          <tr><td>Режим работы</td><td>24×7 круглосуточный, круглогодичный; плановое обслуживание без прерывания</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- OBJECTS -->
+    <div id="ptab-objects" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.Добыча включает <strong>отраслевой шаблон</strong> с типовой иерархией объектов нефтегазодобычи. Шаблон легко расширяется дополнительными объектами.
+      </div>
+
+      <div class="hierarchy-tree">
+        <div class="ovb-title">Иерархия производственных объектов</div>
+        <div class="h-node l0">⬡ Месторождение</div>
+        <div class="h-node l1">⬡ Куст скважин</div>
+        <div class="h-node l2">▸ Скважина добывающая (с ЭЦН)</div>
+        <div class="h-node l2">▸ Скважина водяная нагнетательная</div>
+        <div class="h-node l2">▸ Групповая замерная установка (ГЗУ)</div>
+        <div class="h-node l2">▸ Водораспределительная гребёнка (ВРГ)</div>
+        <div class="h-node l2">▸ Установка дозирования химреагента (УДХ)</div>
+        <div class="h-node l2">▸ Нагреватель</div>
+        <div class="h-node l2">▸ Кустовая насосная станция (КНС)</div>
+      </div>
+
+      <div class="hierarchy-tree">
+        <div class="ovb-title">Распределённые объекты</div>
+        <div class="h-node l1" style="color:var(--flame)">Объекты нефтегазодобычи</div>
+        <div class="h-node l2">▸ Скважины: фонтанные, с ЭЦН, с ШГН, газлифтные, газовые</div>
+        <div class="h-node l2">▸ Кусты: ГЗУ, БДР, депарафинизация, дренажная ёмкость</div>
+        <div class="h-node l2">▸ Система ППД: ВРГ, нагнетательные и водозаборные скважины</div>
+        <div class="h-node l1" style="color:var(--flame)">Транспорт и энергоснабжение</div>
+        <div class="h-node l2">▸ Внутрипромысловые и магистральные трубопроводы</div>
+        <div class="h-node l2">▸ Трансформаторные подстанции, РУ, котельные, генераторы</div>
+      </div>
+
+      <div class="hierarchy-tree">
+        <div class="ovb-title">Площадочные объекты</div>
+        <div class="h-node l1" style="color:var(--flame)">Система ППД</div>
+        <div class="h-node l2">▸ Водозаборные станции, КНС, насосные агрегаты, блоки напорной гребёнки</div>
+        <div class="h-node l2">▸ Узлы учёта воды</div>
+        <div class="h-node l1" style="color:var(--flame)">Подготовка нефти и газа</div>
+        <div class="h-node l2">▸ ДНС, установки подготовки нефти/газа, ЦПС</div>
+        <div class="h-node l2">▸ Нефтегазосепараторы, компрессорные, факельные системы</div>
+        <div class="h-node l2">▸ УПСВ, подогреватели нефти, отстойники</div>
+        <div class="h-node l2">▸ Узлы учёта нефти/газа, резервуарные парки</div>
+      </div>
+
+      <div style="margin-top:24px">
+        <div class="ovb-title">Поддерживаемое оборудование и типы скважин</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <div class="industry-pill">ЭЦН</div>
+          <div class="industry-pill">ШГН</div>
+          <div class="industry-pill">Фонтанная арматура</div>
+          <div class="industry-pill">Газлифт</div>
+          <div class="industry-pill">КНС</div>
+          <div class="industry-pill">ГЗУ / АГЗУ</div>
+          <div class="industry-pill">БДР</div>
+          <div class="industry-pill">ВРГ</div>
+          <div class="industry-pill">УДХ</div>
+          <div class="industry-pill">ДНС</div>
+          <div class="industry-pill">УПСВ</div>
+          <div class="industry-pill">ЦПС</div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px">
+        <div class="ovb-title">Пользователи системы</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <div class="industry-pill">Диспетчер промысла / ЦДУ</div>
+          <div class="industry-pill">Геологи промысла</div>
+          <div class="industry-pill">Технологи промысла</div>
+          <div class="industry-pill">Специалисты КИПиА</div>
+          <div class="industry-pill">Руководство компании</div>
+          <div class="industry-pill">Веб-пользователи</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADVANTAGES -->
+    <div id="ptab-advantages" class="ptab-panel">
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Импортозамещение</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Полностью отечественный продукт, Реестр Минцифры</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Снижение санкционных рисков</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Соответствие стандартам IIoT (IIC IIRA, RAMI 4.0)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Включён в реестр разрешённого ПО ПАО «ЛУКОЙЛ»</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Архитектура и масштабирование</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Открытая архитектура — горизонтальное и вертикальное масштабирование</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Работа с ПЛК различных производителей РФ</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Поддержка физических серверов и виртуализации</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Работа под Windows Server и Linux, СУБД PostgreSQL</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Интеграция</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>OPC DA/UA/AE/HDA — стандарт промышленной интеграции</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Modbus RTU/TCP, ГОСТ Р МЭК 60870-5-104, SNMP, Syslog</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>SQL, XLSX-импорт, API/SDK для внешних систем</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Взаимодействие с ERP, BI, SCADA через OPC-туннели</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPLEMENTATIONS -->
+    <div id="ptab-implementations" class="ptab-panel">
+
+      <div class="impl-card">
+        <span class="impl-tag">ЛУКОЙЛ</span>
+        <h4>АСУ ТП КНС — ТПП «Когалымнефтегаз» (ООО «ЛУКОЙЛ-Западная Сибирь»)</h4>
+        <p>Система управления кустовой насосной станции на базе ДПП.Добыча.</p>
+        <ul>
+          <li>Консолидация данных о ходе технологических процессов</li>
+          <li>Управление оборудованием КНС: ЦНС-240×1422, ЦНС-240×1510, ЦНС-180×1525</li>
+          <li>Интеграция с контроллерами B&R серии X20 (3 шт.)</li>
+          <li>Мнемосхемы, отчёты, тренды, алармы</li>
+          <li>Базовое ПО включено в Реестр разрешённого ПО ПАО «ЛУКОЙЛ»</li>
+          <li>В эксплуатации с сентября 2020 года</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <span class="impl-tag">Газпром нефть</span>
+        <h4>Система телемеханики — Западно-Мессояхский лицензионный участок</h4>
+        <p>Телемеханика и мониторинг на одном из крупных месторождений.</p>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Заказчики</div>
+        <div class="logo-row">
+          <div class="logo-badge">Газпром нефть</div>
+          <div class="logo-badge">ЛУКОЙЛ</div>
+          <div class="logo-badge">Татнефть</div>
+          <div class="logo-badge">Башнефть</div>
+          <div class="logo-badge">Транснефть</div>
+          <div class="logo-badge">Росэнергоатом</div>
+          <div class="logo-badge">Cargill</div>
+          <div class="logo-badge">Губкинский университет</div>
+          <div class="logo-badge">Гомельэнерго</div>
+        </div>
+      </div>
+
+      <p style="color:var(--text3);font-size:13px;margin-top:24px;">Подробные кейсы внедрения — по запросу. Источник: <a href="https://infteh.ru/experience/" target="_blank" style="color:var(--volt)">infteh.ru/experience</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

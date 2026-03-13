@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДПП.Сервер тревог — управление аварийной сигнализацией АСУТП | СПЕЦТЕХ</title>
+<meta name="description" content="ДПП.Сервер тревог — расширенное управление сигнализацией на уровне АСУТП с аналитическими методами, развитой отчётностью и информированием. SCADA-независимая архитектура.">
+<meta name="keywords" content="ДПП Сервер тревог, управление сигнализацией, АСУТП, аварийная сигнализация, аналитика тревог, ИнфТех, СПЕЦТЕХ, импортозамещение, OPC UA, OPC DA, OPC A&E">
+<meta property="og:title" content="ДПП.Сервер тревог — управление аварийной сигнализацией АСУТП">
+<meta property="og:description" content="Расширенное управление сигнализацией на уровне АСУТП с аналитическими методами, развитой отчётностью и информированием. SCADA-независимая архитектура.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dpp-alarms.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dpp-alarms.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}.breadcrumb-cur{color:var(--text2)}
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-sub{font-size:18px;color:var(--text2);font-weight:300;margin-top:4px}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+.ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:28px;font-weight:900;color:var(--text)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}.ptab-panel.active{display:block}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.feat-line svg{flex-shrink:0;margin-top:3px}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:800px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px;text-align:center}
+.arch-level-name{font-weight:600;color:var(--text);min-width:220px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+.process-step{display:flex;align-items:flex-start;gap:16px;padding:16px;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;margin-bottom:8px}
+.step-num{font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--volt);min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:2px solid var(--volt);border-radius:50%;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.formula-block{background:var(--ink2);border:1px solid var(--wire);border-radius:8px;padding:20px 24px;margin:16px 0;font-family:var(--ff-mono);font-size:14px;color:var(--volt);line-height:1.8;overflow-x:auto}
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+.logo-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px;justify-content:center}
+.logo-badge{padding:8px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:8px;font-size:12px;color:var(--text2);font-weight:600}
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+  .arch-level-name{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">ДПП.Сервер тревог</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">ДПП.Сервер тревог</h1>
+        <div class="product-sub">Управление аварийной сигнализацией АСУТП</div>
+        <div class="product-version">Релиз 1.0 · ИнфТех</div>
+        <p class="product-tagline">Расширенное управление сигнализацией на уровне АСУТП с аналитическими методами, развитой отчётностью и информированием. SCADA-независимая архитектура.</p>
+
+        <div class="product-pills">
+          <span class="ppill accent">SCADA-независимый</span>
+          <span class="ppill">Аналитика тревог</span>
+          <span class="ppill">Реестр Минцифры</span>
+          <span class="ppill">OPC UA/DA/A&E</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">Российская разработка</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="infteh.html#contacts" class="btn-cta-primary">Запросить демо</a>
+          <a href="https://infteh.ru" class="btn-cta-secondary">Документация</a>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>SCADA-независимая архитектура</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>8 типов аналитики</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Авто-отчёты по email</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Кроссплатформенность</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('architecture',this)">Архитектура</button>
+    <button class="ptab" onclick="showPTab('analytics',this)">Аналитика</button>
+    <button class="ptab" onclick="showPTab('functions',this)">Функции</button>
+    <button class="ptab" onclick="showPTab('advantages',this)">Преимущества</button>
+    <button class="ptab" onclick="showPTab('specifications',this)">Спецификации</button>
+  </div>
+</div>
+
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="specs-note">
+        ДПП.Сервер тревог — это расширенное управление сигнализацией с аналитикой. Система обеспечивает комплексное решение для управления аварийной сигнализацией на промышленных предприятиях.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Решаемые задачи</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Идентификация тревог по логическим правилам</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Анализ технологических опасностей и инцидентов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Регулярный мониторинг системы сигнализации</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Оптимизация системы (установка новой / изменение существующей)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Определение приоритетов и корректирующих действий</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Гибкая атрибутика описания тревог</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Визуализация данных по сигналам</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Журнализация действий</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Работа в реальном времени</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Унификация процесса независимо от SCADA</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Проблемы рынка</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,18 18,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/><polyline points="6,6 18,18" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Зарубежное ПО (отключение поддержки)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,18 18,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/><polyline points="6,6 18,18" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Open Source (нет гарантий)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="6,18 18,6" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/><polyline points="6,6 18,18" stroke="#ff3d57" stroke-width="2" stroke-linecap="round"/></svg>Собственная разработка (затраты на команду)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE -->
+    <div id="ptab-architecture" class="ptab-panel">
+      <div class="specs-note">
+        Архитектура ДПП.Сервер тревог состоит из 5 основных компонентов, обеспечивающих полный цикл работы с аварийной сигнализацией — от сбора данных до аналитики и отчётности.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">5 компонентов системы</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)"><span class="arch-level-num">1</span><span class="arch-level-name">Веб-портал</span><span class="arch-level-desc">Тонкий клиент для управления и мониторинга</span></div>
+          <div class="arch-level"><span class="arch-level-num">2</span><span class="arch-level-name">Подсистема аналитики тревог</span><span class="arch-level-desc">8 типов аналитических методов</span></div>
+          <div class="arch-level"><span class="arch-level-num">3</span><span class="arch-level-name">Модуль производственной отчётности</span><span class="arch-level-desc">Генерация и рассылка отчётов</span></div>
+          <div class="arch-level"><span class="arch-level-num">4</span><span class="arch-level-name">Библиотека интеграционных коннекторов</span><span class="arch-level-desc">OPC UA, Alpha.Link, Rmap, OPC A&E</span></div>
+          <div class="arch-level"><span class="arch-level-num">5</span><span class="arch-level-name">SMTP-модуль</span><span class="arch-level-desc">Рассылка отчётов по электронной почте</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Протоколы интеграции</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>OPC UA</td><td class="spec-val-hi">Современный стандарт промышленной автоматизации</td></tr>
+            <tr><td>OPC DA</td><td>Классический протокол обмена данными</td></tr>
+            <tr><td>OPC A&E</td><td>Протокол для работы с событиями и сигнализацией</td></tr>
+            <tr><td>Alpha.Link</td><td>Специализированный протокол для АСУ ТП</td></tr>
+            <tr><td>Rmap</td><td>Протокол удалённого управления и мониторинга</td></tr>
+            <tr><td>SMTP/POP3</td><td>Электронная почта для уведомлений</td></tr>
+            <tr><td>HTTP/HTTPS</td><td>Веб-протоколы для удалённого доступа</td></tr>
+            <tr><td>Web-API</td><td>REST API для интеграции со сторонними системами</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Хранилище данных</div>
+        <div class="overview-block">
+          <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px">Централизованное хранилище данных Сервера тревог обеспечивает:</p>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Долговременное архивирование всех событий тревожной сигнализации</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Высокую производительность запросов для аналитики</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Целостность и безопасность критически важной информации</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Масштабируемость для больших объёмов данных</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div id="ptab-analytics" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.Сервер тревог включает 8 типов аналитических методов для глубокого анализа системы аварийной сигнализации и выявления проблемных зон.
+      </div>
+
+      <div class="ovb-title">8 типов аналитики</div>
+      
+      <div class="process-step" style="border-color:var(--volt)"><div class="step-num" style="border-color:var(--volt);color:var(--volt)">1</div><div class="step-content"><div class="step-title">Анализ группы СТ</div><div class="step-desc">Долевая процентная статистика каждого сигнала в группе, выявление наиболее активных тревог</div></div></div>
+
+      <div class="process-step" style="border-color:var(--lime)"><div class="step-num" style="border-color:var(--lime);color:var(--lime)">2</div><div class="step-content"><div class="step-title">Анализ ложных СТ</div><div class="step-desc">Отсечение часто срабатывающих ложных тревог, фильтрация шума в системе сигнализации</div></div></div>
+
+      <div class="process-step" style="border-color:var(--flame)"><div class="step-num" style="border-color:var(--flame);color:var(--flame)">3</div><div class="step-content"><div class="step-title">Анализ неустойчивых СТ</div><div class="step-desc">Выявление тревог с частыми циклами активации/сброса, анализ нестабильности сигналов</div></div></div>
+
+      <div class="process-step" style="border-color:var(--amber)"><div class="step-num" style="border-color:var(--amber);color:var(--amber)">4</div><div class="step-content"><div class="step-title">Анализ продолжительности</div><div class="step-desc">Время активности тревог, анализ скорости подтверждения оператором</div></div></div>
+
+      <div class="process-step" style="border-color:var(--crimson)"><div class="step-num" style="border-color:var(--crimson);color:var(--crimson)">5</div><div class="step-content"><div class="step-title">Анализ потоков СТ</div><div class="step-desc">Высокая интенсивность событий, выявление превышения пороговых значений потока</div></div></div>
+
+      <div class="process-step" style="border-color:var(--volt)"><div class="step-num" style="border-color:var(--volt);color:var(--volt)">6</div><div class="step-content"><div class="step-title">Анализ связанных СТ</div><div class="step-desc">Корреляционный анализ пар тревог, выявление причинно-следственных связей</div></div></div>
+
+      <div class="process-step" style="border-color:var(--lime)"><div class="step-num" style="border-color:var(--lime);color:var(--lime)">7</div><div class="step-content"><div class="step-title">Сопоставление обзорных показателей</div><div class="step-desc">Сравнительный анализ различных временных периодов, трендовый анализ</div></div></div>
+
+      <div class="process-step" style="border-color:var(--flame)"><div class="step-num" style="border-color:var(--flame);color:var(--flame)">8</div><div class="step-content"><div class="step-title">Анализ частоты группы СТ</div><div class="step-desc">Частотность срабатывания по типам и подтипам тревог, статистический анализ</div></div></div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Применение аналитики</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Оптимизация системы</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Выявление избыточных тревог</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Настройка приоритетов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Улучшение производительности</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Повышение безопасности</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Предотвращение инцидентов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Быстрое реагирование</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Снижение рисков</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNCTIONS -->
+    <div id="ptab-functions" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.Сервер тревог предоставляет широкий спектр функций для работы с аварийной сигнализацией — от простой визуализации до сложной аналитики и автоматической генерации отчётов.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Основные функции</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Реестр тревог: визуализация всех параметров</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Детализация отдельного сигнала</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Анализ группы, неустойчивых, частоты</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Генерация обзорного отчёта</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Генерация отчётов по анализам</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Конструктор отчётов ДатаПлат</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Настройка расписания генерации</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Экспорт XLSX и PDF</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Отчётность</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Автоматическая генерация отчётов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Гибкое расписание рассылки</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Настраиваемые шаблоны</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Множественные форматы экспорта</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Email-рассылка</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Детализация функций</div>
+
+        <div class="process-step" style="border-color:var(--volt)"><div class="step-num" style="border-color:var(--volt);color:var(--volt)">1</div><div class="step-content"><div class="step-title">Реестр тревог</div><div class="step-desc">Единое окно для просмотра всех тревожных событий с полной информацией: время, приоритет, состояние, описание, источник</div></div></div>
+
+        <div class="process-step" style="border-color:var(--lime)"><div class="step-num" style="border-color:var(--lime);color:var(--lime)">2</div><div class="step-content"><div class="step-title">Детализация сигнала</div><div class="step-desc">Углублённый анализ конкретной тревоги: история срабатываний, тренды, связанные события, параметры</div></div></div>
+
+        <div class="process-step" style="border-color:var(--flame)"><div class="step-num" style="border-color:var(--flame);color:var(--flame)">3</div><div class="step-content"><div class="step-title">Аналитические отчёты</div><div class="step-desc">Комплексный анализ по всем 8 типам аналитики с визуализацией результатов и рекомендациями</div></div></div>
+
+        <div class="process-step" style="border-color:var(--amber)"><div class="step-num" style="border-color:var(--amber);color:var(--amber)">4</div><div class="step-content"><div class="step-title">Конструктор отчётов</div><div class="step-desc">Гибкий инструмент создания пользовательских отчётов с использованием платформы ДатаПлат</div></div></div>
+
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Форматы экспорта</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Microsoft Excel (XLSX)</td><td class="spec-val-hi">Структурированные данные для дальнейшего анализа</td></tr>
+            <tr><td>Adobe PDF</td><td>Готовые отчёты для презентации и архивирования</td></tr>
+            <tr><td>CSV</td><td>Упрощённый формат для импорта в сторонние системы</td></tr>
+            <tr><td>Email рассылка</td><td>Автоматическая отправка отчётов по расписанию</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADVANTAGES -->
+    <div id="ptab-advantages" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.Сервер тревог — полностью отечественная разработка, обеспечивающая независимость от зарубежных решений и высокую эффективность управления аварийной сигнализацией.
+      </div>
+
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--lime)">Отечественная разработка</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Полностью отечественный продукт, без зарубежных компонентов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Кроссплатформенность (Windows/Linux)</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Тонкий клиент (веб-браузер)</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--volt)">Техническая гибкость</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Подключение к различным SCADA-системам</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Одновременная работа нескольких пользователей</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Развитый инструментарий логических правил</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Пользовательские преимущества</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Удобный интерфейс аналитических данных</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Автоматическая генерация отчётов с рассылкой по e-mail</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Быстрое отображение большого количества данных</div>
+            </div>
+          </div>
+
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--amber)">Экономические выгоды</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Снижение операционных расходов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Повышение эффективности персонала</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Предотвращение инцидентов</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Ключевые преимущества</div>
+        
+        <div class="process-step" style="border-color:var(--lime)"><div class="step-num" style="border-color:var(--lime);color:var(--lime)">1</div><div class="step-content"><div class="step-title">SCADA-независимость</div><div class="step-desc">Система может работать с любыми SCADA-системами благодаря универсальным протоколам интеграции</div></div></div>
+
+        <div class="process-step" style="border-color:var(--volt)"><div class="step-num" style="border-color:var(--volt);color:var(--volt)">2</div><div class="step-content"><div class="step-title">Комплексная аналитика</div><div class="step-desc">8 типов анализа обеспечивают полное понимание состояния системы аварийной сигнализации</div></div></div>
+
+        <div class="process-step" style="border-color:var(--flame)"><div class="step-num" style="border-color:var(--flame);color:var(--flame)">3</div><div class="step-content"><div class="step-title">Автоматизация отчётности</div><div class="step-desc">Полная автоматизация процесса создания и рассылки отчётов снижает нагрузку на персонал</div></div></div>
+
+        <div class="process-step" style="border-color:var(--amber)"><div class="step-num" style="border-color:var(--amber);color:var(--amber)">4</div><div class="step-content"><div class="step-title">Масштабируемость</div><div class="step-desc">Система легко масштабируется для предприятий любого размера — от малых производств до крупных комплексов</div></div></div>
+
+      </div>
+    </div>
+
+    <!-- SPECIFICATIONS -->
+    <div id="ptab-specifications" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.Сервер тревог поддерживает кроссплатформенную архитектуру с веб-порталом в качестве тонкого клиента. Система интегрируется с различными АСУТП через стандартные промышленные протоколы.
+      </div>
+
+      <div class="ovb-title">Технические характеристики</div>
+      <table class="specs-table">
+        <tbody>
+          <tr><td>Платформа</td><td class="spec-val-hi">Windows / Linux</td></tr>
+          <tr><td>Протоколы</td><td>OPC UA, OPC DA, OPC A&E, Alpha.Link, Rmap</td></tr>
+          <tr><td>Интерфейс</td><td class="spec-val-hi">Веб-портал (тонкий клиент)</td></tr>
+          <tr><td>Экспорт</td><td>XLSX, PDF</td></tr>
+          <tr><td>Уведомления</td><td>SMTP/POP3</td></tr>
+          <tr><td>Web-API</td><td class="spec-val-hi">Интеграция со сторонними ИС</td></tr>
+          <tr><td>Реестр</td><td>Минцифры России</td></tr>
+          <tr><td>Разработчик</td><td class="spec-val-hi">ООО «ИнфТех»</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Системные требования</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Серверная часть</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Windows Server 2016+ или Linux (Ubuntu/RHEL)</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>4+ ядра CPU, 8+ ГБ RAM</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>100+ ГБ свободного места на диске</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Сетевое подключение к АСУТП</div>
+            </div>
+          </div>
+          
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Клиентская часть</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Веб-браузер: Chrome, Firefox, Edge, Safari</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Разрешение экрана: 1280x1024+</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Подключение к локальной сети</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Поддержка JavaScript и HTML5</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Протоколы и интерфейсы</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>OPC UA</td><td class="spec-val-hi">Современный универсальный протокол M2M</td></tr>
+            <tr><td>OPC DA</td><td>Классический протокол обмена данными реального времени</td></tr>
+            <tr><td>OPC A&E</td><td>Специализированный протокол для работы с событиями и тревогами</td></tr>
+            <tr><td>Alpha.Link</td><td>Высокопроизводительный протокол для критичных применений</td></tr>
+            <tr><td>Rmap</td><td>Протокол удалённого мониторинга и управления</td></tr>
+            <tr><td>SMTP</td><td>Исходящая почта для автоматической рассылки отчётов</td></tr>
+            <tr><td>HTTP/HTTPS</td><td>Веб-интерфейс с поддержкой безопасного соединения</td></tr>
+            <tr><td>REST API</td><td>Программный интерфейс для интеграции со сторонними системами</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Лицензирование и поддержка</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Тип лицензии</td><td class="spec-val-hi">Коммерческая именная лицензия</td></tr>
+            <tr><td>Модель лицензирования</td><td>По количеству одновременных подключений</td></tr>
+            <tr><td>Техническая поддержка</td><td>8×5, расширение до 24×7 доступно</td></tr>
+            <tr><td>Обновления ПО</td><td>Включены в стоимость лицензии на 1 год</td></tr>
+            <tr><td>Гарантия</td><td>12 месяцев с момента внедрения</td></tr>
+            <tr><td>Документация</td><td>Полный комплект на русском языке</td></tr>
+            <tr><td>Обучение</td><td>Обучение администраторов и пользователей</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xml:lang="ru-RU" lang="ru-RU">
+<head>
+	<title>Страница не найдена!</title>
+	<base href="//infteh.ru/"/> 
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<meta name="Keywords" content=""/>
+	<meta name="Description" content=""/>
+        <meta name="yandex-verification" content="8f98774208c1662e" />
+
+	<link rel="shortcut icon" type="image/x-icon" href="//infteh.ru/assets/themes/images/icons/favicon.ico"/>
+	<link rel="icon" type="image/png" href="//infteh.ru/assets/themes/images/icons/favicon.png"/>
+	<link rel="apple-touch-icon" sizes="57x57" href="//infteh.ru/assets/themes/images/icons/icon-57.png"/>
+	<link rel="apple-touch-icon" sizes="60x60" href="//infteh.ru/assets/themes/images/icons/icon-60.png"/>
+	<link rel="apple-touch-icon" sizes="72x72" href="//infteh.ru/assets/themes/images/icons/icon-72.png"/>
+	<link rel="apple-touch-icon" sizes="76x76" href="//infteh.ru/assets/themes/images/icons/icon-76.png"/>
+	<link rel="apple-touch-icon" sizes="114x114" href="//infteh.ru/assets/themes/images/icons/icon-114.png"/>
+	<link rel="apple-touch-icon" sizes="120x120" href="//infteh.ru/assets/themes/images/icons/icon-120.png"/>
+	<link rel="apple-touch-icon" sizes="144x144" href="//infteh.ru/assets/themes/images/icons/icon-144.png"/>
+	<link rel="//infteh.ru/apple-touch-icon" sizes="152x152" href="//infteh.ru/assets/themes/images/icons/icon-152.png"/>
+	<link href="//infteh.ru/assets/themes/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="//infteh.ru/assets/themes/css/owl.carousel.css" rel="stylesheet"/>
+	<!-- link href="//infteh.ru/assets/themes/css/owl.theme.css" rel="stylesheet"/ -->
+	<link href="//infteh.ru/assets/themes/css/animate.css" rel="stylesheet"/>
+	<link href="//infteh.ru/assets/themes/css/fancybox.css" rel="stylesheet"/>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+	<link href="//infteh.ru/assets/themes/css/style.css" rel="stylesheet"/>
+
+
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/jquery.min.js"></script>
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/jquery.maskedinput.js"></script>
+
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/owl.carousel.js"></script>
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/fancybox.pack.js"></script>
+<script type="text/javascript" src="//infteh.ru/assets/themes/js/script.js"></script>
+
+<link rel="stylesheet" href="/assets/components/ajaxform/css/default.css" type="text/css" />
+</head>
+<body>
+<div class="header">
+	<div class="container">
+		<div class="row header_h">
+			<div class="col-lg-2 col-md-3 col-sm-6 col-xs-8 text-center h-middle_wrapper">
+				<div class="h-middle">
+					<a class="logo" href="//infteh.ru/">
+						<img class="img-responsive" src="assets/themes/images/logo.png"/>
+					</a>
+				</div>
+			</div>
+			<div class="col-lg-1 col-md-2 col-sm-6 col-xs-4  h-middle_wrapper prioritet pull-right">
+				<div class="h-middle">
+					<a href="http://prioritetaward.ru/" target="_blank" class="p-title">
+						Лауреат национальной<br/>
+						премии в области<br/>
+						импортозамещения
+					</a>
+				</div>
+			</div>
+			<div class="col-lg-8 col-md-12 col-sm-12 tmenu h-middle_wrapper">
+				<div class="navbar-header">
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> Меню </button>
+</div>
+<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav_catalog h-middle_wrapper row min"><div class="submenu collapse" id="collapseExample1"><ul><li><a href="news" >Новости</a></li><li><a href="about/press_releases.html" >Пресс-релизы</a></li><li><a href="about/job.html" >Работа в компании</a></li></ul></div><li class="h-middle hovered-nav collapseExample1"><a href="about">О компании</a></li><div class="submenu collapse" id="collapseExample2"><ul><li><a href="services/services01.html" >Решения для нефтегазодобывающих производств</a></li><li><a href="services/services02.html" >Решения для нефтеперерабатывающих и нефтехимических производств</a></li><li><a href="services/services03.html" >Решения для траспортировки и хранения</a></li><li><a href="services/services04.html" >Система мониторинга инженерных систем</a></li><li><a href="services/services05.html" >Решения для информационной и инженерной инфраструктуры</a></li><li><a href="services/services08.html" >Решения для управления компанией</a></li></ul></div><li class="h-middle hovered-nav collapseExample2"><a href="services">Решения<span> и услуги</span></a></li><div class="submenu collapse" id="collapseExample3"><ul><li><a href="products/dataplat.html" >Цифровая платформа ДатаПлат</a></li><li><a href="https://ipredicta.ru" target="_blank">iPredicta предиктивный анализ надежности оборудования</a></li><li><a href="products/dpp_dobycha.html" >ДатаПлат Производство.Добыча</a></li><li><a href="products/dpp_balance.html" >ДатаПлат Производство.Балансы</a></li><li><a href="products/dpp_alarms.html" >ДатаПлат Производство.Сервер тревог</a></li><li><a href="products/dpptm.html" >ДатаПлат Производство.Технологическое моделирование</a></li><li><a href="products/dppur.html" >ДатаПлат Производство.Управление рецептурой</a></li><li><a href="products/dp_reports.html" >ДатаПлат.Сервер отчетов</a></li><li><a href="products/eon.html" >Электронная Очередь Налива</a></li><li><a href="products/kompograf.html" >КомпоГраф</a></li><li><a href="products/products_support.html" >Техническая поддержка</a></li><li><a href="products/training/" >Обучение</a></li></ul></div><li class="h-middle hovered-nav collapseExample3"><a href="products">Продукты</a></li><li class="h-middle"><a href="experience/" >Опыт</a></li><li class="h-middle"><a href="partners" >Партнеры</a></li><li class="h-middle"><a href="import_dependence/" >Импорто<span>независимость</span></a></li><li class="h-middle"><a href="contacts/" >Контакты</a></li></ul>
+</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+<div class="container main-box">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="path">
+	<h1>Страница не найдена?</h1>
+</div>
+			<div class="content">
+			<div class="h1 e404">Возможно, что-то пошло не так.</div>
+			</div>
+			
+</ul>
+		</div>
+	</div>
+</div>
+
+<div id="basicModal" class="modal fade">
+<div class="modal-dialog">
+<div class="modal-content transform-skew2" style="border-radius: 0;">
+<div class="modal-header">
+<h4 id="myModalLabel" class="modal-title" style="display: inline-block;" name="ЗАПРОС ИНФОРМАЦИИ">ЗАПРОС ИНФОРМАЦИИ</h4>
+<button class="close" type="button" data-dismiss="modal"> <span>×</span> </button></div>
+<div class="modal-body">
+<form action="" method="post" class="ajax_form af_example form-horizontal" id="basicModal">
+<input type="hidden" name="nospam" value="">
+<div class="col-sm-offset-2 col-md-offset-1 col-sm-10 col-md-10">
+<div class="form-horizontal online-order row">
+<input id="title" class="hide" style="display:none;" type="hidden" name="title" value="Прочие вопросы пользователей"/>
+<div class="col-md-12"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="name">Ваше имя<sup style="color: #ee2829;">*</sup></label> <input id="name" class="form-control transform-skew2" type="text" name="name" value="" required="required"/></div>
+<div class="col-md-6"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="email">E-mail<sup style="color: #ee2829;">*</sup></label> <input id="email" class="form-control transform-skew2" type="email" name="email" value="" required="required"/></div>
+<div class="col-md-6"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="phone">Телефон</label> <input id="phone" class="form-control transform-skew2" type="text" name="phone" value="" /></div>
+<div class="col-md-6"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="company">Компания<sup style="color: #ee2829;">*</sup></label> <input id="company" class="form-control transform-skew2" type="text" name="company" value="" required="required"/></div>
+<div class="col-md-6"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="job">Должность<sup style="color: #ee2829;">*</sup></label> <input id="job" class="form-control transform-skew2" type="text" name="job" value="" required="required"/></div>
+<div class="col-md-12"><label class="control-label" style="margin:0 0 2px 15px;font-size:0.8em;font-weight:100;" for="description">Дополнительно<sup style="color: #ee2829;">*</sup></label> <textarea id="description" class="form-control transform-skew2" name="description" rows="2" cols="50" required="required" placeholder="задать вопрос/указать конкретную потребность"></textarea></div>
+
+<div class="col-md-12" style="margin:10px 0 2px 15px;font-size:0.8em;font-weight:100;"><input id="opd" type="checkbox" name="opd" required="required" value="Выбрано"/>  Я даю <a href="privacy" target="_blank" rel="noopener noreferrer" style="color: rgb(7, 121, 218); "><u>согласие</u></a> на обработку персональных данных<sup style="color: #ee2829;">*</sup></div>
+<input type="hidden" id="spm" name="spm" value=""/>
+<!--
+<div class="col-md-12">
+	<div class="form-item" style="margin:15px 0;">
+		<div class="g-recaptcha" data-sitekey="6Lc8wuojAAAAAATsPr6r6cfn3IC8lKjzy6yl-wzL"></div>
+<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=ru"></script>
+		
+	</div>
+</div>
+-->
+<div class="col-md-12 text-center" style="margin: 20px 0;"><input class="btn transform-skew text-uppercase" style="background:#ee2829;font-szie:1.5em;padding:15px 30px;color:#FFF;" type="submit" value="Отправить*" enabled/></div>
+<label class="control-label" style="font-size:0.6em;font-weight:100;">* отправка запроса доступна в рабочее время MSK
+
+</div>
+</div>
+<div class="clear"> </div>
+
+	<input type="hidden" name="af_action" value="1c0a28b118c57e5d370a63150ec0da8c" />
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="gotop"><div class="" id="gotop"><a class="scrollup" href="страница_не_найдена!.html#"><i class="fa fa-angle-up"></i></a></div></div>
+<!--
+<div class="question"><div class="" id="question"><a id="scrollup_question" class="scrollup blink-2" href="страница_не_найдена!.html#" data-toggle="modal" data-target="#basicModal"><i class="fa fa-question-circle"></i></a></div></div>
+-->
+<footer class="footer_bar" itemscope itemtype="http://schema.org/Organization">
+	<div class="container">
+		<div class="row min">
+			<div class="col-lg-2 col-md-2 col-sm-2 srpotek">
+				<a href="http://www.srpotek.ru" target="_blank" class="row empty h-middle_wrapper">
+					<div class="h-middle col-xs-4">
+						<img src="assets/themes/images/srpotek.png" class="img-responsive"/>
+					</div>
+					<div class="h-middle col-xs-8">
+						<span>Союз Разработчиков Программного Обеспечения и ИТ ТЭК</span>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 h-middle_wrapper address" >
+				<div class="h-middle" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+					<span class="h3">Московский офис:</span>
+					<address>
+						<div><i class="fa fa-map-pin"></i> <span itemprop="postalCode">109147</span>, <span itemprop="addressLocality">г. Москва</span>, <span itemprop="streetAddress">Марксистский переулок, 6</span></div>
+						<div><span itemprop="telephone"><i class="fa fa-mobile"></i> +7 (495) 912-66-81</span> <span itemprop="faxNumber"><i class="fa fa-fax"></i> +7 (495) 911-73-00</span></div>
+						<div><a href="mailto:input.mail.box@infteh.ru"><span itemprop="email"><i class="fa fa-envelope-o"></i> input.mail.box@infteh.ru</span></a></div>
+					</address>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6 h-middle_wrapper address">
+				<div class="h-middle" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+					<span class="h3">Уфимский офис:</span>
+					<address>
+						<div><i class="fa fa-map-pin"></i> <span itemprop="postalCode">450077</span>, <span itemprop="addressLocality">г. Уфа</span>, <span itemprop="streetAddress">ул. Карла Маркса, 20/1</span></div>
+						<div><span itemprop="telephone"><i class="fa fa-mobile"></i> +7 (347) 293-56-02</span><br/> <span itemprop="faxNumber"><i class="fa fa-fax"></i> +7 (495) 911-73-00</span></div>
+						<div><a href="mailto:input.mail.box@infteh.ru"><span itemprop="email"><i class="fa fa-envelope-o"></i> input.mail.box@infteh.ru</span></a></div>
+					</address>
+				</div>
+			</div>
+			<div class="clear visible-xs"></div>
+			<div class="col-lg-4 col-md-4 col-sm-2 slogan">
+				<div class="h-middle_wrapper">
+					<div class="h-middle col-xs-5">
+						<a href="//infteh.ru/" itemprop="url"><img src="assets/themes/images/logo-white.png" class="img-responsive"/></a>
+					</div>
+					<div class="h-middle col-xs-7">
+						<span>Опираемся на опыт, работаем в команде, нацелены на результат</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-2 col-md-2 col-sm-2 h-middle_wrapper copy">
+				<div class="h-middle">
+					<br/>
+					© <span itemprop="name">ООО «ИнфТех»</span>, 2001–2026
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<script type="text/javascript" src="/assets/components/ajaxform/js/default.js"></script>
+<script type="text/javascript">AjaxForm.initialize({"assetsUrl":"\/assets\/components\/ajaxform\/","actionUrl":"\/assets\/components\/ajaxform\/action.php","closeMessage":"\u0437\u0430\u043a\u0440\u044b\u0442\u044c \u0432\u0441\u0435","formSelector":"form.ajax_form","pageId":2});</script>
+</body>
+</html>

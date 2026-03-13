@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
+ ym(107569860,'init',{ssr:true,webvisor:true,clickmap:true,ecommerce:"dataLayer",referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute;left:-9999px;" alt=""></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ДПП.ТМ — платформа технологического моделирования и цифровых двойников | СПЕЦТЕХ</title>
+<meta name="description" content="ДатаПлат Производство.Технологическое моделирование — открытая программная среда для интеграции искусственного интеллекта в механизмы технологического моделирования производственных процессов. Поддержка ML-моделей, динамического и дискретно-событийного моделирования.">
+<meta name="keywords" content="ДПП ТМ, ДатаПлат, технологическое моделирование, цифровой двойник, машинное обучение, динамическое моделирование, ИнфТех, СПЕЦТЕХ, искусственный интеллект, промышленная автоматизация">
+<meta property="og:title" content="ДПП.ТМ — платформа технологического моделирования и цифровых двойников">
+<meta property="og:description" content="Открытая программная среда для интеграции ИИ в механизмы моделирования технологических процессов предприятия.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/dpp-tm.html">
+<meta property="og:locale" content="ru_RU">
+<link rel="canonical" href="https://specialtechnology.ru/dpp-tm.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
+a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:var(--text2);text-transform:uppercase;letter-spacing:1px;text-decoration:none;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--volt);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--volt)}.nav-links a:hover::after{transform:scaleX(1)}
+.nav-links li{position:relative;list-style:none}
+.nav-dropdown{display:none;position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:8px 0;min-width:200px;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.4);list-style:none}
+.nav-dropdown li{list-style:none}
+.nav-dropdown a{display:block;padding:8px 16px;font-size:13px;color:var(--text2);white-space:nowrap}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.05)}
+.nav-dropdown a::after{display:none}
+.nav-links li:hover>.nav-dropdown{display:block}
+.nav-cta a{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:6px;background:var(--volt);color:var(--ink);text-decoration:none;transition:transform .2s,box-shadow .2s}
+.nav-cta a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--ff-mono);font-size:16px;color:var(--text3)}
+.breadcrumb a{color:var(--text2);text-decoration:none;transition:color .15s;cursor:pointer}
+.breadcrumb a:hover{color:var(--volt);text-decoration:underline}
+.breadcrumb-sep{color:var(--wire2)}.breadcrumb-cur{color:var(--text2)}
+.product-hero{padding:120px 0 60px;position:relative}
+.product-hero-grid{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start}
+.product-vendor-badge{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:13px;color:var(--text2)}
+.vendor-name{font-weight:600}.vendor-official{color:var(--lime);font-size:12px}
+.product-name{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1.1}
+.product-sub{font-size:18px;color:var(--text2);font-weight:300;margin-top:4px}
+.product-version{font-family:var(--ff-mono);font-size:13px;color:var(--text3);margin:8px 0 16px}
+.product-tagline{font-size:17px;color:var(--text2);line-height:1.6}
+.product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
+.ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
+.cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
+.cta-price{font-size:28px;font-weight:900;color:var(--text)}
+.cta-price-note{font-size:12px;color:var(--text3);margin-top:4px}
+.cta-card-body{padding:20px 24px}
+.btn-cta-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--volt);color:var(--ink);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-radius:8px;text-decoration:none;transition:box-shadow .2s}
+.btn-cta-primary:hover{box-shadow:0 4px 20px var(--volt-glow);color:var(--ink)}
+.btn-cta-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:transparent;color:var(--text);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;border-radius:8px;border:1px solid var(--wire);text-decoration:none;margin-top:8px;transition:border-color .2s}
+.btn-cta-secondary:hover{border-color:var(--volt);color:var(--volt)}
+.cta-card-features{margin-top:16px}
+.cta-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);padding:4px 0}
+.product-tabs-nav{background:var(--ink1);border-top:1px solid var(--wire);border-bottom:1px solid var(--wire);position:sticky;top:72px;z-index:100}
+.ptab{background:none;border:none;color:var(--text3);font-family:var(--ff-head);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:16px 20px;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.ptab:hover{color:var(--text)}.ptab.active{color:var(--volt);border-bottom-color:var(--volt)}
+.product-tab-content{padding:60px 0 80px}
+.ptab-panel{display:none}.ptab-panel.active{display:block}
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.overview-block{background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:28px}
+.ovb-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:16px}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text2);padding:6px 0}
+.feat-line svg{flex-shrink:0;margin-top:3px}
+.industry-pill{display:inline-block;padding:5px 14px;font-size:12px;border-radius:20px;background:var(--steel);color:var(--text2);margin:3px}
+.arch-diagram{margin-top:40px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px;padding:32px;text-align:center}
+.arch-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--volt);margin-bottom:24px}
+.arch-levels{display:flex;flex-direction:column;gap:4px;max-width:800px;margin:0 auto}
+.arch-level{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:6px;font-size:13px}
+.arch-level-num{font-family:var(--ff-mono);font-size:11px;color:var(--volt);min-width:20px;text-align:center}
+.arch-level-name{font-weight:600;color:var(--text);min-width:220px}
+.arch-level-desc{color:var(--text3);font-size:12px}
+.specs-table{width:100%;border-collapse:collapse;margin-top:16px}
+.specs-table td{padding:12px 16px;border-bottom:1px solid var(--wire);font-size:14px}
+.specs-table td:first-child{color:var(--text);font-weight:600;width:40%}
+.specs-table td:last-child{color:var(--text2)}
+.spec-val-hi{color:var(--volt)!important}
+.specs-note{font-size:15px;color:var(--text2);line-height:1.7;margin-bottom:24px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:10px}
+.process-step{display:flex;align-items:flex-start;gap:16px;padding:16px;background:var(--ink1);border:1px solid var(--wire);border-radius:8px;margin-bottom:8px}
+.step-num{font-family:var(--ff-mono);font-size:18px;font-weight:700;color:var(--volt);min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:2px solid var(--volt);border-radius:50%;flex-shrink:0}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--text2);line-height:1.5}
+.formula-block{background:var(--ink2);border:1px solid var(--wire);border-radius:8px;padding:20px 24px;margin:16px 0;font-family:var(--ff-mono);font-size:14px;color:var(--volt);line-height:1.8;overflow-x:auto}
+.impl-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;padding:24px;margin-bottom:16px}
+.impl-card h4{font-size:16px;font-weight:700;margin-bottom:4px}
+.impl-card .impl-tag{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;background:var(--flame-lo);color:var(--flame);font-family:var(--ff-mono);margin-bottom:10px}
+.impl-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.impl-card ul{list-style:none;padding:0;margin-top:8px}
+.impl-card li{font-size:13px;color:var(--text2);padding:3px 0;padding-left:16px;position:relative}
+.impl-card li::before{content:'▸';position:absolute;left:0;color:var(--volt)}
+.logo-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:24px;justify-content:center}
+.logo-badge{padding:8px 16px;background:var(--steel);border:1px solid var(--wire);border-radius:8px;font-size:12px;color:var(--text2);font-weight:600}
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px}
+.footer-col-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.footer-links{list-style:none;padding:0}.footer-links li{margin-bottom:8px}.footer-links a{font-size:14px;color:var(--text2)}.footer-links a:hover{color:var(--volt)}
+footer p{font-size:14px;color:var(--text3);line-height:1.6}
+.footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
+.footer-copy{font-size:13px;color:var(--text3)}
+.f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
+@media(max-width:900px){
+  nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;text-align:center}
+  .product-name{font-size:28px}
+  .arch-level{flex-direction:column;text-align:left}
+  .arch-level-name{min-width:auto}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><div class="nav-logo-text">СПЕЦТЕХ</div></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="index.html#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+</nav>
+
+<!-- HERO -->
+<div class="product-hero">
+  <div class="container">
+    <div class="product-hero-grid">
+      <div>
+        <div class="breadcrumb">
+          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="infteh.html">ИнфТех</a><span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-cur">ДПП.ТМ</span>
+        </div>
+
+        <div class="product-vendor-badge">
+          <span class="vendor-name">Разработчик: ООО «ИнфТех»</span>
+          <span class="vendor-official">✓ Реестр Минцифры</span>
+        </div>
+
+        <h1 class="product-name">ДПП.ТМ</h1>
+        <div class="product-sub">ДатаПлат Производство.Технологическое моделирование</div>
+        <div class="product-version">Релиз 1.0 · Модуль платформы ДатаПлат</div>
+        <p class="product-tagline">Открытая программная среда для интеграции объектов, алгоритмики и технологий искусственного интеллекта в механизмы моделирования технологических и производственных процессов предприятия. Создание цифровых двойников промышленных объектов.</p>
+
+        <div class="product-pills">
+          <span class="ppill accent">Цифровой двойник</span>
+          <span class="ppill">Технологическое моделирование</span>
+          <span class="ppill">Машинное обучение</span>
+          <span class="ppill">Искусственный интеллект</span>
+          <span class="ppill">Динамическое моделирование</span>
+          <span class="ppill">Industry 4.0</span>
+        </div>
+      </div>
+
+      <div class="product-cta-card">
+        <div class="cta-card-head">
+          <div class="cta-price-label">Стоимость лицензии</div>
+          <div class="cta-price">По запросу</div>
+          <div class="cta-price-note">Модуль платформы ДатаПлат Производство</div>
+        </div>
+        <div class="cta-card-body">
+          <a href="index.html#contact" class="btn-cta-primary">Запросить КП</a>
+          <a href="dataplat.html" class="btn-cta-secondary">Платформа ДатаПлат</a>
+          <div class="cta-card-features">
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>100% отечественная разработка</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Поддержка ML-моделей и ИИ</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Кроссплатформенность (Windows/Linux)</div>
+            <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>REST API для интеграции</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="product-tabs-nav">
+  <div class="container" style="display:flex;">
+    <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+    <button class="ptab" onclick="showPTab('components',this)">Компоненты</button>
+    <button class="ptab" onclick="showPTab('functions',this)">Функции</button>
+    <button class="ptab" onclick="showPTab('application',this)">Применение</button>
+    <button class="ptab" onclick="showPTab('implementations',this)">Внедрения</button>
+  </div>
+</div>
+
+<div class="product-tab-content">
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <div id="ptab-overview" class="ptab-panel active">
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title">Назначение</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Создание открытой программной среды для технологического моделирования</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Интеграция объектов, алгоритмики и технологий ИИ</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Моделирование технологических и производственных процессов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Создание цифровых двойников промышленных объектов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Поддержка библиотек и шаблонов для отраслевых решений</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Многопользовательская работа в едином информационном пространстве</div>
+          </div>
+        </div>
+
+        <div class="overview-block">
+          <div class="ovb-title">Ключевые возможности</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Поддержка ML-моделей и применение ИИ</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Стационарные и динамические модели</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Дискретно-событийное моделирование</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Моделирование в реальном времени</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Функции оптимизации и планирование экспериментов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>REST API для интеграции со сторонними системами</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Концепция платформы цифровых двойников</div>
+        <div class="specs-note">
+          ДПП.ТМ представляет собой цифровую платформу технологического моделирования, которая обеспечивает создание библиотек и шаблонов с открытостью для импорта НСИ и библиотек расчетных программных процедур в рамках отраслевых шаблонов. Платформа поддерживает версионность моделей и алгоритмов анализа потоков, что позволяет интерактивно получать требуемый результат за счет варьирования входных данных или расчетов в рамках нескольких циклов моделирования.
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Рынок технологического моделирования</div>
+        <div class="overview-grid">
+          <div class="overview-block" style="border-color:var(--lime)">
+            <div class="ovb-title" style="color:var(--lime)">Прогноз развития</div>
+            <p style="font-size:14px;color:var(--text2);line-height:1.7">К 2030 году объем продаж продуктов, построенных на основе нейротехнологий и искусственного интеллекта, увеличится более чем в 20 раз (с 6 до 130 млрд рублей), а удельный вес этого сегмента в общем объеме спроса на передовые цифровые технологии в ТЭК России увеличится до 31,4%.</p>
+          </div>
+          <div class="overview-block" style="border-color:var(--flame)">
+            <div class="ovb-title" style="color:var(--flame)">Актуальность импортозамещения</div>
+            <p style="font-size:14px;color:var(--text2);line-height:1.7">Российских аналогов полнофункциональных систем технологического моделирования на рынке практически нет. Существующие решения покрывают лишь 10-15% функциональности зарубежных систем. Актуальность создания российского аналога признают на уровне руководства Минэнерго.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPONENTS -->
+    <div id="ptab-components" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.ТМ построена на базе цифровой платформы ДатаПлат 3.0 и включает специализированные компоненты для создания, выполнения и управления моделями технологических процессов.
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-title">Архитектура ДПП.ТМ</div>
+        <div class="arch-levels">
+          <div class="arch-level" style="border-color:var(--volt)"><span class="arch-level-num">1</span><span class="arch-level-name">Конструктор моделей</span><span class="arch-level-desc">Графический интерфейс для создания и редактирования моделей</span></div>
+          <div class="arch-level"><span class="arch-level-num">2</span><span class="arch-level-name">Модуль расчетов</span><span class="arch-level-desc">Выполнение расчетов модели с поддержкой различных типов моделирования</span></div>
+          <div class="arch-level"><span class="arch-level-num">3</span><span class="arch-level-name">Управление наборами данных</span><span class="arch-level-desc">Формирование и управление входными и расчетными данными</span></div>
+          <div class="arch-level"><span class="arch-level-num">4</span><span class="arch-level-name">Контроль результатов</span><span class="arch-level-desc">Анализ и визуализация результатов моделирования</span></div>
+          <div class="arch-level"><span class="arch-level-num">5</span><span class="arch-level-name">Платформа ДатаПлат 3.0</span><span class="arch-level-desc">Базовая цифровая платформа с веб-порталом</span></div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Основные компоненты системы</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Конструктор моделей</td><td class="spec-val-hi">Построение модели в графическом интерфейсе, создание узлов и потоков, настройка параметров</td></tr>
+            <tr><td>Модуль расчетов</td><td>Выполнение расчетов с поддержкой различных типов моделей и алгоритмов оптимизации</td></tr>
+            <tr><td>Управление данными</td><td>Формирование наборов данных, входные и расчетные параметры, версионность данных</td></tr>
+            <tr><td>Контроль результатов</td><td>Анализ результатов моделирования, визуализация, экспорт отчетов</td></tr>
+            <tr><td>Библиотека шаблонов</td><td>Функциональные и отраслевые шаблоны, НСИ, математические модели</td></tr>
+            <tr><td>API интеграции</td><td>REST API для взаимодействия со сторонними системами и сервисами</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Ключевые понятия ДПП.ТМ</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Объекты моделирования</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg><strong>Функциональный шаблон</strong> — совокупность узлов и потоков с математическими моделями</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg><strong>Узел</strong> — производственный объект (агрегат) с параметрами и процедурами обработки</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg><strong>Поток</strong> — соединение узлов для перемещения материальных/энергетических ресурсов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg><strong>Математическая модель</strong> — система выражений, описывающих характеристики объекта</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Управление моделями</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg><strong>Симуляционная модель</strong> — модель, построенная на основе функционального шаблона</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg><strong>Рассчитанная модель</strong> — симуляционная модель с примененным набором данных</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg><strong>Активная модель</strong> — временная модель в режиме визуализации для сессии пользователя</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg><strong>Набор данных</strong> — входные и расчетные данные модели с версионностью</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FUNCTIONS -->
+    <div id="ptab-functions" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.ТМ обеспечивает полный цикл работы с технологическими моделями — от создания и настройки до выполнения расчетов и анализа результатов. Система поддерживает различные типы моделирования и интеграцию с технологиями искусственного интеллекта.
+      </div>
+
+      <div class="ovb-title">Основные функции пользователя</div>
+      <div class="process-step"><div class="step-num">1</div><div class="step-content"><div class="step-title">Построение модели</div><div class="step-desc">Создание технологической модели в графическом конструкторе: размещение узлов, создание потоков, настройка параметров и математических моделей.</div></div></div>
+      <div class="process-step"><div class="step-num">2</div><div class="step-content"><div class="step-title">Формирование набора данных</div><div class="step-desc">Подготовка входных данных для моделирования: задание параметров потоков, узлов, компонентного состава и граничных условий.</div></div></div>
+      <div class="process-step"><div class="step-num">3</div><div class="step-content"><div class="step-title">Выполнение расчетов</div><div class="step-desc">Запуск расчета модели с выбранным набором данных, мониторинг процесса выполнения, управление параллельными расчетами.</div></div></div>
+      <div class="process-step"><div class="step-num">4</div><div class="step-content"><div class="step-title">Контроль результатов</div><div class="step-desc">Анализ результатов моделирования, визуализация данных, сравнение вариантов, экспорт отчетов и интеграция с внешними системами.</div></div></div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Типы поддерживаемого моделирования</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>ML-модели</td><td class="spec-val-hi">Возможность применения искусственного интеллекта в рамках бизнес-процесса технологического моделирования</td></tr>
+            <tr><td>Стационарные модели</td><td>Конструирование моделей с неизменяющимися во времени свойствами</td></tr>
+            <tr><td>Динамические модели</td><td>Построение моделей с временным параметром для анализа переходных процессов</td></tr>
+            <tr><td>Дискретно-событийное моделирование</td><td>Построение моделей, отражающих развитие системы во времени при изменении состояния по событиям</td></tr>
+            <tr><td>Моделирование в реальном времени</td><td>Расчеты на основе исходных данных, получаемых со средств измерения в режиме онлайн</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Дополнительные возможности</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Оптимизация и планирование</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Функции оптимизации для нахождения наилучшего решения задачи</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Разработка сценариев — различные варианты развития событий</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Планирование экспериментов — определение порядка и времени расчетов</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Интерактивность и интеграция</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Интерактивная работа с версионностью моделей и алгоритмов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>REST API для интеграции со сторонними системами</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Многопользовательский режим в единой иерархической модели</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Технические характеристики</div>
+        <table class="specs-table">
+          <tbody>
+            <tr><td>Кроссплатформенность</td><td class="spec-val-hi">Работа в среде ОС Windows и семействе ОС Linux</td></tr>
+            <tr><td>Режим работы</td><td>АРМ для локального пользователя и многопользовательский сетевой режим</td></tr>
+            <tr><td>Веб-интерфейс</td><td>Запуск через веб-портал ДатаПлат, доступ из любого браузера</td></tr>
+            <tr><td>Масштабируемость</td><td>Поддержка виртуализации, кластерное развертывание</td></tr>
+            <tr><td>Безопасность</td><td>Интегрированная система безопасности платформы ДатаПлат</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- APPLICATION -->
+    <div id="ptab-application" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.ТМ применяется в широком спектре отраслей промышленности для решения задач технологического моделирования, оптимизации производственных процессов и создания цифровых двойников промышленных объектов.
+      </div>
+
+      <div class="ovb-title">Целевые группы потребителей</div>
+      <div class="overview-grid">
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--lime)">Конечные потребители</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Производственные компании для повышения эффективности деятельности</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Технологическое моделирование для оптимизации процессов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Анализ режимов работы оборудования и установок</div>
+          </div>
+        </div>
+        <div class="overview-block">
+          <div class="ovb-title" style="color:var(--flame)">Инжиниринговые компании</div>
+          <div class="feature-list">
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Реализация комплексных решений для заказчиков</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Моделирование технологических схем и процессов</div>
+            <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Оптимизация проектных решений</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Проектные институты и образование</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--volt)">Проектные институты</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Проектирование производственных объектов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Расчеты и моделирование будущих производственных процессов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Отраслевые технологические решения</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--amber)">Учебные заведения</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Материально-техническая база имитационного моделирования</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Лабораторные и практические занятия</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ffb800" stroke-width="2" stroke-linecap="round"/></svg>Подготовка специалистов по технологическому моделированию</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Отрасли применения</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;margin-bottom:32px">
+          <div class="industry-pill">Топливно-энергетический комплекс (ТЭК)</div>
+          <div class="industry-pill">Химическая промышленность</div>
+          <div class="industry-pill">Производство удобрений</div>
+          <div class="industry-pill">Пищевая промышленность</div>
+          <div class="industry-pill">Фармацевтическая промышленность</div>
+          <div class="industry-pill">Нефтегазовая отрасль</div>
+          <div class="industry-pill">Металлургия</div>
+          <div class="industry-pill">Энергетика</div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Производители оборудования</div>
+        <div class="specs-note">
+          Производители промышленного оборудования используют ДПП.ТМ для разработки собственных систем моделирования и расчетов режимов работы оборудования. Открытая архитектура платформы позволяет интегрировать специализированные математические модели и алгоритмы управления.
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Ключевые преимущества применения</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Технологические</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Снижение времени разработки и внедрения моделей</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Повышение точности моделирования за счет ИИ</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Унификация подходов к технологическому моделированию</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Экономические</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Импортозамещение зарубежных решений</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Снижение стоимости владения ИТ-решениями</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Оптимизация производственных процессов</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPLEMENTATIONS -->
+    <div id="ptab-implementations" class="ptab-panel">
+      <div class="specs-note">
+        ДПП.ТМ как современная отечественная платформа технологического моделирования находится на стадии активного развития и внедрения в российских компаниях. Компания ИнфТех имеет богатый опыт реализации проектов в области промышленной автоматизации.
+      </div>
+
+      <div class="ovb-title">Статус внедрений ДПП.ТМ</div>
+      <div class="impl-card">
+        <div class="impl-tag">НОВИНКА 2024</div>
+        <h4>Запуск продукта</h4>
+        <p>ДПП.ТМ представлена как новейшая разработка ООО «ИнфТех» в декабре 2024 года. Продукт готов к промышленному применению и пилотным внедрениям.</p>
+        <ul>
+          <li>Завершены разработка и тестирование базового функционала</li>
+          <li>Продукт включен в Реестр российского ПО Минцифры</li>
+          <li>Запущена программа пилотных проектов для крупных промышленных предприятий</li>
+          <li>Готовы отраслевые шаблоны для нефтегазовой и химической промышленности</li>
+        </ul>
+      </div>
+
+      <div class="ovb-title" style="margin-top:32px">Опыт компании ИнфТех</div>
+      <div class="specs-note">
+        ООО «ИнфТех» — ведущий российский разработчик решений для промышленной автоматизации с более чем 20-летним опытом работы. Компания имеет успешный опыт внедрения платформы ДатаПлат и ее модулей на крупнейших предприятиях России.
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Референсные заказчики ИнфТех</div>
+        <div class="logo-row">
+          <div class="logo-badge">ПАО «НК «Роснефть»</div>
+          <div class="logo-badge">ПАО «ЛУКОЙЛ»</div>
+          <div class="logo-badge">ПАО «Газпром нефть»</div>
+          <div class="logo-badge">ПАО «Татнефть»</div>
+          <div class="logo-badge">АО «НК «Башнефть»</div>
+          <div class="logo-badge">ПАО «Транснефть»</div>
+          <div class="logo-badge">АО «Росэнергоатом»</div>
+        </div>
+      </div>
+
+      <div class="ovb-title" style="margin-top:32px">Пилотные проекты ДПП.ТМ</div>
+      <div class="impl-card">
+        <div class="impl-tag">В РАЗРАБОТКЕ</div>
+        <h4>Нефтеперерабатывающий завод</h4>
+        <p>Создание цифрового двойника установки каталитического крекинга для оптимизации режимов работы и повышения выхода целевых продуктов.</p>
+        <ul>
+          <li>Моделирование теплообменного оборудования и реакторного блока</li>
+          <li>Интеграция с системой АСУ ТП для получения данных в реальном времени</li>
+          <li>ML-модели для прогнозирования качества продукции</li>
+        </ul>
+      </div>
+
+      <div class="impl-card">
+        <div class="impl-tag">ПЛАНИРУЕТСЯ</div>
+        <h4>Химический комплекс</h4>
+        <p>Разработка комплексной модели производства полиэтилена с оптимизацией энергопотребления и минимизацией отходов производства.</p>
+        <ul>
+          <li>Динамическое моделирование процессов полимеризации</li>
+          <li>Оптимизация логистических потоков сырья и продукции</li>
+          <li>Система поддержки принятия решений для операторов</li>
+        </ul>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Партнерская программа</div>
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--lime)">Системные интеграторы</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Обучение специалистов работе с ДПП.ТМ</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Техническая поддержка проектов внедрения</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Совместная разработка отраслевых решений</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title" style="color:var(--flame)">Образовательные учреждения</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Льготные условия лицензирования для ВУЗов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Методические материалы для учебных курсов</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Стажировки студентов в проектах ИнфТех</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px">
+        <div class="ovb-title">Контакты для сотрудничества</div>
+        <div class="specs-note">
+          <strong>ООО «ИнфТех»</strong><br>
+          Московский офис: 109147, г. Москва, Марксистский пер., д.6<br>
+          Тел.: +7 (495) 912-66-81, +7 (495) 911-73-00<br>
+          Email: input.mail.box@infteh.ru<br><br>
+          Обособленное подразделение: 450077, г. Уфа, ул. К. Маркса 20/1, этаж 1<br>
+          Тел.: +7 (347) 293-56-02
+        </div>
+      </div>
+
+      <p style="color:var(--text3);font-size:13px;margin-top:24px;">Актуальная информация о внедрениях — по запросу. Источник: <a href="https://infteh.ru/" target="_blank" style="color:var(--volt)">infteh.ru</a></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:12px">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="index.html">О компании</a></li>
+          <li><a href="blog.html">Блог</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="margin-top:8px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 · ИТ-деятельность 2.01</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showPTab(id,btn){
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ptab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
