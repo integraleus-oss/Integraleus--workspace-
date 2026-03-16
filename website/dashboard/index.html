@@ -765,6 +765,66 @@
         });
       });
     });
+
+    // Live data from api-status.json
+    async function loadMetrics() {
+      try {
+        const r = await fetch('/api-status.json?' + Date.now());
+        if (!r.ok) return;
+        const d = await r.json();
+
+        // Update timestamp
+        const ts = document.querySelector('.update-time, .timestamp');
+        if (ts) ts.textContent = 'Обновлено: ' + d.updated_msk;
+
+        // System metrics in status bar
+        const bar = document.querySelector('.status-bar, .sys-bar');
+        if (bar) {
+          const vals = bar.querySelectorAll('.metric-val, .stat-value, .val');
+          if (vals.length >= 4) {
+            vals[0].textContent = d.system.cpu_pct + '%';
+            vals[1].textContent = d.system.ram_pct + '%';
+            vals[2].textContent = d.system.disk_pct + '%';
+            vals[3].textContent = d.system.uptime_days + 'д ' + String(d.system.uptime_hours).padStart(2,'0') + 'ч';
+          }
+        }
+
+        // Try update overview cards
+        document.querySelectorAll('[data-metric]').forEach(el => {
+          const k = el.dataset.metric;
+          if (k === 'sessions') el.textContent = d.openclaw.sessions;
+          if (k === 'cpu') el.textContent = d.system.cpu_pct + '%';
+          if (k === 'ram') el.textContent = d.system.ram_pct + '%';
+          if (k === 'disk') el.textContent = d.system.disk_used_gb + '/' + d.system.disk_total_gb + ' GB';
+          if (k === 'disk-pct') el.textContent = d.system.disk_pct + '%';
+          if (k === 'uptime') el.textContent = d.system.uptime_days + 'д ' + d.system.uptime_hours + 'ч';
+        });
+
+        // Update progress bars
+        document.querySelectorAll('[data-bar]').forEach(el => {
+          const k = el.dataset.bar;
+          if (k === 'cpu') el.style.width = d.system.cpu_pct + '%';
+          if (k === 'ram') el.style.width = d.system.ram_pct + '%';
+          if (k === 'disk') el.style.width = d.system.disk_pct + '%';
+        });
+
+        // Server status dots
+        ['main','garden','vpn'].forEach(s => {
+          const dot = document.querySelector(`[data-server="${s}"] .status-dot, [data-server="${s}"]`);
+          if (dot && d.servers[s]) {
+            const online = d.servers[s].status === 'online';
+            dot.style.color = online ? '#00e676' : '#ff3d57';
+          }
+        });
+
+        console.log('[dashboard] metrics updated', d.updated_msk);
+      } catch(e) {
+        console.warn('[dashboard] fetch failed', e);
+      }
+    }
+
+    loadMetrics();
+    setInterval(loadMetrics, 60000);
   </script>
 </body>
 </html>
