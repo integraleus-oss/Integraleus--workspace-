@@ -1,1 +1,26 @@
-.venv/
+# Secrets & personal data
+MEMORY.md
+USER.md
+IDENTITY.md
+memory/
+TOOLS.md
+
+# Large files
+docs/lacerta/
+docs/tabler-icons-*.zip
+
+# Media & screenshots
+*.jpg
+*.png
+*.mp4
+*.ogg
+*.pdf
+
+# Keep specific website images
+!website/img/**
+!website/spectech/img/**
+
+# Temp files
+*.bak
+*.tmp
+calc_log.txt
