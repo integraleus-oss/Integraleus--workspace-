@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>OpenClaw Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D0D14;
+      --card: #1A1A2E;
+      --border: #2A2A3E;
+      --text: #F5F7FB;
+      --muted: #8E95A9;
+      --ok: #00E676;
+      --warning: #FFB800;
+      --critical: #FF3D57;
+      --info: #00C8F0;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at top, rgba(0, 200, 240, 0.08), transparent 28%), var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      padding: 18px 14px 120px;
+      padding-bottom: max(120px, calc(120px + var(--safe-bottom)));
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(0, 230, 118, 0.18), rgba(0, 200, 240, 0.16));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .stamp {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: #C6CBDA;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .tab-panel {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      animation: fade .25s ease;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01)), var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+    }
+
+    .card.wide { grid-column: 1 / -1; }
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: #C3C8D6;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .chip {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      flex: 0 0 auto;
+    }
+
+    .metric {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.15rem, 4vw, 1.8rem);
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .muted { color: var(--muted); }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    .mini-list, .server-meta, .session-list, .channel-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row, .session-row, .usage-row, .status-grid, .system-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .ok { color: var(--ok); }
+    .warn { color: var(--warning); }
+    .critical { color: var(--critical); }
+    .info { color: var(--info); }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      color: #CBD1E0;
+      font-size: 0.8rem;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 999px;
+      background: #121220;
+      border: 1px solid rgba(255,255,255,0.04);
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .bar {
+      height: 100%;
+      border-radius: inherit;
+      background: var(--info);
+    }
+
+    .bar.ok { background: linear-gradient(90deg, #00D96D, #00E676); }
+    .bar.warn { background: linear-gradient(90deg, #F59E0B, #FFB800); }
+    .bar.info { background: linear-gradient(90deg, #00AEEA, #00C8F0); }
+    .bar.critical { background: linear-gradient(90deg, #FF5870, #FF3D57); }
+
+    .server-card {
+      border-left: 4px solid var(--ok);
+      padding-left: 14px;
+    }
+
+    .server-title, .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      color: #D7DBE8;
+      font-size: 0.77rem;
+    }
+
+    .terminal {
+      background: #10101A;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      max-height: 52vh;
+      overflow: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+      line-height: 1.55;
+      color: #CFE7D8;
+    }
+
+    .event-line {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      white-space: pre-wrap;
+    }
+
+    .event-line:last-child { border-bottom: 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    th { color: #C1C7D7; font-weight: 600; }
+    td { color: #E9ECF5; }
+
+    .nav-bar {
+      position: fixed;
+      bottom: 52px;
+      left: 10px;
+      right: 10px;
+      height: 56px;
+      border-radius: 18px;
+      z-index: 9999;
+      background: rgba(26, 26, 46, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      padding: 4px;
+    }
+
+    .nav-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: #9EA6BA;
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 4px 2px;
+      font: inherit;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .nav-btn svg { width: 18px; height: 18px; }
+
+    .nav-btn span {
+      font-size: 0.63rem;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      color: #FFFFFF;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .status-bar {
+      position: fixed;
+      bottom: 4px;
+      left: 10px;
+      right: 10px;
+      height: 44px;
+      border-radius: 14px;
+      z-index: 9999;
+      background: rgba(26, 26, 46, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      padding: 0 10px;
+      gap: 6px;
+    }
+
+    .status-item {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .status-key {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .status-val {
+      margin-top: 2px;
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: #F3F6FB;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (min-width: 760px) {
+      body {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .grid-2 {
+        gap: 14px;
+      }
+
+      .nav-bar, .status-bar {
+        max-width: 740px;
+        margin: 0 auto;
+      }
+
+      .nav-bar {
+        left: max(10px, calc(50% - 370px));
+        right: max(10px, calc(50% - 370px));
+      }
+
+      .status-bar {
+        left: max(10px, calc(50% - 370px));
+        right: max(10px, calc(50% - 370px));
+      }
+    }
+
+    @media (max-width: 420px) {
+      body { padding-left: 10px; padding-right: 10px; }
+      .topbar { flex-direction: column; }
+      .grid-2 { gap: 10px; }
+      .card { padding: 14px; border-radius: 18px; }
+      .nav-btn span { font-size: 0.58rem; }
+      .status-bar { padding: 0 8px; gap: 4px; }
+      .status-key { font-size: 0.54rem; }
+      .status-val { font-size: 0.66rem; }
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-wrap">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="24" height="24">
+            <path d="M12 3l7 4v5c0 4.5-2.7 7.8-7 9-4.3-1.2-7-4.5-7-9V7l7-4z" stroke="#00E676"/>
+            <path d="M9 12l2 2 4-4" stroke="#00C8F0" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Панель OpenClaw</h1>
+          <div class="subtitle">Тёмный мобильный дашборд инфраструктуры и LLM</div>
+        </div>
+      </div>
+      <div class="stamp">обновлено · 16.03 16:22</div>
+    </header>
+
+    <section class="tab-panel active" id="tab-overview">
+      <div class="grid-2">
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M8 7h8M8 12h8M8 17h5"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg></div>Сессии</div>
+          <p class="metric">10</p>
+          <div class="legend">
+            <span><i class="dot ok"></i> active</span>
+            <span><i class="dot warn"></i> warm</span>
+            <span><i class="dot info"></i> idle</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00C8F0" stroke-width="1.8"><path d="M12 4v16M4 12h16"/><circle cx="12" cy="12" r="8"/></svg></div>Модели</div>
+          <div class="mini-list">
+            <div class="row"><span>Opus</span><span class="pill">Claude</span></div>
+            <div class="row"><span>Codex</span><span class="pill">GPT-5.4</span></div>
+            <div class="row"><span>Sonnet</span><span class="pill">Claude</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#FFB800" stroke-width="1.8"><path d="M12 3v18M5 8h8a3 3 0 010 6H9a3 3 0 000 6h10"/></svg></div>Токены</div>
+          <p class="metric">515k</p>
+          <div class="muted">за день · 3 провайдера</div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M5 12h14M5 7h14M5 17h10"/><rect x="3" y="4" width="18" height="16" rx="3"/></svg></div>Диск</div>
+          <p class="metric">26 / 38 GB</p>
+          <div class="progress"><div class="bar warn" style="width:68%"></div></div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M5 19h14M7 16V8m5 8V5m5 11v-6"/></svg></div>Серверы</div>
+          <div class="mini-list">
+            <div class="row"><span>Main</span><span class="ok">●</span></div>
+            <div class="row"><span>Garden</span><span class="ok">●</span></div>
+            <div class="row"><span>VPN</span><span class="ok">●</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#FF3D57" stroke-width="1.8"><path d="M12 3l8 4v5c0 4.2-2.5 7.2-8 9-5.5-1.8-8-4.8-8-9V7l8-4z"/><path d="M9.5 12l1.7 1.7L15 10"/></svg></div>Безопасность</div>
+          <div class="mini-list">
+            <div class="row"><span>UFW</span><span class="pill">active</span></div>
+            <div class="row"><span>SSH</span><span class="pill">hardened</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-servers">
+      <div class="stack">
+        <article class="card server-card">
+          <div class="row"><h3 class="server-title">Main <span class="muted mono">155.212.227.115</span></h3><span class="pill"><i class="dot ok"></i> online</span></div>
+          <div class="server-meta">
+            <div>Ubuntu 24.04 · kernel <span class="mono">6.8.0-101</span></div>
+            <div>SSH key-only · UFW 22/tcp</div>
+            <div>OpenClaw + Telegram + Discord</div>
+          </div>
+        </article>
+        <article class="card server-card">
+          <div class="row"><h3 class="server-title">Garden <span class="muted mono">31.128.32.68</span></h3><span class="pill"><i class="dot ok"></i> online</span></div>
+          <div class="server-meta">
+            <div>Beget hosting</div>
+            <div>SSH key-only</div>
+            <div>UFW 22/tcp</div>
+          </div>
+        </article>
+        <article class="card server-card">
+          <div class="row"><h3 class="server-title">VPN <span class="muted mono">157.22.180.83</span></h3><span class="pill"><i class="dot ok"></i> online</span></div>
+          <div class="server-meta">
+            <div>FirstVDS Amsterdam</div>
+            <div>SSH key-only</div>
+            <div>UFW 22 + 55424 + 1500</div>
+            <div>AmneziaWG docker</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-llm">
+      <div class="stack">
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00C8F0" stroke-width="1.8"><path d="M4 16l4-4 3 3 5-7 4 5"/><path d="M4 20h16"/></svg></div>Расход токенов по моделям</div>
+          <div class="mini-list">
+            <div>
+              <div class="usage-row"><span>Claude Opus</span><span class="mono">441k</span></div>
+              <div class="progress"><div class="bar info" style="width:86%"></div></div>
+            </div>
+            <div>
+              <div class="usage-row"><span>Claude Sonnet</span><span class="mono">40k</span></div>
+              <div class="progress"><div class="bar warn" style="width:24%"></div></div>
+            </div>
+            <div>
+              <div class="usage-row"><span>GPT-5.4 Codex</span><span class="mono">34k</span></div>
+              <div class="progress"><div class="bar ok" style="width:19%"></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M7 7h10v10H7z"/><path d="M4 12h3m10 0h3M12 4v3m0 10v3"/></svg></div>Сессии</div>
+          <div class="session-list">
+            <div class="session-row"><span>Telegram ЛС</span><span class="mono">212k</span></div>
+            <div class="session-row"><span>Telegram группа</span><span class="mono">204k</span></div>
+            <div class="session-row"><span>Cron мониторинг</span><span class="mono">40k</span></div>
+            <div class="session-row"><span>Cron аудит</span><span class="mono">34k</span></div>
+            <div class="session-row"><span>Heartbeat</span><span class="mono">25k</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-events">
+      <article class="card">
+        <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>События</div>
+        <div class="terminal">
+          <div class="event-line">[16.03 15:57] 🟢 Мониторинг: все серверы OK</div>
+          <div class="event-line">[16.03 09:00] 🔒 Аудит безопасности: 0 критических</div>
+          <div class="event-line">[15.03 23:05] ✅ Discord подключен</div>
+          <div class="event-line">[15.03 22:47] 🔄 VPN перезагружен (ядро 6.8.0-106)</div>
+          <div class="event-line">[15.03 13:31] ✅ Codex OAuth переавторизован</div>
+          <div class="event-line">[15.03 10:27] 🔄 OpenClaw обновлён → 2026.3.13</div>
+          <div class="event-line">[14.03 21:53] ✅ ТЗ ОГНЕСФЕРА создано</div>
+          <div class="event-line">[13.03 12:23] 🧪 A/B тест Codex vs Opus</div>
+          <div class="event-line">[12.03 01:30] ✅ Калькулятор specialtechnology.ru</div>
+          <div class="event-line">[11.03 14:11] 🔓 UFW порт 18800 закрыт</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="tab-panel" id="tab-system">
+      <div class="stack">
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00C8F0" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg></div>Система</div>
+          <div class="mini-list">
+            <div class="system-row"><span>OpenClaw</span><span class="mono">2026.3.13</span></div>
+            <div class="system-row"><span>build</span><span class="mono">61d171a</span></div>
+            <div class="system-row"><span>канал</span><span class="pill">stable</span></div>
+            <div class="system-row"><span>uptime</span><span class="mono">5 days 17 hours</span></div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#FFB800" stroke-width="1.8"><path d="M5 19h14M7 15V9m5 6V5m5 10v-3"/></svg></div>Ресурсы</div>
+          <div class="mini-list">
+            <div>
+              <div class="usage-row"><span>CPU</span><span class="mono">2%</span></div>
+              <div class="progress"><div class="bar ok" style="width:2%"></div></div>
+            </div>
+            <div>
+              <div class="usage-row"><span>RAM</span><span class="mono">14%</span></div>
+              <div class="progress"><div class="bar info" style="width:14%"></div></div>
+            </div>
+            <div>
+              <div class="usage-row"><span>Disk</span><span class="mono">68%</span></div>
+              <div class="progress"><div class="bar warn" style="width:68%"></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="1.8"><path d="M8 2v4M16 2v4M4 10h16"/><rect x="3" y="4" width="18" height="17" rx="3"/></svg></div>Cron jobs</div>
+          <table>
+            <thead>
+              <tr><th>Задача</th><th>Когда</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Daily Monitoring</td><td>10:00</td></tr>
+              <tr><td>Security Audit</td><td>Mon 9:00</td></tr>
+              <tr><td>Update Status</td><td>Mon 9:30</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="card">
+          <div class="label"><div class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="#00C8F0" stroke-width="1.8"><path d="M5 7h14v10H5z"/><path d="M9 17v2m6-2v2"/></svg></div>Каналы</div>
+          <div class="channel-list">
+            <div class="row"><span>Telegram</span><span class="pill">✅</span></div>
+            <div class="row"><span>Discord</span><span class="pill">✅</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <nav class="nav-bar" aria-label="Нижняя навигация">
+    <button class="nav-btn active" data-tab="overview" aria-label="Обзор">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 13l8-8 8 8"/><path d="M6 11v8h12v-8"/></svg>
+      <span>Обзор</span>
+    </button>
+    <button class="nav-btn" data-tab="servers" aria-label="Серверы">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="6" rx="2"/><rect x="4" y="14" width="16" height="6" rx="2"/><path d="M8 7h.01M8 17h.01"/></svg>
+      <span>Серверы</span>
+    </button>
+    <button class="nav-btn" data-tab="llm" aria-label="LLM">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l2.7 5.47L21 9.4l-4.5 4.38L17.6 20 12 17.05 6.4 20l1.1-6.22L3 9.4l6.3-.93L12 3z"/></svg>
+      <span>LLM</span>
+    </button>
+    <button class="nav-btn" data-tab="events" aria-label="События">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h14v14H5z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+      <span>События</span>
+    </button>
+    <button class="nav-btn" data-tab="system" aria-label="Система">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg>
+      <span>Система</span>
+    </button>
+  </nav>
+
+  <div class="status-bar" aria-label="Статус системы">
+    <div class="status-item"><div class="status-key">CPU</div><div class="status-val">2%</div></div>
+    <div class="status-item"><div class="status-key">RAM</div><div class="status-val">14%</div></div>
+    <div class="status-item"><div class="status-key">DISK</div><div class="status-val">68%</div></div>
+    <div class="status-item"><div class="status-key">UPTIME</div><div class="status-val">5d 17h</div></div>
+  </div>
+
+  <script>
+    const buttons = document.querySelectorAll('.nav-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const tab = button.dataset.tab;
+
+        buttons.forEach((btn) => btn.classList.toggle('active', btn === button));
+        panels.forEach((panel) => {
+          panel.classList.toggle('active', panel.id === `tab-${tab}`);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
