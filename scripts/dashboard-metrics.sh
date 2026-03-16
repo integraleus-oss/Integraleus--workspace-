@@ -33,7 +33,7 @@ UFW_STATUS=$(sudo /usr/sbin/ufw status 2>/dev/null | head -1 || echo "unknown")
 
 # Timestamp
 TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-TS_MSK=$(TZ=Europe/Moscow date +"%d.%m.%Y %H:%M")
+TS_MSK=$(TZ=Europe/Moscow date +"%d.%m %H:%M")
 
 # Build JSON
 cat > "$TMP" << JSONEOF
@@ -72,5 +72,12 @@ JSONEOF
 # Upload to hosting
 scp -o StrictHostKeyChecking=no -q "$TMP" "$HOSTING:$REMOTE_PATH"
 ssh -o StrictHostKeyChecking=no -q "$HOSTING" "chmod 644 $REMOTE_PATH"
+
+# Upload events log
+EVENTS="/root/.openclaw/workspace/agents/main/data/events.json"
+if [ -f "$EVENTS" ]; then
+  scp -o StrictHostKeyChecking=no -q "$EVENTS" "$HOSTING:~/www/integraleus.ru/api-events.json"
+  ssh -o StrictHostKeyChecking=no -q "$HOSTING" "chmod 644 ~/www/integraleus.ru/api-events.json"
+fi
 
 rm -f "$TMP"
