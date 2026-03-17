@@ -155,6 +155,21 @@
 :root.theme-light .theme-toggle .icon-moon { display: none;  }
 :root.theme-light .theme-toggle .icon-sun  { display: block; }
 
+/* Fix white SVG logos in light theme */
+:root.theme-light .partner-brand svg path[fill="#FFFFFF"],
+:root.theme-light .partner-brand svg path[fill="white"],
+:root.theme-light .partner-brand svg path[fill="#fff"],
+:root.theme-light .product-brand svg path[fill="#FFFFFF"],
+:root.theme-light .product-brand svg path[fill="white"],
+:root.theme-light .product-brand svg path[fill="#fff"] {
+  fill: #1a2332;
+}
+/* Hero SVG text elements */
+:root.theme-light svg text[fill="white"] {
+  fill: var(--text);
+}
+
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
