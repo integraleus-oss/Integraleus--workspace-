@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<script>
+(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light');})();
+</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
  (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860','ym');
@@ -22,6 +25,120 @@
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+
+/* ── LIGHT THEME ── */
+:root.theme-light {
+  --ink:        #f0f2f5;
+  --ink1:       #ffffff;
+  --ink2:       #f7f8fa;
+  --steel:      #e8ecf0;
+  --wire:       #d0d7e0;
+  --wire2:      #bcc5d0;
+
+  --volt:       #0088cc;
+  --volt-lo:    rgba(0,136,204,0.08);
+  --volt-glow:  rgba(0,136,204,0.25);
+  --flame:      #e85d2a;
+  --flame-lo:   rgba(232,93,42,0.08);
+  --lime:       #15a87e;
+  --lime-lo:    rgba(21,168,126,0.08);
+  --crimson:    #e0294a;
+  --amber:      #d9a000;
+
+  --text:       #1a2332;
+  --text2:      #4a5d75;
+  --text3:      #8a9bb5;
+
+  color-scheme: light;
+}
+
+/* Light theme overrides for elements with hardcoded colors */
+:root.theme-light body {
+  color: var(--text);
+}
+:root.theme-light body::before {
+  background-image:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(0,136,204,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(21,168,126,0.03) 0%, transparent 70%);
+}
+:root.theme-light nav {
+  background: rgba(255,255,255,0.92);
+  border-bottom-color: var(--wire);
+}
+:root.theme-light .btn-volt {
+  color: #ffffff;
+}
+:root.theme-light .btn-flame {
+  color: #ffffff;
+}
+:root.theme-light input[type=range]::-webkit-slider-thumb {
+  border-color: var(--ink1);
+}
+:root.theme-light ::placeholder {
+  color: var(--text3);
+}
+:root.theme-light ::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+:root.theme-light ::-webkit-scrollbar-thumb {
+  background: var(--wire2);
+}
+/* SVG strokes that were hardcoded for dark theme */
+:root.theme-light .hero-orb {
+  opacity: 0.3;
+}
+:root.theme-light .nav-logo-hex::after,
+:root.theme-light .logo-hex::after {
+  background: var(--ink1);
+}
+/* Cards and sections */
+:root.theme-light .card,
+:root.theme-light .product-card,
+:root.theme-light .blog-card,
+:root.theme-light .tech-card {
+  background: var(--ink1);
+  border-color: var(--wire);
+}
+/* Footer */
+:root.theme-light footer,
+:root.theme-light .footer {
+  background: var(--steel);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--wire);
+  border-radius: 50%;
+  background: var(--ink2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  margin-left: 12px;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  border-color: var(--volt);
+  background: var(--volt-lo);
+}
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+.theme-toggle:hover svg {
+  transform: rotate(30deg);
+}
+/* Show/hide icons based on theme */
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun  { display: none;  }
+:root.theme-light .theme-toggle .icon-moon { display: none;  }
+:root.theme-light .theme-toggle .icon-sun  { display: block; }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
 body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
 a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
@@ -145,6 +262,10 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
     <li><a href="index.html#contact">Контакты</a></li>
   </ul>
   <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -618,6 +739,25 @@ function showPTab(id,btn){
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
   document.getElementById('ptab-'+id).classList.add('active');
   btn.classList.add('active');
+}
+</script>
+<script>
+/* ── Theme Switcher ── */
+(function(){
+  var saved = localStorage.getItem('sptech-theme');
+  if (saved === 'light') document.documentElement.classList.add('theme-light');
+  else if (saved === 'dark') document.documentElement.classList.remove('theme-light');
+  else {
+    // Respect system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+      document.documentElement.classList.add('theme-light');
+    }
+  }
+})();
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
 </script>
 </body>
