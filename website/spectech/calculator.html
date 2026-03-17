@@ -130,24 +130,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--wire);
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--volt);
   border-radius: 50%;
-  background: var(--ink2);
+  background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
   padding: 0;
   margin-left: 12px;
   flex-shrink: 0;
+  color: var(--volt);
 }
 .theme-toggle:hover {
-  border-color: var(--volt);
-  background: var(--volt-lo);
+  background: var(--volt);
+  color: #fff;
 }
 .theme-toggle svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
   transition: transform 0.3s ease;
 }
 .theme-toggle:hover svg {
