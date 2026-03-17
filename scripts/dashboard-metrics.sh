@@ -81,3 +81,21 @@ if [ -f "$EVENTS" ]; then
 fi
 
 rm -f "$TMP"
+
+# Check UFW on all servers
+MAIN_UFW=$(sudo /usr/sbin/ufw status 2>/dev/null | head -1)
+GARDEN_UFW=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@31.128.32.68 'ufw status 2>/dev/null | head -1' 2>/dev/null || echo "unreachable")
+VPN_UFW=$(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=5 root@157.22.180.83 'ufw status 2>/dev/null | head -1' 2>/dev/null || echo "unreachable")
+
+# Alert if any UFW is not active
+ALERT=""
+[[ "$MAIN_UFW" != *"active"* ]] && ALERT="${ALERT}⚠️ Main: UFW неактивен!\n"
+[[ "$GARDEN_UFW" != *"active"* ]] && ALERT="${ALERT}⚠️ Garden: UFW неактивен!\n"
+[[ "$VPN_UFW" != *"active"* ]] && ALERT="${ALERT}⚠️ VPN: UFW неактивен!\n"
+
+if [ -n "$ALERT" ]; then
+  # Send alert via openclaw
+  echo -e "$ALERT" > /tmp/ufw-alert.txt
+  # Log alert
+  echo "$(date) UFW ALERT: $ALERT" >> /tmp/dashboard-metrics.log
+fi

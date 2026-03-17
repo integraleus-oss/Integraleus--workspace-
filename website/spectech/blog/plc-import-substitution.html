@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Сравнительный анализ российских и зарубежных ПЛК: архитектура, быстродействие, среды разработки, поддержка протоколов. Реальное состояние импортозамещения в сегменте программируемых логических контроллеров.">
+<meta name="keywords" content="ПЛК, импортозамещение, российские контроллеры, ОВЕН, Regul, Fastwel, ЭлеСи, Siemens S7, Allen-Bradley, IEC 61131-3, промышленная автоматизация">
+<title>Перспективы импортозамещения: сравнительный анализ иностранных и российских ПЛК — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-plc{color:var(--amber);border-color:var(--amber);background:rgba(255,184,0,0.08);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body a{color:var(--volt);text-decoration:none;border-bottom:1px solid rgba(0,200,240,0.3);}
+.article-body a:hover{border-bottom-color:var(--volt);}
+
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--crimson);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.practice-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--lime);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.practice-box .info-box-title{color:var(--lime);}
+.practice-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.practice-box p:last-child{margin-bottom:0;}
+
+.warning-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box .info-box-title{color:var(--amber);}
+.warning-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.warning-box p:last-child{margin-bottom:0;}
+
+.source-ref{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:8px;}
+
+.comp-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px;}
+.comp-table th{background:var(--ink2);color:var(--volt);font-family:var(--mono);font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:2px solid var(--wire2);}
+.comp-table td{padding:12px 16px;border-bottom:1px solid var(--wire);color:var(--text2);}
+.comp-table tr:hover td{background:var(--volt-lo);}
+
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .comp-table{font-size:13px;}
+  .comp-table th,.comp-table td{padding:8px 10px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Импортозамещение ПЛК: сравнительный анализ</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-plc">ПЛК</span>
+            <span class="article-date">16 март. 2026</span>
+            <span class="article-read">15 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Перспективы импортозамещения: сравнительный анализ иностранных и российских ПЛК</h1>
+          <p class="article-subtitle">Где российские контроллеры уже конкурентоспособны, где разрыв остаётся критическим и что это означает для проектировщиков АСУ ТП — без лозунгов и без паники.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>К марту 2026 года прошло четыре года с момента ухода Siemens, Rockwell Automation, Schneider Electric и ABB с российского рынка. За это время сформировалась новая реальность: часть предприятий нашла рабочие альтернативы, часть продолжает эксплуатировать «замороженный» парк, а часть столкнулась с проблемами, которые не решаются простой заменой одного контроллера на другой.</p>
+
+          <p>Эта статья — попытка трезвой оценки. Не парадного отчёта об успехах импортозамещения и не панической констатации отставания. Инженеру-проектировщику нужна конкретика: что могут российские ПЛК, чего не могут и как с этим работать.</p>
+
+          <h2 id="исходная-позиция">Исходная позиция: что потерял рынок</h2>
+
+          <p>До 2022 года российский рынок <strong>программируемых логических контроллеров (ПЛК)</strong> на 65–70% состоял из продукции четырёх вендоров: Siemens (S7-1200/1500, ET 200SP), Schneider Electric (Modicon M340/M580), Rockwell Automation (ControlLogix/CompactLogix) и ABB (AC500). Остальные 30–35% делили между собой ОВЕН, Fastwel, Прософт-Системы (Regul), ЭлеСи, Текон, китайские производители и нишевые решения.</p>
+
+          <p>Уход мажоритарных вендоров означал не просто отсутствие новых поставок. Прекратилась техническая поддержка, обновления прошивок и среды разработки, поставка запасных частей по официальным каналам. Для действующих систем это создало три категории рисков:</p>
+
+          <ul>
+            <li><strong>Эксплуатационный</strong> — выход из строя модуля ввода-вывода без возможности замены</li>
+            <li><strong>Безопасность</strong> — известные уязвимости (CVE) в прошивках Siemens S7, которые больше не закрываются патчами для российских клиентов</li>
+            <li><strong>Развитие</strong> — невозможность расширения системы, добавления новых точек ввода-вывода, модернизации</li>
+          </ul>
+
+          <h2 id="российские-плк">Российские ПЛК: кто есть кто</h2>
+
+          <p>Рынок российских контроллеров неоднороден. Здесь соседствуют компании с двадцатилетней историей и новые игроки. Принципиально важно различать три категории:</p>
+
+          <h3 id="категория-1">Контроллеры собственной разработки</h3>
+          <p>Полный цикл — от проектирования процессорного модуля до среды разработки. Сюда относятся <strong>ОВЕН</strong> (серия ПЛК210/ПЛК200), <strong>Прософт-Системы</strong> (<a href="https://reglab.ru/controller/regul_r600">Regul R500/R600</a>), <strong>ЭлеСи</strong> (Элсима, ЭЛСИ-ТМК), <strong>Fastwel</strong> (<a href="https://www.fastwel.ru/products/fastwel-plc/fastwel-io/programmiruemye-kontrollery-uzla-seti/CPM723/">CPM723</a>), <strong>АО «ТРЭИ»</strong> (<a href="https://trei.biz/produktsiya/programmiruemye-kontrollery-upravleniya-trei-5b/">TREI-5B</a>, собственная среда Unimod PRO 2), <strong>НИЦ «Инкомсистем»</strong> (<a href="https://incomsystem.ru/abak-controllers/">АБАК ПЛК</a>), <strong>АО «Экоресурс»</strong> (<a href="https://www.ecoresurs.ru/catalog/po-tipam/bazis-100/">БАЗИС-100</a>, выпускается с 1997 года). Эти компании контролируют аппаратную и программную части, что даёт возможность развивать платформу.</p>
+
+          <h3 id="категория-2">Контроллеры на импортной элементной базе с локализованным ПО</h3>
+          <p>Процессорный модуль строится на серийных промышленных SoC (NXP, TI, Intel), модули ввода-вывода используют импортные АЦП/ЦАП, но прошивка и среда разработки — собственные. Фактически это большинство российских ПЛК. Зависимость от поставок компонентов остаётся, но она управляема: серийные микросхемы доступны через альтернативных дистрибьюторов.</p>
+
+          <h3 id="категория-3">Контроллеры-ребрендинги</h3>
+          <p>Китайские контроллеры (Haiwell, Wecon, Inovance) с адаптированной документацией. Формально в реестре. Для проектировщика это риск: вендор не контролирует прошивку, не может исправить ошибку в runtime, зависит от китайского поставщика так же, как раньше зависел от Siemens.</p>
+
+          <div class="warning-box">
+            <div class="info-box-title">На что смотреть</div>
+            <p>При выборе контроллера запрашивайте у поставщика информацию о происхождении аппаратной платформы и среды разработки. Наличие записи в реестре отечественного ПО (Минцифры) не гарантирует, что контроллер разработан в России — реестр фиксирует ПО, а не аппаратную часть.</p>
+          </div>
+
+          <h2 id="сравнение-hardware">Аппаратные характеристики: где паритет, где разрыв</h2>
+
+          <h3 id="процессорная-мощность">Процессорная мощность и время цикла</h3>
+
+          <p>Время цикла — критический параметр для задач управления быстрыми процессами. Ниже — данные с официальных сайтов производителей.</p>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Контроллер</th>
+                <th>Процессор</th>
+                <th>Мин. время цикла</th>
+                <th>Источник</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Siemens S7-1500</strong> (CPU 1518)</td>
+                <td>Dual-core, проприетарный</td>
+                <td>1 мс</td>
+                <td>siemens.com</td>
+              </tr>
+              <tr>
+                <td><strong>Rockwell ControlLogix</strong> (1756-L85E)</td>
+                <td>Multi-core</td>
+                <td>0.1 мс (Motion)</td>
+                <td>rockwellautomation.com</td>
+              </tr>
+              <tr>
+                <td><strong>Schneider M580</strong> (BMEP586040)</td>
+                <td>Dual-core ARM</td>
+                <td>1 мс</td>
+                <td>se.com</td>
+              </tr>
+              <tr>
+                <td><strong>Regul R500</strong> (Прософт-Системы)</td>
+                <td>Intel Atom, 1.33 ГГц, 2 ядра</td>
+                <td>1 мс</td>
+                <td><a href="https://isup.ru/articles/4/11083/">isup.ru</a></td>
+              </tr>
+              <tr>
+                <td><strong>Regul R600</strong> (Прософт-Системы)</td>
+                <td>Intel Atom E640</td>
+                <td>Не опубликовано</td>
+                <td><a href="https://regul-plc.ru/">regul-plc.ru</a></td>
+              </tr>
+              <tr>
+                <td><strong>ОВЕН ПЛК210</strong> (серия 1x)</td>
+                <td>4× Cortex-A55, 1.8 ГГц</td>
+                <td>3 мс</td>
+                <td><a href="https://owen.ru/product/plk210/specifications">owen.ru</a></td>
+              </tr>
+              <tr>
+                <td><strong>ОВЕН ПЛК210</strong> (серия 0x)</td>
+                <td>RISC 800 МГц</td>
+                <td>3 мс</td>
+                <td><a href="https://owen.ru/product/plk210/specifications">owen.ru</a></td>
+              </tr>
+              <tr>
+                <td><strong>Fastwel CPM723</strong></td>
+                <td>x86-совместимый</td>
+                <td>Не опубликовано</td>
+                <td><a href="https://www.fastwel.ru/products/fastwel-plc/fastwel-io/programmiruemye-kontrollery-uzla-seti/CPM723/">fastwel.ru</a></td>
+              </tr>
+              <tr>
+                <td><strong>TREI-5B-04</strong> (АО «ТРЭИ»)</td>
+                <td>x86 PC/104-Plus совместимый</td>
+                <td>Не опубликовано</td>
+                <td><a href="https://trei.biz/produktsiya/programmiruemye-kontrollery-upravleniya-trei-5b/">trei.biz</a></td>
+              </tr>
+              <tr>
+                <td><strong>АБАК ПЛК</strong> (Инкомсистем)</td>
+                <td>Не опубликовано</td>
+                <td>10 мс (опрос модулей)</td>
+                <td><a href="https://incomsystem.ru/abak-controllers/products/programmiruemyy-logicheskiy-kontroller-abak-plk/">incomsystem.ru</a></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Regul R500 с заявленным временем цикла 1 мс вышел на паритет с зарубежными аналогами для типовых задач — этого достаточно для управления технологическими процессами в нефтепереработке, энергетике, водоподготовке. ОВЕН ПЛК210 с минимальным циклом 3 мс покрывает большинство задач среднего уровня автоматизации. Разрыв проявляется в задачах Motion Control (управление сервоприводами), где Rockwell обеспечивает субмиллисекундные циклы — у российских контроллеров этого класса нет.</p>
+
+          <h3 id="масштабируемость">Масштабируемость ввода-вывода</h3>
+
+          <p>Критичный параметр для крупных объектов — максимальное количество модулей I/O на один процессорный модуль.</p>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Контроллер</th>
+                <th>Макс. модулей I/O</th>
+                <th>Особенности</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Regul R600</strong></td>
+                <td>До 12 в крейте, до 255 крейтов расширения</td>
+                <td>Дублированная внутренняя шина</td>
+              </tr>
+              <tr>
+                <td><strong>Fastwel CPM723</strong></td>
+                <td>До 64 на локальной шине FBUS, до 128 на удалённой</td>
+                <td>Шина FBUS, CODESYS V3</td>
+              </tr>
+              <tr>
+                <td><strong>ОВЕН ПЛК210</strong></td>
+                <td>Расширение через модули Мх210 по Ethernet</td>
+                <td>Модули подключаются как сетевые устройства</td>
+              </tr>
+              <tr>
+                <td><strong>TREI-5B-04 STANDARD</strong></td>
+                <td>До 254 модулей, до 8 128 каналов I/O на мастер-модуль</td>
+                <td>Шина ST-BUS(N) 5 Мбод, каркас 19"</td>
+              </tr>
+              <tr>
+                <td><strong>АБАК ПЛК</strong></td>
+                <td>До 100 модулей ввода/вывода</td>
+                <td>EtherCAT Master + FSoE (Safety), PROFINET, Profibus DP</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="source-ref">Источники: prosoftsystems.ru, fastwel.ru, owen.ru, trei.biz, incomsystem.ru</div>
+
+          <p>Regul R600 с поддержкой до 255 крейтов расширения теоретически закрывает задачи крупных объектов. На практике всё зависит от конкретной конфигурации и требований к быстродействию обмена с удалёнными крейтами.</p>
+
+          <h3 id="модули-io">Номенклатура модулей ввода-вывода</h3>
+
+          <p>Siemens предлагает более 200 типов модулей для S7-1500/ET 200SP: аналоговые с разрешением до 16 бит, модули взвешивания, модули позиционирования, специализированные модули для термопар типа S/B/R. У российских производителей линейка уже, но базовые потребности закрыты:</p>
+
+          <ul>
+            <li><strong>ОВЕН ПЛК210</strong> — встроенные дискретные и аналоговые входы/выходы: АЦП 16 бит, термопары (L, J, N, K, S, R, B, T, A-1/2/3), термосопротивления (50М–1000П, Pt100/500/1000), унифицированные сигналы 0–20 мА/4–20 мА. Быстрые дискретные входы до 100 кГц. Расширение через модули серии Мх210 по Ethernet. <span class="source-ref">Источник: <a href="https://owen.ru/product/plk210/specifications">owen.ru</a></span></li>
+            <li><strong>Regul R600</strong> — модульная архитектура: модули аналогового ввода 0/4–20 мА + HART, 8 каналов с поканальной гальванической изоляцией, погрешность 0.1%. Дискретные модули до 32 каналов с метками времени (10 событий на канал за цикл). <span class="source-ref">Источник: prosoft.ru</span></li>
+            <li><strong>Fastwel CPM723</strong> — модульная архитектура Fastwel I/O: аналоговые модули 0–20 мА / 4–20 мА, дифференциальное подключение. <span class="source-ref">Источник: <a href="https://www.fastwel.ru/products/fastwel-plc/fastwel-io/">fastwel.ru</a></span></li>
+          </ul>
+
+          <p>Для 80% типовых задач (дискретное и аналоговое управление, ПИД-регулирование) номенклатура российских модулей достаточна. Пробелы — в специализированных модулях: управление сервоприводами, тензометрия, высокоскоростной счёт энкодеров SSI/BiSS.</p>
+
+          <h2 id="среды-разработки">Среды разработки: главный разрыв</h2>
+
+          <p>Если в аппаратной части российские ПЛК за четыре года заметно подтянулись, то в средах разработки разрыв остаётся самым болезненным. И дело не в языках программирования — все серьёзные российские ПЛК поддерживают пять языков <strong>IEC 61131-3</strong> (ST, LD, FBD, SFC, IL). Дело в инструментарии вокруг.</p>
+
+          <h3 id="tia-portal">TIA Portal как эталон</h3>
+          <p>Siemens TIA Portal — результат 30+ лет эволюции STEP 7. Единая среда, в которой программируется ПЛК, конфигурируется HMI, настраивается сеть PROFINET, диагностируются приводы. Встроенный симулятор PLCSIM позволяет отлаживать программу без реального оборудования. Библиотека готовых функциональных блоков охватывает тысячи типовых задач.</p>
+
+          <h3 id="российские-ide">Российские среды разработки</h3>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Среда</th>
+                <th>Контроллеры</th>
+                <th>Сильные стороны</th>
+                <th>Ограничения</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CODESYS V3</strong> (3S-Smart Software, Германия)</td>
+                <td>ОВЕН ПЛК210/200, Fastwel CPM723, ЭлеСи Элсима-М01</td>
+                <td>Зрелый runtime, широкое сообщество, полный IEC 61131-3, WebVisu</td>
+                <td>Немецкий вендор — лицензионные риски, зависимость от зарубежного ПО</td>
+              </tr>
+              <tr>
+                <td><strong>Epsilon LD</strong> (Прософт-Системы, Россия)</td>
+                <td>Regul R400/R500/R600</td>
+                <td>Полностью российская, 5 языков IEC 61131-3, поддержка резервирования, онлайн-изменения, виртуальный ПЛК</td>
+                <td>Экосистема в стадии роста, меньше библиотек и сообщества</td>
+              </tr>
+              <tr>
+                <td><strong>Unimod PRO 2</strong> (АО «ТРЭИ», Россия)</td>
+                <td>TREI-5B-04, TREI-5B-05</td>
+                <td>Полностью российская, сертификат ФСТЭК (4-й уровень доверия), 100% владение исходным кодом</td>
+                <td>Привязка к платформе ТРЭИ</td>
+              </tr>
+              <tr>
+                <td><strong>Abak IDE / CODESYS V3.5</strong> (Инкомсистем, Россия + 3S)</td>
+                <td>АБАК ПЛК</td>
+                <td>Своя IDE + CODESYS, также поддержка MasterSCADA 4D, Полигон, Alpha.Platform, КРУГОЛ (СРВК)</td>
+                <td>CODESYS — лицензионные риски (немецкий вендор)</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="source-ref">Источники: <a href="https://prosoftsystems.ru/catalog/show/programmnoe-obespechenie-epsilon-ld">prosoftsystems.ru</a>, <a href="https://owen.ru/product/plk210">owen.ru</a>, <a href="https://www.fastwel.ru/products/fastwel-plc/fastwel-io/programmiruemye-kontrollery-uzla-seti/CPM723/">fastwel.ru</a></div>
+
+          <p>Ключевые пробелы российских сред разработки по сравнению с TIA Portal / Studio 5000:</p>
+
+          <ul>
+            <li><strong>Симуляция</strong> — Epsilon LD предлагает виртуальный ПЛК для отладки без оборудования. Однако полноценного аналога PLCSIM Advanced (с поддержкой виртуального ввода-вывода и интеграцией с внешними моделями процессов) пока нет</li>
+            <li><strong>Библиотеки</strong> — у Siemens для S7-1500 доступны тысячи сертифицированных функциональных блоков: ПИД с автотюнингом, управление клапанами, рецептуры ISA-88, расчёт расхода по ГОСТ 8.586. Российские среды покрывают базовые задачи</li>
+            <li><strong>Диагностика</strong> — трассировка переменных в реальном времени, логический анализатор, запись осциллограмм — у зарубежных сред это стандарт. Российские среды часто ограничиваются таблицей текущих значений</li>
+            <li><strong>Командная работа</strong> — интеграция с Git, одновременная работа нескольких программистов, разграничение прав — в российских средах либо отсутствует, либо реализовано базово</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Типичная ошибка</div>
+            <p>Сравнивать среды разработки по чек-листу: «поддерживает ST — да, FBD — да, онлайн-мониторинг — да». Формально всё совпадает. На практике разница в удобстве, скорости работы и количестве ошибок при программировании — значительная. Это как сравнивать текстовый редактор и IDE: оба позволяют «писать код».</p>
+          </div>
+
+          <h2 id="протоколы">Поддержка промышленных протоколов</h2>
+
+          <p>Базовые протоколы поддерживаются всеми серьёзными российскими ПЛК:</p>
+
+          <ul>
+            <li><strong>Modbus RTU/TCP</strong> — master и slave. У ОВЕН ПЛК210: Modbus TCP и RTU (Master/Slave). У Fastwel CPM723: Modbus TCP (клиент/сервер), маршрутизация Modbus TCP → RTU через модули NIM741/NIM742</li>
+            <li><strong>OPC UA</strong> — встроенный сервер у ОВЕН ПЛК210, Fastwel CPM723, Regul R500/R600</li>
+            <li><strong>MQTT</strong> — ОВЕН ПЛК210 поддерживает Client/Broker</li>
+            <li><strong>МЭК 60870-5-104</strong> — Fastwel CPM723 (ведущий и подчинённый), Regul R500/R600</li>
+          </ul>
+
+          <p>Проблемы начинаются с проприетарных промышленных Ethernet-протоколов реального времени:</p>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Протокол</th>
+                <th>Зарубежные ПЛК</th>
+                <th>Российские ПЛК</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PROFINET</strong></td>
+                <td>Siemens — нативная поддержка (IRT)</td>
+                <td>АБАК ПЛК — Controller/Device</td>
+              </tr>
+              <tr>
+                <td><strong>EtherNet/IP + CIP</strong></td>
+                <td>Rockwell — нативная поддержка</td>
+                <td>Единичные реализации</td>
+              </tr>
+              <tr>
+                <td><strong>EtherCAT</strong></td>
+                <td>Beckhoff, широкая поддержка</td>
+                <td>АБАК ПЛК — Master + FSoE (Safety)</td>
+              </tr>
+              <tr>
+                <td><strong>PROFIBUS DP</strong></td>
+                <td>Siemens, Schneider — полная поддержка</td>
+                <td>Regul — master. АБАК ПЛК — поддержка. ОВЕН — через шлюз</td>
+              </tr>
+              <tr>
+                <td><strong>FOUNDATION Fieldbus</strong></td>
+                <td>ABB, Emerson — нативная поддержка</td>
+                <td>Не поддерживается</td>
+              </tr>
+              <tr>
+                <td><strong>HART</strong></td>
+                <td>Широкая поддержка в модулях AI</td>
+                <td>Regul R600 — модули AI с HART</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Для новых проектов это решаемо: проектировщик выбирает архитектуру под открытые протоколы (Modbus TCP, OPC UA). Для модернизации действующих систем, где полевые устройства подключены по PROFIBUS DP или FOUNDATION Fieldbus, замена контроллера требует замены или перекоммутации всей полевой шины. Стоимость такой модернизации может превысить стоимость контроллера в 5–10 раз.</p>
+
+          <h2 id="надёжность">Надёжность и резервирование</h2>
+
+          <p>Для критических применений (энергетика, нефтегаз, химия) ключевой вопрос — аппаратное резервирование: дублированные процессорные модули с горячим переключением, резервированные шины.</p>
+
+          <ul>
+            <li><strong>Regul R600</strong> — горячее резервирование CPU, источников питания, внутренней шины. Горячая замена всех модулей. Дублированная высокоскоростная внутренняя шина данных. <span class="source-ref">Источник: <a href="https://prosoftsystems.ru/">prosoftsystems.ru</a></span></li>
+            <li><strong>Regul R500</strong> — горячее резервирование центральных процессоров, источников питания, модулей ввода/вывода. <span class="source-ref">Источник: <a href="https://reglab.ru/product/plk_regul_rx00/regul_r500/">reglab.ru</a></span></li>
+            <li><strong>ОВЕН ПЛК210-KR</strong> — 100% горячее резервирование процессорного модуля и всего контроллера. Исполнительная среда СРВК (разработка НПФ «КРУГ»). <span class="source-ref">Источник: <a href="https://owen-energo.ru/product/plk210_kr/">owen-energo.ru</a>, <a href="https://www.krug2000.ru/products/ptc/plk210-kr-kontroller.html">krug2000.ru</a></span></li>
+            <li><strong>Fastwel CPM723</strong> — поддержка резервирования модуля процессора и интерфейса Ethernet. <span class="source-ref">Источник: <a href="https://www.fastwel.ru/o-kompanii/novosti/cpm723-novyy-kontroller-v-lineyke-fastwel-i-o/">fastwel.ru</a></span></li>
+            <li><strong>TREI-5B-04 STANDARD</strong> — многоуровневое резервирование: канал → модуль → каркас, включая мастер-модули, модули питания, модули ввода/вывода, интерфейсные каналы связи. Горячая замена модулей. <span class="source-ref">Источник: <a href="https://trei.biz/produktsiya/programmiruemye-kontrollery-upravleniya-trei-5b/">trei.biz</a></span></li>
+            <li><strong>АБАК ПЛК</strong> — резервирование и горячая замена ЦПУ и модулей ввода-вывода, резервирование внутренней шины и внешних интерфейсов. EtherCAT Master + режим Safety (FSoE) для обмена с контроллерами ПАЗ. <span class="source-ref">Источник: <a href="https://incomsystem.ru/abak-controllers/products/programmiruemyy-logicheskiy-kontroller-abak-plk/">incomsystem.ru</a></span></li>
+            <li><strong>БАЗИС-100</strong> — контроллер модульный противоаварийной защиты, регистрации и управления. Взрывозащищённые модификации [Ex ia Ga] IIC. Сертификат ТР ЕАЭС 043/2017. Выпускается АО «Экоресурс» (Воронеж) с 1997 года. <span class="source-ref">Источник: <a href="https://www.ecoresurs.ru/catalog/po-tipam/bazis-100/">ecoresurs.ru</a></span></li>
+          </ul>
+
+          <div class="practice-box">
+            <div class="info-box-title">На практике</div>
+            <p>Горячее резервирование CPU — уже не эксклюзив зарубежных платформ. Regul R500/R600 и ОВЕН ПЛК210-KR предлагают аппаратное резервирование. Fastwel CPM723 поддерживает резервирование процессора. Это расширяет область применения российских контроллеров на ответственные объекты энергетики и нефтегазовой отрасли.</p>
+          </div>
+
+          <h2 id="сертификация">Сертификация и допуски</h2>
+
+          <p>Для промышленного применения ПЛК должен иметь ряд сертификатов:</p>
+
+          <ul>
+            <li><strong>Декларация соответствия ТР ТС 004/020</strong> — электробезопасность и ЭМС. Есть у всех серийных российских ПЛК</li>
+            <li><strong>Сертификат взрывозащиты</strong> (Ex) — для зон с взрывоопасными средами. Имеют Regul, ОВЕН (отдельные модели)</li>
+            <li><strong>Сертификат функциональной безопасности</strong> (SIL по IEC 61508) — для систем ПАЗ. Siemens S7-1500F и Schneider M580 Safety имели SIL 3. У российских ПЛК на начало 2026 года подтверждённый сертификат SIL 3 от аккредитованной организации (TÜV, Exida) отсутствует</li>
+            <li><strong>Включение в реестр Минпромторга</strong> — для госзакупок. Есть у большинства российских ПЛК</li>
+          </ul>
+
+          <p>Для систем ПАЗ существуют российские решения: <strong>БАЗИС-100</strong> (АО «Экоресурс») сертифицирован как контроллер противоаварийной защиты с взрывозащитой, серия <strong>TREI-5B-04 SAFE</strong> предназначена для систем ПАЗ, <strong>АБАК ПЛК</strong> поддерживает EtherCAT с режимом FSoE (Fail Safe over EtherCAT) для обмена с контроллерами безопасности. Однако <strong>сертификация SIL 3</strong> от аккредитованной международной организации (TÜV, Exida) на начало 2026 года у серийных российских ПЛК по-прежнему отсутствует. Для объектов, где SIL 3 — нормативное требование, альтернатив зарубежным контроллерам безопасности (HIMA HIMax, Schneider M580 Safety) пока нет.</p>
+
+          <h2 id="стоимость-владения">Совокупная стоимость владения</h2>
+
+          <p>Стоимость ПЛК — это не цена процессорного модуля. Совокупная стоимость владения (TCO) включает аппаратную часть, лицензии на ПО, обучение, пусконаладку и сопровождение.</p>
+
+          <h3 id="скрытые-расходы">Скрытые расходы при миграции</h3>
+          <ul>
+            <li><strong>Перепрограммирование</strong> — перенос проекта из TIA Portal в другую среду — это не «экспорт-импорт». Это переписывание с учётом различий в runtime, библиотеках, обработке ошибок. Трудоёмкость: от 30% до 100% от исходной разработки</li>
+            <li><strong>Переобучение персонала</strong> — инженеры, 10 лет работавшие в TIA Portal, не станут продуктивными в новой среде за двухдневный курс. Реальный срок адаптации — 3–6 месяцев</li>
+            <li><strong>Перекоммутация полевого уровня</strong> — при замене контроллера меняются клеммные модули, меняется разводка шкафа. Для шкафа на 500 точек — 2–3 дня монтажных работ</li>
+            <li><strong>Повторные испытания</strong> — замена контроллера на объекте, подлежащем надзору Ростехнадзора, требует повторной экспертизы промышленной безопасности</li>
+          </ul>
+
+          <div class="warning-box">
+            <div class="info-box-title">Важно</div>
+            <p>«Дешевле в закупке» не означает «дешевле в проекте». При миграции с Siemens S7-1500 на российский ПЛК стоимость аппаратуры составляет 15–25% от полной стоимости модернизации. Остальное — проектирование, программирование, монтаж, пусконаладка и повторная сертификация.</p>
+          </div>
+
+          <h2 id="рекомендации">Практические рекомендации для проектировщиков</h2>
+
+          <h3 id="новые-проекты">Новые проекты</h3>
+          <p>Для новых объектов переход на российские ПЛК — вопрос решённый регуляторно (Постановление Правительства РФ № 878). Практически это означает:</p>
+
+          <ol>
+            <li>Выбирайте контроллер под задачу: для водоканала или котельной — ОВЕН ПЛК210. Для НПЗ с резервированием — Regul R500/R600, ОВЕН ПЛК210-KR, TREI-5B-04 или АБАК ПЛК. Для систем ПАЗ — БАЗИС-100, TREI-5B-04 SAFE</li>
+            <li>Закладывайте запас по производительности 30–40%: библиотеки российских ПЛК менее оптимизированы</li>
+            <li>Проектируйте полевой уровень на открытых протоколах (Modbus TCP, OPC UA). Избегайте привязки к проприетарным шинам</li>
+            <li>Закладывайте в бюджет обучение и увеличенное время пусконаладки — минимум +30% к привычным срокам</li>
+          </ol>
+
+          <h3 id="модернизация">Модернизация действующих систем</h3>
+          <p>Универсального рецепта нет. Стратегия зависит от состояния оборудования, критичности объекта и бюджета:</p>
+
+          <ul>
+            <li><strong>Система работает стабильно</strong> — не трогайте. Запасите критические модули (CPU, блоки питания, коммуникационные модули). Планируйте замену на горизонте 3–5 лет</li>
+            <li><strong>Требуется расширение</strong> — добавляйте новые узлы на российских контроллерах, интегрируйте через OPC UA. Смешанная архитектура — рабочее решение</li>
+            <li><strong>Система требует замены</strong> — проведите полный аудит: перечень I/O, используемые протоколы, специализированные функции. Только после этого выбирайте платформу</li>
+          </ul>
+
+          <h2 id="прогноз">Куда движется рынок</h2>
+
+          <p>Четыре года — недостаточный срок для создания экосистемы, сопоставимой с тем, что Siemens и Rockwell строили десятилетиями. Но динамика положительная:</p>
+
+          <ul>
+            <li><strong>Аппаратная часть</strong> — российские ПЛК верхнего сегмента (Regul R500/R600) уже закрывают задачи ответственных применений с резервированием. ОВЕН с ПЛК210-KR вышел в сегмент горячего резервирования</li>
+            <li><strong>Среды разработки</strong> — наиболее критичное направление. Epsilon LD развивается, но до уровня TIA Portal — годы работы</li>
+            <li><strong>Сертификация SIL 3</strong> — ключевой пробел для систем ПАЗ. Его закрытие откроет российским ПЛК последний крупный сегмент рынка</li>
+            <li><strong>Элементная база</strong> — зависимость от импортных компонентов сохранится на обозримую перспективу. Производство промышленных АЦП и сигнальных процессоров в России отсутствует</li>
+          </ul>
+
+          <p>Импортозамещение в сегменте ПЛК — процесс с чёткими техническими границами. Для большинства задач промышленной автоматизации российские контроллеры применимы уже сейчас. Для оставшейся части (высокоскоростное управление приводами, системы ПАЗ уровня SIL 3, объекты с полевыми шинами PROFIBUS/FF) замена либо сопряжена с компромиссами, либо пока невозможна. Признание этих границ — необходимое условие для инженерно обоснованных решений.</p>
+
+        </div>
+
+        <div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Подбор оборудования для вашего проекта</div>
+          <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Поможем выбрать оптимальную конфигурацию контроллеров и SCADA</div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Подробнее о платформе</a>
+            <a href="../index.html#contact" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Запросить консультацию</a>
+          </div>
+        </div>
+
+        <div style="margin-top:32px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="import-substitution.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Импортозамещение в АСУ ТП: SCADA и инженерное ПО</a>
+            <a href="protocols.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Промышленные протоколы: Modbus, OPC UA, MQTT</a>
+            <a href="ot-security-mistakes.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Типичные ошибки при защите АСУ ТП</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#исходная-позиция">Что потерял рынок</a></li>
+              <li><a href="#российские-плк">Российские ПЛК: кто есть кто</a></li>
+              <li class="toc-h3"><a href="#категория-1">Собственная разработка</a></li>
+              <li class="toc-h3"><a href="#категория-2">Импортная база + своё ПО</a></li>
+              <li class="toc-h3"><a href="#категория-3">Ребрендинги</a></li>
+              <li><a href="#сравнение-hardware">Аппаратные характеристики</a></li>
+              <li class="toc-h3"><a href="#процессорная-мощность">Время цикла</a></li>
+              <li class="toc-h3"><a href="#масштабируемость">Масштабируемость I/O</a></li>
+              <li class="toc-h3"><a href="#модули-io">Номенклатура модулей</a></li>
+              <li><a href="#среды-разработки">Среды разработки</a></li>
+              <li><a href="#протоколы">Протоколы</a></li>
+              <li><a href="#надёжность">Резервирование</a></li>
+              <li><a href="#сертификация">Сертификация</a></li>
+              <li><a href="#стоимость-владения">TCO</a></li>
+              <li><a href="#рекомендации">Рекомендации</a></li>
+              <li><a href="#прогноз">Прогноз</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Производители</div>
+          <div class="sb-body" style="font-size:14px;color:var(--text3);line-height:1.6">
+            <p style="margin-bottom:8px"><a href="https://owen.ru/product/plk210" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>ОВЕН</strong></a> — ПЛК200/210/210-KR, наибольшая база инсталляций</p>
+            <p style="margin-bottom:8px"><a href="https://prosoftsystems.ru/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>Прософт-Системы</strong></a> — Regul R500/R600, нефтегаз, энергетика</p>
+            <p style="margin-bottom:8px"><a href="https://www.fastwel.ru/products/fastwel-plc/fastwel-io/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>Fastwel</strong></a> — CPM723, Fastwel I/O</p>
+            <p style="margin-bottom:8px"><a href="https://elesy.ru/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>ЭлеСи</strong></a> — Элсима, ЭЛСИ-ТМК (Томск)</p>
+            <p style="margin-bottom:8px"><a href="https://trei.biz/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>ТРЭИ</strong></a> — TREI-5B, Unimod PRO 2, с 1990 г.</p>
+            <p style="margin-bottom:8px"><a href="https://incomsystem.ru/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>Инкомсистем</strong></a> — АБАК ПЛК, нефтегаз, Арктика</p>
+            <p style="margin-bottom:0"><a href="https://www.ecoresurs.ru/" style="color:var(--text2);text-decoration:none;border-bottom:1px dotted var(--text3)"><strong>Экоресурс</strong></a> — БАЗИС-100, ПАЗ, с 1997 г.</p>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="import-substitution.html" class="related-item">
+                <div class="related-item-title">Импортозамещение в АСУ ТП</div>
+                <div class="related-item-meta">Аналитика · 12 мин</div>
+              </a>
+              <a href="protocols.html" class="related-item">
+                <div class="related-item-title">Промышленные протоколы</div>
+                <div class="related-item-meta">Протоколы · 11 мин</div>
+              </a>
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+          <li><a href="../calculator.html">Калькулятор</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
