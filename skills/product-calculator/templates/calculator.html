@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Calculator</title>
+<link rel="stylesheet" href="../assets/calculator.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="calc-nav">
+  <div class="nav-brand">
+    <h1>Product Calculator</h1>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <span class="icon-light">☀️</span>
+    <span class="icon-dark">🌙</span>
+  </button>
+</nav>
+
+<div class="calculator-container">
+  
+  <!-- Product Selection -->
+  <section class="calc-section">
+    <h2>Choose Your Product</h2>
+    <div class="product-grid">
+      
+      <div class="product-option">
+        <input type="radio" name="product" id="basic" value="product-basic" checked>
+        <label for="basic" class="product-card">
+          <div class="product-header">
+            <h3>Basic Package</h3>
+            <p class="product-description">Perfect for small teams and startups</p>
+          </div>
+          <div class="product-features">
+            <ul>
+              <li>Up to 5,000 units</li>
+              <li>Basic support</li>
+              <li>Standard features</li>
+            </ul>
+          </div>
+          <div class="product-pricing">
+            Starting at <strong>$1,000</strong>
+          </div>
+        </label>
+      </div>
+
+      <div class="product-option">
+        <input type="radio" name="product" id="pro" value="product-professional">
+        <label for="pro" class="product-card">
+          <div class="product-header">
+            <h3>Professional Package</h3>
+            <p class="product-description">Advanced features for growing businesses</p>
+          </div>
+          <div class="product-features">
+            <ul>
+              <li>Up to 50,000 units</li>
+              <li>Priority support</li>
+              <li>Advanced analytics</li>
+            </ul>
+          </div>
+          <div class="product-pricing">
+            Starting at <strong>$2,000</strong>
+          </div>
+        </label>
+      </div>
+
+      <div class="product-option">
+        <input type="radio" name="product" id="enterprise" value="product-enterprise">
+        <label for="enterprise" class="product-card">
+          <div class="product-header">
+            <h3>Enterprise Package</h3>
+            <p class="product-description">Full-scale solution for large organizations</p>
+          </div>
+          <div class="product-features">
+            <ul>
+              <li>Unlimited units</li>
+              <li>24/7 dedicated support</li>
+              <li>Custom integrations</li>
+            </ul>
+          </div>
+          <div class="product-pricing">
+            Starting at <strong>$20,000</strong>
+          </div>
+        </label>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Configuration -->
+  <section class="calc-section">
+    <h2>Configuration</h2>
+    
+    <div class="config-row">
+      <label for="quantity">Quantity</label>
+      <div class="slider-container">
+        <input type="range" id="quantity" min="0" max="10" value="2" step="1">
+        <div class="slider-labels">
+          <span>100</span>
+          <span>500</span>
+          <span>1K</span>
+          <span>5K</span>
+          <span>10K+</span>
+        </div>
+      </div>
+      <span class="quantity-display">500 units</span>
+    </div>
+
+    <div class="config-row">
+      <label for="license-term">License Term</label>
+      <select id="license-term">
+        <option value="perpetual">Perpetual License</option>
+        <option value="annual">Annual Subscription</option>
+        <option value="triennial">3-Year Subscription</option>
+      </select>
+    </div>
+
+  </section>
+
+  <!-- Add-ons -->
+  <section class="calc-section">
+    <h2>Add-ons & Services</h2>
+    
+    <div class="addons-grid">
+      <div class="addon-category">
+        <h3>Support Packages</h3>
+        <div class="addon-options">
+          <label class="addon-option">
+            <input type="checkbox" name="addon" value="support-basic">
+            <span class="addon-name">Basic Support</span>
+            <span class="addon-price">$500/year</span>
+          </label>
+          <label class="addon-option">
+            <input type="checkbox" name="addon" value="support-premium">
+            <span class="addon-name">Premium Support</span>
+            <span class="addon-price">$1,500/year</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="addon-category">
+        <h3>Additional Modules</h3>
+        <div class="addon-options">
+          <label class="addon-option">
+            <input type="checkbox" name="addon" value="module-analytics">
+            <span class="addon-name">Analytics Module</span>
+            <span class="addon-price">$2,000</span>
+          </label>
+          <label class="addon-option">
+            <input type="checkbox" name="addon" value="module-reporting">
+            <span class="addon-name">Reporting Module</span>
+            <span class="addon-price">$3,000</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Results -->
+  <section class="results-section">
+    <div class="results-panel">
+      <h3>Quote Summary</h3>
+      
+      <div class="result-line">
+        <span>Product:</span>
+        <span id="result-product">Basic Package</span>
+      </div>
+      
+      <div class="result-line">
+        <span>SKU:</span>
+        <span id="result-sku">BASIC-M</span>
+      </div>
+      
+      <div class="result-line">
+        <span>Quantity:</span>
+        <span id="result-quantity">500 units</span>
+      </div>
+      
+      <div class="result-line">
+        <span>License:</span>
+        <span id="result-license">Perpetual</span>
+      </div>
+
+      <div class="result-addons" id="result-addons" style="display: none;">
+        <div class="result-line">
+          <span>Add-ons:</span>
+          <span id="addons-list"></span>
+        </div>
+      </div>
+
+      <div class="result-total">
+        <div class="total-label">Total Price</div>
+        <div class="total-amount" id="total-price">$4,000</div>
+        <div class="total-note">Estimated pricing - contact for final quote</div>
+      </div>
+
+      <!-- Contact Form -->
+      <form class="contact-form" id="quote-form">
+        <h4>Get Your Quote</h4>
+        <input type="text" name="name" placeholder="Your Name *" required>
+        <input type="email" name="email" placeholder="Email Address *" required>
+        <input type="tel" name="phone" placeholder="Phone Number">
+        <input type="text" name="company" placeholder="Company Name">
+        <textarea name="message" placeholder="Additional requirements..."></textarea>
+        <button type="submit" class="btn-submit">Request Quote</button>
+      </form>
+
+    </div>
+  </section>
+
+</div>
+
+<script src="../assets/products.js"></script>
+<script src="../assets/calculator.js"></script>
+
+</body>
+</html>
