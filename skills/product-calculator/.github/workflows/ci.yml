@@ -1,0 +1,118 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install -g html-validate
+        npm install -g stylelint stylelint-config-standard
+        
+    - name: Validate HTML
+      run: |
+        html-validate templates/*.html
+        
+    - name: Lint CSS
+      run: |
+        stylelint "assets/*.css"
+        
+    - name: Test JavaScript
+      run: |
+        node -c assets/*.js
+        
+    - name: Check file structure
+      run: |
+        test -f templates/calculator.html
+        test -f assets/products.js
+        test -f assets/calculator.js
+        test -f assets/calculator.css
+        test -f docs/customization.md
+        
+    - name: Test basic functionality
+      run: |
+        # Basic smoke test - check if files load without errors
+        node -e "
+          const fs = require('fs');
+          const html = fs.readFileSync('templates/calculator.html', 'utf8');
+          const js = fs.readFileSync('assets/calculator.js', 'utf8');
+          const products = fs.readFileSync('assets/products.js', 'utf8');
+          
+          // Check for required elements
+          if (!html.includes('product-grid')) throw new Error('Missing product grid');
+          if (!html.includes('results-panel')) throw new Error('Missing results panel');
+          if (!products.includes('productCatalog')) throw new Error('Missing product catalog');
+          
+          console.log('✅ Basic structure validation passed');
+        "
+        
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Security scan
+      run: |
+        # Check for common security issues
+        ! grep -r "eval(" assets/
+        ! grep -r "innerHTML.*+" assets/
+        ! grep -r "document.write" assets/
+        echo "✅ Basic security checks passed"
+        
+  accessibility:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Install accessibility tools
+      run: |
+        npm install -g pa11y
+        
+    - name: Accessibility audit
+      run: |
+        # Start a simple HTTP server for testing
+        python3 -m http.server 8000 &
+        sleep 5
+        
+        # Run accessibility tests
+        pa11y http://localhost:8000/templates/calculator.html --standard WCAG2AA
+        
+  performance:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Check file sizes
+      run: |
+        # Ensure files are reasonably sized
+        css_size=$(stat -c%s assets/calculator.css)
+        js_size=$(stat -c%s assets/calculator.js)
+        html_size=$(stat -c%s templates/calculator.html)
+        
+        if [ $css_size -gt 100000 ]; then echo "❌ CSS too large: ${css_size}B"; exit 1; fi
+        if [ $js_size -gt 100000 ]; then echo "❌ JS too large: ${js_size}B"; exit 1; fi
+        if [ $html_size -gt 50000 ]; then echo "❌ HTML too large: ${html_size}B"; exit 1; fi
+        
+        echo "✅ File sizes within limits"
+        echo "CSS: ${css_size}B, JS: ${js_size}B, HTML: ${html_size}B"
