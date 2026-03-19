@@ -327,6 +327,11 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   box-shadow: 0 4px 16px var(--volt-glow);
 }
 .btn-volt:hover { background: var(--volt-hover); box-shadow: 0 6px 24px var(--volt-glow); transform: translateY(-1px); }
+.btn-lime {
+  background: var(--lime); color: #ffffff;
+  box-shadow: 0 4px 16px rgba(85,150,24,0.3);
+}
+.btn-lime:hover { background: #4a7e15; box-shadow: 0 6px 24px rgba(85,150,24,0.35); transform: translateY(-1px); }
 .btn-outline {
   background: transparent; color: var(--volt); border: 1px solid var(--volt);
   padding: 12px 22px; border-radius: var(--radius);
@@ -334,6 +339,111 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .btn-outline:hover { background: var(--volt-lo); }
 .btn-flame { background: var(--flame); color: #fff; box-shadow: 0 4px 16px rgba(255,107,53,0.3); }
 .btn-flame:hover { background: #ff8054; box-shadow: 0 6px 24px rgba(255,107,53,0.35); transform: translateY(-1px); }
+
+/* ══════════════════════════════
+   PROJECT CART
+══════════════════════════════ */
+.project-cart {
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: var(--radius);
+  overflow: hidden;
+  animation: fadeIn .3s ease;
+  display: none;
+}
+.project-cart.show { display: block; }
+
+.cart-header {
+  padding: 12px 16px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-header-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+  display: flex; align-items: center; gap: 10px;
+}
+.cart-count-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  background: var(--lime); color: #ffffff; font-family: var(--mono);
+  font-size: 10px; font-weight: 500; border-radius: 10px;
+}
+
+.cart-body { padding: 12px; }
+
+.cart-item {
+  display: flex; gap: 16px; padding: 16px; background: var(--ink2);
+  border: 1px solid var(--wire); border-radius: var(--radius); margin-bottom: 12px;
+  position: relative;
+}
+.cart-item:last-child { margin-bottom: 0; }
+
+.cart-item-number {
+  flex: 0 0 32px; height: 32px; border-radius: 4px; background: var(--volt-lo);
+  border: 1px solid var(--volt); display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--volt);
+}
+
+.cart-item-details {
+  flex: 1; display: flex; flex-direction: column; gap: 8px;
+}
+.cart-item-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+}
+.cart-item-product {
+  font-size: 14px; font-weight: 700; color: var(--text);
+}
+.cart-item-sku {
+  font-family: var(--mono); font-size: 11px; color: var(--volt); margin-top: 2px;
+}
+.cart-item-price {
+  font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text);
+  text-align: right;
+}
+
+.cart-item-meta {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+}
+.cart-meta-item {
+  display: flex; justify-content: space-between;
+}
+.cart-meta-label { color: var(--text3); }
+.cart-meta-value { color: var(--text); }
+
+.cart-item-addons {
+  font-family: var(--mono); font-size: 10px; color: var(--text2);
+  line-height: 1.5;
+}
+
+.cart-item-delete {
+  position: absolute; top: 8px; right: 8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--wire); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); transition: all .2s;
+  font-size: 14px; line-height: 1;
+}
+.cart-item-delete:hover {
+  background: var(--crimson); color: #ffffff;
+}
+
+.cart-footer {
+  padding: 12px 16px; border-top: 1px solid var(--wire);
+  background: var(--steel);
+}
+.cart-total-block {
+  padding: 16px; background: var(--ink1); border: 1px solid var(--wire);
+  border-left: 3px solid var(--lime); border-radius: var(--radius); margin-bottom: 16px;
+}
+.cart-total-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+.cart-total-val {
+  font-size: 24px; font-weight: 900; color: var(--text); line-height: 1;
+}
+.cart-total-note {
+  font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 6px;
+}
 
 /* ══════════════════════════════
    WIZARD
@@ -553,6 +663,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .page-title { font-size: 28px; }
   .tabs { flex-wrap: wrap; }
   .tab { font-size: 12px; padding: 10px 16px; }
+  .cart-item { flex-direction: column; gap: 8px; }
+  .cart-item-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .cart-item-meta { grid-template-columns: 1fr; }
 }
 @media (max-width: 480px) {
   .product-select-grid { grid-template-columns: 1fr; }
@@ -902,7 +1015,35 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             </div>
           </div>
 
-                    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
+          <!-- Add to Project Button -->
+          <div class="result-actions">
+            <button class="btn btn-lime" id="btn-add-project" onclick="addToProject()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Добавить в проект
+            </button>
+          </div>
+
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
+            <!-- PROJECT CART (inside result panel) -->
+            <div class="project-cart" id="project-cart" style="margin-bottom:12px">
+              <div class="cart-header">
+                <div class="cart-header-title">
+                  ПРОЕКТ
+                  <div class="cart-count-badge" id="cart-count">0</div>
+                </div>
+              </div>
+              <div class="cart-body">
+                <div id="cart-items"></div>
+              </div>
+              <div class="cart-footer">
+                <div class="cart-total-block">
+                  <div class="cart-total-label">Общая стоимость проекта</div>
+                  <div class="cart-total-val" id="cart-total">—</div>
+                  <div class="cart-total-note">без НДС · все позиции</div>
+                </div>
+              </div>
+            </div>
+
             <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px">// ваши контакты</div>
             <input class="addon-select" id="calc-name" placeholder="Имя *" style="margin-bottom:6px">
             <input class="addon-select" id="calc-company" placeholder="Компания *" style="margin-bottom:6px">
@@ -914,7 +1055,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           </div>
 
           <div class="result-actions">
-            <button class="btn btn-volt" id="btn-send-calc" onclick="sendConfigEmail()">
+            <button class="btn btn-volt" id="btn-send-calc" onclick="smartSend()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
               Отправить КП
             </button>
@@ -934,6 +1075,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
       </div>
 
     </div>
+
+
+
   </div><!-- /calc panel -->
 
 
@@ -1022,6 +1166,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div id="wiz-head-3" style="display:none">
             <div class="wizard-card-head">
               <div class="wch-left">
+
                 <div class="wch-step">// Шаг 03 из 04</div>
                 <div class="wch-title">Контактные данные</div>
                 <div class="wch-sub">Заполните данные — мы отправим КП на указанный email</div>
@@ -1446,6 +1591,9 @@ const skuPrices = {
 const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
 const termMultipliers = { 1:1.0, 2:0.4, 3:0.85 }; // 1=Бессрочная, 2=1 год, 3=3 года
 
+/* ─── PROJECT CART ─── */
+let projectItems = [];
+
 function formatPrice(n) {
   if (!n && n !== 0) return '—';
   return n.toLocaleString('ru-RU') + ' ₽';
@@ -1515,13 +1663,27 @@ function updateSliderRange() {
     else { drvNote.style.display = 'none'; }
   }
   
-  // Platform includes 1 full client
+  // Alpha.One+ is single-user — no additional clients allowed
+  const isOne = (prod === 'alpha-one');
+  
+  // Full client (CL-F)
   const clientSel = document.getElementById('addon-client');
-  if (clientSel) {
-    if (isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
+  const clientRow = clientSel?.closest('.addon-row');
+  if (clientRow) {
+    if (isOne) { clientRow.style.display = 'none'; clientSel.value = ''; }
+    else { clientRow.style.display = ''; }
   }
+  if (clientSel && isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
   const clfNote = document.getElementById('clf-note');
   if (clfNote) clfNote.style.display = isPlatform ? 'inline' : 'none';
+  
+  // WEB clients — also hide for One+
+  const webSel = document.getElementById('addon-web');
+  const webRow = webSel?.closest('.addon-row');
+  if (webRow) {
+    if (isOne) { webRow.style.display = 'none'; webSel.value = ''; }
+    else { webRow.style.display = ''; }
+  }
   
   // IOSRV only for Platform
   const iosrvRow = document.getElementById('addon-iosrv')?.closest('.addon-row');
@@ -1716,6 +1878,329 @@ function calcUpdate() {
     now.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
 }
 
+function addToProject() {
+  // Capture current calculator state
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = +document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  
+  // Collect addons
+  let addons = [];
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addons.push(el.options[el.selectedIndex].text);
+  });
+  
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'OPC DA клиент',
+    'addon-opcda-srv': 'OPC DA сервер',
+    'addon-portal': 'WEB-портал'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addons.push(name);
+  });
+  
+  if (hasReserve) addons.push('Резервный сервер');
+  
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  if (slaVal !== 'SLA-BASE') {
+    const slaEl = document.getElementById('addon-sla');
+    addons.push('SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  }
+  
+  // Get current price from result panel
+  const currentPrice = document.getElementById('r-total').textContent;
+  
+  // Create item object
+  const item = {
+    product: p.name,
+    sku: bestSku ? bestSku.sku : '—',
+    tags: qty,
+    term: terms[term - 1],
+    historian: hist ? (hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')') : null,
+    reports: rpt ? (rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')') : null,
+    reserve: hasReserve,
+    addons: addons,
+    price: currentPrice,
+    timestamp: Date.now()
+  };
+  
+  // Add to project
+  projectItems.push(item);
+  
+  // Save to sessionStorage
+  saveProjectToStorage();
+  
+  // Update cart display
+  updateCartDisplay();
+  
+  // Show success animation
+  const btn = document.getElementById('btn-add-project');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено!';
+  btn.style.background = 'var(--lime)';
+  
+  setTimeout(() => {
+    btn.innerHTML = origText;
+    btn.style.background = '';
+  }, 1500);
+
+  // Reset calculator to defaults
+  resetCalcToDefaults();
+}
+
+function resetCalcToDefaults() {
+  // Reset product to Alpha.One+
+  document.getElementById('p1').checked = true;
+
+  // Reset term to Бессрочная
+  document.getElementById('term-slider').value = 1;
+  document.getElementById('term-val').textContent = 'Бессрочная';
+
+  // Reset reserve
+  const res = document.getElementById('addon-reserve');
+  if (res) res.checked = false;
+
+  // Reset Historian & Reports
+  const addHist = document.getElementById('add-historian');
+  if (addHist) { addHist.checked = false; toggleAddonProduct('historian'); }
+  const addRpt = document.getElementById('add-reports');
+  if (addRpt) { addRpt.checked = false; toggleAddonProduct('reports'); }
+
+  // Reset selects
+  ['addon-client','addon-web','addon-rpt-cl','addon-iosrv'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Reset checkboxes (only non-disabled)
+  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.disabled) el.checked = false;
+  });
+
+  // Reset SLA
+  const sla = document.getElementById('addon-sla');
+  if (sla) sla.value = 'SLA-BASE';
+
+  // Update slider range for new product & recalc
+  updateSliderRange();
+  calcUpdate();
+}
+
+function removeFromProject(index) {
+  if (index >= 0 && index < projectItems.length) {
+    projectItems.splice(index, 1);
+    saveProjectToStorage();
+    updateCartDisplay();
+  }
+}
+
+function updateCartDisplay() {
+  const cart = document.getElementById('project-cart');
+  const itemsContainer = document.getElementById('cart-items');
+  const countBadge = document.getElementById('cart-count');
+  const totalEl = document.getElementById('cart-total');
+  
+  if (projectItems.length === 0) {
+    cart.classList.remove('show');
+    return;
+  }
+  
+  cart.classList.add('show');
+  countBadge.textContent = projectItems.length;
+  
+  // Render items
+  itemsContainer.innerHTML = projectItems.map((item, index) => `
+    <div class="cart-item">
+      <div class="cart-item-number">#${index + 1}</div>
+      <div class="cart-item-details">
+        <div class="cart-item-header">
+          <div>
+            <div class="cart-item-product">${item.product}</div>
+            <div class="cart-item-sku">${item.sku}</div>
+          </div>
+          <div class="cart-item-price">${item.price}</div>
+        </div>
+        
+        <div class="cart-item-meta">
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Тегов:</span>
+            <span class="cart-meta-value">${item.tags.toLocaleString('ru-RU')}</span>
+          </div>
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Лицензия:</span>
+            <span class="cart-meta-value">${item.term}</span>
+          </div>
+          ${item.historian ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Historian:</span>
+            <span class="cart-meta-value">${item.historian}</span>
+          </div>` : ''}
+          ${item.reports ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Reports:</span>
+            <span class="cart-meta-value">${item.reports}</span>
+          </div>` : ''}
+        </div>
+        
+        ${item.addons.length > 0 ? `<div class="cart-item-addons">
+          Доп. модули: ${item.addons.join(', ')}
+        </div>` : ''}
+      </div>
+      
+      <button class="cart-item-delete" onclick="removeFromProject(${index})" title="Удалить">
+        ×
+      </button>
+    </div>
+  `).join('');
+  
+  // Calculate total
+  const total = calcProjectTotal();
+  totalEl.textContent = formatPrice(total);
+}
+
+function calcProjectTotal() {
+  // Simple approach: sum up prices from stored items
+  // Note: this parses the formatted price strings, which is not ideal for production
+  // but works for demo purposes
+  let total = 0;
+  projectItems.forEach(item => {
+    const priceStr = item.price.replace(/[^\d]/g, '');
+    const price = parseInt(priceStr) || 0;
+    total += price;
+  });
+  return total;
+}
+
+function saveProjectToStorage() {
+  // disabled — cart resets on page refresh
+}
+
+function loadProjectFromStorage() {
+  // disabled — cart starts empty
+  projectItems = [];
+}
+
+function sendProjectEmail() {
+  if (projectItems.length === 0) {
+    alert('Проект пуст. Добавьте хотя бы один элемент.');
+    return;
+  }
+  
+  // Get contact fields (shared with single calculator)
+  const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+  
+  if (!cName || !cCompany || !cEmail) {
+    alert('Заполните имя, компанию и email');
+    if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
+  // Prepare project data
+  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+  const total = calcProjectTotal();
+  
+  // Create items summary for email
+  let itemsText = '';
+  projectItems.forEach((item, index) => {
+    itemsText += `\n--- Элемент #${index + 1} ---\n`;
+    itemsText += `Продукт: ${item.product}\n`;
+    itemsText += `Артикул: ${item.sku}\n`;
+    itemsText += `Тегов: ${item.tags.toLocaleString('ru-RU')}\n`;
+    itemsText += `Лицензия: ${item.term}\n`;
+    if (item.historian) itemsText += `Historian: ${item.historian}\n`;
+    if (item.reports) itemsText += `Reports: ${item.reports}\n`;
+    if (item.reserve) itemsText += `Резерв: Да\n`;
+    if (item.addons.length > 0) itemsText += `Модули: ${item.addons.join(', ')}\n`;
+    itemsText += `Стоимость: ${item.price}\n`;
+  });
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', tid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('name', cName);
+  fd.append('company', cCompany);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
+  fd.append('is_project', '1');
+  fd.append('items_count', projectItems.length);
+  fd.append('items_json', JSON.stringify(projectItems));
+  fd.append('total_price', formatPrice(total));
+  fd.append('items_text', itemsText);
+
+  // Show sending state on the main send button
+  const btn = document.getElementById('btn-send-calc');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
+    .then(data => {
+      if (data.ok) {
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Проект отправлен!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { 
+          btn.innerHTML = origText; 
+          btn.disabled = false; 
+          btn.style.borderColor = ''; 
+          btn.style.color = ''; 
+          // Clear project after successful send
+          projectItems = [];
+          saveProjectToStorage();
+          updateCartDisplay();
+        }, 3000);
+      } else {
+        btn.innerHTML = data.error || '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+      }
+    })
+    .catch(e => {
+      btn.innerHTML = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+    });
+}
+
+function smartSend() {
+  // If cart has items → send project, otherwise → send single product
+  if (projectItems.length > 0) {
+    sendProjectEmail();
+  } else {
+    sendConfigEmail();
+  }
+}
+
 function sendConfigEmail() {
   const prod = document.querySelector('input[name=product]:checked').value;
   const qty = getSelectedTags();
@@ -1890,6 +2375,9 @@ function getSelectedReports() {
 const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 const calcLoadTs = Math.floor(Date.now() / 1000); // anti-bot timestamp
 document.getElementById('r-tid').textContent = calcTid;
+
+// Load project from storage on page load
+loadProjectFromStorage();
 
 updateSliderRange();
 calcUpdate();
