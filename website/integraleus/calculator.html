@@ -192,9 +192,11 @@ nav {
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, background .2s;
 }
+.prod-check svg { opacity: 0; transition: opacity .2s; }
 .prod-option input:checked ~ .prod-label .prod-check {
   background: var(--volt); border-color: var(--volt);
 }
+.prod-option input:checked ~ .prod-label .prod-check svg { opacity: 1; }
 
 /* Sliders & number inputs */
 .field-row { margin-bottom: 22px; }
@@ -344,7 +346,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
    PROJECT CART
 ══════════════════════════════ */
 .project-cart {
-  background: var(--ink2); border: 1px solid var(--wire); border-radius: var(--radius);
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius);
   overflow: hidden;
   animation: fadeIn .3s ease;
   display: none;
@@ -706,6 +708,10 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       Калькулятор
     </button>
+    <button class="tab" onclick="switchTab('survey', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="1.5"/></svg>
+      Опросный лист
+    </button>
     <button class="tab" onclick="switchTab('wizard', this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><polyline points="9,12 11,14 15,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       Запрос КП
@@ -1023,54 +1029,6 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             </button>
           </div>
 
-          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
-            <!-- PROJECT CART (inside result panel) -->
-            <div class="project-cart" id="project-cart" style="margin-bottom:12px">
-              <div class="cart-header">
-                <div class="cart-header-title">
-                  ПРОЕКТ
-                  <div class="cart-count-badge" id="cart-count">0</div>
-                </div>
-              </div>
-              <div class="cart-body">
-                <div id="cart-items"></div>
-              </div>
-              <div class="cart-footer">
-                <div class="cart-total-block">
-                  <div class="cart-total-label">Общая стоимость проекта</div>
-                  <div class="cart-total-val" id="cart-total">—</div>
-                  <div class="cart-total-note">без НДС · все позиции</div>
-                </div>
-              </div>
-            </div>
-
-            <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:8px">// ваши контакты</div>
-            <input class="addon-select" id="calc-name" placeholder="Имя *" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-company" placeholder="Компания *" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
-            <textarea class="addon-select" id="calc-comment" placeholder="Комментарий (необязательно)" style="margin-bottom:6px;min-height:48px;resize:vertical;font-family:var(--mono);font-size:12px"></textarea>
-            <!-- Honeypot — hidden from humans, bots fill it -->
-            <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
-          </div>
-
-          <div class="result-actions">
-            <button class="btn btn-volt" id="btn-send-calc" onclick="smartSend()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
-              Отправить КП
-            </button>
-            <button class="btn btn-outline" onclick="switchTab('wizard', document.querySelectorAll('.tab')[1]); prefillWizard()">
-              Расширенный запрос
-            </button>
-          </div>
-
-          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--wire)">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
-              <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
-              Integraleus<br>info@integraleus.ru<br>
-              <span style="color:var(--volt)" id="r-date"></span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -1079,6 +1037,494 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
 
   </div><!-- /calc panel -->
+
+
+  <!-- ══════════ SURVEY PANEL ══════════ -->
+  <div id="panel-survey" class="panel">
+    <div class="wizard-wrap">
+
+      <!-- SURVEY SIDEBAR -->
+      <div class="wizard-steps">
+        <div class="wizard-steps-inner">
+          <div class="wizard-steps-head">
+            <div class="wizard-steps-title">Шаги опроса</div>
+          </div>
+          <div class="step-list">
+            <div class="step-item active" id="srv-si-1">
+              <div class="step-num">01</div>
+              <div class="step-info">
+                <div class="step-name">Масштаб</div>
+                <div class="step-desc">Система и серверы</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-2">
+              <div class="step-num">02</div>
+              <div class="step-info">
+                <div class="step-name">Клиенты</div>
+                <div class="step-desc">Подключения</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-3">
+              <div class="step-num">03</div>
+              <div class="step-info">
+                <div class="step-name">Архив</div>
+                <div class="step-desc">Historian & Reports</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-4">
+              <div class="step-num">04</div>
+              <div class="step-info">
+                <div class="step-name">Протоколы</div>
+                <div class="step-desc">Драйверы</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-5">
+              <div class="step-num">05</div>
+              <div class="step-info">
+                <div class="step-name">Результат</div>
+                <div class="step-desc">Конфигурация</div>
+              </div>
+            </div>
+          </div>
+          <div class="wizard-progress">
+            <div class="wp-label">
+              <span class="wp-text">Прогресс</span>
+              <span class="wp-pct" id="srv-pct">20%</span>
+            </div>
+            <div class="wp-track">
+              <div class="wp-fill" id="srv-bar" style="width:20%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SURVEY MAIN CARD -->
+      <div class="wizard-main">
+        <div class="wizard-card" id="survey-form-card">
+
+          <!-- Survey Step 1: System Scale -->
+          <div id="srv-head-1">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 01 из 05</div>
+                <div class="wch-title">Масштаб системы</div>
+                <div class="wch-sub">Расскажите о размере и архитектуре вашей системы</div>
+              </div>
+              <div class="wch-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="20" rx="2" stroke="#00c8f0" stroke-width="1.5"/><rect x="8" y="12" width="24" height="16" rx="1" fill="#0c1525"/><line x1="10" y1="18" x2="30" y2="18" stroke="#ff6b35" stroke-width="1.2"/><line x1="10" y1="22" x2="25" y2="22" stroke="#1de9b6" stroke-width="1.2"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 2 head -->
+          <div id="srv-head-2" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 02 из 05</div>
+                <div class="wch-title">Клиентские подключения</div>
+                <div class="wch-sub">Сколько рабочих мест потребуется для операторов</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 3 head -->
+          <div id="srv-head-3" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 03 из 05</div>
+                <div class="wch-title">Архивирование и отчёты</div>
+                <div class="wch-sub">Нужно ли сохранять данные и генерировать отчёты</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 4 head -->
+          <div id="srv-head-4" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 04 из 05</div>
+                <div class="wch-title">Протоколы и драйверы</div>
+                <div class="wch-sub">Какое оборудование нужно подключить</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 5 head -->
+          <div id="srv-head-5" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 05 из 05</div>
+                <div class="wch-title">Рекомендованная конфигурация</div>
+                <div class="wch-sub">Подобрали оптимальную систему для ваших задач</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SURVEY STEP PANELS -->
+
+          <!-- S1: System Scale -->
+          <div id="srv-sp-1" class="step-panel active">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Количество внешних тегов/сигналов <span class="req">*</span></label>
+                  <input class="wiz-input" id="srv-tags" type="number" placeholder="1500" min="1" oninput="updateSurveyRecommendation()">
+                  <div class="wiz-hint">Только внешние теги (I/O точки подключения к оборудованию)</div>
+                </div>
+
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество серверов <span class="req">*</span></label>
+                    <select class="wiz-input wiz-select" id="srv-servers" onchange="updateSurveyRecommendation()">
+                      <option value="1">1 сервер</option>
+                      <option value="2">2 сервера</option>
+                      <option value="3">3-5 серверов</option>
+                      <option value="6">6-10 серверов</option>
+                      <option value="10">10+ серверов</option>
+                    </select>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Резервирование</label>
+                    <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="да" style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Да</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="нет" checked style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Нет</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="не знаю" style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Не знаю</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Auto-recommendation hint box -->
+                <div id="srv-hint-box" style="margin-top:20px; padding:16px; background:var(--volt-lo); border:1px solid var(--volt); border-left:4px solid var(--volt); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#00c8f0" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;" id="srv-hint-text">Рекомендуем: Alpha.One+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S2: Clients -->
+          <div id="srv-sp-2" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Полные клиенты (АРМ оператора)</label>
+                  <input class="wiz-input" id="srv-full-clients" type="number" placeholder="0" min="0" max="50" oninput="checkClientCompatibility();validateClientSplit()">
+                  <div class="wiz-hint">Рабочие станции с полным управлением</div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">WEB-клиенты (только просмотр)</label>
+                  <select class="wiz-input wiz-select" id="srv-web-clients" onchange="checkClientCompatibility()">
+                    <option value="0">Не нужны</option>
+                    <option value="10">до 10</option>
+                    <option value="25">до 25</option>
+                    <option value="50">до 50</option>
+                    <option value="100">до 100</option>
+                    <option value="250">250+</option>
+                    <option value="999">Безлимит</option>
+                  </select>
+                </div>
+
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Терминальные клиенты</label>
+                    <input class="wiz-input" id="srv-terminal-clients" type="number" placeholder="0" min="0" oninput="validateClientSplit()">
+                    <div class="wiz-hint">Тонкие клиенты / терминалы</div>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">RDP клиенты</label>
+                    <input class="wiz-input" id="srv-rdp-clients" type="number" placeholder="0" min="0" oninput="validateClientSplit()">
+                    <div class="wiz-hint">Удалённый рабочий стол</div>
+                  </div>
+                </div>
+                <div id="srv-client-split-hint" class="wiz-hint" style="margin-top:4px;color:var(--text3)">Распределение terminal/RDP уточняется при заказе ключей</div>
+                <div id="srv-client-split-warn" style="display:none;margin-top:8px;padding:10px 14px;background:var(--flame-lo);border:1px solid var(--flame);border-radius:6px;font-size:12px;color:var(--flame);font-weight:600;">⚠ Терминальные + RDP не могут превышать количество полных клиентов</div>
+
+                <!-- Warning box for One+ compatibility -->
+                <div id="srv-client-warning" style="display:none; margin-top:20px; padding:16px; background:var(--flame-lo); border:1px solid var(--flame); border-left:4px solid var(--flame); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v3m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="#ff6b35" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;">Alpha.One+ не поддерживает дополнительных клиентов. Рекомендация изменена на Alpha.SCADA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S3: Historian & Reports -->
+          <div id="srv-sp-3" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен Historian?</label>
+                  <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="да" style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="нет" checked style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="не знаю" style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Не знаю</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div id="srv-historian-fields" style="display:none;">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество тегов для архивирования</label>
+                    <input class="wiz-input" id="srv-hist-tags" type="number" placeholder="" min="1">
+                    <div class="wiz-hint">Обычно равно или меньше количества внешних тегов</div>
+                  </div>
+
+                  <div class="wiz-field">
+                    <label class="wiz-label">Резервирование Historian?</label>
+                    <div style="margin-top:8px; display:flex; gap:16px;">
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-hist-reserve" value="да" style="accent-color: var(--volt)">
+                        <span style="font-size:13px;">Да</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-hist-reserve" value="нет" checked style="accent-color: var(--volt)">
+                        <span style="font-size:13px;">Нет</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен Reports?</label>
+                  <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="да" style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="нет" checked style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="не знаю" style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Не знаю</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div id="srv-reports-fields" style="display:none;">
+                  <div class="wiz-row">
+                    <div class="wiz-field">
+                      <label class="wiz-label">Количество тегов Reports</label>
+                      <input class="wiz-input" id="srv-rpt-tags" type="number" placeholder="" min="1">
+                    </div>
+                    <div class="wiz-field">
+                      <label class="wiz-label">Количество пользователей Reports</label>
+                      <select class="wiz-input wiz-select" id="srv-rpt-users">
+                        <option value="1">1</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S4: Protocols -->
+          <div id="srv-sp-4" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <!-- Protocol checkboxes -->
+                <div class="wiz-field">
+                  <label class="wiz-label">Необходимые протоколы</label>
+                  <div style="margin-top:12px;">
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Базовые (включены в любой продукт):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        OPC UA
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        OPC DA
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        Modbus TCP/RTU
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        MQTT
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        SNMP
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Энергетика (DRV-PACK-ENERGY):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-61850" onchange="updateDriverPacks()">
+                        МЭК 61850
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-104" onchange="updateDriverPacks()">
+                        МЭК 60870-5-104
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-101" onchange="updateDriverPacks()">
+                        МЭК 60870-5-101
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-tem" onchange="updateDriverPacks()">
+                        ТЭМ-104
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Промышленность (DRV-PACK-INDUSTRY):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-bacnet" onchange="updateDriverPacks()">
+                        BACnet
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-s7" onchange="updateDriverPacks()">
+                        Siemens S7
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-eip" onchange="updateDriverPacks()">
+                        Ethernet/IP
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-fins" onchange="updateDriverPacks()">
+                        FINS (Omron)
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">OPC DA на отдельном ПК:</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-opcda-cl">
+                        OPC DA клиент
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-opcda-srv">
+                        OPC DA сервер
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен WEB-портал?</label>
+                  <div style="margin-top:8px; display:flex; gap:16px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-web-portal" value="да" style="accent-color: var(--volt)">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-web-portal" value="нет" checked style="accent-color: var(--volt)">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                  </div>
+                  <div class="wiz-hint">Для публикации данных через IIS/Apache</div>
+                </div>
+
+                <!-- Platform driver note -->
+                <div id="srv-platform-note" style="display:none; margin-top:20px; padding:16px; background:var(--lime-lo); border:1px solid var(--lime); border-left:4px solid var(--lime); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#559618" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;">Для Alpha.Platform все драйверы включены</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S5: Result -->
+          <div id="srv-sp-5" class="step-panel">
+            <div class="wizard-card-body">
+              <!-- Recommendation summary card -->
+              <div style="background:var(--ink2); border:1px solid var(--wire); border-left:4px solid var(--volt); border-radius:var(--radius); padding:20px; margin-bottom:24px;">
+                <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:12px;">Рекомендованная конфигурация</div>
+                
+                <div id="srv-result-product" style="font-size:18px; font-weight:700; color:var(--volt); margin-bottom:8px;">Alpha.SCADA</div>
+                <div id="srv-result-explanation" style="font-size:14px; color:var(--text2); margin-bottom:16px; line-height:1.5;">Клиент-серверная версия подходит для вашего масштаба и требований</div>
+                
+                <div id="srv-result-details" style="font-family:var(--mono); font-size:12px; color:var(--text); line-height:1.8;">
+                  <!-- Details will be filled dynamically -->
+                </div>
+              </div>
+
+              <!-- SLA & Term selectors -->
+              <div class="wiz-row" style="margin-bottom:20px;">
+                <div class="wiz-field">
+                  <label class="wiz-label">SLA-сертификат</label>
+                  <select class="wiz-input wiz-select" id="srv-sla" onchange="updateSurveyPrice()">
+                    <option value="SLA-BASE">Базовый (бесплатно)</option>
+                    <option value="SLA-STD">Стандартный (10% / год)</option>
+                    <option value="SLA-OPT">Оптимальный (15% / год)</option>
+                    <option value="SLA-PRM">Премиальный (25% / год)</option>
+                  </select>
+                </div>
+                <div class="wiz-field">
+                  <label class="wiz-label">Тип лицензии</label>
+                  <select class="wiz-input wiz-select" id="srv-term" onchange="updateSurveyPrice()">
+                    <option value="1">Бессрочная</option>
+                    <option value="2">1 год</option>
+                    <option value="3">3 года</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Total price -->
+              <div style="background:var(--ink1); border:1px solid var(--wire); border-left:4px solid var(--lime); border-radius:var(--radius); padding:20px; margin-bottom:20px;">
+                <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:8px;">Ориентировочная стоимость</div>
+                <div id="srv-total-price" style="font-size:28px; font-weight:900; color:var(--text); line-height:1;">—</div>
+                <div style="font-family:var(--mono); font-size:11px; color:var(--text3); margin-top:8px;">без НДС · предварительный расчёт</div>
+              </div>
+
+              <!-- Action buttons -->
+              <div style="display:flex; gap:12px;">
+                <button class="btn btn-lime" onclick="addSurveyToProject()" style="flex:1;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  Добавить в проект
+                </button>
+                <button class="btn btn-outline" onclick="switchToWizardWithSurveyData()" style="flex:1;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+                  Запросить КП
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SURVEY FOOTER -->
+          <div class="wizard-footer" id="srv-footer">
+            <div class="wf-note" id="srv-note">Поля, отмеченные <span style="color:var(--volt)">*</span> — обязательны</div>
+            <div class="wf-btns">
+              <button class="btn btn-sm btn-nav" id="srv-btn-back" onclick="surveyStep(-1)" style="display:none">← Назад</button>
+              <button class="btn btn-sm btn-volt" id="srv-btn-next" onclick="surveyStep(1)">
+                Далее →
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /survey-card -->
+      </div><!-- /survey-main -->
+    </div>
+  </div><!-- /survey panel -->
 
 
   <!-- ══════════ WIZARD PANEL ══════════ -->
@@ -1460,6 +1906,91 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
     </div>
   </div><!-- /wizard panel -->
 
+  <!-- PROJECT CART — visible across all tabs -->
+  <div class="project-cart" id="project-cart" style="margin-top:24px">
+    <div class="calc-section-head">
+      <div class="calc-section-title">
+        Проект
+        <span class="cart-count-badge" id="cart-count" style="margin-left:8px">0</span>
+      </div>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// корзина</span>
+    </div>
+    <div class="cart-body">
+      <div id="cart-items"></div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-block">
+        <div class="cart-total-label">Общая стоимость проекта</div>
+        <div class="cart-total-val" id="cart-total">—</div>
+        <div class="cart-total-note">без НДС · все позиции</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL: Contact Form + Send -->
+  <div class="calc-main" style="margin-top:24px">
+    <div class="calc-section-head">
+      <div class="calc-section-title">Ваши контакты</div>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// для отправки КП</span>
+    </div>
+    <div class="calc-body" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <input class="addon-select" id="calc-name" placeholder="Имя *">
+        <input class="addon-select" id="calc-company" placeholder="Компания *">
+        <input class="addon-select" id="calc-email" placeholder="Email *" type="email">
+        <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel">
+        <input class="addon-select" id="calc-inn" placeholder="ИНН">
+        <select class="addon-select" id="calc-industry">
+          <option value="">Отрасль...</option>
+          <option value="Системный интегратор">Системный интегратор</option>
+          <option value="Энергетика">Энергетика</option>
+          <option value="Нефть и газ">Нефть и газ</option>
+          <option value="Химия и нефтехимия">Химия и нефтехимия</option>
+          <option value="Металлургия">Металлургия</option>
+          <option value="Горнодобыча">Горнодобыча</option>
+          <option value="ЖКХ / Водоснабжение">ЖКХ / Водоснабжение</option>
+          <option value="Пищевая промышленность">Пищевая промышленность</option>
+          <option value="Фармацевтика">Фармацевтика</option>
+          <option value="Строительство / BMS">Строительство / BMS</option>
+          <option value="Транспорт">Транспорт</option>
+          <option value="Другое">Другое</option>
+        </select>
+      </div>
+      <select class="addon-select" id="calc-urgency" style="margin-bottom:8px;width:100%">
+        <option value="">Срочность...</option>
+        <option value="ASAP (24–48 ч)">🔴 ASAP (24–48 ч)</option>
+        <option value="Неделя (3–7 дней)">🟠 Неделя (3–7 дней)</option>
+        <option value="Месяц">🟡 До месяца</option>
+        <option value="Плановый / бюджет">🟢 Плановый / бюджет</option>
+      </select>
+      <textarea class="addon-select" id="calc-comment" placeholder="Комментарий (необязательно)" style="margin-bottom:8px;min-height:48px;resize:vertical;font-family:var(--mono);font-size:12px;width:100%"></textarea>
+      <div style="margin-bottom:8px">
+        <label class="addon-select" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="file-label" style="font-size:12px;color:var(--text2)">Прикрепить файл</span>
+          <input type="file" id="calc-file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip,.rar,.txt,.csv" onchange="fileSelected(this)">
+        </label>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;padding-left:12px">Макс. 10 МБ · PDF, DOC, XLS, PNG, JPG, ZIP</div>
+      </div>
+      <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
+
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-volt" id="btn-send-calc" onclick="smartSend()" style="flex:1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
+          Отправить КП
+        </button>
+      </div>
+
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--wire)">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
+          <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
+          Integraleus · info@integraleus.ru<br>
+          <span style="color:var(--volt)" id="r-date"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /container -->
 </div><!-- /page -->
 
@@ -1650,11 +2181,11 @@ function updateSliderRange() {
   const drvIndustry = document.getElementById('addon-industry');
   if (drvEnergy) {
     if (isPlatform || isScada) { drvEnergy.checked = true; drvEnergy.disabled = true; }
-    else { drvEnergy.disabled = false; }
+    else { drvEnergy.disabled = false; drvEnergy.checked = false; }
   }
   if (drvIndustry) {
     if (isPlatform) { drvIndustry.checked = true; drvIndustry.disabled = true; }
-    else { drvIndustry.disabled = false; }
+    else { drvIndustry.disabled = false; drvIndustry.checked = false; }
   }
   const drvNote = document.getElementById('drv-note');
   if (drvNote) {
@@ -2035,7 +2566,7 @@ function updateCartDisplay() {
             <div class="cart-item-product">${item.product}</div>
             <div class="cart-item-sku">${item.sku}</div>
           </div>
-          <div class="cart-item-price">${item.price}</div>
+          <div class="cart-item-price">${typeof item.price === 'number' ? formatPrice(item.price) : item.price}</div>
         </div>
         
         <div class="cart-item-meta">
@@ -2079,9 +2610,8 @@ function calcProjectTotal() {
   // but works for demo purposes
   let total = 0;
   projectItems.forEach(item => {
-    const priceStr = item.price.replace(/[^\d]/g, '');
-    const price = parseInt(priceStr) || 0;
-    total += price;
+    const priceNum = typeof item.price === 'number' ? item.price : parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+    total += priceNum;
   });
   return total;
 }
@@ -2132,7 +2662,7 @@ function sendProjectEmail() {
     if (item.reports) itemsText += `Reports: ${item.reports}\n`;
     if (item.reserve) itemsText += `Резерв: Да\n`;
     if (item.addons.length > 0) itemsText += `Модули: ${item.addons.join(', ')}\n`;
-    itemsText += `Стоимость: ${item.price}\n`;
+    itemsText += `Стоимость: ${typeof item.price === 'number' ? formatPrice(item.price) : item.price}\n`;
   });
 
   // Send via PHP
@@ -2150,6 +2680,7 @@ function sendProjectEmail() {
   fd.append('items_json', JSON.stringify(projectItems));
   fd.append('total_price', formatPrice(total));
   fd.append('items_text', itemsText);
+  appendExtraFields(fd);
 
   // Show sending state on the main send button
   const btn = document.getElementById('btn-send-calc');
@@ -2190,6 +2721,35 @@ function sendProjectEmail() {
       btn.style.color = 'var(--crimson)';
       setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
     });
+}
+
+function fileSelected(input) {
+  const label = document.getElementById('file-label');
+  if (input.files.length > 0) {
+    const f = input.files[0];
+    if (f.size > 10 * 1024 * 1024) {
+      alert('Файл слишком большой. Максимум 10 МБ.');
+      input.value = '';
+      label.textContent = 'Прикрепить файл';
+      label.style.color = 'var(--text2)';
+      return;
+    }
+    label.textContent = f.name;
+    label.style.color = 'var(--volt)';
+  } else {
+    label.textContent = 'Прикрепить файл';
+    label.style.color = 'var(--text2)';
+  }
+}
+
+function appendExtraFields(fd) {
+  fd.append('inn', document.getElementById('calc-inn')?.value.trim() || '');
+  fd.append('industry', document.getElementById('calc-industry')?.value || '');
+  fd.append('urgency', document.getElementById('calc-urgency')?.value || '');
+  const fileInput = document.getElementById('calc-file');
+  if (fileInput?.files.length > 0) {
+    fd.append('attachment', fileInput.files[0]);
+  }
 }
 
 function smartSend() {
@@ -2274,6 +2834,7 @@ function sendConfigEmail() {
   fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
   fd.append('addons', addonLines.join('\n'));
   fd.append('total_price', document.getElementById('r-total')?.textContent || '');
+  appendExtraFields(fd);
 
   // Show sending state
   const btn = document.getElementById('btn-send-calc');
@@ -2613,6 +3174,511 @@ function prefillWizard() {
 }
 
 updateWizardUI();
+
+/* ══════════════════════════════
+   SURVEY (Опросный лист)
+══════════════════════════════ */
+let srvCurrentStep = 1;
+const srvTotalSteps = 5;
+
+// Cached survey result for price/cart
+let srvResult = null;
+
+function recommendProduct(tags, servers, reserve, fullClients, webClients) {
+  // Platform: 3+ servers, or >150k tags
+  if (servers >= 3) return 'alpha-platform';
+  if (tags > 150000) return 'alpha-platform';
+
+  // SCADA: 2 servers, reserve, clients, or >50k tags (One+ max = 50k)
+  if (servers === 2) return 'alpha-scada';
+  if (reserve === true) return 'alpha-scada';
+  if (fullClients > 0) return 'alpha-scada';
+  if (webClients > 0) return 'alpha-scada';
+  if (tags > 50000) return 'alpha-scada';
+
+  // One+: single server, no reserve, no clients, ≤50k tags
+  return 'alpha-one';
+}
+
+function mapServerCount(val) {
+  return parseInt(val) || 1;
+}
+
+function getSurveyInputs() {
+  const tags = parseInt(document.getElementById('srv-tags')?.value) || 0;
+  const servers = mapServerCount(document.getElementById('srv-servers')?.value || '1');
+  const reserveVal = document.querySelector('input[name="srv-reserve"]:checked')?.value || 'нет';
+  const reserve = (reserveVal === 'да' || reserveVal === 'не знаю');
+  const fullClients = parseInt(document.getElementById('srv-full-clients')?.value) || 0;
+  const webVal = document.getElementById('srv-web-clients')?.value || '';
+  const webClients = webVal ? parseInt(webVal) || 0 : 0;
+  const terminalClients = (parseInt(document.getElementById('srv-terminal-clients')?.value) || 0) + (parseInt(document.getElementById('srv-rdp-clients')?.value) || 0);
+
+  const needHistorian = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const histTags = needHistorian ? (parseInt(document.getElementById('srv-hist-tags')?.value) || 0) : 0;
+  const histReserve = needHistorian && document.querySelector('input[name="srv-hist-reserve"]:checked')?.value === 'да';
+  const needReports = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const rptTags = needReports ? (parseInt(document.getElementById('srv-rpt-tags')?.value) || 0) : 0;
+  const rptUsers = needReports ? (document.getElementById('srv-rpt-users')?.value || '') : '';
+
+  // Protocols
+  const needEnergy = document.getElementById('srv-prot-61850')?.checked ||
+                     document.getElementById('srv-prot-104')?.checked ||
+                     document.getElementById('srv-prot-101')?.checked ||
+                     document.getElementById('srv-prot-tem')?.checked;
+  const needIndustry = document.getElementById('srv-prot-bacnet')?.checked ||
+                       document.getElementById('srv-prot-s7')?.checked ||
+                       document.getElementById('srv-prot-eip')?.checked ||
+                       document.getElementById('srv-prot-fins')?.checked;
+  const needOpcDaCl = document.getElementById('srv-prot-opcda-cl')?.checked;
+  const needOpcDaSrv = document.getElementById('srv-prot-opcda-srv')?.checked;
+  const needPortal = document.querySelector('input[name="srv-web-portal"]:checked')?.value === 'да';
+
+  return {
+    tags, servers, reserve, fullClients, webClients, terminalClients,
+    needHistorian, histTags, histReserve,
+    needReports, rptTags, rptUsers,
+    needEnergy, needIndustry, needOpcDaCl, needOpcDaSrv, needPortal
+  };
+}
+
+function updateSurveyHint() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const reserveUnsure = document.querySelector('input[name="srv-reserve"]:checked')?.value === 'не знаю';
+  const hints = {
+    'alpha-one': 'Однопользовательский комплект — оптимален для одного сервера без доп. клиентов',
+    'alpha-scada': reserveUnsure
+      ? 'Рекомендуем клиент-серверную версию — она поддерживает резервирование, если оно понадобится'
+      : 'Клиент-серверная система с резервированием и масштабированием',
+    'alpha-platform': 'Мультисерверная распределённая платформа для крупных объектов'
+  };
+  const hintEl = document.getElementById('srv-hint-text');
+  if (hintEl) {
+    hintEl.innerHTML = '<strong style="color:var(--volt)">Рекомендуем: ' + names[rec] + '</strong><br>' +
+      '<span style="font-size:12px;color:var(--text2)">' + hints[rec] + '</span>';
+    hintEl.style.display = 'block';
+  }
+
+  // Warning if One+ but has clients
+  const warnEl = document.getElementById('srv-client-warning');
+  if (warnEl) {
+    if (rec !== 'alpha-one' && inp.fullClients > 0) {
+      warnEl.style.display = 'none';
+    } else {
+      warnEl.style.display = 'none';
+    }
+  }
+}
+
+function buildSurveyResult() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const isPlatform = (rec === 'alpha-platform');
+  const isScada = (rec === 'alpha-scada');
+
+  // Base SKU
+  const baseSku = findBestSku(rec, inp.tags || 150);
+  let basePrice = baseSku ? (skuPrices[baseSku.sku] || 0) : 0;
+
+  // Reserve
+  let reservePrice = 0;
+  if (inp.reserve && rec !== 'alpha-one') {
+    reservePrice = basePrice;
+  }
+
+  // Historian
+  let histSku = null, histPrice = 0;
+  if (inp.needHistorian && inp.histTags > 0) {
+    histSku = findBestSku('alpha-historian', inp.histTags);
+    histPrice = histSku ? (skuPrices[histSku.sku] || 0) : 0;
+    if (inp.histReserve) histPrice *= 2;
+  }
+
+  // Reports
+  let rptSku = null, rptClSku = '', rptPrice = 0;
+  if (inp.needReports && inp.rptTags > 0) {
+    rptSku = findBestSku('alpha-reports', inp.rptTags);
+    rptPrice = rptSku ? (skuPrices[rptSku.sku] || 0) : 0;
+    if (inp.rptUsers) {
+      rptClSku = 'RPT-CL' + inp.rptUsers;
+      rptPrice += skuPrices[rptClSku] || 0;
+    }
+  }
+
+  // Addons
+  let addonsPrice = 0;
+  let addonsList = [];
+
+  // Clients
+  if (inp.fullClients > 0 && rec !== 'alpha-one') {
+    const clPrice = (skuPrices['CL-F'] || 0) * inp.fullClients;
+    addonsPrice += clPrice;
+    addonsList.push('CL-F ×' + inp.fullClients);
+  }
+
+  // Web clients
+  if (inp.webClients > 0) {
+    let webSku = '';
+    if (inp.webClients <= 10) webSku = 'CL-RO10';
+    else if (inp.webClients <= 25) webSku = 'CL-RO25';
+    else if (inp.webClients <= 50) webSku = 'CL-RO50';
+    else if (inp.webClients <= 100) webSku = 'CL-RO100';
+    else if (inp.webClients <= 250) webSku = 'AP-CL-RO250';
+    else webSku = 'AP-CL-ROUNL';
+    addonsPrice += skuPrices[webSku] || 0;
+    addonsList.push(webSku);
+  }
+
+  // Drivers
+  if (inp.needEnergy && !isPlatform && !isScada) {
+    addonsPrice += skuPrices['DRV-PACK-ENERGY'] || 0;
+    addonsList.push('DRV-PACK-ENERGY');
+  }
+  if (inp.needIndustry && !isPlatform) {
+    addonsPrice += skuPrices['DRV-PACK-INDUSTRY'] || 0;
+    addonsList.push('DRV-PACK-INDUSTRY');
+  }
+  if (inp.needOpcDaCl) {
+    addonsPrice += skuPrices['DRV-OPCDA-CL'] || 0;
+    addonsList.push('DRV-OPCDA-CL');
+  }
+  if (inp.needOpcDaSrv) {
+    addonsPrice += skuPrices['DRV-OPCDA-SRV'] || 0;
+    addonsList.push('DRV-OPCDA-SRV');
+  }
+  if (inp.needPortal) {
+    addonsPrice += skuPrices['WEB-PORTAL'] || 0;
+    addonsList.push('WEB-PORTAL');
+  }
+
+  // Additional IO servers for Platform
+  if (isPlatform && inp.servers > 1) {
+    const extraServers = inp.servers - 1;
+    addonsPrice += (skuPrices['AP-IOSRV'] || 0) * extraServers;
+    addonsList.push('AP-IOSRV ×' + extraServers);
+  }
+
+  const licensesTotal = basePrice + reservePrice + histPrice + rptPrice + addonsPrice;
+
+  srvResult = {
+    product: rec,
+    productName: names[rec],
+    baseSku: baseSku,
+    basePrice: basePrice,
+    reserve: inp.reserve && rec !== 'alpha-one',
+    reservePrice: reservePrice,
+    histSku: histSku,
+    histPrice: histPrice,
+    histReserve: inp.histReserve,
+    rptSku: rptSku,
+    rptClSku: rptClSku,
+    rptPrice: rptPrice,
+    addonsList: addonsList,
+    addonsPrice: addonsPrice,
+    licensesTotal: licensesTotal,
+    inputs: inp
+  };
+
+  // Render result
+  renderSurveyResult();
+  updateSurveyPrice();
+}
+
+function renderSurveyResult() {
+  if (!srvResult) return;
+  const r = srvResult;
+  const inp = r.inputs;
+
+  // Product name & explanation
+  document.getElementById('srv-result-product').textContent = r.productName;
+  let expl = '';
+  if (r.product === 'alpha-one') expl = 'Однопользовательский комплект — оптимальный выбор для одного сервера';
+  else if (r.product === 'alpha-scada') expl = 'Клиент-серверная версия с поддержкой резервирования и доп. клиентов';
+  else expl = 'Мультисерверная платформа для ' + inp.servers + ' серверов';
+  document.getElementById('srv-result-explanation').textContent = expl;
+
+  // Details
+  let det = '';
+  det += '• Базовый комплект: <strong>' + (r.baseSku?.sku || '—') + '</strong> (' + formatTags(r.baseSku?.tags || 0) + ' тегов)\n';
+  if (r.reserve) det += '• Резервный сервер: +' + (r.baseSku?.sku || '') + '\n';
+  if (r.histSku) det += '• Historian: <strong>' + r.histSku.sku + '</strong> (' + formatTags(r.histSku.tags) + ' тегов)' + (r.histReserve ? ' × 2 (с резервом)' : '') + '\n';
+  if (r.rptSku) det += '• Reports: <strong>' + r.rptSku.sku + '</strong>' + (r.rptClSku ? ' + ' + r.rptClSku : '') + '\n';
+  if (r.addonsList.length > 0) det += '• Доп. модули: ' + r.addonsList.join(', ') + '\n';
+
+  document.getElementById('srv-result-details').innerHTML = det.replace(/\n/g, '<br>');
+}
+
+function updateSurveyPrice() {
+  if (!srvResult) return;
+  const term = parseInt(document.getElementById('srv-term')?.value) || 1;
+  const slaVal = document.getElementById('srv-sla')?.value || 'SLA-BASE';
+  const termMul = termMultipliers[term] || 1.0;
+  const slaCoeff = slaCoeffs[slaVal] || 0;
+
+  const licensesWithTerm = Math.round(srvResult.licensesTotal * termMul);
+  const slaPrice = Math.round(slaCoeff * srvResult.licensesTotal);
+  const total = licensesWithTerm + slaPrice;
+
+  srvResult.totalPrice = total;
+  srvResult.term = term;
+  srvResult.sla = slaVal;
+
+  document.getElementById('srv-total-price').textContent = formatPrice(total);
+}
+
+function updateSurveyUI() {
+  for (let i = 1; i <= srvTotalSteps; i++) {
+    const sp = document.getElementById('srv-sp-' + i);
+    const sh = document.getElementById('srv-head-' + i);
+    if (sp) sp.classList.toggle('active', i === srvCurrentStep);
+    if (sh) sh.style.display = i === srvCurrentStep ? 'block' : 'none';
+  }
+  for (let i = 1; i <= srvTotalSteps; i++) {
+    const si = document.getElementById('srv-si-' + i);
+    if (!si) continue;
+    si.classList.remove('active', 'done');
+    if (i < srvCurrentStep) si.classList.add('done');
+    else if (i === srvCurrentStep) si.classList.add('active');
+  }
+  const pct = Math.round((srvCurrentStep / srvTotalSteps) * 100);
+  const pctEl = document.getElementById('srv-pct');
+  const barEl = document.getElementById('srv-bar');
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (barEl) barEl.style.width = pct + '%';
+
+  const back = document.getElementById('srv-btn-back');
+  const next = document.getElementById('srv-btn-next');
+  if (back) back.style.display = srvCurrentStep > 1 ? 'inline-flex' : 'none';
+  if (next) {
+    if (srvCurrentStep === srvTotalSteps) {
+      next.style.display = 'none';
+    } else {
+      next.style.display = 'inline-flex';
+      next.innerHTML = 'Далее →';
+      next.className = 'btn btn-sm btn-volt';
+    }
+  }
+
+  const noteEl = document.getElementById('srv-note');
+  if (noteEl) noteEl.innerHTML = 'Шаг ' + srvCurrentStep + ' из ' + srvTotalSteps;
+
+  // Build result when entering step 5
+  if (srvCurrentStep === srvTotalSteps) {
+    buildSurveyResult();
+  }
+}
+
+function surveyStep(dir) {
+  srvCurrentStep = Math.max(1, Math.min(srvTotalSteps, srvCurrentStep + dir));
+  updateSurveyUI();
+  // Adapt fields on step entry
+  if (srvCurrentStep === 2) updateSurveyClientsUI();
+  if (srvCurrentStep === 4) updateDriverPacks();
+}
+
+function addSurveyToProject() {
+  try {
+  if (!srvResult) { buildSurveyResult(); }
+  if (!srvResult) { alert('Ошибка: результат не сформирован'); return; }
+
+  const r = srvResult;
+  const terms = {1:'Бессрочная',2:'1 год',3:'3 года'};
+
+  const item = {
+    product: r.productName,
+    sku: r.baseSku?.sku || '—',
+    tags: r.baseSku?.tags || 0,
+    term: terms[r.term] || 'Бессрочная',
+    reserve: r.reserve,
+    historian: r.histSku ? r.histSku.sku + ' (' + formatTags(r.histSku.tags) + ')' + (r.histReserve ? ' ×2' : '') : '',
+    reports: r.rptSku ? r.rptSku.sku + (r.rptClSku ? ' + ' + r.rptClSku : '') : '',
+    addons: r.addonsList,
+    price: r.totalPrice || 0,
+    source: 'survey'
+  };
+
+  projectItems.push(item);
+  saveProjectToStorage();
+  updateCartDisplay();
+
+  // Flash cart to draw attention
+  const cart = document.getElementById('project-cart');
+  if (cart) {
+    cart.style.boxShadow = '0 0 20px var(--lime)';
+    cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => { cart.style.boxShadow = ''; }, 1500);
+  }
+  } catch(e) { alert('Ошибка: ' + e.message); }
+}
+
+function switchToWizardWithSurveyData() {
+  if (!srvResult) buildSurveyResult();
+  
+  // Switch to wizard tab
+  const wizTab = document.querySelectorAll('.tab')[2];
+  switchTab('wizard', wizTab);
+
+  if (!srvResult) return;
+
+  // Prefill wizard category from survey recommendation
+  const catMap = {
+    'alpha-one': 'wc1',
+    'alpha-scada': 'wc2',
+    'alpha-platform': 'wc3'
+  };
+  const radioId = catMap[srvResult.product];
+  if (radioId) {
+    const el = document.getElementById(radioId);
+    if (el) el.checked = true;
+  }
+
+  // Prefill SKU and tags
+  const skuEl = document.getElementById('wiz-product-name');
+  if (skuEl && srvResult.baseSku) skuEl.value = srvResult.baseSku.sku;
+  const qtyEl = document.getElementById('wiz-qty');
+  if (qtyEl && srvResult.baseSku) qtyEl.value = srvResult.baseSku.tags;
+}
+
+// Toggle conditional fields in survey
+function srvToggleHistorian() {
+  const show = document.querySelector('input[name="srv-historian"]:checked')?.value === 'yes';
+  const el = document.getElementById('srv-hist-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function srvToggleReports() {
+  const show = document.querySelector('input[name="srv-reports"]:checked')?.value === 'yes';
+  const el = document.getElementById('srv-rpt-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+// Platform driver note
+function srvUpdateDriverNote() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const noteEl = document.getElementById('srv-drv-platform-note');
+  if (noteEl) noteEl.style.display = (rec === 'alpha-platform') ? 'block' : 'none';
+}
+
+// Aliases for HTML event handlers
+function updateSurveyRecommendation() { updateSurveyHint(); }
+function checkClientCompatibility() { updateSurveyHint(); }
+
+function updateSurveyClientsUI() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, 0, 0);
+  const fullEl = document.getElementById('srv-full-clients');
+  const webEl = document.getElementById('srv-web-clients');
+  const termEl = document.getElementById('srv-terminal-clients');
+  const rdpEl = document.getElementById('srv-rdp-clients');
+  const fullField = fullEl?.closest('.wiz-field');
+  const webField = webEl?.closest('.wiz-field');
+  const rdpRow = rdpEl?.closest('.wiz-row');
+  const warn = document.getElementById('srv-client-warning');
+
+  if (rec === 'alpha-one') {
+    if (fullField) fullField.style.display = 'none';
+    if (webField) webField.style.display = 'none';
+    if (rdpRow) rdpRow.style.display = 'none';
+    if (fullEl) fullEl.value = '0';
+    if (webEl) webEl.value = '0';
+    if (termEl) termEl.value = '0';
+    if (rdpEl) rdpEl.value = '0';
+    if (warn) {
+      warn.style.display = 'flex';
+      const warnText = warn.querySelector('div:last-child');
+      if (warnText) warnText.textContent = 'Alpha.One+ — однопользовательский комплект. Дополнительные клиенты не предусмотрены. Если нужны клиенты — вернитесь и выберите 2+ сервера или резервирование.';
+    }
+  } else {
+    if (fullField) fullField.style.display = '';
+    if (webField) webField.style.display = '';
+    if (rdpRow) rdpRow.style.display = '';
+    if (warn) {
+      if (rec === 'alpha-platform') {
+        warn.style.display = 'flex';
+        warn.style.borderColor = 'var(--lime)';
+        warn.style.background = 'var(--lime-lo)';
+        const warnText = warn.querySelector('div:last-child');
+        if (warnText) warnText.textContent = 'Alpha.Platform уже включает 1 полный клиент (CL-F). Укажите только дополнительных клиентов сверх этого.';
+        const warnSvg = warn.querySelector('svg path');
+        if (warnSvg) warnSvg.setAttribute('stroke', '#559618');
+      } else {
+        warn.style.display = 'none';
+        warn.style.borderColor = '';
+        warn.style.background = '';
+      }
+    }
+  }
+}
+function toggleHistorianFields() {
+  const show = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-historian-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function toggleReportsFields() {
+  const show = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-reports-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function validateClientSplit() {
+  const full = parseInt(document.getElementById('srv-full-clients')?.value) || 0;
+  const term = parseInt(document.getElementById('srv-terminal-clients')?.value) || 0;
+  const rdp = parseInt(document.getElementById('srv-rdp-clients')?.value) || 0;
+  const warn = document.getElementById('srv-client-split-warn');
+  const hint = document.getElementById('srv-client-split-hint');
+  if (full > 0 && (term + rdp) > full) {
+    if (warn) warn.style.display = 'block';
+    if (hint) hint.style.display = 'none';
+  } else {
+    if (warn) warn.style.display = 'none';
+    if (hint) {
+      hint.style.display = '';
+      if (full > 0 && (term + rdp) > 0) {
+        hint.textContent = 'Терминальные (' + term + ') + RDP (' + rdp + ') = ' + (term+rdp) + ' из ' + full + ' полных клиентов';
+      } else {
+        hint.textContent = 'Распределение terminal/RDP уточняется при заказе ключей';
+      }
+    }
+  }
+}
+
+function updateDriverPacks() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const isPlatform = (rec === 'alpha-platform');
+  const isScada = (rec === 'alpha-scada');
+  const noteEl = document.getElementById('srv-platform-note');
+  if (noteEl) noteEl.style.display = isPlatform ? 'flex' : 'none';
+
+  // Energy protocols
+  const energyIds = ['srv-prot-61850','srv-prot-104','srv-prot-101','srv-prot-tem'];
+  // Industry protocols
+  const industryIds = ['srv-prot-bacnet','srv-prot-s7','srv-prot-eip','srv-prot-fins'];
+
+  energyIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (isPlatform || isScada) {
+      el.checked = true; el.disabled = true;
+    } else {
+      el.disabled = false;
+    }
+  });
+  industryIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (isPlatform) {
+      el.checked = true; el.disabled = true;
+    } else {
+      el.disabled = false;
+    }
+  });
+}
+
+// Init survey UI
+updateSurveyUI();
 </script>
 </body>
 </html>
