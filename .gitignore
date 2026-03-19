@@ -24,3 +24,11 @@ docs/tabler-icons-*.zip
 *.bak
 *.tmp
 calc_log.txt
+
+# Bot runtime
+projects/*/venv/
+projects/*/.env
+projects/*/memory.db
+projects/*/*.session
+projects/*/*.session.bak
+projects/*/__pycache__/
