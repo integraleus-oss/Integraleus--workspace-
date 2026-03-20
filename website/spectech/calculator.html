@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -24,31 +25,58 @@ ym(107569860, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,we
 </style>
 <style>
 :root {
-  --ink:       #EAEAEA;
-  --ink1:      #FFFFFF;
-  --ink2:      #F5F5F5;
-  --steel:     #E0E0E0;
-  --wire:      #D0D0D0;
-  --wire2:     #CACACA;
-  --volt:      #0997C8;
-  --volt-lo:   rgba(9,151,200,0.08);
-  --volt-glow: rgba(9,151,200,0.20);
-  --volt-hover:#0378A0;
+  --ink:       #05080f;
+  --ink1:      #080d1a;
+  --ink2:      #0c1525;
+  --steel:     #111b2e;
+  --wire:      #192d48;
+  --wire2:     #2d4a6a;
+  --volt:      #00c8f0;
+  --volt-lo:   rgba(0,200,240,0.08);
+  --volt-glow: rgba(0,200,240,0.20);
+  --volt-hover:#00a8cc;
   --flame:     #FF6B35;
   --flame-lo:  rgba(255,107,53,0.08);
-  --lime:      #559618;
-  --lime-lo:   rgba(85,150,24,0.08);
+  --lime:      #1de9b6;
+  --lime-lo:   rgba(29,233,182,0.08);
   --crimson:   #EA0E3B;
   --amber:     #ffb800;
-  --text:      #02040E;
-  --text2:     rgba(2,4,14,0.6);
-  --text3:     rgba(2,4,14,0.3);
+  --text:      #ccd9ea;
+  --text2:     #6a8aaa;
+  --text3:     #3d5a7a;
   --ff:        'Circe', 'Source Sans 3', sans-serif;
   --mono:      'JetBrains Mono', monospace;
   --ease:      cubic-bezier(.22,.68,0,1.2);
-  --glass:     rgba(255,255,255,0.85);
+  --glass:     rgba(8,13,26,0.85);
   --radius:    8px;
+  color-scheme: dark;
 }
+:root.theme-light {
+  --ink:#f0f2f5;--ink1:#ffffff;--ink2:#f7f8fa;--steel:#e8ecf0;--wire:#d0d7e0;--wire2:#bcc5d0;
+  --volt:#0088cc;--volt-lo:rgba(0,136,204,0.08);--volt-glow:rgba(0,136,204,0.25);
+  --flame:#e85d2a;--flame-lo:rgba(232,93,42,0.08);
+  --lime:#15a87e;--lime-lo:rgba(21,168,126,0.08);
+  --crimson:#e0294a;--amber:#d9a000;
+  --text:#1a2332;--text2:#4a5d75;--text3:#8a9bb5;
+  --glass:rgba(255,255,255,0.92);
+  color-scheme:light;
+}
+:root.theme-light nav { background:rgba(255,255,255,0.92); }
+:root.theme-light .btn-volt,:root.theme-light .btn-flame { color:#fff; }
+:root.theme-light .logo-dark-theme { display:none !important; }
+:root.theme-light .logo-light-theme { display:block !important; }
+.theme-toggle {
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border:1px solid var(--volt);border-radius:50%;
+  background:transparent;cursor:pointer;transition:all .3s;padding:0;margin-left:12px;flex-shrink:0;color:var(--volt);
+}
+.theme-toggle:hover { background:var(--volt);color:#fff; }
+.theme-toggle svg { width:20px;height:20px;stroke:currentColor;transition:transform .3s; }
+.theme-toggle:hover svg { transform:rotate(30deg); }
+.theme-toggle .icon-moon { display:block; }
+.theme-toggle .icon-sun { display:none; }
+:root.theme-light .theme-toggle .icon-moon { display:none; }
+:root.theme-light .theme-toggle .icon-sun { display:block; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -716,6 +744,10 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="19,12 5,12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 5,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     На главную
   </a>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
 </nav>
 
 <div class="page">
@@ -759,7 +791,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <input type="radio" name="product" id="p1" value="alpha-one" checked onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p1">
                   <div class="prod-check">
-                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.One+</div>
                   <div class="prod-label-vendor">Атомик Софт · SCADA/MES/IoT</div>
@@ -770,7 +802,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <input type="radio" name="product" id="p2" value="alpha-scada" onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p2">
                   <div class="prod-check">
-                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.SCADA</div>
                   <div class="prod-label-vendor">Атомик Софт · Мониторинг</div>
@@ -781,7 +813,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <input type="radio" name="product" id="p3" value="alpha-platform" onchange="updateSliderRange();calcUpdate()">
                 <label class="prod-label" for="p3">
                   <div class="prod-check">
-                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/></svg>
                   </div>
                   <div class="prod-label-name">Alpha.Platform</div>
                   <div class="prod-label-vendor">Атомик Софт · Полный комплект</div>
@@ -1469,7 +1501,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
                 <!-- Platform driver note -->
                 <div id="srv-platform-note" style="display:none; margin-top:20px; padding:16px; background:var(--lime-lo); border:1px solid var(--lime); border-left:4px solid var(--lime); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#559618" stroke-width="1.5"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#1de9b6" stroke-width="1.5"/></svg>
                   <div style="font-size:14px; color:var(--text); font-weight:500;">Для Alpha.Platform все драйверы включены</div>
                 </div>
               </div>
@@ -3756,6 +3788,11 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleTheme() {
+  var isLight = document.documentElement.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
 
 // Init survey UI
