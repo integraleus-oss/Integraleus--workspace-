@@ -2,180 +2,53 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<script>
-(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light');})();
-</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
- (function(m,e,t,r,i,k,a){
- m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
- m[i].l=1*new Date();
- for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
- k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
- })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
-
- ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+m[i].l=1*new Date();
+for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r)return;}
+k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+ym(107569860, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор лицензий + Запрос КП — СПЕЦТЕХ</title>
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Калькулятор лицензий — СПЕЦТЕХ</title>
+<meta name="description" content="Онлайн-калькулятор стоимости лицензий Альфа платформы. Подберите конфигурацию и оформите запрос КП.">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Circe — шрифт automiq.ru, подключаем с CDN как fallback */
+@font-face { font-family: 'Circe'; src: url('https://www.automiq.ru/local/templates/automiqsoft/assets/fonts/Circe-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Circe'; src: url('https://www.automiq.ru/local/templates/automiqsoft/assets/fonts/Circe-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Circe'; src: url('https://www.automiq.ru/local/templates/automiqsoft/assets/fonts/Circe-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap; }
+</style>
 <style>
 :root {
-  --ink:       #05080f;
-  --ink1:      #080d1a;
-  --ink2:      #0c1525;
-  --steel:     #111e35;
-  --wire:      #192d48;
-  --wire2:     #1f3a5f;
-  --volt:      #00c8f0;
-  --volt-lo:   rgba(0,200,240,0.09);
-  --volt-glow: rgba(0,200,240,0.38);
-  --flame:     #ff6b35;
-  --flame-lo:  rgba(255,107,53,0.1);
-  --lime:      #1de9b6;
-  --lime-lo:   rgba(29,233,182,0.08);
-  --crimson:   #ff3d57;
+  --ink:       #EAEAEA;
+  --ink1:      #FFFFFF;
+  --ink2:      #F5F5F5;
+  --steel:     #E0E0E0;
+  --wire:      #D0D0D0;
+  --wire2:     #CACACA;
+  --volt:      #0997C8;
+  --volt-lo:   rgba(9,151,200,0.08);
+  --volt-glow: rgba(9,151,200,0.20);
+  --volt-hover:#0378A0;
+  --flame:     #FF6B35;
+  --flame-lo:  rgba(255,107,53,0.08);
+  --lime:      #559618;
+  --lime-lo:   rgba(85,150,24,0.08);
+  --crimson:   #EA0E3B;
   --amber:     #ffb800;
-  --text:      #ccd9ea;
-  --text2:     #6a8aaa;
-  --text3:     #2d4a6a;
-  --ff:        'Exo 2', sans-serif;
+  --text:      #02040E;
+  --text2:     rgba(2,4,14,0.6);
+  --text3:     rgba(2,4,14,0.3);
+  --ff:        'Circe', 'Source Sans 3', sans-serif;
   --mono:      'JetBrains Mono', monospace;
   --ease:      cubic-bezier(.22,.68,0,1.2);
+  --glass:     rgba(255,255,255,0.85);
+  --radius:    8px;
 }
-
-/* ── LIGHT THEME ── */
-:root.theme-light {
-  --ink:        #f0f2f5;
-  --ink1:       #ffffff;
-  --ink2:       #f7f8fa;
-  --steel:      #e8ecf0;
-  --wire:       #d0d7e0;
-  --wire2:      #bcc5d0;
-
-  --volt:       #0088cc;
-  --volt-lo:    rgba(0,136,204,0.08);
-  --volt-glow:  rgba(0,136,204,0.25);
-  --flame:      #e85d2a;
-  --flame-lo:   rgba(232,93,42,0.08);
-  --lime:       #15a87e;
-  --lime-lo:    rgba(21,168,126,0.08);
-  --crimson:    #e0294a;
-  --amber:      #d9a000;
-
-  --text:       #1a2332;
-  --text2:      #4a5d75;
-  --text3:      #8a9bb5;
-
-  color-scheme: light;
-}
-
-/* Light theme overrides for elements with hardcoded colors */
-:root.theme-light body {
-  color: var(--text);
-}
-:root.theme-light body::before {
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0,40,80,0.2) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0,40,80,0.2) 60px);
-}
-:root.theme-light nav {
-  background: rgba(255,255,255,0.92);
-  border-bottom-color: var(--wire);
-}
-:root.theme-light .btn-volt {
-  color: #ffffff;
-}
-:root.theme-light .btn-flame {
-  color: #ffffff;
-}
-:root.theme-light input[type=range]::-webkit-slider-thumb {
-  border-color: var(--ink1);
-}
-:root.theme-light ::placeholder {
-  color: var(--text3);
-}
-:root.theme-light ::-webkit-scrollbar-track {
-  background: var(--ink);
-}
-:root.theme-light ::-webkit-scrollbar-thumb {
-  background: var(--wire2);
-}
-/* SVG strokes that were hardcoded for dark theme */
-:root.theme-light .hero-orb {
-  opacity: 0.3;
-}
-:root.theme-light .nav-logo-hex::after,
-:root.theme-light .logo-hex::after {
-  background: var(--ink1);
-}
-/* Cards and sections */
-:root.theme-light .card,
-:root.theme-light .product-card,
-:root.theme-light .blog-card,
-:root.theme-light .tech-card {
-  background: var(--ink1);
-  border-color: var(--wire);
-}
-/* Footer */
-:root.theme-light footer,
-:root.theme-light .footer {
-  background: var(--steel);
-}
-
-/* Theme toggle button */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--volt);
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-  margin-left: 12px;
-  flex-shrink: 0;
-  color: var(--volt);
-}
-.theme-toggle:hover {
-  background: var(--volt);
-  color: #fff;
-}
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  transition: transform 0.3s ease;
-}
-.theme-toggle:hover svg {
-  transform: rotate(30deg);
-}
-/* Show/hide icons based on theme */
-.theme-toggle .icon-moon { display: block; }
-.theme-toggle .icon-sun  { display: none;  }
-:root.theme-light .theme-toggle .icon-moon { display: none;  }
-:root.theme-light .theme-toggle .icon-sun  { display: block; }
-
-/* Fix white SVG logos in light theme */
-:root.theme-light .partner-brand svg path[fill="#FFFFFF"],
-:root.theme-light .partner-brand svg path[fill="white"],
-:root.theme-light .partner-brand svg path[fill="#fff"],
-:root.theme-light .product-brand svg path[fill="#FFFFFF"],
-:root.theme-light .product-brand svg path[fill="white"],
-:root.theme-light .product-brand svg path[fill="#fff"] {
-  fill: #1a2332;
-}
-/* Hero SVG text elements */
-:root.theme-light svg text[fill="white"] {
-  fill: var(--text);
-}
-
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -188,37 +61,25 @@ body {
 body::before {
   content: '';
   position: fixed; inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.1) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.1) 60px);
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 10%, rgba(9,151,200,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 85% 85%, rgba(85,150,24,0.04) 0%, transparent 60%);
   pointer-events: none; z-index: 0;
 }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--ink1); }
-::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 2px; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 3px; }
 
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 40px; height: 60px;
-  background: rgba(5,8,15,0.9); backdrop-filter: blur(16px);
+  padding: 0 40px; height: 64px;
+  background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--wire);
 }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.logo-hex {
-  width: 28px; height: 28px;
-  background: var(--volt);
-  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
-  position: relative;
-}
-.logo-hex::after {
-  content: '';
-  position: absolute; inset: 4px;
-  background: var(--ink);
-  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
-}
-.logo-text { font-size: 16px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--text); }
+.logo-text { font-size: 17px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text); }
 .logo-text span { color: var(--volt); }
 .nav-back {
   display: inline-flex; align-items: center; gap: 8px;
@@ -252,7 +113,7 @@ nav {
 /* ── TABS ── */
 .tabs {
   display: flex; gap: 2px; margin-bottom: 40px;
-  background: var(--wire); border: 1px solid var(--wire); border-radius: 4px;
+  background: var(--wire); border: 1px solid var(--wire); border-radius: var(--radius);
   overflow: hidden; max-width: 500px; margin-left: auto; margin-right: auto;
 }
 .tab {
@@ -283,7 +144,7 @@ nav {
   display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start;
 }
 .calc-main {
-  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px; overflow: hidden;
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius); overflow: hidden;
 }
 .calc-section-head {
   padding: 16px 24px;
@@ -311,7 +172,7 @@ nav {
   display: flex; flex-direction: column; gap: 4px;
   padding: 14px 16px; height: 110px;
   background: var(--ink2); border: 1px solid var(--wire);
-  border-radius: 3px; cursor: pointer; transition: border-color .2s, background .2s;
+  border-radius: var(--radius); cursor: pointer; transition: border-color .25s, background .25s;
   position: relative; overflow: hidden;
 }
 .prod-label::before {
@@ -341,9 +202,11 @@ nav {
   display: flex; align-items: center; justify-content: center;
   transition: border-color .2s, background .2s;
 }
+.prod-check svg { opacity: 0; transition: opacity .2s; }
 .prod-option input:checked ~ .prod-label .prod-check {
   background: var(--volt); border-color: var(--volt);
 }
+.prod-option input:checked ~ .prod-label .prod-check svg { opacity: 1; }
 
 /* Sliders & number inputs */
 .field-row { margin-bottom: 22px; }
@@ -365,8 +228,8 @@ input[type=range] {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
   background: var(--volt); cursor: pointer;
-  box-shadow: 0 0 12px var(--volt-glow); border: 3px solid var(--ink);
-  transition: transform .15s;
+  box-shadow: 0 2px 8px var(--volt-glow); border: 3px solid var(--ink1);
+  transition: transform .2s ease;
 }
 input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
@@ -376,15 +239,15 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .check-item input[type=checkbox] { position: absolute; opacity: 0; width: 0; height: 0; }
 .check-lbl {
   display: flex; align-items: center; gap: 10px; padding: 11px 14px;
-  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
-  cursor: pointer; transition: border-color .2s, background .2s; font-size: 13px;
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: 6px;
+  cursor: pointer; transition: border-color .25s, background .25s; font-size: 13px;
   color: var(--text2); font-weight: 500;
 }
 .check-item input:checked + .check-lbl {
   border-color: var(--lime); background: var(--lime-lo); color: var(--text);
 }
 .check-box {
-  width: 14px; height: 14px; border: 1px solid var(--wire2); border-radius: 2px;
+  width: 14px; height: 14px; border: 1px solid var(--wire2); border-radius: 3px;
   background: var(--ink); flex-shrink: 0; display: flex; align-items: center; justify-content: center;
   transition: background .2s, border-color .2s;
 }
@@ -402,7 +265,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .addon-ctrl { flex: 1; }
 .addon-select {
   width: 100%; padding: 8px 12px; background: var(--ink2); border: 1px solid var(--wire);
-  border-radius: 3px; color: var(--text); font-family: var(--ff-mono); font-size: 12px;
+  border-radius: 6px; color: var(--text); font-family: var(--mono); font-size: 12px;
   appearance: none; -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300c8f0'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 12px center;
@@ -410,14 +273,14 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
 .addon-select:focus { outline: none; border-color: var(--volt); }
 .addon-select option { background: var(--ink1); color: var(--text); }
-.addon-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: var(--ff-mono); }
+.addon-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: var(--mono); }
 .addon-check input[type=checkbox] { accent-color: var(--lime); width: 14px; height: 14px; cursor: pointer; }
 .addon-hint { font-size: 10px; color: var(--text3); }
 
 /* ── RESULT PANEL ── */
 .result-panel {
-  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px;
-  overflow: hidden; position: sticky; top: 80px;
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius);
+  overflow: hidden; position: sticky; top: 84px;
 }
 .result-head {
   padding: 16px 20px; background: var(--steel); border-bottom: 1px solid var(--wire);
@@ -437,7 +300,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
 .result-line {
   display: flex; justify-content: space-between; align-items: flex-start;
-  padding: 10px 0; border-bottom: 1px solid rgba(25,45,72,0.6); gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid var(--wire); gap: 10px;
 }
 .result-line:last-of-type { border-bottom: none; }
 .r-name { font-size: 12px; color: var(--text2); line-height: 1.4; }
@@ -447,7 +310,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
 .result-total-block {
   margin-top: 16px; padding: 16px; background: var(--ink2);
-  border: 1px solid var(--wire2); border-left: 3px solid var(--volt);
+  border: 1px solid var(--wire); border-left: 3px solid var(--volt);
+  border-radius: var(--radius);
 }
 .result-total-label {
   font-size: 10px; font-weight: 700; letter-spacing: 3px;
@@ -467,23 +331,134 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   font-family: var(--ff); font-weight: 700; letter-spacing: 1.5px;
   text-transform: uppercase; border: none; cursor: pointer;
-  transition: all .2s; text-decoration: none; white-space: nowrap; width: 100%;
-  padding: 12px 20px; font-size: 12px;
-  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  transition: all .25s ease; text-decoration: none; white-space: nowrap; width: 100%;
+  padding: 13px 22px; font-size: 12px; border-radius: var(--radius);
 }
 .btn-volt {
-  background: var(--volt); color: var(--ink);
-  box-shadow: 0 0 20px var(--volt-glow);
+  background: var(--volt); color: #ffffff;
+  box-shadow: 0 4px 16px var(--volt-glow);
 }
-.btn-volt:hover { background: #33d5f7; box-shadow: 0 0 32px var(--volt-glow); transform: translateY(-1px); }
+.btn-volt:hover { background: var(--volt-hover); box-shadow: 0 6px 24px var(--volt-glow); transform: translateY(-1px); }
+.btn-lime {
+  background: var(--lime); color: #ffffff;
+  box-shadow: 0 4px 16px rgba(85,150,24,0.3);
+}
+.btn-lime:hover { background: #4a7e15; box-shadow: 0 6px 24px rgba(85,150,24,0.35); transform: translateY(-1px); }
 .btn-outline {
   background: transparent; color: var(--volt); border: 1px solid var(--volt);
-  box-shadow: inset 0 0 14px var(--volt-lo);
-  clip-path: none; padding: 11px 20px;
+  padding: 12px 22px; border-radius: var(--radius);
 }
 .btn-outline:hover { background: var(--volt-lo); }
-.btn-flame { background: var(--flame); color: #fff; box-shadow: 0 0 20px rgba(255,107,53,0.35); }
-.btn-flame:hover { background: #ff8054; box-shadow: 0 0 32px rgba(255,107,53,0.4); transform: translateY(-1px); }
+.btn-flame { background: var(--flame); color: #fff; box-shadow: 0 4px 16px rgba(255,107,53,0.3); }
+.btn-flame:hover { background: #ff8054; box-shadow: 0 6px 24px rgba(255,107,53,0.35); transform: translateY(-1px); }
+
+/* ══════════════════════════════
+   PROJECT CART
+══════════════════════════════ */
+.project-cart {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius);
+  overflow: hidden;
+  animation: fadeIn .3s ease;
+  display: none;
+}
+.project-cart.show { display: block; }
+
+.cart-header {
+  padding: 12px 16px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-header-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+  display: flex; align-items: center; gap: 10px;
+}
+.cart-count-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  background: var(--lime); color: #ffffff; font-family: var(--mono);
+  font-size: 10px; font-weight: 500; border-radius: 10px;
+}
+
+.cart-body { padding: 12px; }
+
+.cart-item {
+  display: flex; gap: 16px; padding: 16px; background: var(--ink2);
+  border: 1px solid var(--wire); border-radius: var(--radius); margin-bottom: 12px;
+  position: relative;
+}
+.cart-item:last-child { margin-bottom: 0; }
+
+.cart-item-number {
+  flex: 0 0 32px; height: 32px; border-radius: 4px; background: var(--volt-lo);
+  border: 1px solid var(--volt); display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--volt);
+}
+
+.cart-item-details {
+  flex: 1; display: flex; flex-direction: column; gap: 8px;
+}
+.cart-item-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+}
+.cart-item-product {
+  font-size: 14px; font-weight: 700; color: var(--text);
+}
+.cart-item-sku {
+  font-family: var(--mono); font-size: 11px; color: var(--volt); margin-top: 2px;
+}
+.cart-item-price {
+  font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text);
+  text-align: right;
+}
+
+.cart-item-meta {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+}
+.cart-meta-item {
+  display: inline-flex; gap: 4px;
+}
+.cart-meta-item:not(:last-child)::after {
+  content: '·'; color: var(--text3); margin-left: 8px;
+}
+.cart-meta-label { color: var(--text3); }
+.cart-meta-value { color: var(--text); }
+
+.cart-item-addons {
+  font-family: var(--mono); font-size: 10px; color: var(--text2);
+  line-height: 1.5;
+}
+
+.cart-item-delete {
+  position: absolute; top: 8px; right: 8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--wire); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); transition: all .2s;
+  font-size: 14px; line-height: 1;
+}
+.cart-item-delete:hover {
+  background: var(--crimson); color: #ffffff;
+}
+
+.cart-footer {
+  padding: 12px 16px; border-top: 1px solid var(--wire);
+  background: var(--steel);
+}
+.cart-total-block {
+  padding: 16px; background: var(--ink1); border: 1px solid var(--wire);
+  border-left: 3px solid var(--lime); border-radius: var(--radius); margin-bottom: 16px;
+}
+.cart-total-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+.cart-total-val {
+  font-size: 24px; font-weight: 900; color: var(--text); line-height: 1;
+}
+.cart-total-note {
+  font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 6px;
+}
 
 /* ══════════════════════════════
    WIZARD
@@ -495,7 +470,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 /* Sidebar steps */
 .wizard-steps { position: sticky; top: 80px; }
 .wizard-steps-inner {
-  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px; overflow: hidden;
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius); overflow: hidden;
 }
 .wizard-steps-head {
   padding: 14px 20px; background: var(--steel); border-bottom: 1px solid var(--wire);
@@ -554,7 +529,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 /* Wizard main content */
 .wizard-main {}
 .wizard-card {
-  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px;
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius);
   overflow: hidden;
 }
 .wizard-card-head {
@@ -581,7 +556,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   display: flex; flex-direction: column; align-items: center; gap: 10px;
   padding: 20px 14px; text-align: center;
   background: var(--ink2); border: 1px solid var(--wire);
-  border-radius: 3px; cursor: pointer; transition: all .2s;
+  border-radius: var(--radius); cursor: pointer; transition: all .25s;
 }
 .cat-opt-lbl:hover { border-color: var(--wire2); transform: translateY(-2px); }
 .cat-opt input:checked + .cat-opt-lbl {
@@ -603,9 +578,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
 .wiz-label .req { color: var(--volt); }
 .wiz-input {
-  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: 6px;
   color: var(--text); font-family: var(--mono); font-size: 13px;
-  padding: 11px 14px; outline: none; transition: border-color .2s, box-shadow .2s;
+  padding: 11px 14px; outline: none; transition: border-color .25s, box-shadow .25s;
   width: 100%;
 }
 .wiz-input::placeholder { color: var(--text3); }
@@ -628,7 +603,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   padding: 14px 8px; text-align: center;
   background: var(--ink2); border: 1px solid var(--wire);
-  border-radius: 3px; cursor: pointer; transition: all .2s;
+  border-radius: var(--radius); cursor: pointer; transition: all .25s;
 }
 .urg-opt input:checked + .urg-lbl { border-color: var(--flame); background: var(--flame-lo); }
 .urg-lbl:hover { border-color: var(--wire2); }
@@ -640,7 +615,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 /* Summary step */
 .summary-grid { display: flex; flex-direction: column; gap: 16px; }
 .summary-block {
-  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: var(--radius);
   overflow: hidden;
 }
 .summary-block-head {
@@ -685,9 +660,22 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
 .wf-note { font-family: var(--mono); font-size: 10px; color: var(--text3); }
 .wf-btns { display: flex; gap: 10px; }
-.btn-sm { padding: 10px 20px; font-size: 11px; width: auto; clip-path: none; }
+.btn-sm { padding: 10px 20px; font-size: 11px; width: auto; }
 .btn-nav { background: transparent; color: var(--text2); border: 1px solid var(--wire); }
 .btn-nav:hover { border-color: var(--wire2); color: var(--text); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text); color: #fff; padding: 14px 28px;
+  border-radius: var(--radius); font-family: var(--ff); font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 9999;
+  opacity: 0; transition: transform .35s var(--ease), opacity .35s ease;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0); opacity: 1;
+}
 
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
@@ -703,6 +691,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .page-title { font-size: 28px; }
   .tabs { flex-wrap: wrap; }
   .tab { font-size: 12px; padding: 10px 16px; }
+  .cart-item { flex-direction: column; gap: 8px; }
+  .cart-item-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+
 }
 @media (max-width: 480px) {
   .product-select-grid { grid-template-columns: 1fr; }
@@ -718,18 +709,13 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-hex"></div>
-    <div class="logo-text">СПЕЦ<span>ТЕХ</span></div>
+  <a href="https://specialtechnology.ru" class="logo">
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;"><img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
-  <a href="/" class="nav-back">
+  <a href="https://specialtechnology.ru" class="nav-back">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="19,12 5,12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 5,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     На главную
   </a>
-  <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-  </button>
 </nav>
 
 <div class="page">
@@ -738,8 +724,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="page-eyebrow">Инструменты</div>
-    <h1 class="page-title">Калькулятор<br><span>и запрос КП</span></h1>
-    <p class="page-sub">Подберите лицензии Альфа платформы онлайн или оформите запрос коммерческого предложения за 3 минуты</p>
+    <h1 class="page-title">Калькулятор<br><span>лицензий</span></h1>
+    <p class="page-sub">Подберите лицензии Альфа платформы онлайн — по артикулам или через опросный лист</p>
   </div>
 
   <!-- TABS -->
@@ -748,10 +734,11 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       Калькулятор
     </button>
-    <button class="tab" onclick="switchTab('wizard', this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><polyline points="9,12 11,14 15,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Запрос КП
+    <button class="tab" onclick="switchTab('survey', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="1.5"/></svg>
+      Опросный лист
     </button>
+
   </div>
 
   <!-- ══════════ CALCULATOR PANEL ══════════ -->
@@ -764,7 +751,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main" style="margin-bottom:16px">
           <div class="calc-section-head">
             <div class="calc-section-title">Выбор продукта</div>
-            <span>// step 1 of 3</span>
+            <span>// шаг 1 из 3</span>
           </div>
           <div class="calc-body">
             <div class="product-select-grid">
@@ -810,7 +797,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main" style="margin-bottom:16px">
           <div class="calc-section-head">
             <div class="calc-section-title">Параметры лицензии</div>
-            <span>// step 2 of 3</span>
+            <span>// шаг 2 из 3</span>
           </div>
           <div class="calc-body">
 
@@ -848,10 +835,10 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
             <!-- Дополнительные продукты -->
             <div style="margin-top:16px; border-top:1px solid var(--wire); padding-top:12px">
-              <div style="font-size:11px; color:var(--text3); font-family:var(--ff-mono); margin-bottom:8px">// дополнительно к основному продукту</div>
+              <div style="font-size:11px; color:var(--text3); font-family:var(--mono); margin-bottom:8px">// дополнительно к основному продукту</div>
               
               <div class="addon-product" style="margin-bottom:10px">
-                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff)">
                   <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
                   <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
                   <span class="addon-hint">Архивирование данных процесса</span>
@@ -859,7 +846,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
                   <div style="display:flex;justify-content:space-between;margin-bottom:4px">
                     <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
-                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="hist-qty-val">1 k</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--mono)" id="hist-qty-val">1 k</span>
                   </div>
                   <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
                   <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
@@ -867,7 +854,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
               </div>
 
               <div class="addon-product">
-                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff)">
                   <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
                   <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
                   <span class="addon-hint">Генерация отчётов и аналитика</span>
@@ -875,7 +862,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
                   <div style="display:flex;justify-content:space-between;margin-bottom:4px">
                     <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
-                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="rpt-qty-val">1 k</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--mono)" id="rpt-qty-val">1 k</span>
                   </div>
                   <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
                   <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
@@ -890,12 +877,12 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main">
           <div class="calc-section-head">
             <div class="calc-section-title">Дополнительные модули</div>
-            <span>// step 3 of 3</span>
+            <span>// шаг 3 из 3</span>
           </div>
           <div class="calc-body">
             <!-- Клиенты -->
             <div class="addon-row">
-              <div class="addon-label">Полный клиент (CL-F) <span id="clf-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">1 включён в Platform</span></div>
+              <div class="addon-label">Полный клиент (CL-F) <span id="clf-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--mono)">1 включён в Platform</span></div>
               <div class="addon-ctrl">
                 <select id="addon-client" class="addon-select" onchange="calcUpdate()">
                   <option value="">— не нужен</option>
@@ -947,7 +934,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
             <!-- Драйверы -->
             <div class="addon-row">
-              <div class="addon-label">Пакеты драйверов <span id="drv-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">включены в Platform</span></div>
+              <div class="addon-label">Пакеты драйверов <span id="drv-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--mono)">включены в Platform</span></div>
               <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
                 <label class="addon-check"><input type="checkbox" id="addon-energy" onchange="calcUpdate()"> DRV-PACK-ENERGY <span class="addon-hint">МЭК 61850, ТЭМ-104</span></label>
                 <label class="addon-check"><input type="checkbox" id="addon-industry" onchange="calcUpdate()"> DRV-PACK-INDUSTRY <span class="addon-hint">BACnet, S7, Ethernet/IP, FINS</span></label>
@@ -1052,47 +1039,516 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
             <div class="result-total-label">Ориентировочная стоимость</div>
             <div class="result-total-val" id="r-total" style="font-size:22px">—</div>
             <div class="result-total-note" id="r-note">без НДС · ориентировочная стоимость</div>
-            <div style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--wire);border-radius:4px;font-size:11px;line-height:1.5;color:var(--text3)">
-              Расчёт является предварительным и не является публичной офертой (ст. 437 ГК РФ). Окончательная стоимость определяется в коммерческом предложении. Для уточнения цен и условий обращайтесь к&nbsp;менеджерам: <a href="mailto:sales@special-tech.ru" style="color:var(--volt);text-decoration:none">sales@special-tech.ru</a>
+            <div style="margin-top:12px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:4px;font-size:11px;line-height:1.5;color:var(--text3)">
+              Расчёт является предварительным и не является публичной офертой (ст. 437 ГК РФ). Окончательная стоимость определяется в коммерческом предложении. Для уточнения цен и условий обращайтесь: <a href="mailto:sales@special-tech.ru" style="color:var(--volt);text-decoration:none">sales@special-tech.ru</a>
             </div>
           </div>
 
-                    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
-            <div style="font-size:11px;color:var(--text3);font-family:var(--ff-mono);margin-bottom:8px">// ваши контакты</div>
-            <input class="addon-select" id="calc-name" placeholder="Имя *" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-company" placeholder="Компания *" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
-            <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
-            <!-- Honeypot — hidden from humans, bots fill it -->
-            <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
-          </div>
-
+          <!-- Add to Project Button -->
           <div class="result-actions">
-            <button class="btn btn-volt" id="btn-send-calc" onclick="sendConfigEmail()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
-              Отправить КП
-            </button>
-            <button class="btn btn-outline" onclick="switchTab('wizard', document.querySelectorAll('.tab')[1]); prefillWizard()">
-              Расширенный запрос
+            <button class="btn btn-lime" id="btn-add-project" onclick="addToProject()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Добавить в проект
             </button>
           </div>
 
-          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--wire)">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
-              <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
-              АО СПЕЦТЕХ<br>sales@special-tech.ru<br>+7 (495) 760 09 39<br>
-              <span style="color:var(--volt)" id="r-date"></span>
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </div><!-- /calc panel -->
+
+
+  <!-- ══════════ SURVEY PANEL ══════════ -->
+  <div id="panel-survey" class="panel">
+    <div class="wizard-wrap">
+
+      <!-- SURVEY SIDEBAR -->
+      <div class="wizard-steps">
+        <div class="wizard-steps-inner">
+          <div class="wizard-steps-head">
+            <div class="wizard-steps-title">Шаги опроса</div>
+          </div>
+          <div class="step-list">
+            <div class="step-item active" id="srv-si-1">
+              <div class="step-num">01</div>
+              <div class="step-info">
+                <div class="step-name">Масштаб</div>
+                <div class="step-desc">Система и серверы</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-2">
+              <div class="step-num">02</div>
+              <div class="step-info">
+                <div class="step-name">Клиенты</div>
+                <div class="step-desc">Подключения</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-3">
+              <div class="step-num">03</div>
+              <div class="step-info">
+                <div class="step-name">Архив</div>
+                <div class="step-desc">Historian & Reports</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-4">
+              <div class="step-num">04</div>
+              <div class="step-info">
+                <div class="step-name">Протоколы</div>
+                <div class="step-desc">Драйверы</div>
+              </div>
+            </div>
+            <div class="step-item" id="srv-si-5">
+              <div class="step-num">05</div>
+              <div class="step-info">
+                <div class="step-name">Результат</div>
+                <div class="step-desc">Конфигурация</div>
+              </div>
+            </div>
+          </div>
+          <div class="wizard-progress">
+            <div class="wp-label">
+              <span class="wp-text">Прогресс</span>
+              <span class="wp-pct" id="srv-pct">20%</span>
+            </div>
+            <div class="wp-track">
+              <div class="wp-fill" id="srv-bar" style="width:20%"></div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- SURVEY MAIN CARD -->
+      <div class="wizard-main">
+        <div class="wizard-card" id="survey-form-card">
+
+          <!-- Survey Step 1: System Scale -->
+          <div id="srv-head-1">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 01 из 05</div>
+                <div class="wch-title">Масштаб системы</div>
+                <div class="wch-sub">Расскажите о размере и архитектуре вашей системы</div>
+              </div>
+              <div class="wch-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="20" rx="2" stroke="#00c8f0" stroke-width="1.5"/><rect x="8" y="12" width="24" height="16" rx="1" fill="#0c1525"/><line x1="10" y1="18" x2="30" y2="18" stroke="#ff6b35" stroke-width="1.2"/><line x1="10" y1="22" x2="25" y2="22" stroke="#1de9b6" stroke-width="1.2"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 2 head -->
+          <div id="srv-head-2" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 02 из 05</div>
+                <div class="wch-title">Клиентские подключения</div>
+                <div class="wch-sub">Сколько рабочих мест потребуется для операторов</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 3 head -->
+          <div id="srv-head-3" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 03 из 05</div>
+                <div class="wch-title">Архивирование и отчёты</div>
+                <div class="wch-sub">Нужно ли сохранять данные и генерировать отчёты</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 4 head -->
+          <div id="srv-head-4" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 04 из 05</div>
+                <div class="wch-title">Протоколы и драйверы</div>
+                <div class="wch-sub">Какое оборудование нужно подключить</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Step 5 head -->
+          <div id="srv-head-5" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 05 из 05</div>
+                <div class="wch-title">Рекомендованная конфигурация</div>
+                <div class="wch-sub">Подобрали оптимальную систему для ваших задач</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SURVEY STEP PANELS -->
+
+          <!-- S1: System Scale -->
+          <div id="srv-sp-1" class="step-panel active">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Количество внешних тегов/сигналов <span class="req">*</span></label>
+                  <input class="wiz-input" id="srv-tags" type="number" placeholder="1500" min="1" oninput="updateSurveyRecommendation()">
+                  <div class="wiz-hint">Только внешние теги (I/O точки подключения к оборудованию)</div>
+                </div>
+
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество серверов <span class="req">*</span></label>
+                    <select class="wiz-input wiz-select" id="srv-servers" onchange="updateSurveyRecommendation()">
+                      <option value="1">1 сервер</option>
+                      <option value="2">2 сервера</option>
+                      <option value="3">3-5 серверов</option>
+                      <option value="6">6-10 серверов</option>
+                      <option value="10">10+ серверов</option>
+                    </select>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Резервирование</label>
+                    <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="да" style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Да</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="нет" checked style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Нет</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-reserve" value="не знаю" style="accent-color: var(--volt)" onchange="updateSurveyRecommendation()">
+                        <span style="font-size:13px;">Не знаю</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Auto-recommendation hint box -->
+                <div id="srv-hint-box" style="margin-top:20px; padding:16px; background:var(--volt-lo); border:1px solid var(--volt); border-left:4px solid var(--volt); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#00c8f0" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;" id="srv-hint-text">Рекомендуем: Alpha.One+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S2: Clients -->
+          <div id="srv-sp-2" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Полные клиенты (АРМ оператора)</label>
+                  <input class="wiz-input" id="srv-full-clients" type="number" placeholder="0" min="0" max="50" oninput="checkClientCompatibility();validateClientSplit()">
+                  <div class="wiz-hint">Рабочие станции с полным управлением</div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">WEB-клиенты (только просмотр)</label>
+                  <select class="wiz-input wiz-select" id="srv-web-clients" onchange="checkClientCompatibility()">
+                    <option value="0">Не нужны</option>
+                    <option value="10">до 10</option>
+                    <option value="25">до 25</option>
+                    <option value="50">до 50</option>
+                    <option value="100">до 100</option>
+                    <option value="250">250+</option>
+                    <option value="999">Безлимит</option>
+                  </select>
+                </div>
+
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Терминальные клиенты</label>
+                    <input class="wiz-input" id="srv-terminal-clients" type="number" placeholder="0" min="0" oninput="validateClientSplit()">
+                    <div class="wiz-hint">Тонкие клиенты / терминалы</div>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">RDP клиенты</label>
+                    <input class="wiz-input" id="srv-rdp-clients" type="number" placeholder="0" min="0" oninput="validateClientSplit()">
+                    <div class="wiz-hint">Удалённый рабочий стол</div>
+                  </div>
+                </div>
+                <div id="srv-client-split-hint" class="wiz-hint" style="margin-top:4px;color:var(--text3)">Распределение terminal/RDP уточняется при заказе ключей</div>
+                <div id="srv-client-split-warn" style="display:none;margin-top:8px;padding:10px 14px;background:var(--flame-lo);border:1px solid var(--flame);border-radius:6px;font-size:12px;color:var(--flame);font-weight:600;">⚠ Терминальные + RDP не могут превышать количество полных клиентов</div>
+
+                <!-- Warning box for One+ compatibility -->
+                <div id="srv-client-warning" style="display:none; margin-top:20px; padding:16px; background:var(--flame-lo); border:1px solid var(--flame); border-left:4px solid var(--flame); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 9v3m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="#ff6b35" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;">Alpha.One+ не поддерживает дополнительных клиентов. Рекомендация изменена на Alpha.SCADA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S3: Historian & Reports -->
+          <div id="srv-sp-3" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен Historian?</label>
+                  <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="да" style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="нет" checked style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-historian" value="не знаю" style="accent-color: var(--volt)" onchange="toggleHistorianFields()">
+                      <span style="font-size:13px;">Не знаю</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div id="srv-historian-fields" style="display:none;">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество тегов для архивирования</label>
+                    <input class="wiz-input" id="srv-hist-tags" type="number" placeholder="" min="1">
+                    <div class="wiz-hint">Обычно равно или меньше количества внешних тегов</div>
+                  </div>
+
+                  <div class="wiz-field">
+                    <label class="wiz-label">Резервирование Historian?</label>
+                    <div style="margin-top:8px; display:flex; gap:16px;">
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-hist-reserve" value="да" style="accent-color: var(--volt)">
+                        <span style="font-size:13px;">Да</span>
+                      </label>
+                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="srv-hist-reserve" value="нет" checked style="accent-color: var(--volt)">
+                        <span style="font-size:13px;">Нет</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен Reports?</label>
+                  <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="да" style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="нет" checked style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-reports" value="не знаю" style="accent-color: var(--volt)" onchange="toggleReportsFields()">
+                      <span style="font-size:13px;">Не знаю</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div id="srv-reports-fields" style="display:none;">
+                  <div class="wiz-row">
+                    <div class="wiz-field">
+                      <label class="wiz-label">Количество тегов Reports</label>
+                      <input class="wiz-input" id="srv-rpt-tags" type="number" placeholder="" min="1">
+                    </div>
+                    <div class="wiz-field">
+                      <label class="wiz-label">Количество пользователей Reports</label>
+                      <select class="wiz-input wiz-select" id="srv-rpt-users">
+                        <option value="1">1</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S4: Protocols -->
+          <div id="srv-sp-4" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <!-- Protocol checkboxes -->
+                <div class="wiz-field">
+                  <label class="wiz-label">Необходимые протоколы</label>
+                  <div style="margin-top:12px;">
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Базовые (включены в любой продукт):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        OPC UA
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        OPC DA
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        Modbus TCP/RTU
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        MQTT
+                      </label>
+                      <label class="addon-check" style="font-size:12px; opacity:0.6;">
+                        <input type="checkbox" checked disabled>
+                        SNMP
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Энергетика (DRV-PACK-ENERGY):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-61850" onchange="updateDriverPacks()">
+                        МЭК 61850
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-104" onchange="updateDriverPacks()">
+                        МЭК 60870-5-104
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-101" onchange="updateDriverPacks()">
+                        МЭК 60870-5-101
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-tem" onchange="updateDriverPacks()">
+                        ТЭМ-104
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Промышленность (DRV-PACK-INDUSTRY):</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-bacnet" onchange="updateDriverPacks()">
+                        BACnet
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-s7" onchange="updateDriverPacks()">
+                        Siemens S7
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-eip" onchange="updateDriverPacks()">
+                        Ethernet/IP
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-fins" onchange="updateDriverPacks()">
+                        FINS (Omron)
+                      </label>
+                    </div>
+
+                    <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">OPC DA на отдельном ПК:</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px;">
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-opcda-cl">
+                        OPC DA клиент
+                      </label>
+                      <label class="addon-check" style="font-size:12px;">
+                        <input type="checkbox" id="srv-prot-opcda-srv">
+                        OPC DA сервер
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="wiz-field">
+                  <label class="wiz-label">Нужен WEB-портал?</label>
+                  <div style="margin-top:8px; display:flex; gap:16px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-web-portal" value="да" style="accent-color: var(--volt)">
+                      <span style="font-size:13px;">Да</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                      <input type="radio" name="srv-web-portal" value="нет" checked style="accent-color: var(--volt)">
+                      <span style="font-size:13px;">Нет</span>
+                    </label>
+                  </div>
+                  <div class="wiz-hint">Для публикации данных через IIS/Apache</div>
+                </div>
+
+                <!-- Platform driver note -->
+                <div id="srv-platform-note" style="display:none; margin-top:20px; padding:16px; background:var(--lime-lo); border:1px solid var(--lime); border-left:4px solid var(--lime); border-radius:var(--radius); display:flex; align-items:center; gap:12px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#559618" stroke-width="1.5"/></svg>
+                  <div style="font-size:14px; color:var(--text); font-weight:500;">Для Alpha.Platform все драйверы включены</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S5: Result -->
+          <div id="srv-sp-5" class="step-panel">
+            <div class="wizard-card-body">
+              <!-- Recommendation summary card -->
+              <div style="background:var(--ink2); border:1px solid var(--wire); border-left:4px solid var(--volt); border-radius:var(--radius); padding:20px; margin-bottom:24px;">
+                <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:12px;">Рекомендованная конфигурация</div>
+                
+                <div id="srv-result-product" style="font-size:18px; font-weight:700; color:var(--volt); margin-bottom:8px;">Alpha.SCADA</div>
+                <div id="srv-result-explanation" style="font-size:14px; color:var(--text2); margin-bottom:16px; line-height:1.5;">Клиент-серверная версия подходит для вашего масштаба и требований</div>
+                
+                <div id="srv-result-details" style="font-family:var(--mono); font-size:12px; color:var(--text); line-height:1.8;">
+                  <!-- Details will be filled dynamically -->
+                </div>
+              </div>
+
+              <!-- SLA & Term selectors -->
+              <div class="wiz-row" style="margin-bottom:20px;">
+                <div class="wiz-field">
+                  <label class="wiz-label">SLA-сертификат</label>
+                  <select class="wiz-input wiz-select" id="srv-sla" onchange="updateSurveyPrice()">
+                    <option value="SLA-BASE">Базовый (бесплатно)</option>
+                    <option value="SLA-STD">Стандартный (10% / год)</option>
+                    <option value="SLA-OPT">Оптимальный (15% / год)</option>
+                    <option value="SLA-PRM">Премиальный (25% / год)</option>
+                  </select>
+                </div>
+                <div class="wiz-field">
+                  <label class="wiz-label">Тип лицензии</label>
+                  <select class="wiz-input wiz-select" id="srv-term" onchange="updateSurveyPrice()">
+                    <option value="1">Бессрочная</option>
+                    <option value="2">1 год</option>
+                    <option value="3">3 года</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Total price -->
+              <div style="background:var(--ink1); border:1px solid var(--wire); border-left:4px solid var(--lime); border-radius:var(--radius); padding:20px; margin-bottom:20px;">
+                <div style="font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text3); margin-bottom:8px;">Ориентировочная стоимость</div>
+                <div id="srv-total-price" style="font-size:28px; font-weight:900; color:var(--text); line-height:1;">—</div>
+                <div style="font-family:var(--mono); font-size:11px; color:var(--text3); margin-top:8px;">без НДС · предварительный расчёт</div>
+              </div>
+
+              <!-- Action buttons -->
+              <div style="display:flex; gap:12px;">
+                <button class="btn btn-lime" id="btn-add-survey" onclick="addSurveyToProject()" style="flex:1;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  Добавить в проект
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- SURVEY FOOTER -->
+          <div class="wizard-footer" id="srv-footer">
+            <div class="wf-note" id="srv-note">Поля, отмеченные <span style="color:var(--volt)">*</span> — обязательны</div>
+            <div class="wf-btns">
+              <button class="btn btn-sm btn-nav" id="srv-btn-back" onclick="surveyStep(-1)" style="display:none">← Назад</button>
+              <button class="btn btn-sm btn-volt" id="srv-btn-next" onclick="surveyStep(1)">
+                Далее →
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /survey-card -->
+      </div><!-- /survey-main -->
     </div>
-  </div><!-- /calc panel -->
+  </div><!-- /survey panel -->
 
 
-  <!-- ══════════ WIZARD PANEL ══════════ -->
-  <div id="panel-wizard" class="panel">
+  <!-- WIZARD PANEL REMOVED -->
+  <div id="panel-wizard-removed" style="display:none">
     <div class="wizard-wrap">
 
       <!-- SIDEBAR -->
@@ -1176,6 +1632,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div id="wiz-head-3" style="display:none">
             <div class="wizard-card-head">
               <div class="wch-left">
+
                 <div class="wch-step">// Шаг 03 из 04</div>
                 <div class="wch-title">Контактные данные</div>
                 <div class="wch-sub">Заполните данные — мы отправим КП на указанный email</div>
@@ -1434,7 +1891,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
                 </div>
               </div>
 
-              <div style="margin-top:20px;padding:16px;background:var(--volt-lo);border:1px solid rgba(0,200,240,0.2);border-radius:3px;display:flex;align-items:center;gap:12px">
+              <div style="margin-top:20px;padding:16px;background:var(--volt-lo);border:1px solid rgba(9,151,200,0.3);border-radius:var(--radius);display:flex;align-items:center;gap:12px">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00c8f0" stroke-width="1.5"/><line x1="12" y1="8" x2="12" y2="12" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="#00c8f0"/></svg>
                 <div style="font-size:13px;color:var(--text2);line-height:1.5">Мы получим ваш запрос и вышлем КП в течение <strong style="color:var(--volt)">4 рабочих часов</strong>. При срочном запросе — менеджер свяжется по телефону.</div>
               </div>
@@ -1467,7 +1924,103 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         </div><!-- /wizard-card -->
       </div><!-- /wizard-main -->
     </div>
-  </div><!-- /wizard panel -->
+  </div><!-- /wizard-removed -->
+
+  <!-- PROJECT CART — visible across all tabs -->
+  <div class="project-cart" id="project-cart" style="margin-top:24px">
+    <div class="calc-section-head">
+      <div class="calc-section-title">
+        Проект
+        <span class="cart-count-badge" id="cart-count" style="margin-left:8px">0</span>
+      </div>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// корзина</span>
+    </div>
+    <div class="cart-body">
+      <div id="cart-items"></div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-block">
+        <div class="cart-total-label">Общая стоимость проекта</div>
+        <div class="cart-total-val" id="cart-total">—</div>
+        <div class="cart-total-note">без НДС · все позиции</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOBAL: Contact Form + Send -->
+  <div class="calc-main" style="margin-top:24px">
+    <div class="calc-section-head">
+      <div class="calc-section-title">Ваши контакты</div>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// для отправки КП</span>
+    </div>
+    <div class="calc-body" style="padding:20px 24px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <input class="addon-select" id="calc-name" placeholder="Имя *">
+        <input class="addon-select" id="calc-company" placeholder="Компания *">
+        <input class="addon-select" id="calc-email" placeholder="Email *" type="email">
+        <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel">
+        <input class="addon-select" id="calc-inn" placeholder="ИНН">
+        <select class="addon-select" id="calc-industry">
+          <option value="">Отрасль...</option>
+          <option value="Системный интегратор">Системный интегратор</option>
+          <option value="Энергетика">Энергетика</option>
+          <option value="Нефть и газ">Нефть и газ</option>
+          <option value="Химия и нефтехимия">Химия и нефтехимия</option>
+          <option value="Металлургия">Металлургия</option>
+          <option value="Горнодобыча">Горнодобыча</option>
+          <option value="ЖКХ / Водоснабжение">ЖКХ / Водоснабжение</option>
+          <option value="Пищевая промышленность">Пищевая промышленность</option>
+          <option value="Фармацевтика">Фармацевтика</option>
+          <option value="Строительство / BMS">Строительство / BMS</option>
+          <option value="Транспорт">Транспорт</option>
+          <option value="Другое">Другое</option>
+        </select>
+      </div>
+      <select class="addon-select" id="calc-urgency" style="margin-bottom:8px;width:100%">
+        <option value="">Срочность...</option>
+        <option value="ASAP (24–48 ч)">🔴 ASAP (24–48 ч)</option>
+        <option value="Неделя (3–7 дней)">🟠 Неделя (3–7 дней)</option>
+        <option value="Месяц">🟡 До месяца</option>
+        <option value="Плановый / бюджет">🟢 Плановый / бюджет</option>
+      </select>
+      <textarea class="addon-select" id="calc-comment" placeholder="Комментарий (необязательно)" style="margin-bottom:8px;min-height:48px;resize:vertical;font-family:var(--mono);font-size:12px;width:100%"></textarea>
+      <div style="margin-bottom:8px">
+        <label class="addon-select" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span id="file-label" style="font-size:12px;color:var(--text2)">Прикрепить файл</span>
+          <input type="file" id="calc-file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip,.rar,.txt,.csv" onchange="fileSelected(this)">
+        </label>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;padding-left:12px">Макс. 10 МБ · PDF, DOC, XLS, PNG, JPG, ZIP</div>
+      </div>
+      <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
+
+      <div style="margin:12px 0 8px;">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.4;margin-bottom:8px;">
+          <input type="checkbox" id="calc-consent-pd" required style="margin-top:2px;flex-shrink:0;accent-color:var(--volt);">
+          <span>Даю <a href="consent.html" target="_blank" style="color:var(--volt);text-decoration:underline;">согласие на обработку ПД</a></span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.4;">
+          <input type="checkbox" id="calc-consent-comm" required style="margin-top:2px;flex-shrink:0;accent-color:var(--volt);">
+          <span>Согласен на получение информационных материалов</span>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-volt" id="btn-send-calc" onclick="smartSend()" style="flex:1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
+          Отправить КП
+        </button>
+      </div>
+
+      <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--wire)">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
+          <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
+          АО СПЕЦТЕХ · sales@special-tech.ru · +7 (495) 760 09 39<br>
+          <span style="color:var(--volt)" id="r-date"></span>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div><!-- /container -->
 </div><!-- /page -->
@@ -1600,6 +2153,9 @@ const skuPrices = {
 const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
 const termMultipliers = { 1:1.0, 2:0.4, 3:0.85 }; // 1=Бессрочная, 2=1 год, 3=3 года
 
+/* ─── PROJECT CART ─── */
+let projectItems = [];
+
 function formatPrice(n) {
   if (!n && n !== 0) return '—';
   return n.toLocaleString('ru-RU') + ' ₽';
@@ -1656,11 +2212,11 @@ function updateSliderRange() {
   const drvIndustry = document.getElementById('addon-industry');
   if (drvEnergy) {
     if (isPlatform || isScada) { drvEnergy.checked = true; drvEnergy.disabled = true; }
-    else { drvEnergy.disabled = false; }
+    else { drvEnergy.disabled = false; drvEnergy.checked = false; }
   }
   if (drvIndustry) {
     if (isPlatform) { drvIndustry.checked = true; drvIndustry.disabled = true; }
-    else { drvIndustry.disabled = false; }
+    else { drvIndustry.disabled = false; drvIndustry.checked = false; }
   }
   const drvNote = document.getElementById('drv-note');
   if (drvNote) {
@@ -1669,13 +2225,27 @@ function updateSliderRange() {
     else { drvNote.style.display = 'none'; }
   }
   
-  // Platform includes 1 full client
+  // Alpha.One+ is single-user — no additional clients allowed
+  const isOne = (prod === 'alpha-one');
+  
+  // Full client (CL-F)
   const clientSel = document.getElementById('addon-client');
-  if (clientSel) {
-    if (isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
+  const clientRow = clientSel?.closest('.addon-row');
+  if (clientRow) {
+    if (isOne) { clientRow.style.display = 'none'; clientSel.value = ''; }
+    else { clientRow.style.display = ''; }
   }
+  if (clientSel && isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
   const clfNote = document.getElementById('clf-note');
   if (clfNote) clfNote.style.display = isPlatform ? 'inline' : 'none';
+  
+  // WEB clients — also hide for One+
+  const webSel = document.getElementById('addon-web');
+  const webRow = webSel?.closest('.addon-row');
+  if (webRow) {
+    if (isOne) { webRow.style.display = 'none'; webSel.value = ''; }
+    else { webRow.style.display = ''; }
+  }
   
   // IOSRV only for Platform
   const iosrvRow = document.getElementById('addon-iosrv')?.closest('.addon-row');
@@ -1870,6 +2440,384 @@ function calcUpdate() {
     now.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
 }
 
+function addToProject() {
+  // Capture current calculator state
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = +document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  
+  // Collect addons
+  let addons = [];
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addons.push(el.options[el.selectedIndex].text);
+  });
+  
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'OPC DA клиент',
+    'addon-opcda-srv': 'OPC DA сервер',
+    'addon-portal': 'WEB-портал'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addons.push(name);
+  });
+  
+  if (hasReserve) addons.push('Резервный сервер');
+  
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  if (slaVal !== 'SLA-BASE') {
+    const slaEl = document.getElementById('addon-sla');
+    addons.push('SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  }
+  
+  // Get current price from result panel
+  const currentPrice = document.getElementById('r-total').textContent;
+  
+  // Create item object
+  const item = {
+    product: p.name,
+    sku: bestSku ? bestSku.sku : '—',
+    tags: qty,
+    term: terms[term - 1],
+    historian: hist ? (hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')') : null,
+    reports: rpt ? (rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')') : null,
+    reserve: hasReserve,
+    addons: addons,
+    price: currentPrice,
+    timestamp: Date.now()
+  };
+  
+  // Add to project
+  projectItems.push(item);
+  
+  // Save to sessionStorage
+  saveProjectToStorage();
+  
+  // Update cart display
+  updateCartDisplay();
+  
+  // Show success feedback
+  const btn = document.getElementById('btn-add-project');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено в проект!';
+  btn.style.background = 'var(--lime)';
+
+  // Show toast notification
+  showToast('✓ ' + (projectItems[projectItems.length-1]?.product || 'Продукт') + ' добавлен в проект (' + projectItems.length + ' поз.)');
+
+  // Scroll to cart
+  setTimeout(() => {
+    const cart = document.getElementById('project-cart');
+    if (cart) {
+      cart.style.boxShadow = '0 0 24px var(--lime)';
+      cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => { cart.style.boxShadow = ''; }, 2000);
+    }
+  }, 300);
+
+  setTimeout(() => {
+    btn.innerHTML = origText;
+    btn.style.background = '';
+  }, 2000);
+
+  // Reset calculator to defaults
+  resetCalcToDefaults();
+}
+
+function resetCalcToDefaults() {
+  // Reset product to Alpha.One+
+  document.getElementById('p1').checked = true;
+
+  // Reset term to Бессрочная
+  document.getElementById('term-slider').value = 1;
+  document.getElementById('term-val').textContent = 'Бессрочная';
+
+  // Reset reserve
+  const res = document.getElementById('addon-reserve');
+  if (res) res.checked = false;
+
+  // Reset Historian & Reports
+  const addHist = document.getElementById('add-historian');
+  if (addHist) { addHist.checked = false; toggleAddonProduct('historian'); }
+  const addRpt = document.getElementById('add-reports');
+  if (addRpt) { addRpt.checked = false; toggleAddonProduct('reports'); }
+
+  // Reset selects
+  ['addon-client','addon-web','addon-rpt-cl','addon-iosrv'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Reset checkboxes (only non-disabled)
+  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.disabled) el.checked = false;
+  });
+
+  // Reset SLA
+  const sla = document.getElementById('addon-sla');
+  if (sla) sla.value = 'SLA-BASE';
+
+  // Update slider range for new product & recalc
+  updateSliderRange();
+  calcUpdate();
+}
+
+function removeFromProject(index) {
+  if (index >= 0 && index < projectItems.length) {
+    projectItems.splice(index, 1);
+    saveProjectToStorage();
+    updateCartDisplay();
+  }
+}
+
+function updateCartDisplay() {
+  const cart = document.getElementById('project-cart');
+  const itemsContainer = document.getElementById('cart-items');
+  const countBadge = document.getElementById('cart-count');
+  const totalEl = document.getElementById('cart-total');
+  
+  if (projectItems.length === 0) {
+    cart.classList.remove('show');
+    return;
+  }
+  
+  cart.classList.add('show');
+  countBadge.textContent = projectItems.length;
+  
+  // Render items
+  itemsContainer.innerHTML = projectItems.map((item, index) => `
+    <div class="cart-item">
+      <div class="cart-item-number">#${index + 1}</div>
+      <div class="cart-item-details">
+        <div class="cart-item-header">
+          <div>
+            <div class="cart-item-product">${item.product}</div>
+            <div class="cart-item-sku">${item.sku}</div>
+          </div>
+          <div class="cart-item-price">${typeof item.price === 'number' ? formatPrice(item.price) : item.price}</div>
+        </div>
+        
+        <div class="cart-item-meta">
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Тегов:</span>
+            <span class="cart-meta-value">${item.tags.toLocaleString('ru-RU')}</span>
+          </div>
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Лицензия:</span>
+            <span class="cart-meta-value">${item.term}</span>
+          </div>
+          ${item.historian ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Historian:</span>
+            <span class="cart-meta-value">${item.historian}</span>
+          </div>` : ''}
+          ${item.reports ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Reports:</span>
+            <span class="cart-meta-value">${item.reports}</span>
+          </div>` : ''}
+        </div>
+        
+        ${item.addons.length > 0 ? `<div class="cart-item-addons">
+          Доп. модули: ${item.addons.join(', ')}
+        </div>` : ''}
+      </div>
+      
+      <button class="cart-item-delete" onclick="removeFromProject(${index})" title="Удалить">
+        ×
+      </button>
+    </div>
+  `).join('');
+  
+  // Calculate total
+  const total = calcProjectTotal();
+  totalEl.textContent = formatPrice(total);
+}
+
+function calcProjectTotal() {
+  // Simple approach: sum up prices from stored items
+  // Note: this parses the formatted price strings, which is not ideal for production
+  // but works for demo purposes
+  let total = 0;
+  projectItems.forEach(item => {
+    const priceNum = typeof item.price === 'number' ? item.price : parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+    total += priceNum;
+  });
+  return total;
+}
+
+function saveProjectToStorage() {
+  // disabled — cart resets on page refresh
+}
+
+function loadProjectFromStorage() {
+  // disabled — cart starts empty
+  projectItems = [];
+}
+
+function sendProjectEmail() {
+  if (projectItems.length === 0) {
+    alert('Проект пуст. Добавьте хотя бы один элемент.');
+    return;
+  }
+  
+  // Get contact fields (shared with single calculator)
+  const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+  
+  if (!cName || !cCompany || !cEmail) {
+    alert('Заполните имя, компанию и email');
+    if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
+  // Prepare project data
+  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+  const total = calcProjectTotal();
+  
+  // Create items summary for email
+  let itemsText = '';
+  projectItems.forEach((item, index) => {
+    itemsText += `\n--- Элемент #${index + 1} ---\n`;
+    itemsText += `Продукт: ${item.product}\n`;
+    itemsText += `Артикул: ${item.sku}\n`;
+    itemsText += `Тегов: ${item.tags.toLocaleString('ru-RU')}\n`;
+    itemsText += `Лицензия: ${item.term}\n`;
+    if (item.historian) itemsText += `Historian: ${item.historian}\n`;
+    if (item.reports) itemsText += `Reports: ${item.reports}\n`;
+    if (item.reserve) itemsText += `Резерв: Да\n`;
+    if (item.addons.length > 0) itemsText += `Модули: ${item.addons.join(', ')}\n`;
+    itemsText += `Стоимость: ${typeof item.price === 'number' ? formatPrice(item.price) : item.price}\n`;
+  });
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', tid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('name', cName);
+  fd.append('company', cCompany);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
+  fd.append('is_project', '1');
+  fd.append('items_count', projectItems.length);
+  fd.append('items_json', JSON.stringify(projectItems));
+  fd.append('total_price', formatPrice(total));
+  fd.append('items_text', itemsText);
+  appendExtraFields(fd);
+
+  // Show sending state on the main send button
+  const btn = document.getElementById('btn-send-calc');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
+    .then(data => {
+      if (data.ok) {
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Проект отправлен!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { 
+          btn.innerHTML = origText; 
+          btn.disabled = false; 
+          btn.style.borderColor = ''; 
+          btn.style.color = ''; 
+          // Clear project after successful send
+          projectItems = [];
+          saveProjectToStorage();
+          updateCartDisplay();
+        }, 3000);
+      } else {
+        btn.innerHTML = data.error || '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+      }
+    })
+    .catch(e => {
+      btn.innerHTML = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+    });
+}
+
+function fileSelected(input) {
+  const label = document.getElementById('file-label');
+  if (input.files.length > 0) {
+    const f = input.files[0];
+    if (f.size > 10 * 1024 * 1024) {
+      alert('Файл слишком большой. Максимум 10 МБ.');
+      input.value = '';
+      label.textContent = 'Прикрепить файл';
+      label.style.color = 'var(--text2)';
+      return;
+    }
+    label.textContent = f.name;
+    label.style.color = 'var(--volt)';
+  } else {
+    label.textContent = 'Прикрепить файл';
+    label.style.color = 'var(--text2)';
+  }
+}
+
+function appendExtraFields(fd) {
+  fd.append('inn', document.getElementById('calc-inn')?.value.trim() || '');
+  fd.append('industry', document.getElementById('calc-industry')?.value || '');
+  fd.append('urgency', document.getElementById('calc-urgency')?.value || '');
+  const fileInput = document.getElementById('calc-file');
+  if (fileInput?.files.length > 0) {
+    fd.append('attachment', fileInput.files[0]);
+  }
+}
+
+function smartSend() {
+  // Consent validation
+  const consentPd = document.getElementById('calc-consent-pd');
+  const consentComm = document.getElementById('calc-consent-comm');
+  if (consentPd && !consentPd.checked) {
+    alert('Необходимо дать согласие на обработку персональных данных');
+    consentPd.focus();
+    return;
+  }
+  if (consentComm && !consentComm.checked) {
+    alert('Необходимо дать согласие на получение информационных материалов');
+    consentComm.focus();
+    return;
+  }
+  // If cart has items → send project, otherwise → send single product
+  if (projectItems.length > 0) {
+    sendProjectEmail();
+  } else {
+    sendConfigEmail();
+  }
+}
+
 function sendConfigEmail() {
   const prod = document.querySelector('input[name=product]:checked').value;
   const qty = getSelectedTags();
@@ -1943,6 +2891,7 @@ function sendConfigEmail() {
   fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
   fd.append('addons', addonLines.join('\n'));
   fd.append('total_price', document.getElementById('r-total')?.textContent || '');
+  appendExtraFields(fd);
 
   // Show sending state
   const btn = document.getElementById('btn-send-calc');
@@ -2044,6 +2993,9 @@ function getSelectedReports() {
 const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 const calcLoadTs = Math.floor(Date.now() / 1000); // anti-bot timestamp
 document.getElementById('r-tid').textContent = calcTid;
+
+// Load project from storage on page load
+loadProjectFromStorage();
 
 updateSliderRange();
 calcUpdate();
@@ -2279,25 +3231,544 @@ function prefillWizard() {
 }
 
 updateWizardUI();
-</script>
-<script>
-/* ── Theme Switcher ── */
-(function(){
-  var saved = localStorage.getItem('sptech-theme');
-  if (saved === 'light') document.documentElement.classList.add('theme-light');
-  else if (saved === 'dark') document.documentElement.classList.remove('theme-light');
-  else {
-    // Respect system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.classList.add('theme-light');
+
+/* ══════════════════════════════
+   SURVEY (Опросный лист)
+══════════════════════════════ */
+let srvCurrentStep = 1;
+const srvTotalSteps = 5;
+
+// Cached survey result for price/cart
+let srvResult = null;
+
+function recommendProduct(tags, servers, reserve, fullClients, webClients) {
+  // Platform: 3+ servers, or >150k tags
+  if (servers >= 3) return 'alpha-platform';
+  if (tags > 150000) return 'alpha-platform';
+
+  // SCADA: 2 servers, reserve, clients, or >50k tags (One+ max = 50k)
+  if (servers === 2) return 'alpha-scada';
+  if (reserve === true) return 'alpha-scada';
+  if (fullClients > 0) return 'alpha-scada';
+  if (webClients > 0) return 'alpha-scada';
+  if (tags > 50000) return 'alpha-scada';
+
+  // One+: single server, no reserve, no clients, ≤50k tags
+  return 'alpha-one';
+}
+
+function mapServerCount(val) {
+  return parseInt(val) || 1;
+}
+
+function getSurveyInputs() {
+  const tags = parseInt(document.getElementById('srv-tags')?.value) || 0;
+  const servers = mapServerCount(document.getElementById('srv-servers')?.value || '1');
+  const reserveVal = document.querySelector('input[name="srv-reserve"]:checked')?.value || 'нет';
+  const reserve = (reserveVal === 'да' || reserveVal === 'не знаю');
+  const fullClients = parseInt(document.getElementById('srv-full-clients')?.value) || 0;
+  const webVal = document.getElementById('srv-web-clients')?.value || '';
+  const webClients = webVal ? parseInt(webVal) || 0 : 0;
+  const terminalClients = (parseInt(document.getElementById('srv-terminal-clients')?.value) || 0) + (parseInt(document.getElementById('srv-rdp-clients')?.value) || 0);
+
+  const needHistorian = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const histTags = needHistorian ? (parseInt(document.getElementById('srv-hist-tags')?.value) || 0) : 0;
+  const histReserve = needHistorian && document.querySelector('input[name="srv-hist-reserve"]:checked')?.value === 'да';
+  const needReports = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const rptTags = needReports ? (parseInt(document.getElementById('srv-rpt-tags')?.value) || 0) : 0;
+  const rptUsers = needReports ? (document.getElementById('srv-rpt-users')?.value || '') : '';
+
+  // Protocols
+  const needEnergy = document.getElementById('srv-prot-61850')?.checked ||
+                     document.getElementById('srv-prot-104')?.checked ||
+                     document.getElementById('srv-prot-101')?.checked ||
+                     document.getElementById('srv-prot-tem')?.checked;
+  const needIndustry = document.getElementById('srv-prot-bacnet')?.checked ||
+                       document.getElementById('srv-prot-s7')?.checked ||
+                       document.getElementById('srv-prot-eip')?.checked ||
+                       document.getElementById('srv-prot-fins')?.checked;
+  const needOpcDaCl = document.getElementById('srv-prot-opcda-cl')?.checked;
+  const needOpcDaSrv = document.getElementById('srv-prot-opcda-srv')?.checked;
+  const needPortal = document.querySelector('input[name="srv-web-portal"]:checked')?.value === 'да';
+
+  return {
+    tags, servers, reserve, fullClients, webClients, terminalClients,
+    needHistorian, histTags, histReserve,
+    needReports, rptTags, rptUsers,
+    needEnergy, needIndustry, needOpcDaCl, needOpcDaSrv, needPortal
+  };
+}
+
+function updateSurveyHint() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const reserveUnsure = document.querySelector('input[name="srv-reserve"]:checked')?.value === 'не знаю';
+  const hints = {
+    'alpha-one': 'Однопользовательский комплект — оптимален для одного сервера без доп. клиентов',
+    'alpha-scada': reserveUnsure
+      ? 'Рекомендуем клиент-серверную версию — она поддерживает резервирование, если оно понадобится'
+      : 'Клиент-серверная система с резервированием и масштабированием',
+    'alpha-platform': 'Мультисерверная распределённая платформа для крупных объектов'
+  };
+  const hintEl = document.getElementById('srv-hint-text');
+  if (hintEl) {
+    hintEl.innerHTML = '<strong style="color:var(--volt)">Рекомендуем: ' + names[rec] + '</strong><br>' +
+      '<span style="font-size:12px;color:var(--text2)">' + hints[rec] + '</span>';
+    hintEl.style.display = 'block';
+  }
+
+  // Warning if One+ but has clients
+  const warnEl = document.getElementById('srv-client-warning');
+  if (warnEl) {
+    if (rec !== 'alpha-one' && inp.fullClients > 0) {
+      warnEl.style.display = 'none';
+    } else {
+      warnEl.style.display = 'none';
     }
   }
-})();
-function toggleTheme() {
-  var root = document.documentElement;
-  var isLight = root.classList.toggle('theme-light');
-  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
+
+function buildSurveyResult() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const isPlatform = (rec === 'alpha-platform');
+  const isScada = (rec === 'alpha-scada');
+
+  // Base SKU
+  const baseSku = findBestSku(rec, inp.tags || 150);
+  let basePrice = baseSku ? (skuPrices[baseSku.sku] || 0) : 0;
+
+  // Reserve
+  let reservePrice = 0;
+  if (inp.reserve && rec !== 'alpha-one') {
+    reservePrice = basePrice;
+  }
+
+  // Historian
+  let histSku = null, histPrice = 0;
+  if (inp.needHistorian && inp.histTags > 0) {
+    histSku = findBestSku('alpha-historian', inp.histTags);
+    histPrice = histSku ? (skuPrices[histSku.sku] || 0) : 0;
+    if (inp.histReserve) histPrice *= 2;
+  }
+
+  // Reports
+  let rptSku = null, rptClSku = '', rptPrice = 0;
+  if (inp.needReports && inp.rptTags > 0) {
+    rptSku = findBestSku('alpha-reports', inp.rptTags);
+    rptPrice = rptSku ? (skuPrices[rptSku.sku] || 0) : 0;
+    if (inp.rptUsers) {
+      rptClSku = 'RPT-CL' + inp.rptUsers;
+      rptPrice += skuPrices[rptClSku] || 0;
+    }
+  }
+
+  // Addons
+  let addonsPrice = 0;
+  let addonsList = [];
+
+  // Clients
+  if (inp.fullClients > 0 && rec !== 'alpha-one') {
+    const clPrice = (skuPrices['CL-F'] || 0) * inp.fullClients;
+    addonsPrice += clPrice;
+    addonsList.push('CL-F ×' + inp.fullClients);
+  }
+
+  // Web clients
+  if (inp.webClients > 0) {
+    let webSku = '';
+    if (inp.webClients <= 10) webSku = 'CL-RO10';
+    else if (inp.webClients <= 25) webSku = 'CL-RO25';
+    else if (inp.webClients <= 50) webSku = 'CL-RO50';
+    else if (inp.webClients <= 100) webSku = 'CL-RO100';
+    else if (inp.webClients <= 250) webSku = 'AP-CL-RO250';
+    else webSku = 'AP-CL-ROUNL';
+    addonsPrice += skuPrices[webSku] || 0;
+    addonsList.push(webSku);
+  }
+
+  // Drivers
+  if (inp.needEnergy && !isPlatform && !isScada) {
+    addonsPrice += skuPrices['DRV-PACK-ENERGY'] || 0;
+    addonsList.push('DRV-PACK-ENERGY');
+  }
+  if (inp.needIndustry && !isPlatform) {
+    addonsPrice += skuPrices['DRV-PACK-INDUSTRY'] || 0;
+    addonsList.push('DRV-PACK-INDUSTRY');
+  }
+  if (inp.needOpcDaCl) {
+    addonsPrice += skuPrices['DRV-OPCDA-CL'] || 0;
+    addonsList.push('DRV-OPCDA-CL');
+  }
+  if (inp.needOpcDaSrv) {
+    addonsPrice += skuPrices['DRV-OPCDA-SRV'] || 0;
+    addonsList.push('DRV-OPCDA-SRV');
+  }
+  if (inp.needPortal) {
+    addonsPrice += skuPrices['WEB-PORTAL'] || 0;
+    addonsList.push('WEB-PORTAL');
+  }
+
+  // Additional IO servers for Platform
+  if (isPlatform && inp.servers > 1) {
+    const extraServers = inp.servers - 1;
+    addonsPrice += (skuPrices['AP-IOSRV'] || 0) * extraServers;
+    addonsList.push('AP-IOSRV ×' + extraServers);
+  }
+
+  const licensesTotal = basePrice + reservePrice + histPrice + rptPrice + addonsPrice;
+
+  srvResult = {
+    product: rec,
+    productName: names[rec],
+    baseSku: baseSku,
+    basePrice: basePrice,
+    reserve: inp.reserve && rec !== 'alpha-one',
+    reservePrice: reservePrice,
+    histSku: histSku,
+    histPrice: histPrice,
+    histReserve: inp.histReserve,
+    rptSku: rptSku,
+    rptClSku: rptClSku,
+    rptPrice: rptPrice,
+    addonsList: addonsList,
+    addonsPrice: addonsPrice,
+    licensesTotal: licensesTotal,
+    inputs: inp
+  };
+
+  // Render result
+  renderSurveyResult();
+  updateSurveyPrice();
+}
+
+function renderSurveyResult() {
+  if (!srvResult) return;
+  const r = srvResult;
+  const inp = r.inputs;
+
+  // Product name & explanation
+  document.getElementById('srv-result-product').textContent = r.productName;
+  let expl = '';
+  if (r.product === 'alpha-one') expl = 'Однопользовательский комплект — оптимальный выбор для одного сервера';
+  else if (r.product === 'alpha-scada') expl = 'Клиент-серверная версия с поддержкой резервирования и доп. клиентов';
+  else expl = 'Мультисерверная платформа для ' + inp.servers + ' серверов';
+  document.getElementById('srv-result-explanation').textContent = expl;
+
+  // Details
+  let det = '';
+  det += '• Базовый комплект: <strong>' + (r.baseSku?.sku || '—') + '</strong> (' + formatTags(r.baseSku?.tags || 0) + ' тегов)\n';
+  if (r.reserve) det += '• Резервный сервер: +' + (r.baseSku?.sku || '') + '\n';
+  if (r.histSku) det += '• Historian: <strong>' + r.histSku.sku + '</strong> (' + formatTags(r.histSku.tags) + ' тегов)' + (r.histReserve ? ' × 2 (с резервом)' : '') + '\n';
+  if (r.rptSku) det += '• Reports: <strong>' + r.rptSku.sku + '</strong>' + (r.rptClSku ? ' + ' + r.rptClSku : '') + '\n';
+  if (r.addonsList.length > 0) det += '• Доп. модули: ' + r.addonsList.join(', ') + '\n';
+
+  document.getElementById('srv-result-details').innerHTML = det.replace(/\n/g, '<br>');
+}
+
+function updateSurveyPrice() {
+  if (!srvResult) return;
+  const term = parseInt(document.getElementById('srv-term')?.value) || 1;
+  const slaVal = document.getElementById('srv-sla')?.value || 'SLA-BASE';
+  const termMul = termMultipliers[term] || 1.0;
+  const slaCoeff = slaCoeffs[slaVal] || 0;
+
+  const licensesWithTerm = Math.round(srvResult.licensesTotal * termMul);
+  const slaPrice = Math.round(slaCoeff * srvResult.licensesTotal);
+  const total = licensesWithTerm + slaPrice;
+
+  srvResult.totalPrice = total;
+  srvResult.term = term;
+  srvResult.sla = slaVal;
+
+  document.getElementById('srv-total-price').textContent = formatPrice(total);
+}
+
+function updateSurveyUI() {
+  for (let i = 1; i <= srvTotalSteps; i++) {
+    const sp = document.getElementById('srv-sp-' + i);
+    const sh = document.getElementById('srv-head-' + i);
+    if (sp) sp.classList.toggle('active', i === srvCurrentStep);
+    if (sh) sh.style.display = i === srvCurrentStep ? 'block' : 'none';
+  }
+  for (let i = 1; i <= srvTotalSteps; i++) {
+    const si = document.getElementById('srv-si-' + i);
+    if (!si) continue;
+    si.classList.remove('active', 'done');
+    if (i < srvCurrentStep) si.classList.add('done');
+    else if (i === srvCurrentStep) si.classList.add('active');
+  }
+  const pct = Math.round((srvCurrentStep / srvTotalSteps) * 100);
+  const pctEl = document.getElementById('srv-pct');
+  const barEl = document.getElementById('srv-bar');
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (barEl) barEl.style.width = pct + '%';
+
+  const back = document.getElementById('srv-btn-back');
+  const next = document.getElementById('srv-btn-next');
+  if (back) back.style.display = srvCurrentStep > 1 ? 'inline-flex' : 'none';
+  if (next) {
+    if (srvCurrentStep === srvTotalSteps) {
+      next.style.display = 'none';
+    } else {
+      next.style.display = 'inline-flex';
+      next.innerHTML = 'Далее →';
+      next.className = 'btn btn-sm btn-volt';
+    }
+  }
+
+  const noteEl = document.getElementById('srv-note');
+  if (noteEl) noteEl.innerHTML = 'Шаг ' + srvCurrentStep + ' из ' + srvTotalSteps;
+
+  // Build result when entering step 5
+  if (srvCurrentStep === srvTotalSteps) {
+    buildSurveyResult();
+  }
+}
+
+function surveyStep(dir) {
+  srvCurrentStep = Math.max(1, Math.min(srvTotalSteps, srvCurrentStep + dir));
+  updateSurveyUI();
+  // Adapt fields on step entry
+  if (srvCurrentStep === 2) updateSurveyClientsUI();
+  if (srvCurrentStep === 4) updateDriverPacks();
+}
+
+function addSurveyToProject() {
+  try {
+  if (!srvResult) { buildSurveyResult(); }
+  if (!srvResult) { alert('Ошибка: результат не сформирован'); return; }
+
+  const r = srvResult;
+  const terms = {1:'Бессрочная',2:'1 год',3:'3 года'};
+
+  const item = {
+    product: r.productName,
+    sku: r.baseSku?.sku || '—',
+    tags: r.baseSku?.tags || 0,
+    term: terms[r.term] || 'Бессрочная',
+    reserve: r.reserve,
+    historian: r.histSku ? r.histSku.sku + ' (' + formatTags(r.histSku.tags) + ')' + (r.histReserve ? ' ×2' : '') : '',
+    reports: r.rptSku ? r.rptSku.sku + (r.rptClSku ? ' + ' + r.rptClSku : '') : '',
+    addons: r.addonsList,
+    price: r.totalPrice || 0,
+    source: 'survey'
+  };
+
+  projectItems.push(item);
+  saveProjectToStorage();
+  updateCartDisplay();
+
+  // Button animation
+  const srvBtn = document.getElementById('btn-add-survey');
+  if (srvBtn) {
+    const origText = srvBtn.innerHTML;
+    srvBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено в проект!';
+    srvBtn.style.background = 'var(--lime)';
+    setTimeout(() => { srvBtn.innerHTML = origText; srvBtn.style.background = ''; }, 2000);
+  }
+
+  // Toast + flash cart
+  showToast('✓ ' + (r.productName || 'Продукт') + ' добавлен в проект (' + projectItems.length + ' поз.)');
+  const cart = document.getElementById('project-cart');
+  if (cart) {
+    cart.style.boxShadow = '0 0 24px var(--lime)';
+    cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => { cart.style.boxShadow = ''; }, 2000);
+  }
+  } catch(e) { alert('Ошибка: ' + e.message); }
+}
+
+function switchToWizardWithSurveyData() {
+  if (!srvResult) buildSurveyResult();
+  
+  // Switch to wizard tab
+  const wizTab = document.querySelectorAll('.tab')[2];
+  switchTab('wizard', wizTab);
+
+  if (!srvResult) return;
+
+  // Prefill wizard category from survey recommendation
+  const catMap = {
+    'alpha-one': 'wc1',
+    'alpha-scada': 'wc2',
+    'alpha-platform': 'wc3'
+  };
+  const radioId = catMap[srvResult.product];
+  if (radioId) {
+    const el = document.getElementById(radioId);
+    if (el) el.checked = true;
+  }
+
+  // Prefill SKU and tags
+  const skuEl = document.getElementById('wiz-product-name');
+  if (skuEl && srvResult.baseSku) skuEl.value = srvResult.baseSku.sku;
+  const qtyEl = document.getElementById('wiz-qty');
+  if (qtyEl && srvResult.baseSku) qtyEl.value = srvResult.baseSku.tags;
+}
+
+// Toggle conditional fields in survey
+function srvToggleHistorian() {
+  const show = document.querySelector('input[name="srv-historian"]:checked')?.value === 'yes';
+  const el = document.getElementById('srv-hist-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function srvToggleReports() {
+  const show = document.querySelector('input[name="srv-reports"]:checked')?.value === 'yes';
+  const el = document.getElementById('srv-rpt-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+// Platform driver note
+function srvUpdateDriverNote() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const noteEl = document.getElementById('srv-drv-platform-note');
+  if (noteEl) noteEl.style.display = (rec === 'alpha-platform') ? 'block' : 'none';
+}
+
+// Aliases for HTML event handlers
+function updateSurveyRecommendation() { updateSurveyHint(); }
+function checkClientCompatibility() { updateSurveyHint(); }
+
+function updateSurveyClientsUI() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, 0, 0);
+  const fullEl = document.getElementById('srv-full-clients');
+  const webEl = document.getElementById('srv-web-clients');
+  const termEl = document.getElementById('srv-terminal-clients');
+  const rdpEl = document.getElementById('srv-rdp-clients');
+  const fullField = fullEl?.closest('.wiz-field');
+  const webField = webEl?.closest('.wiz-field');
+  const rdpRow = rdpEl?.closest('.wiz-row');
+  const warn = document.getElementById('srv-client-warning');
+
+  if (rec === 'alpha-one') {
+    if (fullField) fullField.style.display = 'none';
+    if (webField) webField.style.display = 'none';
+    if (rdpRow) rdpRow.style.display = 'none';
+    if (fullEl) fullEl.value = '0';
+    if (webEl) webEl.value = '0';
+    if (termEl) termEl.value = '0';
+    if (rdpEl) rdpEl.value = '0';
+    if (warn) {
+      warn.style.display = 'flex';
+      const warnText = warn.querySelector('div:last-child');
+      if (warnText) warnText.textContent = 'Alpha.One+ — однопользовательский комплект. Дополнительные клиенты не предусмотрены. Если нужны клиенты — вернитесь и выберите 2+ сервера или резервирование.';
+    }
+  } else {
+    if (fullField) fullField.style.display = '';
+    if (webField) webField.style.display = '';
+    if (rdpRow) rdpRow.style.display = '';
+    if (warn) {
+      if (rec === 'alpha-platform') {
+        warn.style.display = 'flex';
+        warn.style.borderColor = 'var(--lime)';
+        warn.style.background = 'var(--lime-lo)';
+        const warnText = warn.querySelector('div:last-child');
+        if (warnText) warnText.textContent = 'Alpha.Platform уже включает 1 полный клиент (CL-F). Укажите только дополнительных клиентов сверх этого.';
+        const warnSvg = warn.querySelector('svg path');
+        if (warnSvg) warnSvg.setAttribute('stroke', '#559618');
+      } else {
+        warn.style.display = 'none';
+        warn.style.borderColor = '';
+        warn.style.background = '';
+      }
+    }
+  }
+}
+function toggleHistorianFields() {
+  const show = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-historian-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function toggleReportsFields() {
+  const show = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-reports-fields');
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+function validateClientSplit() {
+  const full = parseInt(document.getElementById('srv-full-clients')?.value) || 0;
+  const term = parseInt(document.getElementById('srv-terminal-clients')?.value) || 0;
+  const rdp = parseInt(document.getElementById('srv-rdp-clients')?.value) || 0;
+  const warn = document.getElementById('srv-client-split-warn');
+  const hint = document.getElementById('srv-client-split-hint');
+  if (full > 0 && (term + rdp) > full) {
+    if (warn) warn.style.display = 'block';
+    if (hint) hint.style.display = 'none';
+  } else {
+    if (warn) warn.style.display = 'none';
+    if (hint) {
+      hint.style.display = '';
+      if (full > 0 && (term + rdp) > 0) {
+        hint.textContent = 'Терминальные (' + term + ') + RDP (' + rdp + ') = ' + (term+rdp) + ' из ' + full + ' полных клиентов';
+      } else {
+        hint.textContent = 'Распределение terminal/RDP уточняется при заказе ключей';
+      }
+    }
+  }
+}
+
+function updateDriverPacks() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const isPlatform = (rec === 'alpha-platform');
+  const isScada = (rec === 'alpha-scada');
+  const noteEl = document.getElementById('srv-platform-note');
+  if (noteEl) noteEl.style.display = isPlatform ? 'flex' : 'none';
+
+  // Energy protocols
+  const energyIds = ['srv-prot-61850','srv-prot-104','srv-prot-101','srv-prot-tem'];
+  // Industry protocols
+  const industryIds = ['srv-prot-bacnet','srv-prot-s7','srv-prot-eip','srv-prot-fins'];
+
+  energyIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (isPlatform || isScada) {
+      el.checked = true; el.disabled = true;
+    } else {
+      el.disabled = false;
+    }
+  });
+  industryIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (isPlatform) {
+      el.checked = true; el.disabled = true;
+    } else {
+      el.disabled = false;
+    }
+  });
+}
+
+// Toast notification
+(function(){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.id = 'toast';
+  document.body.appendChild(t);
+})();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Init survey UI
+updateSurveyUI();
 </script>
+<!-- Cookie Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span>Мы используем файлы cookie (Яндекс.Метрика) для анализа посещаемости сайта. Продолжая использование сайта, вы соглашаетесь с <a href="privacy.html" style="color:var(--volt);text-decoration:underline;">Политикой конфиденциальности</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('sptech-cookies','ok');" style="padding:8px 20px;background:var(--volt);color:var(--ink);border:none;border-radius:3px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;">Принять</button>
+  </div>
+</div>
+<script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
+
 </body>
 </html>
