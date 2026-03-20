@@ -51,6 +51,7 @@ ym(107569860, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,we
   --radius:    8px;
   color-scheme: dark;
 }
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
   --ink:#f0f2f5;--ink1:#ffffff;--ink2:#f7f8fa;--steel:#e8ecf0;--wire:#d0d7e0;--wire2:#bcc5d0;
   --volt:#0088cc;--volt-lo:rgba(0,136,204,0.08);--volt-glow:rgba(0,136,204,0.25);
@@ -86,14 +87,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 10%, rgba(9,151,200,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 85% 85%, rgba(85,150,24,0.04) 0%, transparent 60%);
-  pointer-events: none; z-index: 0;
-}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--ink); }
 ::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 3px; }
@@ -106,15 +101,20 @@ nav {
   background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--wire);
 }
-.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.logo-text { font-size: 17px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text); }
-.logo-text span { color: var(--volt); }
-.nav-back {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--text2); text-decoration: none; transition: color .2s;
-}
-.nav-back:hover { color: var(--volt); }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:rgba(0,200,240,0.08);}
+.nav-cta{margin-left:20px;display:flex;align-items:center;gap:12px;}
+.btn-volt{display:inline-block;padding:8px 20px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px;transition:all .2s;background:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+.theme-toggle{background:none;border:none;cursor:pointer;font-size:18px;padding:4px;}
 
 /* ── PAGE WRAPPER ── */
 .page { position: relative; z-index: 1; padding: 80px 0 80px; }
@@ -729,7 +729,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .page-title { font-size: 24px; }
   .page-sub { font-size: 13px; }
   nav { padding: 12px 16px; }
-  .logo-text { font-size: 16px; }
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
 }
 </style>
 </head>
@@ -737,17 +738,27 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
 <!-- NAV -->
 <nav>
-  <a href="https://specialtechnology.ru" class="logo">
-    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;"><img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
+  <a href="index.html" class="nav-logo">
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
+    <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
-  <a href="https://specialtechnology.ru" class="nav-back">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="19,12 5,12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 5,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    На главную
-  </a>
-  <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-  </button>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html" class="active">Калькулятор</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+    <a href="index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
 </nav>
 
 <div class="page">
@@ -2179,7 +2190,8 @@ const skuPrices = {
   // Прочее
   'WEB-PORTAL':174900,'AP-IOSRV':380200,
   // Reports клиенты
-  'RPT-CL1':79100,'RPT-CL5':349800
+  'RPT-CL1':79100,'RPT-CL5':349800,'RPT-CL10':699700,'RPT-CL25':1049400,'RPT-CL50':1749000,'RPT-CL100':2623500,
+  'AP-CL-RO250':3061500,'AP-CL-ROUNL':4958100
 };
 
 const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
@@ -3807,5 +3819,6 @@ updateSurveyUI();
 </div>
 <script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
 
+<script src="https://bot.specialtechnology.ru/widget.js"></script>
 </body>
 </html>
