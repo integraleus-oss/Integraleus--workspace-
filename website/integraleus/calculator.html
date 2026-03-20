@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор лицензий + Запрос КП — Integraleus</title>
+<title>Калькулятор лицензий — Integraleus</title>
 <meta name="description" content="Онлайн-калькулятор стоимости лицензий Альфа платформы. Подберите конфигурацию и оформите запрос КП.">
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -402,11 +402,14 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 }
 
 .cart-item-meta {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px;
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
   font-family: var(--mono); font-size: 11px; color: var(--text3);
 }
 .cart-meta-item {
-  display: flex; justify-content: space-between;
+  display: inline-flex; gap: 4px;
+}
+.cart-meta-item:not(:last-child)::after {
+  content: '·'; color: var(--text3); margin-left: 8px;
 }
 .cart-meta-label { color: var(--text3); }
 .cart-meta-value { color: var(--text); }
@@ -651,6 +654,19 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 .btn-nav { background: transparent; color: var(--text2); border: 1px solid var(--wire); }
 .btn-nav:hover { border-color: var(--wire2); color: var(--text); }
 
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text); color: #fff; padding: 14px 28px;
+  border-radius: var(--radius); font-family: var(--ff); font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3); z-index: 9999;
+  opacity: 0; transition: transform .35s var(--ease), opacity .35s ease;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0); opacity: 1;
+}
+
 /* ── RESPONSIVE ── */
 @media (max-width: 860px) {
   .calc-layout  { grid-template-columns: 1fr; }
@@ -667,7 +683,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .tab { font-size: 12px; padding: 10px 16px; }
   .cart-item { flex-direction: column; gap: 8px; }
   .cart-item-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .cart-item-meta { grid-template-columns: 1fr; }
+
 }
 @media (max-width: 480px) {
   .product-select-grid { grid-template-columns: 1fr; }
@@ -698,8 +714,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   <!-- PAGE HEADER -->
   <div class="page-header">
     <div class="page-eyebrow">Инструменты</div>
-    <h1 class="page-title">Калькулятор<br><span>и запрос КП</span></h1>
-    <p class="page-sub">Подберите лицензии Альфа платформы онлайн или оформите запрос коммерческого предложения</p>
+    <h1 class="page-title">Калькулятор<br><span>лицензий</span></h1>
+    <p class="page-sub">Подберите лицензии Альфа платформы онлайн — по артикулам или через опросный лист</p>
   </div>
 
   <!-- TABS -->
@@ -712,10 +728,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="1.5"/></svg>
       Опросный лист
     </button>
-    <button class="tab" onclick="switchTab('wizard', this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><polyline points="9,12 11,14 15,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      Запрос КП
-    </button>
+
   </div>
 
   <!-- ══════════ CALCULATOR PANEL ══════════ -->
@@ -728,7 +741,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main" style="margin-bottom:16px">
           <div class="calc-section-head">
             <div class="calc-section-title">Выбор продукта</div>
-            <span>// step 1 of 3</span>
+            <span>// шаг 1 из 3</span>
           </div>
           <div class="calc-body">
             <div class="product-select-grid">
@@ -774,7 +787,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main" style="margin-bottom:16px">
           <div class="calc-section-head">
             <div class="calc-section-title">Параметры лицензии</div>
-            <span>// step 2 of 3</span>
+            <span>// шаг 2 из 3</span>
           </div>
           <div class="calc-body">
 
@@ -854,7 +867,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         <div class="calc-main">
           <div class="calc-section-head">
             <div class="calc-section-title">Дополнительные модули</div>
-            <span>// step 3 of 3</span>
+            <span>// шаг 3 из 3</span>
           </div>
           <div class="calc-body">
             <!-- Клиенты -->
@@ -1498,14 +1511,11 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 
               <!-- Action buttons -->
               <div style="display:flex; gap:12px;">
-                <button class="btn btn-lime" onclick="addSurveyToProject()" style="flex:1;">
+                <button class="btn btn-lime" id="btn-add-survey" onclick="addSurveyToProject()" style="flex:1;">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                   Добавить в проект
                 </button>
-                <button class="btn btn-outline" onclick="switchToWizardWithSurveyData()" style="flex:1;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
-                  Запросить КП
-                </button>
+
               </div>
             </div>
           </div>
@@ -1527,8 +1537,8 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   </div><!-- /survey panel -->
 
 
-  <!-- ══════════ WIZARD PANEL ══════════ -->
-  <div id="panel-wizard" class="panel">
+  <!-- WIZARD PANEL REMOVED -->
+  <div id="panel-wizard-removed" style="display:none">
     <div class="wizard-wrap">
 
       <!-- SIDEBAR -->
@@ -1904,7 +1914,7 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
         </div><!-- /wizard-card -->
       </div><!-- /wizard-main -->
     </div>
-  </div><!-- /wizard panel -->
+  </div><!-- /wizard-removed -->
 
   <!-- PROJECT CART — visible across all tabs -->
   <div class="project-cart" id="project-cart" style="margin-top:24px">
@@ -2480,16 +2490,29 @@ function addToProject() {
   // Update cart display
   updateCartDisplay();
   
-  // Show success animation
+  // Show success feedback
   const btn = document.getElementById('btn-add-project');
   const origText = btn.innerHTML;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено!';
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено в проект!';
   btn.style.background = 'var(--lime)';
-  
+
+  // Show toast notification
+  showToast('✓ ' + (projectItems[projectItems.length-1]?.product || 'Продукт') + ' добавлен в проект (' + projectItems.length + ' поз.)');
+
+  // Scroll to cart
+  setTimeout(() => {
+    const cart = document.getElementById('project-cart');
+    if (cart) {
+      cart.style.boxShadow = '0 0 24px var(--lime)';
+      cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => { cart.style.boxShadow = ''; }, 2000);
+    }
+  }, 300);
+
   setTimeout(() => {
     btn.innerHTML = origText;
     btn.style.background = '';
-  }, 1500);
+  }, 2000);
 
   // Reset calculator to defaults
   resetCalcToDefaults();
@@ -3504,12 +3527,22 @@ function addSurveyToProject() {
   saveProjectToStorage();
   updateCartDisplay();
 
-  // Flash cart to draw attention
+  // Button animation
+  const srvBtn = document.getElementById('btn-add-survey');
+  if (srvBtn) {
+    const origText = srvBtn.innerHTML;
+    srvBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено в проект!';
+    srvBtn.style.background = 'var(--lime)';
+    setTimeout(() => { srvBtn.innerHTML = origText; srvBtn.style.background = ''; }, 2000);
+  }
+
+  // Toast + flash cart
+  showToast('✓ ' + (r.productName || 'Продукт') + ' добавлен в проект (' + projectItems.length + ' поз.)');
   const cart = document.getElementById('project-cart');
   if (cart) {
-    cart.style.boxShadow = '0 0 20px var(--lime)';
+    cart.style.boxShadow = '0 0 24px var(--lime)';
     cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    setTimeout(() => { cart.style.boxShadow = ''; }, 1500);
+    setTimeout(() => { cart.style.boxShadow = ''; }, 2000);
   }
   } catch(e) { alert('Ошибка: ' + e.message); }
 }
@@ -3675,6 +3708,20 @@ function updateDriverPacks() {
       el.disabled = false;
     }
   });
+}
+
+// Toast notification
+(function(){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.id = 'toast';
+  document.body.appendChild(t);
+})();
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
 // Init survey UI
