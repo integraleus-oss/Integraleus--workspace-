@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>
-(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light');})();
+(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -15,7 +15,7 @@
  })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
  ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ИнфТех — Цифровая платформа ДатаПлат | АО «СПЕЦТЕХ»</title>
@@ -41,6 +41,7 @@
 }
 
 /* ── LIGHT THEME ── */
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
   --ink:        #f0f2f5;
   --ink1:       #ffffff;
@@ -70,11 +71,9 @@
 :root.theme-light body {
   color: var(--text);
 }
-:root.theme-light body::before {
-  background-image:
-    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(0,136,204,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(21,168,126,0.03) 0%, transparent 70%);
-}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+
+
 :root.theme-light nav {
   background: rgba(255,255,255,0.92);
   border-bottom-color: var(--wire);
@@ -105,6 +104,8 @@
 :root.theme-light .logo-hex::after {
   background: var(--ink1);
 }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
 /* Cards and sections */
 :root.theme-light .card,
 :root.theme-light .product-card,
@@ -183,7 +184,7 @@ a:hover{color:#fff}
 .container{max-width:1200px;margin:0 auto;padding:0 40px}
 
 /* NAV */
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(5,8,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:#05080f;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
 .nav-links{display:flex;gap:28px;list-style:none;align-items:center}
@@ -310,13 +311,18 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
   .ind-grid{grid-template-columns:1fr}
   h1.partner-title{font-size:24px}
 }
+@media (max-width: 480px) {
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  .nav-logo img { height: 20px !important; max-width: 90px !important; }
+}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-text">СПЕЦТЕХ</div>
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
+    <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Главная</a></li>
@@ -620,7 +626,8 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
           <li><a href="index.html">О компании</a></li>
           <li><a href="blog.html">Блог</a></li>
           <li><a href="index.html#contact">Контакты</a></li>
-        </ul>
+        
+          <li><a href="privacy.html">Конфиденциальность</a></li></ul>
       </div>
       <div>
         <div class="footer-col-title">Контакты</div>
@@ -646,12 +653,7 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
   var saved = localStorage.getItem('sptech-theme');
   if (saved === 'light') document.documentElement.classList.add('theme-light');
   else if (saved === 'dark') document.documentElement.classList.remove('theme-light');
-  else {
-    // Respect system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.classList.add('theme-light');
-    }
-  }
+
 })();
 function toggleTheme() {
   var root = document.documentElement;
@@ -659,5 +661,16 @@ function toggleTheme() {
   localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
 </script>
+
+<!-- Cookie Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span>Мы используем файлы cookie (Яндекс.Метрика) для анализа посещаемости сайта. Продолжая использование сайта, вы соглашаетесь с <a href="privacy.html" style="color:var(--volt);text-decoration:underline;">Политикой конфиденциальности</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('sptech-cookies','ok');" style="padding:8px 20px;background:var(--volt);color:var(--ink);border:none;border-radius:3px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;">Принять</button>
+  </div>
+</div>
+<script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
+
+<script src="https://bot.specialtechnology.ru/widget.js"></script>
 </body>
 </html>

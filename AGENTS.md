@@ -215,6 +215,17 @@ Think of it like a human reviewing their journal and updating their mental model
 
 The goal: Be helpful without being annoying. Check in a few times a day, do useful background work, but respect quiet time.
 
+## Alpha Product Knowledge Guardrail (Mandatory)
+
+Before answering ANY question about Alpha platform products, modules, or product names:
+1. Read `docs/alpha_platform/PRODUCT_CHEATSHEET.md`
+2. Answer ONLY based on what's in that file
+3. If a product/module is not listed there — it does NOT exist. Do not invent.
+4. **Use ONLY current (new) components. NEVER mention deprecated ones:**
+   - ❌ Alpha.Alarms 3.30 → ✅ Alpha.HMI.Alarms 3.3 (кроссплатформенный: Windows, Linux, веб)
+   - ❌ Alpha.Trends 3.33 (standalone) → ✅ alpha.hmi.charts (встроенные графики в Alpha.HMI)
+   This rule applies to ALL contexts: main session, bots (Alpha-Bot), presentations, articles, blog posts.
+
 ## Alpha Licensing Guardrail (Mandatory)
 
 For any Alpha licensing / TKP calculation, before answering always read these files in this order:

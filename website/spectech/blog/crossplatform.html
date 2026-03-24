@@ -182,6 +182,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   .support-row{grid-template-columns:1fr;gap:8px;}
   .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
 }
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 </style>
 </head>
 
@@ -258,8 +259,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
                 <li>Windows 10/11</li>
                 <li>Windows Server 2012-2022</li>
                 <li>Поддержка OPC DA</li>
-                <li>Alpha.Alarms (встраиваемый)</li>
-                <li>Alpha.Trends (встраиваемый)</li>
+                <li>Alpha.HMI.Alarms (кроссплатформенный)</li>
+                <li>alpha.hmi.charts (встроенные графики)</li>
                 <li>Полная интеграция с .NET</li>
               </ul>
             </div>
@@ -404,14 +405,14 @@ journalctl -u alpha.historian.server -f</code></pre>
               <div class="support-status support-no">✗ Недоступно</div>
             </div>
             <div class="support-row">
-              <div class="support-component">Alpha.Alarms (встр.)</div>
+              <div class="support-component">Alpha.HMI.Alarms</div>
               <div class="support-status support-yes">✓ Полная</div>
-              <div class="support-status support-no">✗ Недоступно</div>
+              <div class="support-status support-yes">✓ Полная</div>
             </div>
             <div class="support-row">
-              <div class="support-component">Alpha.Trends (встр.)</div>
+              <div class="support-component">alpha.hmi.charts</div>
               <div class="support-status support-yes">✓ Полная</div>
-              <div class="support-status support-no">✗ Недоступно</div>
+              <div class="support-status support-yes">✓ Полная</div>
             </div>
           </div>
 

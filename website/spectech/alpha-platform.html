@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>
-(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light');})();
+(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -16,7 +16,7 @@
 
  ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Альфа платформа v6.4 — SCADA-система от АО «Атомик Софт» | СПЕЦТЕХ</title>
@@ -59,6 +59,7 @@
 }
 
 /* ── LIGHT THEME ── */
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
   --ink:        #f0f2f5;
   --ink1:       #ffffff;
@@ -88,11 +89,9 @@
 :root.theme-light body {
   color: var(--text);
 }
-:root.theme-light body::before {
-  background-image:
-    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(0,136,204,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(21,168,126,0.03) 0%, transparent 70%);
-}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+
+
 :root.theme-light nav {
   background: rgba(255,255,255,0.92);
   border-bottom-color: var(--wire);
@@ -123,6 +122,8 @@
 :root.theme-light .logo-hex::after {
   background: var(--ink1);
 }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
 /* Cards and sections */
 :root.theme-light .card,
 :root.theme-light .product-card,
@@ -190,7 +191,7 @@
 
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: var(--ink);
@@ -208,17 +209,6 @@ body {
 /* ══════════════════════════════════════
    NOISE OVERLAY
 ══════════════════════════════════════ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.12) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.12) 60px);
-  pointer-events: none;
-  z-index: 0;
-}
-
 /* ══════════════════════════════════════
    NAV
 ══════════════════════════════════════ */
@@ -231,7 +221,7 @@ nav {
   justify-content: space-between;
   padding: 0 48px;
   height: 72px;
-  background: rgba(5,8,15,0.85);
+  background: #05080f;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
   transition: height 0.3s ease, background 0.3s ease;
@@ -439,6 +429,27 @@ nav {
   font-size: 15px;
   color: var(--lime);
   margin-left: 6px;
+}
+
+.vendor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(0,200,240,0.08);
+  border: 1px solid rgba(0,200,240,0.25);
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--volt);
+  text-decoration: none;
+  transition: all .2s;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+.vendor-badge:hover {
+  background: rgba(0,200,240,0.15);
+  color: var(--volt);
+  text-decoration: none;
 }
 
 .product-name {
@@ -1105,8 +1116,19 @@ footer p {
 }
 
 /* Responsive */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; }
+  nav { padding: 0 16px; }
+}
 @media (max-width: 768px) {
-  .container { padding: 0 20px; }
+  .container { padding: 0 16px; }
+  .breadcrumb { font-size: 11px; flex-wrap: wrap; }
+  .product-vendor-badge { font-size: 11px; flex-wrap: wrap; }
+  .product-name { font-size: 24px !important; }
+  .product-version { font-size: 12px; }
+  .vendor-badge { font-size: 11px; }
+  nav .nav-logo img { height: 24px; max-width: 100px; }
   .ptab {
     padding: 12px 16px;
     font-size: 12px;
@@ -1142,6 +1164,10 @@ footer p {
     display: none;
   }
 }
+@media (max-width: 480px) {
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  .nav-logo img { height: 20px !important; max-width: 90px !important; }
+}
 </style>
 </head>
 
@@ -1149,7 +1175,8 @@ footer p {
 <!-- ══════════ NAV ══════════ -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-text">СПЕЦТЕХ</div>
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
+    <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Главная</a></li>
@@ -1194,6 +1221,7 @@ footer p {
         <h1 class="product-name">Альфа платформа</h1>
         <div class="product-version">v6.4 · Реестр ПО №1187 · Актуальна</div>
         <p class="product-tagline">Программная платформа для создания SCADA и многоуровневых систем диспетчеризации</p>
+        <a href="cert-automiq.pdf" target="_blank" class="vendor-badge">✓ Официальный дистрибьютор · сертификат BY1141P3</a>
         
         <div class="product-pills">
           <span class="ppill">SCADA</span>
@@ -1217,7 +1245,7 @@ footer p {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
             Запросить КП
           </a>
-          <a href="/calculator.html" class="btn-cta-secondary">
+          <a href="calculator.html" class="btn-cta-secondary">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="1.5"/><line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="1.5"/></svg>
             Калькулятор лицензий
           </a>
@@ -1341,9 +1369,9 @@ footer p {
           <tr><td>Alpha.HMI 2.0</td><td>Визуализация, мнемосхемы, Alpha.Om + JavaScript</td></tr>
           <tr><td>Alpha.Historian 4.0</td><td class="spec-val-hi">NoSQL БД, 1.6M reads/sec, 800K writes/sec, LZMA сжатие</td></tr>
           <tr><td>Alpha.Reports</td><td>Отчёты, шаблоны, рассылка по email</td></tr>
-          <tr><td>Alpha.Alarms 3.30</td><td>Тревоги и события, приоритеты 1-1000, квитирование</td></tr>
+          <tr><td>Alpha.HMI.Alarms 3.3</td><td>Тревоги и события, приоритеты 1-1000, квитирование, кроссплатформенный (Windows, Linux, веб)</td></tr>
           <tr><td>Alpha.DevStudio</td><td class="spec-val-hi">IDE, Linux native с 2025</td></tr>
-          <tr><td>Alpha.Trends</td><td>Тренды, история и реалтайм</td></tr>
+          <tr><td>alpha.hmi.charts</td><td>Встроенные графики трендов в Alpha.HMI, оперативные и исторические данные</td></tr>
           <tr><td>Alpha.WebViewer</td><td>Веб-клиент</td></tr>
           <tr><td>Alpha.Security</td><td>Управление доступом</td></tr>
         </tbody>
@@ -1570,7 +1598,8 @@ footer p {
           <li><a href="#careers">Карьера</a></li>
           <li><a href="#contact">Контакты</a></li>
           <li><a href="#blog">Блог</a></li>
-        </ul>
+        
+          <li><a href="privacy.html">Конфиденциальность</a></li></ul>
       </div>
     </div>
 
@@ -1610,12 +1639,7 @@ function showPTab(tabId, button) {
   var saved = localStorage.getItem('sptech-theme');
   if (saved === 'light') document.documentElement.classList.add('theme-light');
   else if (saved === 'dark') document.documentElement.classList.remove('theme-light');
-  else {
-    // Respect system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.classList.add('theme-light');
-    }
-  }
+
 })();
 function toggleTheme() {
   var root = document.documentElement;
@@ -1623,5 +1647,16 @@ function toggleTheme() {
   localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
 </script>
+
+<!-- Cookie Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span>Мы используем файлы cookie (Яндекс.Метрика) для анализа посещаемости сайта. Продолжая использование сайта, вы соглашаетесь с <a href="privacy.html" style="color:var(--volt);text-decoration:underline;">Политикой конфиденциальности</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('sptech-cookies','ok');" style="padding:8px 20px;background:var(--volt);color:var(--ink);border:none;border-radius:3px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;">Принять</button>
+  </div>
+</div>
+<script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
+
+<script src="https://bot.specialtechnology.ru/widget.js"></script>
 </body>
 </html>

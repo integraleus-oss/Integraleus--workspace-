@@ -35,7 +35,7 @@ if (strpos($file, '..') !== false || $file[0] === '/') {
 
 // Whitelist extensions
 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-$allowed = ['html', 'css', 'js', 'php', 'txt', 'json', 'svg', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'webp', 'woff', 'woff2', 'xml', 'htaccess'];
+$allowed = ['html', 'css', 'js', 'php', 'txt', 'json', 'svg', 'png', 'jpg', 'jpeg', 'gif', 'ico', 'webp', 'woff', 'woff2', 'xml', 'htaccess', 'pdf'];
 // Handle dotfiles like .htaccess (pathinfo returns 'htaccess')
 if ($ext === '' && strpos(basename($file), '.') === 0) {
     $ext = substr(basename($file), 1);

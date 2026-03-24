@@ -1,0 +1,1715 @@
+{
+  "seo": {
+    "index.html": {
+      "title": "АО «СПЕЦТЕХ» — Российские технологии для промышленной автоматизации",
+      "meta_description": "АО «СПЕЦТЕХ» — официальный дистрибьютор российского ПО для промышленной автоматизации и АСУ ТП. Альфа платформа, CAE WeRTSim. Калькулятор лицензий, техподдержка.",
+      "meta_keywords": "СПЕЦТЕХ, SCADA, АСУ ТП, Альфа платформа, Alpha Platform, CAE WeRTSim, промышленная автоматизация, российское ПО, импортозамещение, Атомик Софт",
+      "h1_count": 1,
+      "h1_text": [
+        "Российские\nтехнологии\n        для цифровизации\n        промышленности"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/"
+    },
+    "about.html": {
+      "title": "О компании АО «СПЕЦТЕХ» — дистрибьютор российского промышленного ПО",
+      "meta_description": "АО «СПЕЦТЕХ» — официальный дистрибьютор российского ПО для промышленной автоматизации. Продукты Альфа платформа, CAE WeRTSim, ИнфТех ДатаПлат. Сергиев Посад.",
+      "meta_keywords": "СПЕЦТЕХ, о компании, российское ПО, промышленная автоматизация, SCADA, MES, Альфа платформа, Атомик Софт, дистрибьютор",
+      "h1_count": 1,
+      "h1_text": [
+        "О компании"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": null
+    },
+    "alpha-platform.html": {
+      "title": "Альфа платформа v6.4 — SCADA-система от АО «Атомик Софт» | СПЕЦТЕХ",
+      "meta_description": "Альфа платформа — российская SCADA для создания АСУ ТП любого масштаба. До 1 000 000 тегов, кроссплатформенность, Alpha.Historian, Alpha.HMI. Лицензии от 149 000 ₽.",
+      "meta_keywords": "Альфа платформа, Alpha Platform, SCADA, АСУ ТП, Атомик Софт, Alpha.Server, Alpha.HMI, Alpha.Historian, промышленная автоматизация",
+      "h1_count": 1,
+      "h1_text": [
+        "Альфа платформа"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/alpha-platform.html"
+    },
+    "blog.html": {
+      "title": "База знаний — Экспертный блог — СПЕЦТЕХ",
+      "meta_description": "База знаний по промышленной автоматизации. Статьи про SCADA, протоколы АСУ ТП, Alpha.Historian, Alpha.HMI, Alpha.HMI.Alarms.",
+      "meta_keywords": "блог SCADA, база знаний АСУ ТП, Альфа платформа статьи, промышленная автоматизация обучение",
+      "h1_count": 1,
+      "h1_text": [
+        "Экспертныйблог"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/blog.html"
+    },
+    "calculator.html": {
+      "title": "Калькулятор лицензий — СПЕЦТЕХ",
+      "meta_description": "Онлайн-калькулятор стоимости лицензий Альфа платформы. Подберите конфигурацию и оформите запрос КП.",
+      "meta_keywords": null,
+      "h1_count": 1,
+      "h1_text": [
+        "Калькуляторлицензий"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": null
+    },
+    "compograph.html": {
+      "title": "КомпоГраф — библиотека веб-компонентов UI и конструктор диаграмм | СПЕЦТЕХ",
+      "meta_description": "КомпоГраф — набор веб-компонентов для создания пользовательских интерфейсов веб-приложений. Включает UI элементы, конструктор диаграмм на Canvas и TypeScript. Разработка ИнфТех.",
+      "meta_keywords": "КомпоГраф, веб-компоненты, UI библиотека, конструктор диаграмм, Canvas, TypeScript, ИнфТех, СПЕЦТЕХ, веб-интерфейсы, пользовательский интерфейс",
+      "h1_count": 1,
+      "h1_text": [
+        "КомпоГраф"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/compograph.html"
+    },
+    "dataplat.html": {
+      "title": "Цифровая платформа ДатаПлат — IIoT, MES, цифровые двойники | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат — российская IIoT-платформа для цифровизации производства. Цифровые двойники, БДРВ, MES. Разработчик ИнфТех. Реестр Минцифры.",
+      "meta_keywords": "ДатаПлат, DataPlat, IIoT, MES, цифровой двойник, БДРВ, ИнфТех, СПЕЦТЕХ, импортозамещение, SCADA, АСУТП, OPC UA",
+      "h1_count": 1,
+      "h1_text": [
+        "Цифровая платформа ДатаПлат"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dataplat.html"
+    },
+    "dataplat-reports.html": {
+      "title": "ДатаПлат.Сервер отчётов — производственная отчётность | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат.Сервер отчётов — автоматизированная генерация производственных отчётов из промышленных источников данных. Конструктор шаблонов без программирования, OPC UA/DA/HDA.",
+      "meta_keywords": "ДатаПлат Сервер отчётов, производственная отчётность, OPC UA, автоматические отчёты, Excel шаблоны, ИнфТех, СПЕЦТЕХ, промышленная автоматизация",
+      "h1_count": 1,
+      "h1_text": [
+        "ДатаПлат.Сервер отчётов"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dataplat-reports.html"
+    },
+    "dpp-alarms.html": {
+      "title": "ДПП.Сервер тревог — управление аварийной сигнализацией АСУТП | СПЕЦТЕХ",
+      "meta_description": "ДПП.Сервер тревог — расширенное управление сигнализацией на уровне АСУТП с аналитическими методами, развитой отчётностью и информированием. SCADA-независимая архитектура.",
+      "meta_keywords": "ДПП Сервер тревог, управление сигнализацией, АСУТП, аварийная сигнализация, аналитика тревог, ИнфТех, СПЕЦТЕХ, импортозамещение, OPC UA, OPC DA, OPC A&E",
+      "h1_count": 1,
+      "h1_text": [
+        "ДПП.Сервер тревог"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dpp-alarms.html"
+    },
+    "dpp-balance.html": {
+      "title": "ДПП.Балансы — сведение материальных и энергетических балансов предприятия | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат Производство.Балансы — программный модуль для автоматизации расчёта и сведения материальных и энергетических балансов нефтеперерабатывающего предприятия. Согласование данных, поиск грубых ошибок, балансовая отчётность.",
+      "meta_keywords": "ДПП Балансы, ДатаПлат, материальный баланс, энергетический баланс, согласование данных, нефтепереработка, MES, ИнфТех, СПЕЦТЕХ, импортозамещение, цифровой двойник",
+      "h1_count": 1,
+      "h1_text": [
+        "ДПП.Балансы"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dpp-balance.html"
+    },
+    "dpp-dobycha.html": {
+      "title": "ДПП.Добыча — автоматизация нефтегазодобычи, цифровое месторождение | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат Производство.Добыча — отечественный программный комплекс для автоматизации процессов нефтегазодобычи. Цифровое месторождение, мониторинг скважин, управление промысловым оборудованием.",
+      "meta_keywords": "ДПП Добыча, ДатаПлат, нефтегазодобыча, цифровое месторождение, SCADA, ЭЦН, ШГН, мониторинг скважин, ИнфТех, СПЕЦТЕХ, импортозамещение, АСУ ТП",
+      "h1_count": 1,
+      "h1_text": [
+        "ДПП.Добыча"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dpp-dobycha.html"
+    },
+    "dpp-tm.html": {
+      "title": "ДПП.ТМ — платформа технологического моделирования и цифровых двойников | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат Производство.Технологическое моделирование — открытая программная среда для интеграции искусственного интеллекта в механизмы технологического моделирования производственных процессов. Поддержка ML-моделей, динамического и дискретно-событийного моделирования.",
+      "meta_keywords": "ДПП ТМ, ДатаПлат, технологическое моделирование, цифровой двойник, машинное обучение, динамическое моделирование, ИнфТех, СПЕЦТЕХ, искусственный интеллект, промышленная автоматизация",
+      "h1_count": 1,
+      "h1_text": [
+        "ДПП.ТМ"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dpp-tm.html"
+    },
+    "dpp-ur.html": {
+      "title": "ДПП.УР — управление рецептурой производства | СПЕЦТЕХ",
+      "meta_description": "ДатаПлат Производство.Управление рецептурой — программный модуль для автоматизации управления рецептурой продукта, формирования заданий на производство и контроля исполнения. Цифровизация процессов смешивания и рецептурного производства.",
+      "meta_keywords": "ДПП УР, ДатаПлат, управление рецептурой, смешивание, ингредиенты, производство, задания на производство, MES, ИнфТех, СПЕЦТЕХ, импортозамещение, цифровой двойник",
+      "h1_count": 1,
+      "h1_text": [
+        "ДПП.УР"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/dpp-ur.html"
+    },
+    "infteh.html": {
+      "title": "ИнфТех — Цифровая платформа ДатаПлат | АО «СПЕЦТЕХ»",
+      "meta_description": "ИнфТех — российская IIoT-платформа ДатаПлат для цифровизации производства. Предиктивная аналитика iPredicta, MES-решения, цифровые двойники. Партнёр АО СПЕЦТЕХ.",
+      "meta_keywords": "ИнфТех, ДатаПлат, DataPlat, iPredicta, IIoT, MES, цифровой двойник, предиктивная аналитика, СПЕЦТЕХ, импортозамещение, SCADA, АСУТП",
+      "h1_count": 1,
+      "h1_text": [
+        "ИнфТех — Цифровая платформа ДатаПлат"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/infteh.html"
+    },
+    "ipredicta.html": {
+      "title": "iPredicta — предиктивная аналитика и мониторинг оборудования | СПЕЦТЕХ",
+      "meta_description": "iPredicta — система предиктивного анализа надёжности промышленного оборудования. MSET, SPRT, нейронные сети. Реестр Минцифры №14786.",
+      "meta_keywords": "iPredicta, предиктивная аналитика, мониторинг оборудования, MSET, SPRT, Hotelling, нейронные сети, ИнфТех, СПЕЦТЕХ, предиктивное обслуживание, остаточный ресурс",
+      "h1_count": 1,
+      "h1_text": [
+        "iPredicta"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/ipredicta.html"
+    },
+    "kompograf.html": {
+      "title": "КомпоГраф — веб-компоненты для промышленных приложений | СПЕЦТЕХ",
+      "meta_description": "КомпоГраф — набор веб-компонентов для создания пользовательских интерфейсов промышленных веб-приложений. UI-библиотека, конструктор диаграмм, компоненты отображения данных от ИнфТех.",
+      "meta_keywords": "КомпоГраф, веб-компоненты, UI-библиотека, диаграммы, ИнфТех, СПЕЦТЕХ, интерфейс, промышленные приложения, реестр Минцифры",
+      "h1_count": 1,
+      "h1_text": [
+        "КомпоГраф"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/kompograf.html"
+    },
+    "lacerta.html": {
+      "title": "SCADA Лацерта — Платформа промышленной автоматизации | АО «СПЕЦТЕХ»",
+      "meta_description": "SCADA Лацерта — российская платформа для АСУ ТП, РСУ и IIoT. Облачная архитектура, 13+ протоколов, кластерная модель. От АО «ЛТА».",
+      "meta_keywords": "SCADA Лацерта, Lacerta, АСУ ТП, РСУ, IIoT, ЛТА, промышленная автоматизация, OPC UA, Modbus, СУБД реального времени",
+      "h1_count": 1,
+      "h1_text": [
+        "SCADA Лацерта"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/lacerta.html"
+    },
+    "wertsim.html": {
+      "title": "CAE WeRTSim — Платформа цифровых двойников сварочных технологий | СПЕЦТЕХ",
+      "meta_description": "CAE WeRTSim — российская CAE-система для имитационного моделирования сварки и родственных технологий. Цифровые двойники сварочных процессов.",
+      "meta_keywords": "CAE WeRTSim, моделирование сварки, цифровые двойники, Юмосс, имитационное моделирование, сварочные технологии, импортозамещение CAE",
+      "h1_count": 1,
+      "h1_text": [
+        "CAE WeRTSim"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": "https://specialtechnology.ru/wertsim.html"
+    },
+    "privacy.html": {
+      "title": "Политика конфиденциальности — АО «СПЕЦТЕХ»",
+      "meta_description": "Политика конфиденциальности АО «СПЕЦТЕХ» в соответствии с 152-ФЗ «О персональных данных». Обработка персональных данных клиентов и посетителей сайта.",
+      "meta_keywords": "политика конфиденциальности, персональные данные, 152-ФЗ, защита данных, СПЕЦТЕХ",
+      "h1_count": 1,
+      "h1_text": [
+        "Политика конфиденциальности"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": null
+    },
+    "consent.html": {
+      "title": "Согласие на обработку персональных данных — АО «СПЕЦТЕХ»",
+      "meta_description": "Согласие на обработку персональных данных АО «СПЕЦТЕХ» в соответствии с требованиями ФЗ-152 «О персональных данных».",
+      "meta_keywords": "согласие, обработка персональных данных, ПД, 152-ФЗ, СПЕЦТЕХ",
+      "h1_count": 1,
+      "h1_text": [
+        "Согласие на обработку персональных данных"
+      ],
+      "lang_ru": true,
+      "img_without_alt": [
+        "https://mc.yandex.ru/watch/107569860"
+      ],
+      "canonical": null
+    }
+  },
+  "links": {
+    "index.html": {
+      "internal_links": [
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "/calculator.html",
+        "blog.html",
+        "/calculator.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "alpha-platform.html",
+        "alpha-platform.html",
+        "alpha-platform.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "dataplat.html",
+        "calculator.html",
+        "infteh.html",
+        "consent.html",
+        "consent.html",
+        "privacy.html",
+        "calculator.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [
+        "/calculator.html",
+        "/calculator.html"
+      ],
+      "anchor_links": [
+        "#",
+        "#about",
+        "#products",
+        "#tech",
+        "#partners",
+        "#contact",
+        "#contact",
+        "#products",
+        "#products",
+        "#capabilities",
+        "#about",
+        "#tech",
+        "#partners",
+        "#contact"
+      ],
+      "broken_anchors": [
+        "#",
+        "#capabilities"
+      ],
+      "external_links": [
+        "https://automiq.ru",
+        "https://umoss.ru"
+      ]
+    },
+    "about.html": {
+      "internal_links": [
+        "index.html",
+        "about.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "about.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#products"
+      ],
+      "broken_anchors": [
+        "#products"
+      ],
+      "external_links": []
+    },
+    "alpha-platform.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "/calculator.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [
+        "/calculator.html"
+      ],
+      "anchor_links": [
+        "#contact",
+        "#contact",
+        "#products",
+        "#products",
+        "#products",
+        "#capabilities",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "broken_anchors": [
+        "#contact",
+        "#contact",
+        "#products",
+        "#products",
+        "#products",
+        "#capabilities",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "external_links": [
+        "http://automiq.ru/stories/"
+      ]
+    },
+    "blog.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "blog/architecture.html",
+        "alpha-platform.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#",
+        "#products",
+        "#products",
+        "#capabilities"
+      ],
+      "broken_anchors": [
+        "#",
+        "#products",
+        "#products",
+        "#capabilities"
+      ],
+      "external_links": []
+    },
+    "calculator.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "consent.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#"
+      ],
+      "broken_anchors": [
+        "#"
+      ],
+      "external_links": []
+    },
+    "compograph.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": []
+    },
+    "dataplat.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru/experience/"
+      ]
+    },
+    "dataplat-reports.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru"
+      ]
+    },
+    "dpp-alarms.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru"
+      ]
+    },
+    "dpp-balance.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru/experience/"
+      ]
+    },
+    "dpp-dobycha.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru/experience/"
+      ]
+    },
+    "dpp-tm.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru/"
+      ]
+    },
+    "dpp-ur.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": []
+    },
+    "infteh.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "dataplat.html",
+        "ipredicta.html",
+        "dpp-dobycha.html",
+        "dpp-balance.html",
+        "dpp-alarms.html",
+        "dpp-tm.html",
+        "dpp-ur.html",
+        "dataplat-reports.html",
+        "kompograf.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru/products/eon.html",
+        "https://infteh.ru",
+        "https://ipredicta.ru"
+      ]
+    },
+    "ipredicta.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "dataplat.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://ipredicta.ru/"
+      ]
+    },
+    "kompograf.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "infteh.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "index.html",
+        "blog.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [],
+      "broken_anchors": [],
+      "external_links": [
+        "https://infteh.ru"
+      ]
+    },
+    "lacerta.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "alpha-platform.html",
+        "lacerta.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#products",
+        "#contact",
+        "#products",
+        "#contact",
+        "#products",
+        "#products",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "broken_anchors": [
+        "#products",
+        "#contact",
+        "#products",
+        "#contact",
+        "#products",
+        "#products",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "external_links": [
+        "https://apcslab.ru",
+        "https://docs.apcslab.ru/Lacerta_Manual.pdf",
+        "https://docs.apcslab.ru/Lacerta_Functions.pdf",
+        "https://docs.apcslab.ru/Lacerta_Setup.pdf",
+        "https://docs.apcslab.ru/Lacerta_LifeCycle.pdf",
+        "https://apcslab.ru"
+      ]
+    },
+    "wertsim.html": {
+      "internal_links": [
+        "index.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#products",
+        "#contact",
+        "#products",
+        "#cae",
+        "#products",
+        "#capabilities",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "broken_anchors": [
+        "#products",
+        "#contact",
+        "#products",
+        "#cae",
+        "#products",
+        "#capabilities",
+        "#services",
+        "#services",
+        "#services",
+        "#services",
+        "#about",
+        "#careers",
+        "#contact",
+        "#blog"
+      ],
+      "external_links": []
+    },
+    "privacy.html": {
+      "internal_links": [
+        "index.html",
+        "about.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "blog.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "about.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#products"
+      ],
+      "broken_anchors": [
+        "#products"
+      ],
+      "external_links": [
+        "https://yandex.ru/support/metrica/general/cookies.html",
+        "https://specialtechnology.ru/privacy.html"
+      ]
+    },
+    "consent.html": {
+      "internal_links": [
+        "index.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "about.html",
+        "blog.html",
+        "calculator.html",
+        "privacy.html",
+        "alpha-platform.html",
+        "wertsim.html",
+        "infteh.html",
+        "calculator.html",
+        "about.html",
+        "privacy.html",
+        "privacy.html"
+      ],
+      "broken_internal": [],
+      "anchor_links": [
+        "#"
+      ],
+      "broken_anchors": [
+        "#"
+      ],
+      "external_links": []
+    }
+  },
+  "consistency": {
+    "index.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "about.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "alpha-platform.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "blog.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "calculator.html": {
+      "nav_structure": true,
+      "footer_structure": false,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": false
+    },
+    "compograph.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dataplat.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dataplat-reports.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dpp-alarms.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dpp-balance.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dpp-dobycha.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dpp-tm.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "dpp-ur.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "infteh.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "ipredicta.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "kompograf.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "lacerta.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "wertsim.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "privacy.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": false,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    },
+    "consent.html": {
+      "nav_structure": true,
+      "footer_structure": true,
+      "cookie_banner": true,
+      "alpha_bot_widget": false,
+      "theme_switcher": true,
+      "yandex_metrika": true,
+      "privacy_link_footer": true
+    }
+  },
+  "mobile": {
+    "index.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width: 120px",
+        "width:48px",
+        "width:200px",
+        "width: 900px",
+        "width:12px",
+        "width: 160px",
+        "width: 1400px",
+        "width:600px",
+        "width:700px",
+        "width: 600px",
+        "width: 24px",
+        "width:900px",
+        "width: 1px",
+        "width:1200px",
+        "width: 48px",
+        "width: 280px",
+        "width: 40px",
+        "width: 4px",
+        "width:480px",
+        "width: 80px",
+        "width: 768px",
+        "width:8px",
+        "width: 700px",
+        "width: 480px",
+        "width: 20px",
+        "width: 8px",
+        "width: 5px",
+        "width:800px",
+        "width:500px",
+        "width: 64px"
+      ]
+    },
+    "about.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:200px",
+        "width:1160px",
+        "width: 900px",
+        "width:120px",
+        "width: 768px",
+        "width:32px",
+        "width:4px",
+        "width:500px",
+        "width:600px",
+        "width:1200px"
+      ]
+    },
+    "alpha-platform.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width: 520px",
+        "width: 4px",
+        "width:200px",
+        "width: 20px",
+        "width: 768px",
+        "width: 500px",
+        "width: 40px",
+        "width: 600px",
+        "width: 1160px",
+        "width: 700px",
+        "width:1200px"
+      ]
+    },
+    "blog.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:480px",
+        "width:200px",
+        "width: 20px",
+        "width:1160px",
+        "width: 900px",
+        "width:1200px",
+        "width:320px",
+        "width: 40px",
+        "width:32px",
+        "width:4px",
+        "width:24px",
+        "width:20px"
+      ]
+    },
+    "calculator.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width: 7px",
+        "width: 16px",
+        "width: 480px",
+        "width: 72px",
+        "width:40px",
+        "width: 280px",
+        "width:200px",
+        "width: 20px",
+        "width: 400px",
+        "width:1200px",
+        "width: 28px",
+        "width: 500px",
+        "width: 860px",
+        "width: 6px",
+        "width: 14px",
+        "width: 24px",
+        "width: 1100px",
+        "width:20px"
+      ]
+    },
+    "compograph.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:900px",
+        "width:1200px"
+      ]
+    },
+    "dataplat.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:200px",
+        "width: 20px",
+        "width:700px",
+        "width: 40px",
+        "width:900px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dataplat-reports.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dpp-alarms.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dpp-balance.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dpp-dobycha.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dpp-tm.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "dpp-ur.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "infteh.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:40px",
+        "width:480px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:300px",
+        "width:700px",
+        "width:900px",
+        "width:1200px"
+      ]
+    },
+    "ipredicta.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:900px",
+        "width:1200px"
+      ]
+    },
+    "kompograf.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:220px",
+        "width:200px",
+        "width: 20px",
+        "width: 40px",
+        "width:800px",
+        "width:900px",
+        "width:36px",
+        "width:20px",
+        "width:1200px"
+      ]
+    },
+    "lacerta.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width: 520px",
+        "width: 4px",
+        "width: 20px",
+        "width: 768px",
+        "width: 500px",
+        "width: 40px",
+        "width: 1160px",
+        "width:1200px"
+      ]
+    },
+    "wertsim.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width: 4px",
+        "width: 20px",
+        "width: 768px",
+        "width: 40px",
+        "width: 600px",
+        "width: 1200px",
+        "width: 200px",
+        "width: 32px",
+        "width:1200px"
+      ]
+    },
+    "privacy.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:200px",
+        "width:1160px",
+        "width: 900px",
+        "width:120px",
+        "width: 768px",
+        "width:4px",
+        "width:500px",
+        "width:600px",
+        "width:1200px"
+      ]
+    },
+    "consent.html": {
+      "viewport_meta": true,
+      "media_queries": true,
+      "nav_mobile_hidden": true,
+      "fixed_width_elements": [
+        "width:768px",
+        "width:200px",
+        "width:1160px",
+        "width:4px",
+        "width:1200px"
+      ]
+    }
+  },
+  "forms": {
+    "index.html": {
+      "forms_found": [
+        {
+          "index": 0,
+          "action": "/send_form.php",
+          "method": "POST",
+          "has_consent": false,
+          "required_fields": []
+        }
+      ],
+      "consent_checkboxes": [],
+      "required_fields": [
+        {
+          "form": 0,
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "form": 0,
+          "name": "company",
+          "type": "text"
+        },
+        {
+          "form": 0,
+          "name": "email",
+          "type": "email"
+        },
+        {
+          "form": 0,
+          "name": "consent_pd",
+          "type": "checkbox"
+        },
+        {
+          "form": 0,
+          "name": "consent_comm",
+          "type": "checkbox"
+        }
+      ],
+      "action_urls": [
+        "/send_form.php"
+      ]
+    },
+    "about.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "alpha-platform.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "blog.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "calculator.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "compograph.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dataplat.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dataplat-reports.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dpp-alarms.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dpp-balance.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dpp-dobycha.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dpp-tm.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "dpp-ur.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "infteh.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "ipredicta.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "kompograf.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "lacerta.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "wertsim.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "privacy.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    },
+    "consent.html": {
+      "forms_found": [],
+      "consent_checkboxes": [],
+      "required_fields": [],
+      "action_urls": []
+    }
+  },
+  "compliance": {},
+  "performance": {
+    "index.html": {
+      "file_size": 135578
+    },
+    "about.html": {
+      "file_size": 28127
+    },
+    "alpha-platform.html": {
+      "file_size": 53167
+    },
+    "blog.html": {
+      "file_size": 49007
+    },
+    "calculator.html": {
+      "file_size": 183609
+    },
+    "compograph.html": {
+      "file_size": 55236
+    },
+    "dataplat.html": {
+      "file_size": 49717
+    },
+    "dataplat-reports.html": {
+      "file_size": 63283
+    },
+    "dpp-alarms.html": {
+      "file_size": 62997
+    },
+    "dpp-balance.html": {
+      "file_size": 57319
+    },
+    "dpp-dobycha.html": {
+      "file_size": 52795
+    },
+    "dpp-tm.html": {
+      "file_size": 66404
+    },
+    "dpp-ur.html": {
+      "file_size": 58367
+    },
+    "infteh.html": {
+      "file_size": 43909
+    },
+    "ipredicta.html": {
+      "file_size": 45044
+    },
+    "kompograf.html": {
+      "file_size": 66883
+    },
+    "lacerta.html": {
+      "file_size": 52427
+    },
+    "wertsim.html": {
+      "file_size": 54732
+    },
+    "privacy.html": {
+      "file_size": 32752
+    },
+    "consent.html": {
+      "file_size": 19468
+    }
+  },
+  "content": {},
+  "sitemap": {
+    "exists": true,
+    "pages_listed": [
+      "alpha-platform.html",
+      "wertsim.html",
+      "infteh.html",
+      "dataplat.html",
+      "ipredicta.html",
+      "dpp-dobycha.html",
+      "dpp-balance.html",
+      "dpp-tm.html",
+      "dpp-ur.html",
+      "dpp-alarms.html",
+      "compograph.html",
+      "dataplat-reports.html",
+      "calculator.html",
+      "blog.html",
+      "architecture.html",
+      "historian.html",
+      "hmi.html",
+      "protocols.html",
+      "crossplatform.html",
+      "alarms.html",
+      "reports.html",
+      "scaling.html",
+      "devstudio.html"
+    ]
+  },
+  "robots": {
+    "exists": true,
+    "content": "User-agent: *\nAllow: /\nSitemap: https://specialtechnology.ru/sitemap.xml\n\nUser-agent: *\nDisallow: /deploy.php\n"
+  }
+}

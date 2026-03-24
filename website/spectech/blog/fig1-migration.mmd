@@ -1,0 +1,42 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4a9eff', 'lineColor': '#8ab4f8', 'secondaryColor': '#34a853', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#2d2d3f', 'nodeBorder': '#4a9eff', 'clusterBkg': '#252538', 'clusterBorder': '#4a9eff', 'titleColor': '#fff', 'edgeLabelBackground': '#2d2d3f'}}}%%
+
+graph LR
+    subgraph AVEVA["🔴 AVEVA (текущая система)"]
+        direction TB
+        OIS["OI Server<br/>Modbus / IEC 104"]
+        IT["InTouch /<br/>System Platform"]
+        AH["AVEVA Historian"]
+        AA["Alarm Provider"]
+        OIS --> IT
+        OIS --> AH
+        OIS --> AA
+    end
+
+    subgraph RTU_FIELD["⚙️ Полевое оборудование"]
+        direction TB
+        RTU1["RTU кустов<br/>IEC 60870-5-104"]
+        PLC1["ПЛК локальные<br/>Modbus TCP"]
+        OPC1["Сторонние системы<br/>OPC DA/UA"]
+    end
+
+    subgraph ALPHA["🟢 Альфа платформа (целевая)"]
+        direction TB
+        AS["Alpha.Server 6.4<br/>встроенные драйверы"]
+        HMI["Alpha.HMI 2.0"]
+        HIST["Alpha.Historian 4.0"]
+        ALM["Alpha.Alarms 3.30"]
+        AS --> HMI
+        AS --> HIST
+        AS --> ALM
+    end
+
+    RTU1 -->|"IEC 104<br/>Master #1"| OIS
+    RTU1 -->|"IEC 104<br/>Master #2"| AS
+    PLC1 -->|"Modbus TCP"| OIS
+    PLC1 -->|"Modbus TCP<br/>(через OPC)"| AS
+    OPC1 -->|"OPC DA"| OIS
+    OPC1 -->|"OPC UA"| AS
+
+    style AVEVA fill:#3a1c1c,stroke:#ff6b6b,stroke-width:2px
+    style ALPHA fill:#1c3a1c,stroke:#69db7c,stroke-width:2px
+    style RTU_FIELD fill:#2d2d3f,stroke:#ffd43b,stroke-width:2px

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Разбираем семь распространённых ошибок предприятий при построении защиты АСУ ТП: от подмены OT-безопасности IT-практиками до отсутствия инвентаризации активов. Практические рекомендации по IEC 62443, ФЗ-187 и приказам ФСТЭК.">
+<meta name="keywords" content="кибербезопасность АСУ ТП, OT Security, IEC 62443, защита SCADA, промышленная кибербезопасность, ФЗ-187, ФСТЭК, сегментация сетей, модель Purdue">
+<title>Типичные ошибки предприятий при построении комплексной защиты АСУ ТП — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-security{color:var(--crimson);border-color:var(--crimson);background:rgba(255,61,87,0.08);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--crimson);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.practice-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--lime);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.practice-box .info-box-title{color:var(--lime);}
+.practice-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.practice-box p:last-child{margin-bottom:0;}
+
+.warning-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box .info-box-title{color:var(--amber);}
+.warning-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.warning-box p:last-child{margin-bottom:0;}
+
+/* Mistake counter */
+.mistake-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:rgba(255,61,87,0.12);border:1px solid var(--crimson);border-radius:50%;font-family:var(--mono);font-size:16px;font-weight:700;color:var(--crimson);margin-right:12px;vertical-align:middle;}
+
+/* Comparison table */
+.comp-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px;}
+.comp-table th{background:var(--ink2);color:var(--volt);font-family:var(--mono);font-size:13px;letter-spacing:1px;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:2px solid var(--wire2);}
+.comp-table td{padding:12px 16px;border-bottom:1px solid var(--wire);color:var(--text2);}
+.comp-table tr:hover td{background:var(--volt-lo);}
+
+/* Checklist */
+.checklist{list-style:none;padding:0;margin:24px 0;}
+.checklist li{padding:10px 0 10px 32px;border-bottom:1px solid var(--wire);color:var(--text2);position:relative;}
+.checklist li::before{content:'☐';position:absolute;left:0;color:var(--volt);font-size:18px;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .comp-table{font-size:13px;}
+  .comp-table th,.comp-table td{padding:8px 10px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Типичные ошибки при защите АСУ ТП</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-security">Кибербезопасность</span>
+            <span class="article-date">16 март. 2026</span>
+            <span class="article-read">14 мин</span>
+            <span class="article-author">Редакция СпецТех</span>
+          </div>
+          <h1 class="article-title">Типичные ошибки предприятий при построении комплексной защиты АСУ ТП</h1>
+          <p class="article-subtitle">Почему промышленные предприятия тратят миллионы на средства защиты информации и остаются уязвимыми. Семь системных просчётов — от подмены OT-безопасности IT-практиками до игнорирования цепочки поставок.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>По данным отчёта Dragos за 2024 год, 72% промышленных организаций имеют в технологической сети хотя бы одно устройство с прямым выходом в интернет. При этом большинство из них уже потратили значительные бюджеты на средства защиты. Проблема не в отсутствии инструментов — проблема в системных ошибках, которые обесценивают любые инвестиции в безопасность.</p>
+
+          <p>Ниже — семь просчётов, которые встречаются на предприятиях снова и снова, независимо от отрасли и масштаба.</p>
+
+          <h2 id="ошибка-1"><span class="mistake-num">1</span>Подмена OT-безопасности IT-практиками</h2>
+
+          <p>Самая распространённая ошибка — переносить корпоративные IT-политики на технологическую сеть без адаптации. Антивирус на серверах SCADA, групповые политики Active Directory для операторских станций, централизованное обновление Windows через WSUS — всё это выглядит логично с точки зрения IT-отдела и создаёт реальные риски для непрерывности технологического процесса.</p>
+
+          <p>Антивирусная проверка в момент опроса контроллеров вносит задержки в цикл обмена данных. Принудительная перезагрузка после патча ОС останавливает операторскую станцию. Сетевое сканирование уязвимостей перегружает промышленные коммутаторы и может вызвать отказ ПЛК старых поколений, которые не рассчитаны на интенсивный побочный трафик.</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Типичная ошибка</div>
+            <p>Запуск Nessus или OpenVAS в сегменте АСУ ТП уровня 1 по модели Purdue. Сканер отправляет десятки тысяч пакетов на каждый IP-адрес. Контроллеры Siemens S7-300, Allen-Bradley MicroLogix и аналогичные устройства с ограниченным сетевым стеком уходят в аварийный останов или перестают отвечать на запросы OPC-сервера.</p>
+          </div>
+
+          <p><strong>IEC 62443-2-1, раздел 4.3.4.3</strong> требует, чтобы процедуры управления патчами для промышленных систем отличались от корпоративных и учитывали влияние на доступность технологического процесса. Патч, прошедший тестирование в IT-лаборатории, не эквивалентен патчу, проверенному на стенде с реальной конфигурацией АСУ ТП.</p>
+
+          <h3 id="что-делать-1">Что делать</h3>
+          <p>Разделить ответственность: IT-служба отвечает за корпоративную сеть (уровни 4–5 по Purdue), отдельная команда или выделенный специалист — за безопасность OT (уровни 0–3). Если выделенной команды нет, как минимум адаптировать каждую IT-политику перед применением в технологическом сегменте. Тестировать патчи на резервной станции. Использовать пассивный мониторинг вместо активного сканирования.</p>
+
+          <h2 id="ошибка-2"><span class="mistake-num">2</span>Защита периметра без внутренней сегментации</h2>
+
+          <p>Второй по частоте просчёт — установить межсетевой экран между корпоративной и технологической сетью и считать задачу решённой. Модель «твёрдая оболочка, мягкая начинка» не работает по простой причине: если атакующий преодолел периметр (а в случае целенаправленной атаки это вопрос времени), он получает неограниченный доступ ко всем компонентам АСУ ТП.</p>
+
+          <p>Внутри технологической сети контроллеры, серверы SCADA, инженерные станции и историан обычно находятся в одном VLAN. Протоколы Modbus TCP, S7comm, EtherNet/IP не имеют встроенной аутентификации. Любое устройство в сети может отправить команду на запись регистра в ПЛК.</p>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Уровень Purdue</th>
+                <th>Компоненты</th>
+                <th>Типичное нарушение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Уровень 3 (Site Operations)</td>
+                <td>Historian, MES-сервер, антивирусный сервер</td>
+                <td>Прямой маршрут к уровню 1 в обход DMZ</td>
+              </tr>
+              <tr>
+                <td>Уровень 2 (Area Supervisory)</td>
+                <td>SCADA-серверы, HMI-станции</td>
+                <td>Один VLAN с инженерными станциями</td>
+              </tr>
+              <tr>
+                <td>Уровень 1 (Basic Control)</td>
+                <td>ПЛК, RTU, контроллеры безопасности</td>
+                <td>Нет ACL между ПЛК разных технологических зон</td>
+              </tr>
+              <tr>
+                <td>Уровень 0 (Process)</td>
+                <td>Датчики, исполнительные механизмы</td>
+                <td>Диагностические порты HART доступны из сети уровня 2</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p><strong>IEC 62443-3-3</strong> вводит понятие <em>зон</em> (zones) и <em>каналов</em> (conduits) — именно они определяют границы сегментации. Каждая зона объединяет активы с одинаковым уровнем доверия (Security Level, SL). Трафик между зонами проходит через контролируемые каналы с определёнными правилами фильтрации.</p>
+
+          <div class="practice-box">
+            <div class="info-box-title">На практике</div>
+            <p>Минимальная сегментация для среднего предприятия — четыре зоны: корпоративная сеть, промышленная DMZ (уровень 3.5), зона управления (SCADA/HMI), зона контроллеров. Между каждой парой — межсетевой экран с правилами, разрешающими только необходимые протоколы и направления. OPC UA между DMZ и SCADA — да. RDP с ноутбука инженера напрямую к ПЛК — нет.</p>
+          </div>
+
+          <h2 id="ошибка-3"><span class="mistake-num">3</span>Отсутствие инвентаризации OT-активов</h2>
+
+          <p>Невозможно защитить то, о существовании чего вы не знаете. Тем не менее на большинстве предприятий полная инвентаризация активов технологической сети отсутствует. Есть проектная документация пятилетней давности, есть разрозненные таблицы Excel у разных подразделений, но единого реестра с актуальными версиями прошивок, IP-адресами и сетевыми связями — нет.</p>
+
+          <p>Без инвентаризации невозможно:</p>
+          <ul>
+            <li>Определить поверхность атаки — сколько устройств доступно из сети и по каким протоколам</li>
+            <li>Оценить уязвимости — какие версии прошивок установлены, какие CVE к ним применимы</li>
+            <li>Спланировать сегментацию — нельзя разделить сеть на зоны, не зная, что в ней находится</li>
+            <li>Обнаружить аномалии — если неизвестен нормальный состав сети, любое несанкционированное устройство останется незамеченным</li>
+          </ul>
+
+          <p><strong>IEC 62443-2-1, раздел 4.2.3.4</strong> прямо требует вести и поддерживать реестр всех компонентов системы автоматизации. <strong>Приказ ФСТЭК России № 239</strong> (для значимых объектов КИИ) включает инвентаризацию в состав обязательных мер защиты.</p>
+
+          <h3 id="пассивная-инвентаризация">Пассивная инвентаризация</h3>
+          <p>Активное сканирование в OT-сети опасно (см. ошибку №1). Альтернатива — пассивный анализ трафика. Системы класса <strong>Network Detection and Response (NDR)</strong> для промышленных сетей (Dragos, Claroty, Nozomi Networks, PT ISIM) подключаются к SPAN-порту коммутатора и восстанавливают карту активов по наблюдаемому трафику: MAC-адреса, IP, протоколы, типы устройств, версии прошивок (если протокол передаёт эту информацию).</p>
+
+          <p>Результат — актуальная карта сети, которая обновляется автоматически и показывает связи между устройствами, а не только их наличие.</p>
+
+          <h2 id="ошибка-4"><span class="mistake-num">4</span>Покупка средств защиты без выстроенных процессов</h2>
+
+          <p>Руководство выделяет бюджет, закупается SIEM, IDS для промышленных протоколов, межсетевые экраны следующего поколения. Оборудование монтируется, лицензии активируются. Через полгода SIEM генерирует тысячи событий в сутки, которые никто не разбирает. Правила на файрволе не обновлялись с момента ввода в эксплуатацию. IDS работает в режиме обучения, потому что никто не переключил его в режим мониторинга.</p>
+
+          <p>Средства защиты — инструменты. Без процессов эксплуатации они бесполезны.</p>
+
+          <div class="warning-box">
+            <div class="info-box-title">Критический пробел</div>
+            <p>Наличие SIEM без регламента обработки инцидентов эквивалентно видеокамере, запись с которой никто не просматривает. Данные копятся, место на дисках заканчивается, а ретроспективный анализ после реального инцидента невозможен, потому что логи уже ротированы.</p>
+          </div>
+
+          <p>Минимальный набор процессов, которые должны быть формализованы <strong>до</strong> закупки средств защиты:</p>
+          <ul>
+            <li><strong>Управление инцидентами</strong> — кто принимает решение об изоляции сегмента сети, кто координирует расследование, каков порядок восстановления</li>
+            <li><strong>Управление изменениями</strong> — любое изменение в конфигурации сетевого оборудования, ПЛК или SCADA-сервера проходит через процедуру согласования и фиксируется</li>
+            <li><strong>Управление уязвимостями</strong> — регулярная проверка бюллетеней вендоров (Siemens ProductCERT, Schneider PSIRT, CISA ICS-CERT), оценка применимости и планирование обновлений</li>
+            <li><strong>Управление доступом</strong> — кто и с каких станций может подключаться к инженерным портам контроллеров, кто имеет права на изменение программ ПЛК</li>
+          </ul>
+
+          <h2 id="ошибка-5"><span class="mistake-num">5</span>Игнорирование удалённого доступа</h2>
+
+          <p>Пандемия 2020 года ускорила внедрение удалённого доступа к промышленным системам на несколько лет. То, что планировалось как временное решение, стало постоянным. VPN-концентратор с доступом к SCADA-серверу, TeamViewer на инженерной станции, проброшенный SSH-туннель для диагностики ПЛК — всё это примеры решений, которые создавались «на неделю» и работают до сих пор.</p>
+
+          <p>Проблема не в самом удалённом доступе — он может быть необходим. Проблема в реализации:</p>
+          <ul>
+            <li>Один общий аккаунт VPN для всех подрядчиков</li>
+            <li>Отсутствие многофакторной аутентификации (MFA)</li>
+            <li>VPN-соединение ведёт напрямую в технологическую сеть, минуя DMZ</li>
+            <li>Нет журналирования действий удалённых пользователей</li>
+            <li>Нет ограничения по времени — подрядчик сохраняет доступ после завершения работ</li>
+          </ul>
+
+          <p>Атака на Colonial Pipeline в 2021 году началась именно через скомпрометированный VPN-аккаунт. Один пароль без MFA — и атакующие получили доступ к IT-инфраструктуре, а затем из-за отсутствия уверенности в сегментации между IT и OT компания была вынуждена остановить трубопровод.</p>
+
+          <div class="practice-box">
+            <div class="info-box-title">На практике</div>
+            <p>Безопасный удалённый доступ: выделенный шлюз в промышленной DMZ (jump-host), MFA для каждого подключения, ограничение по времени и IP-адресам, запись сеансов, разрешение только на те протоколы и хосты, которые необходимы для конкретной задачи. Подрядчик получает временный сертификат на 8 часов, а не постоянный логин/пароль.</p>
+          </div>
+
+          <h2 id="ошибка-6"><span class="mistake-num">6</span>Отсутствие плана реагирования для OT-инцидентов</h2>
+
+          <p>Даже на предприятиях с зрелыми IT-процессами план реагирования на инциденты (Incident Response Plan, IRP) редко учитывает специфику технологической сети. IT-инцидент и OT-инцидент — принципиально разные ситуации.</p>
+
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Параметр</th>
+                <th>IT-инцидент</th>
+                <th>OT-инцидент</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Приоритет</td>
+                <td>Конфиденциальность данных</td>
+                <td>Непрерывность процесса и безопасность персонала</td>
+              </tr>
+              <tr>
+                <td>Допустимая реакция</td>
+                <td>Изолировать заражённый хост немедленно</td>
+                <td>Оценить влияние изоляции на технологический процесс</td>
+              </tr>
+              <tr>
+                <td>Перезагрузка</td>
+                <td>Стандартная процедура</td>
+                <td>Может привести к аварийному останову</td>
+              </tr>
+              <tr>
+                <td>Сбор форензики</td>
+                <td>Снять образ диска</td>
+                <td>На работающем сервере SCADA невозможно без остановки процесса</td>
+              </tr>
+              <tr>
+                <td>Время восстановления</td>
+                <td>Часы — дни</td>
+                <td>Минуты — часы (или физический ущерб)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p><strong>Требования ФЗ-187</strong> обязывают субъектов критической информационной инфраструктуры (КИИ) уведомлять НКЦКИ об инцидентах. Без формализованного плана реагирования предприятие не способно выполнить это требование в установленные сроки (3 часа для значимых объектов КИИ по приказу ФСБ России № 367).</p>
+
+          <h3 id="минимальный-irp">Минимальный состав OT IRP</h3>
+          <ul>
+            <li>Классификация инцидентов с учётом влияния на технологический процесс</li>
+            <li>Матрица эскалации: кто принимает решение об останове — начальник смены, главный инженер, диспетчер</li>
+            <li>Процедура изоляции сегментов без остановки критических процессов</li>
+            <li>Контакты вендоров АСУ ТП для экстренной поддержки</li>
+            <li>Процедура переключения на ручное управление</li>
+            <li>Порядок уведомления регуляторов (НКЦКИ, ФСБ, ФСТЭК)</li>
+            <li>Регулярные тренировки — не реже раза в год</li>
+          </ul>
+
+          <h2 id="ошибка-7"><span class="mistake-num">7</span>Игнорирование цепочки поставок</h2>
+
+          <p>Предприятие может выстроить эшелонированную защиту, сегментировать сеть, внедрить мониторинг — и получить компрометацию через обновление ПО от вендора или через ноутбук подрядчика, подключённый к инженерному порту контроллера.</p>
+
+          <p>Атака TRITON/TRISIS (2017) на систему противоаварийной защиты Schneider Electric Triconex — один из наиболее показательных примеров. Атакующие получили доступ к контроллерам безопасности (SIS) через скомпрометированную инженерную станцию. Целью было изменение логики контроллера безопасности — по сути, отключение последнего рубежа защиты от физической аварии.</p>
+
+          <p>Элементы управления рисками цепочки поставок для OT:</p>
+          <ul>
+            <li><strong>Проверка целостности</strong> — верификация хешей прошивок и обновлений ПО перед установкой</li>
+            <li><strong>Политика для подрядчиков</strong> — запрет подключения личных устройств к технологической сети, сканирование переносных носителей</li>
+            <li><strong>Резервирование конфигураций ПЛК</strong> — регулярное резервное копирование программ контроллеров с контролем изменений (version control)</li>
+            <li><strong>Мониторинг изменений</strong> — отслеживание несанкционированных модификаций программ ПЛК, уставок и конфигураций</li>
+          </ul>
+
+          <p><strong>IEC 62443-2-4</strong> определяет требования к поставщикам услуг интеграции — Security Program requirements for IACS service providers. Если ваш интегратор не может подтвердить соответствие этим требованиям, это повод задуматься.</p>
+
+          <h2 id="чек-лист">Чек-лист: с чего начать</h2>
+
+          <p>Выстраивание комплексной защиты АСУ ТП — не проект с конечным сроком, а непрерывный процесс. Однако начинать стоит с конкретных, измеримых шагов:</p>
+
+          <ul class="checklist">
+            <li>Провести инвентаризацию OT-активов (пассивными методами)</li>
+            <li>Разделить ответственность за безопасность IT и OT</li>
+            <li>Внедрить базовую сегментацию: минимум — файрвол между корпоративной и технологической сетью с DMZ</li>
+            <li>Аудит удалённого доступа: убрать TeamViewer, закрыть неиспользуемые VPN-аккаунты, внедрить MFA</li>
+            <li>Разработать план реагирования на OT-инциденты, провести табличные учения</li>
+            <li>Начать мониторинг: хотя бы NetFlow/зеркалирование трафика на границе IT/OT</li>
+            <li>Формализовать процедуру управления изменениями в конфигурациях ПЛК и SCADA</li>
+            <li>Определить, подпадает ли предприятие под ФЗ-187, и если да — провести категорирование объектов КИИ</li>
+          </ul>
+
+          <div class="practice-box">
+            <div class="info-box-title">Последовательность важнее полноты</div>
+            <p>Лучше последовательно закрыть три первых пункта за квартал, чем пытаться внедрить всё одновременно и не завершить ничего. IEC 62443 допускает поэтапное повышение уровня безопасности (Security Level) — и это разумный подход для реальных предприятий с ограниченными ресурсами.</p>
+          </div>
+
+        </div>
+
+        <div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+          <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Защита промышленных систем</div>
+          <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Комплексные решения для безопасности АСУ ТП</div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Подробнее о платформе</a>
+            <a href="../index.html#contact" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Консультация</a>
+          </div>
+        </div>
+
+        <div style="margin-top:32px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="architecture.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Архитектура Альфа платформы: от контроллера до облака</a>
+            <a href="protocols.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Промышленные протоколы: Modbus, OPC UA, MQTT</a>
+            <a href="scaling.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Масштабирование SCADA-систем</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#ошибка-1">1. IT-практики в OT</a></li>
+              <li class="toc-h3"><a href="#что-делать-1">Что делать</a></li>
+              <li><a href="#ошибка-2">2. Периметр без сегментации</a></li>
+              <li><a href="#ошибка-3">3. Нет инвентаризации активов</a></li>
+              <li class="toc-h3"><a href="#пассивная-инвентаризация">Пассивная инвентаризация</a></li>
+              <li><a href="#ошибка-4">4. Инструменты без процессов</a></li>
+              <li><a href="#ошибка-5">5. Удалённый доступ</a></li>
+              <li><a href="#ошибка-6">6. Нет IRP для OT</a></li>
+              <li class="toc-h3"><a href="#минимальный-irp">Минимальный IRP</a></li>
+              <li><a href="#ошибка-7">7. Цепочка поставок</a></li>
+              <li><a href="#чек-лист">Чек-лист</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Стандарты</div>
+          <div class="sb-body" style="font-size:14px;color:var(--text3);line-height:1.6">
+            <p style="margin-bottom:8px"><strong style="color:var(--text2)">IEC 62443</strong> — серия стандартов по кибербезопасности промышленных систем</p>
+            <p style="margin-bottom:8px"><strong style="color:var(--text2)">NIST SP 800-82</strong> — руководство по безопасности ICS</p>
+            <p style="margin-bottom:8px"><strong style="color:var(--text2)">ФЗ-187</strong> — о безопасности критической информационной инфраструктуры</p>
+            <p style="margin-bottom:0"><strong style="color:var(--text2)">Приказ ФСТЭК № 239</strong> — требования к защите значимых объектов КИИ</p>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="protocols.html" class="related-item">
+                <div class="related-item-title">Промышленные протоколы</div>
+                <div class="related-item-meta">Протоколы · 11 мин</div>
+              </a>
+              <a href="crossplatform.html" class="related-item">
+                <div class="related-item-title">Кроссплатформенность</div>
+                <div class="related-item-meta">Инфраструктура · 10 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+          <li><a href="../calculator.html">Калькулятор</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

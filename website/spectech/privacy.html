@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<script>
+(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
+</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Политика конфиденциальности — АО «СПЕЦТЕХ»</title>
+<link rel="canonical" href="https://specialtechnology.ru/privacy.html">
+<meta name="description" content="Политика конфиденциальности АО «СПЕЦТЕХ» в соответствии с 152-ФЗ «О персональных данных». Обработка персональных данных клиентов и посетителей сайта.">
+<meta name="keywords" content="политика конфиденциальности, персональные данные, 152-ФЗ, защита данных, СПЕЦТЕХ">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+
+/* Theme switcher support */
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+:root.theme-light {
+  --ink:      #f8fafc;
+  --ink1:     #f1f5f9;
+  --ink2:     #e2e8f0;
+  --steel:    #cbd5e1;
+  --wire:     #94a3b8;
+  --wire2:    #64748b;
+  --text:     #1e293b;
+  --text2:    #475569;
+  --text3:    #64748b;
+}
+:root.theme-light nav {
+  background: rgba(248,250,252,0.92);
+  border-bottom-color: var(--wire);
+}
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:#05080f;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{transition:opacity .2s;}
+.logo-light-theme{display:none;}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;display:flex;align-items:center;gap:12px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+.theme-toggle{background:none;border:1px solid var(--wire);border-radius:3px;padding:8px 10px;cursor:pointer;color:var(--text2);font-size:16px;transition:all .2s;}
+.theme-toggle:hover{border-color:var(--volt);color:var(--volt);}
+
+.page{position:relative;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Hero section */
+.hero{padding:40px 0 60px;text-align:center;}
+.hero-title{font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--text);margin-bottom:16px;letter-spacing:-0.5px;}
+.hero-subtitle{font-size:18px;color:var(--text2);max-width:600px;margin:0 auto;}
+
+/* Main content sections */
+.content-section{padding:60px 0;border-bottom:1px solid var(--wire);}
+.content-section:last-child{border-bottom:none;}
+.section-title{font-size:28px;font-weight:700;color:var(--text);margin-bottom:24px;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.section-text{font-size:16px;line-height:1.7;color:var(--text2);margin-bottom:20px;}
+.section-text strong{color:var(--text);font-weight:600;}
+
+/* Data list styling */
+.data-list{margin:20px 0;}
+.data-list li{font-size:16px;line-height:1.7;color:var(--text2);margin-bottom:8px;list-style-type:none;padding-left:20px;position:relative;}
+.data-list li::before{content:'•';color:var(--volt);font-weight:bold;position:absolute;left:0;}
+
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+.footer-copy{font-size:15px;color:var(--text3);}
+.footer-legal{font-family:var(--mono);font-size:12px;color:var(--text3);line-height:1.6;opacity:0.8;max-width:500px;}
+
+@media (max-width: 900px) {
+  .nav-links{display:none;}
+  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; }
+  nav { padding: 0 16px; }
+}
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  nav{padding:0 20px;}
+  .nav-cta{margin-left:auto;}
+  .nav-logo img{height:24px;max-width:120px;}
+  .hero{padding:20px 0 40px;}
+  .content-section{padding:40px 0;}
+  .footer-content{grid-template-columns:1fr;gap:30px;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+}
+@media (max-width: 480px) {
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  .nav-logo img { height: 20px !important; max-width: 90px !important; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
+    <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="about.html">О компании</a></li>
+    <li><a href="#products">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="calculator.html">Калькулятор</a></li>
+    <li><a href="index.html#tech">Технологии</a></li>
+    <li><a href="index.html#partners">Партнёры</a></li>
+    <li><a href="blog.html">Блог</a></li>
+    <li><a href="index.html#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+    <a href="index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-title">Политика конфиденциальности</h1>
+      <p class="hero-subtitle">Обработка и защита персональных данных в АО «СПЕЦТЕХ»</p>
+    </div>
+  </section>
+
+  <!-- Общие положения -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">1. Общие положения</h2>
+      <p class="section-text">
+        Настоящая политика конфиденциальности (далее — «Политика») разработана в соответствии с требованиями Федерального закона от 27.07.2006 № <strong>152-ФЗ «О персональных данных»</strong> и определяет порядок обработки персональных данных и меры по их защите в <strong>АО «СПЕЦТЕХ»</strong> (далее — «Оператор»).
+      </p>
+      <p class="section-text">
+        <strong>Оператор персональных данных:</strong><br>
+        АО «СПЕЦТЕХ»<br>
+        <strong>ИНН:</strong> 5042162563<br>
+        <strong>Адрес:</strong> 141301, Московская обл., Сергиево-Посадский г.о., г. Сергиев Посад, шоссе Новоугличское, дом 75, офис 308<br>
+        <strong>Email:</strong> <a href="mailto:info@special-tech.ru" style="color:var(--volt);">info@special-tech.ru</a><br>
+        <strong>Телефон:</strong> +7 (495) 760 09 39
+      </p>
+      <p class="section-text">
+        Обрабатывая персональные данные посредством данного веб-сайта, Оператор берёт на себя обязательства по их конфиденциальности и обеспечению безопасности.
+      </p>
+    </div>
+  </section>
+
+  <!-- Категории персональных данных -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">2. Категории обрабатываемых персональных данных</h2>
+      <p class="section-text">
+        Оператор обрабатывает следующие категории персональных данных субъектов:
+      </p>
+      <ul class="data-list">
+        <li><strong>Фамилия, имя, отчество</strong> — для идентификации субъекта данных</li>
+        <li><strong>Адрес электронной почты</strong> — для осуществления обратной связи и направления коммерческих предложений</li>
+        <li><strong>Номер телефона</strong> — для осуществления телефонной связи</li>
+        <li><strong>Наименование организации</strong> — для подготовки коммерческих предложений</li>
+        <li><strong>Должность</strong> — для корректного обращения при деловой переписке</li>
+        <li><strong>IP-адрес и файлы cookie</strong> — для обеспечения работы веб-сайта и аналитики</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Цели обработки -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">3. Цели обработки персональных данных</h2>
+      <p class="section-text">
+        Персональные данные обрабатываются Оператором в следующих целях:
+      </p>
+      <ul class="data-list">
+        <li><strong>Обратная связь</strong> — ответы на запросы, поступившие через формы обратной связи на сайте</li>
+        <li><strong>Коммерческие предложения</strong> — направление информации о продуктах и услугах Оператора</li>
+        <li><strong>Техническая поддержка</strong> — консультации по продуктам АО «Атомик Софт» и партнёров</li>
+        <li><strong>Исполнение договорных обязательств</strong> — поставка программного обеспечения и сопутствующих услуг</li>
+        <li><strong>Аналитика и улучшение сайта</strong> — повышение качества предоставляемых услуг</li>
+        <li><strong>Исполнение требований законодательства РФ</strong> — соблюдение налогового и иного законодательства</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Правовые основания -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">4. Правовые основания обработки</h2>
+      <p class="section-text">
+        Обработка персональных данных осуществляется на следующих правовых основаниях:
+      </p>
+      <ul class="data-list">
+        <li><strong>Согласие субъекта данных</strong> — при заполнении форм обратной связи (ст. 6 152-ФЗ)</li>
+        <li><strong>Исполнение договора</strong> — при заключении договоров поставки ПО (п. 5 ч. 1 ст. 6 152-ФЗ)</li>
+        <li><strong>Законные интересы Оператора</strong> — для улучшения качества услуг (п. 6 ч. 1 ст. 6 152-ФЗ)</li>
+        <li><strong>Исполнение правовой обязанности</strong> — соблюдение требований законодательства РФ (п. 2 ч. 1 ст. 6 152-ФЗ)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Способы обработки -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">5. Способы обработки персональных данных</h2>
+      <p class="section-text">
+        Оператор обрабатывает персональные данные как с использованием средств автоматизации, так и без их использования. Обработка включает в себя:
+      </p>
+      <ul class="data-list">
+        <li>Сбор персональных данных</li>
+        <li>Запись на электронные носители</li>
+        <li>Систематизацию</li>
+        <li>Накопление</li>
+        <li>Хранение</li>
+        <li>Уточнение (обновление, изменение)</li>
+        <li>Извлечение</li>
+        <li>Использование</li>
+        <li>Передачу (распространение, предоставление, доступ)</li>
+        <li>Обезличивание</li>
+        <li>Блокирование</li>
+        <li>Удаление</li>
+        <li>Уничтожение</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Сроки хранения -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">6. Сроки хранения персональных данных</h2>
+      <p class="section-text">
+        Персональные данные хранятся в течение сроков, установленных действующим законодательством РФ, либо до достижения целей их обработки:
+      </p>
+      <ul class="data-list">
+        <li><strong>Данные для обратной связи</strong> — 3 года с момента последнего взаимодействия</li>
+        <li><strong>Данные по договорам</strong> — в соответствии с требованиями налогового законодательства (не менее 5 лет)</li>
+        <li><strong>Технические данные (IP, cookie)</strong> — не более 25 месяцев</li>
+        <li><strong>Аналитические данные</strong> — в обезличенном виде без ограничения срока</li>
+      </ul>
+      <p class="section-text">
+        По истечении указанных сроков персональные данные <strong>уничтожаются</strong> способом, исключающим возможность восстановления содержания персональных данных.
+      </p>
+    </div>
+  </section>
+
+  <!-- Файлы cookie и аналитика -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">7. Файлы cookie и веб-аналитика</h2>
+      <p class="section-text">
+        Данный веб-сайт использует технологию «cookie» и сервисы веб-аналитики:
+      </p>
+      <ul class="data-list">
+        <li><strong>Яндекс.Метрика</strong> — для анализа посещаемости, поведения пользователей и улучшения функциональности сайта</li>
+        <li><strong>Технические cookie</strong> — для обеспечения корректной работы сайта (переключение темы, настройки)</li>
+      </ul>
+      <p class="section-text">
+        Пользователь может запретить сохранение файлов cookie в настройках браузера, однако в этом случае некоторые функции сайта могут работать некорректно.
+      </p>
+      <p class="section-text">
+        Подробная информация о файлах cookie Яндекс.Метрики доступна по адресу: <a href="https://yandex.ru/support/metrica/general/cookies.html" target="_blank" style="color:var(--volt);">https://yandex.ru/support/metrica/general/cookies.html</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Права субъектов -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">8. Права субъектов персональных данных</h2>
+      <p class="section-text">
+        В соответствии со статьями 14, 15, 16 и 21 Федерального закона № 152-ФЗ, субъект персональных данных имеет право:
+      </p>
+      <ul class="data-list">
+        <li><strong>Получить информацию</strong> о наличии персональных данных, относящихся к субъекту персональных данных</li>
+        <li><strong>Получить информацию</strong> о правовых основаниях и целях обработки персональных данных</li>
+        <li><strong>Получить информацию</strong> о применяемых Оператором способах обработки персональных данных</li>
+        <li><strong>Получить информацию</strong> о наименовании и местонахождении Оператора</li>
+        <li><strong>Получить информацию</strong> о сроках обработки персональных данных</li>
+        <li><strong>Требовать уточнения</strong> его персональных данных, их блокирования или уничтожения</li>
+        <li><strong>Отозвать согласие</strong> на обработку персональных данных</li>
+        <li><strong>Обжаловать действия</strong> или бездействие Оператора в уполномоченном органе по защите прав субъектов персональных данных или в судебном порядке</li>
+      </ul>
+      <p class="section-text">
+        Для реализации указанных прав обращайтесь по адресу электронной почты: <a href="mailto:info@special-tech.ru" style="color:var(--volt);font-weight:600;">info@special-tech.ru</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Меры защиты -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">9. Меры по защите персональных данных</h2>
+      <p class="section-text">
+        Оператор принимает необходимые правовые, организационные и технические меры для защиты персональных данных от неправомерного или случайного доступа к ним, уничтожения, изменения, блокирования, копирования, предоставления, распространения, а также от иных неправомерных действий:
+      </p>
+      <ul class="data-list">
+        <li><strong>Назначение ответственного</strong> за организацию обработки персональных данных</li>
+        <li><strong>Применение прошифрованного соединения</strong> HTTPS для передачи данных</li>
+        <li><strong>Ограничение доступа</strong> к персональным данным только для уполномоченных лиц</li>
+        <li><strong>Применение средств защиты информации</strong>, прошедших сертификацию</li>
+        <li><strong>Регулярное обновление</strong> программного обеспечения и средств защиты</li>
+        <li><strong>Обучение сотрудников</strong> правилам обработки персональных данных</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Передача третьим лицам -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">10. Передача персональных данных третьим лицам</h2>
+      <p class="section-text">
+        Оператор не передаёт персональные данные третьим лицам, за исключением случаев, прямо предусмотренных настоящей Политикой либо действующим законодательством РФ.
+      </p>
+      <p class="section-text">
+        Передача персональных данных может осуществляться:
+      </p>
+      <ul class="data-list">
+        <li>Государственным органам — в случаях, установленных законодательством РФ</li>
+        <li>Контрагентам — при исполнении договорных обязательств (с согласия субъекта данных)</li>
+        <li>Техническим поставщикам — для обеспечения функционирования IT-инфраструктуры (с соблюдением конфиденциальности)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Изменения политики -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">11. Изменения политики конфиденциальности</h2>
+      <p class="section-text">
+        Оператор вправе в одностороннем порядке вносить изменения в настоящую Политику без согласования с субъектом персональных данных.
+      </p>
+      <p class="section-text">
+        Новая редакция Политики вступает в силу с момента её размещения на веб-сайте <strong>specialtechnology.ru</strong>, если иное не предусмотрено новой редакцией Политики.
+      </p>
+      <p class="section-text">
+        Действующая редакция Политики постоянно доступна на данной странице по адресу: <a href="https://specialtechnology.ru/privacy.html" style="color:var(--volt);">https://specialtechnology.ru/privacy.html</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Контактная информация -->
+  <section class="content-section">
+    <div class="container">
+      <h2 class="section-title">12. Контактная информация</h2>
+      <p class="section-text">
+        По всем вопросам, связанным с обработкой персональных данных, обращайтесь к Оператору:
+      </p>
+      <p class="section-text">
+        <strong>АО «СПЕЦТЕХ»</strong><br>
+        <strong>Адрес:</strong> 141301, Московская обл., Сергиево-Посадский г.о., г. Сергиев Посад, шоссе Новоугличское, дом 75, офис 308<br>
+        <strong>Телефон:</strong> +7 (495) 760 09 39<br>
+        <strong>Email:</strong> <a href="mailto:info@special-tech.ru" style="color:var(--volt);font-weight:600;">info@special-tech.ru</a>
+      </p>
+      <p class="section-text" style="margin-top:30px;padding:20px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;">
+        <strong style="color:var(--volt);">Дата вступления в силу:</strong> 20 марта 2026 г.<br>
+        <strong style="color:var(--volt);">Последнее обновление:</strong> 20 марта 2026 г.
+      </p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px"><div class="f-badge">Россия</div><div class="f-badge">СНГ</div></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="wertsim.html">CAE WeRTSim</a></li>
+          <li><a href="infteh.html">ИнфТех ДатаПлат</a></li>
+          <li><a href="calculator.html">Калькулятор лицензий</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="about.html">О компании</a></li>
+          <li><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li><a href="index.html#tech">Технологии</a></li>
+          <li><a href="index.html#partners">Партнёры</a></li>
+          <li><a href="index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div class="footer-legal">
+        ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023) · Московская обл., Сергиев Посад
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const root = document.documentElement;
+  const isLight = root.classList.contains('theme-light');
+  const toggle = document.querySelector('.theme-toggle');
+  
+  if (isLight) {
+    root.classList.remove('theme-light');
+    toggle.textContent = '🌙';
+    localStorage.setItem('sptech-theme', 'dark');
+  } else {
+    root.classList.add('theme-light');
+    toggle.textContent = '☀️';
+    localStorage.setItem('sptech-theme', 'light');
+  }
+}
+
+// Initialize theme toggle text
+document.addEventListener('DOMContentLoaded', function() {
+  const toggle = document.querySelector('.theme-toggle');
+  const isLight = document.documentElement.classList.contains('theme-light');
+  toggle.textContent = isLight ? '☀️' : '🌙';
+});
+</script>
+
+
+<!-- Cookie Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span>Мы используем файлы cookie (Яндекс.Метрика) для анализа посещаемости сайта. Продолжая использование сайта, вы соглашаетесь с <a href="privacy.html" style="color:var(--volt);text-decoration:underline;">Политикой конфиденциальности</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('sptech-cookies','ok');" style="padding:8px 20px;background:var(--volt);color:var(--ink);border:none;border-radius:3px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;">Принять</button>
+  </div>
+</div>
+<script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
+
+<script src="https://bot.specialtechnology.ru/widget.js"></script>
+</body>
+</html>

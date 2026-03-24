@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИНДАВТОПРО — Программное обеспечение для промышленной автоматизации</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   ROOT TOKENS
+══════════════════════════════════════ */
+:root {
+  --ink:        #05080f;
+  --ink1:       #080d1a;
+  --ink2:       #0c1525;
+  --steel:      #111e35;
+  --wire:       #192d48;
+  --wire2:      #1f3a5f;
+
+  --volt:       #00c8f0;
+  --volt-lo:    rgba(0,200,240,0.08);
+  --volt-glow:  rgba(0,200,240,0.4);
+  --flame:      #ff6b35;
+  --flame-lo:   rgba(255,107,53,0.1);
+  --lime:       #1de9b6;
+  --lime-lo:    rgba(29,233,182,0.08);
+  --crimson:    #ff3d57;
+  --amber:      #ffb800;
+
+  --text:       #ccd9ea;
+  --text2:      #6a8aaa;
+  --text3:      #2d4a6a;
+
+  --ff-head:    'Exo 2', sans-serif;
+  --ff-mono:    'JetBrains Mono', monospace;
+
+  --ease:       cubic-bezier(.22,.68,0,1.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff-head);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink1); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 2px; }
+
+/* ══════════════════════════════════════
+   NOISE OVERLAY
+══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.12) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.12) 60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: rgba(5,8,15,0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.nav-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--volt);
+  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.nav-logo-mark::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: var(--ink);
+  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
+}
+.nav-logo-text {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.nav-logo-text span { color: var(--volt); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  transition: color .2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--volt);
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+.nav-links a:hover { color: var(--volt); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ff-head);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-volt {
+  background: var(--volt);
+  color: var(--ink);
+  padding: 11px 24px;
+  font-size: 12px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: 0 0 24px var(--volt-glow);
+}
+.btn-volt:hover {
+  background: #33d5f7;
+  box-shadow: 0 0 40px var(--volt-glow);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--volt);
+  padding: 10px 22px;
+  font-size: 12px;
+  border: 1px solid var(--volt);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: inset 0 0 16px var(--volt-lo);
+}
+.btn-outline:hover {
+  background: var(--volt-lo);
+  box-shadow: 0 0 24px var(--volt-lo), inset 0 0 20px var(--volt-lo);
+  transform: translateY(-1px);
+}
+
+.btn-flame {
+  background: var(--flame);
+  color: #fff;
+  padding: 14px 32px;
+  font-size: 14px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  box-shadow: 0 0 30px rgba(255,107,53,0.4);
+}
+.btn-flame:hover {
+  background: #ff8054;
+  box-shadow: 0 0 50px rgba(255,107,53,0.5);
+  transform: translateY(-2px);
+}
+
+.btn-lg {
+  padding: 16px 42px;
+  font-size: 14px;
+}
+
+/* ══════════════════════════════════════
+   HERO
+══════════════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 48px 80px;
+  overflow: hidden;
+}
+
+/* Animated grid bg */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--wire) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 20%, transparent 80%);
+  opacity: 0.25;
+}
+
+/* Glowing orb */
+.hero-orb {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,200,240,0.07) 0%, rgba(0,200,240,0.03) 40%, transparent 70%);
+  animation: orb-pulse 6s ease-in-out infinite;
+}
+@keyframes orb-pulse {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.08); opacity: 0.7; }
+}
+
+/* Diagonal accent line */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 180px;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, var(--volt) 30%, var(--volt) 70%, transparent);
+  opacity: 0.15;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  animation: slide-up .7s var(--ease) both;
+}
+.hero-eyebrow-line {
+  width: 40px;
+  height: 1px;
+  background: var(--volt);
+  box-shadow: 0 0 8px var(--volt-glow);
+}
+.hero-eyebrow span {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--volt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: clamp(42px, 6vw, 88px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: var(--text);
+  max-width: 780px;
+  animation: slide-up .7s .1s var(--ease) both;
+}
+.hero-title .accent { color: var(--volt); }
+.hero-title .outline {
+  -webkit-text-stroke: 1px var(--text2);
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 520px;
+  margin-top: 28px;
+  animation: slide-up .7s .2s var(--ease) both;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+  animation: slide-up .7s .3s var(--ease) both;
+}
+
+/* Live ticker */
+.hero-ticker {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  height: 40px;
+  background: var(--steel);
+  border-top: 1px solid var(--wire);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.ticker-inner {
+  display: flex;
+  gap: 60px;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+@keyframes ticker { to { transform: translateX(-50%); } }
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+.ticker-item .t-name { color: var(--text2); }
+.ticker-item .t-val  { color: var(--lime); }
+.ticker-item .t-dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--lime); }
+
+/* Hero stat pills */
+.hero-stats {
+  position: absolute;
+  right: 48px;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slide-up .7s .4s var(--ease) both;
+}
+.stat-pill {
+  background: var(--steel);
+  border: 1px solid var(--wire);
+  border-left: 3px solid var(--volt);
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 160px;
+}
+.stat-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.stat-num span { font-size: 16px; color: var(--volt); }
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+/* ══════════════════════════════════════
+   SECTION COMMONS
+══════════════════════════════════════ */
+section { position: relative; z-index: 1; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 0 48px; }
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.section-tag::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--volt);
+  box-shadow: 0 0 6px var(--volt-glow);
+}
+.section-tag span {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--volt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.section-title span { color: var(--volt); }
+
+/* ══════════════════════════════════════
+   PARTNERS / LOGOS STRIP
+══════════════════════════════════════ */
+.partners {
+  padding: 48px 0;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  border-bottom: 1px solid var(--wire);
+  overflow: hidden;
+}
+.partners-label {
+  text-align: center;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.partners-scroll {
+  display: flex;
+  gap: 60px;
+  animation: ticker 20s linear infinite;
+  width: max-content;
+}
+.partner-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.4;
+  transition: opacity .2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.partner-logo:hover { opacity: 0.8; }
+.partner-logo-icon {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--wire2);
+  background: var(--steel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text2);
+}
+.partner-logo-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+/* ══════════════════════════════════════
+   PRODUCTS
+══════════════════════════════════════ */
+.products { padding: 100px 0; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+  background: var(--wire);
+}
+
+.product-card {
+  background: var(--ink1);
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background .25s;
+}
+.product-card:hover { background: var(--ink2); }
+
+/* Top accent */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--wire2);
+  transition: background .25s, box-shadow .25s;
+}
+.product-card:hover::before {
+  background: var(--volt);
+  box-shadow: 0 0 12px var(--volt-glow);
+}
+
+/* Hover glow */
+.product-card::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: var(--volt-lo);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.product-card:hover::after { opacity: 1; }
+
+.product-num {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.product-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.product-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+.ptag {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  border: 1px solid var(--wire2);
+  color: var(--text3);
+  letter-spacing: 1px;
+  transition: border-color .2s, color .2s;
+}
+.product-card:hover .ptag { border-color: var(--volt); color: var(--volt); }
+
+.product-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--volt);
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+  transition: gap .2s;
+}
+.product-link:hover { gap: 14px; }
+.product-link svg { transition: transform .2s; }
+.product-link:hover svg { transform: translateX(4px); }
+
+/* ══════════════════════════════════════
+   FEATURES (WHY US)
+══════════════════════════════════════ */
+.features {
+  padding: 100px 0;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  border-bottom: 1px solid var(--wire);
+}
+
+.features-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.features-visual {
+  position: relative;
+}
+
+/* Terminal window mock */
+.terminal {
+  background: var(--ink);
+  border: 1px solid var(--wire2);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,200,240,0.05);
+}
+.terminal-bar {
+  background: var(--steel);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--wire);
+}
+.t-dot { width: 10px; height: 10px; border-radius: 50%; }
+.t-dot-r { background: var(--crimson); opacity: 0.6; }
+.t-dot-y { background: var(--amber); opacity: 0.6; }
+.t-dot-g { background: var(--lime); opacity: 0.6; }
+.terminal-title {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: auto;
+  letter-spacing: 1px;
+}
+.terminal-body {
+  padding: 24px;
+  font-family: var(--ff-mono);
+  font-size: 12px;
+  line-height: 2;
+}
+.tl { display: flex; gap: 12px; }
+.tl-prompt { color: var(--lime); flex-shrink: 0; }
+.tl-cmd    { color: var(--text); }
+.tl-out    { color: var(--text2); padding-left: 20px; }
+.tl-ok     { color: var(--lime); }
+.tl-warn   { color: var(--amber); }
+.tl-err    { color: var(--crimson); }
+.tl-volt   { color: var(--volt); }
+.cursor {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: var(--volt);
+  animation: blink-c .9s step-end infinite;
+  vertical-align: middle;
+}
+@keyframes blink-c { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* Floating badge on terminal */
+.terminal-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--steel);
+  border: 1px solid var(--wire2);
+  border-left: 3px solid var(--lime);
+  padding: 14px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.tb-label { font-family: var(--ff-mono); font-size: 9px; color: var(--text3); letter-spacing: 2px; margin-bottom: 4px; }
+.tb-val   { font-size: 22px; font-weight: 800; color: var(--lime); }
+
+.features-list { display: flex; flex-direction: column; gap: 32px; }
+
+.feat-item { display: flex; gap: 20px; align-items: flex-start; }
+.feat-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background: var(--steel);
+  border: 1px solid var(--wire2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.feat-icon-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--volt);
+  opacity: 0.5;
+}
+.feat-body {}
+.feat-name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.feat-desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+/* ══════════════════════════════════════
+   CATALOG CATEGORIES
+══════════════════════════════════════ */
+.catalog { padding: 100px 0; }
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 60px;
+}
+
+.cat-card {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  padding: 28px 24px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  group: true;
+}
+
+.cat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--volt);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s;
+}
+
+.cat-card:hover {
+  border-color: var(--wire2);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+.cat-card:hover::after { transform: scaleX(1); }
+
+.cat-card-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--volt-lo), transparent 70%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cat-card:hover .cat-card-bg { opacity: 1; }
+
+.cat-icon { margin-bottom: 20px; position: relative; z-index: 1; }
+.cat-count {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+.cat-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  transition: color .2s;
+}
+.cat-card:hover .cat-name { color: var(--volt); }
+.cat-sub {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════════════════════════
+   METRICS ROW
+══════════════════════════════════════ */
+.metrics {
+  padding: 0 0 100px;
+}
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--wire);
+  border: 1px solid var(--wire);
+}
+.metric-block {
+  background: var(--ink1);
+  padding: 40px 32px;
+  text-align: center;
+}
+.metric-val {
+  font-size: 52px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.metric-val .u { font-size: 28px; color: var(--volt); }
+.metric-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.metric-note {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* ══════════════════════════════════════
+   TESTIMONIALS
+══════════════════════════════════════ */
+.testimonials {
+  padding: 100px 0;
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  overflow: hidden;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 60px;
+}
+.testi-card {
+  background: var(--ink);
+  border: 1px solid var(--wire);
+  padding: 28px;
+  position: relative;
+  transition: border-color .2s;
+}
+.testi-card:hover { border-color: var(--wire2); }
+.testi-quote {
+  font-size: 36px;
+  color: var(--volt);
+  font-family: Georgia, serif;
+  line-height: 1;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+.testi-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.testi-author { display: flex; align-items: center; gap: 14px; }
+.testi-avatar {
+  width: 40px;
+  height: 40px;
+  background: var(--steel);
+  border: 1px solid var(--wire2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--volt);
+  flex-shrink: 0;
+}
+.testi-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+.testi-pos {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.testi-stars {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  gap: 3px;
+}
+.star { color: var(--amber); font-size: 12px; }
+
+/* ══════════════════════════════════════
+   CTA SECTION
+══════════════════════════════════════ */
+.cta-section {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(0,200,240,0.06) 0%, transparent 70%);
+}
+.cta-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--wire) 1px, transparent 1px),
+    linear-gradient(90deg, var(--wire) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.2;
+}
+.cta-inner {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.cta-sup {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--volt);
+  text-transform: uppercase;
+}
+.cta-title {
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--text);
+  line-height: 1;
+}
+.cta-title span { color: var(--volt); }
+.cta-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--text2);
+  max-width: 480px;
+  line-height: 1.6;
+}
+.cta-btns { display: flex; gap: 16px; align-items: center; margin-top: 8px; }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer {
+  background: var(--ink1);
+  border-top: 1px solid var(--wire);
+  padding: 60px 0 32px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+.footer-brand p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-top: 16px;
+  max-width: 280px;
+}
+.footer-col-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text2);
+  transition: color .15s;
+}
+.footer-links a:hover { color: var(--volt); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28px;
+  border-top: 1px solid var(--wire);
+}
+.footer-copy {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+.footer-badges { display: flex; gap: 12px; }
+.f-badge {
+  font-family: var(--ff-mono);
+  font-size: 9px;
+  padding: 4px 10px;
+  border: 1px solid var(--wire2);
+  color: var(--text3);
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════ */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 80px; }
+  .hero-stats { display: none; }
+  .container { padding: 0 24px; }
+  .products-grid { grid-template-columns: 1fr; }
+  .features-layout { grid-template-columns: 1fr; }
+  .catalog-grid { grid-template-columns: 1fr 1fr; }
+  .metrics-row { grid-template-columns: 1fr 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark"></div>
+    <div class="nav-logo-text">Инд<span>Авто</span>Про</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#products">Продукты</a></li>
+    <li><a href="#catalog">Каталог</a></li>
+    <li><a href="#about">О компании</a></li>
+    <li><a href="#support">Поддержка</a></li>
+    <li><a href="#contacts">Контакты</a></li>
+  </ul>
+  <div class="nav-cta">
+    <a href="#" class="btn btn-outline" style="font-size:11px;padding:9px 18px">Войти</a>
+    <a href="#" class="btn btn-volt">Запрос КП</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+
+  <div class="hero-eyebrow">
+    <div class="hero-eyebrow-line"></div>
+    <span>Официальный дистрибьютор · Россия и СНГ</span>
+  </div>
+
+  <h1 class="hero-title">
+    Программное<br>
+    <span class="accent">обеспечение</span><br>
+    <span class="outline">для промышленности</span>
+  </h1>
+
+  <p class="hero-sub">
+    Поставки лицензионного ПО для SCADA, АСУ ТП, ПЛК и инженерных систем.
+    Технический консалтинг, внедрение и круглосуточная поддержка.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#catalog" class="btn btn-volt btn-lg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/></svg>
+      Каталог ПО
+    </a>
+    <a href="#contacts" class="btn btn-outline btn-lg">Получить консультацию</a>
+  </div>
+
+  <!-- Stat pills -->
+  <div class="hero-stats">
+    <div class="stat-pill">
+      <div class="stat-num">200<span>+</span></div>
+      <div class="stat-label">Программных продуктов</div>
+    </div>
+    <div class="stat-pill" style="border-left-color:var(--flame)">
+      <div class="stat-num" style="color:var(--text)">14<span style="color:var(--flame)">лет</span></div>
+      <div class="stat-label">На рынке АСУ ТП</div>
+    </div>
+    <div class="stat-pill" style="border-left-color:var(--lime)">
+      <div class="stat-num">99<span style="color:var(--lime)">%</span></div>
+      <div class="stat-label">Uptime поддержки</div>
+    </div>
+  </div>
+
+  <!-- Live ticker -->
+  <div class="hero-ticker">
+    <div class="ticker-inner">
+      <!-- set 1 -->
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">SCADA Wonderware</span><span class="t-val">✓ В наличии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Siemens TIA Portal</span><span class="t-val">✓ Лицензии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Kepware OPC Server</span><span class="t-val">✓ Поставка</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OSIsoft PI System</span><span class="t-val">✓ Партнёр</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">iFIX GE Digital</span><span class="t-val">✓ В наличии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Citect SCADA</span><span class="t-val">✓ Лицензии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">AutoCAD Electrical</span><span class="t-val">✓ Поставка</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MATLAB Simulink</span><span class="t-val">✓ Академия</span></div>
+      <!-- set 2 (duplicate for seamless loop) -->
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">SCADA Wonderware</span><span class="t-val">✓ В наличии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Siemens TIA Portal</span><span class="t-val">✓ Лицензии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Kepware OPC Server</span><span class="t-val">✓ Поставка</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">OSIsoft PI System</span><span class="t-val">✓ Партнёр</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">iFIX GE Digital</span><span class="t-val">✓ В наличии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">Citect SCADA</span><span class="t-val">✓ Лицензии</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">AutoCAD Electrical</span><span class="t-val">✓ Поставка</span></div>
+      <div class="ticker-item"><div class="t-dot"></div><span class="t-name">MATLAB Simulink</span><span class="t-val">✓ Академия</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PARTNERS ══ -->
+<div class="partners">
+  <div class="partners-label">Официальные партнёры и поставщики</div>
+  <div style="overflow:hidden">
+    <div class="partners-scroll">
+      <!-- set 1 -->
+      <div class="partner-logo"><div class="partner-logo-icon">SI</div><div class="partner-logo-name">Siemens</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">SC</div><div class="partner-logo-name">Schneider</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">GE</div><div class="partner-logo-name">GE Digital</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">KE</div><div class="partner-logo-name">Kepware</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">AB</div><div class="partner-logo-name">Rockwell</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">HN</div><div class="partner-logo-name">Honeywell</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">EM</div><div class="partner-logo-name">Emerson</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">MW</div><div class="partner-logo-name">Wonderware</div></div>
+      <!-- set 2 -->
+      <div class="partner-logo"><div class="partner-logo-icon">SI</div><div class="partner-logo-name">Siemens</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">SC</div><div class="partner-logo-name">Schneider</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">GE</div><div class="partner-logo-name">GE Digital</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">KE</div><div class="partner-logo-name">Kepware</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">AB</div><div class="partner-logo-name">Rockwell</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">HN</div><div class="partner-logo-name">Honeywell</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">EM</div><div class="partner-logo-name">Emerson</div></div>
+      <div class="partner-logo"><div class="partner-logo-icon">MW</div><div class="partner-logo-name">Wonderware</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FEATURED PRODUCTS ══ -->
+<section class="products" id="products">
+  <div class="container">
+    <div class="section-tag"><span>// Флагманские решения</span></div>
+    <h2 class="section-title">Ключевые<br><span>продукты</span></h2>
+  </div>
+
+  <div style="margin-top:60px">
+    <div class="products-grid">
+
+      <!-- SCADA -->
+      <div class="product-card">
+        <div class="product-num">01 / SCADA</div>
+        <div class="product-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <rect x="4" y="8" width="40" height="28" rx="2" stroke="#00c8f0" stroke-width="1.5" fill="none"/>
+            <rect x="6" y="10" width="36" height="24" rx="1" fill="#0c1525"/>
+            <polyline points="8,26 13,20 17,24 22,16 27,20 32,14 38,18" stroke="#1de9b6" stroke-width="1.5" fill="none"/>
+            <rect x="8" y="12" width="10" height="6" rx="1" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <circle cx="40" cy="12" r="2" fill="#ff6b35" opacity="0.8"/>
+            <rect x="18" y="38" width="12" height="3" fill="#192d48"/>
+            <rect x="14" y="41" width="20" height="2" rx="1" fill="#192d48"/>
+          </svg>
+        </div>
+        <div class="product-name">SCADA-системы</div>
+        <div class="product-desc">Диспетчерское управление и сбор данных. Wonderware, Citect, iFIX, InTouch, GENESIS64 и другие платформы.</div>
+        <div class="product-tags">
+          <span class="ptag">Wonderware</span>
+          <span class="ptag">Citect</span>
+          <span class="ptag">iFIX</span>
+          <span class="ptag">OPC-UA</span>
+        </div>
+        <a href="#" class="product-link">
+          Смотреть каталог
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 19,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+
+      <!-- ПЛК -->
+      <div class="product-card">
+        <div class="product-num">02 / ПЛК</div>
+        <div class="product-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <rect x="8" y="12" width="22" height="28" rx="2" stroke="#00c8f0" stroke-width="1.5" fill="none"/>
+            <rect x="6" y="10" width="26" height="5" rx="1" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="12" y="18" width="4" height="3" rx="0.5" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="18" y="18" width="4" height="3" rx="0.5" fill="#192d48" stroke="#ff6b35" stroke-width="0.8"/>
+            <circle cx="14" cy="15" r="1.5" fill="#1de9b6"/>
+            <circle cx="20" cy="15" r="1.5" fill="#1de9b6"/>
+            <circle cx="26" cy="15" r="1.5" fill="#ff6b35"/>
+            <line x1="10" y1="26" x2="17" y2="26" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="17" y="24" width="5" height="4" rx="0.5" stroke="#00c8f0" stroke-width="0.8" fill="none"/>
+            <line x1="22" y1="26" x2="28" y2="26" stroke="#00c8f0" stroke-width="0.8"/>
+            <line x1="34" y1="18" x2="40" y2="14" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+            <line x1="34" y1="22" x2="42" y2="20" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+            <line x1="34" y1="26" x2="42" y2="28" stroke="#1de9b6" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+            <circle cx="42" cy="14" r="1.5" fill="#ff6b35"/>
+            <circle cx="42" cy="20" r="1.5" fill="#00c8f0"/>
+            <circle cx="42" cy="28" r="1.5" fill="#1de9b6"/>
+          </svg>
+        </div>
+        <div class="product-name">ПО для ПЛК</div>
+        <div class="product-desc">Среды разработки для программируемых контроллеров. TIA Portal, Unity Pro, Studio 5000, Codesys и совместимые IDE.</div>
+        <div class="product-tags">
+          <span class="ptag">TIA Portal</span>
+          <span class="ptag">Unity Pro</span>
+          <span class="ptag">Codesys</span>
+          <span class="ptag">IEC 61131</span>
+        </div>
+        <a href="#" class="product-link">
+          Смотреть каталог
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 19,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+
+      <!-- MES/ERP -->
+      <div class="product-card">
+        <div class="product-num">03 / MES</div>
+        <div class="product-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <rect x="6" y="10" width="36" height="28" rx="2" stroke="#00c8f0" stroke-width="1.5" fill="none"/>
+            <line x1="6" y1="18" x2="42" y2="18" stroke="#192d48" stroke-width="1"/>
+            <line x1="22" y1="18" x2="22" y2="38" stroke="#192d48" stroke-width="1"/>
+            <rect x="10" y="22" width="8" height="4" rx="0.5" fill="#192d48" stroke="#1de9b6" stroke-width="0.8"/>
+            <rect x="10" y="29" width="8" height="4" rx="0.5" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="26" y="22" width="12" height="12" rx="0.5" fill="none" stroke="#ff6b35" stroke-width="0.8"/>
+            <polyline points="27,30 30,26 33,28 36,24 38,26" stroke="#ff6b35" stroke-width="1" fill="none"/>
+            <text x="10" y="16" font-family="monospace" font-size="5" fill="#00c8f0">MES · ERP · LIMS</text>
+          </svg>
+        </div>
+        <div class="product-name">MES / ERP-интеграция</div>
+        <div class="product-desc">Системы управления производством и интеграция с ERP. Wonderware MES, SAP PM, LIMS и historian-решения.</div>
+        <div class="product-tags">
+          <span class="ptag">Wonderware MES</span>
+          <span class="ptag">SAP PM</span>
+          <span class="ptag">Historian</span>
+        </div>
+        <a href="#" class="product-link">
+          Смотреть каталог
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 19,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ METRICS ══ -->
+<section class="metrics">
+  <div class="container">
+    <div class="metrics-row">
+      <div class="metric-block">
+        <div class="metric-val">200<span class="u">+</span></div>
+        <div class="metric-name">Программных продуктов</div>
+        <div class="metric-note">в каталоге</div>
+      </div>
+      <div class="metric-block">
+        <div class="metric-val">1200<span class="u">+</span></div>
+        <div class="metric-name">Внедрений</div>
+        <div class="metric-note">по всей России и СНГ</div>
+      </div>
+      <div class="metric-block">
+        <div class="metric-val">14<span class="u">лет</span></div>
+        <div class="metric-name">На рынке</div>
+        <div class="metric-note">с 2010 года</div>
+      </div>
+      <div class="metric-block">
+        <div class="metric-val">24<span class="u">/7</span></div>
+        <div class="metric-name">Техподдержка</div>
+        <div class="metric-note">SLA до 4 часов</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="features" id="about">
+  <div class="container">
+    <div class="section-tag"><span>// Почему мы</span></div>
+    <h2 class="section-title">Полный цикл<br><span>поставок</span></h2>
+
+    <div class="features-layout">
+      <!-- Terminal visual -->
+      <div class="features-visual">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="t-dot t-dot-r"></div>
+            <div class="t-dot t-dot-y"></div>
+            <div class="t-dot t-dot-g"></div>
+            <div class="terminal-title">indautopro-portal v2.4.1</div>
+          </div>
+          <div class="terminal-body">
+            <div class="tl"><span class="tl-prompt">›</span><span class="tl-cmd">license check --vendor=siemens --sku=6ES7822</span></div>
+            <div class="tl-out tl-ok">✓ Лицензия активна · 48 узлов · до 2027-12</div>
+            <br>
+            <div class="tl"><span class="tl-prompt">›</span><span class="tl-cmd">order status ORD-2024-4491</span></div>
+            <div class="tl-out tl-volt">→ Статус: ДОСТАВКА · ETA 14 марта 2026</div>
+            <div class="tl-out" style="color:var(--text3)">  Трек: RU-MSK-4491-X · Сортировочный центр</div>
+            <br>
+            <div class="tl"><span class="tl-prompt">›</span><span class="tl-cmd">support ticket --priority=critical</span></div>
+            <div class="tl-out tl-ok">✓ Инженер назначен · Ответ через &lt; 15 мин</div>
+            <br>
+            <div class="tl"><span class="tl-prompt">›</span><span class="tl-cmd">catalog search --category=scada --limit=5</span></div>
+            <div class="tl-out">  [1] Wonderware InTouch 2023 R2</div>
+            <div class="tl-out">  [2] Citect SCADA 2018 SP1</div>
+            <div class="tl-out">  [3] GENESIS64 v10.97</div>
+            <div class="tl-out tl-warn">  [4] iFIX 6.5 ⚠ Уточните совместимость</div>
+            <div class="tl-out">  [5] Ignition 8.1 by Inductive</div>
+            <br>
+            <div class="tl"><span class="tl-prompt">›</span><span class="tl-cmd"><span class="cursor"></span></span></div>
+          </div>
+        </div>
+        <div class="terminal-badge">
+          <div class="tb-label">Среднее время ответа</div>
+          <div class="tb-val">14 мин</div>
+        </div>
+      </div>
+
+      <!-- Feature list -->
+      <div class="features-list">
+        <div class="feat-item">
+          <div class="feat-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3L20 6V13Q20 19 12 22Q4 19 4 13V6Z" stroke="#00c8f0" stroke-width="1.5" fill="none"/><polyline points="8,12 11,15 16,9" stroke="#1de9b6" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="feat-body">
+            <div class="feat-name">Официальные лицензии</div>
+            <div class="feat-desc">Поставка только оригинального лицензионного ПО напрямую от производителей. Все сертификаты и документация включены.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00c8f0" stroke-width="1.5"/><polyline points="12,6 12,12 16,14" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="feat-body">
+            <div class="feat-name">Поставка за 1–5 дней</div>
+            <div class="feat-desc">Электронные лицензии — мгновенно. Физические носители — курьерской доставкой по всей России и СНГ.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#00c8f0" stroke-width="1.5"/><polyline points="8,21 12,17 16,21" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,9 10,12 17,8" stroke="#1de9b6" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="feat-body">
+            <div class="feat-name">Техническое внедрение</div>
+            <div class="feat-desc">Команда сертифицированных инженеров. Инсталляция, настройка, интеграция с существующими системами АСУ ТП.</div>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.12 1.18 2 2 0 012.1.01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.45-.45a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" stroke="#00c8f0" stroke-width="1.5"/></svg>
+          </div>
+          <div class="feat-body">
+            <div class="feat-name">Поддержка 24 / 7</div>
+            <div class="feat-desc">Выделенная линия для критических инцидентов. SLA с временем реакции до 15 минут для Enterprise-клиентов.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CATALOG ══ -->
+<section class="catalog" id="catalog">
+  <div class="container">
+    <div class="section-tag"><span>// Каталог</span></div>
+    <h2 class="section-title">Разделы<br><span>каталога</span></h2>
+
+    <div class="catalog-grid">
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">47 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="4" y="7" width="28" height="20" rx="2" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <polyline points="7,21 10,17 13,19 16,14 19,17 22,11 27,14" stroke="#1de9b6" stroke-width="1.2" fill="none"/>
+            <circle cx="27" cy="11" r="2" fill="#1de9b6" opacity="0.6"/>
+            <rect x="13" y="29" width="10" height="3" rx="1" fill="#192d48"/>
+          </svg>
+        </div>
+        <div class="cat-name">SCADA-системы</div>
+        <div class="cat-sub">Диспетчерское управление, мнемосхемы, трендинг</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">34 продукта</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="6" y="8" width="16" height="22" rx="1.5" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <rect x="4" y="6" width="20" height="4" rx="1" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <circle cx="10" cy="14" r="1.2" fill="#1de9b6"/>
+            <circle cx="15" cy="14" r="1.2" fill="#ff6b35"/>
+            <line x1="8" y1="19" x2="14" y2="19" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="14" y="17.5" width="4" height="3" rx="0.5" stroke="#00c8f0" stroke-width="0.8" fill="none"/>
+            <line x1="24" y1="13" x2="30" y2="10" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="1.5 1"/>
+            <line x1="24" y1="17" x2="31" y2="16" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="1.5 1"/>
+            <circle cx="31" cy="10" r="1.2" fill="#ff6b35"/>
+            <circle cx="31" cy="16" r="1.2" fill="#00c8f0"/>
+          </svg>
+        </div>
+        <div class="cat-name">ПЛК и контроллеры</div>
+        <div class="cat-sub">Среды программирования, конфигураторы, отладчики</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">28 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="16" r="10" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <circle cx="18" cy="16" r="5" stroke="#1de9b6" stroke-width="1" fill="none"/>
+            <line x1="18" y1="16" x2="22" y2="10" stroke="#ff6b35" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="18" cy="16" r="1.5" fill="#00c8f0"/>
+            <line x1="18" y1="6" x2="18" y2="8" stroke="#00c8f0" stroke-width="1.2"/>
+            <line x1="18" y1="24" x2="18" y2="26" stroke="#00c8f0" stroke-width="1.2"/>
+            <line x1="8" y1="16" x2="10" y2="16" stroke="#00c8f0" stroke-width="1.2"/>
+            <line x1="26" y1="16" x2="28" y2="16" stroke="#00c8f0" stroke-width="1.2"/>
+            <line x1="10" y1="29" x2="26" y2="29" stroke="#192d48" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="cat-name">Датчики и КИПиА</div>
+        <div class="cat-sub">ПО для калибровки, конфигурирования, диагностики</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">22 продукта</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="6" y="8" width="24" height="16" rx="1.5" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <rect x="8" y="10" width="20" height="12" rx="0.5" fill="#0c1525"/>
+            <polyline points="10,19 13,15 16,17 19,12 22,14 25,10 28,12" stroke="#ff6b35" stroke-width="1.2" fill="none"/>
+            <rect x="10" y="26" width="6" height="4" rx="0.5" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+            <rect x="20" y="26" width="6" height="4" rx="0.5" fill="#ff6b35" opacity="0.8"/>
+          </svg>
+        </div>
+        <div class="cat-name">HMI-интерфейсы</div>
+        <div class="cat-sub">Разработка панелей оператора, визуализация процессов</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">19 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <circle cx="18" cy="18" r="11" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <ellipse cx="18" cy="18" rx="5" ry="11" stroke="#192d48" stroke-width="1" fill="none"/>
+            <ellipse cx="18" cy="18" rx="11" ry="4" stroke="#192d48" stroke-width="1" fill="none"/>
+            <circle cx="12" cy="13" r="1.5" fill="#00c8f0"/>
+            <circle cx="24" cy="10" r="1.5" fill="#00c8f0"/>
+            <circle cx="22" cy="23" r="1.5" fill="#1de9b6"/>
+            <line x1="12" y1="13" x2="24" y2="10" stroke="#00c8f0" stroke-width="0.7" stroke-dasharray="2 1.5" opacity="0.6"/>
+            <line x1="24" y1="10" x2="22" y2="23" stroke="#00c8f0" stroke-width="0.7" stroke-dasharray="2 1.5" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="cat-name">Промышленные сети</div>
+        <div class="cat-sub">OPC-серверы, конвертеры протоколов, сетевые анализаторы</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">31 продукт</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="5" y="8" width="16" height="20" rx="1.5" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <rect x="8" y="11" width="10" height="8" rx="0.5" fill="#0c1525" stroke="#1e3a5f" stroke-width="0.7"/>
+            <rect x="8" y="11" width="4" height="8" fill="#1de9b6" opacity="0.15"/>
+            <polygon points="18,11 28,14 28,22 18,25" stroke="#00c8f0" stroke-width="1" fill="none"/>
+            <circle cx="22" cy="18" r="3.5" stroke="#ff6b35" stroke-width="1" fill="none"/>
+            <circle cx="22" cy="18" r="1.5" fill="#0c1525"/>
+            <line x1="22" y1="12" x2="22" y2="13.5" stroke="#ff6b35" stroke-width="1.5"/>
+            <line x1="22" y1="22.5" x2="22" y2="24" stroke="#ff6b35" stroke-width="1.5"/>
+            <line x1="16.5" y1="18" x2="18" y2="18" stroke="#ff6b35" stroke-width="1.5"/>
+            <line x1="26" y1="18" x2="27.5" y2="18" stroke="#ff6b35" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="cat-name">Инженерное ПО</div>
+        <div class="cat-sub">CAD, моделирование, расчёт трубопроводов, электрика</div>
+      </a>
+
+      <a href="#" class="cat-card">
+        <div class="cat-card-bg"></div>
+        <div class="cat-count">15 продуктов</div>
+        <div class="cat-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect x="5" y="10" width="26" height="18" rx="1.5" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+            <rect x="7" y="12" width="8" height="6" rx="0.5" fill="#0c1525" stroke="#1e3a5f" stroke-width="0.7"/>
+            <rect x="7" y="20" width="8" height="6" rx="0.5" fill="#0c1525" stroke="#1e3a5f" stroke-width="0.7"/>
+            <rect x="17" y="12" width="12" height="14" rx="0.5" fill="#0c1525" stroke="#1e3a5f" stroke-width="0.7"/>
+            <rect x="7" y="14" width="4" height="3" fill="#1de9b6" opacity="0.3"/>
+            <rect x="7" y="22" width="3" height="3" fill="#ff6b35" opacity="0.3"/>
+            <polyline points="19,22 21,19 23,21 25,17 27,19" stroke="#1de9b6" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <div class="cat-name">MES / Аналитика</div>
+        <div class="cat-sub">Управление производством, historian, BI для промышленности</div>
+      </a>
+
+      <a href="#" class="cat-card" style="border: 1px dashed var(--wire2); background: transparent; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:180px">
+        <div class="cat-card-bg"></div>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="margin-bottom:12px;opacity:0.4"><circle cx="12" cy="12" r="10" stroke="#00c8f0" stroke-width="1.5"/><line x1="12" y1="8" x2="12" y2="16" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="12" x2="16" y2="12" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <div class="cat-name" style="opacity:0.5;font-size:13px">Смотреть все категории</div>
+        <div class="cat-sub" style="margin-top:6px;opacity:0.4;font-size:12px">200+ продуктов в каталоге</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="testimonials">
+  <div class="container">
+    <div class="section-tag"><span>// Отзывы клиентов</span></div>
+    <h2 class="section-title">Нам <span>доверяют</span></h2>
+
+    <div class="testimonials-grid">
+      <div class="testi-card">
+        <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <div class="testi-quote">"</div>
+        <div class="testi-text">Поставка лицензий Wonderware прошла за двое суток. Инженеры помогли с активацией на серверах ДЦ и настройкой репликации. Работаем с компанией уже 6 лет.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">АК</div>
+          <div>
+            <div class="testi-name">Александр Козырев</div>
+            <div class="testi-pos">Главный технолог · НПЗ «Нефтехим»</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <div class="testi-quote">"</div>
+        <div class="testi-text">Закупили TIA Portal v18 для 40 рабочих мест. Оформление за один день, все ключи активации пришли корпоративным письмом. Техподдержка отвечает быстро.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">МВ</div>
+          <div>
+            <div class="testi-name">Марина Волкова</div>
+            <div class="testi-pos">Начальник АСУ · Уралэнерго</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        <div class="testi-quote">"</div>
+        <div class="testi-text">Интегрировали OSIsoft PI с нашей SAP-системой. Команда ИндАвтоПро взялась за весь проект под ключ — от поставки ПО до тестирования промышленного контура.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">ДС</div>
+          <div>
+            <div class="testi-name">Дмитрий Сорокин</div>
+            <div class="testi-pos">IT-директор · ГК «МеталлГрупп»</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" id="contacts">
+  <div class="cta-grid-bg"></div>
+  <div class="container">
+    <div class="cta-inner">
+      <div class="cta-sup">// Готовы начать?</div>
+      <h2 class="cta-title">Запросите<br><span>коммерческое</span><br>предложение</h2>
+      <p class="cta-sub">Получите точную стоимость лицензий, сроки поставки и план технического внедрения в течение 4 часов.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn btn-flame btn-lg">Запросить КП</a>
+        <a href="tel:+74951234567" class="btn btn-outline btn-lg">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.12 1.18 2 2 0 012.1.01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.45-.45a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z" stroke="currentColor" stroke-width="1.5"/></svg>
+          +7 (495) 123-45-67
+        </a>
+      </div>
+      <div style="font-family:var(--ff-mono);font-size:11px;color:var(--text3);margin-top:8px">
+        Пн–Пт 9:00–19:00 МСК · Круглосуточно для критических инцидентов
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="display:inline-flex">
+          <div class="nav-logo-mark"></div>
+          <div class="nav-logo-text">Инд<span>Авто</span>Про</div>
+        </a>
+        <p>Официальный дистрибьютор программного обеспечения для промышленной автоматизации, SCADA и АСУ ТП. Россия, СНГ.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">ISO 9001</div>
+          <div class="f-badge">ФСТЭК</div>
+          <div class="f-badge">Роскомнадзор</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="#">SCADA-системы</a></li>
+          <li><a href="#">ПО для ПЛК</a></li>
+          <li><a href="#">HMI-интерфейсы</a></li>
+          <li><a href="#">MES / ERP</a></li>
+          <li><a href="#">Промышленные сети</a></li>
+          <li><a href="#">Инженерное ПО</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="#">О нас</a></li>
+          <li><a href="#">Партнёры</a></li>
+          <li><a href="#">Сертификаты</a></li>
+          <li><a href="#">Вакансии</a></li>
+          <li><a href="#">Новости</a></li>
+          <li><a href="#">Блог</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Поддержка</div>
+        <ul class="footer-links">
+          <li><a href="#">Техподдержка 24/7</a></li>
+          <li><a href="#">База знаний</a></li>
+          <li><a href="#">Документация</a></li>
+          <li><a href="#">Обучение</a></li>
+          <li><a href="#">Личный кабинет</a></li>
+          <li><a href="#">Запрос КП</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2010–2026 ИндАвтоПро · ООО «Промавтоматика» · ИНН 7701234567</div>
+      <div style="display:flex;gap:20px">
+        <a href="#" style="font-family:var(--ff-mono);font-size:11px;color:var(--text3);text-decoration:none">Политика конфиденциальности</a>
+        <a href="#" style="font-family:var(--ff-mono);font-size:11px;color:var(--text3);text-decoration:none">Реквизиты</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

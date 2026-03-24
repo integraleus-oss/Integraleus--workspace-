@@ -1,0 +1,4 @@
+telethon==1.*
+aiohttp==3.*
+python-dotenv==1.*
+numpy==2.*

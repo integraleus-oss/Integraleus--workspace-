@@ -20,7 +20,7 @@
 | `blog/hmi.html` | /blog/hmi.html | Статья: Визуализация в Alpha.HMI 2.0 |
 | `blog/protocols.html` | /blog/protocols.html | Статья: Протоколы связи в АСУ ТП |
 | `blog/crossplatform.html` | /blog/crossplatform.html | Статья: Кроссплатформенность (Linux/Windows) |
-| `blog/alarms.html` | /blog/alarms.html | Статья: Alpha.Alarms 3.30 |
+| `blog/alarms.html` | /blog/alarms.html | Статья: Alpha.HMI.Alarms 3.3 |
 | `blog/reports.html` | /blog/reports.html | Статья: Alpha.Reports |
 | `blog/scaling.html` | /blog/scaling.html | Статья: Масштабирование SCADA |
 | `blog/devstudio.html` | /blog/devstudio.html | Статья: Alpha.DevStudio 4.1 (в процессе) |

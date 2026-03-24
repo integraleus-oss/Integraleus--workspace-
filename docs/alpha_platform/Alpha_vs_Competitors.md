@@ -53,8 +53,8 @@
 | Историан | Alpha.Historian | Встроенный архив | Внешняя СУБД | Tag Historian | WinCC Archive |
 | HMI / Визуализация | Alpha.HMI | Графический редактор | Редактор проектов | Perspective / Vision | WinCC Unified |
 | Web-клиент | Alpha.HMI.WebViewer | Есть | Есть (ограничено) | ✅ Нативный (HTML5) | ✅ HTML5 |
-| Тренды | Alpha.Trends | Встроенные | Встроенные | Встроенные | Встроенные |
-| Алармы/События | Alpha.Alarms | Встроенные | Встроенные | Alarm Pipeline | Встроенные |
+| Тренды | alpha.hmi.charts (встроенные в HMI) | Встроенные | Встроенные | Встроенные | Встроенные |
+| Алармы/События | Alpha.HMI.Alarms | Встроенные | Встроенные | Alarm Pipeline | Встроенные |
 | Среда разработки | Alpha.DevStudio | Интегрированная IDE | Интегрированная IDE | Designer (Java) | TIA Portal |
 | Скриптовый язык | **Alpha.Om + JavaScript** | Встроенный ЯП | МЭК 61131-3 | Python (Jython) | VBScript / C |
 | Отчёты | Alpha.Reports | Встроенные | Внешние (Stimulsoft) | Reporting Module | WinCC/DataMonitor |

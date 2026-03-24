@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script>
-(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme:light)').matches)document.documentElement.classList.add('theme-light');})();
+(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -16,7 +16,7 @@
 
  ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CAE WeRTSim — Платформа цифровых двойников сварочных технологий | СПЕЦТЕХ</title>
@@ -59,6 +59,7 @@
 }
 
 /* ── LIGHT THEME ── */
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
   --ink:        #f0f2f5;
   --ink1:       #ffffff;
@@ -88,11 +89,9 @@
 :root.theme-light body {
   color: var(--text);
 }
-:root.theme-light body::before {
-  background-image:
-    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(0,136,204,0.04) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 80%, rgba(21,168,126,0.03) 0%, transparent 70%);
-}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+
+
 :root.theme-light nav {
   background: rgba(255,255,255,0.92);
   border-bottom-color: var(--wire);
@@ -123,6 +122,8 @@
 :root.theme-light .logo-hex::after {
   background: var(--ink1);
 }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
 /* Cards and sections */
 :root.theme-light .card,
 :root.theme-light .product-card,
@@ -190,7 +191,7 @@
 
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: var(--ink);
@@ -208,17 +209,6 @@ body {
 /* ══════════════════════════════════════
    NOISE OVERLAY
 ══════════════════════════════════════ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.12) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.12) 60px);
-  pointer-events: none;
-  z-index: 0;
-}
-
 /* ══════════════════════════════════════
    NAV
 ══════════════════════════════════════ */
@@ -231,7 +221,7 @@ nav {
   justify-content: space-between;
   padding: 0 48px;
   height: 72px;
-  background: rgba(5,8,15,0.85);
+  background: #05080f;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
   transition: height 0.3s ease, background 0.3s ease;
@@ -293,7 +283,7 @@ nav {
   top: 100%;
   left: -12px;
   min-width: 200px;
-  background: rgba(5,8,15,0.95);
+  background: #05080f;
   backdrop-filter: blur(16px);
   border: 1px solid var(--wire);
   border-radius: 8px;
@@ -600,7 +590,7 @@ nav {
 .product-tabs-nav {
   position: sticky;
   top: 72px;
-  background: rgba(5,8,15,0.95);
+  background: #05080f;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
   padding: 16px 0;
@@ -610,7 +600,11 @@ nav {
 .product-tabs-nav .container {
   display: flex;
   gap: 32px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.product-tabs-nav .container::-webkit-scrollbar { display: none; }
 
 .ptab {
   background: transparent;
@@ -978,7 +972,14 @@ footer {
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; }
+  nav { padding: 0 16px; }
+}
 @media (max-width: 768px) {
+  .product-vendor-badge { flex-wrap: wrap; font-size: 12px; }
+  .vendor-official { font-size: 12px; margin-left: 0; }
   .product-hero-grid {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -1006,13 +1007,18 @@ footer {
     font-size: 36px;
   }
 }
+@media (max-width: 480px) {
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  .nav-logo img { height: 20px !important; max-width: 90px !important; }
+}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-text">СПЕЦТЕХ</div>
+    <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
+    <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Главная</a></li>
@@ -1052,7 +1058,7 @@ footer {
         <div class="product-vendor-badge">
           <div class="vendor-logo" style="background:transparent;border:none;"><svg width="28" height="32" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M0 0L0.279297 80.1172C0.280797 88.3224 1.843 96.1304 4.96875 103.424L4.97266 103.43L4.97461 103.436C8.07432 110.599 12.31 116.926 17.6445 122.33L17.6602 122.346L17.6777 122.363C23.0815 127.698 29.4066 131.934 36.5703 135.033L36.5762 135.037L36.582 135.039C43.879 138.166 51.6928 139.73 59.9024 139.73C68.1076 139.73 75.8876 138.168 83.1231 135.039C90.3528 131.941 96.7176 127.705 102.127 122.365L102.135 122.354L102.145 122.346C107.55 116.941 111.826 110.608 114.93 103.436L114.932 103.43L114.934 103.424C118.058 96.1347 119.655 88.3185 119.625 80.0918L119.334 0H84.002L84.2656 80.1035C84.2649 83.4693 83.6217 86.5452 82.332 89.4609L82.3203 89.4883L82.3086 89.5156C81.0511 92.4879 79.3414 95.0316 77.1348 97.2383C74.9305 99.4426 72.3462 101.191 69.293 102.518C66.3721 103.75 63.2816 104.367 59.9043 104.367C56.5319 104.367 53.4033 103.75 50.4082 102.512C47.4325 101.19 44.8789 99.4453 42.6719 97.2383C40.4615 95.0279 38.7174 92.47 37.3945 89.4883C36.166 86.5745 35.5518 83.4833 35.543 80.0957L35.3379 0H0Z" fill="white"/></svg></div>
           <span class="vendor-name">Разработчик: АО «Юмосс»</span>
-          <span class="vendor-official">✓ Дистрибьютор: АО «СПЕЦТЕХ»</span>
+          <span class="vendor-official">✓&nbsp;Дистрибьютор: АО&nbsp;«СПЕЦТЕХ»</span>
         </div>
         
         <h1 class="product-name">CAE WeRTSim</h1>
@@ -1446,7 +1452,8 @@ ENDPROC
           <li><a href="#careers">Карьера</a></li>
           <li><a href="#contact">Контакты</a></li>
           <li><a href="#blog">Блог</a></li>
-        </ul>
+        
+          <li><a href="privacy.html">Конфиденциальность</a></li></ul>
       </div>
     </div>
 
@@ -1486,12 +1493,7 @@ function showPTab(tabId, button) {
   var saved = localStorage.getItem('sptech-theme');
   if (saved === 'light') document.documentElement.classList.add('theme-light');
   else if (saved === 'dark') document.documentElement.classList.remove('theme-light');
-  else {
-    // Respect system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-      document.documentElement.classList.add('theme-light');
-    }
-  }
+
 })();
 function toggleTheme() {
   var root = document.documentElement;
@@ -1499,5 +1501,16 @@ function toggleTheme() {
   localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
 </script>
+
+<!-- Cookie Banner -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+    <span>Мы используем файлы cookie (Яндекс.Метрика) для анализа посещаемости сайта. Продолжая использование сайта, вы соглашаетесь с <a href="privacy.html" style="color:var(--volt);text-decoration:underline;">Политикой конфиденциальности</a>.</span>
+    <button onclick="document.getElementById('cookie-banner').style.display='none';localStorage.setItem('sptech-cookies','ok');" style="padding:8px 20px;background:var(--volt);color:var(--ink);border:none;border-radius:3px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap;">Принять</button>
+  </div>
+</div>
+<script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
+
+<script src="https://bot.specialtechnology.ru/widget.js"></script>
 </body>
 </html>

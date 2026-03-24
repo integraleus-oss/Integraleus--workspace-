@@ -159,6 +159,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   .perf-stats{grid-template-columns:1fr;}
   .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
 }
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 </style>
 </head>
 
@@ -385,7 +386,7 @@ alpha.historian.cli stat --target server01:4950</code></pre>
             <li><strong>Alpha.Server</strong> — источник оперативных данных</li>
             <li><strong>Alpha.HMI</strong> — отображение трендов и графиков</li>
             <li><strong>Alpha.Reports</strong> — генерация отчётов по историческим данным</li>
-            <li><strong>Alpha.Alarms</strong> — журнал событий и тревог</li>
+            <li><strong>Alpha.HMI.Alarms</strong> — журнал событий и тревог</li>
             <li><strong>OPC UA HDA</strong> — стандартизированный доступ к истории</li>
             <li><strong>PostgreSQL</strong> — возможность SQL-запросов к данным</li>
           </ul>

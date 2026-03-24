@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  agent:
+    build: .
+    container_name: humanlike-agent
+    restart: always
+    env_file: .env
+    volumes:
+      - ./data:/opt/humanlike-agent
+      - ./session:/app/session

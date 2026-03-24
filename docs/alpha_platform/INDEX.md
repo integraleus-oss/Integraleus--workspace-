@@ -15,7 +15,7 @@
 | Alpha.DevStudio 4.1 | `alpha_devstudio_notes.md` | 6.4K | IDE: проекты, компиляция, отладка, деплой, CLI |
 | Alpha.Domain | `alpha_domain_notes.md` | 1.8K | Информационная модель, типы объектов |
 | Alpha.Historian 4.0 | `alpha_historian_notes.md` | 2.8K | Архивирование, сжатие, запросы истории, агрегация |
-| Alpha.Alarms 3.30 | `alpha_alarms_notes.md` | 7.2K | Тревоги, квитирование, подавление, аналитика, фильтрация |
+| Alpha.HMI.Alarms 3.3 (ранее Alpha.Alarms 3.30) | `alpha_alarms_notes.md` | 7.2K | Тревоги, квитирование, подавление, аналитика, фильтрация. ⚠️ Актуальный компонент — Alpha.HMI.Alarms 3.3 (кроссплатформенный) |
 | Alpha.Diagnostics 2.2 | `alpha_diagnostics_notes.md` | 2.2K | Диагностика компонентов платформы |
 | Alpha.Reports, Om, Security, AccessPoint, Imitator, RMap, Tools, Trends | `alpha_other_modules_notes.md` | 16K | 8 модулей: отчёты, скрипты, безопасность, АРМ оператора, имитация, интерактивная карта, утилиты, тренды |
 

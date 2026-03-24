@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор лицензий + Запрос КП — СПЕЦТЕХ</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #05080f;
+  --ink1:      #080d1a;
+  --ink2:      #0c1525;
+  --steel:     #111e35;
+  --wire:      #192d48;
+  --wire2:     #1f3a5f;
+  --volt:      #00c8f0;
+  --volt-lo:   rgba(0,200,240,0.09);
+  --volt-glow: rgba(0,200,240,0.38);
+  --flame:     #ff6b35;
+  --flame-lo:  rgba(255,107,53,0.1);
+  --lime:      #1de9b6;
+  --lime-lo:   rgba(29,233,182,0.08);
+  --crimson:   #ff3d57;
+  --amber:     #ffb800;
+  --text:      #ccd9ea;
+  --text2:     #6a8aaa;
+  --text3:     #2d4a6a;
+  --ff:        'Exo 2', sans-serif;
+  --mono:      'JetBrains Mono', monospace;
+  --ease:      cubic-bezier(.22,.68,0,1.2);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg,  transparent, transparent 59px, rgba(25,45,72,0.1) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(25,45,72,0.1) 60px);
+  pointer-events: none; z-index: 0;
+}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--ink1); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 60px;
+  background: rgba(5,8,15,0.9); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wire);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-hex {
+  width: 28px; height: 28px;
+  background: var(--volt);
+  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
+  position: relative;
+}
+.logo-hex::after {
+  content: '';
+  position: absolute; inset: 4px;
+  background: var(--ink);
+  clip-path: polygon(0 30%, 50% 0, 100% 30%, 100% 70%, 50% 100%, 0 70%);
+}
+.logo-text { font-size: 16px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--text); }
+.logo-text span { color: var(--volt); }
+.nav-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text2); text-decoration: none; transition: color .2s;
+}
+.nav-back:hover { color: var(--volt); }
+
+/* ── PAGE WRAPPER ── */
+.page { position: relative; z-index: 1; padding: 80px 0 80px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+/* ── PAGE HEADER ── */
+.page-header { text-align: center; padding: 48px 0 64px; }
+.page-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px; color: var(--volt);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;
+}
+.page-eyebrow::before, .page-eyebrow::after {
+  content: ''; display: block; width: 28px; height: 1px;
+  background: var(--volt); box-shadow: 0 0 6px var(--volt-glow);
+}
+.page-title {
+  font-size: clamp(32px, 5vw, 60px); font-weight: 900; text-transform: uppercase;
+  letter-spacing: -1px; line-height: 1; color: var(--text);
+}
+.page-title span { color: var(--volt); }
+.page-sub { font-size: 15px; font-weight: 300; color: var(--text2); margin-top: 16px; line-height: 1.6; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 2px; margin-bottom: 40px;
+  background: var(--wire); border: 1px solid var(--wire); border-radius: 4px;
+  overflow: hidden; max-width: 500px; margin-left: auto; margin-right: auto;
+}
+.tab {
+  flex: 1; padding: 13px 20px;
+  font-family: var(--ff); font-size: 12px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  background: var(--ink1); color: var(--text2); border: none;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background .2s, color .2s; position: relative;
+}
+.tab.active {
+  background: var(--steel); color: var(--volt);
+}
+.tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--volt); box-shadow: 0 0 8px var(--volt-glow);
+}
+
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ══════════════════════════════
+   CALCULATOR
+══════════════════════════════ */
+.calc-layout {
+  display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start;
+}
+.calc-main {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px; overflow: hidden;
+}
+.calc-section-head {
+  padding: 16px 24px;
+  background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; gap: 10px;
+}
+.calc-section-head span {
+  font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 2px;
+}
+.calc-section-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+}
+.calc-body { padding: 24px; }
+
+/* Product selector */
+.product-select-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px;
+}
+.prod-option {
+  position: relative; cursor: pointer;
+}
+.prod-option input[type=radio] { position: absolute; opacity: 0; width: 0; height: 0; }
+.prod-label {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 14px 16px; height: 110px;
+  background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: 3px; cursor: pointer; transition: border-color .2s, background .2s;
+  position: relative; overflow: hidden;
+}
+.prod-label::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--volt); transform: scaleX(0); transition: transform .2s;
+}
+.prod-option input:checked + .prod-label {
+  border-color: var(--volt); background: var(--volt-lo);
+}
+.prod-option input:checked + .prod-label::before { transform: scaleX(1); }
+.prod-label:hover { border-color: var(--wire2); }
+.prod-label-name {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; color: var(--text);
+}
+.prod-label-vendor {
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+}
+.prod-label-base {
+  font-family: var(--mono); font-size: 11px; color: var(--volt); margin-top: 4px;
+  line-height: 1.4;
+}
+.prod-check {
+  position: absolute; top: 10px; right: 10px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid var(--wire2); background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, background .2s;
+}
+.prod-option input:checked ~ .prod-label .prod-check {
+  background: var(--volt); border-color: var(--volt);
+}
+
+/* Sliders & number inputs */
+.field-row { margin-bottom: 22px; }
+.field-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 10px;
+}
+.field-lbl {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+}
+.field-val {
+  font-family: var(--mono); font-size: 14px; color: var(--volt); font-weight: 500;
+}
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  background: var(--wire); border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--volt); cursor: pointer;
+  box-shadow: 0 0 12px var(--volt-glow); border: 3px solid var(--ink);
+  transition: transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+/* Checkboxes */
+.check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.check-item { position: relative; }
+.check-item input[type=checkbox] { position: absolute; opacity: 0; width: 0; height: 0; }
+.check-lbl {
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
+  cursor: pointer; transition: border-color .2s, background .2s; font-size: 13px;
+  color: var(--text2); font-weight: 500;
+}
+.check-item input:checked + .check-lbl {
+  border-color: var(--lime); background: var(--lime-lo); color: var(--text);
+}
+.check-box {
+  width: 14px; height: 14px; border: 1px solid var(--wire2); border-radius: 2px;
+  background: var(--ink); flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: background .2s, border-color .2s;
+}
+.check-item input:checked + .check-lbl .check-box {
+  background: var(--lime); border-color: var(--lime);
+}
+.check-tick { display: none; }
+.check-item input:checked + .check-lbl .check-tick { display: block; }
+.check-addon { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-left: auto; }
+.check-item input:checked + .check-lbl .check-addon { color: var(--text3); }
+
+.addon-row { display: flex; align-items: flex-start; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--wire); }
+.addon-row:last-child { border-bottom: none; }
+.addon-label { flex: 0 0 200px; font-size: 13px; font-weight: 500; color: var(--text); padding-top: 6px; }
+.addon-ctrl { flex: 1; }
+.addon-select {
+  width: 100%; padding: 8px 12px; background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: 3px; color: var(--text); font-family: var(--ff-mono); font-size: 12px;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300c8f0'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  cursor: pointer; transition: border-color .2s;
+}
+.addon-select:focus { outline: none; border-color: var(--volt); }
+.addon-select option { background: var(--ink1); color: var(--text); }
+.addon-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: var(--ff-mono); }
+.addon-check input[type=checkbox] { accent-color: var(--lime); width: 14px; height: 14px; cursor: pointer; }
+.addon-hint { font-size: 10px; color: var(--text3); }
+
+/* ── RESULT PANEL ── */
+.result-panel {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px;
+  overflow: hidden; position: sticky; top: 80px;
+}
+.result-head {
+  padding: 16px 20px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.result-head-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--lime);
+  animation: blink-g 1.2s ease-in-out infinite;
+}
+@keyframes blink-g { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+.result-body { padding: 20px; }
+
+.result-line {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid rgba(25,45,72,0.6); gap: 10px;
+}
+.result-line:last-of-type { border-bottom: none; }
+.r-name { font-size: 12px; color: var(--text2); line-height: 1.4; }
+.r-val  { font-family: var(--mono); font-size: 12px; color: var(--text); word-break: break-word; }
+.r-val.accent { color: var(--volt); }
+.r-val.muted  { color: var(--text3); }
+
+.result-total-block {
+  margin-top: 16px; padding: 16px; background: var(--ink2);
+  border: 1px solid var(--wire2); border-left: 3px solid var(--volt);
+}
+.result-total-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+.result-total-val {
+  font-size: 24px; font-weight: 900; color: var(--text); line-height: 1;
+}
+.result-total-note {
+  font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 6px;
+}
+
+.result-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+
+/* ── BTN ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--ff); font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; border: none; cursor: pointer;
+  transition: all .2s; text-decoration: none; white-space: nowrap; width: 100%;
+  padding: 12px 20px; font-size: 12px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+.btn-volt {
+  background: var(--volt); color: var(--ink);
+  box-shadow: 0 0 20px var(--volt-glow);
+}
+.btn-volt:hover { background: #33d5f7; box-shadow: 0 0 32px var(--volt-glow); transform: translateY(-1px); }
+.btn-outline {
+  background: transparent; color: var(--volt); border: 1px solid var(--volt);
+  box-shadow: inset 0 0 14px var(--volt-lo);
+  clip-path: none; padding: 11px 20px;
+}
+.btn-outline:hover { background: var(--volt-lo); }
+.btn-flame { background: var(--flame); color: #fff; box-shadow: 0 0 20px rgba(255,107,53,0.35); }
+.btn-flame:hover { background: #ff8054; box-shadow: 0 0 32px rgba(255,107,53,0.4); transform: translateY(-1px); }
+
+/* ══════════════════════════════
+   WIZARD
+══════════════════════════════ */
+.wizard-wrap {
+  display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start;
+}
+
+/* Sidebar steps */
+.wizard-steps { position: sticky; top: 80px; }
+.wizard-steps-inner {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px; overflow: hidden;
+}
+.wizard-steps-head {
+  padding: 14px 20px; background: var(--steel); border-bottom: 1px solid var(--wire);
+}
+.wizard-steps-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text3);
+}
+.step-list { padding: 12px 0; }
+.step-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 20px; cursor: pointer; transition: background .15s;
+  position: relative;
+}
+.step-item::after {
+  content: ''; position: absolute; left: 20px; bottom: 0;
+  right: 20px; height: 1px; background: var(--wire); opacity: 0.5;
+}
+.step-item:last-child::after { display: none; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  border: 1px solid var(--wire2); background: var(--ink2);
+  color: var(--text3); flex-shrink: 0; transition: all .2s;
+}
+.step-item.done .step-num {
+  background: var(--lime-lo); border-color: var(--lime); color: var(--lime);
+}
+.step-item.active .step-num {
+  background: var(--volt-lo); border-color: var(--volt); color: var(--volt);
+}
+.step-info {}
+.step-name {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; color: var(--text2); transition: color .2s;
+}
+.step-item.active .step-name { color: var(--volt); }
+.step-item.done  .step-name { color: var(--lime); }
+.step-desc { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+/* Progress bar in sidebar */
+.wizard-progress { padding: 16px 20px; border-top: 1px solid var(--wire); }
+.wp-label { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.wp-text { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.wp-pct  { font-family: var(--mono); font-size: 10px; color: var(--volt); }
+.wp-track {
+  height: 3px; background: var(--wire); border-radius: 2px; overflow: hidden;
+}
+.wp-fill {
+  height: 100%; background: var(--volt); border-radius: 2px;
+  box-shadow: 0 0 6px var(--volt-glow);
+  transition: width .4s var(--ease);
+}
+
+/* Wizard main content */
+.wizard-main {}
+.wizard-card {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: 4px;
+  overflow: hidden;
+}
+.wizard-card-head {
+  padding: 18px 28px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.wch-left {}
+.wch-step { font-family: var(--mono); font-size: 10px; color: var(--volt); letter-spacing: 2px; margin-bottom: 4px; }
+.wch-title { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text); }
+.wch-sub   { font-size: 13px; font-weight: 300; color: var(--text2); margin-top: 4px; }
+.wch-icon  { opacity: 0.3; }
+
+.wizard-card-body { padding: 28px; }
+
+/* Step panels */
+.step-panel { display: none; }
+.step-panel.active { display: block; animation: fadeIn .3s ease; }
+
+/* Category cards in step 1 */
+.cat-select-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cat-opt { position: relative; }
+.cat-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.cat-opt-lbl {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 20px 14px; text-align: center;
+  background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: 3px; cursor: pointer; transition: all .2s;
+}
+.cat-opt-lbl:hover { border-color: var(--wire2); transform: translateY(-2px); }
+.cat-opt input:checked + .cat-opt-lbl {
+  border-color: var(--volt); background: var(--volt-lo);
+  box-shadow: 0 0 20px var(--volt-lo);
+}
+.cat-opt-icon { opacity: 0.6; transition: opacity .2s; }
+.cat-opt input:checked + .cat-opt-lbl .cat-opt-icon { opacity: 1; }
+.cat-opt-name { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text); }
+.cat-opt-sub  { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+/* Text inputs in wizard */
+.wiz-form { display: flex; flex-direction: column; gap: 20px; }
+.wiz-row  { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wiz-field { display: flex; flex-direction: column; gap: 8px; }
+.wiz-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+}
+.wiz-label .req { color: var(--volt); }
+.wiz-input {
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
+  color: var(--text); font-family: var(--mono); font-size: 13px;
+  padding: 11px 14px; outline: none; transition: border-color .2s, box-shadow .2s;
+  width: 100%;
+}
+.wiz-input::placeholder { color: var(--text3); }
+.wiz-input:focus { border-color: var(--volt); box-shadow: 0 0 0 3px var(--volt-lo); }
+.wiz-textarea {
+  resize: vertical; min-height: 100px; font-family: var(--mono); font-size: 12px;
+}
+.wiz-select {
+  appearance: none;
+  background: var(--ink2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232d4a6a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+  padding-right: 36px;
+}
+.wiz-hint { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+/* Urgency selector */
+.urgency-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.urg-opt { position: relative; }
+.urg-opt input { position: absolute; opacity: 0; width: 0; height: 0; }
+.urg-lbl {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px; text-align: center;
+  background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: 3px; cursor: pointer; transition: all .2s;
+}
+.urg-opt input:checked + .urg-lbl { border-color: var(--flame); background: var(--flame-lo); }
+.urg-lbl:hover { border-color: var(--wire2); }
+.urg-icon { font-size: 20px; }
+.urg-name { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text2); }
+.urg-opt input:checked + .urg-lbl .urg-name { color: var(--flame); }
+.urg-time { font-family: var(--mono); font-size: 9px; color: var(--text3); }
+
+/* Summary step */
+.summary-grid { display: flex; flex-direction: column; gap: 16px; }
+.summary-block {
+  background: var(--ink2); border: 1px solid var(--wire); border-radius: 3px;
+  overflow: hidden;
+}
+.summary-block-head {
+  padding: 10px 16px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.sb-title { font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); }
+.sb-edit  { font-family: var(--mono); font-size: 10px; color: var(--volt); cursor: pointer; transition: opacity .15s; }
+.sb-edit:hover { opacity: 0.7; }
+.summary-rows { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.sum-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.sum-key { color: var(--text2); }
+.sum-val { font-family: var(--mono); color: var(--text); }
+.sum-val.hi { color: var(--volt); }
+
+/* Success state */
+.success-state {
+  text-align: center; padding: 60px 40px;
+  display: none; flex-direction: column; align-items: center; gap: 20px;
+}
+.success-state.show { display: flex; animation: fadeIn .4s ease; }
+.success-icon {
+  width: 72px; height: 72px;
+  background: var(--lime-lo); border: 1px solid var(--lime);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  animation: pulse-s 2s ease-in-out infinite;
+}
+@keyframes pulse-s {
+  0%,100% { box-shadow: 0 0 0 0 rgba(29,233,182,0.3); }
+  50%      { box-shadow: 0 0 0 12px rgba(29,233,182,0); }
+}
+.success-title { font-size: 28px; font-weight: 900; text-transform: uppercase; color: var(--text); }
+.success-sub { font-size: 14px; font-weight: 300; color: var(--text2); line-height: 1.6; max-width: 400px; }
+.success-meta { font-family: var(--mono); font-size: 12px; color: var(--text3); }
+.ticket-id { font-family: var(--mono); font-size: 16px; color: var(--volt); padding: 8px 20px; border: 1px solid var(--volt); background: var(--volt-lo); }
+
+/* Wizard footer */
+.wizard-footer {
+  padding: 20px 28px; border-top: 1px solid var(--wire);
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--steel);
+}
+.wf-note { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.wf-btns { display: flex; gap: 10px; }
+.btn-sm { padding: 10px 20px; font-size: 11px; width: auto; clip-path: none; }
+.btn-nav { background: transparent; color: var(--text2); border: 1px solid var(--wire); }
+.btn-nav:hover { border-color: var(--wire2); color: var(--text); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .calc-layout  { grid-template-columns: 1fr; }
+  .wizard-wrap  { grid-template-columns: 1fr; }
+  .wizard-steps { position: static; }
+  .cat-select-grid { grid-template-columns: 1fr 1fr; }
+  .wiz-row { grid-template-columns: 1fr; }
+  .container { padding: 0 20px; }
+  .addon-row { flex-direction: column; gap: 6px; }
+  .addon-label { flex: none; padding-top: 0; }
+  .page-header { padding: 32px 0 40px; }
+  .page-title { font-size: 28px; }
+  .tabs { flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 10px 16px; }
+}
+@media (max-width: 480px) {
+  .product-select-grid { grid-template-columns: 1fr; }
+  .cat-select-grid { grid-template-columns: 1fr; }
+  .page-title { font-size: 24px; }
+  .page-sub { font-size: 13px; }
+  nav { padding: 12px 16px; }
+  .logo-text { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-hex"></div>
+    <div class="logo-text">СПЕЦ<span>ТЕХ</span></div>
+  </a>
+  <a href="/" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="19,12 5,12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><polyline points="12,5 5,12 12,19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    На главную
+  </a>
+</nav>
+
+<div class="page">
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-eyebrow">Инструменты</div>
+    <h1 class="page-title">Калькулятор<br><span>и запрос КП</span></h1>
+    <p class="page-sub">Подберите лицензии Альфа платформы онлайн или оформите запрос коммерческого предложения за 3 минуты</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('calc', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="10" x2="16" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="18" x2="12" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Калькулятор
+    </button>
+    <button class="tab" onclick="switchTab('wizard', this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/><polyline points="9,12 11,14 15,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Запрос КП
+    </button>
+  </div>
+
+  <!-- ══════════ CALCULATOR PANEL ══════════ -->
+  <div id="panel-calc" class="panel active">
+    <div class="calc-layout">
+
+      <!-- LEFT: config -->
+      <div>
+        <!-- Product selection -->
+        <div class="calc-main" style="margin-bottom:16px">
+          <div class="calc-section-head">
+            <div class="calc-section-title">Выбор продукта</div>
+            <span>// step 1 of 3</span>
+          </div>
+          <div class="calc-body">
+            <div class="product-select-grid">
+              <div class="prod-option">
+                <input type="radio" name="product" id="p1" value="alpha-one" checked onchange="updateSliderRange();calcUpdate()">
+                <label class="prod-label" for="p1">
+                  <div class="prod-check">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="prod-label-name">Alpha.One+</div>
+                  <div class="prod-label-vendor">Атомик Софт · SCADA/MES/IoT</div>
+                  <div class="prod-label-base">Однопользовательский комплект без функции резервирования и дополнительных клиентов</div>
+                </label>
+              </div>
+              <div class="prod-option">
+                <input type="radio" name="product" id="p2" value="alpha-scada" onchange="updateSliderRange();calcUpdate()">
+                <label class="prod-label" for="p2">
+                  <div class="prod-check">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="prod-label-name">Alpha.SCADA</div>
+                  <div class="prod-label-vendor">Атомик Софт · Мониторинг</div>
+                  <div class="prod-label-base">Клиент-серверная версия</div>
+                </label>
+              </div>
+              <div class="prod-option">
+                <input type="radio" name="product" id="p3" value="alpha-platform" onchange="updateSliderRange();calcUpdate()">
+                <label class="prod-label" for="p3">
+                  <div class="prod-check">
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#05080f" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  </div>
+                  <div class="prod-label-name">Alpha.Platform</div>
+                  <div class="prod-label-vendor">Атомик Софт · Полный комплект</div>
+                  <div class="prod-label-base">Распределённая, мультисерверная диспетчерская система</div>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Quantity & options -->
+        <div class="calc-main" style="margin-bottom:16px">
+          <div class="calc-section-head">
+            <div class="calc-section-title">Параметры лицензии</div>
+            <span>// step 2 of 3</span>
+          </div>
+          <div class="calc-body">
+
+            <div class="field-row">
+              <div class="field-head">
+                <div class="field-lbl">Количество тегов / точек</div>
+                <div class="field-val" id="qty-val">1500</div>
+              </div>
+              <input type="range" min="150" max="50000" value="1500" id="qty-slider" 
+                     step="1" oninput="sliderChanged()" >
+              <div id="slider-labels" style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-head">
+                <div class="field-lbl">Тип лицензии</div>
+                <div class="field-val" id="term-val">Бессрочная</div>
+              </div>
+              <input type="range" min="1" max="3" value="1" id="term-slider"
+                oninput="const v=['Бессрочная','1 год','3 года'][this.value-1]; document.getElementById('term-val').textContent=v; calcUpdate()">
+              <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
+                <span>Бессрочная</span><span>1 год</span><span>3 года</span>
+              </div>
+            </div>
+
+            <!-- Резервный сервер (SCADA only) -->
+            <div class="field-row" id="reserve-row" style="display:none;margin-top:12px">
+              <label class="addon-check" style="font-size:13px">
+                <input type="checkbox" id="addon-reserve" onchange="calcUpdate()">
+                <span style="color:var(--text)">Резервный сервер</span>
+                <span class="addon-hint" style="margin-left:8px">Отдельная лицензия на тот же теговый уровень (резервная пара)</span>
+              </label>
+            </div>
+
+            <!-- Дополнительные продукты -->
+            <div style="margin-top:16px; border-top:1px solid var(--wire); padding-top:12px">
+              <div style="font-size:11px; color:var(--text3); font-family:var(--ff-mono); margin-bottom:8px">// дополнительно к основному продукту</div>
+              
+              <div class="addon-product" style="margin-bottom:10px">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
+                  <span class="addon-hint">Архивирование данных процесса</span>
+                </label>
+                <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="hist-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
+                  <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
+              </div>
+
+              <div class="addon-product">
+                <label class="addon-check" style="font-size:13px;font-family:var(--ff-head)">
+                  <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
+                  <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
+                  <span class="addon-hint">Генерация отчётов и аналитика</span>
+                </label>
+                <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                    <span style="font-size:11px;color:var(--text);font-family:var(--ff-mono)" id="rpt-qty-val">1 k</span>
+                  </div>
+                  <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
+                  <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:9px;color:var(--text3)"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Add-ons -->
+        <div class="calc-main">
+          <div class="calc-section-head">
+            <div class="calc-section-title">Дополнительные модули</div>
+            <span>// step 3 of 3</span>
+          </div>
+          <div class="calc-body">
+            <!-- Клиенты -->
+            <div class="addon-row">
+              <div class="addon-label">Полный клиент (CL-F) <span id="clf-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">1 включён в Platform</span></div>
+              <div class="addon-ctrl">
+                <select id="addon-client" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужен</option>
+                  <option value="CL-F:1">1 клиент</option>
+                  <option value="CL-F:2">2 клиента</option>
+                  <option value="CL-F:3">3 клиента</option>
+                  <option value="CL-F:4">4 клиента</option>
+                  <option value="CL-F:5">5 клиентов</option>
+                  <option value="CL-F:6">6 клиентов</option>
+                  <option value="CL-F:7">7 клиентов</option>
+                  <option value="CL-F:8">8 клиентов</option>
+                  <option value="CL-F:9">9 клиентов</option>
+                  <option value="CL-F:10">10 клиентов</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- WEB-клиенты -->
+            <div class="addon-row">
+              <div class="addon-label">WEB-клиенты «без управления»</div>
+              <div class="addon-ctrl">
+                <select id="addon-web" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужны</option>
+                  <option value="CL-RO10">10 клиентов (CL-RO10)</option>
+                  <option value="CL-RO25">25 клиентов (CL-RO25)</option>
+                  <option value="CL-RO50">50 клиентов (CL-RO50)</option>
+                  <option value="CL-RO100">100 клиентов (CL-RO100)</option>
+                  <option value="AP-CL-RO250">250 клиентов (AP-CL-RO250)</option>
+                  <option value="AP-CL-ROUNL">Безлимит (AP-CL-ROUNL)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Клиенты Reports -->
+            <div class="addon-row">
+              <div class="addon-label">Клиенты Alpha.Reports</div>
+              <div class="addon-ctrl">
+                <select id="addon-rpt-cl" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужны</option>
+                  <option value="RPT-CL1">1 пользователь (RPT-CL1)</option>
+                  <option value="RPT-CL5">5 пользователей (RPT-CL5)</option>
+                  <option value="RPT-CL10">10 пользователей (RPT-CL10)</option>
+                  <option value="RPT-CL25">25 пользователей (RPT-CL25)</option>
+                  <option value="RPT-CL50">50 пользователей (RPT-CL50)</option>
+                  <option value="RPT-CL100">100 пользователей (RPT-CL100)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Драйверы -->
+            <div class="addon-row">
+              <div class="addon-label">Пакеты драйверов <span id="drv-note" style="display:none;font-size:9px;color:var(--lime);font-family:var(--ff-mono)">включены в Platform</span></div>
+              <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-energy" onchange="calcUpdate()"> DRV-PACK-ENERGY <span class="addon-hint">МЭК 61850, ТЭМ-104</span></label>
+                <label class="addon-check"><input type="checkbox" id="addon-industry" onchange="calcUpdate()"> DRV-PACK-INDUSTRY <span class="addon-hint">BACnet, S7, Ethernet/IP, FINS</span></label>
+              </div>
+            </div>
+
+            <!-- OPC DA -->
+            <div class="addon-row">
+              <div class="addon-label">OPC DA (доп. Windows ПК)</div>
+              <div class="addon-ctrl" style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-cl" onchange="calcUpdate()"> OPC DA клиент (DRV-OPCDA-CL)</label>
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-srv" onchange="calcUpdate()"> OPC DA сервер (DRV-OPCDA-SRV)</label>
+              </div>
+            </div>
+
+            <!-- WEB-портал -->
+            <div class="addon-row">
+              <div class="addon-label">WEB-портал</div>
+              <div class="addon-ctrl">
+                <label class="addon-check"><input type="checkbox" id="addon-portal" onchange="calcUpdate()"> WEB-PORTAL <span class="addon-hint">IIS / Apache</span></label>
+              </div>
+            </div>
+
+            <!-- Доп. сервер Platform -->
+            <div class="addon-row">
+              <div class="addon-label">Доп. сервер Platform</div>
+              <div class="addon-ctrl">
+                <select id="addon-iosrv" class="addon-select" onchange="calcUpdate()">
+                  <option value="">— не нужен</option>
+                  <option value="AP-IOSRV:1">1 сервер</option>
+                  <option value="AP-IOSRV:2">2 сервера</option>
+                  <option value="AP-IOSRV:3">3 сервера</option>
+                  <option value="AP-IOSRV:4">4 сервера</option>
+                  <option value="AP-IOSRV:5">5 серверов</option>
+                  <option value="AP-IOSRV:6">6 серверов</option>
+                  <option value="AP-IOSRV:7">7 серверов</option>
+                  <option value="AP-IOSRV:8">8 серверов</option>
+                  <option value="AP-IOSRV:9">9 серверов</option>
+                  <option value="AP-IOSRV:10">10 серверов</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- SLA -->
+            <div class="addon-row">
+              <div class="addon-label">SLA-сертификат</div>
+              <div class="addon-ctrl">
+                <select id="addon-sla" class="addon-select" onchange="calcUpdate()">
+                  <option value="SLA-BASE">Базовый (бесплатно, входит в лицензию)</option>
+                  <option value="SLA-STD">Стандартный (10% от лицензий / год)</option>
+                  <option value="SLA-OPT">Оптимальный (15% от лицензий / год)</option>
+                  <option value="SLA-PRM">Премиальный (25% от лицензий / год)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: result -->
+      <div class="result-panel">
+        <div class="result-head">
+          <div class="result-head-title">Сводка конфигурации</div>
+          <div class="live-dot"></div>
+        </div>
+        <div class="result-body">
+          <div class="result-line">
+            <div class="r-name">Продукт</div>
+            <div class="r-val accent" id="r-product">Alpha.One+</div>
+          </div>
+          <div class="result-line">
+            <div class="r-name">Артикул</div>
+            <div class="r-val" id="r-sku">ONE-N1k5</div>
+          </div>
+          <div class="result-line">
+            <div class="r-name">Тегов</div>
+            <div class="r-val" id="r-qty">1500 точек</div>
+          </div>
+          <div class="result-line">
+            <div class="r-name">Тип лицензии</div>
+            <div class="r-val" id="r-term">Бессрочная</div>
+          </div>
+          <div class="result-line" id="r-reserve-row" style="display:none">
+            <div class="r-name">Резерв</div>
+            <div class="r-val" style="color:var(--lime)">Да (резервная пара)</div>
+          </div>
+          <div class="result-line" id="r-historian-row" style="display:none">
+            <div class="r-name">+ Historian</div>
+            <div class="r-val" id="r-historian">—</div>
+          </div>
+          <div class="result-line" id="r-reports-row" style="display:none">
+            <div class="r-name">+ Reports</div>
+            <div class="r-val" id="r-reports">—</div>
+          </div>
+          <div class="result-line" id="r-addons-row" style="display:none">
+            <div class="r-name">Доп. модули</div>
+            <div class="r-val" id="r-addons">0 модулей</div>
+          </div>
+
+
+          <div class="result-total-block">
+            <div class="result-total-label">Ориентировочная стоимость</div>
+            <div class="result-total-val" id="r-total" style="font-size:22px">—</div>
+            <div class="result-total-note" id="r-note">без НДС · ориентировочная стоимость</div>
+            <div style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--wire);border-radius:4px;font-size:11px;line-height:1.5;color:var(--text3)">
+              Расчёт является предварительным и не является публичной офертой (ст. 437 ГК РФ). Окончательная стоимость определяется в коммерческом предложении. Для уточнения цен и условий обращайтесь к&nbsp;менеджерам: <a href="mailto:sales@special-tech.ru" style="color:var(--volt);text-decoration:none">sales@special-tech.ru</a>
+            </div>
+          </div>
+
+                    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--wire)">
+            <div style="font-size:11px;color:var(--text3);font-family:var(--ff-mono);margin-bottom:8px">// ваши контакты</div>
+            <input class="addon-select" id="calc-name" placeholder="Имя *" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-company" placeholder="Компания *" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-email" placeholder="Email *" type="email" style="margin-bottom:6px">
+            <input class="addon-select" id="calc-phone" placeholder="Телефон" type="tel" style="margin-bottom:6px">
+            <!-- Honeypot — hidden from humans, bots fill it -->
+            <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-volt" id="btn-send-calc" onclick="sendConfigEmail()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
+              Отправить КП
+            </button>
+            <button class="btn btn-outline" onclick="switchTab('wizard', document.querySelectorAll('.tab')[1]); prefillWizard()">
+              Расширенный запрос
+            </button>
+          </div>
+
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--wire)">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
+              <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
+              АО СПЕЦТЕХ<br>sales@special-tech.ru<br>+7 (495) 760 09 39<br>
+              <span style="color:var(--volt)" id="r-date"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /calc panel -->
+
+
+  <!-- ══════════ WIZARD PANEL ══════════ -->
+  <div id="panel-wizard" class="panel">
+    <div class="wizard-wrap">
+
+      <!-- SIDEBAR -->
+      <div class="wizard-steps">
+        <div class="wizard-steps-inner">
+          <div class="wizard-steps-head">
+            <div class="wizard-steps-title">Шаги оформления</div>
+          </div>
+          <div class="step-list">
+            <div class="step-item active" id="si-1">
+              <div class="step-num">01</div>
+              <div class="step-info">
+                <div class="step-name">Категория</div>
+                <div class="step-desc">Продукт Альфа</div>
+              </div>
+            </div>
+            <div class="step-item" id="si-2">
+              <div class="step-num">02</div>
+              <div class="step-info">
+                <div class="step-name">Детали</div>
+                <div class="step-desc">Объём и сроки</div>
+              </div>
+            </div>
+            <div class="step-item" id="si-3">
+              <div class="step-num">03</div>
+              <div class="step-info">
+                <div class="step-name">Контакты</div>
+                <div class="step-desc">Компания и ФИО</div>
+              </div>
+            </div>
+            <div class="step-item" id="si-4">
+              <div class="step-num">04</div>
+              <div class="step-info">
+                <div class="step-name">Подтверждение</div>
+                <div class="step-desc">Проверка и отправка</div>
+              </div>
+            </div>
+          </div>
+          <div class="wizard-progress">
+            <div class="wp-label">
+              <span class="wp-text">Прогресс</span>
+              <span class="wp-pct" id="wiz-pct">25%</span>
+            </div>
+            <div class="wp-track">
+              <div class="wp-fill" id="wiz-bar" style="width:25%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CARD -->
+      <div class="wizard-main">
+        <div class="wizard-card" id="wizard-form-card">
+
+          <!-- Step 1: Category -->
+          <div id="wiz-head-1">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 01 из 04</div>
+                <div class="wch-title">Выберите продукт Альфа</div>
+                <div class="wch-sub">Укажите, какой продукт платформы Альфа вас интересует</div>
+              </div>
+              <div class="wch-icon">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="28" height="28" rx="2" stroke="#00c8f0" stroke-width="1.5"/><line x1="6" y1="14" x2="34" y2="14" stroke="#192d48" stroke-width="1"/><line x1="20" y1="14" x2="20" y2="34" stroke="#192d48" stroke-width="1"/><rect x="8" y="16" width="10" height="7" rx="0.5" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 head -->
+          <div id="wiz-head-2" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 02 из 04</div>
+                <div class="wch-title">Параметры заказа</div>
+                <div class="wch-sub">Укажите объём, сроки и дополнительные требования</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 head -->
+          <div id="wiz-head-3" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 03 из 04</div>
+                <div class="wch-title">Контактные данные</div>
+                <div class="wch-sub">Заполните данные — мы отправим КП на указанный email</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 head -->
+          <div id="wiz-head-4" style="display:none">
+            <div class="wizard-card-head">
+              <div class="wch-left">
+                <div class="wch-step">// Шаг 04 из 04</div>
+                <div class="wch-title">Подтверждение</div>
+                <div class="wch-sub">Проверьте данные перед отправкой</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP PANELS -->
+
+          <!-- S1: Category -->
+          <div id="sp-1" class="step-panel active">
+            <div class="wizard-card-body">
+              <div class="cat-select-grid">
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc1" value="alpha-one" checked>
+                  <label class="cat-opt-lbl" for="wc1">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="3" y="6" width="26" height="18" rx="2" stroke="#00c8f0" stroke-width="1.2"/><polyline points="6,18 9,14 12,16 15,11 18,14 21,9 26,12" stroke="#1de9b6" stroke-width="1.2" fill="none"/><rect x="12" y="26" width="8" height="3" rx="1" fill="#192d48"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.One+</div>
+                    <div class="cat-opt-sub">SCADA/MES/IoT</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc2" value="alpha-scada">
+                  <label class="cat-opt-lbl" for="wc2">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="8" width="14" height="18" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><rect x="4" y="6" width="18" height="4" rx="0.8" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/><circle cx="10" cy="13" r="1.2" fill="#1de9b6"/><circle cx="15" cy="13" r="1.2" fill="#ff6b35"/><line x1="22" y1="12" x2="27" y2="9" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="1.5 1"/><line x1="22" y1="16" x2="28" y2="15" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="1.5 1"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.SCADA</div>
+                    <div class="cat-opt-sub">Мониторинг</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc3" value="alpha-platform">
+                  <label class="cat-opt-lbl" for="wc3">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="6" width="24" height="16" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><rect x="6" y="8" width="20" height="12" rx="0.5" fill="#0c1525"/><polyline points="8,17 11,13 14,15 17,10 20,13 23,9 26,11" stroke="#ff6b35" stroke-width="1.2" fill="none"/><rect x="9" y="24" width="5" height="3" rx="0.5" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/><rect x="18" y="24" width="5" height="3" rx="0.5" fill="#ff6b35" opacity="0.8"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.Platform</div>
+                    <div class="cat-opt-sub">Полный комплект</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc4" value="alpha-historian">
+                  <label class="cat-opt-lbl" for="wc4">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="11" stroke="#00c8f0" stroke-width="1.2"/><ellipse cx="16" cy="16" rx="4.5" ry="11" stroke="#192d48" stroke-width="0.8"/><ellipse cx="16" cy="16" rx="11" ry="4" stroke="#192d48" stroke-width="0.8"/><circle cx="10" cy="11" r="1.5" fill="#00c8f0"/><circle cx="22" cy="9" r="1.5" fill="#00c8f0"/><circle cx="20" cy="22" r="1.5" fill="#1de9b6"/><line x1="10" y1="11" x2="22" y2="9" stroke="#00c8f0" stroke-width="0.6" stroke-dasharray="1.5 1.2"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.Historian</div>
+                    <div class="cat-opt-sub">Архивирование</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc5" value="alpha-reports">
+                  <label class="cat-opt-lbl" for="wc5">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="7" y="4" width="18" height="24" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><line x1="10" y1="10" x2="22" y2="10" stroke="#192d48" stroke-width="0.8"/><line x1="10" y1="14" x2="22" y2="14" stroke="#192d48" stroke-width="0.8"/><line x1="10" y1="18" x2="18" y2="18" stroke="#192d48" stroke-width="0.8"/><rect x="17" y="20" width="5" height="4" rx="0.5" fill="#1de9b6" opacity="0.3"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Alpha.Reports</div>
+                    <div class="cat-opt-sub">Отчётность</div>
+                  </label>
+                </div>
+                <div class="cat-opt">
+                  <input type="radio" name="wiz-cat" id="wc6" value="alpha-modules">
+                  <label class="cat-opt-lbl" for="wc6">
+                    <div class="cat-opt-icon">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="7" width="24" height="18" rx="1.5" stroke="#00c8f0" stroke-width="1.2"/><line x1="4" y1="14" x2="28" y2="14" stroke="#192d48" stroke-width="0.8"/><line x1="16" y1="14" x2="16" y2="25" stroke="#192d48" stroke-width="0.8"/><rect x="6" y="16" width="8" height="4" rx="0.5" fill="#192d48" stroke="#1de9b6" stroke-width="0.7"/><polyline points="18,21 20,18 22,20 24,16 26,18" stroke="#ff6b35" stroke-width="1" fill="none"/></svg>
+                    </div>
+                    <div class="cat-opt-name">Дополнительные</div>
+                    <div class="cat-opt-sub">Модули</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S2: Details -->
+          <div id="sp-2" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Конкретный артикул <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-product-name" type="text" placeholder="Например: ONE-N1k5">
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество тегов <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-qty" type="number" placeholder="1500" min="1">
+                  </div>
+                </div>
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Тип лицензии</label>
+                    <select class="wiz-input wiz-select">
+                      <option>Бессрочная</option>
+                      <option>Годовая подписка</option>
+                      <option>3-летняя подписка</option>
+                      <option>Не знаю, нужна консультация</option>
+                    </select>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Срочность</label>
+                    <div class="urgency-grid" style="margin-top:2px">
+                      <div class="urg-opt">
+                        <input type="radio" name="urgency" id="u1" value="asap" checked>
+                        <label class="urg-lbl" for="u1">
+                          <div class="urg-icon">🔴</div>
+                          <div class="urg-name">ASAP</div>
+                          <div class="urg-time">24–48 ч</div>
+                        </label>
+                      </div>
+                      <div class="urg-opt">
+                        <input type="radio" name="urgency" id="u2" value="week">
+                        <label class="urg-lbl" for="u2">
+                          <div class="urg-icon">🟠</div>
+                          <div class="urg-name">Неделя</div>
+                          <div class="urg-time">3–7 дней</div>
+                        </label>
+                      </div>
+                      <div class="urg-opt">
+                        <input type="radio" name="urgency" id="u3" value="month">
+                        <label class="urg-lbl" for="u3">
+                          <div class="urg-icon">🟡</div>
+                          <div class="urg-name">Месяц</div>
+                          <div class="urg-time">до 30 дней</div>
+                        </label>
+                      </div>
+                      <div class="urg-opt">
+                        <input type="radio" name="urgency" id="u4" value="plan">
+                        <label class="urg-lbl" for="u4">
+                          <div class="urg-icon">🟢</div>
+                          <div class="urg-name">Плановый</div>
+                          <div class="urg-time">Бюджет</div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="wiz-field">
+                  <label class="wiz-label">Описание задачи</label>
+                  <textarea class="wiz-input wiz-textarea" placeholder="Кратко опишите объект, задачи автоматизации, требуемые драйверы..."></textarea>
+                  <div class="wiz-hint">Это поможет нам подобрать оптимальную конфигурацию и предложить лучшую цену</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S3: Contacts -->
+          <div id="sp-3" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="wiz-form">
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Имя и фамилия <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-name" type="text" placeholder="Иван Петров">
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Должность</label>
+                    <input class="wiz-input" type="text" placeholder="Главный технолог">
+                  </div>
+                </div>
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Email <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-email" type="email" placeholder="i.petrov@company.ru">
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Телефон <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-phone" type="tel" placeholder="+7 (___) ___-__-__">
+                  </div>
+                </div>
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Компания <span class="req">*</span></label>
+                    <input class="wiz-input" id="wiz-company" type="text" placeholder="ООО «НефтеХим»">
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">ИНН</label>
+                    <input class="wiz-input" type="text" placeholder="7701234567">
+                  </div>
+                </div>
+                <div class="wiz-row">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Отрасль</label>
+                    <select class="wiz-input wiz-select">
+                      <option>Нефтегазовая</option>
+                      <option>Химическая промышленность</option>
+                      <option>Энергетика</option>
+                      <option>Металлургия</option>
+                      <option>Водоснабжение / ЖКХ</option>
+                      <option>Пищевая промышленность</option>
+                      <option>Машиностроение</option>
+                      <option>Другое</option>
+                    </select>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Способ получения КП</label>
+                    <select class="wiz-input wiz-select">
+                      <option>Email (PDF)</option>
+                      <option>Email + звонок менеджера</option>
+                      <option>Только звонок</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- S4: Summary -->
+          <div id="sp-4" class="step-panel">
+            <div class="wizard-card-body">
+              <div class="summary-grid">
+                <div class="summary-block">
+                  <div class="summary-block-head">
+                    <div class="sb-title">Продукт Альфа</div>
+                    <div class="sb-edit" onclick="goToStep(1)">← Изменить</div>
+                  </div>
+                  <div class="summary-rows">
+                    <div class="sum-row"><span class="sum-key">Продукт</span><span class="sum-val hi" id="s-cat">Alpha.One+</span></div>
+                    <div class="sum-row"><span class="sum-key">Артикул</span><span class="sum-val" id="s-product">—</span></div>
+                    <div class="sum-row"><span class="sum-key">Количество</span><span class="sum-val" id="s-qty">—</span></div>
+                  </div>
+                </div>
+                <div class="summary-block">
+                  <div class="summary-block-head">
+                    <div class="sb-title">Параметры</div>
+                    <div class="sb-edit" onclick="goToStep(2)">← Изменить</div>
+                  </div>
+                  <div class="summary-rows">
+                    <div class="sum-row"><span class="sum-key">Тип лицензии</span><span class="sum-val" id="s-lictype">Бессрочная</span></div>
+                    <div class="sum-row"><span class="sum-key">Срочность</span><span class="sum-val" id="s-urgency">ASAP (24–48 ч)</span></div>
+                  </div>
+                </div>
+                <div class="summary-block">
+                  <div class="summary-block-head">
+                    <div class="sb-title">Контакты</div>
+                    <div class="sb-edit" onclick="goToStep(3)">← Изменить</div>
+                  </div>
+                  <div class="summary-rows">
+                    <div class="sum-row"><span class="sum-key">Имя</span><span class="sum-val" id="s-name">—</span></div>
+                    <div class="sum-row"><span class="sum-key">Email</span><span class="sum-val hi" id="s-email">—</span></div>
+                    <div class="sum-row"><span class="sum-key">Компания</span><span class="sum-val" id="s-company">—</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px;padding:16px;background:var(--volt-lo);border:1px solid rgba(0,200,240,0.2);border-radius:3px;display:flex;align-items:center;gap:12px">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00c8f0" stroke-width="1.5"/><line x1="12" y1="8" x2="12" y2="12" stroke="#00c8f0" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="16" r="0.8" fill="#00c8f0"/></svg>
+                <div style="font-size:13px;color:var(--text2);line-height:1.5">Мы получим ваш запрос и вышлем КП в течение <strong style="color:var(--volt)">4 рабочих часов</strong>. При срочном запросе — менеджер свяжется по телефону.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUCCESS STATE -->
+          <div class="success-state" id="success-state">
+            <div class="success-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="success-title">Запрос отправлен!</div>
+            <div class="success-sub">Ваш запрос КП получен. Менеджер АО СПЕЦТЕХ свяжется с вами в течение 4 рабочих часов.</div>
+            <div class="ticket-id" id="ticket-id">КП-2026-XXXX</div>
+            <div class="success-meta">Номер запроса сохранён · Копия отправлена на email</div>
+            <button class="btn btn-outline" style="width:auto;clip-path:none;padding:11px 28px;margin-top:8px" onclick="resetWizard()">Создать новый запрос</button>
+          </div>
+
+          <!-- FOOTER (hidden on success) -->
+          <div class="wizard-footer" id="wiz-footer">
+            <div class="wf-note" id="wf-note">Поля, отмеченные <span style="color:var(--volt)">*</span> — обязательны</div>
+            <div class="wf-btns">
+              <button class="btn btn-sm btn-nav" id="btn-back" onclick="wizStep(-1)" style="display:none">← Назад</button>
+              <button class="btn btn-sm btn-volt" id="btn-next" onclick="wizStep(1)">
+                Далее →
+              </button>
+            </div>
+          </div>
+
+        </div><!-- /wizard-card -->
+      </div><!-- /wizard-main -->
+    </div>
+  </div><!-- /wizard panel -->
+
+</div><!-- /container -->
+</div><!-- /page -->
+
+<script>
+/* ─── ALPHA PRODUCTS ─── */
+const alphaProducts = {
+  'alpha-one': {
+    name: 'Alpha.One+',
+    variants: [
+      { sku: 'ONE-N150', tags: 150 },
+      { sku: 'ONE-N300', tags: 300 },
+      { sku: 'ONE-N500', tags: 500 },
+      { sku: 'ONE-N1k', tags: 1000 },
+      { sku: 'ONE-N1k5', tags: 1500 },
+      { sku: 'ONE-N3k', tags: 3000 },
+      { sku: 'ONE-N5k', tags: 5000 },
+      { sku: 'ONE-N15k', tags: 15000 },
+      { sku: 'ONE-N50k', tags: 50000 }
+    ]
+  },
+  'alpha-scada': {
+    name: 'Alpha.SCADA',
+    variants: [
+      { sku: 'SCADA-SRV500', tags: 500 },
+      { sku: 'SCADA-SRV1k', tags: 1000 },
+      { sku: 'SCADA-SRV1k5', tags: 1500 },
+      { sku: 'SCADA-SRV3k', tags: 3000 },
+      { sku: 'SCADA-SRV5k', tags: 5000 },
+      { sku: 'SCADA-SRV15k', tags: 15000 },
+      { sku: 'SCADA-SRV50k', tags: 50000 },
+      { sku: 'SCADA-SRV100k', tags: 100000 },
+      { sku: 'SCADA-SRV150k', tags: 150000 }
+    ]
+  },
+  'alpha-platform': {
+    name: 'Alpha.Platform',
+    variants: [
+      { sku: 'AP-1k5', tags: 1500 },
+      { sku: 'AP-3k', tags: 3000 },
+      { sku: 'AP-5k', tags: 5000 },
+      { sku: 'AP-15k', tags: 15000 },
+      { sku: 'AP-25k', tags: 25000 },
+      { sku: 'AP-50k', tags: 50000 },
+      { sku: 'AP-100k', tags: 100000 },
+      { sku: 'AP-200k', tags: 200000 },
+      { sku: 'AP-300k', tags: 300000 },
+      { sku: 'AP-500k', tags: 500000 },
+      { sku: 'AP-1M', tags: 1000000 },
+      { sku: 'AP-2M', tags: 2000000 }
+    ]
+  },
+  'alpha-historian': {
+    name: 'Alpha.Historian',
+    variants: [
+      { sku: 'HIST-S100', tags: 100 },
+      { sku: 'HIST-S200', tags: 200 },
+      { sku: 'HIST-S300', tags: 300 },
+      { sku: 'HIST-S500', tags: 500 },
+      { sku: 'HIST-S700', tags: 700 },
+      { sku: 'HIST-S1k', tags: 1000 },
+      { sku: 'HIST-S2k', tags: 2000 },
+      { sku: 'HIST-S3k', tags: 3000 },
+      { sku: 'HIST-S5k', tags: 5000 },
+      { sku: 'HIST-S7k', tags: 7000 },
+      { sku: 'HIST-S10k', tags: 10000 },
+      { sku: 'HIST-S15k', tags: 15000 },
+      { sku: 'HIST-S20k', tags: 20000 },
+      { sku: 'HIST-S30k', tags: 30000 },
+      { sku: 'HIST-S50k', tags: 50000 },
+      { sku: 'HIST-S100k', tags: 100000 },
+      { sku: 'HIST-S150k', tags: 150000 },
+      { sku: 'HIST-S200k', tags: 200000 },
+      { sku: 'HIST-S300k', tags: 300000 },
+      { sku: 'HIST-S500k', tags: 500000 },
+      { sku: 'HIST-S1M', tags: 1000000 },
+      { sku: 'HIST-S2M', tags: 2000000 }
+    ]
+  },
+  'alpha-reports': {
+    name: 'Alpha.Reports',
+    variants: [
+      { sku: 'RPT-E50', tags: 50 },
+      { sku: 'RPT-E100', tags: 100 },
+      { sku: 'RPT-E250', tags: 250 },
+      { sku: 'RPT-E500', tags: 500 },
+      { sku: 'RPT-E1k', tags: 1000 },
+      { sku: 'RPT-E2k', tags: 2000 },
+      { sku: 'RPT-E5k', tags: 5000 },
+      { sku: 'RPT-E10k', tags: 10000 },
+      { sku: 'RPT-EUNL', tags: 999999 }
+    ]
+  }
+};
+
+/* ─── PRICE MAP (SKU → RUB, без НДС, 2026) ─── */
+const skuPrices = {
+  // Alpha.One+
+  'ONE-N150':149000,'ONE-N300':200800,'ONE-N500':263100,'ONE-N1k':333000,
+  'ONE-N1k5':410700,'ONE-N3k':498000,'ONE-N5k':578000,'ONE-N15k':673800,'ONE-N50k':778700,
+  // Alpha.SCADA
+  'SCADA-SRV500':340600,'SCADA-SRV1k':438000,'SCADA-SRV1k5':550500,'SCADA-SRV3k':682900,
+  'SCADA-SRV5k':848700,'SCADA-SRV15k':1049400,'SCADA-SRV50k':1294200,
+  'SCADA-SRV100k':1574100,'SCADA-SRV150k':2361900,
+  // Alpha.Platform
+  'AP-1k5':1837200,'AP-3k':2361900,'AP-5k':2763500,'AP-15k':3332200,
+  'AP-25k':3847800,'AP-50k':4897300,'AP-100k':8745100,'AP-200k':16790500,
+  'AP-300k':24136300,'AP-500k':38478200,'AP-1M':71604300,'AP-2M':138784400,
+  // Alpha.Historian
+  'HIST-S100':28900,'HIST-S200':57800,'HIST-S300':86700,'HIST-S500':144400,
+  'HIST-S700':202300,'HIST-S1k':260000,'HIST-S2k':404600,'HIST-S3k':605400,
+  'HIST-S5k':865400,'HIST-S7k':1154400,'HIST-S10k':1443400,'HIST-S15k':1732200,
+  'HIST-S20k':2308700,'HIST-S30k':3271400,'HIST-S50k':4810600,'HIST-S100k':7888800,
+  'HIST-S150k':10600700,'HIST-S200k':12506100,'HIST-S300k':19239000,'HIST-S500k':28858600,
+  'HIST-S1M':48097700,'HIST-S2M':76956300,
+  // Alpha.Reports
+  'RPT-E50':193200,'RPT-E100':279800,'RPT-E250':384800,'RPT-E500':550500,
+  'RPT-E1k':752800,'RPT-E2k':1084300,'RPT-E5k':1469100,'RPT-E10k':2187100,'RPT-EUNL':3498100,
+  // Драйверы
+  'DRV-PACK-ENERGY':88200,'DRV-PACK-INDUSTRY':209900,
+  'DRV-OPCDA-CL':123200,'DRV-OPCDA-SRV':209900,
+  // Клиенты
+  'CL-F':174900,'CL-RO10':655500,'CL-RO25':984100,'CL-RO50':1262400,'CL-RO100':1530000,
+  // Прочее
+  'WEB-PORTAL':174900,'AP-IOSRV':380200,
+  // Reports клиенты
+  'RPT-CL1':79100,'RPT-CL5':349800
+};
+
+const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
+const termMultipliers = { 1:1.0, 2:0.4, 3:0.85 }; // 1=Бессрочная, 2=1 год, 3=3 года
+
+function formatPrice(n) {
+  if (!n && n !== 0) return '—';
+  return n.toLocaleString('ru-RU') + ' ₽';
+}
+
+function findBestSku(product, targetTags) {
+  const variants = alphaProducts[product]?.variants || [];
+  // Find the smallest SKU that can handle the target tags
+  const suitable = variants.filter(v => v.tags >= targetTags);
+  return suitable.length > 0 ? suitable[0] : variants[variants.length - 1];
+}
+
+function updateSliderRange() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const slider = document.getElementById('qty-slider');
+  const steps = p.variants.length - 1;
+  slider.min = 0;
+  slider.max = steps;
+  slider.step = 1;
+  // Find closest variant to current displayed value
+  const curVal = parseInt(document.getElementById('qty-val').textContent) || p.variants[0].tags;
+  let bestIdx = 0;
+  let bestDist = Infinity;
+  p.variants.forEach((v, i) => {
+    const d = Math.abs(v.tags - curVal);
+    if (d < bestDist) { bestDist = d; bestIdx = i; }
+  });
+  slider.value = bestIdx;
+  document.getElementById('qty-val').textContent = formatTags(p.variants[bestIdx].tags);
+  // Update labels
+  const labelsEl = document.getElementById('slider-labels');
+  const vr = p.variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => formatTags(v.tags));
+  } else {
+    // Show first, ~25%, ~50%, ~75%, last
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => formatTags(vr[i].tags));
+  }
+  labelsEl.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+  // Show reserve checkbox only for SCADA
+  const resRow = document.getElementById('reserve-row');
+  if (resRow) resRow.style.display = (prod === 'alpha-scada') ? 'block' : 'none';
+  
+  // Driver packs included by product:
+  // SCADA: Base + ENERGY
+  // Platform: Base + ENERGY + INDUSTRY
+  const isPlatform = (prod === 'alpha-platform');
+  const isScada = (prod === 'alpha-scada');
+  const drvEnergy = document.getElementById('addon-energy');
+  const drvIndustry = document.getElementById('addon-industry');
+  if (drvEnergy) {
+    if (isPlatform || isScada) { drvEnergy.checked = true; drvEnergy.disabled = true; }
+    else { drvEnergy.disabled = false; }
+  }
+  if (drvIndustry) {
+    if (isPlatform) { drvIndustry.checked = true; drvIndustry.disabled = true; }
+    else { drvIndustry.disabled = false; }
+  }
+  const drvNote = document.getElementById('drv-note');
+  if (drvNote) {
+    if (isPlatform) { drvNote.textContent = 'включены в Platform'; drvNote.style.display = 'inline'; }
+    else if (isScada) { drvNote.textContent = 'ENERGY включён в SCADA'; drvNote.style.display = 'inline'; }
+    else { drvNote.style.display = 'none'; }
+  }
+  
+  // Platform includes 1 full client
+  const clientSel = document.getElementById('addon-client');
+  if (clientSel) {
+    if (isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
+  }
+  const clfNote = document.getElementById('clf-note');
+  if (clfNote) clfNote.style.display = isPlatform ? 'inline' : 'none';
+  
+  // IOSRV only for Platform
+  const iosrvRow = document.getElementById('addon-iosrv')?.closest('.addon-row');
+  if (iosrvRow) {
+    iosrvRow.style.display = isPlatform ? '' : 'none';
+    if (!isPlatform) document.getElementById('addon-iosrv').value = '';
+  }
+}
+
+function formatTags(n) {
+  if (n >= 1000000) return (n/1000000) + ' M';
+  if (n >= 1000) return (n/1000).toLocaleString('ru-RU') + ' k';
+  return n.toString();
+}
+
+// Update slider on product change
+document.addEventListener('change', function(e) {
+  if (e.target.name === 'product') { updateSliderRange(); calcUpdate(); }
+});
+
+function sliderChanged() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  document.getElementById('qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function getSelectedTags() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return 1500;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  return v.tags;
+}
+
+function calcUpdate() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = +document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  
+  if (!p) return;
+  
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  const termMul = termMultipliers[term] || 1.0;
+
+  /* ─── PRICE CALCULATION ─── */
+  let basePrice = bestSku ? (skuPrices[bestSku.sku] || 0) : 0;
+  let reservePrice = 0;
+  let histPrice = 0;
+  let rptPrice = 0;
+  let addonsPrice = 0;
+  let addonDetails = [];
+
+  // Reserve server = same price as base product
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  if (hasReserve) {
+    reservePrice = basePrice;
+  }
+
+  // Historian
+  const hist = getSelectedHistorian();
+  if (hist) {
+    histPrice = skuPrices[hist.sku] || 0;
+  }
+
+  // Reports
+  const rpt = getSelectedReports();
+  if (rpt) {
+    rptPrice = skuPrices[rpt.sku] || 0;
+  }
+
+  // Addon selects
+  const clientVal = document.getElementById('addon-client')?.value;
+  if (clientVal) {
+    const parts = clientVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    const total = unitPrice * count;
+    addonsPrice += total;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  const webVal = document.getElementById('addon-web')?.value;
+  if (webVal) {
+    const sku = webVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const rptClVal = document.getElementById('addon-rpt-cl')?.value;
+  if (rptClVal) {
+    const sku = rptClVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const iosrvVal = document.getElementById('addon-iosrv')?.value;
+  if (iosrvVal) {
+    const parts = iosrvVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    addonsPrice += unitPrice * count;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  // Checkbox addons
+  const chkMap = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'DRV-OPCDA-CL',
+    'addon-opcda-srv': 'DRV-OPCDA-SRV',
+    'addon-portal': 'WEB-PORTAL'
+  };
+  Object.entries(chkMap).forEach(([id, sku]) => {
+    if (document.getElementById(id)?.checked) {
+      // If included in product (disabled checkbox), don't charge extra
+      const el = document.getElementById(id);
+      if (!el.disabled) {
+        addonsPrice += skuPrices[sku] || 0;
+      }
+      addonDetails.push(sku);
+    }
+  });
+
+  // SLA
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  const slaCoeff = slaCoeffs[slaVal] || 0;
+  // SLA base = sum of all license prices (before term multiplier)
+  const licensesTotal = basePrice + reservePrice + histPrice + rptPrice + addonsPrice;
+  const slaPrice = Math.round(slaCoeff * licensesTotal);
+
+  // Term multiplier applies to licenses, SLA is yearly and independent
+  const licensesWithTerm = Math.round(licensesTotal * termMul);
+  // For yearly terms, SLA is included; for perpetual, SLA is separate yearly cost
+  let totalPrice;
+  if (term === 1) {
+    // Бессрочная: licenses × 1.0 + SLA (yearly)
+    totalPrice = licensesWithTerm + slaPrice;
+  } else {
+    // Yearly terms: licenses × multiplier + SLA
+    totalPrice = licensesWithTerm + slaPrice;
+  }
+
+  /* ─── UPDATE SUMMARY DISPLAY ─── */
+  // Collect addons list for display
+  let addonsCount = addonDetails.length;
+  if (slaVal !== 'SLA-BASE') addonsCount++;
+
+  document.getElementById('r-product').textContent = p.name;
+  document.getElementById('r-sku').textContent = bestSku ? bestSku.sku : '—';
+  document.getElementById('r-qty').textContent = qty.toLocaleString('ru-RU') + ' тегов';
+  document.getElementById('r-term').textContent = terms[term - 1];
+
+  // Reserve in result
+  const resRow2 = document.getElementById('r-reserve-row');
+  if (resRow2) resRow2.style.display = hasReserve ? 'flex' : 'none';
+
+  // Historian/Reports in result
+  const histRow = document.getElementById('r-historian-row');
+  if (hist) { histRow.style.display = 'flex'; document.getElementById('r-historian').textContent = hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
+  else { histRow.style.display = 'none'; }
+
+  const rptRow = document.getElementById('r-reports-row');
+  if (rpt) { rptRow.style.display = 'flex'; document.getElementById('r-reports').textContent = rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
+  else { rptRow.style.display = 'none'; }
+
+  const addRow = document.getElementById('r-addons-row');
+  if (addonDetails.length > 0) {
+    addRow.style.display = 'flex';
+    document.getElementById('r-addons').textContent = addonDetails.join(', ');
+  } else {
+    addRow.style.display = 'none';
+  }
+
+  /* ─── TOTAL PRICE (single number, SLA included) ─── */
+  document.getElementById('r-total').textContent = formatPrice(totalPrice);
+  document.getElementById('r-note').textContent = 'без НДС';
+
+  // Update date
+  const now = new Date();
+  document.getElementById('r-date').textContent =
+    now.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function sendConfigEmail() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  
+  let addonLines = [];
+  // Selects
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addonLines.push('• ' + name + ' (' + el.options[el.selectedIndex].text + ')');
+  });
+  // SLA
+  const slaEl = document.getElementById('addon-sla');
+  if (slaEl) addonLines.push('• SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  // Checkboxes
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY (МЭК 61850, ТЭМ-104)',
+    'addon-industry': 'DRV-PACK-INDUSTRY (BACnet, S7, Ethernet/IP)',
+    'addon-opcda-cl': 'OPC DA клиент (DRV-OPCDA-CL)',
+    'addon-opcda-srv': 'OPC DA сервер (DRV-OPCDA-SRV)',
+    'addon-portal': 'WEB-портал (WEB-PORTAL)'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addonLines.push('• ' + name);
+  });
+  if (document.getElementById('addon-reserve')?.checked) addonLines.push('• Резервный сервер (доп. лицензия)');
+
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+
+  // Get contact fields
+  const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+
+  if (!cName || !cCompany || !cEmail) {
+    alert('Заполните имя, компанию и email');
+    if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', calcTid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('product', p.name);
+  fd.append('name', cName);
+  fd.append('company', cCompany);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
+  fd.append('sku', bestSku ? bestSku.sku : '—');
+  fd.append('tags', qty);
+  fd.append('term', terms[term - 1]);
+  fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
+  fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' : '');
+  fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
+  fd.append('addons', addonLines.join('\n'));
+  fd.append('total_price', document.getElementById('r-total')?.textContent || '');
+
+  // Show sending state
+  const btn = document.getElementById('btn-send-calc');
+  const origText = btn.textContent;
+  btn.textContent = 'Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
+    .then(data => {
+      if (data.ok) {
+        btn.textContent = '✓ Отправлено!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+      } else {
+        btn.textContent = data.error || '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+      }
+    })
+    .catch(e => {
+      btn.textContent = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+    });
+}
+
+/* ─── ADDON PRODUCT SLIDERS (Historian, Reports) ─── */
+const histVariants = alphaProducts['alpha-historian'].variants;
+const rptVariants = alphaProducts['alpha-reports'].variants;
+
+function toggleAddonProduct(which) {
+  const wrap = document.getElementById(which === 'historian' ? 'historian-slider-wrap' : 'reports-slider-wrap');
+  const chk = document.getElementById(which === 'historian' ? 'add-historian' : 'add-reports');
+  wrap.style.display = chk.checked ? 'block' : 'none';
+  if (chk.checked) {
+    if (which === 'historian') initHistSlider();
+    else initRptSlider();
+  }
+}
+
+function initHistSlider() {
+  const s = document.getElementById('hist-slider');
+  s.max = histVariants.length - 1;
+  histSliderChanged();
+  updateAddonLabels('hist-slider-labels', histVariants);
+}
+function histSliderChanged() {
+  const idx = +document.getElementById('hist-slider').value;
+  const v = histVariants[idx];
+  document.getElementById('hist-qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function initRptSlider() {
+  const s = document.getElementById('rpt-slider');
+  s.max = rptVariants.length - 1;
+  rptSliderChanged();
+  updateAddonLabels('rpt-slider-labels', rptVariants);
+}
+function rptSliderChanged() {
+  const idx = +document.getElementById('rpt-slider').value;
+  const v = rptVariants[idx];
+  document.getElementById('rpt-qty-val').textContent = v.tags === 999999 ? 'Безлимит' : formatTags(v.tags);
+  calcUpdate();
+}
+
+function updateAddonLabels(elId, variants) {
+  const el = document.getElementById(elId);
+  const vr = variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => v.tags === 999999 ? '∞' : formatTags(v.tags));
+  } else {
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => vr[i].tags === 999999 ? '∞' : formatTags(vr[i].tags));
+  }
+  el.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+}
+
+function getSelectedHistorian() {
+  if (!document.getElementById('add-historian')?.checked) return null;
+  const idx = +document.getElementById('hist-slider').value;
+  return histVariants[idx];
+}
+function getSelectedReports() {
+  if (!document.getElementById('add-reports')?.checked) return null;
+  const idx = +document.getElementById('rpt-slider').value;
+  return rptVariants[idx];
+}
+
+// Generate ticket ID
+const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+const calcLoadTs = Math.floor(Date.now() / 1000); // anti-bot timestamp
+document.getElementById('r-tid').textContent = calcTid;
+
+updateSliderRange();
+calcUpdate();
+
+/* ─── TABS ─── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ─── WIZARD ─── */
+let currentStep = 1;
+const totalSteps = 4;
+
+function updateWizardUI() {
+  // Panels
+  for (let i = 1; i <= totalSteps; i++) {
+    const sp = document.getElementById('sp-' + i);
+    const sh = document.getElementById('wiz-head-' + i);
+    if (sp) sp.classList.toggle('active', i === currentStep);
+    if (sh) sh.style.display = i === currentStep ? 'block' : 'none';
+  }
+  // Sidebar
+  for (let i = 1; i <= totalSteps; i++) {
+    const si = document.getElementById('si-' + i);
+    if (!si) continue;
+    si.classList.remove('active', 'done');
+    if (i < currentStep) si.classList.add('done');
+    else if (i === currentStep) si.classList.add('active');
+  }
+  // Progress
+  const pct = Math.round((currentStep / totalSteps) * 100);
+  document.getElementById('wiz-pct').textContent = pct + '%';
+  document.getElementById('wiz-bar').style.width = pct + '%';
+  // Buttons
+  const back = document.getElementById('btn-back');
+  const next = document.getElementById('btn-next');
+  if (back) back.style.display = currentStep > 1 ? 'inline-flex' : 'none';
+  if (next) {
+    if (currentStep === totalSteps) {
+      next.textContent = '✓ Отправить КП';
+      next.className = 'btn btn-sm btn-flame';
+    } else {
+      next.innerHTML = 'Далее →';
+      next.className = 'btn btn-sm btn-volt';
+    }
+  }
+  // Note
+  document.getElementById('wf-note').innerHTML =
+    `Шаг ${currentStep} из ${totalSteps} · Поля <span style="color:var(--volt)">*</span> обязательны`;
+}
+
+function goToStep(n) {
+  currentStep = n;
+  updateWizardUI();
+}
+
+function wizStep(dir) {
+  if (dir === 1 && currentStep === totalSteps) {
+    // Submit
+    fillSummaryBeforeSend();
+    submitWizard();
+    return;
+  }
+  if (dir === 1 && currentStep === totalSteps - 1) fillSummary();
+  currentStep = Math.max(1, Math.min(totalSteps, currentStep + dir));
+  updateWizardUI();
+  document.querySelector('.wizard-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function fillSummary() {
+  const catMap = { 
+    'alpha-one':'Alpha.One+', 
+    'alpha-scada':'Alpha.SCADA', 
+    'alpha-platform':'Alpha.Platform', 
+    'alpha-historian':'Alpha.Historian',
+    'alpha-reports':'Alpha.Reports',
+    'alpha-modules':'Дополнительные модули'
+  };
+  
+  const cat = document.querySelector('input[name=wiz-cat]:checked')?.value || 'alpha-one';
+  const urg = document.querySelector('input[name=urgency]:checked')?.value || 'asap';
+  const urgMap = { asap:'🔴 ASAP (24–48 ч)', week:'🟠 Неделя (3–7 дней)', month:'🟡 Месяц', plan:'🟢 Плановый' };
+  const licSel = document.querySelector('.wiz-select');
+  
+  document.getElementById('s-cat').textContent = catMap[cat] || cat;
+  document.getElementById('s-product').textContent = document.getElementById('wiz-product-name').value || '—';
+  document.getElementById('s-qty').textContent = (document.getElementById('wiz-qty').value || '—') + ' тегов';
+  document.getElementById('s-lictype').textContent = licSel ? licSel.value : 'Бессрочная';
+  document.getElementById('s-urgency').textContent = urgMap[urg] || urg;
+  document.getElementById('s-name').textContent = document.getElementById('wiz-name').value || '—';
+  document.getElementById('s-email').textContent = document.getElementById('wiz-email').value || '—';
+  document.getElementById('s-company').textContent = document.getElementById('wiz-company').value || '—';
+}
+
+function fillSummaryBeforeSend() { fillSummary(); }
+
+function submitWizard() {
+  const card = document.getElementById('wizard-form-card');
+  const success = document.getElementById('success-state');
+  const footer = document.getElementById('wiz-footer');
+  
+  // Collect wizard data
+  const cat = document.querySelector('input[name=wiz-cat]:checked')?.value || '';
+  const catMap = {
+    'alpha-one':'Alpha.One+', 'alpha-scada':'Alpha.SCADA',
+    'alpha-platform':'Alpha.Platform', 'alpha-historian':'Alpha.Historian',
+    'alpha-reports':'Alpha.Reports', 'alpha-modules':'Дополнительные модули'
+  };
+  const prodName = catMap[cat] || cat;
+  const prodSku = document.getElementById('wiz-product-name')?.value || '';
+  const qty = document.getElementById('wiz-qty')?.value || '';
+  const licType = document.querySelector('.wiz-select')?.value || 'Бессрочная';
+  const urg = document.querySelector('input[name=urgency]:checked')?.value || '';
+  const urgMap = { asap:'ASAP (24–48 ч)', week:'Неделя', month:'Месяц', plan:'Плановый' };
+  const desc = document.querySelector('.wiz-textarea')?.value || '';
+  const name = document.getElementById('wiz-name')?.value || '';
+  const email = document.getElementById('wiz-email')?.value || '';
+  const phone = document.getElementById('wiz-phone')?.value || '';
+  const company = document.getElementById('wiz-company')?.value || '';
+
+  // Ticket ID
+  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+
+  // Collect addons from calculator (if prefilled)
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+  
+  let wizAddons = [];
+  // Selects from calc
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, n]) => {
+    const el = document.getElementById(id);
+    if (el?.value) wizAddons.push('• ' + n + ' (' + el.options[el.selectedIndex].text + ')');
+  });
+  const slaEl = document.getElementById('addon-sla');
+  if (slaEl) wizAddons.push('• SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY', 'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'OPC DA клиент', 'addon-opcda-srv': 'OPC DA сервер',
+    'addon-portal': 'WEB-портал'
+  };
+  Object.entries(chkAddons).forEach(([id, n]) => {
+    if (document.getElementById(id)?.checked) wizAddons.push('• ' + n);
+  });
+  if (document.getElementById('addon-reserve')?.checked) wizAddons.push('• Резервный сервер');
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', tid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('product', prodName);
+  fd.append('sku', prodSku || prodName);
+  fd.append('tags', qty);
+  fd.append('term', licType);
+  fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
+  fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' : '');
+  fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
+  fd.append('addons', wizAddons.join('\n'));
+  fd.append('name', name);
+  fd.append('email', email);
+  fd.append('phone', phone);
+  fd.append('comment', 'Компания: ' + company + '\nСрочность: ' + (urgMap[urg]||urg) + '\nОписание: ' + desc);
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(data => {
+      if (!data.ok) console.error('Mail send failed');
+    })
+    .catch(e => console.error('Wizard submit error:', e));
+
+  // Show success UI
+  for (let i = 1; i <= totalSteps; i++) {
+    const sp = document.getElementById('sp-' + i);
+    const sh = document.getElementById('wiz-head-' + i);
+    if (sp) sp.style.display = 'none';
+    if (sh) sh.style.display = 'none';
+  }
+  if (footer) footer.style.display = 'none';
+  
+  document.getElementById('ticket-id').textContent = tid;
+  success.classList.add('show');
+  
+  for (let i = 1; i <= totalSteps; i++) {
+    const si = document.getElementById('si-' + i);
+    if (si) { si.classList.remove('active'); si.classList.add('done'); }
+  }
+  document.getElementById('wiz-pct').textContent = '100%';
+  document.getElementById('wiz-bar').style.width = '100%';
+}
+
+function resetWizard() {
+  currentStep = 1;
+  document.getElementById('success-state').classList.remove('show');
+  for (let i = 1; i <= totalSteps; i++) {
+    const sp = document.getElementById('sp-' + i);
+    const sh = document.getElementById('wiz-head-' + i);
+    if (sp) sp.style.display = '';
+    if (sh) sh.style.display = '';
+  }
+  document.getElementById('wiz-footer').style.display = '';
+  updateWizardUI();
+}
+
+function prefillWizard() {
+  // Switch to wizard and prefill from calculator
+  setTimeout(() => {
+    const prod = document.querySelector('input[name=product]:checked').value;
+    const qty = getSelectedTags();
+    const bestSku = findBestSku(prod, qty);
+    
+    // Set category radio
+    const catRadio = document.getElementById(prod === 'alpha-one' ? 'wc1' : 
+                                          prod === 'alpha-scada' ? 'wc2' :
+                                          prod === 'alpha-platform' ? 'wc3' : 'wc4');
+    if (catRadio) catRadio.checked = true;
+    
+    // Prefill form fields
+    const skuEl = document.getElementById('wiz-product-name');
+    if (skuEl && bestSku) skuEl.value = bestSku.sku;
+    
+    const qtyEl = document.getElementById('wiz-qty');
+    if (qtyEl) qtyEl.value = qty;
+  }, 100);
+}
+
+updateWizardUI();
+</script>
+</body>
+</html>

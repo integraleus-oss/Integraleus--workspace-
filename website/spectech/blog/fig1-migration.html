@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; }
+.diagram { 
+    display: flex; 
+    align-items: flex-start; 
+    justify-content: center; 
+    gap: 30px; 
+    max-width: 1200px; 
+    margin: 0 auto;
+}
+.column { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 12px; 
+}
+.system-block {
+    border-radius: 16px;
+    padding: 24px 20px;
+    min-width: 280px;
+    position: relative;
+}
+.aveva-block {
+    background: linear-gradient(135deg, #2a1520 0%, #3a1c2c 100%);
+    border: 2px solid #ff6b6b;
+}
+.field-block {
+    background: linear-gradient(135deg, #2a2520 0%, #3a3020 100%);
+    border: 2px solid #ffd43b;
+}
+.alpha-block {
+    background: linear-gradient(135deg, #152a1c 0%, #1c3a24 100%);
+    border: 2px solid #69db7c;
+}
+.system-title {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+.aveva-block .system-title { color: #ff8787; }
+.field-block .system-title { color: #ffd43b; }
+.alpha-block .system-title { color: #69db7c; }
+.component {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 4px 0;
+    color: #e0e0e0;
+    font-size: 13px;
+    text-align: center;
+    width: 100%;
+}
+.component .name { font-weight: 600; color: #fff; font-size: 14px; }
+.component .desc { color: #aaa; font-size: 11px; margin-top: 2px; }
+.arrows-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding-top: 50px;
+}
+.arrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #8ab4f8;
+    font-size: 11px;
+    white-space: nowrap;
+}
+.arrow-line {
+    width: 50px;
+    height: 2px;
+    background: #8ab4f8;
+    position: relative;
+}
+.arrow-line::after {
+    content: '▶';
+    position: absolute;
+    right: -8px;
+    top: -7px;
+    font-size: 10px;
+    color: #8ab4f8;
+}
+.arrow-line.left::after { content: '◀'; left: -8px; right: auto; }
+.arrow-line.both::before {
+    content: '◀';
+    position: absolute;
+    left: -8px;
+    top: -7px;
+    font-size: 10px;
+    color: #8ab4f8;
+}
+.phase-label {
+    background: rgba(138, 180, 248, 0.15);
+    border: 1px solid rgba(138, 180, 248, 0.3);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #8ab4f8;
+    font-size: 12px;
+    text-align: center;
+    font-weight: 600;
+    margin: 6px 0;
+}
+.caption {
+    color: #888;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 24px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+.caption b { color: #ccc; }
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.badge-red { background: rgba(255,107,107,0.2); color: #ff8787; }
+.badge-green { background: rgba(105,219,124,0.2); color: #69db7c; }
+.badge-yellow { background: rgba(255,212,59,0.2); color: #ffd43b; }
+</style>
+</head>
+<body>
+
+<div class="diagram">
+    <!-- AVEVA -->
+    <div class="column">
+        <div class="system-block aveva-block">
+            <div class="system-title">🔴 AVEVA <span class="badge badge-red">текущая</span></div>
+            <div class="component">
+                <div class="name">OI Server / DAServer</div>
+                <div class="desc">Modbus TCP/RTU, IEC 104 → OPC DA</div>
+            </div>
+            <div class="component">
+                <div class="name">InTouch / System Platform</div>
+                <div class="desc">Мнемосхемы, QuickScript, Galaxy</div>
+            </div>
+            <div class="component">
+                <div class="name">AVEVA Historian</div>
+                <div class="desc">Swinging Door, проприетарный формат</div>
+            </div>
+            <div class="component">
+                <div class="name">Alarm Provider</div>
+                <div class="desc">Тревоги и события</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Стрелки AVEVA ← Поле -->
+    <div class="arrows-col">
+        <div class="arrow"><span>IEC 104</span><div class="arrow-line both"></div><span>Master #1</span></div>
+        <div class="arrow"><span>Modbus</span><div class="arrow-line both"></div></div>
+        <div class="arrow"><span>OPC DA</span><div class="arrow-line both"></div></div>
+        <div class="phase-label">2–4 нед.<br/>параллельно</div>
+    </div>
+
+    <!-- Полевое оборудование -->
+    <div class="column">
+        <div class="system-block field-block">
+            <div class="system-title">⚙️ Поле <span class="badge badge-yellow">RTU / ПЛК</span></div>
+            <div class="component">
+                <div class="name">RTU кустовых площадок</div>
+                <div class="desc">IEC 60870-5-104, до 200 кустов</div>
+            </div>
+            <div class="component">
+                <div class="name">Локальные ПЛК</div>
+                <div class="desc">Modbus TCP/RTU, станции управления</div>
+            </div>
+            <div class="component">
+                <div class="name">Сторонние системы</div>
+                <div class="desc">Газоанализаторы, ПАЗ, узлы учёта</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Стрелки Поле → Альфа -->
+    <div class="arrows-col">
+        <div class="arrow"><span>Master #2</span><div class="arrow-line"></div><span>IEC 104</span></div>
+        <div class="arrow"><div class="arrow-line"></div><span>Modbus</span></div>
+        <div class="arrow"><div class="arrow-line"></div><span>OPC UA</span></div>
+        <div class="phase-label">Без<br/>OPC-прослойки</div>
+    </div>
+
+    <!-- Альфа платформа -->
+    <div class="column">
+        <div class="system-block alpha-block">
+            <div class="system-title">🟢 Альфа платформа <span class="badge badge-green">целевая</span></div>
+            <div class="component">
+                <div class="name">Alpha.Server 6.4</div>
+                <div class="desc">Встроенные драйверы: IEC 104, Modbus, OPC UA</div>
+            </div>
+            <div class="component">
+                <div class="name">Alpha.HMI 2.0</div>
+                <div class="desc">Мнемосхемы, Alpha.Om, JavaScript</div>
+            </div>
+            <div class="component">
+                <div class="name">Alpha.Historian 4.0</div>
+                <div class="desc">NoSQL TSDB, 800K записей/с, LZMA</div>
+            </div>
+            <div class="component">
+                <div class="name">Alpha.HMI.Alarms 3.3</div>
+                <div class="desc">Квитирование, подавление, агрегатор</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p class="caption">
+    <b>Рис. 1.</b> Архитектура миграции с AVEVA на Альфа платформу. Этап параллельной работы: оба сервера подключены к одним RTU/ПЛК. 
+    IEC 60870-5-104 допускает два Master-соединения. Данные пишутся в оба историана одновременно. 
+    Диспетчеры переключаются после 2–4 недель параллельной работы. 
+    Ключевое архитектурное отличие: Alpha.Server подключается к устройствам напрямую, без промежуточных OPC-серверов.
+</p>
+
+</body>
+</html>

@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Блог + Страница продукта — ИндАвтоПро</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #ccd9ea;
+  --text2:    #6a8aaa;
+  --text3:    #2d4a6a;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-hex{width:26px;height:26px;background:var(--volt);clip-path:polygon(0 30%,50% 0,100% 30%,100% 70%,50% 100%,0 70%);position:relative;}
+.logo-hex::after{content:'';position:absolute;inset:4px;background:var(--ink);clip-path:polygon(0 30%,50% 0,100% 30%,100% 70%,50% 100%,0 70%);}
+.logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.logo-text span{color:var(--volt);}
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-link{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;border:1px solid transparent;border-radius:3px;cursor:pointer;background:transparent;transition:all .2s;white-space:nowrap;}
+.nav-link:hover{color:var(--text);border-color:var(--wire);}
+.nav-link.active{color:var(--volt);border-color:var(--volt);background:var(--volt-lo);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.view{display:none;} .view.active{display:block;animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ════════════════════════════════
+   BLOG / KNOWLEDGE BASE
+════════════════════════════════ */
+.blog-hero{padding:60px 0 48px;background:var(--ink1);border-bottom:1px solid var(--wire);position:relative;overflow:hidden;}
+.blog-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 100% at 0% 50%,rgba(0,200,240,0.05),transparent 60%);}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+.blog-hero-inner{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;position:relative;z-index:1;}
+.blog-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.blog-eyebrow::before{content:'';width:24px;height:2px;background:var(--volt);box-shadow:0 0 6px var(--volt-glow);}
+.blog-eyebrow span{font-family:var(--mono);font-size:10px;color:var(--volt);letter-spacing:3px;text-transform:uppercase;}
+.blog-title{font-size:clamp(28px,4vw,52px);font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;line-height:1;color:var(--text);}
+.blog-title span{color:var(--volt);}
+.blog-sub{font-size:14px;font-weight:300;color:var(--text2);margin-top:12px;line-height:1.6;max-width:480px;}
+
+/* Search box */
+.blog-search{position:relative;width:320px;flex-shrink:0;}
+.blog-search input{width:100%;background:var(--ink2);border:1px solid var(--wire2);border-radius:3px;color:var(--text);font-family:var(--mono);font-size:12px;padding:11px 40px 11px 14px;outline:none;transition:border-color .2s,box-shadow .2s;}
+.blog-search input::placeholder{color:var(--text3);}
+.blog-search input:focus{border-color:var(--volt);box-shadow:0 0 0 3px var(--volt-lo);}
+.blog-search-icon{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--text3);}
+
+/* Category pills */
+.blog-cats{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;}
+.cat-pill{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border:1px solid var(--wire2);color:var(--text3);cursor:pointer;border-radius:2px;transition:all .2s;background:transparent;}
+.cat-pill:hover{border-color:var(--volt);color:var(--volt);}
+.cat-pill.active{border-color:var(--volt);color:var(--volt);background:var(--volt-lo);}
+.cat-pill .pill-cnt{opacity:0.5;margin-left:4px;}
+
+/* Blog grid */
+.blog-layout{display:grid;grid-template-columns:1fr 300px;gap:24px;padding:40px 0 80px;align-items:start;}
+
+/* Featured post */
+.post-featured{grid-column:1;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;overflow:hidden;cursor:pointer;transition:border-color .25s,transform .2s,box-shadow .2s;}
+.post-featured:hover{border-color:var(--wire2);transform:translateY(-2px);box-shadow:0 12px 48px rgba(0,0,0,0.5);}
+.post-featured-img{height:220px;background:var(--ink2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.post-featured-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--ink1));}
+.post-feat-visual{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
+/* SVG diagram decoration */
+.feat-diagram{opacity:0.4;}
+
+.post-featured-body{padding:24px 28px;}
+.post-meta{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.post-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border:1px solid;border-radius:2px;}
+.tag-scada  {color:var(--volt);border-color:var(--volt);background:var(--volt-lo);}
+.tag-plc    {color:var(--lime);border-color:var(--lime);background:var(--lime-lo);}
+.tag-net    {color:var(--violet);border-color:var(--violet);background:rgba(167,139,250,0.08);}
+.tag-sec    {color:var(--crimson);border-color:var(--crimson);background:rgba(255,61,87,0.08);}
+.tag-mes    {color:var(--amber);border-color:var(--amber);background:rgba(255,184,0,0.08);}
+.tag-guide  {color:var(--flame);border-color:var(--flame);background:var(--flame-lo);}
+.post-date{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.post-read{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:auto;}
+.featured-badge{background:var(--flame);color:#fff;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:2px;}
+
+.post-title{font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--text);line-height:1.2;margin-bottom:10px;}
+.post-title:hover{color:var(--volt);}
+.post-excerpt{font-family:var(--serif);font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:18px;}
+.post-footer{display:flex;align-items:center;gap:14px;}
+.post-author{display:flex;align-items:center;gap:8px;}
+.author-avatar{width:28px;height:28px;background:var(--steel);border:1px solid var(--wire2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--volt);}
+.author-name{font-size:12px;font-weight:600;color:var(--text2);}
+.post-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-left:auto;transition:gap .2s;}
+.post-link:hover{gap:10px;}
+
+/* Posts grid */
+.posts-grid{display:flex;flex-direction:column;gap:12px;margin-top:20px;}
+.post-card{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s;display:grid;grid-template-columns:120px 1fr;}
+.post-card:hover{border-color:var(--wire2);transform:translateY(-1px);}
+.post-card-thumb{background:var(--ink2);display:flex;align-items:center;justify-content:center;border-right:1px solid var(--wire);}
+.post-card-body{padding:16px 20px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;}
+.post-card-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text);line-height:1.3;}
+.post-card:hover .post-card-title{color:var(--volt);}
+.post-card-excerpt{font-family:var(--serif);font-size:12px;color:var(--text2);line-height:1.5;}
+.post-card-meta{display:flex;align-items:center;gap:8px;margin-top:4px;}
+
+/* Sidebar */
+.blog-sidebar{display:flex;flex-direction:column;gap:16px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;overflow:hidden;}
+.sb-head{padding:12px 18px;background:var(--steel);border-bottom:1px solid var(--wire);font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);}
+.sb-body{padding:16px 18px;}
+
+/* Popular posts */
+.popular-list{display:flex;flex-direction:column;gap:0;}
+.popular-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(25,45,72,0.5);cursor:pointer;}
+.popular-item:last-child{border-bottom:none;}
+.pop-num{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--wire2);line-height:1;flex-shrink:0;width:24px;}
+.popular-item:hover .pop-num{color:var(--volt);}
+.pop-title{font-size:12px;font-weight:600;color:var(--text2);line-height:1.4;transition:color .15s;}
+.popular-item:hover .pop-title{color:var(--text);}
+.pop-views{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:3px;}
+
+/* Tag cloud */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:6px;}
+.tag-bubble{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--wire2);color:var(--text3);border-radius:2px;cursor:pointer;transition:all .15s;}
+.tag-bubble:hover{border-color:var(--volt);color:var(--volt);}
+
+/* Newsletter */
+.newsletter-form{display:flex;flex-direction:column;gap:10px;}
+.nl-input{background:var(--ink2);border:1px solid var(--wire);border-radius:3px;color:var(--text);font-family:var(--mono);font-size:11px;padding:9px 12px;outline:none;transition:border-color .2s;}
+.nl-input::placeholder{color:var(--text3);}
+.nl-input:focus{border-color:var(--volt);}
+.btn-nl{background:var(--volt);color:var(--ink);border:none;padding:9px 16px;font-family:var(--ff);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s;border-radius:2px;width:100%;}
+.btn-nl:hover{background:#33d5f7;}
+.nl-note{font-family:var(--mono);font-size:9px;color:var(--text3);line-height:1.5;}
+
+/* ════════════════════════════════
+   PRODUCT PAGE
+════════════════════════════════ */
+.product-hero{padding:52px 0 0;background:var(--ink1);border-bottom:1px solid var(--wire);position:relative;overflow:hidden;}
+.product-hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,240,0.06),transparent 70%);}
+
+.product-hero-grid{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start;position:relative;z-index:1;padding-bottom:40px;}
+
+.breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-family:var(--mono);font-size:10px;color:var(--text3);}
+.breadcrumb a{color:var(--text3);text-decoration:none;transition:color .15s;}
+.breadcrumb a:hover{color:var(--volt);}
+.breadcrumb-sep{color:var(--wire2);}
+.breadcrumb-cur{color:var(--text2);}
+
+.product-vendor-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;padding:5px 12px;background:var(--steel);border:1px solid var(--wire2);border-radius:2px;}
+.vendor-logo{width:20px;height:20px;background:var(--volt);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:8px;font-weight:700;color:var(--ink);}
+.vendor-name{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--text2);}
+.vendor-official{font-family:var(--mono);font-size:9px;color:var(--lime);margin-left:6px;}
+
+.product-name{font-size:clamp(26px,4vw,48px);font-weight:900;text-transform:uppercase;letter-spacing:-0.5px;color:var(--text);line-height:1;margin-bottom:10px;}
+.product-version{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:16px;}
+.product-tagline{font-family:var(--serif);font-size:16px;color:var(--text2);line-height:1.6;max-width:520px;margin-bottom:24px;}
+
+.product-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.ppill{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--wire2);color:var(--text3);border-radius:2px;}
+
+.product-rating{display:flex;align-items:center;gap:12px;margin-bottom:0;}
+.stars{display:flex;gap:3px;}
+.star{color:var(--amber);font-size:13px;}
+.rating-num{font-family:var(--mono);font-size:13px;color:var(--text);}
+.rating-cnt{font-size:12px;color:var(--text3);}
+
+/* Product CTA card */
+.product-cta-card{background:var(--ink2);border:1px solid var(--wire2);border-radius:4px;overflow:hidden;position:sticky;top:72px;}
+.cta-card-head{padding:16px 20px;background:var(--steel);border-bottom:1px solid var(--wire);}
+.cta-price-block{margin-bottom:4px;}
+.cta-price-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.cta-price{font-size:32px;font-weight:900;color:var(--text);line-height:1;}
+.cta-price span{font-size:16px;color:var(--volt);margin-left:4px;}
+.cta-price-note{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;}
+.cta-card-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px;}
+.btn-cta-primary{background:var(--volt);color:var(--ink);border:none;padding:13px 20px;font-family:var(--ff);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.btn-cta-primary:hover{background:#33d5f7;box-shadow:0 0 24px var(--volt-glow);transform:translateY(-1px);}
+.btn-cta-secondary{background:transparent;color:var(--volt);border:1px solid var(--volt);padding:11px 20px;font-family:var(--ff);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;}
+.btn-cta-secondary:hover{background:var(--volt-lo);}
+.cta-card-features{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid var(--wire);}
+.cta-feat{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--text3);}
+.cta-feat svg{flex-shrink:0;}
+
+/* Product tabs */
+.product-tabs-nav{display:flex;gap:0;border-bottom:1px solid var(--wire);background:var(--ink1);position:sticky;top:60px;z-index:50;}
+.ptab{padding:16px 24px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.ptab:hover{color:var(--text);}
+.ptab.active{color:var(--volt);border-bottom-color:var(--volt);}
+
+.product-tab-content{padding:48px 0;}
+.ptab-panel{display:none;} .ptab-panel.active{display:block;animation:fadeUp .3s ease;}
+
+/* Overview tab */
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:48px;}
+.overview-block{}
+.ovb-title{font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.ovb-title::before{content:'';width:20px;height:2px;background:var(--volt);}
+.feature-list{display:flex;flex-direction:column;gap:10px;}
+.feat-line{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text2);line-height:1.5;}
+.feat-line svg{flex-shrink:0;margin-top:2px;}
+
+/* Specs table */
+.specs-table{width:100%;border-collapse:collapse;}
+.specs-table tr{border-bottom:1px solid rgba(25,45,72,0.6);}
+.specs-table tr:hover{background:var(--ink2);}
+.specs-table td{padding:11px 16px;font-size:13px;}
+.specs-table td:first-child{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:1px;width:40%;background:var(--ink1);}
+.specs-table td:last-child{color:var(--text);}
+.specs-table .spec-val-hi{color:var(--volt);font-family:var(--mono);}
+
+/* Compat grid */
+.compat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.compat-card{background:var(--ink1);border:1px solid var(--wire);border-radius:3px;padding:16px;display:flex;align-items:center;gap:14px;}
+.compat-icon{width:36px;height:36px;background:var(--steel);border:1px solid var(--wire2);display:flex;align-items:center;justify-content:center;border-radius:2px;flex-shrink:0;}
+.compat-name{font-size:13px;font-weight:700;color:var(--text);letter-spacing:0.5px;}
+.compat-ver{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px;}
+.compat-ok{margin-left:auto;display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--lime);}
+
+/* Docs tab */
+.docs-grid{display:flex;flex-direction:column;gap:8px;}
+.doc-row{display:flex;align-items:center;gap:16px;padding:14px 18px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;cursor:pointer;transition:border-color .2s;}
+.doc-row:hover{border-color:var(--wire2);}
+.doc-icon{width:36px;height:36px;background:var(--steel);border:1px solid var(--wire2);display:flex;align-items:center;justify-content:center;border-radius:2px;flex-shrink:0;}
+.doc-info{}
+.doc-name{font-size:13px;font-weight:700;color:var(--text);}
+.doc-meta{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px;}
+.doc-dl{margin-left:auto;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--volt);}
+
+/* Reviews tab */
+.reviews-layout{display:grid;grid-template-columns:200px 1fr;gap:32px;}
+.rating-summary{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;padding:24px;text-align:center;}
+.rating-big{font-size:64px;font-weight:900;color:var(--text);line-height:1;}
+.rating-stars-big{display:flex;justify-content:center;gap:4px;margin:8px 0;}
+.rating-star-big{color:var(--amber);font-size:18px;}
+.rating-total{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.rating-bars{margin-top:20px;display:flex;flex-direction:column;gap:6px;}
+.rbar{display:flex;align-items:center;gap:8px;}
+.rbar-lbl{font-family:var(--mono);font-size:10px;color:var(--text3);width:14px;text-align:right;flex-shrink:0;}
+.rbar-track{flex:1;height:4px;background:var(--wire);border-radius:2px;overflow:hidden;}
+.rbar-fill{height:100%;background:var(--amber);border-radius:2px;}
+.rbar-cnt{font-family:var(--mono);font-size:9px;color:var(--text3);width:20px;flex-shrink:0;}
+
+.reviews-list{display:flex;flex-direction:column;gap:12px;}
+.review-card{background:var(--ink1);border:1px solid var(--wire);border-radius:3px;padding:20px;}
+.review-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.review-author{display:flex;align-items:center;gap:10px;}
+.review-avatar{width:32px;height:32px;background:var(--steel);border:1px solid var(--wire2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--volt);}
+.review-name{font-size:13px;font-weight:700;color:var(--text);}
+.review-pos{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:1px;}
+.review-right{text-align:right;}
+.review-stars{display:flex;justify-content:flex-end;gap:2px;margin-bottom:3px;}
+.r-star{color:var(--amber);font-size:11px;}
+.review-date{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.review-text{font-family:var(--serif);font-size:13px;color:var(--text2);line-height:1.7;}
+.review-verdict{margin-top:10px;display:flex;gap:16px;}
+.rv-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;}
+.rv-plus{color:var(--lime);}
+.rv-minus{color:var(--crimson);}
+
+/* Changelog tab */
+.changelog{display:flex;flex-direction:column;gap:0;}
+.cl-item{display:flex;gap:24px;padding-bottom:32px;position:relative;}
+.cl-item::before{content:'';position:absolute;left:71px;top:28px;bottom:0;width:1px;background:var(--wire);}
+.cl-item:last-child::before{display:none;}
+.cl-date{font-family:var(--mono);font-size:11px;color:var(--text3);width:60px;flex-shrink:0;padding-top:6px;text-align:right;}
+.cl-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--wire2);background:var(--ink);flex-shrink:0;margin-top:6px;position:relative;z-index:1;}
+.cl-dot.major{border-color:var(--volt);background:var(--volt);}
+.cl-dot.minor{border-color:var(--lime);background:var(--lime);}
+.cl-dot.patch{border-color:var(--wire2);}
+.cl-body{}
+.cl-version{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.cl-badge{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:2px;margin-left:8px;}
+.cl-badge.major{background:var(--volt-lo);color:var(--volt);border:1px solid var(--volt);}
+.cl-badge.minor{background:var(--lime-lo);color:var(--lime);border:1px solid var(--lime);}
+.cl-badge.patch{background:var(--ink2);color:var(--text3);border:1px solid var(--wire);}
+.cl-changes{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+.cl-line{font-size:13px;color:var(--text2);display:flex;gap:8px;align-items:flex-start;}
+.cl-type-add{color:var(--lime);font-family:var(--mono);font-size:10px;width:50px;flex-shrink:0;margin-top:1px;}
+.cl-type-fix{color:var(--amber);font-family:var(--mono);font-size:10px;width:50px;flex-shrink:0;margin-top:1px;}
+.cl-type-brk{color:var(--crimson);font-family:var(--mono);font-size:10px;width:50px;flex-shrink:0;margin-top:1px;}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .blog-hero-inner{grid-template-columns:1fr;}
+  .blog-search{width:100%;}
+  .blog-layout{grid-template-columns:1fr;}
+  .product-hero-grid{grid-template-columns:1fr;}
+  .product-cta-card{position:static;}
+  .overview-grid{grid-template-columns:1fr;}
+  .compat-grid{grid-template-columns:1fr 1fr;}
+  .reviews-layout{grid-template-columns:1fr;}
+  .post-card{grid-template-columns:80px 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><div class="logo-hex"></div><div class="logo-text">Инд<span>Авто</span>Про</div></a>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showView('blog',this)">Блог / База знаний</button>
+    <button class="nav-link" onclick="showView('product',this)">Страница продукта</button>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ══════════ BLOG VIEW ══════════ -->
+<div id="view-blog" class="view active">
+
+  <div class="blog-hero">
+    <div class="container">
+      <div class="blog-hero-inner">
+        <div>
+          <div class="blog-eyebrow"><span>База знаний · Технический журнал</span></div>
+          <h1 class="blog-title">Экспертный<br><span>блог</span></h1>
+          <p class="blog-sub">Технические руководства, сравнения платформ, кейсы внедрения и обновления ПО для инженеров АСУ ТП</p>
+          <div class="blog-cats">
+            <div class="cat-pill active">Все статьи <span class="pill-cnt">48</span></div>
+            <div class="cat-pill">SCADA <span class="pill-cnt">14</span></div>
+            <div class="cat-pill">ПЛК <span class="pill-cnt">11</span></div>
+            <div class="cat-pill">Сети <span class="pill-cnt">8</span></div>
+            <div class="cat-pill">Безопасность <span class="pill-cnt">6</span></div>
+            <div class="cat-pill">MES <span class="pill-cnt">5</span></div>
+            <div class="cat-pill">Гайды <span class="pill-cnt">4</span></div>
+          </div>
+        </div>
+        <div class="blog-search">
+          <input type="text" placeholder="Поиск по базе знаний...">
+          <div class="blog-search-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="blog-layout">
+
+      <!-- MAIN CONTENT -->
+      <div>
+        <!-- Featured -->
+        <div class="post-featured">
+          <div class="post-featured-img">
+            <div class="post-feat-visual">
+              <svg class="feat-diagram" width="600" height="200" viewBox="0 0 600 200" fill="none">
+                <!-- Network topology diagram -->
+                <rect x="20" y="80" width="80" height="40" rx="2" stroke="#00c8f0" stroke-width="1"/>
+                <text x="60" y="103" text-anchor="middle" font-family="monospace" font-size="10" fill="#00c8f0">SCADA</text>
+                <rect x="160" y="40" width="70" height="35" rx="2" stroke="#1de9b6" stroke-width="1"/>
+                <text x="195" y="61" text-anchor="middle" font-family="monospace" font-size="9" fill="#1de9b6">PLC-001</text>
+                <rect x="160" y="90" width="70" height="35" rx="2" stroke="#1de9b6" stroke-width="1"/>
+                <text x="195" y="111" text-anchor="middle" font-family="monospace" font-size="9" fill="#1de9b6">PLC-002</text>
+                <rect x="160" y="140" width="70" height="35" rx="2" stroke="#ff6b35" stroke-width="1"/>
+                <text x="195" y="161" text-anchor="middle" font-family="monospace" font-size="9" fill="#ff6b35">RTU-003</text>
+                <line x1="100" y1="100" x2="160" y2="57" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="4 3"/>
+                <line x1="100" y1="100" x2="160" y2="107" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="4 3"/>
+                <line x1="100" y1="100" x2="160" y2="157" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="4 3"/>
+                <rect x="290" y="60" width="90" height="80" rx="2" stroke="#a78bfa" stroke-width="1"/>
+                <text x="335" y="88" text-anchor="middle" font-family="monospace" font-size="9" fill="#a78bfa">OPC-UA</text>
+                <text x="335" y="103" text-anchor="middle" font-family="monospace" font-size="9" fill="#a78bfa">Server</text>
+                <text x="335" y="118" text-anchor="middle" font-family="monospace" font-size="9" fill="#a78bfa">Kepware</text>
+                <line x1="230" y1="57" x2="290" y2="90" stroke="#a78bfa" stroke-width="0.8"/>
+                <line x1="230" y1="107" x2="290" y2="100" stroke="#a78bfa" stroke-width="0.8"/>
+                <line x1="230" y1="157" x2="290" y2="110" stroke="#a78bfa" stroke-width="0.8"/>
+                <rect x="440" y="70" width="80" height="60" rx="2" stroke="#ffb800" stroke-width="1"/>
+                <text x="480" y="95" text-anchor="middle" font-family="monospace" font-size="9" fill="#ffb800">Historian</text>
+                <text x="480" y="110" text-anchor="middle" font-family="monospace" font-size="9" fill="#ffb800">PI System</text>
+                <line x1="380" y1="100" x2="440" y2="100" stroke="#ffb800" stroke-width="0.8" stroke-dasharray="4 3"/>
+                <!-- Live dots -->
+                <circle cx="195" cy="57" r="3" fill="#1de9b6" opacity="0.8"/>
+                <circle cx="195" cy="107" r="3" fill="#1de9b6" opacity="0.8"/>
+                <circle cx="195" cy="157" r="3" fill="#ff6b35" opacity="0.8"/>
+                <circle cx="480" cy="100" r="4" fill="#ffb800" opacity="0.6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="post-featured-body">
+            <div class="post-meta">
+              <span class="featured-badge">⭐ Рекомендуем</span>
+              <span class="post-tag tag-scada">SCADA</span>
+              <span class="post-date">07 марта 2026</span>
+              <span class="post-read">14 мин</span>
+            </div>
+            <div class="post-title">Wonderware InTouch 2023 vs GENESIS64: полное сравнение для производственных объектов</div>
+            <p class="post-excerpt">Детальный разбор двух ведущих SCADA-платформ по 12 параметрам: производительность при 50 000+ тегов, интеграция с OPC-UA, стоимость владения, инструменты разработки и техподдержка. Реальные данные с промышленных объектов.</p>
+            <div class="post-footer">
+              <div class="post-author">
+                <div class="author-avatar">АС</div>
+                <div class="author-name">Алексей Соколов · Инженер АСУ ТП</div>
+              </div>
+              <span class="post-link">Читать статью <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="12,5 19,12 12,19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posts grid -->
+        <div class="posts-grid">
+
+          <div class="post-card">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                <rect x="8" y="12" width="20" height="28" rx="1.5" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+                <rect x="6" y="10" width="24" height="5" rx="1" fill="#192d48" stroke="#00c8f0" stroke-width="0.8"/>
+                <circle cx="14" cy="20" r="1.5" fill="#1de9b6"/>
+                <circle cx="20" cy="20" r="1.5" fill="#ff6b35"/>
+                <line x1="30" y1="18" x2="40" y2="14" stroke="#ff6b35" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+                <line x1="30" y1="24" x2="42" y2="22" stroke="#00c8f0" stroke-width="0.8" stroke-dasharray="2 1.5"/>
+                <circle cx="42" cy="14" r="1.5" fill="#ff6b35"/>
+                <circle cx="42" cy="22" r="1.5" fill="#00c8f0"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta"><span class="post-tag tag-plc">ПЛК</span><span class="post-date">01 марта 2026</span><span class="post-read" style="margin-left:auto">9 мин</span></div>
+              <div class="post-card-title">TIA Portal v18: новые возможности для программирования Siemens S7-1500</div>
+              <div class="post-card-excerpt">Обзор функций Safety Integrated, Motion Control и улучшенного Trace-инструмента в последней версии.</div>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                <path d="M25 8L42 14V26Q42 38 25 44Q8 38 8 26V14Z" stroke="#a78bfa" stroke-width="1.2" fill="none"/>
+                <polyline points="17,25 22,30 33,19" stroke="#1de9b6" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta"><span class="post-tag tag-sec">Безопасность</span><span class="post-date">22 февр. 2026</span><span class="post-read" style="margin-left:auto">12 мин</span></div>
+              <div class="post-card-title">Кибербезопасность АСУ ТП: IEC 62443 и практика сегментации SCADA-сетей</div>
+              <div class="post-card-excerpt">Пошаговое руководство по защите промышленной сети: зоны безопасности, conduits, DMZ для SCADA.</div>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                <circle cx="25" cy="25" r="16" stroke="#ffb800" stroke-width="1.2" fill="none"/>
+                <path d="M25 12v10l8 5" stroke="#ffb800" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="25" cy="25" r="2.5" fill="#ffb800"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta"><span class="post-tag tag-mes">MES</span><span class="post-date">14 февр. 2026</span><span class="post-read" style="margin-left:auto">7 мин</span></div>
+              <div class="post-card-title">OSIsoft PI System: интеграция с SAP PM для предиктивного обслуживания</div>
+              <div class="post-card-excerpt">Как настроить обмен данными между историзатором PI и SAP Plant Maintenance для сокращения простоев.</div>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                <circle cx="25" cy="25" r="14" stroke="#00c8f0" stroke-width="1.2" fill="none"/>
+                <ellipse cx="25" cy="25" rx="6" ry="14" stroke="#192d48" stroke-width="1" fill="none"/>
+                <circle cx="17" cy="19" r="2" fill="#00c8f0"/>
+                <circle cx="33" cy="16" r="2" fill="#00c8f0"/>
+                <circle cx="30" cy="32" r="2" fill="#1de9b6"/>
+                <line x1="17" y1="19" x2="33" y2="16" stroke="#00c8f0" stroke-width="0.7" stroke-dasharray="2 1.5"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta"><span class="post-tag tag-net">Сети</span><span class="post-date">05 февр. 2026</span><span class="post-read" style="margin-left:auto">10 мин</span></div>
+              <div class="post-card-title">OPC-UA vs Modbus TCP: что выбрать для новой линии в 2026 году</div>
+              <div class="post-card-excerpt">Сравнение протоколов по задержке, безопасности, поддержке вендоров и стоимости внедрения.</div>
+            </div>
+          </div>
+
+          <div class="post-card">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                <rect x="10" y="12" width="30" height="26" rx="2" stroke="#ff6b35" stroke-width="1.2" fill="none"/>
+                <rect x="12" y="14" width="26" height="22" fill="#0c1525"/>
+                <polyline points="14,30 17,25 20,27 23,21 26,24 29,18 34,22 36,20" stroke="#ff6b35" stroke-width="1.2" fill="none"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta"><span class="post-tag tag-guide">Гайд</span><span class="post-date">28 янв. 2026</span><span class="post-read" style="margin-left:auto">18 мин</span></div>
+              <div class="post-card-title">Полный гайд по HMI-дизайну: ISO 11064, цветовые схемы и тревожная сигнализация</div>
+              <div class="post-card-excerpt">Стандарты проектирования операторских экранов, иерархия дисплеев ASM и ANSI/ISA 101.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="blog-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Популярное</div>
+          <div class="sb-body">
+            <div class="popular-list">
+              <div class="popular-item">
+                <div class="pop-num">01</div>
+                <div><div class="pop-title">Как выбрать SCADA-платформу для нефтехимии</div><div class="pop-views">4 218 просмотров</div></div>
+              </div>
+              <div class="popular-item">
+                <div class="pop-num">02</div>
+                <div><div class="pop-title">Настройка Kepware для 1000+ тегов Modbus</div><div class="pop-views">3 641 просмотр</div></div>
+              </div>
+              <div class="popular-item">
+                <div class="pop-num">03</div>
+                <div><div class="pop-title">IEC 62443: с чего начать внедрение</div><div class="pop-views">2 890 просмотров</div></div>
+              </div>
+              <div class="popular-item">
+                <div class="pop-num">04</div>
+                <div><div class="pop-title">TIA Portal: создание safety-программы</div><div class="pop-views">2 104 просмотра</div></div>
+              </div>
+              <div class="popular-item">
+                <div class="pop-num">05</div>
+                <div><div class="pop-title">PI Historian vs TimescaleDB: сравнение</div><div class="pop-views">1 877 просмотров</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Теги</div>
+          <div class="sb-body">
+            <div class="tag-cloud">
+              <span class="tag-bubble">SCADA</span>
+              <span class="tag-bubble">Modbus</span>
+              <span class="tag-bubble">OPC-UA</span>
+              <span class="tag-bubble">TIA Portal</span>
+              <span class="tag-bubble">ПЛК</span>
+              <span class="tag-bubble">HMI</span>
+              <span class="tag-bubble">Kepware</span>
+              <span class="tag-bubble">IEC 62443</span>
+              <span class="tag-bubble">PI System</span>
+              <span class="tag-bubble">Historian</span>
+              <span class="tag-bubble">MES</span>
+              <span class="tag-bubble">Wonderware</span>
+              <span class="tag-bubble">Profinet</span>
+              <span class="tag-bubble">Safety</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Рассылка</div>
+          <div class="sb-body">
+            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.5;">Новые статьи и обновления ПО — раз в неделю, без спама</p>
+            <div class="newsletter-form">
+              <input class="nl-input" type="email" placeholder="your@email.ru">
+              <button class="btn-nl">Подписаться</button>
+              <div class="nl-note">Нажимая кнопку, вы соглашаетесь<br>с политикой конфиденциальности</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-block" style="border-left:3px solid var(--flame)">
+          <div class="sb-head">// Новое в каталоге</div>
+          <div class="sb-body" style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-size:12px;color:var(--text2);display:flex;justify-content:space-between">
+              <span>Ignition 8.1.44</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--lime)">Новый</span>
+            </div>
+            <div style="font-size:12px;color:var(--text2);display:flex;justify-content:space-between">
+              <span>TIA Portal V18 Upd4</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--amber)">Обновлён</span>
+            </div>
+            <div style="font-size:12px;color:var(--text2);display:flex;justify-content:space-between">
+              <span>Citect SCADA 2018 SP2</span>
+              <span style="font-family:var(--mono);font-size:10px;color:var(--amber)">Обновлён</span>
+            </div>
+            <a href="#" style="font-family:var(--mono);font-size:10px;color:var(--volt);text-decoration:none;margin-top:4px;">Смотреть все обновления →</a>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+</div><!-- /blog view -->
+
+
+<!-- ══════════ PRODUCT PAGE VIEW ══════════ -->
+<div id="view-product" class="view">
+
+  <!-- Hero -->
+  <div class="product-hero">
+    <div class="container">
+      <div class="product-hero-grid">
+        <div>
+          <div class="breadcrumb">
+            <a href="#">Главная</a><span class="breadcrumb-sep">/</span>
+            <a href="#">Каталог</a><span class="breadcrumb-sep">/</span>
+            <a href="#">SCADA-системы</a><span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-cur">Wonderware InTouch 2023</span>
+          </div>
+          <div class="product-vendor-badge">
+            <div class="vendor-logo">AV</div>
+            <span class="vendor-name">AVEVA</span>
+            <span class="vendor-official">✓ Официальный дистрибьютор</span>
+          </div>
+          <h1 class="product-name">Wonderware<br>InTouch 2023</h1>
+          <div class="product-version">Версия R2 · Build 23.2.400.0 · Актуальна</div>
+          <p class="product-tagline">Ведущая SCADA/HMI-платформа для визуализации технологических процессов, управления тревогами и интеграции с MES/ERP в реальном времени.</p>
+          <div class="product-pills">
+            <span class="ppill">SCADA</span><span class="ppill">HMI</span><span class="ppill">OPC-UA</span>
+            <span class="ppill">Historian</span><span class="ppill">Windows Server</span><span class="ppill">IEC 62443</span>
+          </div>
+          <div class="product-rating">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="opacity:.4">★</span></div>
+            <span class="rating-num">4.3</span>
+            <span class="rating-cnt">из 5 · 28 отзывов</span>
+          </div>
+        </div>
+        <!-- CTA Card -->
+        <div class="product-cta-card">
+          <div class="cta-card-head">
+            <div class="cta-price-label">Цена за лицензию</div>
+            <div class="cta-price">180 000<span>₽</span></div>
+            <div class="cta-price-note">без НДС · от 1 узла · бессрочная</div>
+          </div>
+          <div class="cta-card-body">
+            <button class="btn-cta-primary" onclick="showView('blog', document.querySelectorAll('.nav-link')[0])">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+              Запросить КП
+            </button>
+            <button class="btn-cta-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Пробная лицензия 30 дней
+            </button>
+            <div class="cta-card-features">
+              <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Электронная лицензия — 24 ч</div>
+              <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Официальный сертификат AVEVA</div>
+              <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Техподдержка 12 месяцев</div>
+              <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Скидка от 5 лицензий</div>
+              <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2" stroke-linecap="round"/></svg>Договор и счёт за 1 день</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs nav -->
+  <div class="product-tabs-nav">
+    <div class="container" style="display:flex;">
+      <button class="ptab active" onclick="showPTab('overview',this)">Обзор</button>
+      <button class="ptab" onclick="showPTab('specs',this)">Характеристики</button>
+      <button class="ptab" onclick="showPTab('compat',this)">Совместимость</button>
+      <button class="ptab" onclick="showPTab('docs',this)">Документация</button>
+      <button class="ptab" onclick="showPTab('reviews',this)">Отзывы <span style="color:var(--text3);margin-left:4px">28</span></button>
+      <button class="ptab" onclick="showPTab('changelog',this)">Changelog</button>
+    </div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="product-tab-content">
+    <div class="container">
+
+      <!-- OVERVIEW -->
+      <div id="ptab-overview" class="ptab-panel active">
+        <div class="overview-grid">
+          <div class="overview-block">
+            <div class="ovb-title">Ключевые возможности</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Поддержка до 60 000 тегов в реальном времени</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Встроенный Alarm Manager с ISA 18.2</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Коннектор OPC-UA, Modbus, PROFINET, EtherNet/IP</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Встроенный historian до 1 млн сэмплов/сек</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Redundancy — горячее резервирование</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Web-клиент без дополнительных лицензий</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Интеграция с AVEVA MES и PI System</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>Сертификат IEC 62443-3-3 SL2</div>
+            </div>
+          </div>
+          <div class="overview-block">
+            <div class="ovb-title">Для каких отраслей</div>
+            <div class="feature-list">
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Нефтегазовая и нефтехимическая</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Электроэнергетика и сети</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Металлургия и горнодобывающая</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Водоснабжение и ЖКХ</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Пищевая промышленность (FDA 21 CFR)</div>
+              <div class="feat-line"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="#ff6b35" stroke-width="1.5"/></svg>Транспорт и инфраструктура</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPECS -->
+      <div id="ptab-specs" class="ptab-panel">
+        <div style="max-width:700px">
+          <table class="specs-table">
+            <tbody>
+              <tr><td>Версия</td><td class="spec-val-hi">2023 R2 (Build 23.2.400.0)</td></tr>
+              <tr><td>Макс. кол-во тегов</td><td>60 000 (расширяемо)</td></tr>
+              <tr><td>ОС (Сервер)</td><td>Windows Server 2016 / 2019 / 2022</td></tr>
+              <tr><td>ОС (Клиент)</td><td>Windows 10 / 11, Web-клиент (Chrome, Edge)</td></tr>
+              <tr><td>Протоколы</td><td>OPC-UA, OPC-DA, Modbus TCP/RTU, PROFINET, EtherNet/IP, DNP3, BACnet</td></tr>
+              <tr><td>Историзатор</td><td>Встроенный + AVEVA PI System, SQL Server</td></tr>
+              <tr><td>Redundancy</td><td>Hot Standby, Cold Standby</td></tr>
+              <tr><td>Веб-доступ</td><td class="spec-val-hi">Включён (без доп. лицензий)</td></tr>
+              <tr><td>Мобильные клиенты</td><td>iOS, Android (AVEVA Connect)</td></tr>
+              <tr><td>Безопасность</td><td>IEC 62443-3-3 SL2, Active Directory, LDAP</td></tr>
+              <tr><td>База данных тревог</td><td>SQL Server, встроенная (ISA 18.2)</td></tr>
+              <tr><td>API / SDK</td><td>InTouch SDK, .NET API, REST API</td></tr>
+              <tr><td>Лицензирование</td><td>По тегам / по узлам / подписка</td></tr>
+              <tr><td>Язык интерфейса</td><td>EN, RU, DE, FR, ZH и др. (14 языков)</td></tr>
+              <tr><td>Поддержка вендора</td><td class="spec-val-hi">До 2028 (Extended до 2031)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- COMPAT -->
+      <div id="ptab-compat" class="ptab-panel">
+        <p style="font-size:14px;color:var(--text2);margin-bottom:24px;line-height:1.6;max-width:600px">Wonderware InTouch 2023 R2 совместим со следующими системами и ПЛК. Полный список доступен в документации AVEVA.</p>
+        <div class="compat-grid">
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#00c8f0" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#00c8f0" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#00c8f0" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#00c8f0" stroke-width="1.4"/><line x1="9" y1="18" x2="9" y2="21" stroke="#00c8f0" stroke-width="1.4"/><line x1="12" y1="18" x2="12" y2="21" stroke="#00c8f0" stroke-width="1.4"/><line x1="15" y1="18" x2="15" y2="21" stroke="#00c8f0" stroke-width="1.4"/><line x1="3" y1="9" x2="6" y2="9" stroke="#00c8f0" stroke-width="1.4"/><line x1="3" y1="12" x2="6" y2="12" stroke="#00c8f0" stroke-width="1.4"/><line x1="18" y1="9" x2="21" y2="9" stroke="#00c8f0" stroke-width="1.4"/><line x1="18" y1="12" x2="21" y2="12" stroke="#00c8f0" stroke-width="1.4"/></svg></div><div><div class="compat-name">Siemens S7</div><div class="compat-ver">300 / 400 / 1200 / 1500</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#ff6b35" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#ff6b35" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#ff6b35" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#ff6b35" stroke-width="1.4"/><line x1="9" y1="18" x2="9" y2="21" stroke="#ff6b35" stroke-width="1.4"/><line x1="12" y1="18" x2="12" y2="21" stroke="#ff6b35" stroke-width="1.4"/><line x1="15" y1="18" x2="15" y2="21" stroke="#ff6b35" stroke-width="1.4"/><line x1="3" y1="9" x2="6" y2="9" stroke="#ff6b35" stroke-width="1.4"/><line x1="3" y1="12" x2="6" y2="12" stroke="#ff6b35" stroke-width="1.4"/><line x1="18" y1="9" x2="21" y2="9" stroke="#ff6b35" stroke-width="1.4"/><line x1="18" y1="12" x2="21" y2="12" stroke="#ff6b35" stroke-width="1.4"/></svg></div><div><div class="compat-name">Allen-Bradley</div><div class="compat-ver">ControlLogix / CompactLogix</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#a78bfa" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#a78bfa" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#a78bfa" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#a78bfa" stroke-width="1.4"/><line x1="9" y1="18" x2="9" y2="21" stroke="#a78bfa" stroke-width="1.4"/><line x1="12" y1="18" x2="12" y2="21" stroke="#a78bfa" stroke-width="1.4"/><line x1="15" y1="18" x2="15" y2="21" stroke="#a78bfa" stroke-width="1.4"/><line x1="3" y1="9" x2="6" y2="9" stroke="#a78bfa" stroke-width="1.4"/><line x1="18" y1="9" x2="21" y2="9" stroke="#a78bfa" stroke-width="1.4"/></svg></div><div><div class="compat-name">Schneider M340</div><div class="compat-ver">Modicon M340 / M580</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#1de9b6" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#1de9b6" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#1de9b6" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#1de9b6" stroke-width="1.4"/><line x1="9" y1="18" x2="9" y2="21" stroke="#1de9b6" stroke-width="1.4"/><line x1="12" y1="18" x2="12" y2="21" stroke="#1de9b6" stroke-width="1.4"/><line x1="15" y1="18" x2="15" y2="21" stroke="#1de9b6" stroke-width="1.4"/><line x1="3" y1="9" x2="6" y2="9" stroke="#1de9b6" stroke-width="1.4"/><line x1="18" y1="9" x2="21" y2="9" stroke="#1de9b6" stroke-width="1.4"/></svg></div><div><div class="compat-name">Mitsubishi MELSEC</div><div class="compat-ver">iQ-R / iQ-F / Q Series</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#ffb800" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#ffb800" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#ffb800" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#ffb800" stroke-width="1.4"/><line x1="9" y1="18" x2="9" y2="21" stroke="#ffb800" stroke-width="1.4"/><line x1="3" y1="12" x2="6" y2="12" stroke="#ffb800" stroke-width="1.4"/><line x1="18" y1="12" x2="21" y2="12" stroke="#ffb800" stroke-width="1.4"/></svg></div><div><div class="compat-name">Omron NJ/NX</div><div class="compat-ver">NX7 / NX1 / NJ5</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+          <div class="compat-card"><div class="compat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="6" y="6" width="12" height="12" rx="1.5" stroke="#6a8aaa" stroke-width="1.4"/><line x1="9" y1="3" x2="9" y2="6" stroke="#6a8aaa" stroke-width="1.4"/><line x1="12" y1="3" x2="12" y2="6" stroke="#6a8aaa" stroke-width="1.4"/><line x1="15" y1="3" x2="15" y2="6" stroke="#6a8aaa" stroke-width="1.4"/><line x1="3" y1="9" x2="6" y2="9" stroke="#6a8aaa" stroke-width="1.4"/><line x1="18" y1="9" x2="21" y2="9" stroke="#6a8aaa" stroke-width="1.4"/></svg></div><div><div class="compat-name">Codesys v3</div><div class="compat-ver">через OPC-UA</div></div><div class="compat-ok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#1de9b6" stroke-width="2.5" stroke-linecap="round"/></svg>Да</div></div>
+        </div>
+      </div>
+
+      <!-- DOCS -->
+      <div id="ptab-docs" class="ptab-panel">
+        <div class="docs-grid">
+          <div class="doc-row"><div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#ff6b35" stroke-width="1.5"/><polyline points="14,2 14,8 20,8" stroke="#ff6b35" stroke-width="1.5"/></svg></div><div class="doc-info"><div class="doc-name">Wonderware InTouch 2023 R2 — Руководство пользователя</div><div class="doc-meta">PDF · 8.4 МБ · Русский · Официальный перевод</div></div><div class="doc-dl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="8,17 12,21 16,17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Скачать</div></div>
+          <div class="doc-row"><div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#00c8f0" stroke-width="1.5"/><polyline points="14,2 14,8 20,8" stroke="#00c8f0" stroke-width="1.5"/></svg></div><div class="doc-info"><div class="doc-name">Руководство администратора — установка и настройка</div><div class="doc-meta">PDF · 5.1 МБ · Русский · Актуально для v2023 R2</div></div><div class="doc-dl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="8,17 12,21 16,17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Скачать</div></div>
+          <div class="doc-row"><div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#1de9b6" stroke-width="1.5"/><polyline points="14,2 14,8 20,8" stroke="#1de9b6" stroke-width="1.5"/></svg></div><div class="doc-info"><div class="doc-name">Quick Start Guide — первый запуск за 30 минут</div><div class="doc-meta">PDF · 2.2 МБ · Русский · Для новых пользователей</div></div><div class="doc-dl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="8,17 12,21 16,17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Скачать</div></div>
+          <div class="doc-row"><div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#a78bfa" stroke-width="1.5"/><polyline points="14,2 14,8 20,8" stroke="#a78bfa" stroke-width="1.5"/></svg></div><div class="doc-info"><div class="doc-name">InTouch SDK Reference — .NET API и скриптинг</div><div class="doc-meta">PDF · 12.8 МБ · English · Для разработчиков</div></div><div class="doc-dl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="8,17 12,21 16,17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Скачать</div></div>
+          <div class="doc-row"><div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="#ffb800" stroke-width="1.5"/><polyline points="14,2 14,8 20,8" stroke="#ffb800" stroke-width="1.5"/></svg></div><div class="doc-info"><div class="doc-name">Release Notes — версия 2023 R2</div><div class="doc-meta">PDF · 0.8 МБ · English · Список изменений</div></div><div class="doc-dl"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="8,17 12,21 16,17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Скачать</div></div>
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div id="ptab-reviews" class="ptab-panel">
+        <div class="reviews-layout">
+          <div class="rating-summary">
+            <div class="rating-big">4.3</div>
+            <div class="rating-stars-big"><span class="rating-star-big">★</span><span class="rating-star-big">★</span><span class="rating-star-big">★</span><span class="rating-star-big">★</span><span class="rating-star-big" style="opacity:.3">★</span></div>
+            <div class="rating-total">28 отзывов</div>
+            <div class="rating-bars" style="margin-top:16px">
+              <div class="rbar"><span class="rbar-lbl">5</span><div class="rbar-track"><div class="rbar-fill" style="width:50%"></div></div><span class="rbar-cnt">14</span></div>
+              <div class="rbar"><span class="rbar-lbl">4</span><div class="rbar-track"><div class="rbar-fill" style="width:29%"></div></div><span class="rbar-cnt">8</span></div>
+              <div class="rbar"><span class="rbar-lbl">3</span><div class="rbar-track"><div class="rbar-fill" style="width:14%"></div></div><span class="rbar-cnt">4</span></div>
+              <div class="rbar"><span class="rbar-lbl">2</span><div class="rbar-track"><div class="rbar-fill" style="width:4%"></div></div><span class="rbar-cnt">1</span></div>
+              <div class="rbar"><span class="rbar-lbl">1</span><div class="rbar-track"><div class="rbar-fill" style="width:4%"></div></div><span class="rbar-cnt">1</span></div>
+            </div>
+          </div>
+          <div class="reviews-list">
+            <div class="review-card">
+              <div class="review-header"><div class="review-author"><div class="review-avatar">ДК</div><div><div class="review-name">Дмитрий Козлов</div><div class="review-pos">Ведущий инженер АСУ · Сибнефть</div></div></div><div class="review-right"><div class="review-stars"><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span></div><div class="review-date">Feb 2026</div></div></div>
+              <p class="review-text">Работаем с InTouch уже 8 лет, переход с 2014 на 2023 R2 прошёл плавно. Новый Web-клиент без доп. лицензий — огромный плюс. Производительность при 45 000 тегов отличная, задержка не более 200 мс.</p>
+              <div class="review-verdict"><span class="rv-item rv-plus">+ Производительность</span><span class="rv-item rv-plus">+ Web-клиент</span><span class="rv-item rv-minus">− Высокая цена</span></div>
+            </div>
+            <div class="review-card">
+              <div class="review-header"><div class="review-author"><div class="review-avatar">МА</div><div><div class="review-name">Марина Аксёнова</div><div class="review-pos">Начальник АСУТП · Уралэнерго</div></div></div><div class="review-right"><div class="review-stars"><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span><span class="r-star" style="opacity:.3">★</span></div><div class="review-date">Jan 2026</div></div></div>
+              <p class="review-text">Интеграция с PI System работает из коробки, настроили за полдня. Alarm Manager по ISA 18.2 — лучшая реализация среди конкурентов. Единственный минус — обновления требуют остановки сервера.</p>
+              <div class="review-verdict"><span class="rv-item rv-plus">+ PI System</span><span class="rv-item rv-plus">+ Alarm ISA 18.2</span><span class="rv-item rv-minus">− Обновления</span></div>
+            </div>
+            <div class="review-card">
+              <div class="review-header"><div class="review-author"><div class="review-avatar">ВС</div><div><div class="review-name">Виктор Степанов</div><div class="review-pos">CTO · ГК МеталлГрупп</div></div></div><div class="review-right"><div class="review-stars"><span class="r-star">★</span><span class="r-star">★</span><span class="r-star">★</span><span class="r-star" style="opacity:.3">★</span><span class="r-star" style="opacity:.3">★</span></div><div class="review-date">Dec 2025</div></div></div>
+              <p class="review-text">Функционально — лучший на рынке. Но стоимость владения при 10+ узлах очень высокая. Для крупных объектов оправдана, для средних — стоит рассмотреть Ignition или Citect.</p>
+              <div class="review-verdict"><span class="rv-item rv-plus">+ Функционал</span><span class="rv-item rv-minus">− Стоимость ТCO</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHANGELOG -->
+      <div id="ptab-changelog" class="ptab-panel">
+        <div class="changelog" style="max-width:680px">
+          <div class="cl-item">
+            <div class="cl-date">2023<br>Dec</div>
+            <div class="cl-dot major"></div>
+            <div class="cl-body">
+              <div class="cl-version">v2023 R2 (23.2.400.0)<span class="cl-badge major">MAJOR</span></div>
+              <div class="cl-changes">
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>Web-клиент без доп. лицензий (встроен в базовую поставку)</div>
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>REST API v2 — полный CRUD для тегов и тревог</div>
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>Поддержка Windows Server 2022 и Windows 11</div>
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>Новый дизайнер мнемосхем с векторным рендерингом</div>
+                <div class="cl-line"><span class="cl-type-fix">FIXED</span>Утечка памяти при 50 000+ тегов (критический баг)</div>
+                <div class="cl-line"><span class="cl-type-fix">FIXED</span>Некорректная сортировка в журнале тревог при фильтрации</div>
+              </div>
+            </div>
+          </div>
+          <div class="cl-item">
+            <div class="cl-date">2023<br>Jun</div>
+            <div class="cl-dot minor"></div>
+            <div class="cl-body">
+              <div class="cl-version">v2023 R1 (23.1.210.0)<span class="cl-badge minor">MINOR</span></div>
+              <div class="cl-changes">
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>Поддержка OPC-UA Security Mode — Sign & Encrypt</div>
+                <div class="cl-line"><span class="cl-type-add">ADDED</span>Интеграция с AVEVA Connect (мобильный мониторинг)</div>
+                <div class="cl-line"><span class="cl-type-fix">FIXED</span>18 исправлений стабильности и производительности</div>
+              </div>
+            </div>
+          </div>
+          <div class="cl-item">
+            <div class="cl-date">2022<br>Oct</div>
+            <div class="cl-dot patch"></div>
+            <div class="cl-body">
+              <div class="cl-version">v2020 R2 SP2 (20.2.202.0)<span class="cl-badge patch">PATCH</span></div>
+              <div class="cl-changes">
+                <div class="cl-line"><span class="cl-type-fix">FIXED</span>Уязвимость CVE-2022-4141 (важно для промышленных сетей)</div>
+                <div class="cl-line"><span class="cl-type-fix">FIXED</span>Проблема с лицензированием при перезапуске сервера</div>
+                <div class="cl-line"><span class="cl-type-brk">BREAK</span>Прекращена поддержка Windows Server 2012 R2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div><!-- /product view -->
+
+</div><!-- /page -->
+
+<script>
+function showView(id, btn) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function showPTab(id, btn) {
+  document.querySelectorAll('.ptab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  document.getElementById('ptab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+// Category pills toggle
+document.querySelectorAll('.cat-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding: 30px; }
+.diagram { max-width: 1100px; margin: 0 auto; }
+.row { display: flex; gap: 16px; margin-bottom: 16px; justify-content: center; }
+.block {
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+}
+.level-0 { background: #1a1a2e; border: 2px solid #4a9eff; min-width: 100%; }
+.level-1 { background: #202038; border: 1.5px solid #8ab4f8; flex: 1; }
+.level-2 { background: #252540; border: 1px solid #ffd43b; flex: 1; min-width: 200px; }
+.level-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.level-0 > .level-title { color: #4a9eff; font-size: 16px; }
+.level-1 > .level-title { color: #8ab4f8; font-size: 14px; }
+.level-2 > .level-title { color: #ffd43b; font-size: 13px; }
+.obj {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.obj-name { color: #e0e0e0; font-size: 13px; font-weight: 600; }
+.obj-type { 
+    color: #69db7c; 
+    font-size: 11px; 
+    background: rgba(105,219,124,0.12); 
+    padding: 2px 8px; 
+    border-radius: 4px;
+    font-weight: 500;
+}
+.types-block {
+    background: linear-gradient(135deg, #152a1c 0%, #1c3a24 100%);
+    border: 2px solid #69db7c;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+}
+.types-title { color: #69db7c; font-size: 14px; font-weight: 700; margin-bottom: 10px; }
+.types-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.type-card {
+    background: rgba(105,219,124,0.08);
+    border: 1px solid rgba(105,219,124,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+.type-card .icon { font-size: 20px; margin-bottom: 4px; }
+.type-card .name { color: #69db7c; font-weight: 700; font-size: 13px; }
+.type-card .desc { color: #aaa; font-size: 11px; margin-top: 2px; }
+.arrow-label {
+    color: #69db7c;
+    font-size: 11px;
+    text-align: center;
+    padding: 4px 0;
+    opacity: 0.7;
+}
+.arrow-down {
+    text-align: center;
+    color: #69db7c;
+    font-size: 18px;
+    margin: 4px 0;
+    opacity: 0.5;
+}
+.caption {
+    color: #888;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+.caption b { color: #ccc; }
+.multiplier {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: rgba(138,180,248,0.15);
+    color: #8ab4f8;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<div class="diagram">
+    <!-- Промысел -->
+    <div class="block level-0">
+        <div class="level-title">📊 Промысел — информационная модель в Alpha.DevStudio</div>
+        
+        <!-- ЦДНГ-1 -->
+        <div class="block level-1" style="margin-bottom:12px; position:relative;">
+            <div class="level-title">ЦДНГ-1</div>
+            <div class="multiplier">1 из N цехов</div>
+            <div class="row">
+                <!-- ДНС-1 -->
+                <div class="block level-2">
+                    <div class="level-title">ДНС-1</div>
+                    <div class="obj"><span class="obj-name">Насос_1</span><span class="obj-type">ЦНС</span></div>
+                    <div class="obj"><span class="obj-name">Насос_2</span><span class="obj-type">ЦНС</span></div>
+                    <div class="obj"><span class="obj-name">Сепаратор_1</span><span class="obj-type">НГС</span></div>
+                </div>
+                <!-- КП-101 -->
+                <div class="block level-2">
+                    <div class="level-title">КП-101</div>
+                    <div class="obj"><span class="obj-name">Скважина_1</span><span class="obj-type">ШГН</span></div>
+                    <div class="obj"><span class="obj-name">Скважина_2</span><span class="obj-type">ЭЦН</span></div>
+                    <div class="obj"><span class="obj-name">АГЗУ</span><span class="obj-type">АГЗУ</span></div>
+                </div>
+                <!-- КП-102 -->
+                <div class="block level-2">
+                    <div class="level-title">КП-102</div>
+                    <div class="obj"><span class="obj-name">Скважина_3</span><span class="obj-type">ЭЦН</span></div>
+                    <div class="obj"><span class="obj-name">Скважина_4</span><span class="obj-type">ШГН</span></div>
+                    <div class="obj"><span class="obj-name">АГЗУ</span><span class="obj-type">АГЗУ</span></div>
+                </div>
+                <!-- УПН -->
+                <div class="block level-2" style="min-width:120px;">
+                    <div class="level-title">УПН-1</div>
+                    <div class="obj"><span class="obj-name">Колонна_1</span><span class="obj-type">РК</span></div>
+                    <div class="obj"><span class="obj-name">Теплообменник</span><span class="obj-type">ТО</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЦДНГ-2 (свёрнуто) -->
+        <div class="block level-1" style="opacity:0.5; text-align:center; padding:10px;">
+            <div class="level-title" style="border:none; margin:0;">ЦДНГ-2 … ЦДНГ-N</div>
+        </div>
+    </div>
+
+    <div class="arrow-down">▼ ▼ ▼ тиражируются из типов ▼ ▼ ▼</div>
+
+    <!-- Библиотека типов -->
+    <div class="types-block">
+        <div class="types-title">🔧 Библиотека типов — создаётся один раз</div>
+        <div class="types-grid">
+            <div class="type-card">
+                <div class="icon">⚙️</div>
+                <div class="name">ЭЦН</div>
+                <div class="desc">42 сигнала<br/>формулы, уставки</div>
+            </div>
+            <div class="type-card">
+                <div class="icon">⚙️</div>
+                <div class="name">ШГН</div>
+                <div class="desc">38 сигналов<br/>динамограмма</div>
+            </div>
+            <div class="type-card">
+                <div class="icon">⚙️</div>
+                <div class="name">АГЗУ</div>
+                <div class="desc">56 сигналов<br/>замер, переключение</div>
+            </div>
+            <div class="type-card">
+                <div class="icon">⚙️</div>
+                <div class="name">ЦНС</div>
+                <div class="desc">28 сигналов<br/>защиты, вибрация</div>
+            </div>
+            <div class="type-card">
+                <div class="icon">⚙️</div>
+                <div class="name">НГС</div>
+                <div class="desc">34 сигнала<br/>уровни, давления</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p class="caption">
+    <b>Рис. 2.</b> Информационная модель промысла в Alpha.DevStudio. Каждый объект (скважина, насос, АГЗУ) — 
+    экземпляр типа из библиотеки. Тип создаётся один раз с полным набором сигналов, формул и привязок, 
+    затем тиражируется на сотни экземпляров. Для 150 кустов с 2–3 скважинами — минуты на тиражирование вместо часов ручной работы.
+</p>
+
+</body>
+</html>

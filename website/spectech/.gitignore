@@ -1,0 +1,8 @@
+.deploy_log
+*.backup
+index.light-backup.html
+reference-blog-product.html
+cert-*-preview.png
+research/
+*.pyc
+__pycache__/

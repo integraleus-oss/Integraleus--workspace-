@@ -31,6 +31,24 @@
 - Disk usage: `df -h / | tail -1`
 - Uptime / recent reboots
 
+### 3a. Garden server monitoring (every 3-4 heartbeats)
+Garden: root@31.128.32.68 (Beget VPS, no Docker)
+Services: openclaw-gateway, fail2ban, ssh, NetworkManager
+Known user IPs: 157.22.180.83, 31.10.95.23, 193.9.244.115, 79.104.12.133 (Билайн Томск)
+Baseline SSH: permitrootlogin=without-password, passwordauthentication=no
+Baseline users: root (/bin/bash), ops (/bin/bash)
+
+Via SSH (`ssh -o ConnectTimeout=10 root@31.128.32.68 "..."`):
+- **Security:** `last -5`, check for unknown IPs; `sshd -T | grep -E 'permitroot|passwordauth'`; `grep -E '/bin/(ba)?sh$' /etc/passwd`; UFW status
+- **Health:** `uptime`; `df -h / | tail -1`; `systemctl is-active openclaw-gateway fail2ban ssh`
+- **Updates:** `apt list --upgradable 2>/dev/null | wc -l`
+- **OAuth health:** `journalctl -u openclaw-gateway --since '2 hours ago' --no-pager 2>&1 | grep -iE 'oauth|refresh.*fail|token.*fail|auth.*error'` — if any matches → alert user: "⚠️ Garden: OAuth токен OpenAI Codex сбоит, нужна переавторизация: `openclaw configure --section model`"
+- If SSH fails to connect → alert user immediately
+- If unknown login IP → alert user
+- If openclaw-gateway is down → alert user
+- If OAuth errors detected → alert user immediately
+- Log results to `memory/heartbeat-state.json` under `garden`
+
 ### 4. Logging
 - After each check, update `memory/heartbeat-state.json` with timestamps
 - If something important found → write to `memory/YYYY-MM-DD.md` and alert user

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCADA / АСУ ТП — Иконки</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #0f1520;
+    --card: #121a28;
+    --border: #1e2d45;
+    --accent: #00c8ff;
+    --accent2: #00ff9d;
+    --accent3: #ff6b35;
+    --accent4: #f0c040;
+    --text: #c8ddf5;
+    --muted: #4a6080;
+    --glow: rgba(0,200,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    min-height: 100vh;
+    padding: 40px 24px;
+    background-image:
+      linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .label-top {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .section-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin: 48px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .icon-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .icon-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, var(--glow), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .icon-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 24px rgba(0,200,255,0.12), 0 4px 24px rgba(0,0,0,0.4);
+    transform: translateY(-3px);
+  }
+  .icon-card:hover::before { opacity: 1; }
+
+  .icon-card svg {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+
+  .icon-name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .icon-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  /* COLOR VARIANTS */
+  .c-blue  { --ic: #00c8ff; --ig: #0066aa; }
+  .c-green { --ic: #00ff9d; --ig: #007744; }
+  .c-orange{ --ic: #ff6b35; --ig: #aa3300; }
+  .c-yellow{ --ic: #f0c040; --ig: #886600; }
+  .c-violet{ --ic: #b088ff; --ig: #5522aa; }
+  .c-red   { --ic: #ff4466; --ig: #880022; }
+
+  .icon-card.c-blue:hover   { border-color: #00c8ff; box-shadow: 0 0 24px rgba(0,200,255,0.15), 0 4px 24px rgba(0,0,0,0.4); }
+  .icon-card.c-green:hover  { border-color: #00ff9d; box-shadow: 0 0 24px rgba(0,255,157,0.12), 0 4px 24px rgba(0,0,0,0.4); }
+  .icon-card.c-orange:hover { border-color: #ff6b35; box-shadow: 0 0 24px rgba(255,107,53,0.15), 0 4px 24px rgba(0,0,0,0.4); }
+  .icon-card.c-yellow:hover { border-color: #f0c040; box-shadow: 0 0 24px rgba(240,192,64,0.15), 0 4px 24px rgba(0,0,0,0.4); }
+  .icon-card.c-violet:hover { border-color: #b088ff; box-shadow: 0 0 24px rgba(176,136,255,0.15), 0 4px 24px rgba(0,0,0,0.4); }
+  .icon-card.c-red:hover    { border-color: #ff4466; box-shadow: 0 0 24px rgba(255,68,102,0.15), 0 4px 24px rgba(0,0,0,0.4); }
+
+  /* Pulse animation for status icons */
+  @keyframes pulse-ring {
+    0%   { transform: scale(0.92); opacity: 1; }
+    100% { transform: scale(1.08); opacity: 0; }
+  }
+  .pulse-dot {
+    animation: pulse-ring 1.8s cubic-bezier(0.4,0,0.6,1) infinite;
+    transform-origin: center;
+  }
+
+  /* Spin animation */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .spin { animation: spin-slow 8s linear infinite; transform-origin: center; }
+
+  /* Blink */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .blink { animation: blink 2s ease-in-out infinite; }
+
+  /* Flow */
+  @keyframes flow { 0%{stroke-dashoffset:40} 100%{stroke-dashoffset:0} }
+  .flow { animation: flow 2s linear infinite; }
+
+  .footer {
+    text-align: center;
+    margin-top: 64px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="label-top">// icon system v1.0</div>
+  <h1>SCADA · АСУ ТП · Инженерный Софт</h1>
+  <p class="subtitle">Профессиональный набор иконок для промышленных систем управления</p>
+</header>
+
+<!-- ═══════════════════════════════════════════════ МОНИТОРИНГ -->
+<div class="section-title">// мониторинг и контроль</div>
+<div class="grid">
+
+  <!-- HMI Панель -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="8" width="44" height="30" rx="3" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+      <rect x="8" y="12" width="36" height="22" rx="1.5" fill="rgba(0,200,255,0.08)" stroke="#0066aa" stroke-width="1"/>
+      <polyline points="10,30 16,22 21,26 27,18 33,24 38,16" stroke="#00c8ff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="38" cy="16" r="2" fill="#00c8ff"/>
+      <rect x="22" y="38" width="8" height="3" rx="1" fill="#0066aa"/>
+      <rect x="18" y="41" width="16" height="2" rx="1" fill="#004488"/>
+      <rect x="10" y="28" width="6" height="2" rx="0.5" fill="rgba(0,200,255,0.3)" class="blink"/>
+    </svg>
+    <div>
+      <div class="icon-name">HMI Панель</div>
+      <div class="icon-sub">SCADA Display</div>
+    </div>
+  </div>
+
+  <!-- Мнемосхема -->
+  <div class="icon-card c-green">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="4" y="6" width="44" height="36" rx="2" stroke="#00ff9d" stroke-width="1.5" fill="rgba(0,255,157,0.04)"/>
+      <!-- трубопровод -->
+      <rect x="8" y="22" width="14" height="5" rx="1" fill="rgba(0,255,157,0.15)" stroke="#00ff9d" stroke-width="1"/>
+      <rect x="30" y="22" width="14" height="5" rx="1" fill="rgba(0,255,157,0.15)" stroke="#00ff9d" stroke-width="1"/>
+      <line x1="22" y1="24.5" x2="30" y2="24.5" stroke="#00ff9d" stroke-width="1.5" stroke-dasharray="3,2" class="flow"/>
+      <!-- клапан -->
+      <polygon points="25,21 29,24.5 25,28 21,24.5" stroke="#00ff9d" stroke-width="1.2" fill="rgba(0,255,157,0.2)"/>
+      <!-- резервуар -->
+      <rect x="20" y="12" width="12" height="8" rx="1" stroke="#007744" stroke-width="1" fill="rgba(0,255,157,0.1)"/>
+      <rect x="21" y="16" width="10" height="3" rx="0.5" fill="rgba(0,255,157,0.3)"/>
+      <line x1="26" y1="20" x2="26" y2="22" stroke="#007744" stroke-width="1.5"/>
+      <!-- насос -->
+      <circle cx="26" cy="33" r="4" stroke="#007744" stroke-width="1" fill="rgba(0,255,157,0.08)"/>
+      <path d="M24,33 Q26,30 28,33" stroke="#00ff9d" stroke-width="1" fill="none"/>
+      <line x1="26" y1="29" x2="26" y2="27" stroke="#007744" stroke-width="1.2"/>
+    </svg>
+    <div>
+      <div class="icon-name">Мнемосхема</div>
+      <div class="icon-sub">P&ID Diagram</div>
+    </div>
+  </div>
+
+  <!-- Тренды / Графики -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="5" y="8" width="42" height="32" rx="2" stroke="#1e2d45" stroke-width="1" fill="rgba(0,200,255,0.03)"/>
+      <!-- оси -->
+      <line x1="12" y1="10" x2="12" y2="36" stroke="#1e2d45" stroke-width="1.5"/>
+      <line x1="12" y1="36" x2="44" y2="36" stroke="#1e2d45" stroke-width="1.5"/>
+      <!-- сетка -->
+      <line x1="12" y1="28" x2="44" y2="28" stroke="#1e2d45" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <line x1="12" y1="20" x2="44" y2="20" stroke="#1e2d45" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <!-- кривые -->
+      <polyline points="12,32 18,24 24,28 30,16 36,20 44,14" stroke="#00c8ff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <polyline points="12,34 18,30 24,32 30,26 36,29 44,22" stroke="#007744" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+      <!-- легенда -->
+      <line x1="14" y1="43" x2="20" y2="43" stroke="#00c8ff" stroke-width="1.5"/>
+      <line x1="28" y1="43" x2="34" y2="43" stroke="#007744" stroke-width="1.2" opacity="0.6"/>
+    </svg>
+    <div>
+      <div class="icon-name">Тренды</div>
+      <div class="icon-sub">Real-time Charts</div>
+    </div>
+  </div>
+
+  <!-- Аварийная сигнализация -->
+  <div class="icon-card c-red">
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="26" r="18" stroke="rgba(255,68,102,0.2)" stroke-width="6" class="pulse-dot"/>
+      <circle cx="26" cy="26" r="15" stroke="#ff4466" stroke-width="1.5" fill="rgba(255,68,102,0.06)"/>
+      <path d="M18 32 L26 14 L34 32 Z" stroke="#ff4466" stroke-width="1.5" fill="rgba(255,68,102,0.15)" stroke-linejoin="round"/>
+      <line x1="26" y1="22" x2="26" y2="28" stroke="#ff4466" stroke-width="2" stroke-linecap="round" class="blink"/>
+      <circle cx="26" cy="30.5" r="1.2" fill="#ff4466" class="blink"/>
+    </svg>
+    <div>
+      <div class="icon-name">Сигнализация</div>
+      <div class="icon-sub">Alarm System</div>
+    </div>
+  </div>
+
+  <!-- Журнал событий -->
+  <div class="icon-card c-yellow">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="10" y="6" width="32" height="40" rx="2" stroke="#f0c040" stroke-width="1.5" fill="rgba(240,192,64,0.04)"/>
+      <rect x="10" y="6" width="32" height="10" rx="2" fill="rgba(240,192,64,0.12)" stroke="none"/>
+      <path d="M10 16 L42 16" stroke="#886600" stroke-width="1"/>
+      <!-- строки -->
+      <rect x="15" y="21" width="3" height="3" rx="0.5" fill="#f0c040" opacity="0.6"/>
+      <line x1="21" y1="22.5" x2="37" y2="22.5" stroke="#886600" stroke-width="1"/>
+      <rect x="15" y="28" width="3" height="3" rx="0.5" fill="#ff4466" opacity="0.8" class="blink"/>
+      <line x1="21" y1="29.5" x2="37" y2="29.5" stroke="#886600" stroke-width="1"/>
+      <rect x="15" y="35" width="3" height="3" rx="0.5" fill="#00ff9d" opacity="0.6"/>
+      <line x1="21" y1="36.5" x2="37" y2="36.5" stroke="#886600" stroke-width="1"/>
+      <!-- метка времени -->
+      <text x="13" y="13.5" fill="#f0c040" font-size="5" font-family="Share Tech Mono, monospace" opacity="0.8">LOG</text>
+    </svg>
+    <div>
+      <div class="icon-name">Журнал событий</div>
+      <div class="icon-sub">Event Log</div>
+    </div>
+  </div>
+
+  <!-- Статус системы -->
+  <div class="icon-card c-green">
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="26" r="18" stroke="#1e2d45" stroke-width="1.5" fill="rgba(0,255,157,0.04)"/>
+      <!-- секторы статуса -->
+      <path d="M26 26 L26 10 A16 16 0 0 1 39.86 18 Z" fill="rgba(0,255,157,0.3)" stroke="#00ff9d" stroke-width="0.5"/>
+      <path d="M26 26 L39.86 18 A16 16 0 0 1 39.86 34 Z" fill="rgba(0,255,157,0.15)" stroke="#00ff9d" stroke-width="0.5"/>
+      <path d="M26 26 L39.86 34 A16 16 0 0 1 12.14 34 Z" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="0.5"/>
+      <path d="M26 26 L12.14 34 A16 16 0 0 1 12.14 18 Z" fill="rgba(240,192,64,0.15)" stroke="#886600" stroke-width="0.5"/>
+      <path d="M26 26 L12.14 18 A16 16 0 0 1 26 10 Z" fill="rgba(255,107,53,0.1)" stroke="#aa3300" stroke-width="0.5"/>
+      <circle cx="26" cy="26" r="6" fill="var(--card)" stroke="#00ff9d" stroke-width="1.5"/>
+      <circle cx="26" cy="26" r="2.5" fill="#00ff9d"/>
+    </svg>
+    <div>
+      <div class="icon-name">Статус системы</div>
+      <div class="icon-sub">System Status</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ ОБОРУДОВАНИЕ -->
+<div class="section-title">// полевое оборудование и КИП</div>
+<div class="grid">
+
+  <!-- ПЛК / PLC -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="8" y="10" width="36" height="32" rx="2" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.05)"/>
+      <!-- левая сторона - клеммы -->
+      <rect x="5" y="16" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+      <rect x="5" y="22" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+      <rect x="5" y="28" width="5" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.5"/>
+      <!-- правая сторона -->
+      <rect x="42" y="16" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+      <rect x="42" y="22" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+      <rect x="42" y="28" width="5" height="4" rx="0.5" fill="#004488" stroke="#0066aa" stroke-width="0.5"/>
+      <!-- CPU блок -->
+      <rect x="14" y="16" width="24" height="20" rx="1" fill="rgba(0,200,255,0.08)" stroke="#0066aa" stroke-width="1"/>
+      <!-- индикаторы -->
+      <circle cx="18" cy="20" r="1.5" fill="#00ff9d" class="blink"/>
+      <circle cx="22" cy="20" r="1.5" fill="#f0c040"/>
+      <circle cx="26" cy="20" r="1.5" fill="#ff4466" opacity="0.4"/>
+      <!-- чип -->
+      <rect x="20" y="24" width="12" height="8" rx="1" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="0.8"/>
+      <line x1="22" y1="22" x2="22" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+      <line x1="26" y1="22" x2="26" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+      <line x1="30" y1="22" x2="30" y2="24" stroke="#0066aa" stroke-width="0.8"/>
+    </svg>
+    <div>
+      <div class="icon-name">ПЛК</div>
+      <div class="icon-sub">PLC Controller</div>
+    </div>
+  </div>
+
+  <!-- Датчик давления -->
+  <div class="icon-card c-orange">
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="24" r="16" stroke="#ff6b35" stroke-width="1.5" fill="rgba(255,107,53,0.05)"/>
+      <circle cx="26" cy="24" r="12" stroke="#aa3300" stroke-width="0.5"/>
+      <!-- шкала -->
+      <line x1="26" y1="12" x2="26" y2="15" stroke="#ff6b35" stroke-width="1.5"/>
+      <line x1="36.9" y1="16.9" x2="34.8" y2="18.7" stroke="#ff6b35" stroke-width="1.5"/>
+      <line x1="14" y1="17" x2="16" y2="19" stroke="#ff6b35" stroke-width="1.5"/>
+      <line x1="38" y1="24" x2="35" y2="24" stroke="#ff6b35" stroke-width="1.5"/>
+      <line x1="14" y1="24" x2="17" y2="24" stroke="#ff6b35" stroke-width="1.5"/>
+      <!-- зона тревоги -->
+      <path d="M26 24 L36 13" stroke="rgba(255,68,102,0.3)" stroke-width="3" stroke-linecap="round"/>
+      <!-- стрелка -->
+      <line x1="26" y1="24" x2="34" y2="17" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="26" cy="24" r="2.5" fill="#ff6b35"/>
+      <!-- штуцер -->
+      <rect x="22" y="40" width="8" height="6" rx="1" fill="#aa3300" stroke="#ff6b35" stroke-width="0.8"/>
+      <line x1="26" y1="40" x2="26" y2="38" stroke="#ff6b35" stroke-width="1.5"/>
+    </svg>
+    <div>
+      <div class="icon-name">Датчик давления</div>
+      <div class="icon-sub">Pressure Sensor</div>
+    </div>
+  </div>
+
+  <!-- Расходомер -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- труба -->
+      <rect x="4" y="21" width="44" height="10" rx="1.5" fill="rgba(0,200,255,0.06)" stroke="#1e2d45" stroke-width="1.2"/>
+      <!-- поток -->
+      <line x1="8" y1="26" x2="44" y2="26" stroke="#00c8ff" stroke-width="1" stroke-dasharray="4,3" class="flow" opacity="0.6"/>
+      <!-- корпус расходомера -->
+      <rect x="18" y="14" width="16" height="24" rx="2" fill="rgba(0,200,255,0.08)" stroke="#00c8ff" stroke-width="1.5"/>
+      <!-- дисплей -->
+      <rect x="20" y="16" width="12" height="8" rx="1" fill="rgba(0,200,255,0.15)" stroke="#0066aa" stroke-width="0.8"/>
+      <text x="26" y="22" fill="#00c8ff" font-size="5.5" font-family="Share Tech Mono,monospace" text-anchor="middle">42.7</text>
+      <!-- стрелка потока -->
+      <line x1="8" y1="26" x2="16" y2="26" stroke="#00c8ff" stroke-width="2"/>
+      <polygon points="15,24 18,26 15,28" fill="#00c8ff"/>
+      <!-- зажимы -->
+      <line x1="22" y1="26" x2="22" y2="34" stroke="#0066aa" stroke-width="1"/>
+      <line x1="30" y1="26" x2="30" y2="34" stroke="#0066aa" stroke-width="1"/>
+    </svg>
+    <div>
+      <div class="icon-name">Расходомер</div>
+      <div class="icon-sub">Flow Meter</div>
+    </div>
+  </div>
+
+  <!-- Привод / Исполн. механизм -->
+  <div class="icon-card c-violet">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- корпус мотора -->
+      <rect x="6" y="18" width="24" height="16" rx="2" fill="rgba(176,136,255,0.08)" stroke="#b088ff" stroke-width="1.5"/>
+      <!-- ротор -->
+      <circle cx="18" cy="26" r="5" stroke="#5522aa" stroke-width="1" fill="rgba(176,136,255,0.1)" class="spin"/>
+      <line x1="18" y1="21" x2="18" y2="31" stroke="#b088ff" stroke-width="1" class="spin"/>
+      <line x1="13" y1="26" x2="23" y2="26" stroke="#b088ff" stroke-width="1" class="spin"/>
+      <!-- вал -->
+      <line x1="30" y1="26" x2="38" y2="26" stroke="#b088ff" stroke-width="3" stroke-linecap="round"/>
+      <!-- редуктор -->
+      <rect x="36" y="20" width="10" height="12" rx="1.5" fill="rgba(176,136,255,0.1)" stroke="#5522aa" stroke-width="1"/>
+      <!-- шестерня -->
+      <circle cx="41" cy="26" r="3.5" stroke="#b088ff" stroke-width="1" fill="rgba(176,136,255,0.2)" class="spin"/>
+      <circle cx="41" cy="26" r="1.2" fill="#b088ff"/>
+      <!-- клеммная коробка -->
+      <rect x="9" y="12" width="10" height="6" rx="1" fill="rgba(176,136,255,0.15)" stroke="#5522aa" stroke-width="0.8"/>
+      <line x1="12" y1="14" x2="12" y2="18" stroke="#b088ff" stroke-width="0.8"/>
+      <line x1="15" y1="14" x2="15" y2="18" stroke="#b088ff" stroke-width="0.8"/>
+    </svg>
+    <div>
+      <div class="icon-name">Привод</div>
+      <div class="icon-sub">Actuator / Drive</div>
+    </div>
+  </div>
+
+  <!-- Клапан -->
+  <div class="icon-card c-orange">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- трубы -->
+      <rect x="4" y="22" width="17" height="8" rx="1" fill="rgba(255,107,53,0.08)" stroke="#aa3300" stroke-width="1.2"/>
+      <rect x="31" y="22" width="17" height="8" rx="1" fill="rgba(255,107,53,0.08)" stroke="#aa3300" stroke-width="1.2"/>
+      <!-- клапан -->
+      <polygon points="21,20 31,26 21,32" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1.5" stroke-linejoin="round"/>
+      <polygon points="31,20 21,26 31,32" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1.5" stroke-linejoin="round"/>
+      <!-- шток -->
+      <line x1="26" y1="20" x2="26" y2="12" stroke="#ff6b35" stroke-width="2"/>
+      <!-- привод клапана -->
+      <rect x="20" y="7" width="12" height="7" rx="1.5" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1.2"/>
+      <!-- статус открыт -->
+      <circle cx="41" cy="14" r="4" fill="rgba(0,255,157,0.2)" stroke="#00ff9d" stroke-width="1"/>
+      <polyline points="39,14 40.5,15.5 43,12.5" stroke="#00ff9d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div class="icon-name">Клапан</div>
+      <div class="icon-sub">Control Valve</div>
+    </div>
+  </div>
+
+  <!-- Термопара / Температура -->
+  <div class="icon-card c-red">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- термометр корпус -->
+      <rect x="22" y="6" width="8" height="28" rx="4" fill="rgba(255,68,102,0.06)" stroke="#ff4466" stroke-width="1.5"/>
+      <!-- заполнение -->
+      <rect x="24" y="20" width="4" height="14" rx="2" fill="#ff4466" opacity="0.8"/>
+      <!-- колба -->
+      <circle cx="26" cy="38" r="6" fill="rgba(255,68,102,0.3)" stroke="#ff4466" stroke-width="1.5"/>
+      <circle cx="26" cy="38" r="3.5" fill="#ff4466"/>
+      <!-- шкала -->
+      <line x1="30" y1="12" x2="33" y2="12" stroke="#ff4466" stroke-width="1"/>
+      <line x1="30" y1="16" x2="33" y2="16" stroke="#ff4466" stroke-width="1"/>
+      <line x1="30" y1="20" x2="35" y2="20" stroke="#ff4466" stroke-width="1.5"/>
+      <line x1="30" y1="24" x2="33" y2="24" stroke="#ff4466" stroke-width="1"/>
+      <line x1="30" y1="28" x2="33" y2="28" stroke="#ff4466" stroke-width="1"/>
+      <!-- значение -->
+      <text x="39" y="20" fill="#ff4466" font-size="5.5" font-family="Share Tech Mono,monospace">°C</text>
+    </svg>
+    <div>
+      <div class="icon-name">Температура</div>
+      <div class="icon-sub">Thermocouple</div>
+    </div>
+  </div>
+
+  <!-- Уровнемер -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- резервуар -->
+      <rect x="12" y="8" width="22" height="36" rx="2" fill="rgba(0,200,255,0.04)" stroke="#00c8ff" stroke-width="1.5"/>
+      <!-- уровень жидкости -->
+      <rect x="13.5" y="24" width="19" height="19" rx="1" fill="rgba(0,200,255,0.2)"/>
+      <!-- рябь на поверхности -->
+      <path d="M15 24 Q18.5 22.5 22 24 Q25.5 25.5 31.5 24" stroke="#00c8ff" stroke-width="1" fill="none"/>
+      <!-- шкала -->
+      <line x1="34" y1="12" x2="38" y2="12" stroke="#0066aa" stroke-width="1"/>
+      <line x1="34" y1="18" x2="38" y2="18" stroke="#0066aa" stroke-width="1"/>
+      <line x1="34" y1="24" x2="40" y2="24" stroke="#00c8ff" stroke-width="1.5"/>
+      <line x1="34" y1="30" x2="38" y2="30" stroke="#0066aa" stroke-width="1"/>
+      <line x1="34" y1="36" x2="38" y2="36" stroke="#0066aa" stroke-width="1"/>
+      <!-- указатель -->
+      <polygon points="33,24 36,22 36,26" fill="#00c8ff"/>
+      <!-- труба вывода -->
+      <rect x="8" y="38" width="4" height="4" rx="0.5" fill="#0066aa" stroke="#00c8ff" stroke-width="0.8"/>
+      <line x1="12" y1="40" x2="34" y2="40" stroke="#00c8ff" stroke-width="1"/>
+    </svg>
+    <div>
+      <div class="icon-name">Уровнемер</div>
+      <div class="icon-sub">Level Sensor</div>
+    </div>
+  </div>
+
+  <!-- RTU / Удал. терминал -->
+  <div class="icon-card c-yellow">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="8" y="12" width="36" height="26" rx="2" fill="rgba(240,192,64,0.05)" stroke="#f0c040" stroke-width="1.5"/>
+      <!-- антенна -->
+      <line x1="36" y1="12" x2="40" y2="4" stroke="#f0c040" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="40" cy="4" r="1.5" fill="#f0c040" class="blink"/>
+      <!-- дисплей -->
+      <rect x="12" y="16" width="18" height="12" rx="1" fill="rgba(240,192,64,0.1)" stroke="#886600" stroke-width="0.8"/>
+      <text x="14" y="22" fill="#f0c040" font-size="4.5" font-family="Share Tech Mono,monospace">RTU-01</text>
+      <text x="14" y="27" fill="#886600" font-size="4" font-family="Share Tech Mono,monospace">OK 14:33</text>
+      <!-- светодиоды -->
+      <circle cx="35" cy="18" r="2" fill="#00ff9d" class="blink"/>
+      <circle cx="35" cy="24" r="2" fill="#f0c040" opacity="0.5"/>
+      <circle cx="35" cy="30" r="2" fill="#1e2d45"/>
+      <!-- клеммы снизу -->
+      <line x1="14" y1="38" x2="14" y2="42" stroke="#886600" stroke-width="1.5"/>
+      <line x1="20" y1="38" x2="20" y2="42" stroke="#886600" stroke-width="1.5"/>
+      <line x1="26" y1="38" x2="26" y2="42" stroke="#886600" stroke-width="1.5"/>
+      <line x1="32" y1="38" x2="32" y2="42" stroke="#886600" stroke-width="1.5"/>
+    </svg>
+    <div>
+      <div class="icon-name">RTU</div>
+      <div class="icon-sub">Remote Terminal</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ КОММУНИКАЦИИ -->
+<div class="section-title">// сети и коммуникации</div>
+<div class="grid">
+
+  <!-- OPC UA -->
+  <div class="icon-card c-violet">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- сервер -->
+      <rect x="16" y="6" width="20" height="14" rx="2" fill="rgba(176,136,255,0.08)" stroke="#b088ff" stroke-width="1.5"/>
+      <line x1="16" y1="11" x2="36" y2="11" stroke="#5522aa" stroke-width="0.8"/>
+      <circle cx="21" cy="8.5" r="1" fill="#b088ff"/>
+      <circle cx="25" cy="8.5" r="1" fill="#5522aa"/>
+      <circle cx="29" cy="8.5" r="1" fill="#5522aa"/>
+      <!-- клиент 1 -->
+      <rect x="4" y="36" width="14" height="10" rx="1.5" fill="rgba(176,136,255,0.06)" stroke="#5522aa" stroke-width="1"/>
+      <!-- клиент 2 -->
+      <rect x="20" y="36" width="12" height="10" rx="1.5" fill="rgba(176,136,255,0.06)" stroke="#5522aa" stroke-width="1"/>
+      <!-- клиент 3 -->
+      <rect x="34" y="36" width="14" height="10" rx="1.5" fill="rgba(176,136,255,0.06)" stroke="#5522aa" stroke-width="1"/>
+      <!-- линии связи -->
+      <line x1="26" y1="20" x2="11" y2="36" stroke="#b088ff" stroke-width="1" stroke-dasharray="3,2" class="flow"/>
+      <line x1="26" y1="20" x2="26" y2="36" stroke="#b088ff" stroke-width="1" stroke-dasharray="3,2" class="flow"/>
+      <line x1="26" y1="20" x2="41" y2="36" stroke="#b088ff" stroke-width="1" stroke-dasharray="3,2" class="flow"/>
+      <!-- OPC label -->
+      <text x="17" y="17" fill="#b088ff" font-size="5" font-family="Share Tech Mono,monospace">OPC UA</text>
+    </svg>
+    <div>
+      <div class="icon-name">OPC UA</div>
+      <div class="icon-sub">Protocol Server</div>
+    </div>
+  </div>
+
+  <!-- Modbus -->
+  <div class="icon-card c-yellow">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- мастер -->
+      <rect x="4" y="10" width="16" height="12" rx="1.5" fill="rgba(240,192,64,0.1)" stroke="#f0c040" stroke-width="1.5"/>
+      <text x="7" y="18" fill="#f0c040" font-size="5" font-family="Share Tech Mono,monospace">MSTR</text>
+      <!-- шина -->
+      <line x1="20" y1="16" x2="32" y2="16" stroke="#886600" stroke-width="2"/>
+      <!-- слейвы -->
+      <rect x="32" y="6" width="16" height="10" rx="1" fill="rgba(240,192,64,0.06)" stroke="#886600" stroke-width="1"/>
+      <rect x="32" y="20" width="16" height="10" rx="1" fill="rgba(240,192,64,0.06)" stroke="#886600" stroke-width="1"/>
+      <rect x="32" y="34" width="16" height="10" rx="1" fill="rgba(240,192,64,0.06)" stroke="#886600" stroke-width="1"/>
+      <text x="34" y="13" fill="#886600" font-size="4" font-family="Share Tech Mono,monospace">SLV 01</text>
+      <text x="34" y="27" fill="#886600" font-size="4" font-family="Share Tech Mono,monospace">SLV 02</text>
+      <text x="34" y="41" fill="#886600" font-size="4" font-family="Share Tech Mono,monospace">SLV 03</text>
+      <!-- подключения -->
+      <line x1="32" y1="11" x2="28" y2="11" stroke="#886600" stroke-width="1"/>
+      <line x1="28" y1="11" x2="28" y2="39" stroke="#886600" stroke-width="1"/>
+      <line x1="28" y1="25" x2="32" y2="25" stroke="#886600" stroke-width="1"/>
+      <line x1="28" y1="39" x2="32" y2="39" stroke="#886600" stroke-width="1"/>
+      <circle cx="28" cy="16" r="2" fill="#f0c040"/>
+    </svg>
+    <div>
+      <div class="icon-name">Modbus</div>
+      <div class="icon-sub">RTU / TCP</div>
+    </div>
+  </div>
+
+  <!-- Промышленная сеть -->
+  <div class="icon-card c-green">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- центральный узел -->
+      <circle cx="26" cy="26" r="7" fill="rgba(0,255,157,0.15)" stroke="#00ff9d" stroke-width="1.5"/>
+      <circle cx="26" cy="26" r="3" fill="#00ff9d" opacity="0.6"/>
+      <!-- периферийные узлы -->
+      <circle cx="26" cy="8" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <circle cx="40" cy="18" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <circle cx="40" cy="36" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <circle cx="26" cy="44" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <circle cx="12" cy="36" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <circle cx="12" cy="18" r="4" fill="rgba(0,255,157,0.08)" stroke="#007744" stroke-width="1"/>
+      <!-- связи -->
+      <line x1="26" y1="19" x2="26" y2="12" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+      <line x1="32.1" y1="22" x2="36.5" y2="20.5" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+      <line x1="32.1" y1="30" x2="36.5" y2="32" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+      <line x1="26" y1="33" x2="26" y2="40" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+      <line x1="19.9" y1="30" x2="15.5" y2="32" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+      <line x1="19.9" y1="22" x2="15.5" y2="20.5" stroke="#00ff9d" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <div>
+      <div class="icon-name">Industrial Net</div>
+      <div class="icon-sub">PROFINET / EtherIP</div>
+    </div>
+  </div>
+
+  <!-- Шлюз / Gateway -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- корпус шлюза -->
+      <rect x="16" y="14" width="20" height="24" rx="2" fill="rgba(0,200,255,0.08)" stroke="#00c8ff" stroke-width="1.5"/>
+      <!-- стрелки влево-вправо -->
+      <line x1="4" y1="22" x2="16" y2="22" stroke="#0066aa" stroke-width="1.5"/>
+      <polygon points="13,20 16,22 13,24" fill="#0066aa"/>
+      <line x1="36" y1="22" x2="48" y2="22" stroke="#00c8ff" stroke-width="1.5"/>
+      <polygon points="45,20 48,22 45,24" fill="#00c8ff"/>
+      <line x1="4" y1="30" x2="16" y2="30" stroke="#00c8ff" stroke-width="1.5"/>
+      <polygon points="7,28 4,30 7,32" fill="#00c8ff"/>
+      <line x1="36" y1="30" x2="48" y2="30" stroke="#0066aa" stroke-width="1.5"/>
+      <polygon points="39,28 36,30 39,32" fill="#0066aa"/>
+      <!-- внутренности -->
+      <rect x="19" y="18" width="14" height="16" rx="1" fill="rgba(0,200,255,0.1)" stroke="#0066aa" stroke-width="0.8"/>
+      <line x1="26" y1="18" x2="26" y2="34" stroke="#0066aa" stroke-width="1" stroke-dasharray="2,2"/>
+      <!-- протоколы -->
+      <text x="19.5" y="24" fill="#0066aa" font-size="3.5" font-family="Share Tech Mono,monospace">MDB</text>
+      <text x="27" y="24" fill="#00c8ff" font-size="3.5" font-family="Share Tech Mono,monospace">OPC</text>
+      <text x="19.5" y="31" fill="#0066aa" font-size="3.5" font-family="Share Tech Mono,monospace">485</text>
+      <text x="27" y="31" fill="#00c8ff" font-size="3.5" font-family="Share Tech Mono,monospace">ETH</text>
+    </svg>
+    <div>
+      <div class="icon-name">Шлюз</div>
+      <div class="icon-sub">Protocol Gateway</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ -->
+<div class="section-title">// инженерный софт</div>
+<div class="grid">
+
+  <!-- Конфигуратор -->
+  <div class="icon-card c-blue">
+    <svg viewBox="0 0 52 52" fill="none">
+      <circle cx="26" cy="26" r="10" stroke="#00c8ff" stroke-width="1.5" fill="rgba(0,200,255,0.06)" class="spin"/>
+      <circle cx="26" cy="26" r="4" stroke="#0066aa" stroke-width="1" fill="rgba(0,200,255,0.15)"/>
+      <!-- зубья шестерни -->
+      <rect x="24" y="12" width="4" height="5" rx="1" fill="#00c8ff"/>
+      <rect x="24" y="35" width="4" height="5" rx="1" fill="#00c8ff"/>
+      <rect x="12" y="24" width="5" height="4" rx="1" fill="#00c8ff"/>
+      <rect x="35" y="24" width="5" height="4" rx="1" fill="#00c8ff"/>
+      <rect x="15.5" y="15.5" width="3.5" height="3.5" rx="0.8" fill="#0066aa" transform="rotate(45 17.25 17.25)"/>
+      <rect x="33" y="15.5" width="3.5" height="3.5" rx="0.8" fill="#0066aa" transform="rotate(45 34.75 17.25)"/>
+      <rect x="15.5" y="33" width="3.5" height="3.5" rx="0.8" fill="#0066aa" transform="rotate(45 17.25 34.75)"/>
+      <rect x="33" y="33" width="3.5" height="3.5" rx="0.8" fill="#0066aa" transform="rotate(45 34.75 34.75)"/>
+      <circle cx="26" cy="26" r="2" fill="#00c8ff"/>
+    </svg>
+    <div>
+      <div class="icon-name">Конфигуратор</div>
+      <div class="icon-sub">Engineering Tool</div>
+    </div>
+  </div>
+
+  <!-- База данных тегов -->
+  <div class="icon-card c-green">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- цилиндры БД -->
+      <ellipse cx="26" cy="12" rx="16" ry="4" fill="rgba(0,255,157,0.15)" stroke="#00ff9d" stroke-width="1.5"/>
+      <rect x="10" y="12" width="32" height="8" fill="rgba(0,255,157,0.06)" stroke="none"/>
+      <line x1="10" y1="12" x2="10" y2="20" stroke="#00ff9d" stroke-width="1.5"/>
+      <line x1="42" y1="12" x2="42" y2="20" stroke="#00ff9d" stroke-width="1.5"/>
+      <ellipse cx="26" cy="20" rx="16" ry="4" fill="rgba(0,255,157,0.1)" stroke="#007744" stroke-width="1"/>
+      <rect x="10" y="20" width="32" height="8" fill="rgba(0,255,157,0.04)" stroke="none"/>
+      <line x1="10" y1="20" x2="10" y2="28" stroke="#007744" stroke-width="1"/>
+      <line x1="42" y1="20" x2="42" y2="28" stroke="#007744" stroke-width="1"/>
+      <ellipse cx="26" cy="28" rx="16" ry="4" fill="rgba(0,255,157,0.07)" stroke="#007744" stroke-width="1"/>
+      <!-- данные -->
+      <line x1="16" y1="16" x2="28" y2="16" stroke="#00ff9d" stroke-width="1" opacity="0.6"/>
+      <line x1="16" y1="24" x2="24" y2="24" stroke="#007744" stroke-width="1" opacity="0.6"/>
+      <!-- индикатор -->
+      <circle cx="38" cy="12" r="4" fill="#121a28" stroke="none"/>
+      <circle cx="38" cy="12" r="2.5" fill="#00ff9d" class="blink"/>
+      <!-- счётчик тегов -->
+      <text x="16" y="40" fill="#007744" font-size="5" font-family="Share Tech Mono,monospace">4096 TAGS</text>
+    </svg>
+    <div>
+      <div class="icon-name">База тегов</div>
+      <div class="icon-sub">Tag Database</div>
+    </div>
+  </div>
+
+  <!-- Отчёты -->
+  <div class="icon-card c-yellow">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect x="10" y="4" width="28" height="36" rx="2" fill="rgba(240,192,64,0.04)" stroke="#f0c040" stroke-width="1.5"/>
+      <!-- загнутый угол -->
+      <path d="M30 4 L38 12 L30 12 Z" fill="rgba(240,192,64,0.15)" stroke="#f0c040" stroke-width="1"/>
+      <path d="M30 4 L30 12 L38 12" fill="none" stroke="#f0c040" stroke-width="1.5"/>
+      <!-- контент -->
+      <rect x="14" y="18" width="20" height="2" rx="0.5" fill="rgba(240,192,64,0.3)"/>
+      <rect x="14" y="23" width="14" height="2" rx="0.5" fill="rgba(240,192,64,0.2)"/>
+      <!-- мини-график -->
+      <rect x="14" y="28" width="4" height="6" rx="0.5" fill="rgba(240,192,64,0.4)"/>
+      <rect x="20" y="25" width="4" height="9" rx="0.5" fill="rgba(240,192,64,0.6)"/>
+      <rect x="26" y="27" width="4" height="7" rx="0.5" fill="rgba(0,200,255,0.4)"/>
+      <!-- экспорт стрелка -->
+      <rect x="10" y="42" width="32" height="8" rx="1.5" fill="rgba(240,192,64,0.12)" stroke="#886600" stroke-width="1"/>
+      <line x1="26" y1="44" x2="26" y2="48" stroke="#f0c040" stroke-width="1.2"/>
+      <polygon points="23,46 26,49 29,46" fill="#f0c040"/>
+      <text x="12" y="48" fill="#886600" font-size="4.5" font-family="Share Tech Mono,monospace">EXPORT</text>
+    </svg>
+    <div>
+      <div class="icon-name">Отчёты</div>
+      <div class="icon-sub">Report Generator</div>
+    </div>
+  </div>
+
+  <!-- Архив данных -->
+  <div class="icon-card c-violet">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- жёсткий диск -->
+      <rect x="8" y="14" width="36" height="24" rx="3" fill="rgba(176,136,255,0.06)" stroke="#b088ff" stroke-width="1.5"/>
+      <!-- пластины -->
+      <ellipse cx="26" cy="26" rx="11" ry="11" fill="rgba(176,136,255,0.05)" stroke="#5522aa" stroke-width="0.8" class="spin"/>
+      <ellipse cx="26" cy="26" rx="7" ry="7" fill="rgba(176,136,255,0.08)" stroke="#5522aa" stroke-width="0.8" class="spin"/>
+      <circle cx="26" cy="26" r="3" fill="rgba(176,136,255,0.2)" stroke="#b088ff" stroke-width="0.8"/>
+      <!-- головка чтения -->
+      <line x1="34" y1="16" x2="28" y2="24" stroke="#b088ff" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="28" cy="24" r="1.5" fill="#b088ff"/>
+      <!-- индикатор активности -->
+      <rect x="11" y="17" width="6" height="2" rx="0.5" fill="rgba(176,136,255,0.15)"/>
+      <rect x="11" y="17" width="4" height="2" rx="0.5" fill="#b088ff" class="blink"/>
+      <!-- надпись -->
+      <text x="9" y="44" fill="#5522aa" font-size="5" font-family="Share Tech Mono,monospace">HISTORIAN</text>
+    </svg>
+    <div>
+      <div class="icon-name">Архив</div>
+      <div class="icon-sub">Data Historian</div>
+    </div>
+  </div>
+
+  <!-- Кибербезопасность -->
+  <div class="icon-card c-green">
+    <svg viewBox="0 0 52 52" fill="none">
+      <path d="M26 4 L42 10 L42 26 C42 36 26 46 26 46 C26 46 10 36 10 26 L10 10 Z" fill="rgba(0,255,157,0.06)" stroke="#00ff9d" stroke-width="1.5" stroke-linejoin="round"/>
+      <!-- замок -->
+      <rect x="20" y="24" width="12" height="10" rx="1.5" fill="rgba(0,255,157,0.15)" stroke="#007744" stroke-width="1"/>
+      <path d="M21 24 L21 20 C21 17.2 31 17.2 31 20 L31 24" fill="none" stroke="#00ff9d" stroke-width="1.5"/>
+      <circle cx="26" cy="29" r="2" fill="#00ff9d"/>
+      <line x1="26" y1="31" x2="26" y2="33" stroke="#00ff9d" stroke-width="1.2"/>
+      <!-- защита -->
+      <line x1="18" y1="14" x2="34" y2="14" stroke="#007744" stroke-width="0.8" opacity="0.5"/>
+      <line x1="17" y1="17" x2="35" y2="17" stroke="#007744" stroke-width="0.8" opacity="0.3"/>
+    </svg>
+    <div>
+      <div class="icon-name">Кибербезопасность</div>
+      <div class="icon-sub">ICS Security</div>
+    </div>
+  </div>
+
+  <!-- Симулятор -->
+  <div class="icon-card c-orange">
+    <svg viewBox="0 0 52 52" fill="none">
+      <!-- экран -->
+      <rect x="6" y="8" width="40" height="28" rx="2" fill="rgba(255,107,53,0.05)" stroke="#ff6b35" stroke-width="1.5"/>
+      <!-- виртуальная среда -->
+      <rect x="10" y="12" width="32" height="20" rx="1" fill="rgba(255,107,53,0.08)"/>
+      <!-- осциллограмма -->
+      <path d="M12 22 L16 22 L16 16 L20 16 L20 22 L24 22 L24 18 L28 18 L28 22 L32 22 L32 14 L36 14 L36 22 L40 22" stroke="#ff6b35" stroke-width="1.5" fill="none" stroke-linecap="square"/>
+      <!-- метки SIM -->
+      <rect x="10" y="12" width="10" height="4" rx="0.5" fill="rgba(255,107,53,0.3)"/>
+      <text x="11.5" y="15.5" fill="#ff6b35" font-size="4" font-family="Share Tech Mono,monospace">SIM</text>
+      <!-- подставка -->
+      <line x1="26" y1="36" x2="26" y2="40" stroke="#aa3300" stroke-width="2"/>
+      <rect x="18" y="40" width="16" height="3" rx="1" fill="#aa3300" stroke="#ff6b35" stroke-width="0.8"/>
+      <!-- кнопка Play -->
+      <circle cx="40" cy="38" r="5" fill="rgba(255,107,53,0.2)" stroke="#ff6b35" stroke-width="1"/>
+      <polygon points="38.5,36 38.5,40 42.5,38" fill="#ff6b35"/>
+    </svg>
+    <div>
+      <div class="icon-name">Симулятор</div>
+      <div class="icon-sub">Process Simulator</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  ── SCADA ICON SYSTEM · 24 ICONS · SVG FORMAT ──
+</div>
+
+</body>
+</html>

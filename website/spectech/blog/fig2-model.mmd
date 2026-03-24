@@ -1,0 +1,54 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1a73e8', 'primaryTextColor': '#fff', 'primaryBorderColor': '#4a9eff', 'lineColor': '#8ab4f8', 'secondaryColor': '#34a853', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#2d2d3f', 'nodeBorder': '#4a9eff', 'clusterBkg': '#252538', 'clusterBorder': '#4a9eff'}}}%%
+
+graph TB
+    subgraph PROM["Промысел"]
+        direction TB
+        subgraph CDNG1["ЦДНГ-1"]
+            direction LR
+            subgraph DNS1["ДНС-1"]
+                N1["Насос_1<br/><i>тип: ЦНС</i>"]
+                N2["Насос_2<br/><i>тип: ЦНС</i>"]
+                SEP["Сепаратор_1<br/><i>тип: НГС</i>"]
+            end
+            subgraph KP101["КП-101"]
+                SK1["Скважина_1<br/><i>тип: ШГН</i>"]
+                SK2["Скважина_2<br/><i>тип: ЭЦН</i>"]
+                AGZU1["АГЗУ<br/><i>тип: АГЗУ</i>"]
+            end
+            subgraph KP102["КП-102"]
+                SK3["Скважина_3<br/><i>тип: ЭЦН</i>"]
+                SK4["Скважина_4<br/><i>тип: ШГН</i>"]
+                AGZU2["АГЗУ<br/><i>тип: АГЗУ</i>"]
+            end
+            UPN1["УПН-1"]
+        end
+        subgraph CDNG2["ЦДНГ-2"]
+            direction LR
+            DOTS["..."]
+        end
+    end
+
+    subgraph TYPES["Библиотека типов"]
+        direction LR
+        T_ECN["⚙️ ЭЦН<br/>сигналы + формулы"]
+        T_SHGN["⚙️ ШГН<br/>сигналы + формулы"]
+        T_AGZU["⚙️ АГЗУ<br/>сигналы + формулы"]
+        T_CNS["⚙️ ЦНС<br/>сигналы + формулы"]
+    end
+
+    T_ECN -.->|"тиражируется"| SK2
+    T_ECN -.->|"тиражируется"| SK3
+    T_SHGN -.->|"тиражируется"| SK1
+    T_SHGN -.->|"тиражируется"| SK4
+    T_AGZU -.->|"тиражируется"| AGZU1
+    T_AGZU -.->|"тиражируется"| AGZU2
+    T_CNS -.->|"тиражируется"| N1
+    T_CNS -.->|"тиражируется"| N2
+
+    style PROM fill:#1e1e2e,stroke:#4a9eff,stroke-width:2px
+    style TYPES fill:#1c3a1c,stroke:#69db7c,stroke-width:2px
+    style CDNG1 fill:#252538,stroke:#8ab4f8
+    style CDNG2 fill:#252538,stroke:#8ab4f8
+    style DNS1 fill:#2d2d3f,stroke:#ffd43b
+    style KP101 fill:#2d2d3f,stroke:#ffd43b
+    style KP102 fill:#2d2d3f,stroke:#ffd43b
