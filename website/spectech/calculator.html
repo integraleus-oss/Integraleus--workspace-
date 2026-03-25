@@ -1267,10 +1267,107 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
           <div id="srv-sp-1" class="step-panel active">
             <div class="wizard-card-body">
               <div class="wiz-form">
+                <!-- Tag input mode selector -->
                 <div class="wiz-field">
-                  <label class="wiz-label">Количество внешних тегов/сигналов <span class="req">*</span></label>
-                  <input class="wiz-input" id="srv-tags" type="number" placeholder="1500" min="1" oninput="updateSurveyRecommendation()">
-                  <div class="wiz-hint">Только внешние теги (I/O точки подключения к оборудованию)</div>
+                  <label class="wiz-label">Как задать объём системы? <span class="req">*</span></label>
+                  <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;background:var(--ink2);border:1px solid var(--wire);border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;">
+                      <input type="radio" name="srv-input-mode" value="tags" checked style="accent-color:var(--volt)" onchange="switchInputMode()">
+                      Знаю теги
+                    </label>
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;background:var(--ink2);border:1px solid var(--wire);border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;">
+                      <input type="radio" name="srv-input-mode" value="signals" style="accent-color:var(--volt)" onchange="switchInputMode()">
+                      Знаю сигналы
+                    </label>
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;background:var(--ink2);border:1px solid var(--wire);border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);transition:all .2s;">
+                      <input type="radio" name="srv-input-mode" value="combine" style="accent-color:var(--volt)" onchange="switchInputMode()">
+                      Комбинированный
+                    </label>
+                  </div>
+                </div>
+                <div id="srv-mode-tags">
+                  <div class="wiz-field">
+                    <label class="wiz-label">Количество внешних тегов</label>
+                    <input class="wiz-input" id="srv-tags" type="number" placeholder="1500" min="1" oninput="updateSurveyRecommendation()">
+                    <div class="wiz-hint">Внешние теги (I/O точки подключения к оборудованию)</div>
+                  </div>
+                </div>
+                <div id="srv-mode-signals" style="display:none;">
+                  <div class="wiz-row">
+                    <div class="wiz-field">
+                      <label class="wiz-label">DI (дискретные входы)</label>
+                      <input class="wiz-input" id="srv-di" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()">
+                    </div>
+                    <div class="wiz-field">
+                      <label class="wiz-label">DO (дискретные выходы)</label>
+                      <input class="wiz-input" id="srv-do" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()">
+                    </div>
+                  </div>
+                  <div class="wiz-row">
+                    <div class="wiz-field">
+                      <label class="wiz-label">AI (аналоговые входы)</label>
+                      <input class="wiz-input" id="srv-ai" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()">
+                    </div>
+                    <div class="wiz-field">
+                      <label class="wiz-label">AO (аналоговые выходы)</label>
+                      <input class="wiz-input" id="srv-ao" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()">
+                    </div>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Информационная мощность</label>
+                    <select class="wiz-input wiz-select" id="srv-power-level" onchange="calcTagsFromSignals()">
+                      <option value="simple">Простой — датчики, задвижки (DI×2, DO×2, AI×3, AO×1)</option>
+                      <option value="medium" selected>Средний — регуляторы, контуры (DI×2, DO×5, AI×10, AO×1)</option>
+                      <option value="complex">Сложный — алгоритмы, MES (DI×3, DO×10, AI×10, AO×15)</option>
+                      <option value="custom">Свои коэффициенты</option>
+                    </select>
+                  </div>
+                  <div id="srv-custom-coeffs" style="display:none;">
+                    <div class="wiz-row">
+                      <div class="wiz-field"><label class="wiz-label">K(DI)</label><input class="wiz-input" id="srv-k-di" type="number" placeholder="2" min="1" value="2" oninput="calcTagsFromSignals()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(DO)</label><input class="wiz-input" id="srv-k-do" type="number" placeholder="2" min="1" value="2" oninput="calcTagsFromSignals()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(AI)</label><input class="wiz-input" id="srv-k-ai" type="number" placeholder="3" min="1" value="3" oninput="calcTagsFromSignals()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(AO)</label><input class="wiz-input" id="srv-k-ao" type="number" placeholder="1" min="1" value="1" oninput="calcTagsFromSignals()"></div>
+                    </div>
+                  </div>
+                  <div id="srv-calc-tags-result" style="margin-top:12px;padding:12px 16px;background:var(--volt-lo);border:1px solid var(--volt);border-left:4px solid var(--volt);border-radius:var(--radius);font-family:var(--mono);font-size:13px;color:var(--text);">
+                    Расчётное количество тегов: <strong id="srv-calc-tags-val" style="color:var(--volt);font-size:16px;">0</strong>
+                  </div>
+                </div>
+                <div id="srv-mode-combine" style="display:none;">
+                  <div class="wiz-row">
+                    <div class="wiz-field"><label class="wiz-label">DI</label><input class="wiz-input" id="srv-c-di" type="number" placeholder="0" min="0" oninput="calcTagsCombined()"></div>
+                    <div class="wiz-field"><label class="wiz-label">DO</label><input class="wiz-input" id="srv-c-do" type="number" placeholder="0" min="0" oninput="calcTagsCombined()"></div>
+                  </div>
+                  <div class="wiz-row">
+                    <div class="wiz-field"><label class="wiz-label">AI</label><input class="wiz-input" id="srv-c-ai" type="number" placeholder="0" min="0" oninput="calcTagsCombined()"></div>
+                    <div class="wiz-field"><label class="wiz-label">AO</label><input class="wiz-input" id="srv-c-ao" type="number" placeholder="0" min="0" oninput="calcTagsCombined()"></div>
+                  </div>
+                  <div class="wiz-field">
+                    <label class="wiz-label">Информационная мощность</label>
+                    <select class="wiz-input wiz-select" id="srv-c-power-level" onchange="calcTagsCombined()">
+                      <option value="simple">Простой (DI×2, DO×2, AI×3, AO×1)</option>
+                      <option value="medium" selected>Средний (DI×2, DO×5, AI×10, AO×1)</option>
+                      <option value="complex">Сложный (DI×3, DO×10, AI×10, AO×15)</option>
+                      <option value="custom">Свои коэффициенты</option>
+                    </select>
+                  </div>
+                  <div id="srv-c-custom-coeffs" style="display:none;">
+                    <div class="wiz-row">
+                      <div class="wiz-field"><label class="wiz-label">K(DI)</label><input class="wiz-input" id="srv-c-k-di" type="number" placeholder="2" min="1" value="2" oninput="calcTagsCombined()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(DO)</label><input class="wiz-input" id="srv-c-k-do" type="number" placeholder="2" min="1" value="2" oninput="calcTagsCombined()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(AI)</label><input class="wiz-input" id="srv-c-k-ai" type="number" placeholder="3" min="1" value="3" oninput="calcTagsCombined()"></div>
+                      <div class="wiz-field"><label class="wiz-label">K(AO)</label><input class="wiz-input" id="srv-c-k-ao" type="number" placeholder="1" min="1" value="1" oninput="calcTagsCombined()"></div>
+                    </div>
+                  </div>
+                  <div class="wiz-field" style="margin-top:8px;">
+                    <label class="wiz-label">Прочие внешние теги</label>
+                    <input class="wiz-input" id="srv-c-extra-tags" type="number" placeholder="0" min="0" oninput="calcTagsCombined()">
+                    <div class="wiz-hint">Теги, не привязанные к физическим сигналам</div>
+                  </div>
+                  <div id="srv-c-calc-tags-result" style="margin-top:12px;padding:12px 16px;background:var(--volt-lo);border:1px solid var(--volt);border-left:4px solid var(--volt);border-radius:var(--radius);font-family:var(--mono);font-size:13px;color:var(--text);">
+                    По сигналам: <strong id="srv-c-signal-val" style="color:var(--volt)">0</strong> + прочие: <strong id="srv-c-extra-val" style="color:var(--volt)">0</strong> = итого: <strong id="srv-c-total-val" style="color:var(--volt);font-size:16px;">0</strong> тегов
+                  </div>
                 </div>
 
                 <div class="wiz-row">
@@ -3340,8 +3437,60 @@ function mapServerCount(val) {
   return parseInt(val) || 1;
 }
 
+/* ── Signal-to-tag coefficients ── */
+const powerLevels = {
+  simple:  { di:2, do_:2, ai:3, ao:1 },
+  medium:  { di:2, do_:5, ai:10, ao:1 },
+  complex: { di:3, do_:10, ai:10, ao:15 }
+};
+function getCoeffs(selectId, kDiId, kDoId, kAiId, kAoId) {
+  const level = document.getElementById(selectId)?.value || 'medium';
+  if (level === 'custom') {
+    return { di: parseInt(document.getElementById(kDiId)?.value)||1, do_: parseInt(document.getElementById(kDoId)?.value)||1, ai: parseInt(document.getElementById(kAiId)?.value)||1, ao: parseInt(document.getElementById(kAoId)?.value)||1 };
+  }
+  return powerLevels[level] || powerLevels.medium;
+}
+function calcSignalTags(diId, doId, aiId, aoId, coeffs) {
+  const di=parseInt(document.getElementById(diId)?.value)||0, do_=parseInt(document.getElementById(doId)?.value)||0;
+  const ai=parseInt(document.getElementById(aiId)?.value)||0, ao=parseInt(document.getElementById(aoId)?.value)||0;
+  return (di*coeffs.di)+(do_*coeffs.do_)+(ai*coeffs.ai)+(ao*coeffs.ao);
+}
+function switchInputMode() {
+  const mode = document.querySelector('input[name="srv-input-mode"]:checked')?.value || 'tags';
+  document.getElementById('srv-mode-tags').style.display = mode==='tags' ? '' : 'none';
+  document.getElementById('srv-mode-signals').style.display = mode==='signals' ? '' : 'none';
+  document.getElementById('srv-mode-combine').style.display = mode==='combine' ? '' : 'none';
+  updateSurveyRecommendation();
+}
+function calcTagsFromSignals() {
+  const level = document.getElementById('srv-power-level')?.value;
+  document.getElementById('srv-custom-coeffs').style.display = level==='custom' ? '' : 'none';
+  const coeffs = getCoeffs('srv-power-level','srv-k-di','srv-k-do','srv-k-ai','srv-k-ao');
+  const total = calcSignalTags('srv-di','srv-do','srv-ai','srv-ao', coeffs);
+  document.getElementById('srv-calc-tags-val').textContent = total.toLocaleString('ru-RU');
+  updateSurveyRecommendation();
+}
+function calcTagsCombined() {
+  const level = document.getElementById('srv-c-power-level')?.value;
+  document.getElementById('srv-c-custom-coeffs').style.display = level==='custom' ? '' : 'none';
+  const coeffs = getCoeffs('srv-c-power-level','srv-c-k-di','srv-c-k-do','srv-c-k-ai','srv-c-k-ao');
+  const st = calcSignalTags('srv-c-di','srv-c-do','srv-c-ai','srv-c-ao', coeffs);
+  const extra = parseInt(document.getElementById('srv-c-extra-tags')?.value)||0;
+  document.getElementById('srv-c-signal-val').textContent = st.toLocaleString('ru-RU');
+  document.getElementById('srv-c-extra-val').textContent = extra.toLocaleString('ru-RU');
+  document.getElementById('srv-c-total-val').textContent = (st+extra).toLocaleString('ru-RU');
+  updateSurveyRecommendation();
+}
+function getSurveyTotalTags() {
+  const mode = document.querySelector('input[name="srv-input-mode"]:checked')?.value || 'tags';
+  if (mode==='tags') return parseInt(document.getElementById('srv-tags')?.value)||0;
+  if (mode==='signals') { const c=getCoeffs('srv-power-level','srv-k-di','srv-k-do','srv-k-ai','srv-k-ao'); return calcSignalTags('srv-di','srv-do','srv-ai','srv-ao',c); }
+  const c=getCoeffs('srv-c-power-level','srv-c-k-di','srv-c-k-do','srv-c-k-ai','srv-c-k-ao');
+  return calcSignalTags('srv-c-di','srv-c-do','srv-c-ai','srv-c-ao',c) + (parseInt(document.getElementById('srv-c-extra-tags')?.value)||0);
+}
+
 function getSurveyInputs() {
-  const tags = parseInt(document.getElementById('srv-tags')?.value) || 0;
+  const tags = getSurveyTotalTags();
   const servers = mapServerCount(document.getElementById('srv-servers')?.value || '1');
   const reserveVal = document.querySelector('input[name="srv-reserve"]:checked')?.value || 'нет';
   const reserve = (reserveVal === 'да' || reserveVal === 'не знаю');
