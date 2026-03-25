@@ -56,6 +56,20 @@ For detailed brand guidelines (palettes, typography, visual approach) of all sup
 
 → Read `references/vendor-styles.md`
 
+## Conference Templates
+
+### PROавтоматизацию 2025
+Pre-built conference template with 14 layouts (light/dark variants), proper theme colors, and placeholder structure.
+
+→ Read `references/proavtomatizaciyu-template.md`
+
+**Usage**: Open the .pptx as template base, remove sample slides, add slides using layout indices and placeholder maps. The template handles fonts, colors, backgrounds, and decorative elements automatically.
+
+**Template files** (in `templates/` directory):
+- `templates/proavtomatizaciyu-2025.pptx` — conference template (14 layouts)
+- `templates/atomicsoft-about.pptx` — Атомик Софт corporate "О компании" (13 slides, reference)
+- `templates/atomicsoft-tpu2.pptx` — Атомик Софт university presentation (17 slides, reference)
+
 ## Industry Visualization Standards
 
 - Purdue / ISA-95 architecture levels

@@ -44,12 +44,51 @@
 
 ## Russian Vendors
 
-### Атомик Софт
-- **Domain**: SCADA/HMI systems
-- **Palette**: Blue and gray
-- **Visual**: Industrial mimic diagrams, trend charts, HMI panels
-- **Focus**: Import substitution, Astra Linux / РЕД ОС compatibility
-- **Style**: Strict, engineering-oriented
+### Атомик Софт (detailed — extracted from real presentations)
+- **Domain**: SCADA/HMI/АСУ ТП — Альфа платформа (Alpha Platform)
+- **Theme name**: "Custom 2"
+- **Color scheme**:
+  - dk1: `#000000` (black text)
+  - dk2: `#6E6E6E` (gray secondary text)
+  - lt1: `#FFFFFF` (white)
+  - lt2: `#FFFFFF` (white)
+  - accent1: `#005497` (deep blue — primary brand color)
+  - accent2: `#3375AD` (medium blue)
+  - accent3: `#0997C8` (teal/cyan — links, highlights)
+  - accent4: `#52CCF7` (light cyan)
+  - accent5: `#82C444` (green)
+  - accent6: `#CDE7B4` (light green)
+  - hlink: `#0997C8`
+  - folHlink: `#CDE7B4`
+- **Additional text colors found in slides**:
+  - `#00559A` (darker blue, used for headings)
+  - `#11A0D7` (bright cyan)
+  - `#445469` (dark slate — body text)
+- **Fonts**:
+  - Major (headings): Arial
+  - Minor (body): Arial
+  - Accent font: Circe ExtraBold (used for company name, large titles)
+- **Font sizes**: 11–40pt range; titles 28–40pt, body 11–18pt, metrics 26–34pt
+- **Slide size**: 10.00 × 5.62 in (standard 16:9 at lower res)
+- **Layouts used**: Helium_Break_2 (title), General Slide (content), No Footer (special), Master Slide 1 (logos grid), Quotes, 1_Contact Us (final)
+- **Visual style**:
+  - Clean, structured engineering look
+  - Groups of icon-blocks for metrics (e.g. "120+ сотрудников", "6500+ инсталляций")
+  - Photos of industrial facilities as backgrounds with overlays
+  - Logo grids for partners/customers
+  - Two-tone approach: dark blue headers, white body
+- **Key content blocks**:
+  - Company overview with metric tiles
+  - Awards/ratings slide
+  - Value proposition (Независимость/Единая платформа/Функциональность/ИБ)
+  - Platform capabilities
+  - Architecture diagrams
+  - Project case studies (Транснефть ВСТО-II, НОВАТЭК Арктик СПГ 2, Сочинская ТЭС, СИБУР, СберСити, ВОЛМА)
+  - Partners (R&D / Технологические / Интеграторы 80+)
+  - Customer logos grid
+  - Contacts (Томск, пр. Ленина 60/1)
+- **Focus**: Import substitution, Astra Linux / РЕД ОС compatibility, ФСТЭК certification
+- **Style**: Strict, engineering-oriented, blue-dominant
 
 ### IEC Digital
 - **Domain**: Industrial digitalization, IIoT, MES
