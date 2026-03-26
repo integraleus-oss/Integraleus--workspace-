@@ -85,10 +85,10 @@ nav {
 
 .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .logo-text { 
-  font-size: 18px; font-weight: 700; letter-spacing: 2.5px; 
-  text-transform: uppercase; color: var(--text); 
+  font-size: 20px; font-weight: 400; font-family: var(--ff-heading); letter-spacing: 1.5px; 
+  color: var(--text); 
 }
-.logo-text span { color: var(--volt); }
+.logo-text span { color: inherit; }
 
 .nav-back {
   display: inline-flex; align-items: center; gap: 8px;
@@ -673,6 +673,10 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 :root.theme-light .theme-toggle .icon-moon { display:none; }
 :root.theme-light .theme-toggle .icon-sun { display:block; }
 
+::selection { background: #82C444; color: #fff; }
+::-moz-selection { background: #82C444; color: #fff; }
+option:checked, option:hover { background: #82C444; color: #fff; }
+
 /* ── SURVEY STEPS ── */
 .srv-step-dot { font-family: var(--ff-heading);
   flex:1;display:flex;align-items:center;gap:6px;padding:10px 12px;
@@ -728,9 +732,9 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
     <svg width="30" height="30" viewBox="0 0 52 52">
       <path d="M8.928 38.932h-5.48C7.935 46.737 16.348 51.999 26 51.999c3.801 0 7.405-.821 10.66-2.288v-5.137A21.325 21.325 0 0126 47.418c-6.968 0-13.156-3.333-17.072-8.486zm41.637-21.445h-4.909A21.309 21.309 0 0147.419 26c0 5.865-2.361 11.174-6.178 15.043v6.017C47.757 42.332 52 34.663 52 26c0-2.98-.51-5.845-1.435-8.513z" fill="#82C444"/>
       <path d="M0 26c0 2.922.489 5.73 1.378 8.351h4.893A21.37 21.37 0 014.581 26c0-6.573 2.964-12.454 7.629-16.385V3.962C4.878 8.56 0 16.708 0 26zM28.293.104A27.874 27.874 0 0026 0c-.775 0-1.534.042-2.293.104A25.866 25.866 0 0016.79 1.68v4.976A21.409 21.409 0 0126 4.581c6.895 0 13.026 3.26 16.942 8.325h5.517C44.314 5.808 36.904.858 28.293.104z" fill="#0997C8"/>
-      <path d="M31.928 13.114H12.215v4.228h19.484a5.32 5.32 0 015.32 5.32v.884H18.2c-4.202 0-7.608 3.37-7.686 7.55 0 .047-.005.093-.005.145 0 1.248.307 2.424.843 3.469 1.274 2.501 3.868 4.227 6.853 4.227h13.728c5.122 0 9.313-4.19 9.313-9.313v-7.197c-.005-5.142-4.175-9.313-9.318-9.313zm5.09 16.271c0 2.928-2.396 5.32-5.319 5.32H18.2a3.478 3.478 0 01-3.468-3.469 3.468 3.468 0 013.468-3.468h18.814v1.617h.005z" fill="#E0E8F0"/>
+      <path d="M31.928 13.114H12.215v4.228h19.484a5.32 5.32 0 015.32 5.32v.884H18.2c-4.202 0-7.608 3.37-7.686 7.55 0 .047-.005.093-.005.145 0 1.248.307 2.424.843 3.469 1.274 2.501 3.868 4.227 6.853 4.227h13.728c5.122 0 9.313-4.19 9.313-9.313v-7.197c-.005-5.142-4.175-9.313-9.318-9.313zm5.09 16.271c0 2.928-2.396 5.32-5.319 5.32H18.2a3.478 3.478 0 01-3.468-3.469 3.468 3.468 0 013.468-3.468h18.814v1.617h.005z" fill="#FFFFFF"/>
     </svg>
-    <div class="logo-text">АТОМИК <span>СОФТ</span></div>
+    <div class="logo-text">Атомик Софт</div>
   </a>
   <a href="https://automiq.ru" class="nav-back">← На сайт</a>
   <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему">
