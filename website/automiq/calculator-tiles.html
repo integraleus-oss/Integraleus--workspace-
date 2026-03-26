@@ -1,0 +1,3008 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рассчитайте стоимость системы — Атомик Софт</title>
+<meta name="description" content="Онлайн-калькулятор стоимости лицензий Альфа платформы. Подберите конфигурацию и оформите запрос КП.">
+<script>(function(){var t=localStorage.getItem('automiq-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&family=Montserrat:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "Circe"; src: url("https://www.automiq.ru/local/templates/automiqsoft/assets/fonts/Circe-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Circe"; src: url("https://www.automiq.ru/local/templates/automiqsoft/assets/fonts/Circe-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+:root {
+  --ink: #02040E;
+  --ink1: #080D1A;
+  --ink2: #0C1525;
+  --steel: #111B2E;
+  --wire: #1A2D48;
+  --wire2: #2D4A6A;
+  --volt: #0997C8;
+  --volt-lo: rgba(9,151,200,0.10);
+  --volt-glow: rgba(9,151,200,0.25);
+  --volt-hover: #0780A8;
+  --flame: #FF6B35;
+  --flame-lo: rgba(255,107,53,0.08);
+  --lime: #82C444;
+  --lime-lo: rgba(130,196,68,0.10);
+  --crimson: #BA0B2F;
+  --amber: #ffb800;
+  --text: #E0E8F0;
+  --text2: #8899AA;
+  --text3: #4A5A70;
+  --ff: 'Source Sans Pro', 'Open Sans', Arial, sans-serif;
+  --ff-heading: 'Circe', 'Montserrat', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --ease: cubic-bezier(.22,.68,0,1.2);
+  --glass: rgba(255,255,255,0.05);
+  --radius: 16px;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--ff);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(9,151,200,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 85% 30%, rgba(0,84,151,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 35% at 50% 85%, rgba(130,196,68,0.04) 0%, transparent 40%);
+  pointer-events: none; z-index: 0;
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--wire2); border-radius: 8px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 80px;
+  background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--wire);
+}
+
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-text { 
+  font-size: 18px; font-weight: 700; letter-spacing: 2.5px; 
+  text-transform: uppercase; color: var(--text); 
+}
+.logo-text span { color: var(--volt); }
+
+.nav-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text2); text-decoration: none; transition: color .2s;
+}
+.nav-back:hover { color: var(--volt); }
+
+/* ── CONSTRUCTOR LAYOUT ── */
+.constructor {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 32px 32px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.tiles-panel {}
+
+.tiles-header {
+  text-align: center;
+  padding: 48px 0 40px;
+}
+
+.tiles-header h1 {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.tiles-header h1 span {
+  color: var(--volt);
+}
+
+.tiles-header p {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.tile {
+  background: var(--ink1);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all .3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile:hover {
+  border-color: var(--volt);
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+.tile.open {
+  grid-column: 1 / -1;
+  background: rgba(255,255,255,0.06);
+  border-color: var(--volt);
+  cursor: default;
+}
+
+.tile-icon {
+  margin-bottom: 12px;
+  color: var(--volt);
+}
+
+.tile-label { font-family: var(--ff-heading);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.tile-value {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tile-expand {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.tile.open .tile-expand {
+  display: block;
+  animation: fadeIn .3s ease;
+}
+
+.tile-accent {
+  border-color: rgba(0,212,255,0.20);
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(124,77,255,0.06));
+}
+
+/* ── RESULT STICKY PANEL ── */
+.result-sticky {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  background: var(--ink1);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+}
+
+.result-head {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--wire);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-head-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--lime);
+  animation: blink-g 1.2s ease-in-out infinite;
+}
+
+@keyframes blink-g { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+.result-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--wire);
+  gap: 10px;
+}
+
+.result-line:last-of-type { border-bottom: none; }
+
+.r-name { font-size: 12px; color: var(--text2); line-height: 1.4; }
+.r-val { font-family: var(--mono); font-size: 12px; color: var(--text); word-break: break-word; }
+.r-val.accent { color: var(--volt); }
+.r-val.muted { color: var(--text3); }
+
+.result-total-block {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-left: 3px solid var(--volt);
+  border-radius: var(--radius);
+}
+
+.result-total-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 6px;
+}
+
+.result-total-val {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+}
+
+.result-total-note {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+.result-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--ff);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all .25s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  width: 100%;
+  padding: 13px 22px;
+  font-size: 12px;
+  border-radius: var(--radius);
+}
+
+.btn-volt {
+  background: #0997C8;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(9,151,200,0.25);
+  border: none;
+  border-radius: 12px;
+}
+
+.btn-volt:hover {
+  box-shadow: 0 6px 24px rgba(0,212,255,0.35), 0 0 50px rgba(124,77,255,0.2);
+  transform: translateY(-1px);
+}
+
+.btn-lime {
+  background: var(--lime);
+  color: #000;
+  box-shadow: 0 4px 16px rgba(118,255,3,0.3);
+}
+
+.btn-lime:hover {
+  background: #82C444;
+  box-shadow: 0 6px 24px rgba(118,255,3,0.35);
+  transform: translateY(-1px);
+}
+
+/* ── FORM ELEMENTS ── */
+.product-select-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.prod-option {
+  position: relative;
+  cursor: pointer;
+}
+
+.prod-option input[type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.prod-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  height: 110px;
+  background: var(--ink2);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color .25s, background .25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.prod-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--volt);
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+
+.prod-option input:checked + .prod-label {
+  border-color: var(--volt);
+  background: var(--volt-lo);
+}
+
+.prod-option input:checked + .prod-label::before {
+  transform: scaleX(1);
+}
+
+.prod-label:hover {
+  border-color: var(--wire2);
+}
+
+.prod-label-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.prod-label-vendor {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.prod-label-base {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--volt);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.prod-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--wire2);
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .2s, background .2s;
+}
+
+.prod-check svg {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.prod-option input:checked ~ .prod-label .prod-check {
+  background: var(--volt);
+  border-color: var(--volt);
+}
+
+.prod-option input:checked ~ .prod-label .prod-check svg {
+  opacity: 1;
+}
+
+/* ── SLIDERS ── */
+.field-row { margin-bottom: 22px; }
+.field-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 10px;
+}
+.field-lbl {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+}
+.field-val {
+  font-family: var(--mono); font-size: 14px; color: var(--volt); font-weight: 500;
+}
+input[type=range] {
+  -webkit-appearance: none; width: 100%; height: 4px;
+  background: var(--wire); border-radius: 2px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--volt); cursor: pointer;
+  box-shadow: 0 2px 8px var(--volt-glow); border: 3px solid var(--ink1);
+  transition: transform .2s ease;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+/* ── CHECKBOXES ── */
+.addon-check {
+  display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: var(--mono);
+}
+.addon-check input[type=checkbox] {
+  accent-color: var(--lime); width: 14px; height: 14px; cursor: pointer;
+}
+
+/* ── SELECTS ── */
+.addon-select {
+  width: 100%; padding: 8px 12px; background: var(--ink2); border: 1px solid var(--wire);
+  border-radius: var(--radius); color: var(--text); font-family: var(--mono); font-size: 12px;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2300c8f0'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  cursor: pointer; transition: border-color .2s;
+}
+.addon-select:focus { outline: none; border-color: var(--volt); }
+.addon-select option { background: #080D1A; color: #E0E8F0; }
+
+/* ── PROJECT CART ── */
+.project-cart {
+  background: var(--ink1); border: 1px solid var(--wire); border-radius: var(--radius);
+  overflow: hidden; animation: fadeIn .3s ease; display: none; margin-top: 24px;
+}
+.project-cart.show { display: block; }
+
+.cart-header {
+  padding: 12px 16px; background: var(--steel); border-bottom: 1px solid var(--wire);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-header-title {
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text2);
+  display: flex; align-items: center; gap: 10px;
+}
+.cart-count-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 20px; height: 20px; padding: 0 6px;
+  background: var(--lime); color: #ffffff; font-family: var(--mono);
+  font-size: 10px; font-weight: 500; border-radius: var(--radius);
+}
+
+.cart-body { padding: 12px; }
+
+.cart-item {
+  display: flex; gap: 16px; padding: 16px; background: var(--ink2);
+  border: 1px solid var(--wire); border-radius: var(--radius); margin-bottom: 12px;
+  position: relative;
+}
+.cart-item:last-child { margin-bottom: 0; }
+
+.cart-item-number {
+  flex: 0 0 32px; height: 32px; border-radius: 8px; background: var(--volt-lo);
+  border: 1px solid var(--volt); display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--volt);
+}
+
+.cart-item-details {
+  flex: 1; display: flex; flex-direction: column; gap: 8px;
+}
+.cart-item-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+}
+.cart-item-product {
+  font-size: 14px; font-weight: 700; color: var(--text);
+}
+.cart-item-sku {
+  font-family: var(--mono); font-size: 11px; color: var(--volt); margin-top: 2px;
+}
+.cart-item-price {
+  font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text);
+  text-align: right;
+}
+
+.cart-item-meta {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+}
+.cart-meta-item {
+  display: inline-flex; gap: 4px;
+}
+.cart-meta-item:not(:last-child)::after {
+  content: '·'; color: var(--text3); margin-left: 8px;
+}
+.cart-meta-label { color: var(--text3); }
+.cart-meta-value { color: var(--text); }
+
+.cart-item-addons {
+  font-family: var(--mono); font-size: 10px; color: var(--text2);
+  line-height: 1.5;
+}
+
+.cart-item-delete {
+  position: absolute; top: 8px; right: 8px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--wire); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3); transition: all .2s;
+  font-size: 14px; line-height: 1;
+}
+.cart-item-delete:hover {
+  background: var(--crimson); color: #ffffff;
+}
+
+.cart-footer {
+  padding: 12px 16px; border-top: 1px solid var(--wire);
+  background: var(--steel);
+}
+.cart-total-block {
+  padding: 16px; background: var(--ink1); border: 1px solid var(--wire);
+  border-left: 3px solid var(--lime); border-radius: var(--radius); margin-bottom: 16px;
+}
+.cart-total-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+}
+.cart-total-val {
+  font-size: 24px; font-weight: 900; color: var(--text); line-height: 1;
+}
+.cart-total-note {
+  font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 6px;
+}
+
+/* ── CONTACT FORM ── */
+.contact-form {
+  background: var(--ink1);
+  border: 1px solid var(--wire);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.contact-head {
+  padding: 16px 20px;
+  background: var(--steel);
+  border-bottom: 1px solid var(--wire);
+}
+
+.contact-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.contact-body {
+  padding: 20px 24px;
+}
+
+/* ── SURVEY INTEGRATION ── */
+.survey-fields { display: none; }
+.survey-fields.show { display: block; }
+
+/* ── LIGHT THEME ── */
+:root.theme-light {
+  --ink:#F5F5F5; --ink1:rgba(0,0,0,0.03); --ink2:rgba(0,0,0,0.02);
+  --steel:rgba(0,0,0,0.05); --wire:rgba(0,0,0,0.08); --wire2:rgba(0,0,0,0.12);
+  --volt:#005497; --volt-lo:rgba(0,119,204,0.08); --volt-glow:rgba(0,119,204,0.20); --volt-hover:#005497;
+  --flame:#FF6B35; --flame-lo:rgba(232,85,37,0.08);
+  --lime:#559618; --lime-lo:rgba(46,139,46,0.08);
+  --crimson:#BA0B2F; --amber:#a88200;
+  --text:#1A2332; --text2:rgba(26,30,46,0.55); --text3:rgba(26,30,46,0.30);
+  --glass:rgba(255,255,255,0.80);
+  color-scheme:light;
+}
+:root.theme-light body { background:#F5F5F5; }
+:root.theme-light body::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(0,84,151,0.05) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 85% 30%, rgba(9,151,200,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 35% at 50% 85%, rgba(130,196,68,0.03) 0%, transparent 40%);
+}
+:root.theme-light nav { background:rgba(255,255,255,0.85); border-bottom-color:rgba(0,0,0,0.08); }
+:root.theme-light .tile { background:#FFFFFF; border-color:rgba(0,0,0,0.08); backdrop-filter:blur(12px); }
+:root.theme-light .tile:hover { border-color:rgba(0,119,204,0.25); background:rgba(255,255,255,0.80); box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+:root.theme-light .tile.open { background:rgba(255,255,255,0.80); border-color:rgba(0,119,204,0.30); }
+:root.theme-light .result-sticky { background:#FFFFFF; border-color:rgba(0,0,0,0.08); box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+:root.theme-light .btn-volt { background:#005497; }
+:root.theme-light .addon-select { background:rgba(255,255,255,0.8); border-color:rgba(0,0,0,0.10); color:var(--text); }
+:root.theme-light .addon-select option { background:#fff; color:#1A2332; }
+:root.theme-light .toast { background:#005497; }
+:root.theme-light .sla-card, :root.theme-light .tile-expand label { background:rgba(0,0,0,0.03); border-color:rgba(0,0,0,0.08); }
+.theme-toggle { display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid var(--volt);border-radius:50%;background:transparent;cursor:pointer;transition:all .2s;color:var(--volt);flex-shrink:0; }
+.theme-toggle:hover { background:var(--volt);color:#fff; }
+.theme-toggle .icon-moon { display:block; }
+.theme-toggle .icon-sun { display:none; }
+:root.theme-light .theme-toggle .icon-moon { display:none; }
+:root.theme-light .theme-toggle .icon-sun { display:block; }
+
+/* ── SURVEY STEPS ── */
+.srv-step-dot { font-family: var(--ff-heading);
+  flex:1;display:flex;align-items:center;gap:6px;padding:10px 12px;
+  border-radius:var(--radius);font-size:11px;font-weight:600;color:var(--text3);
+  cursor:pointer;transition:all .2s;border:1px solid transparent;
+}
+.srv-step-dot span {
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  background:var(--ink2);border:1px solid var(--wire);color:var(--text3);flex-shrink:0;
+}
+.srv-step-dot.active { color:var(--volt);border-color:var(--volt);background:var(--volt-lo); }
+.srv-step-dot.active span { background:var(--volt);color:#fff;border-color:var(--volt); }
+.srv-step-dot.done { color:var(--lime); }
+.srv-step-dot.done span { background:var(--lime-lo);border-color:var(--lime);color:var(--lime); }
+.srv-frame { animation: fadeIn .3s ease; }
+@media (max-width:600px) { .srv-step-dot { font-family: var(--ff-heading); font-size:0;gap:0;padding:8px;justify-content:center; } }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 860px) {
+  .constructor { grid-template-columns: 1fr; }
+  .result-sticky { position: static; margin-top: 24px; }
+  .tiles-grid { grid-template-columns: 1fr 1fr; }
+  nav { padding: 12px 16px; height: 64px; }
+  .constructor { padding-top: 64px; }
+}
+
+@media (max-width: 480px) {
+  .tiles-grid { grid-template-columns: 1fr; }
+  .product-select-grid { grid-template-columns: 1fr; }
+  .logo-text { font-size: 16px; }
+}
+
+/* ── TOAST NOTIFICATIONS ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #0997C8; color: #fff; padding: 14px 28px;
+  border-radius: var(--radius); font-family: var(--ff); font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,212,255,0.3), 0 0 40px rgba(124,77,255,0.15); z-index: 9999;
+  opacity: 0; transition: transform .35s var(--ease), opacity .35s ease;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0); opacity: 1;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="https://automiq.ru" class="logo">
+    <svg width="30" height="30" viewBox="0 0 52 52">
+      <path d="M8.928 38.932h-5.48C7.935 46.737 16.348 51.999 26 51.999c3.801 0 7.405-.821 10.66-2.288v-5.137A21.325 21.325 0 0126 47.418c-6.968 0-13.156-3.333-17.072-8.486zm41.637-21.445h-4.909A21.309 21.309 0 0147.419 26c0 5.865-2.361 11.174-6.178 15.043v6.017C47.757 42.332 52 34.663 52 26c0-2.98-.51-5.845-1.435-8.513z" fill="#82C444"/>
+      <path d="M0 26c0 2.922.489 5.73 1.378 8.351h4.893A21.37 21.37 0 014.581 26c0-6.573 2.964-12.454 7.629-16.385V3.962C4.878 8.56 0 16.708 0 26zM28.293.104A27.874 27.874 0 0026 0c-.775 0-1.534.042-2.293.104A25.866 25.866 0 0016.79 1.68v4.976A21.409 21.409 0 0126 4.581c6.895 0 13.026 3.26 16.942 8.325h5.517C44.314 5.808 36.904.858 28.293.104z" fill="#0997C8"/>
+      <path d="M31.928 13.114H12.215v4.228h19.484a5.32 5.32 0 015.32 5.32v.884H18.2c-4.202 0-7.608 3.37-7.686 7.55 0 .047-.005.093-.005.145 0 1.248.307 2.424.843 3.469 1.274 2.501 3.868 4.227 6.853 4.227h13.728c5.122 0 9.313-4.19 9.313-9.313v-7.197c-.005-5.142-4.175-9.313-9.318-9.313zm5.09 16.271c0 2.928-2.396 5.32-5.319 5.32H18.2a3.478 3.478 0 01-3.468-3.469 3.468 3.468 0 013.468-3.468h18.814v1.617h.005z" fill="#E0E8F0"/>
+    </svg>
+    <div class="logo-text">АТОМИК <span>СОФТ</span></div>
+  </a>
+  <a href="https://automiq.ru" class="nav-back">← На сайт</a>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему">
+    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+</nav>
+
+<div class="constructor">
+  <!-- LEFT: Tile Grid -->
+  <div class="tiles-panel">
+    <div class="tiles-header">
+      <h1>Рассчитайте <span>стоимость</span></h1>
+      <p>Выберите параметры вашей системы</p>
+    </div>
+    
+    <div class="tiles-grid">
+      <!-- TILE 1: Product -->
+      <!-- TILE 9: Survey mode (opens survey wizard) -->
+      <div class="tile tile-accent" id="tile-survey" style="grid-column:1/-1" onclick="toggleTile('survey')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="tile-label">Помощь в подборе</div>
+        <div class="tile-value">Ответьте на 5 вопросов →</div>
+        <div class="tile-expand" id="te-survey">
+          <div id="panel-survey" style="margin:-16px;border-top:1px solid var(--wire);padding-top:16px;">
+            
+            <!-- PROGRESS BAR -->
+            <div style="display:flex;gap:4px;margin-bottom:24px;" id="srv-progress">
+              <div class="srv-step-dot active" data-step="1" onclick="goSrvStep(1)"><span>1</span> Масштаб</div>
+              <div class="srv-step-dot" data-step="2" onclick="goSrvStep(2)"><span>2</span> Клиенты</div>
+              <div class="srv-step-dot" data-step="3" onclick="goSrvStep(3)"><span>3</span> Архив и отчёты</div>
+              <div class="srv-step-dot" data-step="4" onclick="goSrvStep(4)"><span>4</span> Протоколы</div>
+              <div class="srv-step-dot" data-step="5" onclick="goSrvStep(5)"><span>5</span> Результат</div>
+            </div>
+
+            <!-- STEP 1: Масштаб -->
+            <div class="srv-frame" id="srv-frame-1">
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;">Масштаб вашей системы</div>
+              
+              <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text2);margin-bottom:8px;">Как задать объём? <span style="color:var(--volt)">*</span></div>
+              <div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;">
+                <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);">
+                  <input type="radio" name="srv-input-mode" value="tags" checked style="accent-color:var(--volt)" onchange="switchInputMode()"> Знаю теги
+                </label>
+                <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);">
+                  <input type="radio" name="srv-input-mode" value="signals" style="accent-color:var(--volt)" onchange="switchInputMode()"> Знаю сигналы
+                </label>
+              </div>
+
+              <div id="srv-mode-tags">
+                <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">Количество тегов</div>
+                <input class="addon-select" id="srv-tags" type="number" placeholder="1500" min="1" oninput="updateSurveyRecommendation();checkTagLimit()" style="width:100%;margin-bottom:4px;">
+                <div id="tag-limit-warn" style="display:none;margin-bottom:8px;padding:10px 14px;background:var(--flame-lo);border-left:3px solid var(--flame);border-radius:8px;font-size:12px;color:var(--flame);line-height:1.5;">
+                  Данный калькулятор рассчитан только до 2 000 000 тегов. Для расчёта вашего проекта обратитесь в компанию <a href="https://automiq.ru" style="color:var(--volt);text-decoration:underline;">Атомик Софт</a>.
+                </div>
+                <div style="font-size:10px;color:var(--text3)">150 — котельная · 1 500 — цех · 15 000 — завод · 50 000+ — холдинг</div>
+              </div>
+
+              <div id="srv-mode-signals" style="display:none;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                  <div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;">DI (дискр. вх.)</div><input class="addon-select" id="srv-di" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()" style="width:100%;"></div>
+                  <div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;">DO (дискр. вых.)</div><input class="addon-select" id="srv-do" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()" style="width:100%;"></div>
+                  <div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;">AI (аналог. вх.)</div><input class="addon-select" id="srv-ai" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()" style="width:100%;"></div>
+                  <div><div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;">AO (аналог. вых.)</div><input class="addon-select" id="srv-ao" type="number" placeholder="0" min="0" oninput="calcTagsFromSignals()" style="width:100%;"></div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:4px;">Тип системы</div>
+                <select class="addon-select" id="srv-power-level" onchange="calcTagsFromSignals()" style="width:100%;margin-bottom:8px;">
+                  <option value="simple">Простая — датчики, задвижки</option>
+                  <option value="medium" selected>Средняя — регуляторы, контуры</option>
+                  <option value="complex">Сложная — PID, MES</option>
+                </select>
+                <div id="srv-calc-tags-result" style="padding:10px 14px;background:var(--volt-lo);border-left:3px solid var(--volt);border-radius:8px;font-family:var(--mono);font-size:13px;color:var(--text);">
+                  Расчёт: <strong id="srv-calc-tags-val" style="color:var(--volt);font-size:16px;">0</strong> точек
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">Серверов <span style="color:var(--volt)">*</span></div>
+                  <input type="number" class="addon-select" id="srv-servers" min="1" max="100" value="1" placeholder="1" oninput="if(this.value>100)this.value=100;updateSurveyRecommendation()" style="width:100%;">
+                </div>
+                <div id="srv-reserve-wrap">
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">Резервирование</div>
+                  <div style="display:flex;gap:12px;margin-top:4px;">
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-reserve" value="да" style="accent-color:var(--volt)" onchange="updateSurveyRecommendation()"> Да</label>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-reserve" value="нет" checked style="accent-color:var(--volt)" onchange="updateSurveyRecommendation()"> Нет</label>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text3)"><input type="radio" name="srv-reserve" value="не знаю" style="accent-color:var(--volt)" onchange="updateSurveyRecommendation()"> ?</label>
+                  </div>
+                </div>
+              </div>
+
+              <div id="srv-hint-box" style="margin-top:16px;padding:12px 16px;background:var(--volt-lo);border-left:3px solid var(--volt);border-radius:8px;display:flex;align-items:center;gap:10px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#0997C8" stroke-width="1.5"/></svg>
+                <div style="font-size:13px;color:var(--text);font-weight:500;" id="srv-hint-text">Рекомендуем: Alpha.One+</div>
+              </div>
+            </div>
+
+            <!-- STEP 2: Клиенты -->
+            <div class="srv-frame" id="srv-frame-2" style="display:none;">
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;">Рабочие места операторов</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">Полные клиенты (АРМ)</div>
+                  <input class="addon-select" id="srv-full-clients" type="number" placeholder="0" min="0" max="200" oninput="if(this.value>200)this.value=200" style="width:100%;">
+                  <div style="font-size:10px;color:var(--text3);margin-top:3px;">Станции с полным управлением</div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:6px;">WEB-мониторинг</div>
+                  <select class="addon-select" id="srv-web-clients" style="width:100%;">
+                    <option value="0">Не нужен</option>
+                    <option value="10">до 10</option><option value="25">до 25</option><option value="50">до 50</option>
+                    <option value="100">до 100</option><option value="250">250+</option><option value="999">Безлимит</option>
+                  </select>
+                  <div style="font-size:10px;color:var(--text3);margin-top:3px;">Только просмотр, без управления</div>
+                </div>
+              </div>
+              <div id="srv-client-warning" style="display:none;margin-top:12px;padding:10px 14px;background:var(--flame-lo);border-left:3px solid var(--flame);border-radius:8px;font-size:12px;color:var(--flame);">
+                One+ не поддерживает доп. клиентов — выберите 2+ сервера или резервирование
+              </div>
+              <div id="srv-platform-client-hint" style="display:none;margin-top:12px;padding:10px 14px;background:var(--lime-lo);border-left:3px solid var(--lime);border-radius:8px;font-size:12px;color:var(--lime);">
+                Alpha.Platform уже включает 1 полный клиент (CL-F). Укажите только <strong>дополнительных</strong>.
+              </div>
+            </div>
+
+            <!-- STEP 3: Архив и отчёты -->
+            <div class="srv-frame" id="srv-frame-3" style="display:none;">
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;">Архивирование и отчёты</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;">Архив данных (Historian)</div>
+                  <div style="display:flex;gap:12px;margin-bottom:8px;">
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-historian" value="да" style="accent-color:var(--volt)" onchange="toggleHistorianFields()"> Нужен</label>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-historian" value="нет" checked style="accent-color:var(--volt)" onchange="toggleHistorianFields()"> Не нужен</label>
+                  </div>
+                  <div id="srv-historian-fields" style="display:none;">
+                    <input class="addon-select" id="srv-hist-tags" type="number" placeholder="Кол-во тегов" min="1" oninput="checkHistTagLimit()" style="width:100%;margin-bottom:2px;">
+                    <div id="hist-tag-limit-warn" style="display:none;margin-bottom:6px;padding:8px 12px;background:var(--flame-lo);border-left:3px solid var(--flame);border-radius:8px;font-size:11px;color:var(--flame);line-height:1.4;">
+                      Historian рассчитан до 2 000 000 тегов. Для большего объёма обратитесь в <a href="https://automiq.ru" style="color:var(--volt);">Атомик Софт</a>.
+                    </div>
+                    <div style="font-size:10px;color:var(--text3)">Обычно ≤ количества точек системы</div>
+                    <div style="margin-top:8px;display:flex;gap:12px;">
+                      <label style="font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="radio" name="srv-hist-reserve" value="да" style="accent-color:var(--volt)"> С резервом</label>
+                      <label style="font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer;"><input type="radio" name="srv-hist-reserve" value="нет" checked style="accent-color:var(--volt)"> Без</label>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;">Отчёты (Reports)</div>
+                  <div style="display:flex;gap:12px;margin-bottom:8px;">
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-reports" value="да" style="accent-color:var(--volt)" onchange="toggleReportsFields()"> Нужны</label>
+                    <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;"><input type="radio" name="srv-reports" value="нет" checked style="accent-color:var(--volt)" onchange="toggleReportsFields()"> Не нужны</label>
+                  </div>
+                  <div id="srv-reports-fields" style="display:none;">
+                    <input class="addon-select" id="srv-rpt-tags" type="number" placeholder="Кол-во тегов" min="1" style="width:100%;margin-bottom:6px;">
+                    <select class="addon-select" id="srv-rpt-users" style="width:100%;">
+                      <option value="1">1 пользователь</option><option value="5">5</option><option value="10">10</option>
+                      <option value="25">25</option><option value="50">50</option><option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 4: Протоколы -->
+            <div class="srv-frame" id="srv-frame-4" style="display:none;">
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;">Протоколы оборудования</div>
+              <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Базовые (OPC UA, Modbus, MQTT, SNMP) включены в любой продукт</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-61850" style="accent-color:var(--volt)"> МЭК 61850
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-104" style="accent-color:var(--volt)"> МЭК 60870-5-104
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-101" style="accent-color:var(--volt)"> МЭК 60870-5-101
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-tem" style="accent-color:var(--volt)"> ТЭМ-104
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-bacnet" style="accent-color:var(--volt)"> BACnet
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-s7" style="accent-color:var(--volt)"> Siemens S7
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-eip" style="accent-color:var(--volt)"> Ethernet/IP
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-fins" style="accent-color:var(--volt)"> FINS (Omron)
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-opcda-cl" style="accent-color:var(--volt)"> OPC DA клиент
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="srv-prot-opcda-srv" style="accent-color:var(--volt)"> OPC DA сервер
+                </label>
+              </div>
+
+            </div>
+
+            <!-- STEP 5: Результат -->
+            <div class="srv-frame" id="srv-frame-5" style="display:none;">
+              <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:16px;">Готово! Применить к калькулятору?</div>
+              <div id="srv-hint-box-2" style="padding:14px 18px;background:var(--volt-lo);border-left:3px solid var(--volt);border-radius:8px;margin-bottom:16px;">
+                <div style="font-size:13px;color:var(--text);font-weight:500;" id="srv-hint-text-2">Рекомендация будет рассчитана</div>
+              </div>
+              <button class="btn btn-volt" onclick="applySurveyToCalculator()" style="width:100%;">
+                Применить рекомендацию →
+              </button>
+            </div>
+
+            <!-- NAV BUTTONS -->
+            <div style="display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--wire);">
+              <button class="btn btn-volt" id="srv-btn-prev" onclick="goSrvStep(srvStep-1)" style="display:none;padding:10px 20px;font-size:12px;">← Назад</button>
+              <div style="flex:1"></div>
+              <button class="btn btn-volt" id="srv-btn-next" onclick="goSrvStep(srvStep+1)" style="padding:10px 20px;font-size:12px;">Далее →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tile" id="tile-product" onclick="toggleTile('product')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="4" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="4" y="6" width="16" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="0.8"/>
+            <line x1="6" y1="12" x2="18" y2="12" stroke="currentColor" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="tile-label">Продукт</div>
+        <div class="tile-value" id="tv-product">Альфа платформа</div>
+        <div class="tile-expand" id="te-product">
+          <div class="product-select-grid">
+            <div class="prod-option">
+              <input type="radio" name="product" id="p1" value="alpha-one" checked onchange="updateSliderRange();calcUpdate()">
+              <label class="prod-label" for="p1">
+                <div class="prod-check">
+                  <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#E0E8F0" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div class="prod-label-name">Alpha.One+</div>
+                <div class="prod-label-vendor">Одна станция · до 50 000 точек</div>
+                <div class="prod-label-base">Однопользовательский комплект без функции резервирования</div>
+              </label>
+            </div>
+            <div class="prod-option">
+              <input type="radio" name="product" id="p2" value="alpha-scada" onchange="updateSliderRange();calcUpdate()">
+              <label class="prod-label" for="p2">
+                <div class="prod-check">
+                  <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#E0E8F0" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div class="prod-label-name">Alpha.SCADA</div>
+                <div class="prod-label-vendor">Клиент-сервер · до 150 000 точек</div>
+                <div class="prod-label-base">Объекты управления с клиент-серверной архитектурой</div>
+              </label>
+            </div>
+            <div class="prod-option">
+              <input type="radio" name="product" id="p3" value="alpha-platform" onchange="updateSliderRange();calcUpdate()">
+              <label class="prod-label" for="p3">
+                <div class="prod-check">
+                  <svg width="8" height="8" viewBox="0 0 10 10" fill="none"><polyline points="1,5 4,8 9,2" stroke="#E0E8F0" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div class="prod-label-name">Alpha.Platform</div>
+                <div class="prod-label-vendor">Мультисервер · до 2 000 000 точек</div>
+                <div class="prod-label-base">Крупные объекты — много серверов, полный контроль</div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 2: Tags -->
+      <div class="tile" id="tile-tags" onclick="toggleTile('tags')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="7" y1="7" x2="7.01" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="tile-label">Объём системы</div>
+        <div class="tile-value" id="tv-tags">1 500</div>
+        <div class="tile-expand" id="te-tags">
+          <div class="field-row">
+            <div class="field-head">
+              <div class="field-lbl">Количество тегов</div>
+              <div class="field-val" id="qty-val">1500</div>
+            </div>
+            <input type="range" min="150" max="50000" value="1500" id="qty-slider" 
+                   step="1" oninput="sliderChanged()">
+            <div id="slider-labels" style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text3);line-height:1.6">150 — котельная · 1 500 — цех · 15 000 — завод · 50 000+ — холдинг</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 3: License Term -->
+      <div class="tile" id="tile-term" onclick="toggleTile('term')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+            <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="tile-label">Срок лицензии</div>
+        <div class="tile-value" id="tv-term">Бессрочная</div>
+        <div class="tile-expand" id="te-term">
+          <div class="field-row">
+            <div class="field-head">
+              <div class="field-lbl">На какой срок?</div>
+              <div class="field-val" id="term-val">Бессрочная</div>
+            </div>
+            <input type="range" min="1" max="3" value="1" id="term-slider"
+              oninput="const v=['Бессрочная','1 год','3 года'][this.value-1]; document.getElementById('term-val').textContent=v; calcUpdate()">
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--text3)">
+              <span>Бессрочная</span><span>1 год</span><span>3 года</span>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text3);line-height:1.6">Бессрочная = навсегда · 1 год = экономия 60% · 3 года = экономия 15%</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 4: Clients -->
+      <div class="tile" id="tile-clients" onclick="toggleTile('clients')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="tile-label">Рабочие места</div>
+        <div class="tile-value" id="tv-clients">Не требуются</div>
+        <div class="tile-expand" id="te-clients">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">Рабочее место оператора (CL-F) <span id="clf-note" style="display:none;font-size:10px;color:var(--lime);font-family:var(--mono)">1 включён в Platform</span></div>
+              <input type="number" id="addon-client-num" class="addon-select" min="0" max="200" value="0" placeholder="0" oninput="if(this.value>parseInt(this.max))this.value=this.max;syncClientSelect();calcUpdate()" style="width:100%;">
+              <select id="addon-client" style="display:none;" onchange="calcUpdate()">
+                <option value=""></option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">WEB-мониторинг (только просмотр)</div>
+              <select id="addon-web" class="addon-select" onchange="calcUpdate()">
+                <option value="">Не нужны</option>
+                <option value="CL-RO10">до 10 пользователей</option>
+                <option value="CL-RO25">до 25 пользователей</option>
+                <option value="CL-RO50">до 50 пользователей</option>
+                <option value="CL-RO100">до 100 пользователей</option>
+                <option value="AP-CL-RO250">до 250 пользователей</option>
+                <option value="AP-CL-ROUNL">Без ограничений</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 5: Historian -->
+      <div class="tile" id="tile-historian" onclick="toggleTile('historian')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3v5h5M3 17v4h4M21 21v-5h-5M21 7V3h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="tile-label">Архив данных</div>
+        <div class="tile-value" id="tv-historian">Не подключён</div>
+        <div class="tile-expand" id="te-historian">
+          <div class="addon-product" style="margin-bottom:10px">
+            <label class="addon-check" style="font-size:13px;font-family:var(--ff)">
+              <input type="checkbox" id="add-historian" onchange="toggleAddonProduct('historian');calcUpdate()">
+              <span style="color:var(--volt);font-weight:600">Alpha.Historian</span>
+              <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Запись истории показаний для анализа</span>
+            </label>
+            <div id="historian-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                <span style="font-size:11px;color:var(--text);font-family:var(--mono)" id="hist-qty-val">1 k</span>
+              </div>
+              <input type="range" min="0" max="16" value="5" id="hist-slider" step="1" oninput="histSliderChanged()">
+              <div id="hist-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--text3)"></div>
+              <div style="margin-top:10px;display:flex;gap:12px;align-items:center;">
+                <span style="font-size:11px;color:var(--text3)">Резервирование:</span>
+                <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;color:var(--text2);">
+                  <input type="checkbox" id="addon-hist-reserve" onchange="calcUpdate()" style="accent-color:var(--volt);">
+                  Да (×2 стоимость)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 6: Reports -->
+      <div class="tile" id="tile-reports" onclick="toggleTile('reports')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 7h10M7 12h7M7 17h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="tile-label">Отчёты</div>
+        <div class="tile-value" id="tv-reports">Не подключены</div>
+        <div class="tile-expand" id="te-reports">
+          <div class="addon-product">
+            <label class="addon-check" style="font-size:13px;font-family:var(--ff)">
+              <input type="checkbox" id="add-reports" onchange="toggleAddonProduct('reports');calcUpdate()">
+              <span style="color:var(--volt);font-weight:600">Alpha.Reports</span>
+              <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Автоматические отчёты и ведомости</span>
+            </label>
+            <div id="reports-slider-wrap" style="display:none; margin-top:8px; padding-left:22px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:11px;color:var(--text3)">Количество тегов</span>
+                <span style="font-size:11px;color:var(--text);font-family:var(--mono)" id="rpt-qty-val">1 k</span>
+              </div>
+              <input type="range" min="0" max="8" value="4" id="rpt-slider" step="1" oninput="rptSliderChanged()">
+              <div id="rpt-slider-labels" style="display:flex;justify-content:space-between;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--text3)"></div>
+            </div>
+          </div>
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--wire);">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">Пользователи отчётов</div>
+            <select id="addon-rpt-cl" class="addon-select" onchange="calcUpdate()">
+              <option value="">Не нужны</option>
+              <option value="RPT-CL1">1 пользователь</option>
+              <option value="RPT-CL5">5 пользователей</option>
+              <option value="RPT-CL10">10 пользователей</option>
+              <option value="RPT-CL25">25 пользователей</option>
+              <option value="RPT-CL50">50 пользователей</option>
+              <option value="RPT-CL100">100 пользователей</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 7: Drivers -->
+      <div class="tile" id="tile-drivers" onclick="toggleTile('drivers')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M6 10h12v2H6z" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="tile-label">Протоколы связи</div>
+        <div class="tile-value" id="tv-drivers">Базовый</div>
+        <div class="tile-expand" id="te-drivers">
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="margin-bottom: 8px;">
+              <div style="font-size:11px;color:var(--text3);margin-bottom:12px;padding:10px 14px;background:var(--ink2);border-radius:8px;line-height:1.6;">
+                <strong style="color:var(--text2);">Базовый пакет (входит в любой продукт):</strong> OPC UA · OPC DA · Modbus TCP/RTU · MQTT · SNMP
+              </div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">Дополнительные протоколы <span id="drv-note" style="display:none;font-size:10px;color:var(--lime);font-family:var(--mono)">включены в Platform</span></div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-energy" onchange="calcUpdate()"> DRV-PACK-ENERGY <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Энергетика: МЭК 61850, ТЭМ-104</span></label>
+                <label class="addon-check"><input type="checkbox" id="addon-industry" onchange="calcUpdate()"> DRV-PACK-INDUSTRY <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Промышленность: BACnet, S7, Ethernet/IP</span></label>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">OPC DA (отдельный компьютер)</div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-cl" onchange="calcUpdate()"> OPC DA клиент (DRV-OPCDA-CL)</label>
+                <label class="addon-check"><input type="checkbox" id="addon-opcda-srv" onchange="calcUpdate()"> OPC DA сервер (DRV-OPCDA-SRV)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TILE 8: Extra (Reserve, Portal, IOSRV) -->
+      <div class="tile" id="tile-extra" onclick="toggleTile('extra')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <path d="m12 1-3 6 6 6 6-6-3-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="m12 23 3-6-6-6-6 6 3 6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="tile-label">Расширения</div>
+        <div class="tile-value" id="tv-extra">Без расширений</div>
+        <div class="tile-expand" id="te-extra">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Резервный сервер (SCADA only) -->
+            <div id="reserve-row" style="display:none;">
+              <label class="addon-check" style="font-size:13px">
+                <input type="checkbox" id="addon-reserve" onchange="calcUpdate()">
+                <span style="color:var(--text)">Резервирование</span>
+                <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Дублирующий сервер — система продолжит работать при сбое основного</span>
+              </label>
+            </div>
+            
+            <!-- WEB-портал -->
+            <div>
+              <label class="addon-check"><input type="checkbox" id="addon-portal" onchange="calcUpdate()"> WEB-PORTAL <span style="font-size: 10px; color: var(--text3); margin-left: 8px;">Просмотр данных через браузер без установки ПО</span></label>
+            </div>
+            
+            <!-- Доп. сервер Platform -->
+            <div id="iosrv-wrap">
+              <div style="font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 8px;">Дополнительные серверы ввода-вывода</div>
+              <input type="number" id="addon-iosrv-num" class="addon-select" min="0" max="100" value="0" placeholder="0" oninput="if(this.value>100)this.value=100;syncIosrvSelect();calcUpdate()" style="width:100%;">
+              <select id="addon-iosrv" style="display:none;" onchange="calcUpdate()">
+                <option value=""></option>
+              </select>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- TILE: Техподдержка -->
+      <div class="tile" id="tile-sla" onclick="toggleTile('sla')">
+        <div class="tile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="tile-label">Техподдержка</div>
+        <div class="tile-value" id="tv-sla">Базовый</div>
+        <div class="tile-expand" id="te-sla">
+          <!-- Hidden select for JS compatibility -->
+          <select id="addon-sla" style="display:none;" onchange="calcUpdate()">
+            <option value="SLA-BASE">Базовый</option>
+            <option value="SLA-STD">Стандартный</option>
+            <option value="SLA-OPT">Оптимальный</option>
+            <option value="SLA-PRM">Премиальный</option>
+          </select>
+          
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <!-- BASE -->
+            <label onclick="document.getElementById('addon-sla').value='SLA-BASE';calcUpdate();updateTileValues();document.getElementById('tile-sla').classList.remove('open');" style="display:flex;gap:12px;padding:14px;background:var(--ink2);border:1px solid var(--wire);border-radius:12px;cursor:pointer;transition:all .2s;" class="sla-card" data-sla="SLA-BASE">
+              <input type="radio" name="sla-visual" value="SLA-BASE" checked style="accent-color:var(--volt);margin-top:2px;flex-shrink:0;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Базовый <span style="color:var(--lime);font-size:11px;">бесплатно</span></div>
+                <div style="font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px;">Обновления ПО на весь срок лицензии. Доступ к базе знаний и документации. Без ограничения по времени.</div>
+              </div>
+            </label>
+            
+            <!-- STD -->
+            <label onclick="document.getElementById('addon-sla').value='SLA-STD';calcUpdate();updateTileValues();document.getElementById('tile-sla').classList.remove('open');" style="display:flex;gap:12px;padding:14px;background:var(--ink2);border:1px solid var(--wire);border-radius:12px;cursor:pointer;transition:all .2s;" class="sla-card" data-sla="SLA-STD">
+              <input type="radio" name="sla-visual" value="SLA-STD" style="accent-color:var(--volt);margin-top:2px;flex-shrink:0;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Стандартный <span style="color:var(--text3);font-size:11px;">10% / год</span></div>
+                <div style="font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px;">Техподдержка по email (пн–пт, 9:00–18:00 МСК). Обновления ПО. Время реакции — до 3 рабочих дней. Консультации по настройке.</div>
+              </div>
+            </label>
+            
+            <!-- OPT -->
+            <label onclick="document.getElementById('addon-sla').value='SLA-OPT';calcUpdate();updateTileValues();document.getElementById('tile-sla').classList.remove('open');" style="display:flex;gap:12px;padding:14px;background:var(--ink2);border:1px solid var(--wire);border-radius:12px;cursor:pointer;transition:all .2s;" class="sla-card" data-sla="SLA-OPT">
+              <input type="radio" name="sla-visual" value="SLA-OPT" style="accent-color:var(--volt);margin-top:2px;flex-shrink:0;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Оптимальный <span style="color:var(--volt);font-size:11px;">15% / год</span></div>
+                <div style="font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px;">Приоритетная поддержка по email и телефону (пн–пт, 9:00–18:00 МСК). Время реакции — до 4 рабочих часов. Удалённая диагностика. Помощь с обновлением версий.</div>
+              </div>
+            </label>
+            
+            <!-- PRM -->
+            <label onclick="document.getElementById('addon-sla').value='SLA-PRM';calcUpdate();updateTileValues();document.getElementById('tile-sla').classList.remove('open');" style="display:flex;gap:12px;padding:14px;background:var(--ink2);border:1px solid var(--wire);border-radius:12px;cursor:pointer;transition:all .2s;" class="sla-card" data-sla="SLA-PRM">
+              <input type="radio" name="sla-visual" value="SLA-PRM" style="accent-color:var(--volt);margin-top:2px;flex-shrink:0;">
+              <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);">Премиальный <span style="color:var(--flame);font-size:11px;">25% / год</span></div>
+                <div style="font-size:11px;color:var(--text3);line-height:1.5;margin-top:4px;">Выделенный инженер поддержки. Реакция — до 1 часа (24/7). Удалённый и выездной сервис. Приоритет при обработке запросов. Аудит конфигурации.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- RIGHT: Live Result (sticky) -->
+  <div class="result-sticky">
+    <div class="result-head">
+      <div class="result-head-title">Ваш расчёт</div>
+      <div class="live-dot"></div>
+    </div>
+    <div class="result-body">
+      <div class="result-line">
+        <div class="r-name">Продукт</div>
+        <div class="r-val accent" id="r-product">Alpha.One+</div>
+      </div>
+      <div class="result-line">
+        <div class="r-name">Комплект</div>
+        <div class="r-val" id="r-sku">ONE-N1k5</div>
+      </div>
+      <div class="result-line">
+        <div class="r-name">Количество тегов</div>
+        <div class="r-val" id="r-qty">1500 точек</div>
+      </div>
+      <div class="result-line">
+        <div class="r-name">На какой срок?</div>
+        <div class="r-val" id="r-term">Бессрочная</div>
+      </div>
+      <div class="result-line" id="r-reserve-row" style="display:none">
+        <div class="r-name">Горячий резерв</div>
+        <div class="r-val" style="color:var(--lime)">Да (резервная пара)</div>
+      </div>
+      <div class="result-line" id="r-historian-row" style="display:none">
+        <div class="r-name">+ Архив данных</div>
+        <div class="r-val" id="r-historian">—</div>
+      </div>
+      <div class="result-line" id="r-reports-row" style="display:none">
+        <div class="r-name">+ Отчёты</div>
+        <div class="r-val" id="r-reports">—</div>
+      </div>
+      <div class="result-line" id="r-clients-row" style="display:none">
+        <div class="r-name">Полные клиенты</div>
+        <div class="r-val" id="r-clients">—</div>
+      </div>
+      <div class="result-line" id="r-web-row" style="display:none">
+        <div class="r-name">WEB-мониторинг</div>
+        <div class="r-val" id="r-web">—</div>
+      </div>
+      <div class="result-line" id="r-iosrv-row" style="display:none">
+        <div class="r-name">Доп. серверы</div>
+        <div class="r-val" id="r-iosrv">—</div>
+      </div>
+      <div class="result-line" id="r-sla-row">
+        <div class="r-name">Поддержка</div>
+        <div class="r-val" id="r-sla">Базовый</div>
+      </div>
+      <div class="result-line" id="r-addons-row" style="display:none">
+        <div class="r-name">Дополнительно</div>
+        <div class="r-val" id="r-addons">0 модулей</div>
+      </div>
+
+      <div class="result-total-block">
+        <div class="result-total-label">Стоимость системы</div>
+        <div class="result-total-val" id="r-total" style="font-size:22px">—</div>
+        <div class="result-total-note" id="r-note">без НДС</div>
+        <div style="margin-top:12px;padding:10px 12px;background:var(--ink2);border:1px solid var(--wire);border-radius:8px;font-size:11px;line-height:1.5;color:var(--text3)">
+          Цены ориентировочные по тарифу 2026 г. Точный расчёт — в коммерческом предложении. <a href="mailto:sales@automiq.ru" style="color:var(--volt);text-decoration:none">sales@automiq.ru</a>
+        </div>
+      </div>
+
+      <!-- Add to Project Button -->
+      <div class="result-actions">
+        <button class="btn btn-volt" id="btn-add-project" onclick="addToProject()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Добавить в проект
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT CART — visible across all tabs -->
+<div class="project-cart" id="project-cart">
+  <div class="cart-header">
+    <div class="cart-header-title">
+      Проект
+      <span class="cart-count-badge" id="cart-count" style="margin-left:8px">0</span>
+    </div>
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// корзина</span>
+  </div>
+  <div class="cart-body">
+    <div id="cart-items"></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-block">
+      <div class="cart-total-label">Итого по проекту</div>
+      <div class="cart-total-val" id="cart-total">—</div>
+      <div class="cart-total-note">без НДС</div>
+    </div>
+  </div>
+</div>
+
+<!-- GLOBAL: Contact Form + Send -->
+<div class="contact-form">
+  <div class="contact-head">
+    <div class="contact-title">Куда отправить расчёт?</div>
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">// заполните и нажмите кнопку ниже</span>
+  </div>
+  <div class="contact-body" style="padding:20px 24px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <input class="addon-select" id="calc-name" placeholder="Как вас зовут">
+      <input class="addon-select" id="calc-company" placeholder="Название компании">
+      <input class="addon-select" id="calc-email" placeholder="Email для расчёта" title="Мы не рассылаем спам" type="email">
+      <input class="addon-select" id="calc-phone" placeholder="Телефон (необязательно)" type="tel">
+      <input class="addon-select" id="calc-inn" placeholder="ИНН компании">
+      <select class="addon-select" id="calc-industry">
+        <option value="">Ваша отрасль</option>
+        <option value="Системный интегратор">Системный интегратор</option>
+        <option value="Энергетика">Энергетика</option>
+        <option value="Нефть и газ">Нефть и газ</option>
+        <option value="Химия и нефтехимия">Химия и нефтехимия</option>
+        <option value="Металлургия">Металлургия</option>
+        <option value="Горнодобыча">Горнодобыча</option>
+        <option value="ЖКХ / Водоснабжение">ЖКХ / Водоснабжение</option>
+        <option value="Пищевая промышленность">Пищевая промышленность</option>
+        <option value="Фармацевтика">Фармацевтика</option>
+        <option value="Строительство / BMS">Строительство / BMS</option>
+        <option value="Транспорт">Транспорт</option>
+        <option value="Другое">Другое</option>
+      </select>
+    </div>
+    <select class="addon-select" id="calc-urgency" style="margin-bottom:8px;width:100%">
+      <option value="">Когда нужно?</option>
+      <option value="ASAP (24–48 ч)">🔴 Срочно (24–48 часов)</option>
+      <option value="Неделя (3–7 дней)">🟠 На этой неделе</option>
+      <option value="Месяц">🟡 В течение месяца</option>
+      <option value="Плановый / бюджет">🟢 Планируем бюджет</option>
+    </select>
+    <textarea class="addon-select" id="calc-comment" placeholder="Расскажите о вашем проекте" style="margin-bottom:8px;min-height:48px;resize:vertical;font-family:var(--mono);font-size:12px;width:100%"></textarea>
+    <div style="margin-bottom:8px">
+      <label class="addon-select" style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:8px 12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span id="file-label" style="font-size:12px;color:var(--text2)">Прикрепить документ</span>
+        <input type="file" id="calc-file" style="display:none" accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.zip,.rar,.txt,.csv" onchange="fileSelected(this)">
+      </label>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px;padding-left:12px">Макс. 10 МБ · PDF, DOC, XLS, PNG, JPG, ZIP</div>
+    </div>
+    <input type="text" name="website" id="hp-website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
+
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn btn-volt" id="btn-send-calc" onclick="smartSend()" style="flex:1">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5"/></svg>
+        Отправить КП
+      </button>
+    </div>
+
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--wire)">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8">
+        <span style="color:var(--volt);font-size:12px;font-weight:600" id="r-tid"></span><br>
+        Атомик Софт · sales@automiq.ru<br>
+        <span style="color:var(--volt)" id="r-date"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─── ALPHA PRODUCTS ─── */
+const alphaProducts = {
+  'alpha-one': {
+    name: 'Alpha.One+',
+    variants: [
+      { sku: 'ONE-N150', tags: 150 },
+      { sku: 'ONE-N300', tags: 300 },
+      { sku: 'ONE-N500', tags: 500 },
+      { sku: 'ONE-N1k', tags: 1000 },
+      { sku: 'ONE-N1k5', tags: 1500 },
+      { sku: 'ONE-N3k', tags: 3000 },
+      { sku: 'ONE-N5k', tags: 5000 },
+      { sku: 'ONE-N15k', tags: 15000 },
+      { sku: 'ONE-N50k', tags: 50000 }
+    ]
+  },
+  'alpha-scada': {
+    name: 'Alpha.SCADA',
+    variants: [
+      { sku: 'SCADA-SRV500', tags: 500 },
+      { sku: 'SCADA-SRV1k', tags: 1000 },
+      { sku: 'SCADA-SRV1k5', tags: 1500 },
+      { sku: 'SCADA-SRV3k', tags: 3000 },
+      { sku: 'SCADA-SRV5k', tags: 5000 },
+      { sku: 'SCADA-SRV15k', tags: 15000 },
+      { sku: 'SCADA-SRV50k', tags: 50000 },
+      { sku: 'SCADA-SRV100k', tags: 100000 },
+      { sku: 'SCADA-SRV150k', tags: 150000 }
+    ]
+  },
+  'alpha-platform': {
+    name: 'Alpha.Platform',
+    variants: [
+      { sku: 'AP-1k5', tags: 1500 },
+      { sku: 'AP-3k', tags: 3000 },
+      { sku: 'AP-5k', tags: 5000 },
+      { sku: 'AP-15k', tags: 15000 },
+      { sku: 'AP-25k', tags: 25000 },
+      { sku: 'AP-50k', tags: 50000 },
+      { sku: 'AP-100k', tags: 100000 },
+      { sku: 'AP-200k', tags: 200000 },
+      { sku: 'AP-300k', tags: 300000 },
+      { sku: 'AP-500k', tags: 500000 },
+      { sku: 'AP-1M', tags: 1000000 },
+      { sku: 'AP-2M', tags: 2000000 }
+    ]
+  },
+  'alpha-historian': {
+    name: 'Alpha.Historian',
+    variants: [
+      { sku: 'HIST-S100', tags: 100 },
+      { sku: 'HIST-S200', tags: 200 },
+      { sku: 'HIST-S300', tags: 300 },
+      { sku: 'HIST-S500', tags: 500 },
+      { sku: 'HIST-S700', tags: 700 },
+      { sku: 'HIST-S1k', tags: 1000 },
+      { sku: 'HIST-S2k', tags: 2000 },
+      { sku: 'HIST-S3k', tags: 3000 },
+      { sku: 'HIST-S5k', tags: 5000 },
+      { sku: 'HIST-S7k', tags: 7000 },
+      { sku: 'HIST-S10k', tags: 10000 },
+      { sku: 'HIST-S15k', tags: 15000 },
+      { sku: 'HIST-S20k', tags: 20000 },
+      { sku: 'HIST-S30k', tags: 30000 },
+      { sku: 'HIST-S50k', tags: 50000 },
+      { sku: 'HIST-S100k', tags: 100000 },
+      { sku: 'HIST-S150k', tags: 150000 },
+      { sku: 'HIST-S200k', tags: 200000 },
+      { sku: 'HIST-S300k', tags: 300000 },
+      { sku: 'HIST-S500k', tags: 500000 },
+      { sku: 'HIST-S1M', tags: 1000000 },
+      { sku: 'HIST-S2M', tags: 2000000 }
+    ]
+  },
+  'alpha-reports': {
+    name: 'Alpha.Reports',
+    variants: [
+      { sku: 'RPT-E50', tags: 50 },
+      { sku: 'RPT-E100', tags: 100 },
+      { sku: 'RPT-E250', tags: 250 },
+      { sku: 'RPT-E500', tags: 500 },
+      { sku: 'RPT-E1k', tags: 1000 },
+      { sku: 'RPT-E2k', tags: 2000 },
+      { sku: 'RPT-E5k', tags: 5000 },
+      { sku: 'RPT-E10k', tags: 10000 },
+      { sku: 'RPT-EUNL', tags: 999999 }
+    ]
+  }
+};
+
+/* ─── PRICE MAP (SKU → RUB, без НДС, 2026) ─── */
+const skuPrices = {
+  // Alpha.One+
+  'ONE-N150':149000,'ONE-N300':200800,'ONE-N500':263100,'ONE-N1k':333000,
+  'ONE-N1k5':410700,'ONE-N3k':498000,'ONE-N5k':578000,'ONE-N15k':673800,'ONE-N50k':778700,
+  // Alpha.SCADA
+  'SCADA-SRV500':340600,'SCADA-SRV1k':438000,'SCADA-SRV1k5':550500,'SCADA-SRV3k':682900,
+  'SCADA-SRV5k':848700,'SCADA-SRV15k':1049400,'SCADA-SRV50k':1294200,
+  'SCADA-SRV100k':1574100,'SCADA-SRV150k':2361900,
+  // Alpha.Platform
+  'AP-1k5':1837200,'AP-3k':2361900,'AP-5k':2763500,'AP-15k':3332200,
+  'AP-25k':3847800,'AP-50k':4897300,'AP-100k':8745100,'AP-200k':16790500,
+  'AP-300k':24136300,'AP-500k':38478200,'AP-1M':71604300,'AP-2M':138784400,
+  // Alpha.Historian
+  'HIST-S100':28900,'HIST-S200':57800,'HIST-S300':86700,'HIST-S500':144400,
+  'HIST-S700':202300,'HIST-S1k':260000,'HIST-S2k':404600,'HIST-S3k':605400,
+  'HIST-S5k':865400,'HIST-S7k':1154400,'HIST-S10k':1443400,'HIST-S15k':1732200,
+  'HIST-S20k':2308700,'HIST-S30k':3271400,'HIST-S50k':4810600,'HIST-S100k':7888800,
+  'HIST-S150k':10600700,'HIST-S200k':12506100,'HIST-S300k':19239000,'HIST-S500k':28858600,
+  'HIST-S1M':48097700,'HIST-S2M':76956300,
+  // Alpha.Reports
+  'RPT-E50':193200,'RPT-E100':279800,'RPT-E250':384800,'RPT-E500':550500,
+  'RPT-E1k':752800,'RPT-E2k':1084300,'RPT-E5k':1469100,'RPT-E10k':2187100,'RPT-EUNL':3498100,
+  // Драйверы
+  'DRV-PACK-ENERGY':88200,'DRV-PACK-INDUSTRY':209900,
+  'DRV-OPCDA-CL':123200,'DRV-OPCDA-SRV':209900,
+  // Клиенты
+  'CL-F':174900,'CL-RO10':655500,'CL-RO25':984100,'CL-RO50':1262400,'CL-RO100':1530000,
+  // Прочее
+  'WEB-PORTAL':174900,'AP-IOSRV':380200,
+  // Reports клиенты
+  'RPT-CL1':79100,'RPT-CL5':349800,'RPT-CL10':699700,'RPT-CL25':1049400,'RPT-CL50':1749000,'RPT-CL100':2623500,
+  'AP-CL-RO250':3061500,'AP-CL-ROUNL':4958100
+};
+
+const slaCoeffs = { 'SLA-BASE':0, 'SLA-STD':0.10, 'SLA-OPT':0.15, 'SLA-PRM':0.25 };
+const termMultipliers = { 1:1.0, 2:0.4, 3:0.85 }; // 1=Бессрочная, 2=1 год, 3=3 года
+
+/* ─── PROJECT CART ─── */
+let projectItems = [];
+
+function formatPrice(n) {
+  if (!n && n !== 0) return '—';
+  return n.toLocaleString('ru-RU') + ' ₽';
+}
+
+function findBestSku(product, targetTags) {
+  const variants = alphaProducts[product]?.variants || [];
+  // Find the smallest SKU that can handle the target tags
+  const suitable = variants.filter(v => v.tags >= targetTags);
+  return suitable.length > 0 ? suitable[0] : variants[variants.length - 1];
+}
+
+function updateSliderRange() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const slider = document.getElementById('qty-slider');
+  const steps = p.variants.length - 1;
+  slider.min = 0;
+  slider.max = steps;
+  slider.step = 1;
+  // Find closest variant to current displayed value
+  const curVal = parseInt(document.getElementById('qty-val').textContent) || p.variants[0].tags;
+  let bestIdx = 0;
+  let bestDist = Infinity;
+  p.variants.forEach((v, i) => {
+    const d = Math.abs(v.tags - curVal);
+    if (d < bestDist) { bestDist = d; bestIdx = i; }
+  });
+  slider.value = bestIdx;
+  document.getElementById('qty-val').textContent = formatTags(p.variants[bestIdx].tags);
+  // Update labels
+  const labelsEl = document.getElementById('slider-labels');
+  const vr = p.variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => formatTags(v.tags));
+  } else {
+    // Show first, ~25%, ~50%, ~75%, last
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => formatTags(vr[i].tags));
+  }
+  labelsEl.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+  // Show reserve checkbox only for SCADA
+  const resRow = document.getElementById('reserve-row');
+  if (resRow) resRow.style.display = (prod === 'alpha-scada') ? 'block' : 'none';
+  
+  // Driver packs included by product:
+  // SCADA: Base + ENERGY
+  // Platform: Base + ENERGY + INDUSTRY
+  const isPlatform = (prod === 'alpha-platform');
+  const isScada = (prod === 'alpha-scada');
+  const drvEnergy = document.getElementById('addon-energy');
+  const drvIndustry = document.getElementById('addon-industry');
+  if (drvEnergy) {
+    if (isPlatform || isScada) { drvEnergy.checked = true; drvEnergy.disabled = true; }
+    else { drvEnergy.disabled = false; drvEnergy.checked = false; }
+  }
+  if (drvIndustry) {
+    if (isPlatform) { drvIndustry.checked = true; drvIndustry.disabled = true; }
+    else { drvIndustry.disabled = false; drvIndustry.checked = false; }
+  }
+  const drvNote = document.getElementById('drv-note');
+  if (drvNote) {
+    if (isPlatform) { drvNote.textContent = 'включены в Platform'; drvNote.style.display = 'inline'; }
+    else if (isScada) { drvNote.textContent = 'ENERGY включён в SCADA'; drvNote.style.display = 'inline'; }
+    else { drvNote.style.display = 'none'; }
+  }
+  
+  // Alpha.One+ is single-user — no additional clients allowed
+  const isOne = (prod === 'alpha-one');
+  
+  // Full client (CL-F)
+  const clientSel = document.getElementById('addon-client');
+  const clientRow = clientSel?.closest('.addon-row');
+  if (clientRow) {
+    if (isOne) { clientRow.style.display = 'none'; clientSel.value = ''; }
+    else { clientRow.style.display = ''; }
+  }
+  if (clientSel && isPlatform && !clientSel.value) { clientSel.value = 'CL-F:1'; }
+  const clfNote = document.getElementById('clf-note');
+  if (clfNote) clfNote.style.display = isPlatform ? 'inline' : 'none';
+  // Dynamic client limit: Platform=200, SCADA=100, One+=0
+  const clNumEl = document.getElementById('addon-client-num');
+  if (clNumEl) {
+    clNumEl.max = isPlatform ? 200 : 100;
+    if (parseInt(clNumEl.value) > parseInt(clNumEl.max)) { clNumEl.value = clNumEl.max; syncClientSelect(); }
+  }
+  
+  // WEB clients — also hide for One+
+  const webSel = document.getElementById('addon-web');
+  const webRow = webSel?.closest('.addon-row');
+  if (webRow) {
+    if (isOne) { webRow.style.display = 'none'; webSel.value = ''; }
+    else { webRow.style.display = ''; }
+  }
+  
+  // IOSRV only for Platform
+  const iosrvRow = document.getElementById('addon-iosrv')?.closest('.addon-row');
+  if (iosrvRow) {
+    iosrvRow.style.display = isPlatform ? '' : 'none';
+  }
+  const iosrvWrap = document.getElementById('iosrv-wrap');
+  if (iosrvWrap) {
+    iosrvWrap.style.display = isPlatform ? '' : 'none';
+    if (!isPlatform) document.getElementById('addon-iosrv').value = '';
+  }
+}
+
+function formatTags(n) {
+  if (n >= 1000000) return (n/1000000) + ' M';
+  if (n >= 1000) return (n/1000).toLocaleString('ru-RU') + ' k';
+  return n.toString();
+}
+
+// Update slider on product change
+document.addEventListener('change', function(e) {
+  if (e.target.name === 'product') { updateSliderRange(); calcUpdate(); }
+});
+
+function sliderChanged() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  document.getElementById('qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function getSelectedTags() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const p = alphaProducts[prod];
+  if (!p) return 1500;
+  const idx = +document.getElementById('qty-slider').value;
+  const v = p.variants[idx] || p.variants[0];
+  return v.tags;
+}
+
+function calcUpdate() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = +document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  
+  if (!p) return;
+  
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  const termMul = termMultipliers[term] || 1.0;
+
+  /* ─── PRICE CALCULATION ─── */
+  let basePrice = bestSku ? (skuPrices[bestSku.sku] || 0) : 0;
+  let reservePrice = 0;
+  let histPrice = 0;
+  let rptPrice = 0;
+  let addonsPrice = 0;
+  let addonDetails = [];
+
+  // Reserve server = same price as base product
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  if (hasReserve) {
+    reservePrice = basePrice;
+  }
+
+  // Historian
+  const hist = getSelectedHistorian();
+  if (hist) {
+    histPrice = skuPrices[hist.sku] || 0;
+    if (document.getElementById('addon-hist-reserve')?.checked) histPrice *= 2;
+  }
+
+  // Reports
+  const rpt = getSelectedReports();
+  if (rpt) {
+    rptPrice = skuPrices[rpt.sku] || 0;
+  }
+
+  // Addon selects
+  const clientVal = document.getElementById('addon-client')?.value;
+  if (clientVal) {
+    const parts = clientVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    const total = unitPrice * count;
+    addonsPrice += total;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  const webVal = document.getElementById('addon-web')?.value;
+  if (webVal) {
+    const sku = webVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const rptClVal = document.getElementById('addon-rpt-cl')?.value;
+  if (rptClVal) {
+    const sku = rptClVal.split(':')[0];
+    const price = skuPrices[sku] || 0;
+    addonsPrice += price;
+    addonDetails.push(sku);
+  }
+
+  const iosrvVal = document.getElementById('addon-iosrv')?.value;
+  if (iosrvVal) {
+    const parts = iosrvVal.split(':');
+    const sku = parts[0];
+    const count = parseInt(parts[1]) || 1;
+    const unitPrice = skuPrices[sku] || 0;
+    addonsPrice += unitPrice * count;
+    addonDetails.push(sku + (count > 1 ? ' ×' + count : ''));
+  }
+
+  // Checkbox addons
+  const chkMap = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'DRV-OPCDA-CL',
+    'addon-opcda-srv': 'DRV-OPCDA-SRV',
+    'addon-portal': 'WEB-PORTAL'
+  };
+  Object.entries(chkMap).forEach(([id, sku]) => {
+    if (document.getElementById(id)?.checked) {
+      // If included in product (disabled checkbox), don't charge extra
+      const el = document.getElementById(id);
+      if (!el.disabled) {
+        addonsPrice += skuPrices[sku] || 0;
+      }
+      addonDetails.push(sku);
+    }
+  });
+
+  // SLA
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  const slaCoeff = slaCoeffs[slaVal] || 0;
+  // SLA base = sum of all license prices (before term multiplier)
+  const licensesTotal = basePrice + reservePrice + histPrice + rptPrice + addonsPrice;
+  const slaPrice = Math.round(slaCoeff * licensesTotal);
+
+  // Term multiplier applies to licenses, SLA is yearly and independent
+  const licensesWithTerm = Math.round(licensesTotal * termMul);
+  // For yearly terms, SLA is included; for perpetual, SLA is separate yearly cost
+  let totalPrice;
+  if (term === 1) {
+    // Бессрочная: licenses × 1.0 + SLA (yearly)
+    totalPrice = licensesWithTerm + slaPrice;
+  } else {
+    // Yearly terms: licenses × multiplier + SLA
+    totalPrice = licensesWithTerm + slaPrice;
+  }
+
+  /* ─── UPDATE SUMMARY DISPLAY ─── */
+  // Collect addons list for display
+  let addonsCount = addonDetails.length;
+  if (slaVal !== 'SLA-BASE') addonsCount++;
+
+  document.getElementById('r-product').textContent = p.name;
+  document.getElementById('r-sku').textContent = bestSku ? bestSku.sku : '—';
+  document.getElementById('r-qty').textContent = qty.toLocaleString('ru-RU') + ' тегов';
+  document.getElementById('r-term').textContent = terms[term - 1];
+
+  // Reserve in result
+  const resRow2 = document.getElementById('r-reserve-row');
+  if (resRow2) resRow2.style.display = hasReserve ? 'flex' : 'none';
+
+  // Historian/Reports in result
+  const histRow = document.getElementById('r-historian-row');
+  if (hist) { histRow.style.display = 'flex'; document.getElementById('r-historian').textContent = hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags.toLocaleString('ru-RU') + ' тегов') + ')' + (document.getElementById('addon-hist-reserve')?.checked ? ' ×2 резерв' : ''); }
+  else { histRow.style.display = 'none'; }
+
+  const rptRow = document.getElementById('r-reports-row');
+  if (rpt) { rptRow.style.display = 'flex'; document.getElementById('r-reports').textContent = rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags.toLocaleString('ru-RU') + ' тегов') + ')'; }
+  else { rptRow.style.display = 'none'; }
+
+  // Clients row
+  const clRow = document.getElementById('r-clients-row');
+  if (clRow) {
+    const clN = parseInt(document.getElementById('addon-client-num')?.value) || 0;
+    if (clN > 0) { clRow.style.display = 'flex'; document.getElementById('r-clients').textContent = 'CL-F ×' + clN; }
+    else { clRow.style.display = 'none'; }
+  }
+
+  // WEB row
+  const webRow = document.getElementById('r-web-row');
+  if (webRow) {
+    const wv = document.getElementById('addon-web')?.value;
+    if (wv) { webRow.style.display = 'flex'; document.getElementById('r-web').textContent = wv + ' (' + document.getElementById('addon-web').options[document.getElementById('addon-web').selectedIndex].text + ')'; }
+    else { webRow.style.display = 'none'; }
+  }
+
+  // SLA row
+  const slaRow = document.getElementById('r-sla-row');
+  if (slaRow) {
+    const sv = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+    const slaLabels = {'SLA-BASE':'Базовый (бесплатно)','SLA-STD':'Стандартный (10%/год)','SLA-OPT':'Оптимальный (15%/год)','SLA-PRM':'Премиальный (25%/год)'};
+    document.getElementById('r-sla').textContent = slaLabels[sv] || 'Базовый';
+  }
+
+  // IOSRV row
+  const iosrvRow = document.getElementById('r-iosrv-row');
+  if (iosrvRow) {
+    const iosrvN = parseInt(document.getElementById('addon-iosrv-num')?.value) || 0;
+    if (iosrvN > 0) { iosrvRow.style.display = 'flex'; document.getElementById('r-iosrv').textContent = 'AP-IOSRV ×' + iosrvN; }
+    else { iosrvRow.style.display = 'none'; }
+  }
+
+  // Filter out CL-F and web SKUs from addonDetails for the "Дополнительно" row
+  const filteredAddons = addonDetails.filter(a => !a.startsWith('CL-F') && !a.startsWith('CL-RO') && !a.startsWith('AP-CL-RO') && !a.startsWith('AP-IOSRV'));
+  const addRow = document.getElementById('r-addons-row');
+  if (filteredAddons.length > 0) {
+    addRow.style.display = 'flex';
+    document.getElementById('r-addons').textContent = filteredAddons.join(', ');
+  } else {
+    addRow.style.display = 'none';
+  }
+
+  /* ─── TOTAL PRICE (single number, SLA included) ─── */
+  document.getElementById('r-total').textContent = formatPrice(totalPrice);
+  document.getElementById('r-note').textContent = 'без НДС';
+
+  // Update date
+  const now = new Date();
+  document.getElementById('r-date').textContent =
+    now.toLocaleDateString('ru-RU', { day:'numeric', month:'long', year:'numeric' });
+}
+
+function addToProject() {
+  // Capture current calculator state
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = +document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+  const hasReserve = document.getElementById('addon-reserve')?.checked;
+  
+  // Collect addons
+  let addons = [];
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addons.push(el.options[el.selectedIndex].text);
+  });
+  
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY',
+    'addon-industry': 'DRV-PACK-INDUSTRY',
+    'addon-opcda-cl': 'OPC DA клиент',
+    'addon-opcda-srv': 'OPC DA сервер',
+    'addon-portal': 'WEB-портал'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addons.push(name);
+  });
+  
+  if (hasReserve) addons.push('Резервный сервер');
+  
+  const slaVal = document.getElementById('addon-sla')?.value || 'SLA-BASE';
+  if (slaVal !== 'SLA-BASE') {
+    const slaEl = document.getElementById('addon-sla');
+    addons.push('SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  }
+  
+  // Get current price from result panel
+  const currentPrice = document.getElementById('r-total').textContent;
+  
+  // Create item object
+  const item = {
+    product: p.name,
+    sku: bestSku ? bestSku.sku : '—',
+    tags: qty,
+    term: terms[term - 1],
+    historian: hist ? (hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' + (document.getElementById('addon-hist-reserve')?.checked ? ' ×2 резерв' : '')) : null,
+    reports: rpt ? (rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')') : null,
+    reserve: hasReserve,
+    addons: addons,
+    price: currentPrice,
+    timestamp: Date.now()
+  };
+  
+  // Add to project
+  projectItems.push(item);
+  
+  // Save to sessionStorage
+  saveProjectToStorage();
+  
+  // Update cart display
+  updateCartDisplay();
+  
+  // Show success feedback
+  const btn = document.getElementById('btn-add-project');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Добавлено в проект!';
+  btn.style.background = 'var(--lime)';
+
+  // Show toast notification
+  showToast('✓ ' + (projectItems[projectItems.length-1]?.product || 'Продукт') + ' добавлен в проект (' + projectItems.length + ' поз.)');
+
+  // Scroll to cart
+  setTimeout(() => {
+    const cart = document.getElementById('project-cart');
+    if (cart) {
+      cart.style.boxShadow = '0 0 24px var(--lime)';
+      cart.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => { cart.style.boxShadow = ''; }, 2000);
+    }
+  }, 300);
+
+  setTimeout(() => {
+    btn.innerHTML = origText;
+    btn.style.background = '';
+  }, 2000);
+
+  // Reset calculator to defaults
+  resetCalcToDefaults();
+}
+
+function resetCalcToDefaults() {
+  // Reset product to Alpha.One+
+  document.getElementById('p1').checked = true;
+
+  // Reset term to Бессрочная
+  document.getElementById('term-slider').value = 1;
+  document.getElementById('term-val').textContent = 'Бессрочная';
+
+  // Reset reserve
+  const res = document.getElementById('addon-reserve');
+  if (res) res.checked = false;
+
+  // Reset Historian & Reports
+  const addHist = document.getElementById('add-historian');
+  if (addHist) { addHist.checked = false; toggleAddonProduct('historian'); }
+  const addRpt = document.getElementById('add-reports');
+  if (addRpt) { addRpt.checked = false; toggleAddonProduct('reports'); }
+
+  // Reset selects
+  ['addon-client','addon-web','addon-rpt-cl','addon-iosrv'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  // Reset checkboxes (only non-disabled)
+  ['addon-energy','addon-industry','addon-opcda-cl','addon-opcda-srv','addon-portal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.disabled) el.checked = false;
+  });
+
+  // Reset SLA
+  const sla = document.getElementById('addon-sla');
+  if (sla) sla.value = 'SLA-BASE';
+
+  // Update slider range for new product & recalc
+  updateSliderRange();
+  calcUpdate();
+}
+
+function removeFromProject(index) {
+  if (index >= 0 && index < projectItems.length) {
+    projectItems.splice(index, 1);
+    saveProjectToStorage();
+    updateCartDisplay();
+  }
+}
+
+function updateCartDisplay() {
+  const cart = document.getElementById('project-cart');
+  const itemsContainer = document.getElementById('cart-items');
+  const countBadge = document.getElementById('cart-count');
+  const totalEl = document.getElementById('cart-total');
+  
+  if (projectItems.length === 0) {
+    cart.classList.remove('show');
+    return;
+  }
+  
+  cart.classList.add('show');
+  countBadge.textContent = projectItems.length;
+  
+  // Render items
+  itemsContainer.innerHTML = projectItems.map((item, index) => `
+    <div class="cart-item">
+      <div class="cart-item-number">#${index + 1}</div>
+      <div class="cart-item-details">
+        <div class="cart-item-header">
+          <div>
+            <div class="cart-item-product">${item.product}</div>
+            <div class="cart-item-sku">${item.sku}</div>
+          </div>
+          <div class="cart-item-price">${typeof item.price === 'number' ? formatPrice(item.price) : item.price}</div>
+        </div>
+        
+        <div class="cart-item-meta">
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Тегов:</span>
+            <span class="cart-meta-value">${item.tags.toLocaleString('ru-RU')}</span>
+          </div>
+          <div class="cart-meta-item">
+            <span class="cart-meta-label">Лицензия:</span>
+            <span class="cart-meta-value">${item.term}</span>
+          </div>
+          ${item.historian ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Historian:</span>
+            <span class="cart-meta-value">${item.historian}</span>
+          </div>` : ''}
+          ${item.reports ? `<div class="cart-meta-item">
+            <span class="cart-meta-label">Reports:</span>
+            <span class="cart-meta-value">${item.reports}</span>
+          </div>` : ''}
+        </div>
+        
+        ${item.addons.length > 0 ? `<div class="cart-item-addons">
+          Доп. модули: ${item.addons.join(', ')}
+        </div>` : ''}
+      </div>
+      
+      <button class="cart-item-delete" onclick="removeFromProject(${index})" title="Удалить">
+        ×
+      </button>
+    </div>
+  `).join('');
+  
+  // Calculate total
+  const total = calcProjectTotal();
+  totalEl.textContent = formatPrice(total);
+}
+
+function calcProjectTotal() {
+  // Simple approach: sum up prices from stored items
+  // Note: this parses the formatted price strings, which is not ideal for production
+  // but works for demo purposes
+  let total = 0;
+  projectItems.forEach(item => {
+    const priceNum = typeof item.price === 'number' ? item.price : parseInt(String(item.price).replace(/[^\d]/g, '')) || 0;
+    total += priceNum;
+  });
+  return total;
+}
+
+function saveProjectToStorage() {
+  // disabled — cart resets on page refresh
+}
+
+function loadProjectFromStorage() {
+  // disabled — cart starts empty
+  projectItems = [];
+}
+
+function sendProjectEmail() {
+  if (projectItems.length === 0) {
+    alert('Добавьте хотя бы одну конфигурацию в проект');
+    return;
+  }
+  
+  // Get contact fields (shared with single calculator)
+  const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+  
+  if (!cName || !cCompany || !cEmail) {
+    alert('Укажите имя, компанию и email — мы отправим расчёт');
+    if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
+  // Prepare project data
+  const tid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+  const total = calcProjectTotal();
+  
+  // Create items summary for email
+  let itemsText = '';
+  projectItems.forEach((item, index) => {
+    itemsText += `\n--- Элемент #${index + 1} ---\n`;
+    itemsText += `Продукт: ${item.product}\n`;
+    itemsText += `Артикул: ${item.sku}\n`;
+    itemsText += `Тегов: ${item.tags.toLocaleString('ru-RU')}\n`;
+    itemsText += `Лицензия: ${item.term}\n`;
+    if (item.historian) itemsText += `Historian: ${item.historian}\n`;
+    if (item.reports) itemsText += `Reports: ${item.reports}\n`;
+    if (item.reserve) itemsText += `Резерв: Да\n`;
+    if (item.addons.length > 0) itemsText += `Модули: ${item.addons.join(', ')}\n`;
+    itemsText += `Стоимость: ${typeof item.price === 'number' ? formatPrice(item.price) : item.price}\n`;
+  });
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', tid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('name', cName);
+  fd.append('company', cCompany);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
+  fd.append('is_project', '1');
+  fd.append('items_count', projectItems.length);
+  fd.append('items_json', JSON.stringify(projectItems));
+  fd.append('total_price', formatPrice(total));
+  fd.append('items_text', itemsText);
+  appendExtraFields(fd);
+
+  // Show sending state on the main send button
+  const btn = document.getElementById('btn-send-calc');
+  const origText = btn.innerHTML;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
+    .then(data => {
+      if (data.ok) {
+        btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Проект отправлен!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { 
+          btn.innerHTML = origText; 
+          btn.disabled = false; 
+          btn.style.borderColor = ''; 
+          btn.style.color = ''; 
+          // Clear project after successful send
+          projectItems = [];
+          saveProjectToStorage();
+          updateCartDisplay();
+        }, 3000);
+      } else {
+        btn.innerHTML = data.error || '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+      }
+    })
+    .catch(e => {
+      btn.innerHTML = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.innerHTML = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+    });
+}
+
+function fileSelected(input) {
+  const label = document.getElementById('file-label');
+  if (input.files.length > 0) {
+    const f = input.files[0];
+    if (f.size > 10 * 1024 * 1024) {
+      alert('Файл слишком большой — попробуйте до 10 МБ');
+      input.value = '';
+      label.textContent = 'Прикрепить файл';
+      label.style.color = 'var(--text2)';
+      return;
+    }
+    label.textContent = f.name;
+    label.style.color = 'var(--volt)';
+  } else {
+    label.textContent = 'Прикрепить файл';
+    label.style.color = 'var(--text2)';
+  }
+}
+
+function appendExtraFields(fd) {
+  fd.append('inn', document.getElementById('calc-inn')?.value.trim() || '');
+  fd.append('industry', document.getElementById('calc-industry')?.value || '');
+  fd.append('urgency', document.getElementById('calc-urgency')?.value || '');
+  const fileInput = document.getElementById('calc-file');
+  if (fileInput?.files.length > 0) {
+    fd.append('attachment', fileInput.files[0]);
+  }
+}
+
+function smartSend() {
+  // If cart has items → send project, otherwise → send single product
+  if (projectItems.length > 0) {
+    sendProjectEmail();
+  } else {
+    sendConfigEmail();
+  }
+}
+
+function sendConfigEmail() {
+  const prod = document.querySelector('input[name=product]:checked').value;
+  const qty = getSelectedTags();
+  const term = document.getElementById('term-slider').value;
+  const p = alphaProducts[prod];
+  const bestSku = findBestSku(prod, qty);
+  const terms = ['Бессрочная', '1 год', '3 года'];
+  
+  let addonLines = [];
+  // Selects
+  const selAddons = {
+    'addon-client': 'Полный клиент',
+    'addon-web': 'WEB-клиенты',
+    'addon-rpt-cl': 'Клиенты Reports',
+    'addon-iosrv': 'Доп. сервер Platform'
+  };
+  Object.entries(selAddons).forEach(([id, name]) => {
+    const el = document.getElementById(id);
+    if (el?.value) addonLines.push('• ' + name + ' (' + el.options[el.selectedIndex].text + ')');
+  });
+  // SLA
+  const slaEl = document.getElementById('addon-sla');
+  if (slaEl) addonLines.push('• SLA: ' + slaEl.options[slaEl.selectedIndex].text);
+  // Checkboxes
+  const chkAddons = {
+    'addon-energy': 'DRV-PACK-ENERGY (Энергетика: МЭК 61850, ТЭМ-104)',
+    'addon-industry': 'DRV-PACK-INDUSTRY (BACnet, S7, Ethernet/IP)',
+    'addon-opcda-cl': 'OPC DA клиент (DRV-OPCDA-CL)',
+    'addon-opcda-srv': 'OPC DA сервер (DRV-OPCDA-SRV)',
+    'addon-portal': 'WEB-портал (WEB-PORTAL)'
+  };
+  Object.entries(chkAddons).forEach(([id, name]) => {
+    if (document.getElementById(id)?.checked) addonLines.push('• ' + name);
+  });
+  if (document.getElementById('addon-reserve')?.checked) addonLines.push('• Резервный сервер (доп. лицензия)');
+
+  const hist = getSelectedHistorian();
+  const rpt = getSelectedReports();
+
+  // Get contact fields
+  const cName = document.getElementById('calc-name').value.trim();
+  const cCompany = document.getElementById('calc-company').value.trim();
+  const cEmail = document.getElementById('calc-email').value.trim();
+  const cPhone = document.getElementById('calc-phone').value.trim();
+  const cComment = document.getElementById('calc-comment').value.trim();
+
+  if (!cName || !cCompany || !cEmail) {
+    alert('Укажите имя, компанию и email — мы отправим расчёт');
+    if (!cName) document.getElementById('calc-name').focus();
+    else if (!cCompany) document.getElementById('calc-company').focus();
+    else document.getElementById('calc-email').focus();
+    return;
+  }
+
+  // Send via PHP
+  const fd = new FormData();
+  fd.append('tid', calcTid);
+  fd.append('_ts', calcLoadTs);
+  fd.append('website', document.getElementById('hp-website')?.value || '');
+  fd.append('product', p.name);
+  fd.append('name', cName);
+  fd.append('company', cCompany);
+  fd.append('email', cEmail);
+  fd.append('phone', cPhone);
+  fd.append('comment', cComment);
+  fd.append('sku', bestSku ? bestSku.sku : '—');
+  fd.append('tags', qty);
+  fd.append('term', terms[term - 1]);
+  fd.append('reserve', document.getElementById('addon-reserve')?.checked ? '1' : '');
+  fd.append('historian', hist ? hist.sku + ' (' + (hist.tags === 999999 ? 'Безлимит' : hist.tags + ' тегов') + ')' + (document.getElementById('addon-hist-reserve')?.checked ? ' ×2 резерв' : '') : '');
+  fd.append('reports', rpt ? rpt.sku + ' (' + (rpt.tags === 999999 ? 'Безлимит' : rpt.tags + ' тегов') + ')' : '');
+  fd.append('addons', addonLines.join('\n'));
+  fd.append('total_price', document.getElementById('r-total')?.textContent || '');
+  appendExtraFields(fd);
+
+  // Show sending state
+  const btn = document.getElementById('btn-send-calc');
+  const origText = btn.textContent;
+  btn.textContent = 'Отправка...';
+  btn.disabled = true;
+
+  fetch('/send_calc.php', { method: 'POST', body: fd })
+    .then(r => {
+      if (r.status === 429) throw new Error('rate');
+      return r.json();
+    })
+    .then(data => {
+      if (data.ok) {
+        btn.textContent = '✓ Отправлено!';
+        btn.style.borderColor = 'var(--lime)';
+        btn.style.color = 'var(--lime)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 3000);
+      } else {
+        btn.textContent = data.error || '✗ Ошибка';
+        btn.style.borderColor = 'var(--crimson)';
+        btn.style.color = 'var(--crimson)';
+        setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+      }
+    })
+    .catch(e => {
+      btn.textContent = e.message === 'rate' ? '⏳ Подождите 5 мин' : '✗ Ошибка сети';
+      btn.style.borderColor = 'var(--crimson)';
+      btn.style.color = 'var(--crimson)';
+      setTimeout(() => { btn.textContent = origText; btn.disabled = false; btn.style.borderColor = ''; btn.style.color = ''; }, 4000);
+    });
+}
+
+/* ─── ADDON PRODUCT SLIDERS (Historian, Reports) ─── */
+const histVariants = alphaProducts['alpha-historian'].variants;
+const rptVariants = alphaProducts['alpha-reports'].variants;
+
+function toggleAddonProduct(which) {
+  const wrap = document.getElementById(which === 'historian' ? 'historian-slider-wrap' : 'reports-slider-wrap');
+  const chk = document.getElementById(which === 'historian' ? 'add-historian' : 'add-reports');
+  wrap.style.display = chk.checked ? 'block' : 'none';
+  if (chk.checked) {
+    if (which === 'historian') initHistSlider();
+    else initRptSlider();
+  }
+}
+
+function initHistSlider() {
+  const s = document.getElementById('hist-slider');
+  s.max = histVariants.length - 1;
+  histSliderChanged();
+  updateAddonLabels('hist-slider-labels', histVariants);
+}
+function histSliderChanged() {
+  const idx = +document.getElementById('hist-slider').value;
+  const v = histVariants[idx];
+  document.getElementById('hist-qty-val').textContent = formatTags(v.tags);
+  calcUpdate();
+}
+
+function initRptSlider() {
+  const s = document.getElementById('rpt-slider');
+  s.max = rptVariants.length - 1;
+  rptSliderChanged();
+  updateAddonLabels('rpt-slider-labels', rptVariants);
+}
+function rptSliderChanged() {
+  const idx = +document.getElementById('rpt-slider').value;
+  const v = rptVariants[idx];
+  document.getElementById('rpt-qty-val').textContent = v.tags === 999999 ? 'Безлимит' : formatTags(v.tags);
+  calcUpdate();
+}
+
+function updateAddonLabels(elId, variants) {
+  const el = document.getElementById(elId);
+  const vr = variants;
+  let labels = [];
+  if (vr.length <= 5) {
+    labels = vr.map(v => v.tags === 999999 ? '∞' : formatTags(v.tags));
+  } else {
+    const idxs = [0, Math.floor(vr.length*0.25), Math.floor(vr.length*0.5), Math.floor(vr.length*0.75), vr.length-1];
+    labels = [...new Set(idxs)].map(i => vr[i].tags === 999999 ? '∞' : formatTags(vr[i].tags));
+  }
+  el.innerHTML = labels.map(l => '<span>'+l+'</span>').join('');
+}
+
+function getSelectedHistorian() {
+  if (!document.getElementById('add-historian')?.checked) return null;
+  const idx = +document.getElementById('hist-slider').value;
+  return histVariants[idx];
+}
+function getSelectedReports() {
+  if (!document.getElementById('add-reports')?.checked) return null;
+  const idx = +document.getElementById('rpt-slider').value;
+  return rptVariants[idx];
+}
+
+// Generate ticket ID
+const calcTid = 'КП-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
+const calcLoadTs = Math.floor(Date.now() / 1000); // anti-bot timestamp
+document.getElementById('r-tid').textContent = calcTid;
+
+// Load project from storage on page load
+loadProjectFromStorage();
+
+updateSliderRange();
+calcUpdate();
+
+// ══════════════════════════════
+//  TILE FUNCTIONALITY
+// ══════════════════════════════
+
+function toggleTile(name) {
+  const tile = document.getElementById('tile-' + name);
+  if (!tile) return;
+  
+  // If clicking on an input/select inside expanded tile, don't toggle
+  if (event && (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.tagName === 'LABEL' || event.target.tagName === 'OPTION' || event.target.closest('.tile-expand'))) {
+    return;
+  }
+  
+  const wasOpen = tile.classList.contains('open');
+  
+  // Close all tiles first
+  document.querySelectorAll('.tile.open').forEach(t => t.classList.remove('open'));
+  
+  // Toggle clicked tile
+  if (!wasOpen) {
+    tile.classList.add('open');
+  }
+}
+
+// Update tile values when calc changes (hook into calcUpdate)
+const origCalcUpdate = calcUpdate;
+calcUpdate = function() {
+  origCalcUpdate();
+  updateTileValues();
+};
+
+function updateTileValues() {
+  const prod = document.querySelector('input[name=product]:checked')?.value || 'alpha-one';
+  const prodLabels = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const qty = getSelectedTags();
+  const bestSku = findBestSku(prod, qty);
+  const basePrice = bestSku ? (skuPrices[bestSku.sku] || 0) : 0;
+
+  // Product — show name + SKU + price
+  const tvProd = document.getElementById('tv-product');
+  if (tvProd) tvProd.textContent = (prodLabels[prod] || 'Альфа платформа') + ' · ' + (bestSku?.sku || '') + (document.getElementById('addon-reserve')?.checked ? ' · с резервом' : '');
+
+  // Tags
+  const tvTags = document.getElementById('tv-tags');
+  if (tvTags) tvTags.textContent = (document.getElementById('qty-val')?.textContent || '—') + ' тегов';
+
+  // Term
+  const tvTerm = document.getElementById('tv-term');
+  if (tvTerm) tvTerm.textContent = document.getElementById('term-val')?.textContent || 'Бессрочная';
+
+  // Clients
+  const tvClients = document.getElementById('tv-clients');
+  if (tvClients) {
+    const clNum = parseInt(document.getElementById('addon-client-num')?.value) || 0;
+    const cl = clNum > 0 ? 'CL-F:' + clNum : '';
+    const web = document.getElementById('addon-web')?.value;
+    let parts = [];
+    if (cl) { const n = cl.split(':')[1]; parts.push(n + ' АРМ'); }
+    if (web && web !== '0') { parts.push('WEB ' + document.getElementById('addon-web').options[document.getElementById('addon-web').selectedIndex].text); }
+    tvClients.textContent = parts.length ? parts.join(' + ') : 'Не требуются';
+  }
+
+  // Historian
+  const tvHist = document.getElementById('tv-historian');
+  if (tvHist) {
+    const h = document.getElementById('add-historian')?.checked;
+    if (h) {
+      const hIdx = +document.getElementById('hist-slider').value;
+      const hv = alphaProducts['alpha-historian'].variants[hIdx];
+      if (hv) tvHist.textContent = hv.sku + ' · ' + formatTags(hv.tags) + ' тегов' + (document.getElementById('addon-hist-reserve')?.checked ? ' · ×2 резерв' : '');
+      else tvHist.textContent = 'Включён';
+    } else { tvHist.textContent = 'Не подключён'; }
+  }
+
+  // Reports
+  const tvRpt = document.getElementById('tv-reports');
+  if (tvRpt) {
+    const r = document.getElementById('add-reports')?.checked;
+    if (r) {
+      const rIdx = +document.getElementById('rpt-slider').value;
+      const rv = alphaProducts['alpha-reports'].variants[rIdx];
+      if (rv) tvRpt.textContent = rv.sku + ' · ' + (rv.tags >= 999999 ? 'Безлимит' : formatTags(rv.tags) + ' тегов');
+      else tvRpt.textContent = 'Включены';
+    } else { tvRpt.textContent = 'Не подключены'; }
+  }
+
+  // Drivers
+  const tvDrv = document.getElementById('tv-drivers');
+  if (tvDrv) {
+    let d = ['Базовый'];
+    if (document.getElementById('addon-energy')?.checked) d.push('Энергетика');
+    if (document.getElementById('addon-industry')?.checked) d.push('Промышл.');
+    if (document.getElementById('addon-opcda-cl')?.checked) d.push('OPC DA кл.');
+    if (document.getElementById('addon-opcda-srv')?.checked) d.push('OPC DA серв.');
+    tvDrv.textContent = d.join(' + ');
+  }
+
+  // Extra
+  const tvExtra = document.getElementById('tv-extra');
+  if (tvExtra) {
+    let e = [];
+    if (document.getElementById('addon-reserve')?.checked) e.push('Резерв');
+    if (document.getElementById('addon-portal')?.checked) e.push('WEB-доступ');
+    const iosrv = document.getElementById('addon-iosrv')?.value;
+    const iosrvN = parseInt(document.getElementById('addon-iosrv-num')?.value) || 0; if (iosrvN > 0) e.push(iosrvN + ' доп. серверов');
+    const sla = document.getElementById('addon-sla')?.value;
+    tvExtra.textContent = e.length ? e.join(' · ') : 'Без расширений';
+  }
+
+  // SLA tile
+  const tvSla = document.getElementById('tv-sla');
+  if (tvSla) {
+    const sla = document.getElementById('addon-sla')?.value;
+    const slaLabels = {'SLA-BASE':'Базовый','SLA-STD':'Стандартный','SLA-OPT':'Оптимальный','SLA-PRM':'Премиальный'};
+    tvSla.textContent = slaLabels[sla] || 'Базовый';
+  }
+}
+
+// ══════════════════════════════
+//  SURVEY FUNCTIONALITY
+// ══════════════════════════════
+
+function recommendProduct(tags, servers, reserve, fullClients, webClients) {
+  // Platform: 3+ servers, or >150k tags
+  if (servers >= 3) return 'alpha-platform';
+  if (tags > 150000) return 'alpha-platform';
+
+  // SCADA: 2 servers, reserve, clients, or >50k tags (One+ max = 50k)
+  if (servers === 2) return 'alpha-scada';
+  if (reserve === true) return 'alpha-scada';
+  if (fullClients > 0) return 'alpha-scada';
+  if (webClients > 0) return 'alpha-scada';
+  if (tags > 50000) return 'alpha-scada';
+
+  // One+: single server, no reserve, no clients, ≤50k tags
+  return 'alpha-one';
+}
+
+function mapServerCount(val) {
+  return parseInt(val) || 1;
+}
+
+/* ── Signal-to-tag coefficients ── */
+const powerLevels = {
+  simple:  { di:2, do_:2, ai:3, ao:1 },
+  medium:  { di:2, do_:5, ai:10, ao:1 },
+  complex: { di:3, do_:10, ai:10, ao:15 }
+};
+
+function getCoeffs(selectId, kDiId, kDoId, kAiId, kAoId) {
+  const level = document.getElementById(selectId)?.value || 'medium';
+  if (level === 'custom') {
+    return {
+      di: parseInt(document.getElementById(kDiId)?.value) || 1,
+      do_: parseInt(document.getElementById(kDoId)?.value) || 1,
+      ai: parseInt(document.getElementById(kAiId)?.value) || 1,
+      ao: parseInt(document.getElementById(kAoId)?.value) || 1
+    };
+  }
+  return powerLevels[level] || powerLevels.medium;
+}
+
+function calcSignalTags(diId, doId, aiId, aoId, coeffs) {
+  const di = parseInt(document.getElementById(diId)?.value) || 0;
+  const do_ = parseInt(document.getElementById(doId)?.value) || 0;
+  const ai = parseInt(document.getElementById(aiId)?.value) || 0;
+  const ao = parseInt(document.getElementById(aoId)?.value) || 0;
+  return (di * coeffs.di) + (do_ * coeffs.do_) + (ai * coeffs.ai) + (ao * coeffs.ao);
+}
+
+function switchInputMode() {
+  const mode = document.querySelector('input[name="srv-input-mode"]:checked')?.value || 'tags';
+  document.getElementById('srv-mode-tags').style.display = mode === 'tags' ? '' : 'none';
+  document.getElementById('srv-mode-signals').style.display = mode === 'signals' ? '' : 'none';
+  updateSurveyRecommendation();
+}
+
+function calcTagsFromSignals() {
+  const coeffs = getCoeffs('srv-power-level', 'srv-k-di', 'srv-k-do', 'srv-k-ai', 'srv-k-ao');
+  const total = calcSignalTags('srv-di', 'srv-do', 'srv-ai', 'srv-ao', coeffs);
+  document.getElementById('srv-calc-tags-val').textContent = total.toLocaleString('ru-RU');
+  updateSurveyRecommendation();
+}
+
+function getSurveyTotalTags() {
+  const mode = document.querySelector('input[name="srv-input-mode"]:checked')?.value || 'tags';
+  if (mode === 'tags') {
+    return parseInt(document.getElementById('srv-tags')?.value) || 0;
+  } else if (mode === 'signals') {
+    const coeffs = getCoeffs('srv-power-level', 'srv-k-di', 'srv-k-do', 'srv-k-ai', 'srv-k-ao');
+    return calcSignalTags('srv-di', 'srv-do', 'srv-ai', 'srv-ao', coeffs);
+  }
+  return 0;
+}
+
+function getSurveyInputs() {
+  const tags = getSurveyTotalTags();
+  const servers = mapServerCount(document.getElementById('srv-servers')?.value || '1');
+  const reserveVal = document.querySelector('input[name="srv-reserve"]:checked')?.value || 'нет';
+  const reserve = (reserveVal === 'да' || reserveVal === 'не знаю');
+  const fullClients = parseInt(document.getElementById('srv-full-clients')?.value) || 0;
+  const webVal = document.getElementById('srv-web-clients')?.value || '';
+  const webClients = webVal ? parseInt(webVal) || 0 : 0;
+  
+  const needHistorian = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const histTags = needHistorian ? (parseInt(document.getElementById('srv-hist-tags')?.value) || 0) : 0;
+  const histReserve = needHistorian && document.querySelector('input[name="srv-hist-reserve"]:checked')?.value === 'да';
+  const needReports = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const rptTags = needReports ? (parseInt(document.getElementById('srv-rpt-tags')?.value) || 0) : 0;
+  const rptUsers = needReports ? (document.getElementById('srv-rpt-users')?.value || '') : '';
+
+  const needEnergy = document.getElementById('srv-prot-61850')?.checked ||
+                     document.getElementById('srv-prot-104')?.checked ||
+                     document.getElementById('srv-prot-101')?.checked ||
+                     document.getElementById('srv-prot-tem')?.checked;
+  const needIndustry = document.getElementById('srv-prot-bacnet')?.checked ||
+                       document.getElementById('srv-prot-s7')?.checked ||
+                       document.getElementById('srv-prot-eip')?.checked ||
+                       document.getElementById('srv-prot-fins')?.checked;
+  const needOpcDaCl = document.getElementById('srv-prot-opcda-cl')?.checked;
+  const needOpcDaSrv = document.getElementById('srv-prot-opcda-srv')?.checked;
+  const needPortal = document.querySelector('input[name="srv-web-portal"]:checked')?.value === 'да';
+
+  return {
+    tags, servers, reserve, fullClients, webClients,
+    needHistorian, histTags, histReserve,
+    needReports, rptTags, rptUsers,
+    needEnergy, needIndustry, needOpcDaCl, needOpcDaSrv, needPortal
+  };
+}
+
+function updateSurveyRecommendation() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  const reserveUnsure = document.querySelector('input[name="srv-reserve"]:checked')?.value === 'не знаю';
+  const hints = {
+    'alpha-one': 'Однопользовательский комплект — оптимален для одного сервера без доп. клиентов',
+    'alpha-scada': reserveUnsure
+      ? 'Рекомендуем клиент-серверную версию — она поддерживает резервирование, если оно понадобится'
+      : 'Клиент-серверная система с резервированием и масштабированием',
+    'alpha-platform': 'Мультисерверная распределённая платформа для крупных объектов'
+  };
+  const hintEl = document.getElementById('srv-hint-text');
+  if (hintEl) {
+    hintEl.innerHTML = '<strong style="color:var(--volt)">Рекомендуем: ' + names[rec] + '</strong><br>' +
+      '<span style="font-size:12px;color:var(--text2)">' + hints[rec] + '</span>';
+  }
+  // Hide reserve for Platform
+  const rWrap = document.getElementById('srv-reserve-wrap');
+  if (rWrap) rWrap.style.display = (rec === 'alpha-platform') ? 'none' : '';
+}
+
+function applySurveyToCalculator() {
+  const inp = getSurveyInputs();
+  const rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+  
+  // Close survey tile
+  document.querySelectorAll('.tile.open').forEach(t => t.classList.remove('open'));
+  
+  // Apply recommendation to main calculator
+  if (rec === 'alpha-one') document.getElementById('p1').checked = true;
+  else if (rec === 'alpha-scada') document.getElementById('p2').checked = true;
+  else if (rec === 'alpha-platform') document.getElementById('p3').checked = true;
+  
+  // MUST update slider range first (sets min/max for the new product)
+  updateSliderRange();
+  
+  // THEN set tags on the updated slider
+  if (inp.tags > 0) {
+    const prod = document.querySelector('input[name=product]:checked').value;
+    const p = alphaProducts[prod];
+    if (p) {
+      // Find nearest upper variant
+      let bestIdx = p.variants.length - 1;
+      for (let i = 0; i < p.variants.length; i++) {
+        if (p.variants[i].tags >= inp.tags) { bestIdx = i; break; }
+      }
+      document.getElementById('qty-slider').value = bestIdx;
+      document.getElementById('qty-val').textContent = formatTags(p.variants[bestIdx].tags);
+    }
+  }
+  
+  // Set reserve
+  const reserveEl = document.getElementById('addon-reserve');
+  if (reserveEl) reserveEl.checked = (rec === 'alpha-scada' && inp.reserve);
+
+  // Set clients (Platform includes 1 CL-F, add extra on top)
+  if (rec !== 'alpha-one') {
+    const clients = inp.fullClients > 0 ? inp.fullClients : (rec === 'alpha-platform' ? 1 : 0);
+    const clNum = document.getElementById('addon-client-num');
+    if (clNum) { clNum.value = clients; syncClientSelect(); }
+  }
+
+  // Set web clients
+  const webSel = document.getElementById('addon-web');
+  if (webSel && inp.webClients > 0) {
+    const webMap = [[10,'CL-RO10'],[25,'CL-RO25'],[50,'CL-RO50'],[100,'CL-RO100'],[250,'AP-CL-RO250'],[999,'AP-CL-ROUNL']];
+    let best = '';
+    for (const [n,sku] of webMap) { if (n >= inp.webClients) { best = sku; break; } }
+    if (!best) best = 'AP-CL-ROUNL';
+    webSel.value = best;
+  }
+
+  // Set Historian
+  const histChk = document.getElementById('add-historian');
+  if (histChk && inp.needHistorian && inp.histTags > 0) {
+    histChk.checked = true;
+    toggleAddonProduct('historian');
+    // Find closest historian variant
+    const hv = alphaProducts['alpha-historian'].variants;
+    let hIdx = hv.length - 1;
+    for (let i = 0; i < hv.length; i++) { if (hv[i].tags >= inp.histTags) { hIdx = i; break; } }
+    document.getElementById('hist-slider').value = hIdx;
+    histSliderChanged();
+    // Set Historian reserve
+    const histResChk = document.getElementById('addon-hist-reserve');
+    if (histResChk) histResChk.checked = !!inp.histReserve;
+  }
+
+  // Set Reports
+  const rptChk = document.getElementById('add-reports');
+  if (rptChk && inp.needReports && inp.rptTags > 0) {
+    rptChk.checked = true;
+    toggleAddonProduct('reports');
+    const rv = alphaProducts['alpha-reports'].variants;
+    let rIdx = rv.length - 1;
+    for (let i = 0; i < rv.length; i++) { if (rv[i].tags >= inp.rptTags) { rIdx = i; break; } }
+    document.getElementById('rpt-slider').value = rIdx;
+    rptSliderChanged();
+    // Reports clients
+    const rptClSel = document.getElementById('addon-rpt-cl');
+    if (rptClSel && inp.rptUsers) {
+      const rptVal = 'RPT-CL' + inp.rptUsers;
+      if ([...rptClSel.options].some(o => o.value === rptVal)) rptClSel.value = rptVal;
+    }
+  }
+
+  // Set drivers
+  if (inp.needEnergy && rec !== 'alpha-platform' && rec !== 'alpha-scada') {
+    const e = document.getElementById('addon-energy');
+    if (e) e.checked = true;
+  }
+  if (inp.needIndustry && rec !== 'alpha-platform') {
+    const e = document.getElementById('addon-industry');
+    if (e) e.checked = true;
+  }
+  if (inp.needOpcDaCl) { const e = document.getElementById('addon-opcda-cl'); if (e) e.checked = true; }
+  if (inp.needOpcDaSrv) { const e = document.getElementById('addon-opcda-srv'); if (e) e.checked = true; }
+
+  // Set portal
+  if (inp.needPortal) { const e = document.getElementById('addon-portal'); if (e) e.checked = true; }
+
+  // Set IOSRV for Platform
+  if (rec === 'alpha-platform' && inp.servers > 1) {
+    const iosrvNum = document.getElementById('addon-iosrv-num');
+    if (iosrvNum) { iosrvNum.value = inp.servers - 1; syncIosrvSelect(); }
+  }
+
+  // Update everything (slider range already updated above)
+  calcUpdate();
+  updateTileValues();
+
+  // Show toast
+  const names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+  showToast('✓ Рекомендация применена: ' + (names[rec] || rec));
+
+  // Reset survey to clean state
+  resetSurvey();
+}
+
+function resetSurvey() {
+  // Tags
+  var st = document.getElementById('srv-tags'); if (st) st.value = '';
+  // Signals
+  ['srv-di','srv-do','srv-ai','srv-ao'].forEach(function(id) { var e=document.getElementById(id); if(e) e.value=''; });
+  var cv = document.getElementById('srv-calc-tags-val'); if (cv) cv.textContent = '0';
+  // Mode back to tags
+  var modeTag = document.querySelector('input[name="srv-input-mode"][value="tags"]'); if (modeTag) { modeTag.checked = true; switchInputMode(); }
+  // Servers
+  var ss = document.getElementById('srv-servers'); if (ss) ss.value = 1;
+  // Reserve
+  var rn = document.querySelector('input[name="srv-reserve"][value="нет"]'); if (rn) rn.checked = true;
+  // Clients
+  var fc = document.getElementById('srv-full-clients'); if (fc) { fc.value = 0; fc.disabled = false; }
+  var wc = document.getElementById('srv-web-clients'); if (wc) { wc.value = '0'; [...wc.options].forEach(function(o){o.disabled=false;}); }
+  // Historian
+  var hn = document.querySelector('input[name="srv-historian"][value="нет"]'); if (hn) { hn.checked = true; toggleHistorianFields(); }
+  var ht = document.getElementById('srv-hist-tags'); if (ht) ht.value = '';
+  var hrn = document.querySelector('input[name="srv-hist-reserve"][value="нет"]'); if (hrn) hrn.checked = true;
+  // Reports
+  var rpn = document.querySelector('input[name="srv-reports"][value="нет"]'); if (rpn) { rpn.checked = true; toggleReportsFields(); }
+  var rpt = document.getElementById('srv-rpt-tags'); if (rpt) rpt.value = '';
+  var rpu = document.getElementById('srv-rpt-users'); if (rpu) rpu.value = '1';
+  // Protocols
+  ['srv-prot-61850','srv-prot-104','srv-prot-101','srv-prot-tem','srv-prot-bacnet','srv-prot-s7','srv-prot-eip','srv-prot-fins','srv-prot-opcda-cl','srv-prot-opcda-srv'].forEach(function(id) { var e=document.getElementById(id); if(e) e.checked=false; });
+  // Hints
+  var hb = document.getElementById('srv-hint-text'); if (hb) hb.innerHTML = '<strong style="color:var(--volt)">Введите параметры системы</strong>';
+  var rw = document.getElementById('srv-reserve-wrap'); if (rw) rw.style.display = '';
+  var tw = document.getElementById('tag-limit-warn'); if (tw) tw.style.display = 'none';
+  var hw = document.getElementById('hist-tag-limit-warn'); if (hw) hw.style.display = 'none';
+  var cw = document.getElementById('srv-client-warning'); if (cw) cw.style.display = 'none';
+  var ph = document.getElementById('srv-platform-client-hint'); if (ph) ph.style.display = 'none';
+  // Back to step 1
+  goSrvStep(1);
+}
+
+// Toast notification
+(function(){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.id = 'toast';
+  document.body.appendChild(t);
+})();
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function toggleHistorianFields() {
+  const show = document.querySelector('input[name="srv-historian"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-historian-fields');
+  if (el) el.style.display = show ? '' : 'none';
+}
+function toggleReportsFields() {
+  const show = document.querySelector('input[name="srv-reports"]:checked')?.value === 'да';
+  const el = document.getElementById('srv-reports-fields');
+  if (el) el.style.display = show ? '' : 'none';
+}
+
+/* ── SURVEY STEP NAV ── */
+var srvStep = 1;
+function goSrvStep(n) {
+  n = Math.max(1, Math.min(5, n));
+  srvStep = n;
+  // Show/hide frames
+  for (var i = 1; i <= 5; i++) {
+    var f = document.getElementById('srv-frame-' + i);
+    if (f) f.style.display = (i === n) ? '' : 'none';
+  }
+  // Update dots
+  document.querySelectorAll('.srv-step-dot').forEach(function(d) {
+    var s = parseInt(d.dataset.step);
+    d.classList.remove('active','done');
+    if (s < n) d.classList.add('done');
+    else if (s === n) d.classList.add('active');
+  });
+  // Nav buttons
+  var prev = document.getElementById('srv-btn-prev');
+  var next = document.getElementById('srv-btn-next');
+  if (prev) prev.style.display = n > 1 ? '' : 'none';
+  if (next) {
+    if (n >= 5) { next.style.display = 'none'; }
+    else { next.style.display = ''; next.textContent = 'Далее →'; }
+  }
+  // Update client hints on step 2
+  if (n === 2) {
+    var inp2 = getSurveyInputs();
+    var rec2 = recommendProduct(inp2.tags, inp2.servers, inp2.reserve, 0, 0);
+    var cw = document.getElementById('srv-client-warning');
+    var ph = document.getElementById('srv-platform-client-hint');
+    var srvFullEl = document.getElementById('srv-full-clients');
+    var srvWebEl = document.getElementById('srv-web-clients');
+    if (rec2 === 'alpha-one') {
+      if (cw) { cw.style.display = 'block'; cw.textContent = 'One+ — однопользовательский. Доп. полные клиенты недоступны, WEB — только 1.'; }
+      if (ph) { ph.style.display = 'none'; }
+      if (srvFullEl) { srvFullEl.value = 0; srvFullEl.disabled = true; }
+      if (srvWebEl) {
+        // Keep only "Не нужен" and first web option as "1 клиент"
+        srvWebEl.disabled = false;
+        [...srvWebEl.options].forEach((o,i) => { if (i > 1) o.disabled = true; else o.disabled = false; });
+      }
+    } else if (rec2 === 'alpha-platform') {
+      if (cw) { cw.style.display = 'none'; }
+      if (ph) { ph.style.display = 'block'; }
+      if (srvFullEl) { srvFullEl.disabled = false; srvFullEl.max = 200; }
+      if (srvWebEl) { [...srvWebEl.options].forEach(o => o.disabled = false); }
+    } else {
+      if (cw) { cw.style.display = 'none'; }
+      if (ph) { ph.style.display = 'none'; }
+      if (srvFullEl) { srvFullEl.disabled = false; srvFullEl.max = 100; }
+      if (srvWebEl) { [...srvWebEl.options].forEach(o => o.disabled = false); }
+    }
+  }
+  // Update hint on step 5
+  if (n === 5) {
+    var inp = getSurveyInputs();
+    var rec = recommendProduct(inp.tags, inp.servers, inp.reserve, inp.fullClients, inp.webClients);
+    var names = {'alpha-one':'Alpha.One+','alpha-scada':'Alpha.SCADA','alpha-platform':'Alpha.Platform'};
+    var h2 = document.getElementById('srv-hint-text-2');
+    if (h2) h2.innerHTML = 'Рекомендация: <strong style="color:var(--volt)">' + (names[rec]||rec) + '</strong> · ' + (inp.tags||0).toLocaleString('ru-RU') + ' тегов';
+  }
+}
+
+function checkHistTagLimit() {
+  const v = parseInt(document.getElementById('srv-hist-tags')?.value) || 0;
+  const w = document.getElementById('hist-tag-limit-warn');
+  if (w) w.style.display = v > 2000000 ? 'block' : 'none';
+}
+
+function checkTagLimit() {
+  const v = parseInt(document.getElementById('srv-tags')?.value) || 0;
+  const w = document.getElementById('tag-limit-warn');
+  if (w) w.style.display = v > 2000000 ? 'block' : 'none';
+}
+
+function syncIosrvSelect() {
+  const n = parseInt(document.getElementById('addon-iosrv-num')?.value) || 0;
+  const sel = document.getElementById('addon-iosrv');
+  if (sel) sel.value = n > 0 ? 'AP-IOSRV:' + n : '';
+}
+
+function syncClientSelect() {
+  const n = parseInt(document.getElementById('addon-client-num')?.value) || 0;
+  const sel = document.getElementById('addon-client');
+  if (sel) sel.value = n > 0 ? 'CL-F:' + n : '';
+}
+
+function toggleTheme() {
+  var isLight = document.documentElement.classList.toggle('theme-light');
+  localStorage.setItem('automiq-theme', isLight ? 'light' : 'dark');
+}
+
+// Initialize
+updateTileValues();
+updateSliderRange();
+calcUpdate();
+</script>
+</body>
+</html>
