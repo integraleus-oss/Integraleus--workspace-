@@ -6,9 +6,10 @@
 - Check `last -5` for new logins
 - Check sshd effective config hasn't changed: `sshd -T 2>/dev/null | grep -E 'passwordauth|permitroot'`
 - Check for new users: `grep -E '/bin/(ba)?sh$' /etc/passwd`
-- Check UFW status
+- Check UFW status (use absolute path: `/usr/sbin/ufw status` or `/sbin/ufw status`; do not rely on `ufw` being in PATH)
 - Check for new files in `/etc/ssh/sshd_config.d/`
 - If anything changed since last check → alert user
+- Important: in non-login shells `PATH` may omit `/usr/sbin` and `/sbin`; for admin tools (`ufw`, `iptables`, `sshd`) prefer absolute paths or `command -v` checks before concluding a tool is missing
 
 ### 2. OpenClaw health (every 2-3 heartbeats)
 - Quick `openclaw status` — gateway reachable? Telegram OK?
@@ -39,7 +40,7 @@ Baseline SSH: permitrootlogin=without-password, passwordauthentication=no
 Baseline users: root (/bin/bash), ops (/bin/bash)
 
 Via SSH (`ssh -o ConnectTimeout=10 root@31.128.32.68 "..."`):
-- **Security:** `last -5`, check for unknown IPs; `sshd -T | grep -E 'permitroot|passwordauth'`; `grep -E '/bin/(ba)?sh$' /etc/passwd`; UFW status
+- **Security:** `last -5`, check for unknown IPs; `sshd -T | grep -E 'permitroot|passwordauth'`; `grep -E '/bin/(ba)?sh$' /etc/passwd`; UFW status via absolute path (`/usr/sbin/ufw status` or `/sbin/ufw status`)
 - **Health:** `uptime`; `df -h / | tail -1`; `systemctl is-active openclaw-gateway fail2ban ssh`
 - **Updates:** `apt list --upgradable 2>/dev/null | wc -l`
 - **OAuth health:** `journalctl -u openclaw-gateway --since '2 hours ago' --no-pager 2>&1 | grep -iE 'oauth|refresh.*fail|token.*fail|auth.*error'` — if any matches → alert user: "⚠️ Garden: OAuth токен OpenAI Codex сбоит, нужна переавторизация: `openclaw configure --section model`"
@@ -47,6 +48,7 @@ Via SSH (`ssh -o ConnectTimeout=10 root@31.128.32.68 "..."`):
 - If unknown login IP → alert user
 - If openclaw-gateway is down → alert user
 - If OAuth errors detected → alert user immediately
+- **Codex OAuth check (EVERY garden heartbeat):** `journalctl -u openclaw-gateway --since '2 hours ago' --no-pager 2>&1 | grep -iE 'codex.*refresh|codex.*token.*fail|codex.*oauth'` on MAIN server too — if refresh fails, alert user IMMEDIATELY with "⚠️ Codex OAuth refresh сломался, нужна переавторизация"
 - Log results to `memory/heartbeat-state.json` under `garden`
 
 ### 4. Logging
