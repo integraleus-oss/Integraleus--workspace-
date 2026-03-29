@@ -1,34 +1,34 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-29T04:32:00Z",
-    "openclaw_health": "2026-03-29T08:38:00Z",
-    "system_changes": "2026-03-29T04:32:00Z",
-    "cron_review": "2026-03-29T08:38:00Z",
-    "cron_resources": "2026-03-29T04:32:00Z",
-    "garden": "2026-03-29T04:32:00Z",
-    "telegram_liveness": "2026-03-29T08:38:00Z"
+    "ssh_security": "2026-03-29T09:13:00Z",
+    "openclaw_health": "2026-03-29T09:13:00Z",
+    "system_changes": "2026-03-29T09:13:00Z",
+    "cron_review": "2026-03-29T09:13:00Z",
+    "cron_resources": "2026-03-29T09:13:00Z",
+    "garden": "2026-03-29T09:13:00Z",
+    "telegram_liveness": "2026-03-29T09:13:00Z"
   },
   "telegramHealth": {
     "status": "ok",
     "consecutiveFailures": 0,
-    "lastCheck": "2026-03-29T08:38:00Z",
+    "lastCheck": "2026-03-29T09:13:00Z",
     "note": "Deep probe shows Telegram OK; top channel row remains WARN because requireMention=false for unmentioned group messages. No restart needed. No recent telegram sessions seen in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
   "garden": {
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-29T04:32:00Z",
+    "lastCheck": "2026-03-29T09:13:00Z",
     "alert": null,
-    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h."
+    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-29T08:38:00Z",
-    "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
+    "lastCheck": "2026-03-29T09:13:00Z",
+    "note": "No Codex OAuth refresh errors in main or Garden logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-29T04:32:00Z",
+    "lastCheck": "2026-03-29T09:13:00Z",
     "jobs": {
       "system-monitor:daily": 22119,
       "BBQ Daily Digest": 28675,
@@ -37,13 +37,13 @@
     "note": "No single successful run >50k tokens in the last tracked sample."
   },
   "notes": {
-    "mainDisk": "76% (29G/38G used; was 75% on 2026-03-28)",
+    "mainDisk": "76% (29G/38G used; stable since last heartbeat)",
     "mainLoad": "normal",
     "pendingUpdates": 1,
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
     "openclawUpdate": "Update available: npm 2026.3.28",
-    "cronDeliveryIssue": "As of 2026-03-29T08:38:00Z three cron jobs have usable summaries but status=error because outbound delivery to telegram is not configured: system-monitor:daily, BBQ Daily Digest, Daily Server Monitoring."
+    "cronDeliveryIssue": "As of 2026-03-29T09:13:00Z three cron jobs have usable summaries but status=error because outbound delivery to telegram is not configured: system-monitor:daily, BBQ Daily Digest, Daily Server Monitoring. No new cron failures since the previous heartbeat."
   }
 }
