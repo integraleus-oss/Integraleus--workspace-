@@ -1,17 +1,17 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-29T17:30:00Z",
-    "openclaw_health": "2026-03-29T17:30:00Z",
+    "openclaw_health": "2026-03-29T18:05:00Z",
     "system_changes": "2026-03-29T17:30:00Z",
-    "cron_review": "2026-03-29T17:30:00Z",
+    "cron_review": "2026-03-29T18:05:00Z",
     "cron_resources": "2026-03-29T12:25:00Z",
     "garden": "2026-03-29T17:30:00Z",
-    "telegram_liveness": "2026-03-29T17:30:00Z",
-    "heartbeat": 1774805400,
-    "telegram": 1774805400
+    "telegram_liveness": "2026-03-29T18:05:00Z",
+    "heartbeat": 1774807500,
+    "telegram": 1774807500
   },
   "telegramHealth": {
-    "checkedAt": 1774805400,
+    "checkedAt": 1774807500,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; config warning requireMention=false remains",
     "recentTelegramSession": false,
@@ -27,7 +27,7 @@
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-29T17:30:00Z",
+    "lastCheck": "2026-03-29T18:05:00Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -47,11 +47,11 @@
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
     "openclawUpdate": "Update available: npm 2026.3.28",
-    "cronDeliveryIssue": "As of 2026-03-29T17:30:00Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily recovered and is now ok.",
+    "cronDeliveryIssue": "As of 2026-03-29T18:05:00Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily remains ok.",
     "mainSecurity": "No new external SSH logins, shell users unchanged, UFW rules unchanged"
   },
   "cronStatus": {
-    "checkedAt": 1774805400,
+    "checkedAt": 1774807500,
     "errors": [
       {
         "id": "5947d8b3-540f-454f-a61f-0611ff2c03e7",
