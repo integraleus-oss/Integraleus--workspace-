@@ -1,17 +1,17 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-29T04:32:00Z",
-    "openclaw_health": "2026-03-29T05:42:00Z",
+    "openclaw_health": "2026-03-29T06:17:00Z",
     "system_changes": "2026-03-29T04:32:00Z",
-    "cron_review": "2026-03-29T05:42:00Z",
+    "cron_review": "2026-03-29T06:17:00Z",
     "cron_resources": "2026-03-29T04:32:00Z",
     "garden": "2026-03-29T04:32:00Z",
-    "telegram_liveness": "2026-03-29T05:42:00Z"
+    "telegram_liveness": "2026-03-29T06:17:00Z"
   },
   "telegramHealth": {
     "status": "ok",
     "consecutiveFailures": 0,
-    "lastCheck": "2026-03-29T05:42:00Z",
+    "lastCheck": "2026-03-29T06:17:00Z",
     "note": "Deep probe shows Telegram OK; top channel row remains WARN because requireMention=false for unmentioned group messages. No restart needed. No recent telegram sessions seen in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
   "garden": {
@@ -24,7 +24,7 @@
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-29T05:42:00Z",
+    "lastCheck": "2026-03-29T06:17:00Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
