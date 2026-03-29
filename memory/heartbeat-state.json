@@ -1,17 +1,17 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-29T14:12:00Z",
-    "openclaw_health": "2026-03-29T16:29:00Z",
-    "system_changes": "2026-03-29T15:20:00Z",
-    "cron_review": "2026-03-29T16:29:00Z",
+    "ssh_security": "2026-03-29T17:30:00Z",
+    "openclaw_health": "2026-03-29T17:30:00Z",
+    "system_changes": "2026-03-29T17:30:00Z",
+    "cron_review": "2026-03-29T17:30:00Z",
     "cron_resources": "2026-03-29T12:25:00Z",
-    "garden": "2026-03-29T14:12:00Z",
-    "telegram_liveness": "2026-03-29T16:29:00Z",
-    "heartbeat": 1774801740,
-    "telegram": 1774801740
+    "garden": "2026-03-29T17:30:00Z",
+    "telegram_liveness": "2026-03-29T17:30:00Z",
+    "heartbeat": 1774805400,
+    "telegram": 1774805400
   },
   "telegramHealth": {
-    "checkedAt": 1774801740,
+    "checkedAt": 1774805400,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; config warning requireMention=false remains",
     "recentTelegramSession": false,
@@ -21,13 +21,13 @@
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-29T14:12:00Z",
+    "lastCheck": "2026-03-29T17:30:00Z",
     "alert": null,
     "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-29T16:29:00Z",
+    "lastCheck": "2026-03-29T17:30:00Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -47,11 +47,11 @@
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
     "openclawUpdate": "Update available: npm 2026.3.28",
-    "cronDeliveryIssue": "As of 2026-03-29T16:29:00Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily recovered and is now ok.",
+    "cronDeliveryIssue": "As of 2026-03-29T17:30:00Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily recovered and is now ok.",
     "mainSecurity": "No new external SSH logins, shell users unchanged, UFW rules unchanged"
   },
   "cronStatus": {
-    "checkedAt": 1774801740,
+    "checkedAt": 1774805400,
     "errors": [
       {
         "id": "5947d8b3-540f-454f-a61f-0611ff2c03e7",
@@ -66,13 +66,18 @@
     ]
   },
   "mainSecuritySnapshot": {
-    "checkedAt": 1774793520,
+    "checkedAt": 1774805400,
     "ufw": "active",
     "recentLast": "no new external logins in last -5 beyond known 157.22.180.83 on Mar 25",
     "shellUsers": [
       "root",
       "ops",
       "nova"
+    ],
+    "sshdConfigFiles": [
+      "50-cloud-init.conf",
+      "60-cloudimg-settings.conf",
+      "99-hardening.conf"
     ]
   }
 }
