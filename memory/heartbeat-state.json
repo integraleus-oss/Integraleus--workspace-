@@ -1,60 +1,60 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-29T17:30:00Z",
-    "openclaw_health": "2026-03-30T03:42:00Z",
-    "system_changes": "2026-03-29T17:30:00Z",
-    "cron_review": "2026-03-30T03:42:00Z",
-    "cron_resources": "2026-03-29T12:25:00Z",
-    "garden": "2026-03-29T17:30:00Z",
-    "telegram_liveness": "2026-03-30T03:42:00Z",
-    "heartbeat": 1774842120,
-    "telegram": 1774842120
+    "ssh_security": "2026-03-30T04:43:58Z",
+    "openclaw_health": "2026-03-30T04:43:58Z",
+    "system_changes": "2026-03-30T04:43:58Z",
+    "cron_review": "2026-03-30T04:43:58Z",
+    "cron_resources": "2026-03-30T04:43:58Z",
+    "garden": "2026-03-30T04:43:58Z",
+    "telegram_liveness": "2026-03-30T04:43:58Z",
+    "heartbeat": 1774845838,
+    "telegram": 1774845838
   },
   "telegramHealth": {
-    "checkedAt": 1774842120,
+    "checkedAt": 1774845838,
     "status": "ok",
-    "detail": "openclaw status --deep shows Telegram probe OK; config warning requireMention=false remains",
+    "detail": "openclaw status --deep shows Telegram probe OK; channel row remains WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-30T03:42:00Z",
+    "lastCheck": "2026-03-30T04:43:58Z",
     "consecutiveFailures": 0,
-    "note": "Telegram probe is OK; top status row still WARN only because requireMention=false for unmentioned group messages. No restart needed. No recent telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
+    "note": "Telegram probe is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
   "garden": {
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-29T17:30:00Z",
+    "lastCheck": "2026-03-30T04:43:58Z",
     "alert": null,
     "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-30T03:42:00Z",
+    "lastCheck": "2026-03-30T04:43:58Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-29T12:25:00Z",
+    "lastCheck": "2026-03-30T04:43:58Z",
     "jobs": {
-      "system-monitor:daily": 22119,
-      "BBQ Daily Digest": 28675,
-      "Daily Server Monitoring": 20973
+      "system-monitor:daily": 20036,
+      "BBQ Daily Digest": 24805,
+      "Daily Server Monitoring": 17546
     },
-    "note": "No single successful run >50k tokens in the last tracked sample."
+    "note": "No single recent run exceeded 50k tokens; simple checks stayed under 3 minutes."
   },
   "notes": {
-    "mainDisk": "76% (29G/38G used; stable since last heartbeat)",
+    "mainDisk": "76% (29G/38G used)",
     "mainLoad": "normal",
     "pendingUpdates": 1,
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
     "openclawUpdate": "Update available: npm 2026.3.28",
-    "cronDeliveryIssue": "As of 2026-03-30T03:42:00Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily remains ok.",
-    "mainSecurity": "No new external SSH logins, shell users unchanged, UFW rules unchanged"
+    "cronDeliveryIssue": "As of 2026-03-30T04:43:58Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily remains ok.",
+    "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged"
   },
   "cronStatus": {
-    "checkedAt": 1774842120,
+    "checkedAt": 1774845838,
     "errors": [
       {
         "id": "5947d8b3-540f-454f-a61f-0611ff2c03e7",
@@ -69,7 +69,7 @@
     ]
   },
   "mainSecuritySnapshot": {
-    "checkedAt": 1774805400,
+    "checkedAt": 1774845838,
     "ufw": "active",
     "recentLast": "no new external logins in last -5 beyond known 157.22.180.83 on Mar 25",
     "shellUsers": [
