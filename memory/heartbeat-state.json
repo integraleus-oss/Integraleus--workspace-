@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-30T04:43:58Z",
-    "openclaw_health": "2026-03-30T06:39:53Z",
+    "openclaw_health": "2026-03-30T07:14:07Z",
     "system_changes": "2026-03-30T04:43:58Z",
-    "cron_review": "2026-03-30T06:39:53Z",
+    "cron_review": "2026-03-30T07:14:07Z",
     "cron_resources": "2026-03-30T04:43:58Z",
     "garden": "2026-03-30T04:43:58Z",
-    "telegram_liveness": "2026-03-30T06:39:53Z",
-    "heartbeat": 1774852793,
-    "telegram": 1774852793
+    "telegram_liveness": "2026-03-30T07:14:07Z",
+    "heartbeat": 1774854847,
+    "telegram": 1774854847
   },
   "telegramHealth": {
-    "checkedAt": 1774852793,
+    "checkedAt": 1774854847,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram health OK; channel row remains WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-30T06:39:53Z",
+    "lastCheck": "2026-03-30T07:14:07Z",
     "consecutiveFailures": 0,
     "note": "Telegram probe is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -34,13 +34,15 @@
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-30T04:43:58Z",
+    "lastCheck": "2026-03-30T07:14:07Z",
     "jobs": {
-      "system-monitor:daily": 20036,
-      "BBQ Daily Digest": 24805,
-      "Daily Server Monitoring": 17546
+      "healthcheck:security-audit": 16281,
+      "healthcheck:update-status": 15279,
+      "Garden Server Weekly Check": 24540,
+      "BBQ Daily Digest": 27232,
+      "Daily Server Monitoring": 17347
     },
-    "note": "No single recent run exceeded 50k tokens; simple checks stayed under 3 minutes."
+    "note": "Recent runs stayed under 50k tokens; longest observed run in this sample was Garden weekly at 150s, acceptable for a weekly deep check."
   },
   "notes": {
     "mainDisk": "76% (29G/38G used)",
@@ -49,24 +51,14 @@
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
-    "openclawUpdate": "Update available: npm 2026.3.28",
-    "cronDeliveryIssue": "As of 2026-03-30T06:39:53Z only two cron jobs still show status=error because outbound delivery to telegram is not configured: BBQ Daily Digest, Daily Server Monitoring. system-monitor:daily remains ok.",
-    "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged"
+    "openclawUpdate": "Update available: pnpm 2026.3.28; suggested maintenance window after 20:00 MSK.",
+    "cronDeliveryIssue": "Resolved as of 2026-03-30T07:14:07Z: BBQ Daily Digest and Daily Server Monitoring delivered successfully.",
+    "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
+    "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet."
   },
   "cronStatus": {
-    "checkedAt": 1774852793,
-    "errors": [
-      {
-        "id": "5947d8b3-540f-454f-a61f-0611ff2c03e7",
-        "name": "BBQ Daily Digest",
-        "error": "Outbound not configured for channel: telegram"
-      },
-      {
-        "id": "894f7536-0a96-4c00-902d-d1eb3cb1a262",
-        "name": "Daily Server Monitoring",
-        "error": "Outbound not configured for channel: telegram"
-      }
-    ]
+    "checkedAt": 1774854847,
+    "errors": []
   },
   "mainSecuritySnapshot": {
     "checkedAt": 1774845838,
