@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-30T04:43:58Z",
-    "openclaw_health": "2026-03-30T07:14:07Z",
+    "openclaw_health": "2026-03-30T12:29:59Z",
     "system_changes": "2026-03-30T04:43:58Z",
-    "cron_review": "2026-03-30T07:14:07Z",
+    "cron_review": "2026-03-30T12:29:59Z",
     "cron_resources": "2026-03-30T04:43:58Z",
     "garden": "2026-03-30T04:43:58Z",
-    "telegram_liveness": "2026-03-30T07:14:07Z",
-    "heartbeat": 1774854847,
-    "telegram": 1774854847
+    "telegram_liveness": "2026-03-30T12:29:59Z",
+    "heartbeat": 1774873799,
+    "telegram": 1774873799
   },
   "telegramHealth": {
-    "checkedAt": 1774854847,
+    "checkedAt": 1774873799,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram health OK; channel row remains WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-30T07:14:07Z",
+    "lastCheck": "2026-03-30T12:29:59Z",
     "consecutiveFailures": 0,
     "note": "Telegram probe is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -57,7 +57,7 @@
     "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet."
   },
   "cronStatus": {
-    "checkedAt": 1774854847,
+    "checkedAt": 1774873799,
     "errors": []
   },
   "mainSecuritySnapshot": {
