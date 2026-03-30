@@ -1,22 +1,22 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-30T04:43:58Z",
-    "openclaw_health": "2026-03-30T12:29:59Z",
-    "system_changes": "2026-03-30T04:43:58Z",
-    "cron_review": "2026-03-30T12:29:59Z",
-    "cron_resources": "2026-03-30T04:43:58Z",
-    "garden": "2026-03-30T04:43:58Z",
-    "telegram_liveness": "2026-03-30T12:29:59Z",
-    "heartbeat": 1774873799,
-    "telegram": 1774873799
+    "ssh_security": "2026-03-30T14:50:40Z",
+    "openclaw_health": "2026-03-30T14:50:40Z",
+    "system_changes": "2026-03-30T14:50:40Z",
+    "cron_review": "2026-03-30T14:50:40Z",
+    "cron_resources": "2026-03-30T14:50:40Z",
+    "garden": "2026-03-30T14:50:40Z",
+    "telegram_liveness": "2026-03-30T14:50:40Z",
+    "heartbeat": 1774882240,
+    "telegram": 1774882240
   },
   "telegramHealth": {
-    "checkedAt": 1774873799,
+    "checkedAt": 1774882240,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram health OK; channel row remains WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-30T12:29:59Z",
+    "lastCheck": "2026-03-30T14:50:40Z",
     "consecutiveFailures": 0,
     "note": "Telegram probe is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -24,25 +24,26 @@
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-30T04:43:58Z",
+    "lastCheck": "2026-03-30T14:50:40Z",
     "alert": null,
     "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-30T04:43:58Z",
+    "lastCheck": "2026-03-30T14:50:40Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-30T07:14:07Z",
+    "lastCheck": "2026-03-30T14:50:40Z",
     "jobs": {
+      "system-monitor:daily": 19444,
       "healthcheck:security-audit": 16281,
       "healthcheck:update-status": 15279,
       "Garden Server Weekly Check": 24540,
       "BBQ Daily Digest": 27232,
       "Daily Server Monitoring": 17347
     },
-    "note": "Recent runs stayed under 50k tokens; longest observed run in this sample was Garden weekly at 150s, acceptable for a weekly deep check."
+    "note": "Recent sampled runs stayed under 50k tokens; no simple check exceeded 3 minutes."
   },
   "notes": {
     "mainDisk": "76% (29G/38G used)",
@@ -54,10 +55,11 @@
     "openclawUpdate": "Update available: pnpm 2026.3.28; suggested maintenance window after 20:00 MSK.",
     "cronDeliveryIssue": "Resolved as of 2026-03-30T07:14:07Z: BBQ Daily Digest and Daily Server Monitoring delivered successfully.",
     "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
-    "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet."
+    "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet.",
+    "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774873799,
+    "checkedAt": 1774882240,
     "errors": []
   },
   "mainSecuritySnapshot": {
