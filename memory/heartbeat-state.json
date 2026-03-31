@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-30T14:50:40Z",
-    "openclaw_health": "2026-03-30T14:50:40Z",
+    "openclaw_health": "2026-03-31T00:17:38Z",
     "system_changes": "2026-03-30T14:50:40Z",
-    "cron_review": "2026-03-30T14:50:40Z",
+    "cron_review": "2026-03-31T00:17:38Z",
     "cron_resources": "2026-03-30T14:50:40Z",
     "garden": "2026-03-30T14:50:40Z",
-    "telegram_liveness": "2026-03-30T14:50:40Z",
-    "heartbeat": 1774882240,
-    "telegram": 1774882240
+    "telegram_liveness": "2026-03-31T00:17:38Z",
+    "heartbeat": 1774916258,
+    "telegram": 1774916258
   },
   "telegramHealth": {
-    "checkedAt": 1774882240,
+    "checkedAt": 1774916258,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram health OK; channel row remains WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-30T14:50:40Z",
+    "lastCheck": "2026-03-31T00:17:38Z",
     "consecutiveFailures": 0,
     "note": "Telegram probe is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -59,7 +59,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774882240,
+    "checkedAt": 1774916258,
     "errors": []
   },
   "mainSecuritySnapshot": {
