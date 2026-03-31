@@ -1,24 +1,24 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T21:26:17Z",
-    "openclaw_health": "2026-03-31T21:26:17Z",
+    "openclaw_health": "2026-03-31T22:59:00Z",
     "system_changes": "2026-03-31T21:26:17Z",
-    "cron_review": "2026-03-31T21:26:17Z",
+    "cron_review": "2026-03-31T22:59:00Z",
     "cron_resources": "2026-03-31T18:36:47Z",
     "garden": "2026-03-31T18:36:47Z",
-    "telegram_liveness": "2026-03-31T21:26:17Z",
-    "heartbeat": 1774992377,
-    "telegram": 1774992377
+    "telegram_liveness": "2026-03-31T22:59:00Z",
+    "heartbeat": 1774994340,
+    "telegram": 1774994340
   },
   "telegramHealth": {
-    "checkedAt": 1774992377,
+    "checkedAt": 1774994340,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; user actively chatting",
     "recentTelegramSession": true,
     "recentSessionAges": [
       "just now"
     ],
-    "lastCheck": "2026-03-31T21:26:17Z",
+    "lastCheck": "2026-03-31T22:59:00Z",
     "consecutiveFailures": 0,
     "note": "Telegram fully operational; user confirmed interaction."
   },
