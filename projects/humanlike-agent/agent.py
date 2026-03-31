@@ -24,7 +24,7 @@ from human_simulation import (
     calculate_typing_chunks, should_reply, split_message,
     maybe_add_typo_correction, is_night,
     update_incoming, update_outgoing, simulate_app_opening,
-    should_delay_response, pause_between_parts,
+    should_delay_response, pause_between_parts, normalize_reply_text,
 )
 from llm_client import ask_llm
 from rag_client import search as rag_search, load_index as load_rag_index
@@ -195,9 +195,13 @@ async def handle_message(event):
         user_msgs_after_agent = 0
         for msg in reversed(history):
             if msg["is_agent"]:
-                # continuation только если после последнего ответа агента
-                # был ровно один свежий месседж от того же собеседника.
-                is_continuation = (user_msgs_after_agent == 1)
+                looks_like_followup = any(x in text.lower() for x in [
+                    "?", "а ты", "а как", "что думаешь", "почему", "как", "зачем",
+                    "расскажи", "объясни", "уточни", "имеешь в виду", "то есть"
+                ])
+                # continuation только если это правда похоже на уточнение,
+                # а не просто болтовня в группе.
+                is_continuation = (user_msgs_after_agent == 1 and looks_like_followup)
                 break
             elif msg["user_id"] == event.sender_id:
                 user_msgs_after_agent += 1
@@ -342,6 +346,12 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
 
     if not reply:
         logger.info(f"LLM decided to skip or failed")
+        return
+
+    reply = normalize_reply_text(reply)
+
+    if not reply:
+        logger.info(f"Reply became empty after normalization")
         return
 
     # Разбиваем на части

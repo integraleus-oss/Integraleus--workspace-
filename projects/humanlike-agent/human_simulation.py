@@ -243,34 +243,46 @@ def should_reply(message_text: str, triggers: list[str] = None,
                 return True
 
     if is_night():
-        return random.random() < 0.03  # 3% ночью
+        return random.random() < 0.01  # 1% ночью
 
-    return random.random() < 0.06  # 6% днём
+    return random.random() < 0.02  # 2% днём
 
 
 # ─── Разбивка сообщений ───
 
 def split_message(text: str) -> list[str]:
-    """Разбивает ответ на части как человек в чате.
+    """Короткие — целиком. Длинные (>500 символов) — максимум 2 части."""
+    if len(text) < 500:
+        return [text]
 
-    Человек в чате:
-    - Иногда шлёт одним куском
-    - Иногда разбивает мысль на 2-4 коротких сообщения
-    - Первое сообщение — основная мысль, остальные — дополнения
-    """
-    # Короткие — всегда целиком
+    # Ищем точку разбивки примерно посередине
+    mid = len(text) // 2
+    # Ищем ближайшую точку/перенос к середине
+    best = mid
+    for offset in range(0, min(100, mid)):
+        for pos in [mid + offset, mid - offset]:
+            if 0 < pos < len(text) and text[pos-1] in '.!?\n':
+                best = pos
+                break
+        else:
+            continue
+        break
+
+    if best == mid:
+        return [text]  # не нашли хорошую точку — целиком
+
+    return [text[:best].strip(), text[best:].strip()]
+
+def _split_message_old(text: str) -> list[str]:
+    """Старая версия — оставлена для справки."""
     if len(text) < 100:
         return [text]
 
-    # 40% шанс отправить целиком даже длинное
     if random.random() < 0.40:
         return [text]
 
-    # Ищем естественные точки разбивки
-    # Приоритет: \n\n > \n > ". " > ", " (для длинных)
     parts = []
 
-    # Сначала пробуем по двойному переносу
     if '\n\n' in text:
         raw_parts = text.split('\n\n')
         raw_parts = [p.strip() for p in raw_parts if p.strip()]
@@ -326,6 +338,43 @@ def _merge_short_parts(parts: list[str], min_len: int = 30) -> list[str]:
         else:
             merged.append(p)
     return merged
+
+
+def normalize_reply_text(text: str, max_chars: int = 650) -> str:
+    """Убирает повторы и подрезает слишком длинные простыни для группового чата."""
+    text = re.sub(r'\n{3,}', '\n\n', text).strip()
+
+    # Убираем дословно повторяющиеся абзацы/строки
+    blocks = [b.strip() for b in re.split(r'\n+', text) if b.strip()]
+    uniq_blocks = []
+    seen = set()
+    for b in blocks:
+        key = re.sub(r'\s+', ' ', b.lower()).strip(' .,!?:;')
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq_blocks.append(b)
+    text = '\n'.join(uniq_blocks)
+
+    # Если модель нагенерила длинную простыню без переносов — режем по предложениям без дублей
+    sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', text) if s.strip()]
+    uniq_sentences = []
+    seen = set()
+    for s in sentences:
+        key = re.sub(r'\s+', ' ', s.lower()).strip(' .,!?:;')
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq_sentences.append(s)
+
+    text = ' '.join(uniq_sentences).strip()
+
+    if len(text) > max_chars:
+        cut = text[:max_chars]
+        m = re.search(r'^(.+[.!?])\s+[^.!?]*$', cut)
+        text = m.group(1).strip() if m else cut.rstrip() + '…'
+
+    return text
 
 
 # ─── Опечатки ───
