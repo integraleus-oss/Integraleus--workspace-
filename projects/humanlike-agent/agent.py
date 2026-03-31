@@ -268,8 +268,10 @@ async def _process_reply_flow(event, chat_id: int, first_name: str, text: str,
             return
 
         # 4. Чтение + размышление
-        if is_reply or mentioned or is_continuation:
-            await asyncio.sleep(random.uniform(0.5, 2.0))
+        if is_reply or mentioned:
+            await asyncio.sleep(random.uniform(0.2, 0.8))
+        elif is_continuation:
+            await asyncio.sleep(random.uniform(0.4, 1.2))
         else:
             await simulate_reading(len(text))
             await simulate_thinking(chat_id)
@@ -312,10 +314,12 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
     history = get_chat_history(chat_id, MAX_CONTEXT_MESSAGES)
     llm_history = format_chat_for_llm(history)
 
-    # RAG
+    # RAG: best effort. Для живого чата важнее ответить быстро, чем ждать поиск.
     rag_context = ""
     try:
-        rag_context = await rag_search(text, top_k=3)
+        rag_context = await asyncio.wait_for(rag_search(text, top_k=3), timeout=1.5)
+    except asyncio.TimeoutError:
+        logger.warning(f"RAG timeout in {chat_id}; replying without RAG")
     except Exception as e:
         logger.error(f"RAG error: {e}")
 
