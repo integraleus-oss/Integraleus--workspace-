@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T04:24:58Z",
-    "openclaw_health": "2026-03-31T04:24:58Z",
+    "openclaw_health": "2026-03-31T04:58:40Z",
     "system_changes": "2026-03-31T04:24:58Z",
-    "cron_review": "2026-03-31T04:25:00Z",
+    "cron_review": "2026-03-31T04:58:40Z",
     "cron_resources": "2026-03-31T04:24:58Z",
     "garden": "2026-03-31T04:24:58Z",
-    "telegram_liveness": "2026-03-31T04:25:00Z",
-    "heartbeat": 1774931100,
-    "telegram": 1774931100
+    "telegram_liveness": "2026-03-31T04:58:40Z",
+    "heartbeat": 1774933120,
+    "telegram": 1774933120
   },
   "telegramHealth": {
-    "checkedAt": 1774931100,
+    "checkedAt": 1774933120,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T04:25:00Z",
+    "lastCheck": "2026-03-31T04:58:40Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -30,7 +30,7 @@
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T04:24:58Z",
+    "lastCheck": "2026-03-31T04:58:40Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -60,7 +60,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774931100,
+    "checkedAt": 1774933120,
     "errors": []
   },
   "mainSecuritySnapshot": {
