@@ -197,11 +197,12 @@ async def handle_message(event):
             if msg["is_agent"]:
                 looks_like_followup = any(x in text.lower() for x in [
                     "?", "а ты", "а как", "что думаешь", "почему", "как", "зачем",
-                    "расскажи", "объясни", "уточни", "имеешь в виду", "то есть"
+                    "расскажи", "объясни", "уточни", "имеешь в виду", "то есть",
+                    "подробнее", "можно подробнее", "в смысле", "то есть как"
                 ])
-                # continuation только если это правда похоже на уточнение,
-                # а не просто болтовня в группе.
-                is_continuation = (user_msgs_after_agent == 1 and looks_like_followup)
+                # continuation только если это правда короткое уточнение
+                # сразу после нашего ответа, а не обычная болтовня в группе.
+                is_continuation = (user_msgs_after_agent == 1 and looks_like_followup and len(text) <= 220)
                 break
             elif msg["user_id"] == event.sender_id:
                 user_msgs_after_agent += 1
@@ -210,6 +211,11 @@ async def handle_message(event):
 
     # Решаем, отвечать ли
     triggers = mission.get("triggers", []) if mission else []
+
+    # В группах отвечаем только если:
+    # 1) был прямой reply/mention,
+    # 2) это короткое осмысленное уточнение после нашего ответа,
+    # 3) или это явный вопрос/триггер.
     if not is_private and not is_continuation and not should_reply(text, triggers, mentioned, is_reply):
         logger.info(f"SKIP in {chat_id} from {first_name}: reply={is_reply}, mention={mentioned}, cont={is_continuation}, triggers_hit=false")
         return

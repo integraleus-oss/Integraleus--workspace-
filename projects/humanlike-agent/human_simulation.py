@@ -232,20 +232,27 @@ def calculate_typing_chunks(text: str, chat_id: int = None) -> list[tuple[float,
 
 def should_reply(message_text: str, triggers: list[str] = None,
                  mentioned: bool = False, is_reply_to_agent: bool = False) -> bool:
-    """Решает, стоит ли отвечать на сообщение."""
+    """Решает, стоит ли отвечать на сообщение.
+    В группах — только на прямой запрос, а не по случайности."""
     if mentioned or is_reply_to_agent:
         return True
 
+    text_lower = message_text.lower().strip()
+
     if triggers:
-        text_lower = message_text.lower()
         for trigger in triggers:
             if trigger.lower() in text_lower:
                 return True
 
-    if is_night():
-        return random.random() < 0.01  # 1% ночью
+    question_markers = [
+        "?", "почему", "зачем", "как", "что", "когда", "где", "какой", "какая",
+        "какие", "можно ли", "нужно ли", "стоит ли", "объясни", "расскажи", "подскажи",
+        "посоветуй", "имеет смысл", "в чем", "в чём"
+    ]
+    if any(marker in text_lower for marker in question_markers):
+        return True
 
-    return random.random() < 0.02  # 2% днём
+    return False
 
 
 # ─── Разбивка сообщений ───
