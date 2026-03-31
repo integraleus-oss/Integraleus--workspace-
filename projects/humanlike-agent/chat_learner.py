@@ -366,9 +366,9 @@ def get_adaptive_max_tokens(chat_id: int) -> int:
     """Возвращает адаптивный max_tokens для LLM на основе стиля чата."""
     style = get_chat_style(chat_id)
     if not style or style['samples_count'] < 5:
-        return 500  # дефолт
+        return 220  # дефолт: коротко для чатов
 
     target = style['typical_response_length']
     # Токены ≈ символы / 3 для русского
-    tokens = max(100, min(800, int(target / 2.5)))
+    tokens = max(180, min(320, int(target / 3.5)))
     return tokens

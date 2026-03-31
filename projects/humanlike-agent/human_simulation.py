@@ -340,7 +340,7 @@ def _merge_short_parts(parts: list[str], min_len: int = 30) -> list[str]:
     return merged
 
 
-def normalize_reply_text(text: str, max_chars: int = 650) -> str:
+def normalize_reply_text(text: str, max_chars: int = 280) -> str:
     """Убирает повторы и подрезает слишком длинные простыни для группового чата."""
     text = re.sub(r'\n{3,}', '\n\n', text).strip()
 
@@ -475,25 +475,8 @@ def _make_typo(word: str, typo_type: str) -> str:
 
 
 def maybe_add_typo_correction(parts: list[str], intensity: float = 0.04) -> list[str]:
-    """Может добавить опечатку в одну из частей и исправление следующим сообщением."""
-    if len(parts) == 0:
-        return parts
-
-    # Только для первой или единственной части
-    target_idx = 0
-    typo_result = add_typos(parts[target_idx], intensity)
-
-    if typo_result is None:
-        return parts
-
-    typo_text, correction = typo_result
-    new_parts = parts.copy()
-    new_parts[target_idx] = typo_text
-
-    # Исправление вставляем сразу после
-    new_parts.insert(target_idx + 1, correction)
-
-    return new_parts
+    """Опечатки отключены: они выглядят палевно и засоряют чат."""
+    return parts
 
 
 # ─── Паузы между частями ───
