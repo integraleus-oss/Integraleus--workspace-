@@ -12,8 +12,8 @@ OLLAMA_URL = "http://127.0.0.1:11434"
 EMBED_MODEL = "nomic-embed-text"
 
 # Пути к индексу alpha-bot
-CHUNKS_FILE = "/opt/alpha-bot/chunks.json"
-EMBEDDINGS_FILE = "/opt/alpha-bot/embeddings.npy"
+CHUNKS_FILE = "/opt/alpha-bot-data/chunks.json"
+EMBEDDINGS_FILE = "/opt/alpha-bot-data/embeddings.npy"
 
 _chunks = []
 _embeddings = None
@@ -51,13 +51,18 @@ async def search(query: str, top_k: int = 5) -> str:
                 timeout=aiohttp.ClientTimeout(total=5),
             ) as resp:
                 data = await resp.json()
-                query_emb = np.array(data["embeddings"][0], dtype=np.float32)
+                embs = data.get("embeddings", [])
+                if not embs or not embs[0]:
+                    return ""
+                query_emb = np.array(embs[0], dtype=np.float32)
     except Exception as e:
         logger.error(f"RAG embed error: {e}")
         return ""
 
     scores = []
-    for i, emb in enumerate(_embeddings):
+    max_idx = min(len(_chunks), len(_embeddings))
+    for i in range(max_idx):
+        emb = _embeddings[i]
         sim = cosine_similarity(query_emb, emb)
         # Буст для специализированных файлов (не AlphaPlatform_*)
         source = _chunks[i].get("source", "")
