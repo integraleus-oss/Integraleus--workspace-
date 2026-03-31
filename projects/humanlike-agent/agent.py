@@ -50,6 +50,12 @@ MY_ID = None
 # Отложенные ответы (chat_id -> asyncio.Task)
 _delayed_tasks: dict[int, asyncio.Task] = {}
 
+# Активные генерации/отправки (chat_id -> asyncio.Task)
+_active_reply_tasks: dict[int, asyncio.Task] = {}
+
+# Счётчик поколений ответа по чату: новое сообщение инвалидирует старую генерацию
+_reply_generation: dict[int, int] = {}
+
 # Чаты, о которых уже уведомили владельца
 _notified_chats: set[int] = set()
 
@@ -127,6 +133,7 @@ async def handle_message(event):
     sender = await event.get_sender()
     chat = await event.get_chat()
     chat_id = event.chat_id
+    is_private = event.is_private
 
     username = getattr(sender, "username", "") or ""
     first_name = getattr(sender, "first_name", "") or ""
@@ -172,79 +179,124 @@ async def handle_message(event):
     for name in my_names:
         if name and name.lower() in text.lower():
             mentioned = True
-
-    is_private = event.is_private
+    # Также проверяем упоминание через tg://user ссылку
+    if str(MY_ID) in text:
+        mentioned = True
+    # Проверяем entities сообщения (mention)
+    if event.message and event.message.entities:
+        for entity in event.message.entities:
+            if hasattr(entity, 'user_id') and entity.user_id == MY_ID:
+                mentioned = True
 
     # Продолжение диалога?
     is_continuation = False
     history = get_chat_history(chat_id, 5)
     if history:
+        user_msgs_after_agent = 0
         for msg in reversed(history):
             if msg["is_agent"]:
-                is_continuation = True
+                # continuation только если после последнего ответа агента
+                # был ровно один свежий месседж от того же собеседника.
+                is_continuation = (user_msgs_after_agent == 1)
                 break
-            elif msg["user_id"] != event.sender_id:
+            elif msg["user_id"] == event.sender_id:
+                user_msgs_after_agent += 1
+            else:
                 break
 
     # Решаем, отвечать ли
     triggers = mission.get("triggers", []) if mission else []
     if not is_private and not is_continuation and not should_reply(text, triggers, mentioned, is_reply):
-        logger.debug(f"Skipping message in {chat_id} from {first_name}")
+        logger.info(f"SKIP in {chat_id} from {first_name}: reply={is_reply}, mention={mentioned}, cont={is_continuation}, triggers_hit=false")
         return
 
     logger.info(f"Will reply in {chat_id} to {first_name} (reply={is_reply}, mention={mentioned}, cont={is_continuation})")
 
-    # Отменяем предыдущий отложенный ответ если есть новое сообщение
+    # Новое сообщение инвалидирует все прошлые незавершённые ответы по чату
+    generation = _reply_generation.get(chat_id, 0) + 1
+    _reply_generation[chat_id] = generation
+
     if chat_id in _delayed_tasks:
         _delayed_tasks[chat_id].cancel()
         del _delayed_tasks[chat_id]
 
-    # ─── Фаза 1: Реалистичные задержки ───
+    if chat_id in _active_reply_tasks:
+        _active_reply_tasks[chat_id].cancel()
+        del _active_reply_tasks[chat_id]
 
-    # 1. Имитация "открытия приложения"
-    if not is_private or not (is_reply or mentioned):
-        await simulate_app_opening(chat_id)
+    task = asyncio.create_task(_process_reply_flow(
+        event, chat_id, first_name, text, mission,
+        is_private, is_reply, mentioned, is_continuation, generation,
+    ))
+    _active_reply_tasks[chat_id] = task
 
-    # 2. Помечаем прочитанным (как человек — открыл, увидел)
-    await mark_as_read(chat_id, event.id)
 
-    # 3. Проверяем "прочитал, но ответит позже"
-    should_delay, delay_secs = should_delay_response(chat_id)
-    if should_delay and not (is_reply or mentioned):
-        logger.info(f"Delaying response in {chat_id} by {delay_secs:.0f}s")
-        task = asyncio.create_task(_delayed_reply(
-            event, chat_id, first_name, text, mission, delay_secs
-        ))
-        _delayed_tasks[chat_id] = task
-        return
+async def _process_reply_flow(event, chat_id: int, first_name: str, text: str,
+                              mission: dict | None, is_private: bool,
+                              is_reply: bool, mentioned: bool,
+                              is_continuation: bool, generation: int):
+    """Один актуальный pipeline ответа на чат.
+    Если пришло новое сообщение, generation изменится и старый pipeline должен умереть."""
+    try:
+        # 1. Имитация "открытия приложения"
+        if not is_private or not (is_reply or mentioned):
+            await simulate_app_opening(chat_id)
+        if _reply_generation.get(chat_id) != generation:
+            return
 
-    # 4. Чтение + размышление
-    if is_reply or mentioned or is_continuation:
-        await asyncio.sleep(random.uniform(0.5, 2.0))
-    else:
-        await simulate_reading(len(text))
-        await simulate_thinking(chat_id)
+        # 2. Помечаем прочитанным
+        await mark_as_read(chat_id, event.id)
 
-    # 5. Генерация и отправка ответа
-    await _generate_and_send(event, chat_id, first_name, text, mission)
+        # 3. Проверяем "прочитал, но ответит позже"
+        should_delay, delay_secs = should_delay_response(chat_id)
+        if should_delay and not (is_reply or mentioned):
+            logger.info(f"Delaying response in {chat_id} by {delay_secs:.0f}s")
+            task = asyncio.create_task(_delayed_reply(
+                event, chat_id, first_name, text, mission, delay_secs, generation
+            ))
+            _delayed_tasks[chat_id] = task
+            return
+
+        # 4. Чтение + размышление
+        if is_reply or mentioned or is_continuation:
+            await asyncio.sleep(random.uniform(0.5, 2.0))
+        else:
+            await simulate_reading(len(text))
+            await simulate_thinking(chat_id)
+
+        if _reply_generation.get(chat_id) != generation:
+            return
+
+        # 5. Генерация и отправка ответа
+        await _generate_and_send(event, chat_id, first_name, text, mission, generation)
+    except asyncio.CancelledError:
+        logger.info(f"Reply flow in {chat_id} cancelled (new message)")
+    finally:
+        if _active_reply_tasks.get(chat_id) is asyncio.current_task():
+            _active_reply_tasks.pop(chat_id, None)
 
 
 async def _delayed_reply(event, chat_id: int, first_name: str, text: str,
-                         mission: dict | None, delay: float):
+                         mission: dict | None, delay: float, generation: int):
     """Отложенный ответ — "прочитал, ответил позже"."""
     try:
         await asyncio.sleep(delay)
+        if _reply_generation.get(chat_id) != generation:
+            return
         logger.info(f"Sending delayed reply in {chat_id}")
         await simulate_thinking(chat_id)
-        await _generate_and_send(event, chat_id, first_name, text, mission)
+        if _reply_generation.get(chat_id) != generation:
+            return
+        await _generate_and_send(event, chat_id, first_name, text, mission, generation)
     except asyncio.CancelledError:
         logger.info(f"Delayed reply in {chat_id} cancelled (new message)")
     finally:
-        _delayed_tasks.pop(chat_id, None)
+        if _delayed_tasks.get(chat_id) is asyncio.current_task():
+            _delayed_tasks.pop(chat_id, None)
 
 
 async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
-                              mission: dict | None):
+                              mission: dict | None, generation: int):
     """Генерирует ответ LLM и отправляет с реалистичной анимацией."""
     # Получаем историю чата
     history = get_chat_history(chat_id, MAX_CONTEXT_MESSAGES)
@@ -265,10 +317,19 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
     if style_instructions:
         system_prompt += style_instructions
 
+    alpha_topic = any(x in text.lower() for x in ["alpha", "альфа", "alpha.hmi", "alpha.server", "alpha.om", "webviewer", "historian", "devstudio", "типизац", "мнемо", "scada"])
+
     if rag_context:
         system_prompt += (
             f"\n\n## Дополнительные технические детали "
             f"(используй если релевантно, но говори своими словами, кратко, как в чате):\n{rag_context}"
+        )
+    elif alpha_topic:
+        system_prompt += (
+            "\n\n## ВАЖНО ПО АЛЬФЕ\n"
+            "RAG-контекст не найден. Значит нельзя уверенно утверждать детали по продукту. "
+            "Не выдумывай API, классы, методы, языки, внутренние механизмы и названия модулей. "
+            "Если спросят по деталям — скажи, что точно не помнишь и надо смотреть документацию."
         )
 
     llm_history.append({"role": "user", "content": f"[{first_name}]: {text}"})
@@ -291,8 +352,16 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
 
     # Отправляем части
     for i, part in enumerate(parts):
+        if _reply_generation.get(chat_id) != generation:
+            logger.info(f"Abort stale send in {chat_id}: generation changed before part {i+1}")
+            return
+
         # Анимация печати
         await do_typing_animation(chat_id, part)
+
+        if _reply_generation.get(chat_id) != generation:
+            logger.info(f"Abort stale send in {chat_id}: generation changed after typing part {i+1}")
+            return
 
         # Отправка
         await event.respond(part)
