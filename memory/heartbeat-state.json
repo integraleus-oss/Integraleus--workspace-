@@ -1,24 +1,26 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-31T18:36:47Z",
-    "openclaw_health": "2026-03-31T19:11:40Z",
-    "system_changes": "2026-03-31T18:36:47Z",
-    "cron_review": "2026-03-31T19:11:40Z",
+    "ssh_security": "2026-03-31T21:26:17Z",
+    "openclaw_health": "2026-03-31T21:26:17Z",
+    "system_changes": "2026-03-31T21:26:17Z",
+    "cron_review": "2026-03-31T21:26:17Z",
     "cron_resources": "2026-03-31T18:36:47Z",
     "garden": "2026-03-31T18:36:47Z",
-    "telegram_liveness": "2026-03-31T19:11:40Z",
-    "heartbeat": 1774984300,
-    "telegram": 1774984300
+    "telegram_liveness": "2026-03-31T21:26:17Z",
+    "heartbeat": 1774992377,
+    "telegram": 1774992377
   },
   "telegramHealth": {
-    "checkedAt": 1774984300,
+    "checkedAt": 1774992377,
     "status": "ok",
-    "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
-    "recentTelegramSession": false,
-    "recentSessionAges": [],
-    "lastCheck": "2026-03-31T19:11:40Z",
+    "detail": "openclaw status --deep shows Telegram probe OK; user actively chatting",
+    "recentTelegramSession": true,
+    "recentSessionAges": [
+      "just now"
+    ],
+    "lastCheck": "2026-03-31T21:26:17Z",
     "consecutiveFailures": 0,
-    "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
+    "note": "Telegram fully operational; user confirmed interaction."
   },
   "garden": {
     "status": "ok",
@@ -47,9 +49,9 @@
     "note": "Recent sampled runs stayed under 50k tokens; the longest simple/monitoring job took 150010 ms (under 3 minutes)."
   },
   "notes": {
-    "mainDisk": "77% (29G/38G used)",
+    "mainDisk": "77%",
     "mainLoad": "normal",
-    "pendingUpdates": 12,
+    "pendingUpdates": 13,
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
@@ -57,10 +59,11 @@
     "cronDeliveryIssue": "As of 2026-03-31 18:55 MSK, system-monitor:daily recovered, while BBQ Daily Digest and Daily Server Monitoring still show the morning delivery failure: Outbound not configured for channel: telegram.",
     "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
     "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet.",
-    "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
+    "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged.",
+    "dayRollover": "2026-04-01 started; created new daily memory file."
   },
   "cronStatus": {
-    "checkedAt": 1774984300,
+    "checkedAt": 1774992377,
     "errors": [
       {
         "job": "BBQ Daily Digest",
@@ -73,13 +76,6 @@
         "status": "error",
         "error": "Error: Outbound not configured for channel: telegram",
         "runAt": "2026-03-31T07:01:21Z"
-      }
-    ],
-    "recoveries": [
-      {
-        "job": "system-monitor:daily",
-        "status": "ok",
-        "runAt": "2026-03-31T15:30:00Z"
       }
     ]
   },
