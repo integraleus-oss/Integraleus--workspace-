@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T04:24:58Z",
-    "openclaw_health": "2026-03-31T04:58:40Z",
+    "openclaw_health": "2026-03-31T05:33:58Z",
     "system_changes": "2026-03-31T04:24:58Z",
-    "cron_review": "2026-03-31T04:58:40Z",
+    "cron_review": "2026-03-31T05:33:58Z",
     "cron_resources": "2026-03-31T04:24:58Z",
-    "garden": "2026-03-31T04:24:58Z",
-    "telegram_liveness": "2026-03-31T04:58:40Z",
-    "heartbeat": 1774933120,
-    "telegram": 1774933120
+    "garden": "2026-03-31T05:33:58Z",
+    "telegram_liveness": "2026-03-31T05:33:58Z",
+    "heartbeat": 1774935238,
+    "telegram": 1774935238
   },
   "telegramHealth": {
-    "checkedAt": 1774933120,
+    "checkedAt": 1774935238,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T04:58:40Z",
+    "lastCheck": "2026-03-31T05:33:58Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -24,13 +24,13 @@
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-31T04:24:58Z",
+    "lastCheck": "2026-03-31T05:33:58Z",
     "alert": null,
-    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
+    "note": "Garden reachable; openclaw-gateway/fail2ban/ssh active. No OAuth/Codex OAuth errors in last 2h."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T04:58:40Z",
+    "lastCheck": "2026-03-31T05:33:58Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -60,7 +60,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774933120,
+    "checkedAt": 1774935238,
     "errors": []
   },
   "mainSecuritySnapshot": {
