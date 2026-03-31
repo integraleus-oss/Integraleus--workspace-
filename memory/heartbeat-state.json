@@ -1,36 +1,36 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T04:24:58Z",
-    "openclaw_health": "2026-03-31T05:33:58Z",
+    "openclaw_health": "2026-03-31T06:09:03Z",
     "system_changes": "2026-03-31T04:24:58Z",
-    "cron_review": "2026-03-31T05:33:58Z",
+    "cron_review": "2026-03-31T06:09:03Z",
     "cron_resources": "2026-03-31T04:24:58Z",
-    "garden": "2026-03-31T05:33:58Z",
-    "telegram_liveness": "2026-03-31T05:33:58Z",
-    "heartbeat": 1774935238,
-    "telegram": 1774935238
+    "garden": "2026-03-31T06:09:03Z",
+    "telegram_liveness": "2026-03-31T06:09:03Z",
+    "heartbeat": 1774937343,
+    "telegram": 1774937343
   },
   "telegramHealth": {
-    "checkedAt": 1774935238,
+    "checkedAt": 1774937343,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T05:33:58Z",
+    "lastCheck": "2026-03-31T06:09:03Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
   "garden": {
     "status": "ok",
-    "services": "all active",
+    "services": "not checked this heartbeat",
     "disk": "38%",
-    "lastCheck": "2026-03-31T05:33:58Z",
+    "lastCheck": "2026-03-31T06:09:03Z",
     "alert": null,
-    "note": "Garden reachable; openclaw-gateway/fail2ban/ssh active. No OAuth/Codex OAuth errors in last 2h."
+    "note": "Garden not re-polled this heartbeat; last full check remains healthy with no OAuth/Codex OAuth errors."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T05:33:58Z",
+    "lastCheck": "2026-03-31T06:09:03Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -60,7 +60,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774935238,
+    "checkedAt": 1774937343,
     "errors": []
   },
   "mainSecuritySnapshot": {
