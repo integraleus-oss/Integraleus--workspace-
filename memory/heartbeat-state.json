@@ -1,22 +1,22 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-31T14:50:08Z",
-    "openclaw_health": "2026-03-31T16:50:00Z",
-    "system_changes": "2026-03-31T14:50:08Z",
-    "cron_review": "2026-03-31T16:50:00Z",
-    "cron_resources": "2026-03-31T13:15:30Z",
-    "garden": "2026-03-31T14:50:08Z",
-    "telegram_liveness": "2026-03-31T16:50:00Z",
-    "heartbeat": 1774975800,
-    "telegram": 1774975800
+    "ssh_security": "2026-03-31T17:26:31Z",
+    "openclaw_health": "2026-03-31T17:26:31Z",
+    "system_changes": "2026-03-31T17:26:31Z",
+    "cron_review": "2026-03-31T17:26:31Z",
+    "cron_resources": "2026-03-31T17:26:31Z",
+    "garden": "2026-03-31T17:26:31Z",
+    "telegram_liveness": "2026-03-31T17:26:31Z",
+    "heartbeat": 1774977991,
+    "telegram": 1774977991
   },
   "telegramHealth": {
-    "checkedAt": 1774975800,
+    "checkedAt": 1774977991,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T16:50:00Z",
+    "lastCheck": "2026-03-31T17:26:31Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -24,26 +24,26 @@
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-31T14:50:08Z",
+    "lastCheck": "2026-03-31T17:26:31Z",
     "alert": null,
-    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
+    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 7 packages upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T14:50:08Z",
+    "lastCheck": "2026-03-31T17:26:31Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-31T13:15:30Z",
+    "lastCheck": "2026-03-31T17:26:31Z",
     "jobs": {
-      "system-monitor:daily": 19596,
+      "system-monitor:daily": 22413,
       "healthcheck:security-audit": 16281,
       "healthcheck:update-status": 15279,
       "Garden Server Weekly Check": 24540,
       "BBQ Daily Digest": 28546,
       "Daily Server Monitoring": 17345
     },
-    "dailyTotal": 121587,
+    "dailyTotal": 124404,
     "note": "Recent sampled runs stayed under 50k tokens; the longest simple/monitoring job took 150010 ms (under 3 minutes)."
   },
   "notes": {
@@ -60,7 +60,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774975800,
+    "checkedAt": 1774977991,
     "errors": [
       {
         "job": "BBQ Daily Digest",
@@ -84,7 +84,7 @@
     ]
   },
   "mainSecuritySnapshot": {
-    "checkedAt": 1774931098,
+    "checkedAt": 1774977991,
     "ufw": "active",
     "recentLast": "no new external logins in last -5 beyond known 157.22.180.83 on Mar 25",
     "shellUsers": [
