@@ -1,22 +1,22 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-31T14:47:55Z",
-    "openclaw_health": "2026-03-31T14:47:55Z",
-    "system_changes": "2026-03-31T14:47:55Z",
-    "cron_review": "2026-03-31T14:47:55Z",
+    "ssh_security": "2026-03-31T14:49:05Z",
+    "openclaw_health": "2026-03-31T14:49:05Z",
+    "system_changes": "2026-03-31T14:49:05Z",
+    "cron_review": "2026-03-31T14:49:05Z",
     "cron_resources": "2026-03-31T13:15:30Z",
-    "garden": "2026-03-31T14:47:55Z",
-    "telegram_liveness": "2026-03-31T14:47:55Z",
-    "heartbeat": 1774968475,
-    "telegram": 1774968475
+    "garden": "2026-03-31T14:49:05Z",
+    "telegram_liveness": "2026-03-31T14:49:05Z",
+    "heartbeat": 1774968545,
+    "telegram": 1774968545
   },
   "telegramHealth": {
-    "checkedAt": 1774968475,
+    "checkedAt": 1774968545,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T14:47:55Z",
+    "lastCheck": "2026-03-31T14:49:05Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -24,13 +24,13 @@
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-31T14:47:55Z",
+    "lastCheck": "2026-03-31T14:49:05Z",
     "alert": null,
     "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T14:47:55Z",
+    "lastCheck": "2026-03-31T14:49:05Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
