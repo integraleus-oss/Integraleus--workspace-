@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T04:24:58Z",
-    "openclaw_health": "2026-03-31T07:19:28Z",
+    "openclaw_health": "2026-03-31T08:19:07Z",
     "system_changes": "2026-03-31T04:24:58Z",
-    "cron_review": "2026-03-31T07:19:28Z",
+    "cron_review": "2026-03-31T08:19:07Z",
     "cron_resources": "2026-03-31T04:24:58Z",
     "garden": "2026-03-31T06:09:03Z",
-    "telegram_liveness": "2026-03-31T07:19:28Z",
-    "heartbeat": 1774941568,
-    "telegram": 1774941568
+    "telegram_liveness": "2026-03-31T08:19:07Z",
+    "heartbeat": 1774945147,
+    "telegram": 1774945147
   },
   "telegramHealth": {
-    "checkedAt": 1774941568,
+    "checkedAt": 1774945147,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T07:19:28Z",
+    "lastCheck": "2026-03-31T08:19:07Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -30,7 +30,7 @@
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T07:19:28Z",
+    "lastCheck": "2026-03-31T08:19:07Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -54,14 +54,20 @@
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
     "openclawUpdate": "Update available: pnpm 2026.3.28; suggested maintenance window after 20:00 MSK.",
-    "cronDeliveryIssue": "Recurred on 2026-03-31 morning: BBQ Daily Digest and Daily Server Monitoring generated summaries but delivery failed with Outbound not configured for channel: telegram.",
+    "cronDeliveryIssue": "By 2026-03-31 11:18 MSK, three cron jobs had failed delivery with Outbound not configured for channel: telegram: BBQ Daily Digest, Daily Server Monitoring, and system-monitor:daily.",
     "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
     "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet.",
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774941568,
+    "checkedAt": 1774945147,
     "errors": [
+      {
+        "job": "system-monitor:daily",
+        "status": "error",
+        "error": "Error: Outbound not configured for channel: telegram",
+        "runAt": "2026-03-31T07:30:00Z"
+      },
       {
         "job": "BBQ Daily Digest",
         "status": "error",
