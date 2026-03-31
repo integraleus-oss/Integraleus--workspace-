@@ -1,22 +1,22 @@
 {
   "lastChecks": {
     "ssh_security": "2026-03-31T14:50:08Z",
-    "openclaw_health": "2026-03-31T15:55:00Z",
+    "openclaw_health": "2026-03-31T16:50:00Z",
     "system_changes": "2026-03-31T14:50:08Z",
-    "cron_review": "2026-03-31T15:55:00Z",
+    "cron_review": "2026-03-31T16:50:00Z",
     "cron_resources": "2026-03-31T13:15:30Z",
     "garden": "2026-03-31T14:50:08Z",
-    "telegram_liveness": "2026-03-31T15:55:00Z",
-    "heartbeat": 1774972500,
-    "telegram": 1774972500
+    "telegram_liveness": "2026-03-31T16:50:00Z",
+    "heartbeat": 1774975800,
+    "telegram": 1774975800
   },
   "telegramHealth": {
-    "checkedAt": 1774972500,
+    "checkedAt": 1774975800,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T15:55:00Z",
+    "lastCheck": "2026-03-31T16:50:00Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
@@ -60,7 +60,7 @@
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged."
   },
   "cronStatus": {
-    "checkedAt": 1774972500,
+    "checkedAt": 1774975800,
     "errors": [
       {
         "job": "BBQ Daily Digest",
