@@ -1,36 +1,36 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-31T04:24:58Z",
-    "openclaw_health": "2026-03-31T10:08:47Z",
-    "system_changes": "2026-03-31T04:24:58Z",
-    "cron_review": "2026-03-31T10:08:47Z",
+    "ssh_security": "2026-03-31T11:30:07Z",
+    "openclaw_health": "2026-03-31T11:30:07Z",
+    "system_changes": "2026-03-31T11:30:07Z",
+    "cron_review": "2026-03-31T11:30:07Z",
     "cron_resources": "2026-03-31T04:24:58Z",
-    "garden": "2026-03-31T06:09:03Z",
-    "telegram_liveness": "2026-03-31T10:08:47Z",
-    "heartbeat": 1774951727,
-    "telegram": 1774951727
+    "garden": "2026-03-31T11:30:07Z",
+    "telegram_liveness": "2026-03-31T11:30:07Z",
+    "heartbeat": 1774956607,
+    "telegram": 1774956607
   },
   "telegramHealth": {
-    "checkedAt": 1774951727,
+    "checkedAt": 1774956607,
     "status": "ok",
     "detail": "openclaw status --deep shows Telegram probe OK; channel table still shows WARN only because requireMention=false for unmentioned group messages",
     "recentTelegramSession": false,
     "recentSessionAges": [],
-    "lastCheck": "2026-03-31T10:08:47Z",
+    "lastCheck": "2026-03-31T11:30:07Z",
     "consecutiveFailures": 0,
     "note": "Telegram liveness is OK; no restart needed. No telegram sessions in sessions_list(activeMinutes=120), suspicious but not actionable."
   },
   "garden": {
     "status": "ok",
-    "services": "not checked this heartbeat",
+    "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-31T06:09:03Z",
+    "lastCheck": "2026-03-31T11:30:07Z",
     "alert": null,
-    "note": "Garden not re-polled this heartbeat; last full check remains healthy with no OAuth/Codex OAuth errors."
+    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 1 package upgradable."
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T10:08:47Z",
+    "lastCheck": "2026-03-31T11:30:07Z",
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
@@ -47,9 +47,9 @@
     "note": "Recent sampled runs stayed under 50k tokens; the longest simple/monitoring job took 150010 ms (under 3 minutes)."
   },
   "notes": {
-    "mainDisk": "76% (29G/38G used)",
+    "mainDisk": "77% (29G/38G used)",
     "mainLoad": "normal",
-    "pendingUpdates": 1,
+    "pendingUpdates": 12,
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
