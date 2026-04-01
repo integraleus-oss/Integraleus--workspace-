@@ -110,12 +110,15 @@ def chunk_text(text: str, source: str, chunk_size: int = 1000, overlap: int = 20
 
 
 def load_and_chunk_docs(docs_dir: str) -> list[dict]:
-    """Загружает все markdown-файлы и разбивает на чанки."""
+    """Загружает все markdown-файлы рекурсивно и разбивает на чанки."""
     all_chunks = []
 
-    for filepath in glob.glob(os.path.join(docs_dir, "*.md")):
+    for filepath in glob.glob(os.path.join(docs_dir, "**", "*.md"), recursive=True):
+        relpath = os.path.relpath(filepath, docs_dir)
         filename = os.path.basename(filepath)
-        if filename == "INDEX.md":
+
+        # Пропускаем служебные/архивные файлы
+        if filename == "INDEX.md" or "/archive/" in filepath or relpath.startswith("archive/"):
             continue
 
         try:
@@ -123,12 +126,12 @@ def load_and_chunk_docs(docs_dir: str) -> list[dict]:
                 text = f.read()
 
             if len(text) > 150_000:
-                logger.info(f"Skipping large file: {filename} ({len(text)} bytes)")
+                logger.info(f"Skipping large file: {relpath} ({len(text)} bytes)")
                 continue
 
-            chunks = chunk_text(text, source=filename)
+            chunks = chunk_text(text, source=relpath)
             all_chunks.extend(chunks)
-            logger.info(f"Chunked {filename}: {len(chunks)} chunks")
+            logger.info(f"Chunked {relpath}: {len(chunks)} chunks")
         except Exception as e:
             logger.error(f"Error reading {filepath}: {e}")
 

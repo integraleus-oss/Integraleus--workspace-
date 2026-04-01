@@ -32,8 +32,9 @@ def main():
         indexed_sources = set()
 
     # Находим непроиндексированные файлы
-    all_files = glob.glob(os.path.join(DOCS_DIR, "*.md"))
-    new_files = [f for f in all_files if os.path.basename(f) not in indexed_sources]
+    all_files = glob.glob(os.path.join(DOCS_DIR, "**", "*.md"), recursive=True)
+    all_files = [f for f in all_files if "/archive/" not in f and not f.endswith("/INDEX.md")]
+    new_files = [f for f in all_files if os.path.relpath(f, DOCS_DIR) not in indexed_sources]
     
     if not new_files:
         logger.info("All files already indexed!")
@@ -45,13 +46,13 @@ def main():
     all_embeddings = list(existing_embeddings)
 
     for filepath in sorted(new_files):
-        filename = os.path.basename(filepath)
-        
+        relpath = os.path.relpath(filepath, DOCS_DIR)
+
         with open(filepath, "r", encoding="utf-8") as f:
             text = f.read()
 
-        logger.info(f"Processing {filename} ({len(text)} bytes)...")
-        chunks = chunk_text(text, source=filename)
+        logger.info(f"Processing {relpath} ({len(text)} bytes)...")
+        chunks = chunk_text(text, source=relpath)
         logger.info(f"  → {len(chunks)} chunks")
 
         for i, chunk in enumerate(chunks):
