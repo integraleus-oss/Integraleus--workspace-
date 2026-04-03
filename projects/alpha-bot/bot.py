@@ -282,7 +282,7 @@ body { background-color: transparent !important; }
 </div>
 
 <script>
-const API_URL = window.ALPHA_BOT_API || '';
+const API_URL = window.ALPHA_BOT_API || window.location.origin;
 let sessionId = localStorage.getItem('alpha_session_id');
 if (!sessionId) {
     sessionId = 'web_' + Math.random().toString(36).substr(2, 9);
@@ -290,14 +290,15 @@ if (!sessionId) {
 }
 
 function toggleChat() {
-    if(window.parent !== window) {
-        window.parent.postMessage('alpha-chat-close', '*');
-    }
+    try { window.parent.postMessage('alpha-chat-close', '*'); } catch(e) {}
 }
+console.log('Alpha widget loaded, API_URL:', API_URL);
 
 async function sendMsg() {
+    console.log('sendMsg called');
     const input = document.getElementById('alpha-chat-input');
     const text = input.value.trim();
+    console.log('text:', text);
     if (!text) return;
 
     const msgs = document.getElementById('alpha-chat-messages');
@@ -337,7 +338,7 @@ function scrollBottom() {
 }
 
 function escHtml(t) {
-    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\\n/g,'<br>');
 }
 </script>
 </body>

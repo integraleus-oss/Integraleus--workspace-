@@ -3,6 +3,7 @@
 import os
 import json
 import asyncio
+from calculator import process_llm_response
 import logging
 import aiohttp
 from knowledge_base import SYSTEM_PROMPT
@@ -138,7 +139,10 @@ async def ask_llm(user_message: str, history: list[dict] | None = None, extra_co
                 ) as resp:
                     if resp.status == 200:
                         data = await resp.json()
-                        return data["choices"][0]["message"]["content"]
+                        reply = data["choices"][0]["message"]["content"]
+                        # Обрабатываем маркер калькулятора если есть
+                        reply = process_llm_response(reply)
+                        return reply
                     elif resp.status == 429:
                         last_error = f"429 (rate limit) on {model}"
                         await asyncio.sleep(1)
