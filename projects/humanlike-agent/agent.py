@@ -5,8 +5,8 @@ import logging
 import random
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-from telethon.tl.functions.messages import SetTypingRequest, ReadHistoryRequest
-from telethon.tl.types import SendMessageTypingAction, SendMessageCancelAction
+from telethon.tl.functions.messages import SetTypingRequest, ReadHistoryRequest, SendReactionRequest
+from telethon.tl.types import SendMessageTypingAction, SendMessageCancelAction, ReactionEmoji
 
 from config import API_ID, API_HASH, PHONE, SESSION_NAME, MAX_CONTEXT_MESSAGES
 
@@ -56,8 +56,33 @@ _active_reply_tasks: dict[int, asyncio.Task] = {}
 # Счётчик поколений ответа по чату: новое сообщение инвалидирует старую генерацию
 _reply_generation: dict[int, int] = {}
 
+# Дебаунс: накапливаем сообщения перед ответом
+# chat_id -> {"task": asyncio.Task, "events": [(event, first_name, text)], "generation": int}
+_debounce: dict[int, dict] = {}
+DEBOUNCE_SECONDS = 8  # ждём паузу в потоке сообщений
+
+# Счётчик сообщений для реакций
+_msg_counter: dict[int, int] = {}
+REACTION_EVERY = 7  # ставить реакцию примерно каждые N сообщений
+REACTION_EMOJIS = ["👍", "😄", "🔥", "👀", "💯", "🤔", "👏", "😅"]
+
 # Чаты, о которых уже уведомили владельца
 _notified_chats: set[int] = set()
+
+
+async def _maybe_react(event, chat_id: int):
+    """Ставит случайную реакцию на сообщение."""
+    try:
+        emoji = random.choice(REACTION_EMOJIS)
+        await asyncio.sleep(random.uniform(0.5, 3.0))  # задержка как у человека
+        await client(SendReactionRequest(
+            peer=chat_id,
+            msg_id=event.id,
+            reaction=[ReactionEmoji(emoticon=emoji)],
+        ))
+        logger.info(f"Reacted {emoji} in {chat_id}")
+    except Exception as e:
+        logger.debug(f"React failed: {e}")
 
 
 async def _notify_owner(text: str):
@@ -141,6 +166,12 @@ async def handle_message(event):
 
     logger.info(f"MSG [{chat_id}] {first_name} (@{username}): {text[:80]}")
 
+    # Жёсткий ночной режим: 00:00-07:00 — полная тишина
+    from datetime import datetime
+    hour = datetime.now().hour
+    if 0 <= hour < 7 and not is_private:
+        return
+
     # Трекинг активности
     update_incoming(chat_id)
 
@@ -149,6 +180,13 @@ async def handle_message(event):
 
     # Обучение на стиле чата
     update_chat_style(chat_id, text, user_id=event.sender_id, is_agent=False)
+
+    # ─── Реакции эмодзи (вместо ответа) ───
+    _msg_counter[chat_id] = _msg_counter.get(chat_id, 0) + 1
+    if not is_private and _msg_counter[chat_id] % REACTION_EVERY == 0:
+        if random.random() < 0.6:  # 60% шанс поставить реакцию
+            await _maybe_react(event, chat_id)
+            # Не прерываем — реакция может быть И до ответа
 
     # Проверяем миссию чата
     mission = get_chat_mission(chat_id)
@@ -234,11 +272,55 @@ async def handle_message(event):
         _active_reply_tasks[chat_id].cancel()
         del _active_reply_tasks[chat_id]
 
-    task = asyncio.create_task(_process_reply_flow(
-        event, chat_id, first_name, text, mission,
-        is_private, is_reply, mentioned, is_continuation, generation,
-    ))
-    _active_reply_tasks[chat_id] = task
+    # ─── Дебаунс: ждём паузу в потоке сообщений ───
+    # На прямой mention/reply отвечаем сразу, без дебаунса.
+    if is_reply or mentioned or is_private:
+        task = asyncio.create_task(_process_reply_flow(
+            event, chat_id, first_name, text, mission,
+            is_private, is_reply, mentioned, is_continuation, generation,
+        ))
+        _active_reply_tasks[chat_id] = task
+    else:
+        # Дебаунс: накапливаем, ждём паузу
+        if chat_id in _debounce:
+            _debounce[chat_id]["events"].append((event, first_name, text))
+            _debounce[chat_id]["task"].cancel()
+        else:
+            _debounce[chat_id] = {"events": [(event, first_name, text)]}
+
+        _debounce[chat_id]["generation"] = generation
+        _debounce[chat_id]["mission"] = mission
+        _debounce[chat_id]["is_continuation"] = is_continuation
+        _debounce[chat_id]["task"] = asyncio.create_task(
+            _debounce_wait(chat_id, generation)
+        )
+
+
+async def _debounce_wait(chat_id: int, generation: int):
+    """Ждёт паузу в потоке сообщений, потом отвечает на последнее."""
+    try:
+        await asyncio.sleep(DEBOUNCE_SECONDS)
+        if _reply_generation.get(chat_id) != generation:
+            return
+
+        buf = _debounce.pop(chat_id, None)
+        if not buf or not buf["events"]:
+            return
+
+        # Берём последнее сообщение как контекст для ответа
+        last_event, last_first_name, last_text = buf["events"][-1]
+        mission = buf.get("mission")
+        is_continuation = buf.get("is_continuation", False)
+
+        logger.info(f"Debounce fired in {chat_id}: {len(buf['events'])} msgs accumulated, replying to last")
+
+        task = asyncio.create_task(_process_reply_flow(
+            last_event, chat_id, last_first_name, last_text, mission,
+            False, False, False, is_continuation, generation,
+        ))
+        _active_reply_tasks[chat_id] = task
+    except asyncio.CancelledError:
+        pass
 
 
 async def _process_reply_flow(event, chat_id: int, first_name: str, text: str,
