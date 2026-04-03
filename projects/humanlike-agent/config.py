@@ -15,7 +15,7 @@ SESSION_NAME = os.getenv("SESSION_NAME", "humanlike_agent")
 
 # LLM
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-MODEL = os.getenv("MODEL", "google/gemini-2.0-flash-001")
+MODEL = os.getenv("MODEL", "anthropic/claude-sonnet-4-20250514")
 
 # Поведение
 TYPING_SPEED_CPS = 12  # символов в секунду (средняя скорость печати)
