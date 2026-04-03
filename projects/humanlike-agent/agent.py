@@ -399,7 +399,7 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
     # RAG: best effort. Для живого чата важнее ответить быстро, чем ждать поиск.
     rag_context = ""
     try:
-        rag_context = await asyncio.wait_for(rag_search(text, top_k=3), timeout=1.5)
+        rag_context = await asyncio.wait_for(rag_search(text, top_k=5), timeout=2.5)
     except asyncio.TimeoutError:
         logger.warning(f"RAG timeout in {chat_id}; replying without RAG")
     except Exception as e:
