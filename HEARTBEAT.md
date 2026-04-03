@@ -35,7 +35,7 @@
 ### 3a. Garden server monitoring (every 3-4 heartbeats)
 Garden: root@31.128.32.68 (Beget VPS, no Docker)
 Services: openclaw-gateway, fail2ban, ssh, NetworkManager
-Known user IPs: 157.22.180.83, 31.10.95.23, 193.9.244.115, 79.104.12.133 (Билайн Томск)
+Known user IPs: 157.22.180.83, 31.10.95.23 (Станислав), 193.9.244.115, 79.104.12.133 (Билайн Томск)
 Baseline SSH: permitrootlogin=without-password, passwordauthentication=no
 Baseline users: root (/bin/bash), ops (/bin/bash)
 
@@ -85,6 +85,16 @@ If a cron job has `lastRunStatus: "error"` and error contains "timed out":
   - Costs are growing without obvious reason
 - Log token stats to `memory/heartbeat-state.json` under `cronUsage`
 - Format alert: "Cron расход: [job] съел [N]k токенов за [duration]. Всего за день: [N]k."
+
+### 7. Cross-session awareness (один раз в день, утренний heartbeat)
+- Просканировать все активные сессии через `sessions_list` (activeMinutes=1440, messageLimit=1)
+- Для каждой сессии с активностью за последние 24ч — прочитать последние сообщения через `sessions_history`
+- Записать краткую сводку в `memory/YYYY-MM-DD.md` с тегом сессии:
+  - `[телеграм:группа]` — что обсуждалось
+  - `[discord:#канал]` — какие решения приняты
+  - `[крон:имя]` — результаты задач
+- Обновить `STATE.md` если в других сессиях произошли значимые изменения (деплои, решения, новые сервисы)
+- Цель: main session всегда знает, что происходило в других контекстах
 
 ## Rules
 - Late night (23:00-07:00 Moscow) → only alert if critical

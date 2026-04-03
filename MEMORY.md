@@ -2,7 +2,7 @@
 
 ## SYSTEM FILES
 - Constitution → `CONSTITUTION.md`
-- Current State → `STATE.md`
+- Current State → `STATE.md` — **актуальный статус серверов, проектов, крон-задач, известных проблем**
 - Decisions → `DECISIONS.md`
 - Daily log → `memory/YYYY-MM-DD.md`
 

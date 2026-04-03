@@ -65,3 +65,25 @@ projects/humanlike-agent/    ← код
 
 ## TTS
 - Whisper (local, small model, русский) для транскрипции голосовых
+
+## OpenClaw Gateway — управление
+
+**Правильные команды:**
+- `openclaw gateway restart` — штатный рестарт (предпочтительно)
+- `openclaw gateway stop` / `openclaw gateway start` — стоп/старт
+- `openclaw gateway install` — установка systemd-сервиса
+- `systemctl --user restart openclaw-gateway.service` — через systemd (если установлен)
+- **НЕ использовать:** `kill -TERM <pid>` + ручной запуск — грязно, ломает сессии
+- **НЕ использовать:** `systemctl restart openclaw-gateway` (без --user) — нет такого сервиса
+
+**После обновления OpenClaw (ОБЯЗАТЕЛЬНО):**
+1. `openclaw doctor --fix` — починить runtime-модули
+2. `openclaw logs --plain --limit 50` — проверить ошибки
+3. `openclaw gateway restart` — чистый рестарт
+4. `openclaw status --deep` — контрольная проверка
+5. Убедиться: нет `ERR_MODULE_NOT_FOUND`, нет `409 Conflict` в Telegram
+
+**Ollama — известные проблемы:**
+- `nomic-embed-text` runner может зависнуть при массовых embedding-запросах
+- Rate limiting добавлен в скрипты Alpha-Bot (sleep 0.1s)
+- Если load average > 2 и ollama runner > 100% CPU — перезапустить: `systemctl restart ollama`
