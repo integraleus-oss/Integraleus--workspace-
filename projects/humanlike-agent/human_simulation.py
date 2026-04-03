@@ -373,6 +373,15 @@ def normalize_reply_text(text: str, max_chars: int = 280) -> str:
     lines = [l for l in lines if not any(bp in l.lower() for bp in BANNED_PHRASES)]
     text = '\n'.join(lines).strip()
 
+    # Убираем markdown: **bold**, *italic*, буллеты, заголовки
+    text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # **bold** → bold
+    text = re.sub(r'\*([^*]+)\*', r'\1', text)        # *italic* → italic
+    text = re.sub(r'^#{1,4}\s+', '', text, flags=re.MULTILINE)  # ### headers
+    text = re.sub(r'^[\-\*•]\s+', '', text, flags=re.MULTILINE)  # bullet points
+    text = re.sub(r'^\d+\.\s+', '', text, flags=re.MULTILINE)  # numbered lists
+    text = re.sub(r'`([^`]+)`', r'\1', text)  # `code`
+    text = text.strip()
+
     # Убираем дословно повторяющиеся абзацы/строки
     blocks = [b.strip() for b in re.split(r'\n+', text) if b.strip()]
     uniq_blocks = []

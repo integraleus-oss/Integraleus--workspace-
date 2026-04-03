@@ -444,7 +444,7 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
         return
 
     # Для прямых вопросов (mention/reply) даём больше места
-    max_len = 600 if (is_reply or mentioned) else 280
+    max_len = 900 if (is_reply or mentioned) else 400
     reply = normalize_reply_text(reply, max_chars=max_len)
 
     if not reply:
