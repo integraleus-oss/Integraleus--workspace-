@@ -347,9 +347,31 @@ def _merge_short_parts(parts: list[str], min_len: int = 30) -> list[str]:
     return merged
 
 
+# Запрещённые паттерны: если модель всё равно сгенерила это — вырезаем
+BANNED_PHRASES = [
+    "надо быть более",
+    "путать людей с ботами",
+    "более внимательными",
+    "более добрыми",
+    "различать",
+    "лечить без спроса",
+    "я так, философствую",
+    "нам всем надо",
+    "больше - различать",
+    "меньше лечить",
+    "просто общаться",
+    "я просто иногда задумываюсь",
+]
+
+
 def normalize_reply_text(text: str, max_chars: int = 280) -> str:
     """Убирает повторы и подрезает слишком длинные простыни для группового чата."""
     text = re.sub(r'\n{3,}', '\n\n', text).strip()
+
+    # Вырезаем строки с запрещёнными паттернами
+    lines = text.split('\n')
+    lines = [l for l in lines if not any(bp in l.lower() for bp in BANNED_PHRASES)]
+    text = '\n'.join(lines).strip()
 
     # Убираем дословно повторяющиеся абзацы/строки
     blocks = [b.strip() for b in re.split(r'\n+', text) if b.strip()]
