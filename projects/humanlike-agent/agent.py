@@ -362,7 +362,8 @@ async def _process_reply_flow(event, chat_id: int, first_name: str, text: str,
             return
 
         # 5. Генерация и отправка ответа
-        await _generate_and_send(event, chat_id, first_name, text, mission, generation)
+        await _generate_and_send(event, chat_id, first_name, text, mission, generation,
+                               is_reply=is_reply, mentioned=mentioned)
     except asyncio.CancelledError:
         logger.info(f"Reply flow in {chat_id} cancelled (new message)")
     finally:
@@ -390,7 +391,8 @@ async def _delayed_reply(event, chat_id: int, first_name: str, text: str,
 
 
 async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
-                              mission: dict | None, generation: int):
+                              mission: dict | None, generation: int,
+                              is_reply: bool = False, mentioned: bool = False):
     """Генерирует ответ LLM и отправляет с реалистичной анимацией."""
     # Получаем историю чата
     history = get_chat_history(chat_id, MAX_CONTEXT_MESSAGES)
@@ -441,7 +443,9 @@ async def _generate_and_send(event, chat_id: int, first_name: str, text: str,
         logger.info(f"LLM decided to skip or failed")
         return
 
-    reply = normalize_reply_text(reply)
+    # Для прямых вопросов (mention/reply) даём больше места
+    max_len = 600 if (is_reply or mentioned) else 280
+    reply = normalize_reply_text(reply, max_chars=max_len)
 
     if not reply:
         logger.info(f"Reply became empty after normalization")
