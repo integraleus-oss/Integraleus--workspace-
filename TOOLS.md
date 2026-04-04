@@ -56,13 +56,41 @@ projects/humanlike-agent/    ← код
 **Правило:** Код правим ТОЛЬКО в `projects/`. `/opt/` — симлинки, не трогать.
 **Правило:** `.env` читаем из `projects/*/. env`, НЕ из `/opt/`.
 
-## Synology NAS (192.168.68.103)
-- **Доступ:** NFS через openclaw-home (192.168.68.125)
-- **Монтирование:** `/mnt/synology/Documents` → `/volume1/Documents`
+## openclaw-home (192.168.68.125 / Tailscale: openclaw-home)
+- **OS:** Ubuntu 24.04 LTS, 937 GB NVMe (4% занято), 12 GB RAM
+- **Доступ:** `ssh stanislav@openclaw-home` (Tailscale SSH)
+- **OpenClaw:** 2026.4.2, gateway systemd enabled, heartbeat 1h
+- **Ollama:** nomic-embed-text (memory search)
+- **Docker:** 29.3.1, systemd enabled
+- **Whisper:** 20250625, venv `~/.openclaw/workspace/.venv-whisper/`
+- **VPN:** AmneziaWG split tunnel (MTU 1380), только Discord + YouTube через VPN
+  - Конфиг: `/etc/amnezia/amneziawg/awg0.conf`
+  - AllowedIPs: 162.159.0.0/16 (Discord), Google/YouTube подсети
+- **Безопасность:** UFW active (SSH + LAN + Tailscale), fail2ban (sshd)
+- **GitHub:** SSH-ключ добавлен, `integraleus-oss`
+- **Утилиты:** ffmpeg, tmux, gh CLI, jq, rsync, imagemagick, poppler-utils, p7zip-full, yt-dlp
+- **Locale:** en_US.UTF-8 + ru_RU.UTF-8
+- **Бэкап:** ежедневно 3:00 → Synology `/mnt/synology/Documents/openclaw-backups`
+- **Workspace:** полная синхронизация с VPS через git
+
+## Synology NAS (192.168.68.103) — DS218play, DSM 7.3.2
+- **Доступ:** SSH с ключом `ssh integraleus@192.168.68.103` (через openclaw-home)
+- **API:** `http://192.168.68.103:5000` / `https://192.168.68.103:5001`
+- **Пользователь:** Integraleus (uid 1026, группа administrators)
+- **RAID:** RAID 1, два диска [UU]
+- **NFS шары:** Documents, video, music, homes, Lost, surveillance, PlexMediaServer
+- **Монтирование на openclaw-home:**
+  - `/mnt/synology/Documents` → `/volume1/Documents`
+  - `/mnt/synology/video` → `/volume1/video`
+  - `/mnt/synology/music` → `/volume1/music`
+  - `/mnt/synology/homes` → `/volume1/homes`
 - **Автомонт:** fstab, `_netdev,noatime`
 - **Squash:** Map all users to admin
-- **Объём:** 7.3 TB (3.6 TB занято)
-- **Папки:** OneDrive, Книги, Журналы, Загрузки, Для сайтов, Флешка_SE, nata
+- **Объём:** 7.3 TB (3.6 TB занято, 49%)
+- **Plex:** работает (v1.41.5)
+- **Принтер:** Pantum P1100ADW по USB (не виден, нужно включить)
+- **Симлинки** `~/nas/`:
+  - backups, books, downloads, flash-se, homes, journals, music, nata, onedrive, video, websites
 
 ### 🔒 ПРАВИЛО БЕЗОПАСНОСТИ SYNOLOGY (ОБЯЗАТЕЛЬНОЕ)
 **Любые файлы и данные с Synology НЕ ДОЛЖНЫ покидать домашнюю сеть без явного разрешения Станислава.**
