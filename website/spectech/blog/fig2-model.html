@@ -2,9 +2,10 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding: 30px; }
+body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding: 30px;  padding-top: 60px;}
 .diagram { max-width: 1100px; margin: 0 auto; }
 .row { display: flex; gap: 16px; margin-bottom: 16px; justify-content: center; }
 .block {
@@ -97,9 +98,168 @@ body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding:
     border-radius: 4px;
     font-weight: 600;
 }
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word;  padding-top: 60px;}
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
 </style>
 </head>
 <body>
+
+<nav style="position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; height: 60px; background: rgba(26,26,46,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid #333;">
+  <a href="../index.html" style="display: flex; align-items: center; text-decoration: none;">
+    <div style="font-size: 15px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: #fff;">СПЕЦТЕХ</div>
+  </a>
+  <ul style="display: flex; align-items: center; list-style: none; gap: 0; margin: 0; padding: 0;">
+    <li><a href="../index.html" style="font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ccc; text-decoration: none; padding: 8px 14px; transition: color .2s;">Главная</a></li>
+    <li><a href="../blog.html" style="font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #00c8f0; text-decoration: none; padding: 8px 14px; transition: color .2s;">Блог</a></li>
+    <li><a href="../index.html#contact" style="font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #ccc; text-decoration: none; padding: 8px 14px; transition: color .2s;">Контакты</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню" style="display: none; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; padding: 8px; transition: color 0.3s ease;">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+</nav>
+
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
 <div class="diagram">
     <!-- Промысел -->
@@ -187,6 +347,29 @@ body { background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; padding:
     экземпляр типа из библиотеки. Тип создаётся один раз с полным набором сигналов, формул и привязок, 
     затем тиражируется на сотни экземпляров. Для 150 кустов с 2–3 скважинами — минуты на тиражирование вместо часов ручной работы.
 </p>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
 
 </body>
 </html>

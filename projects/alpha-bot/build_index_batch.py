@@ -60,6 +60,7 @@ def main():
                 emb = get_embedding_sync(chunk["text"][:2000])
                 all_chunks.append(chunk)
                 all_embeddings.append(emb)
+                time.sleep(0.1)  # Rate limiting для ollama
                 
                 if (i + 1) % 20 == 0:
                     logger.info(f"  Embedded {i+1}/{len(chunks)}")

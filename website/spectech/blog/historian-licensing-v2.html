@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лицензирование Alpha.Historian: как мы считаем стоимость и почему вы заложите неправильно — СПЕЦТЕХ</title>
+<meta name="description" content="Практическое руководство по расчёту лицензии Alpha.Historian. Реальные цифры, типичные ошибки, скрытые расходы и чек-лист для проектировщика.">
+
+<meta property="og:image" content="https://specialtechnology.ru/blog/og-historian-licensing.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/blog/historian-licensing.html">
+<meta property="og:title" content="Лицензирование Alpha.Historian: как мы считаем стоимость и почему вы заложите неправильно">
+<meta property="og:description" content="Практическое руководство по расчёту лицензии Alpha.Historian. Реальные цифры, типичные ошибки, скрытые расходы и чек-лист для проектировщика.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://specialtechnology.ru/blog/historian-licensing.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-licensing{color:var(--amber);border-color:var(--amber);background:rgba(255,184,0,0.1);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Tables */
+.article-body table{width:100%;border-collapse:collapse;margin:20px 0;border:1px solid var(--wire);border-radius:4px;overflow:hidden;}
+.article-body th{background:var(--steel);color:var(--text);padding:12px 16px;text-align:left;font-weight:600;border-bottom:1px solid var(--wire);}
+.article-body td{padding:12px 16px;border-bottom:1px solid var(--wire);color:var(--text2);}
+.article-body tbody tr:last-child td{border-bottom:none;}
+.article-body tbody tr:hover{background:var(--ink2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.warning-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box .info-box-title{color:var(--crimson);}
+
+.tip-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--lime);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.tip-box .info-box-title{color:var(--lime);}
+
+/* Price table */
+.price-table{background:var(--ink1);border:1px solid var(--wire);border-radius:8px;padding:24px;margin:24px 0;}
+.price-table h4{color:var(--volt);margin-bottom:16px;font-size:18px;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:16px;}
+.price-item{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:16px;text-align:center;}
+.price-item-tags{font-family:var(--mono);font-size:14px;color:var(--volt);margin-bottom:4px;font-weight:600;}
+.price-item-price{font-size:18px;font-weight:700;color:var(--lime);margin-bottom:4px;}
+.price-item-note{font-size:12px;color:var(--text3);}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-title { font-size: 24px; overflow-wrap: break-word; }
+  .article-meta { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .price-grid{grid-template-columns:1fr;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Лицензирование Alpha.Historian: как мы считаем стоимость и почему вы заложите неправильно","description":"Практическое руководство по расчёту лицензии Alpha.Historian. Реальные цифры, типичные ошибки, скрытые расходы и чек-лист для проектировщика.","author":{"@type":"Organization","name":"СПЕЦТЕХ","url":"https://specialtechnology.ru"},"publisher":{"@type":"Organization","name":"СПЕЦТЕХ"},"datePublished":"2026-04-01","url":"https://specialtechnology.ru/blog/historian-licensing.html"}</script>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+<div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Лицензирование Alpha.Historian: как мы считаем стоимость</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-licensing">Лицензирование</span>
+            <span class="article-date">01 апреля 2026</span>
+            <span class="article-read">14 мин</span>
+            <span class="article-author">Автоматчик СпецТех</span>
+          </div>
+          <h1 class="article-title">Лицензирование Alpha.Historian: как мы считаем стоимость и почему вы, скорее всего, заложите неправильно</h1>
+          <p class="article-subtitle">На каждом втором проекте мы слышим один и тот же вопрос: «Сколько стоит лицензия Alpha.Historian на 5 000 тегов?» Мы прошли через десятки таких расчётов и собрали всё, что знаем, в одну статью — конкретные цифры, реальные грабли и чек-лист для проектировщика.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>На каждом втором проекте мы слышим один и тот же вопрос: «Сколько стоит лицензия Alpha.Historian на 5 000 тегов?» Звучит просто — открой прайс, найди строку, выпиши цифру. Но когда мы начинаем копать, выясняется, что заказчик забыл про резервирование, неправильно посчитал теги или вообще не заложил поддержку в бюджет. А потом начинается: «А почему у нас в ТКП на 40% больше, чем мы планировали?»</p>
+
+          <p>Мы прошли через десятки таких расчётов и собрали всё, что знаем, в одну статью. Без маркетинговых обтекаемостей — конкретные цифры, реальные грабли и чек-лист, который можно распечатать и повесить над рабочим столом проектировщика.</p>
+
+          <h2 id="модель-лицензирования">Как устроена модель лицензирования</h2>
+
+          <p>Начнём с основ. Alpha.Historian — это компонент для долговременного хранения процессных данных. Он работает в связке с Alpha.Server: получает от него данные через модуль истории, а клиенты забирают архив через Alpha.Server/AccessPoint. Без Alpha.Server Historian бесполезен — это не самостоятельный продукт.</p>
+
+          <p><strong>Лицензируется Historian по количеству сохраняемых исторических тегов.</strong> Лицензия покупается отдельно от базовых комплектов (Alpha.One+, Alpha.SCADA, Alpha.Platform).</p>
+
+          <p>Звучит понятно. Но дьявол — в деталях.</p>
+
+          <h2 id="что-считается-тегом">Что считается тегом (и что — нет)</h2>
+
+          <p>Вот здесь у многих начинаются проблемы. На нашем опыте, каждый второй проектировщик считает теги неправильно — либо завышает, либо (чаще) занижает.</p>
+
+          <p>Официальная политика Атомик Софт такая:</p>
+
+          <ul>
+            <li><strong>Лицензируются только теги, связанные с внешним оборудованием или ПО.</strong> Это переменные в ПЛК, данные от умных датчиков и исполнительных механизмов, теги из внешних SCADA/DCS по промышленным протоколам.</li>
+            <li><strong>Внутренние теги, не связанные с внешними данными, не учитываются</strong> в лицензии.</li>
+            <li><strong>События сохраняются бесплатно</strong> — они не увеличивают количество лицензируемых тегов.</li>
+          </ul>
+
+          <p>Последний пункт часто удивляет. Мы сталкивались с ситуациями, когда заказчик включал в расчёт все события как теги и получал раздутую оценку. А потом, наоборот, радовался — бюджет оказывался меньше, чем он планировал.</p>
+
+          <div class="tip-box">
+            <div class="info-box-title">Правило большого пальца</div>
+            <p>Считайте только то, что приходит извне. Внутренняя логика и события — бесплатно.</p>
+          </div>
+
+          <h2 id="градации-лицензий">Градации: от HIST-S100 до HIST-S2M</h2>
+
+          <p>Alpha.Historian предлагает 21 градацию лицензий — от 100 до 2 000 000 тегов. Полный ряд:</p>
+
+          <p><strong>HIST-S100</strong> → <strong>HIST-S200</strong> → <strong>HIST-S300</strong> → <strong>HIST-S500</strong> → <strong>HIST-S700</strong> → <strong>HIST-S1k</strong> → <strong>HIST-S2k</strong> → <strong>HIST-S3k</strong> → <strong>HIST-S5k</strong> → <strong>HIST-S7k</strong> → <strong>HIST-S10k</strong> → <strong>HIST-S15k</strong> → <strong>HIST-S20k</strong> → <strong>HIST-S30k</strong> → <strong>HIST-S50k</strong> → <strong>HIST-S100k</strong> → <strong>HIST-S200k</strong> → <strong>HIST-S300k</strong> → <strong>HIST-S500k</strong> → <strong>HIST-S1M</strong> → <strong>HIST-S2M</strong></p>
+
+          <p>Принцип простой: вы считаете свои теги и выбираете ближайшую верхнюю ступень. Если у вас 4 800 тегов — берёте HIST-S5k. Если 5 200 — уже HIST-S7k.</p>
+
+          <p>Актуальные цены можно посмотреть в <a href="../calculator.html">нашем калькуляторе</a> или запросить расчёт напрямую.</p>
+
+          <h3 id="почему-не-жадничать">Почему важно не жадничать с градацией</h3>
+
+          <p>На одном из проектов мы столкнулись с классической ситуацией: заказчик насчитал 4 900 тегов, взял HIST-S5k и радовался. Через полгода добавили новый цех — и оказалось, что нужно 5 300 тегов. Пришлось менять лицензию на HIST-S7k, а это — дополнительные расходы и бюрократия.</p>
+
+          <div class="tip-box">
+            <div class="info-box-title">Рекомендация</div>
+            <p>Если расчёт близок к границе ступени, берите следующую. Разница в цене обычно не такая большая, а нервы и время сэкономите точно.</p>
+          </div>
+
+          <h2 id="оценка-тегов">Как правильно оценить теги на этапе проекта</h2>
+
+          <p>Вот пошаговый подход, который мы используем на своих проектах:</p>
+
+          <ol>
+            <li><strong>Соберите перечень архивируемых сигналов.</strong> Пройдитесь по всем контроллерам, датчикам и внешним системам. Запишите каждый тег, который должен попасть в долговременный архив.</li>
+            <li><strong>Отделите события от тегов.</strong> События не лицензируются — но их нужно учитывать при планировании дискового пространства и производительности. Не путайте одно с другим.</li>
+            <li><strong>Добавьте запас на развитие.</strong> Мы обычно закладываем 20–30% сверху. Системы растут, новые линии добавляются, а менять лицензию посреди года — удовольствие ниже среднего.</li>
+            <li><strong>Проверьте расчёт по документации или у поставщика.</strong> Точные правила подсчёта зависят от версии и конфигурации. Если проект критичен по бюджету — лучше перепроверить.</li>
+          </ol>
+
+          <div class="info-box">
+            <div class="info-box-title">Из практики</div>
+            <p>На одном из проектов заказчик насчитал 3 000 тегов. Мы пересмотрели спецификацию — оказалось 4 200, потому что он не учёл теги от частотных приводов. Экономия на аудите тегов — копейки. Пересмотр лицензии через год — совсем другие деньги.</p>
+          </div>
+
+          <h2 id="скрытые-расходы">Скрытые расходы, о которых забывают</h2>
+
+          <p>Стоимость лицензии Historian — это верхушка айсберга. Вот что ещё нужно заложить в бюджет.</p>
+
+          <h3 id="резервирование">Резервирование: ×2 к стоимости</h3>
+
+          <p>Для критически важных систем (а в промышленности почти все системы критические) нужен резервный сервер. И вот неприятный момент: <strong>резервный Historian лицензируется отдельно.</strong> Это удваивает стоимость лицензий.</p>
+
+          <pre><code># Пример: система 5 000 тегов с резервом
+Основной Historian:    HIST-S5k = 865 400 ₽
+Резервный Historian:   HIST-S5k = 865 400 ₽
+─────────────────────────────────────────────
+Итого лицензии:                = 1 730 800 ₽</code></pre>
+
+          <p>Полтора миллиона разницы — не та сумма, которую хочется «обнаружить» на этапе закупки. Мы видели проекты, где бюджет утверждали без резерва, а потом главный инженер говорил: «Как это — без резерва? У нас непрерывное производство!» И начинались мучительные согласования дополнительного финансирования.</p>
+
+          <h3 id="sla-поддержка">SLA и годовая поддержка</h3>
+
+          <p>Техническая поддержка — отдельная строка бюджета. Три уровня:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Уровень</th>
+                <th>Стоимость в год</th>
+                <th>Что получаете</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SLA-STD</td>
+                <td>10% от стоимости лицензий</td>
+                <td>Консультации, исправления ошибок</td>
+              </tr>
+              <tr>
+                <td>SLA-OPT</td>
+                <td>15% от стоимости лицензий</td>
+                <td>+ обновления, приоритетная обработка</td>
+              </tr>
+              <tr>
+                <td>SLA-PRM</td>
+                <td>25% от стоимости лицензий</td>
+                <td>+ выезды на объект, персональный инженер</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Для нашего примера с 5 000 тегов и резервом (лицензии на 1 730 800 ₽):</p>
+
+          <ul>
+            <li><strong>STD:</strong> ~173 000 ₽/год</li>
+            <li><strong>OPT:</strong> ~260 000 ₽/год</li>
+            <li><strong>PRM:</strong> ~433 000 ₽/год</li>
+          </ul>
+
+          <p>Мы обычно рекомендуем OPT — он включает обновления, а в промышленных системах актуальные патчи безопасности и исправления — не роскошь, а необходимость.</p>
+
+          <h3 id="дополнительные-компоненты">Дополнительные компоненты</h3>
+
+          <p>Historian редко работает в одиночку. На реальном проекте к нему обычно добавляются другие модули платформы — отчёты, визуализация, web-доступ, интеграция с MES. Их стоимость считается отдельно по составу проекта.</p>
+
+          <p>Не забывайте про это при формировании бюджета. Мы не раз видели, как заказчик считал только Historian, а потом выяснялось, что ему нужен ещё пул клиентских подключений или web-публикация данных.</p>
+
+          <h2 id="полный-расчёт">Пример полного расчёта</h2>
+
+          <p>Давайте соберём всё вместе для типовой системы. Это не универсальный шаблон — каждый проект уникален — но логика расчёта одинаковая.</p>
+
+          <p><strong>Задача:</strong> система на 5 000 тегов, непрерывное производство, нужен резерв.</p>
+
+          <pre><code>ЛИЦЕНЗИИ HISTORIAN:
+├── Основной:    HIST-S5k = 865 400 ₽
+├── Резервный:   HIST-S5k = 865 400 ₽
+└── Итого:               = 1 730 800 ₽
+
+ЕЖЕГОДНАЯ ПОДДЕРЖКА (SLA-STD):
+└── 10% от лицензий      ≈ 173 080 ₽/год
+
+ИТОГО ПЕРВЫЙ ГОД:        ≈ 1 903 880 ₽</code></pre>
+
+          <p>Обратите внимание: это <strong>только Historian</strong> — без базовой платформы и дополнительных компонентов. Полную стоимость системы проще всего прикинуть в <a href="../calculator.html">калькуляторе</a>.</p>
+
+          <h2 id="типичные-ошибки">Типичные ошибки: топ-5 граблей, на которые наступают все</h2>
+
+          <p>За годы работы мы собрали коллекцию ошибок, которые повторяются из проекта в проект. Вот главные:</p>
+
+          <h3 id="ошибка-недооценка">1. Недооценка количества тегов</h3>
+
+          <p>Самая частая ошибка. Проектировщик считает теги по основному технологическому процессу и забывает про вспомогательные системы: вентиляцию, электроснабжение, частотные приводы, аналитические приборы. А они тоже генерируют теги, которые нужно архивировать.</p>
+
+          <p><strong>Как избежать:</strong> закладывайте 20–30% запас. Или посчитайте честно — пройдитесь по всем P&amp;ID и спецификациям оборудования.</p>
+
+          <h3 id="ошибка-резерв">2. Забыли про резерв</h3>
+
+          <p>«Зачем нам резерв? У нас надёжное оборудование!» — слышали мы не раз. А потом, когда контракт уже подписан, приходит требование по надёжности: резервирование обязательно. И бюджет нужно удваивать.</p>
+
+          <p><strong>Как избежать:</strong> на этапе ТЗ сразу определите, нужен ли резервный Historian. Для непрерывного производства ответ почти всегда — да.</p>
+
+          <h3 id="ошибка-sla">3. Не учли SLA</h3>
+
+          <p>Лицензия — разовый платёж. Но поддержка — ежегодная. 10–25% от стоимости лицензий каждый год. На горизонте 5 лет поддержка может превысить стоимость самих лицензий.</p>
+
+          <p><strong>Как избежать:</strong> сразу считайте TCO (полную стоимость владения) на 3–5 лет.</p>
+
+          <h3 id="ошибка-подсчёт">4. Не уточнили правила подсчёта тегов</h3>
+
+          <p>Правила зависят от версии и конфигурации. То, что считается тегом в одной версии, может учитываться иначе в другой. Мы видели разницу в 15–20% при пересчёте.</p>
+
+          <p><strong>Как избежать:</strong> всегда сверяйтесь с актуальной документацией или уточняйте у поставщика.</p>
+
+          <h3 id="ошибка-компоненты">5. Не посчитали дополнительные компоненты</h3>
+
+          <p>Historian без визуализации, отчётов или web-доступа — как автомобиль без колёс. Технически он работает, но ездить на нём невозможно. Дополнительные компоненты — это реальная строка бюджета, которую нельзя игнорировать.</p>
+
+          <p><strong>Как избежать:</strong> составьте полный список функциональности, которая нужна проекту, и посчитайте всё сразу.</p>
+
+          <h2 id="чек-лист">Чек-лист для расчёта бюджета</h2>
+
+          <div class="info-box">
+            <div class="info-box-title">Распечатайте и используйте</div>
+            <p><strong>☐</strong> Определили, какие сигналы и события нужно архивировать<br>
+            <strong>☐</strong> Посчитали только внешние теги (внутренние и события — бесплатно)<br>
+            <strong>☐</strong> Сопоставили объём с градациями HIST-S (выбрали с запасом)<br>
+            <strong>☐</strong> Определили необходимость резервирования (×2 к лицензиям)<br>
+            <strong>☐</strong> Выбрали уровень SLA (STD 10% / OPT 15% / PRM 25%)<br>
+            <strong>☐</strong> Рассчитали TCO на 3–5 лет (лицензии + поддержка × годы)<br>
+            <strong>☐</strong> Учли дополнительные компоненты платформы<br>
+            <strong>☐</strong> Сверили правила подсчёта с документацией или поставщиком<br>
+            <strong>☐</strong> Прогнали расчёт через <a href="../calculator.html">калькулятор</a></p>
+          </div>
+
+          <h2 id="сравнение-с-конкурентами">Сравнение с конкурентами: на что обращать внимание</h2>
+
+          <p>При выборе историана (да, мы так говорим в нашей отрасли) важно сравнивать не просто «цену за 5000 тегов», а полную картину:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Что сравнивать</th>
+                <th>Alpha.Historian</th>
+                <th>Вопрос к конкуренту</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Единица лицензирования</td>
+                <td>Количество тегов</td>
+                <td>Как считается архивируемый объём?</td>
+              </tr>
+              <tr>
+                <td>Поддержка</td>
+                <td>STD/OPT/PRM — процент от лицензии</td>
+                <td>Есть обязательные сервисные платежи?</td>
+              </tr>
+              <tr>
+                <td>Резервирование</td>
+                <td>Отдельная лицензия</td>
+                <td>Нужна ли отдельная лицензия на резерв?</td>
+              </tr>
+              <tr>
+                <td>Дополнительные модули</td>
+                <td>Считаются по составу проекта</td>
+                <td>Что входит в базу, а что — за доплату?</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Мы не раз видели, как «дешёвый» конкурент оказывался дороже после учёта обязательных сервисных контрактов и скрытых платежей за дополнительные модули.</p>
+
+          <div class="tip-box">
+            <div class="info-box-title">Совет</div>
+            <p>Всегда сравнивайте TCO за 5 лет, а не стоимость лицензии на бумаге. Это честнее — и для бюджета, и для нервов.</p>
+          </div>
+
+          <h2 id="итого">Итого</h2>
+
+          <p>Лицензирование Alpha.Historian — не rocket science, но и не тривиальная задача. Главные правила:</p>
+
+          <ol>
+            <li><strong>Считайте только внешние теги</strong> — внутренние и события бесплатны</li>
+            <li><strong>Берите градацию с запасом</strong> — апгрейд лицензии дороже, чем изначально правильный выбор</li>
+            <li><strong>Закладывайте резерв сразу</strong> — он удваивает стоимость, и лучше об этом знать на этапе планирования</li>
+            <li><strong>Не забывайте про SLA</strong> — 10–25% ежегодно, и за 5 лет это ощутимая сумма</li>
+            <li><strong>Используйте <a href="../calculator.html">калькулятор</a></strong> — он считает быстрее и точнее, чем таблица в Excel</li>
+          </ol>
+
+          <p>Если что-то непонятно или нужна помощь с расчётом конкретного проекта — <a href="../index.html#contact">напишите нам</a>. Мы не кусаемся и любим интересные задачки по лицензированию. Серьёзно.</p>
+
+        </div>
+
+<div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Рассчитайте стоимость Alpha.Historian</div>
+  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Точный расчёт с учётом всех компонентов системы</div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--ff-mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Калькулятор стоимости</a>
+    <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--ff-mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Подробнее о платформе</a>
+  </div>
+</div>
+
+<div style="margin-top:32px">
+  <div style="font-family:var(--ff-mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="historian.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Alpha.Historian 4.0: NoSQL для промышленных данных</a>
+    <a href="architecture.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Архитектура Альфа платформы</a>
+    <a href="scaling.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Масштабирование SCADA</a>
+  </div>
+</div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#модель-лицензирования">Модель лицензирования</a></li>
+              <li><a href="#что-считается-тегом">Что считается тегом</a></li>
+              <li><a href="#градации-лицензий">Градации лицензий</a></li>
+              <li class="toc-h3"><a href="#почему-не-жадничать">Почему не жадничать</a></li>
+              <li><a href="#оценка-тегов">Оценка тегов на этапе проекта</a></li>
+              <li><a href="#скрытые-расходы">Скрытые расходы</a></li>
+              <li class="toc-h3"><a href="#резервирование">Резервирование</a></li>
+              <li class="toc-h3"><a href="#sla-поддержка">SLA и поддержка</a></li>
+              <li class="toc-h3"><a href="#дополнительные-компоненты">Доп. компоненты</a></li>
+              <li><a href="#полный-расчёт">Пример полного расчёта</a></li>
+              <li><a href="#типичные-ошибки">Типичные ошибки: топ-5</a></li>
+              <li><a href="#чек-лист">Чек-лист для бюджета</a></li>
+              <li><a href="#сравнение-с-конкурентами">Сравнение с конкурентами</a></li>
+              <li><a href="#итого">Итого</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Полезные ссылки</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="../calculator.html" class="related-item">
+                <div class="related-item-title">Калькулятор стоимости</div>
+                <div class="related-item-meta">Точный расчёт лицензий</div>
+              </a>
+              <a href="../alpha-platform.html" class="related-item">
+                <div class="related-item-title">Альфа платформа</div>
+                <div class="related-item-meta">Полный обзор продукта</div>
+              </a>
+              <a href="../index.html#contact" class="related-item">
+                <div class="related-item-title">Консультация эксперта</div>
+                <div class="related-item-meta">Помощь в выборе конфигурации</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--ff-mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
+
+</body>
+</html>

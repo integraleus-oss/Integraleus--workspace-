@@ -1,0 +1,369 @@
+PI World 2020 Lab PI Vision –
+Migrating PI ProcessBook Displays
+
+OSIsoft, LLC
+1600 Alvarado Street
+San Leandro, CA 94577
+All rights reserved. No part of this publication may be reproduced, stored in a retrieval system, or
+transmitted, in any form or by any means, mechanical, photocopying, recording, or otherwise, without
+the prior written permission of OSIsoft, LLC.
+OSIsoft, the OSIsoft logo and logotype, Managed PI, OSIsoft Advanced Services, OSIsoft Cloud
+Services, OSIsoft Connected Services, OSIsoft EDS, PI ACE, PI Advanced Computing Engine, PI AF
+SDK, PI API, PI Asset Framework, PI Audit Viewer, PI Builder, PI Cloud Connect, PI Connectors, PI
+Data Archive, PI DataLink, PI DataLink Server, PI Developers Club, PI Integrator for Business
+Analytics, PI Interfaces, PI JDBC Driver, PI Manual Logger, PI Notifications, PI ODBC Driver, PI
+OLEDB Enterprise, PI OLEDB Provider, PI OPC DA Server, PI OPC HDA Server, PI ProcessBook,
+PI SDK, PI Server, PI Square, PI System, PI System Access, PI Vision, PI Visualization Suite, PI
+Web API, PI WebParts, PI Web Services, RLINK and RtReports are all trademarks of OSIsoft, LLC.
+All other trademarks or trade names used herein are the property of their respective owners.
+U.S. GOVERNMENT RIGHTS
+Use, duplication or disclosure by the US Government is subject to restrictions set forth in the OSIsoft,
+LLC license agreement and/or as provided in DFARS 227.7202, DFARS 252.227-7013, FAR 12-212,
+FAR 52.227-19, or their successors, as applicable.
+No part of this publication may be reproduced, stored in a retrieval system, or transmitted, in any form or by
+any means, mechanical, photocopying, recording or otherwise, without the written permission of OSIsoft, LLC.
+
+2 | Pa g e
+
+Table of Contents
+Contents
+Table of Contents .......................................................................................................................................................................... 3
+Introduction ...................................................................................................................................................................................... 4
+Approach ............................................................................................................................................................................................ 4
+Why Use the PI ProcessBook to PI Vision Migration Utility?............................................................................. 4
+Scenario: Flynn River Hydro .................................................................................................................................................. 5
+Exercises ............................................................................................................................................................................................ 6
+Exercise 1: Review Existing PI ProcessBook Displays .................................................................................... 6
+Exercise 2: Analyze and Migrate PI ProcessBook Displays .......................................................................... 8
+Exercise 3: Review Migrated PI Vision Displays .................................................................................................10
+Exercise 4: Complete the PI Vision Displays ........................................................................................................12
+Exercise 5: Migrate Another PI ProcessBook Display .....................................................................................16
+
+3 | Pa g e
+
+Introduction
+This lab is designed for people who already have used PI ProcessBook and PI Vision. Students
+should already be familiar with how to navigate displays in both PI ProcessBook and PI Vision
+and understand how PI ProcessBook and PI Vision are able to leverage AF Templates.
+
+Approach
+Specific questions or scenarios will be presented to solve primarily using OSIsoft PI ProcessBook or PI
+Vision as your visualization and analysis tool. In addition, the PI ProcessBook to PI Vision Migration Utility
+will be used. More advanced features of PI Vision will have a strong reliance on AF so you will also need to
+use PI System Explorer (PSE). If you are stuck, ask one of the lab monitors for assistance.
+
+Why Use the PI ProcessBook to PI Vision Migration Utility?
+PI ProcessBook is a 25-year-old product that has begun to show its age. PI Vision is our leading
+visualization tool built to leverage the latest PI System capabilities where PI ProcessBook has
+fallen behind. We know it takes a lot of hard work to build out PI ProcessBook displays, and we
+want to help move that work over to our modern visualization tool and take advantage of the
+benefits of PI Vision. While it may seem like a challenging task, this lab will give you the
+knowledge and practice to be confident in using the PI ProcessBook to PI Vision Migration Utility.
+
+4 | Pa g e
+
+Scenario: Flynn River Hydro
+You have been hired as a PI Administrator at Flynn River Hydro and you are tasked with migrating
+their PI ProcessBook displays to PI Vision. Luckily the company has built out AF databases with
+templatized AF Assets that have been used in the PI ProcessBook displays. The AF structure features
+three main levels, Hydro Unit, Generation Unit, and Equipment (Generator/Turbine).
+
+Red – Hydro Unit
+Blue – Generation Unit
+Green – Equipment
+You know that this AF structure has been utilized in the PI ProcessBook displays and you
+would like to keep that functionality in the migrated PI Vision displays.
+Note: The AF database used in these exercises is a slight modification of the Hydro Plant
+Monitoring Asset Based PI Example Kit available on PI Square:
+https://pisquare.osisoft.com/community/all-things-pi/af-library/asset-based-pi-example-kits/hydro-plant-kit
+
+5 | Pa g e
+
+Exercises
+Exercise 1: Review Existing PI ProcessBook Displays
+Exercise Objectives:
+Examine PI ProcessBook functionality
+
+Scenario:
+Your first assignment is to review the existing set of PI ProcessBook displays that the company currently uses
+to make sure the display content is properly migrated into PI Vision. The company has a set of displays which
+are used to monitor Flynn River Hydro plant and equipment, located in C:\ProcessBook\Flynn. The company
+also has a display which IT uses to monitor the health of the PI Data Archive, located in C:\ProcessBook\IT.
+
+Part 1: PI Data Archive Monitoring Display
+Approach:
+1. Open the PI_Data_Archive_Monitoring.pdi display located in C:\ProcessBook\IT
+2.
+
+Select Visual Basic Editor
+
+and double click on This Display under the C:\ProcessBook\IT\
+
+PI_Data_Archive_Monitoring.pdi VBAProject to open the VBA code. What does this code do?
+
+3. Close the Visual Basic Editor and use the PI_Data_Archive_Monitoring.pdi
+display to answer the following questions
+
+Questions:
+4. How many Unflushed Events are currently in the write cache?
+
+5. What is the Point Count in the Base Subsystem?
+
+6. What is the approximate peak of the PI Server CPU over the last 20
+minutes? Hint: double-click the PI Server CPU trend to maximize it
+
+6 | Pa g e
+
+Part 2: Flynn River Hydro Displays
+Approach:
+1. Open the PG_Flynn_Home.pdi display located in C:\ProcessBook\Flynn
+2. Use the navigation buttons to open the other Flynn PI ProcessBook displays
+3. Use the Flynn River Hydro displays to answer the following questions
+Questions:
+4. What is the current Penstock Flow at plant Flynn II?
+
+5. Which Generation Unit currently has the highest Power Generated?
+
+6. Which Generator currently has the lowest Oil Level?
+
+7. What is the approximate peak Water pH Intake at GU3 Turbine in the last 8 hours?
+Approximately when did this peak occur?
+Hint: hover over the value to see the summary statistics
+
+7 | Pa g e
+
+Exercise 2: Analyze and Migrate PI ProcessBook Displays
+Exercise Objectives:
+Use the PI ProcessBook to PI Vision Migration Utility to migrate PI ProcessBook displays to PI
+Vision Understand the configuration and reporting options available in the Migration Utility
+
+Scenario:
+Now that you have reviewed the PI ProcessBook displays that the client uses, you are ready to
+use the PI ProcessBook to PI Vision Migration Utility to convert these displays to native PI Vision
+displays. You would like to preserve the folder and navigation structure of the existing displays.
+
+Note: The PI ProcessBook to PI Vision Migration Utility User Guide is available on Live
+Library and as a bookmark in Chrome:
+https://livelibrary.osisoft.com/LiveLibrary/web/ui.xql?action=html&resource=publist_home.html&pub_categ
+ory=PI-ProcessBook-to-PI-Vision-Migration-Utility
+
+Approach:
+Part 1: Analyze the PI ProcessBook Displays
+1. Open the PI ProcessBook to PI Vision Migration Utility
+2. Click Add Files and select Folders:
+
+3. In the Browse for Folder window, select the C:\ProcessBook folder and click OK
+4. Select the checkbox next to the ProcessBook folder or Select All in the bottom left to
+select all folders and files
+5. Click Run Analysis and wait for the Analysis completed message
+Part 2: Review the Analysis Results
+6. In the Analysis Results pane, expand the categories that appear to view the extent to
+which the files can be migrated
+8 | Pa g e
+
+7. Hover over the
+
+icon next to each category to review each category definition
+
+8. Hover over the icons in the Issues column to review each migration limitation
+9. The PI_Data_Archive_Monitoring display contains VBA , which is not supported in
+PI Vision. Click Export VBA at the bottom of the Analysis Results pane.
+10. After the Export completed message is displayed, click View Reports and select Open
+Reports Folder to view the associated .vba file in notepad.
+11. In the Reports Folder, open the MigrationAnalysis.csv file to view the migration
+analysis results in detail.
+
+12. Click Select All at the bottom of the Analysis Results pane
+Note: In order to preserve links between PI ProcessBook displays, they must be
+migrated in the same operation
+13. Click Migrate to open and complete the Migration Settings window:
+a Connect to the PI Vision Server: enter https://pivision/pivision and
+click Connect b Destination PI Vision folder: <Home>
+c Target Display Owner: pischool\student01
+d Display Sharing Access: World
+e Select Persist folder structure from migrated items
+14. Click OK and wait for the Migration completed message
+15. Click View Reports and select Migration Report to view the migration results in detail
+
+9 | Pa g e
+
+Exercise 3: Review Migrated PI Vision Displays
+Exercise Objectives:
+Examine PI Vision functionality
+Validate migration configuration options in PI Vision
+
+Scenario:
+Now that the PI ProcessBook displays have been migrated to PI Vision, you need to examine
+the migrated PI Vision displays. The users are not very familiar with PI Vision, so you need to
+be able to demonstrate how the new PI Vision displays work.
+
+Part 1: PI Data Archive Monitoring Display
+Approach:
+1. Use the shortcut on the desktop to launch PI Vision using Chrome.
+a Alternatively, start Chrome and navigate to https://pivision/pivision
+2. Note the folder structure in the lower left panel. Did the folder structure persist from the
+PI ProcessBook files? Select the IT folder within ProcessBook on the left side panel
+
+3. Click Edit display settings
+in the PI_Data_Archive_Monitoring display to open the
+Display Settings window. Did the migration settings apply to this display?
+4. Close the Display Settings window. Click the PI_Data_Archive_Monitoring display to
+open it and answer the questions below
+
+Questions:
+5. How many Unflushed Events are currently in the write cache?
+
+6. What is the Point Count in the Base Subsystem?
+
+7. What is the approximate peak of the PI Server CPU over the last 20
+minutes? Hint: double-click the PI Server CPU trend to maximize it
+
+10 | Pa g e
+
+Part 2: Flynn River Hydro Displays
+Approach:
+1. Back in the PI Vision homepage, select the Flynn folder within ProcessBook on the left side panel
+
+2. Click Edit display settings
+in the PG_Flynn_Home display to open the Display
+Settings window. Did the migration settings apply to this display?
+3. Close the Display Settings window. Click the PG_Flynn_Home display to open it
+4. Use the navigation buttons to open the other Flynn PI Vision displays
+5. Use these Flynn displays to answer the following questions
+
+Questions:
+6. What is the current Penstock Flow at plant Flynn II?
+
+7. Which Generation Unit currently has the highest Power Generated?
+
+8. Which Generator currently has the lowest Oil Level?
+
+9. What is the approximate peak Water pH Intake at GU3 Turbine in the last 8 hours?
+Approximately when did this peak occur?
+
+11 | Pa g e
+
+Exercise 4: Complete the PI Vision Displays
+Exercise Objectives:
+Use AF to create analyses to add to the PI Vision display
+Use PI Vision to edit the migrated PI Vision displays
+
+Scenario:
+After examining the newly migrated PI Vision displays, you see that there is some data missing from the
+original PI ProcessBook displays. Specifically, in the PG_Flynn_Plant PI Vision display, there is some calculation
+
+data missing in the upper left corner. You know from the migration results that there are datasets in the
+original PI ProcessBook display. Since you want to be able to use these calculations in other client tools, you
+
+will create AF analyses for these calculations. You also need to update the banner of the
+PI_Data_Archive_Monitoring display as it utilizes VBA. Since the timebar in PI Vision shows us the time range
+
+of the display, you will replace this header with a static header.
+
+Approach:
+Part 1: Update the PG_Flynn_Plant display using AF analysis
+1. Open PI System Explorer and select the PG_HydroPlant database
+2. Navigate to Library and go to Templates > Element Templates > Hydro
+
+3. In the Analysis Templates tab, create two new expression analysis templates
+with the following properties:
+Analysis 1: % Power Generated
+Expression: ('Actual Power Generated'/'Total Installed
+Capacity')*100 Output Attribute (Map > New Attribute Template)
+
+o Save Output History: No
+o Name: % Power Generated
+Scheduling: Event-Triggered
+
+12 | P a g e
+
+Analysis 2: Min/Max Power Generated
+Expression 1: TagMin('Actual Power Generated', '*-1h',
+'*') Output Attribute (Map > New Attribute Template)
+
+o Save Output History: Yes
+o Name: Min Power Generated
+Expression 2: TagMax('Actual Power Generated', '*-1h', '*')
+Output Attribute (Map > New Attribute Template)
+
+o Save Output History: Yes
+o Name: Max Power
+Generated Scheduling: Periodic
+Period: 01h 00m 00s
+
+13 | P a g e
+
+4. Check In your changes
+5. Go to Elements > Flynn River Hydro
+
+6. In the Attributes tab, if you see “PI Point not found” errors for the Min Power Generated and/or
+Max Power Generated attributes, right-click each attribute and select Create or Update PI Point
+
+7. In the Analyses tab, right click the Min/Max Power Generated analysis and backfill
+the analysis from the beginning of today until now
+
+8. In PI Vision, open the PG_Flynn_Plant display and add value symbols of the newly
+created % Power Generated, Min Power Generated, and Max Power Generated
+attributes to replace the missing datasets and save your display
+Part 2: Update the PI_Data_Archive_Monitoring display
+9. In PI Vision, open the PI_Data_Archive_Monitoring display
+10. Update the non-working date and time header with a header of your choice (ex.
+PISRV01 PI Data Archive Monitoring) and save your display
+
+14 | P a g e
+
+Bonus: Edit the remaining PI Vision displays
+As a bonus exercise, edit the other migrated PI Vision displays to better format the displays
+in PI Vision. Some suggestions are below, but feel free to make any other adjustments! Be
+sure to save the displays when finished.
+PG_Flynn_Home
+Adjust the 4 links and 3 arrows to be evenly spaced by selecting the symbols and
+going to
+
+Arrange > Align Middle
+
+PG_Flynn_Plant
+Add the Generating Capacity attribute for the displayed Flynn I or Flynn II plant to
+the display as a Value symbol under the trend
+Format the boxes surrounding Flynn River Hydro Power and Features to have different Border colors
+Adjust the Penstock Opening and Penstock Flow value and text symbols so they are not overlapping
+
+PG_Flynn_GenerationUnit
+Increase the Font Size of the Generator Analysis and Turbine Analysis text symbols to 24
+Add the Generation Unit Number of Attention Systems attribute for the displayed
+generation unit to the display as a Value symbol
+PG_Flynn_Generator and PG_Flynn_Turbine
+
+Format the Oil Level gauge symbol to show the scale in Format Gauge > Visibility > Scale
+Change the text color of the Last Maintenance and Time Since Maintenance value symbols
+
+15 | P a g e
+
+Exercise 5: Migrate Another PI ProcessBook Display
+Exercise Objectives:
+Complete another migration using the PI ProcessBook to PI Vision Migration Utility
+
+Scenario:
+You have presented the migrated PI Vision displays to the other PI users at Flynn River Hydro,
+and they are excited to see the new visualization tool and its new capabilities. An engineer has
+created a ProcessBook display recently and would like to see how it works in PI Vision.
+
+Approach:
+1. Open the PowerGeneration.pdi file located on the Desktop. Examine this display in PI ProcessBook
+
+2. Use the PI ProcessBook to PI Vision Migration Utility to analyze and migrate the
+display. This display should be located in the Flynn folder in PI Vision.
+3. Review the migrated PowerGeneration display in PI Vision and verify the
+migration settings and symbols have been preserved
+4. Make any adjustments to the display in PI Vision, some suggestions are as follows:
+Edit the background and font colors of the display to match the other Flynn displays
+Increase the font size of the Flynn I, Flynn II, and Total text and value symbols
+
+Add a Home text symbol to the display. Add a navigation link to this
+symbol to link to the PG_Flynn_Home display
+
+16 | P a g e
+
+17 | P a g e
+
+

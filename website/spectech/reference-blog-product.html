@@ -35,7 +35,8 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+section,.container,.page,.product-hero,.product-tabs-nav,footer,.tabs,.contact,.cta-section,.partners,.certificates,.technologies,.catalog{position:relative;z-index:2}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:1;}
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
 
 /* NAV */

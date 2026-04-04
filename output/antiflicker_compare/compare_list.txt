@@ -1,0 +1,6 @@
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/title_original.mp4'
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/original_3clips.mp4'
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/title_mild.mp4'
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/mild_3clips.mp4'
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/title_strong.mp4'
+file '/root/.openclaw/workspace/agents/main/output/antiflicker_compare/strong_3clips.mp4'

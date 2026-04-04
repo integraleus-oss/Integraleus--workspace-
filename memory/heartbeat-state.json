@@ -1,29 +1,29 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-03-31T21:26:17Z",
-    "openclaw_health": "2026-04-01T01:59:47Z",
-    "system_changes": "2026-03-31T21:26:17Z",
-    "cron_review": "2026-04-01T01:59:47Z",
-    "cron_resources": "2026-03-31T18:36:47Z",
-    "garden": "2026-03-31T18:36:47Z",
-    "telegram_liveness": "2026-04-01T01:59:47Z",
-    "heartbeat": 1775008787,
-    "telegram": 1775008787
+    "ssh_security": "2026-04-02T14:53:00Z",
+    "openclaw_health": "2026-04-02T14:53:00Z",
+    "system_changes": "2026-04-02T14:53:00Z",
+    "cron_review": "2026-04-02T14:53:00Z",
+    "cron_resources": "2026-04-01T09:43:00Z",
+    "garden": "2026-04-02T14:53:00Z",
+    "telegram_liveness": "2026-04-02T14:53:00Z",
+    "heartbeat": 1775098200,
+    "telegram": 1775098200
   },
   "telegramHealth": {
-    "checkedAt": 1775008787,
+    "checkedAt": 1775317500,
     "status": "ok",
-    "lastCheck": "2026-04-01T01:59:47Z",
+    "lastCheck": "2026-04-02T15:35:00Z",
     "consecutiveFailures": 0,
-    "note": "Telegram probe OK. Night time check."
+    "note": "Telegram OK (218ms). Post apt-upgrade, pending reboot for kernel 6.8.0-107."
   },
   "garden": {
     "status": "ok",
     "services": "all active",
     "disk": "38%",
-    "lastCheck": "2026-03-31T18:36:47Z",
+    "lastCheck": "2026-04-02T05:50:00Z",
     "alert": null,
-    "note": "Known IPs only (157.22.180.83, 79.104.12.133). Baseline SSH unchanged: permitrootlogin=without-password, passwordauthentication=no. No OAuth/Codex OAuth errors in last 2h. 7 packages upgradable."
+    "note": "All services active, no OAuth errors, known IPs only."
   },
   "codexOAuth": {
     "status": "ok",
@@ -31,48 +31,38 @@
     "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
   },
   "cronUsage": {
-    "lastCheck": "2026-03-31T18:36:47Z",
+    "lastCheck": "2026-04-01T09:43:00Z",
     "jobs": {
-      "system-monitor:daily": 22413,
-      "healthcheck:security-audit": 16281,
-      "healthcheck:update-status": 15279,
-      "Garden Server Weekly Check": 24540,
-      "BBQ Daily Digest": 28546,
-      "Daily Server Monitoring": 17345
+      "BBQ Daily Digest": 22476,
+      "Daily Server Monitoring": 15677,
+      "system-monitor:daily": 17250
     },
-    "dailyTotal": 124404,
-    "note": "Recent sampled runs stayed under 50k tokens; the longest simple/monitoring job took 150010 ms (under 3 minutes)."
+    "dailyTotal": 55403,
+    "note": "All within normal range. No anomalies."
   },
   "notes": {
-    "mainDisk": "77%",
+    "mainDisk": "80%",
     "mainLoad": "normal",
-    "pendingUpdates": 13,
+    "pendingUpdates": 17,
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
-    "openclawUpdate": "Update available: pnpm 2026.3.28; suggested maintenance window after 20:00 MSK.",
-    "cronDeliveryIssue": "As of 2026-03-31 18:55 MSK, system-monitor:daily recovered, while BBQ Daily Digest and Daily Server Monitoring still show the morning delivery failure: Outbound not configured for channel: telegram.",
+    "openclawUpdate": "Updated to 2026.4.1 on 2026-04-02 ~10:32 MSK.",
+    "cronDeliveryIssue": "RESOLVED 2026-04-01: all three cron jobs delivered successfully at 10:00-10:30 MSK.",
     "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
     "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet.",
     "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged.",
-    "dayRollover": "2026-04-01 started; created new daily memory file."
+    "diskAlert": "Main disk 86% (5.6G free) as of 2026-04-02. Easy wins: apt clean ~614M, puppeteer cache ~626M.",
+    "dayRollover": "2026-04-01 started; created new daily memory file.",
+    "openrouterAuth": "Added openrouter:default API key to auth-profiles.json on 2026-04-01. Qwen3-Coder-Free fallback now operational.",
+    "nodeVersion": "22.22.2 (upgraded from 22.22.1)",
+    "gardenOAuth": "Codex refresh token invalid on Garden. Access token expires in ~9 days. Needs openclaw configure --section model.",
+    "pendingKernel": "linux 6.8.0-107 available, will need reboot"
   },
   "cronStatus": {
-    "checkedAt": 1774992377,
-    "errors": [
-      {
-        "job": "BBQ Daily Digest",
-        "status": "error",
-        "error": "Error: Outbound not configured for channel: telegram",
-        "runAt": "2026-03-31T07:00:00Z"
-      },
-      {
-        "job": "Daily Server Monitoring",
-        "status": "error",
-        "error": "Error: Outbound not configured for channel: telegram",
-        "runAt": "2026-03-31T07:01:21Z"
-      }
-    ]
+    "checkedAt": 1775033000,
+    "errors": [],
+    "note": "All cron jobs OK as of 2026-04-01 10:30 MSK"
   },
   "mainSecuritySnapshot": {
     "checkedAt": 1774977991,

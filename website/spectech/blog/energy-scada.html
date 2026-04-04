@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -22,7 +25,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCADA для энергетики: мониторинг и диспетчеризация энергообъектов | СПЕЦТЕХ</title>
     <meta name="description" content="Современные SCADA-системы для энергетических объектов. Требования к мониторингу энергосетей, протоколы IEC 104 и МЭК 61850, решения на базе Alpha Platform.">
-    <meta name="keywords" content="SCADA энергетика, диспетчеризация энергообъектов, IEC 104, МЭК 61850, Alpha Platform, мониторинг энергосетей">
+    
+<meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><meta name="keywords" content="SCADA энергетика, диспетчеризация энергообъектов, IEC 104, МЭК 61850, Alpha Platform, мониторинг энергосетей">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,6 +36,43 @@
     
     <style>
         :root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-med:rgba(0,200,240,0.18);--volt-glow:rgba(0,200,240,0.35);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--violet:#a78bfa;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff:'Exo 2',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Bitter',serif;--ease:cubic-bezier(.22,.68,0,1.2);}
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
 
         * {
             box-sizing: border-box;
@@ -465,6 +508,89 @@
         }
 
         /* Responsive */
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+
         @media (max-width: 768px) {
             .nav-menu {
                 display: none;
@@ -494,7 +620,76 @@
             }
         }
     :root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "SCADA для энергетики: мониторинг и диспетчеризация энергообъектов",
+  "author": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://specialtechnology.ru/automiq-favicon.png"
+    }
+  },
+  "datePublished": "2026-03-16",
+  "description": "Современные SCADA-системы для энергетических объектов. Требования к мониторингу энергосетей, протоколы IEC 104 и МЭК 61850, решения на базе Alpha Platform.",
+  "image": "https://specialtechnology.ru/preview-desktop.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://specialtechnology.ru/blog/energy-scada.html"
+  }
+}
+</script>
 </head>
 <body>
     <!-- Navigation -->
@@ -525,9 +720,29 @@
                 <li class="nav-item">
                     <a href="#" class="cta-btn">Связаться</a>
                 </li>
-            </ul>
+              <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
         </div>
     </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
     <!-- Breadcrumb -->
     <div class="breadcrumb">
@@ -573,11 +788,11 @@
 
                         <h2 id="what-makes-different">Что отличает энергетическую SCADA от промышленной</h2>
 
-                        <p>Когда на заводе останавливается конвейер, страдает производство. Когда отключается энергосеть — останавливается жизнь города. Эта фундаментальная разница определяет особые требования к энергетическим SCADA-системам:</p>
+                        <p>Когда на <a href="oil-refinery.html">заводе</a> останавливается конвейер, страдает производство. Когда отключается энергосеть — останавливается жизнь города. Эта фундаментальная разница определяет особые требования к энергетическим SCADA-системам:</p>
 
                         <p><strong>Временные рамки критичности.</strong> В промышленности автоматика может реагировать за секунды, в энергетике счет идет на миллисекунды. Релейная защита должна отключить аварийный участок за 80-120 миллисекунд, иначе авария распространится по сети как домино.</p>
 
-                        <p><strong>Географический масштаб.</strong> Энергетическая система может охватывать территорию целых регионов. Диспетчеру в Москве нужно видеть и управлять объектами от Калининграда до Камчатки, причем с той же точностью, как если бы они находились в соседнем здании.</p>
+                        <p><strong>Географический масштаб.</strong> Энергетическая система может охватывать территорию целых регионов, что требует <a href="scaling.html">распределённой архитектуры Alpha.Platform</a>. Диспетчеру в Москве нужно видеть и управлять объектами через <a href="hmi.html">интерфейс Alpha.HMI</a> от Калининграда до Камчатки, причем с той же точностью, как если бы они находились в соседнем здании.</p>
 
                         <p><strong>Невозможность "выключения на техобслуживание".</strong> Электричество нельзя "поставить на паузу". Система должна работать 24/7/365, а любые изменения происходят "на горячую", без остановки процесса.</p>
 
@@ -589,7 +804,7 @@
 
                         <p><strong>Сетевые коды</strong> — это конституция энергосистемы. Они устанавливают правила подключения генерации, требования к системам автоматики, параметры качества электроэнергии. Нарушение сетевых кодов может привести к отключению объекта от единой энергосистемы.</p>
 
-                        <p><strong>Требования ФСТЭК по критической информационной инфраструктуре (КИИ)</strong> превратили кибербезопасность из желательного дополнения в обязательный элемент. После атак на энергосистемы Украины в 2015-2016 годах стало ясно: энергетическая SCADA — это не просто система управления, а цель для кибератак.</p>
+                        <p><strong>Требования ФСТЭК по критической информационной инфраструктуре (КИИ, см. также <a href="ot-security-mistakes.html">типичные ошибки OT-безопасности</a>)</strong> превратили кибербезопасность из желательного дополнения в обязательный элемент. После атак на энергосистемы Украины в 2015-2016 годах стало ясно: энергетическая SCADA — это не просто система управления, а цель для кибератак. Тема <a href="import-substitution.html">импортозамещения</a> здесь особенно актуальна.</p>
 
                         <h2 id="protocols-story">История протоколов: как электричество научилось "говорить"</h2>
 
@@ -623,7 +838,7 @@
 
                         <h3 id="realtime-monitoring">Мониторинг в реальном времени</h3>
 
-                        <p>В каждую секунду энергетическая SCADA обрабатывает миллионы измерений: токи, напряжения, частоту, активную и реактивную мощность. Система должна мгновенно выявлять отклонения и предупреждать об опасных режимах.</p>
+                        <p>В каждую секунду энергетическая SCADA обрабатывает миллионы измерений, сохраняемых в <a href="historian.html">архив Alpha.Historian</a>,: токи, напряжения, частоту, активную и реактивную мощность. Система должна мгновенно выявлять отклонения и предупреждать об опасных режимах.</p>
 
                         <p>Частота в энергосистеме — это ее "пульс". Номинальные 50 Гц означают идеальный баланс между выработкой и потреблением. Отклонение на 0,2 Гц — это уже сигнал тревоги. При отклонении на 1 Гц начинается автоматическое отключение потребителей.</p>
 
@@ -635,7 +850,7 @@
 
                         <h3 id="askue-integration">АСКУЭ: точность против воровства</h3>
 
-                        <p>Автоматизированная система коммерческого учета электроэнергии (АСКУЭ) интегрирована со SCADA для контроля потоков мощности и выявления потерь. Система анализирует балансы по узлам сети, выявляет несанкционированные подключения и контролирует договорные ограничения мощности.</p>
+                        <p>Автоматизированная система коммерческого учета электроэнергии (АСКУЭ) интегрирована со SCADA для контроля потоков мощности и выявления потерь. Система анализирует балансы по узлам сети, выявляет несанкционированные подключения и контролирует договорные ограничения мощности. Результаты анализа оформляются через <a href="reports.html">модуль отчётности</a>.</p>
 
                         <h3 id="emergency-response">Ликвидация аварий</h3>
 
@@ -858,5 +1073,28 @@
             </div>
         </div>
     </footer>
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
+
 </body>
 </html>

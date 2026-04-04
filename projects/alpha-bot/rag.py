@@ -5,6 +5,7 @@ import json
 import glob
 import logging
 import re
+import time
 import numpy as np
 import aiohttp
 from rank_bm25 import BM25Okapi
@@ -216,6 +217,7 @@ def build_index(docs_dir: str) -> None:
             try:
                 emb = get_embedding_sync(c["text"][:2000])
                 embeddings.append(emb)
+                time.sleep(0.05)  # Rate limiting для ollama
             except Exception as e:
                 logger.error(f"Error embedding chunk: {e}")
                 embeddings.append([0.0] * 768)

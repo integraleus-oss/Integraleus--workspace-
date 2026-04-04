@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
 <script>
 (function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
@@ -25,10 +27,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:      #05080f;
-  --ink1:     #080d1a;
-  --ink2:     #0c1525;
-  --steel:    #111e35;
+  --ink:      #0a0e1a;
+  --ink1:     #0f1424;
+  --ink2:     #151b2e;
+  --steel:    #1a2340;
   --wire:     #192d48;
   --wire2:    #1f3a5f;
   --volt:     #00c8f0;
@@ -52,7 +54,8 @@
 }
 
 /* Theme switcher support */
-:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+:root.theme-light section,.container,.page,.product-hero,.product-tabs-nav,footer,.tabs,.contact,.cta-section,.partners,.certificates,.technologies,.catalog{position:relative;z-index:2}
+body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
   --ink:      #f8fafc;
   --ink1:     #f1f5f9;
@@ -74,11 +77,11 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;overflow-x:hidden;}
 body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:1;}
 
 ::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:#05080f;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:#0a0e1a;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
 .nav-logo{display:flex;align-items:center;text-decoration:none;}
 .nav-logo img{transition:opacity .2s;}
 .logo-light-theme{display:none;}
@@ -92,8 +95,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
 .nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
 .nav-cta{margin-left:20px;display:flex;align-items:center;gap:12px;}
-.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;
 .btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+  border-radius: 6px;
+}
 .btn-volt:hover{background:transparent;color:var(--volt);}
 .theme-toggle{background:none;border:1px solid var(--wire);border-radius:3px;padding:8px 10px;cursor:pointer;color:var(--text2);font-size:16px;transition:all .2s;}
 .theme-toggle:hover{border-color:var(--volt);color:var(--volt);}
@@ -157,9 +162,78 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 .footer-legal{font-family:var(--mono);font-size:12px;color:var(--text3);line-height:1.6;opacity:0.8;max-width:500px;}
 
 
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
 @media (max-width: 900px) {
-  .nav-links{display:none;}
-  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; }
+  .hamburger { display: block; }
+  .nav-links{display:none !important;}
+  .nav-cta{display:none !important;}
+  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; border-radius: 6px; }
   nav { padding: 0 16px; }
 }
 @media (max-width: 768px) {
@@ -176,11 +250,37 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   .footer-bottom{flex-direction:column;align-items:flex-start;}
 }
 @media (max-width: 480px) {
-  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  * { max-width: 100%; box-sizing: border-box; }
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; border-radius: 6px; }
   .nav-logo img { height: 20px !important; max-width: 90px !important; }
 }
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
 </style>
-</head>
+<meta property="og:title" content="О компании — АО «СПЕЦТЕХ»">
+<meta property="og:description" content="Официальный дистрибьютор российского ПО для промышленной автоматизации. Альфа платформа, CAE WeRTSim, ИнфТех ДатаПлат.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://specialtechnology.ru/about.html">
+
+<meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"></head>
 <body>
 <nav>
   <a href="index.html" class="nav-logo">
@@ -202,11 +302,28 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     <li><a href="blog.html">Блог</a></li>
     <li><a href="index.html#contact">Контакты</a></li>
   </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta">
     <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
     <a href="index.html#contact" class="btn btn-volt">Связаться</a>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
 <div class="page">
   <!-- Hero Section -->
@@ -222,13 +339,13 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     <div class="container">
       <h2 class="section-title">Кто мы</h2>
       <p class="section-text">
-        <strong>АО «СПЕЦТЕХ»</strong> — российская компания, специализирующаяся на дистрибуции и внедрении отечественного программного обеспечения для промышленной автоматизации. Мы являемся официальным дистрибьютором <strong>АО «Атомик Софт»</strong>, разработчика передовой платформы промышленной автоматизации.
+        <strong>АО «СПЕЦТЕХ»</strong> — дистрибьютор российского промышленного ПО. Официальный партнёр <strong>АО «Атомик Софт»</strong> (Альфа платформа), <strong>ООО «ИнфТех»</strong> (ДатаПлат) и <strong>ЮМОСС</strong> (CAE WeRTSim).
       </p>
       <p class="section-text">
-        Наша компания зарегистрирована в Московской области, город Сергиев Посад, и осуществляет деятельность в сфере оптовой торговли программным обеспечением (ОКВЭД 46.51.2) и ИТ-деятельности категории 2.01 в соответствии с приказом Минцифры № 449 от 11.05.2023.
+        Базируемся в Сергиевом Посаде (Московская область). ОКВЭД 46.51.2, ИТ-деятельность категории 2.01.
       </p>
       <p class="section-text">
-        Мы помогаем российским предприятиям решать задачи цифровизации производства, импортозамещения и повышения эффективности технологических процессов с использованием современных российских решений мирового уровня.
+        Помогаем предприятиям подобрать, купить и внедрить SCADA, MES, IoT-решения — от расчёта лицензий до пуска в эксплуатацию.
       </p>
     </div>
   </section>
@@ -241,22 +358,22 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
         <div class="activity-card">
           <div class="activity-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5"/><path d="M12 12l8 -4.5"/><path d="M12 12l0 9"/><path d="M12 12l-8 -4.5"/><path d="M16 5.25l-8 4.5"/></svg></div>
           <div class="activity-title">Дистрибуция ПО</div>
-          <div class="activity-desc">Официальная поставка российского промышленного программного обеспечения для автоматизации производственных процессов</div>
+          <div class="activity-desc">Лицензии напрямую от разработчиков. Электронная поставка — в тот же день</div>
         </div>
         <div class="activity-card">
           <div class="activity-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3"/><path d="M15 20h-9a3 3 0 0 1 -3 -3v-2a3 3 0 0 1 3 -3h12"/><path d="M7 8v.01"/><path d="M7 16v.01"/><path d="M20 15l-2 3h3l-2 3"/></svg></div>
           <div class="activity-title">Подбор и внедрение</div>
-          <div class="activity-desc">Комплексный подбор SCADA-систем, MES-решений, ПЛК и инженерного ПО под задачи конкретного предприятия</div>
+          <div class="activity-desc">Подберём SCADA, MES, IoT под ваши задачи. Интеграция с существующей АСУ ТП</div>
         </div>
         <div class="activity-card">
           <div class="activity-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-3a8 8 0 1 1 16 0v3"/><path d="M18 19c0 1.657 -2.686 3 -6 3"/><path d="M4 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3"/><path d="M15 14a2 2 0 0 1 2 -2h1a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-1a2 2 0 0 1 -2 -2v-3"/></svg></div>
           <div class="activity-title">Техническая поддержка</div>
-          <div class="activity-desc">Профессиональные консультации по выбору, настройке и эксплуатации систем промышленной автоматизации</div>
+          <div class="activity-desc">Консультации по выбору и настройке. Поддержка 24/7 для критических систем</div>
         </div>
         <div class="activity-card">
           <div class="activity-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2l0 -14"/><path d="M8 8a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v1a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1l0 -1"/><path d="M8 14l0 .01"/><path d="M12 14l0 .01"/><path d="M16 14l0 .01"/><path d="M8 17l0 .01"/><path d="M12 17l0 .01"/><path d="M16 17l0 .01"/></svg></div>
           <div class="activity-title">Расчёт лицензий</div>
-          <div class="activity-desc">Точный расчёт стоимости лицензирования и формирование коммерческих предложений для проектов любой сложности</div>
+          <div class="activity-desc">Расчёт стоимости лицензий и формирование КП — за 1 рабочий день</div>
         </div>
       </div>
     </div>
@@ -271,7 +388,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <div class="product-title">Альфа платформа</div>
           <div class="product-subtitle">АО «Атомик Софт», Томск</div>
           <div class="product-desc">
-            Комплексная российская платформа для создания систем промышленной автоматизации. Включает SCADA, MES и IoT-решения с поддержкой более 150 промышленных протоколов.
+            SCADA/MES/IoT-платформа. До 1 000 000 тегов, 20+ протоколов, Linux и Windows. Реестр ПО №1187.
           </div>
           <a href="alpha-platform.html" class="product-link">Подробнее →</a>
         </div>
@@ -279,7 +396,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <div class="product-title">CAE WeRTSim</div>
           <div class="product-subtitle">Имитационное моделирование</div>
           <div class="product-desc">
-            Программный комплекс для создания цифровых двойников технологических процессов и имитационного моделирования промышленных систем.
+            Имитационное моделирование сварки, наплавки, резки и аддитивных технологий. Цифровые двойники процессов.
           </div>
           <a href="wertsim.html" class="product-link">Подробнее →</a>
         </div>
@@ -287,7 +404,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <div class="product-title">ИнфТех ДатаПлат</div>
           <div class="product-subtitle">ООО «ИнфТех»</div>
           <div class="product-desc">
-            Российская цифровая платформа для создания MES-систем и решений промышленного интернета вещей (IIoT) с современной архитектурой.
+            IIoT-платформа, предиктивная аналитика iPredicta, MES. 120+ проектов в нефтегазе и энергетике.
           </div>
           <a href="infteh.html" class="product-link">Подробнее →</a>
         </div>
@@ -432,6 +549,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
 
 <!-- Cookie Banner -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">

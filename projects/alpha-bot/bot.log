@@ -1,0 +1,23 @@
+2026-04-03 05:04:51,659 [INFO] Conversation DB initialized
+2026-04-03 05:04:52,364 [INFO] ChromaDB loaded: 831 chunks
+2026-04-03 05:04:53,334 [INFO] BM25 index built: 7130 chunks
+Traceback (most recent call last):
+  File "/root/.openclaw/workspace/agents/main/projects/alpha-bot/bot.py", line 538, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/root/.openclaw/workspace/agents/main/projects/alpha-bot/bot.py", line 514, in main
+    await site.start()
+  File "/root/.openclaw/workspace/agents/main/projects/alpha-bot/venv/lib/python3.12/site-packages/aiohttp/web_runner.py", line 121, in start
+    self._server = await loop.create_server(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 1572, in create_server
+    raise OSError(err.errno, msg) from None
+OSError: [Errno 98] error while attempting to bind on address ('0.0.0.0', 8090): address already in use

@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
  (function(m,e,t,r,i,k,a){
@@ -17,6 +20,11 @@
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Система тревог Alpha.Alarms 3.30 — СПЕЦТЕХ</title>
+<meta name="description" content="Полный обзор системы управления тревогами Alpha.Alarms 3.30. Группы приоритетов, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.">
+
+<meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/blog/alarms.html">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -45,6 +53,80 @@
   --serif:    'Bitter', serif;
   --ease:     cubic-bezier(.22,.68,0,1.2);
 }
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
@@ -178,8 +260,92 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 .footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
 .footer-copy{font-size:15px;color:var(--text3);}
 
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
 @media (max-width: 768px) {
   .container{padding:0 20px;}
+  .article-title { font-size: 24px; overflow-wrap: break-word; }
+  .article-meta { flex-wrap: wrap; gap: 8px; font-size: 12px; }
   .article-layout{grid-template-columns:1fr;gap:20px;}
   .mode-comparison{grid-template-columns:1fr;}
   .priority-range{grid-template-columns:repeat(2,1fr);}
@@ -187,7 +353,76 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
 }
 :root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Система тревог Alpha.Alarms 3.30",
+  "author": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://specialtechnology.ru/automiq-favicon.png"
+    }
+  },
+  "datePublished": "2026-03-12",
+  "description": "Полный обзор системы управления тревогами Alpha.Alarms 3.30. Группы приоритетов, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.",
+  "image": "https://specialtechnology.ru/preview-desktop.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://specialtechnology.ru/blog/alarms.html"
+  }
+}
+</script>
 </head>
 
 <body>
@@ -210,10 +445,31 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     <li><a href="../blog.html" class="active">Блог</a></li>
     <li><a href="../index.html#contact">Контакты</a></li>
   </ul>
-  <div class="nav-cta">
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+<div class="nav-cta">
     <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
 <div class="page">
 
@@ -287,13 +543,13 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <ul>
             <li><em>Прочие</em> — события низкой важности, информационные сообщения</li>
             <li><em>Значительные</em> — отклонения от нормы, требующие внимания</li>
-            <li><em>Особой важности</em> — критические ситуации, требующие немедленного реагирования</li>
+            <li><em>Особой важности</em> — критические ситуации, требующие немедленного реагирования. Правильная настройка приоритетов — важный элемент <a href="ot-security-mistakes.html">безопасности OT-систем</a></li>
             <li><em>Пользовательские группы</em> — дополнительные категории по необходимости</li>
           </ul>
 
           <div class="priority-box">
             <div class="info-box-title">Цветовая индикация</div>
-            <p>Каждая группа важности имеет свою <strong>цветовую сигнализацию</strong> с возможностью мигания для привлечения внимания оператора к критическим событиям.</p>
+            <p>Каждая группа важности имеет свою <strong>цветовую сигнализацию</strong>, настраиваемую через <a href="devstudio.html">среду разработки Alpha.DevStudio</a>, с возможностью мигания для привлечения внимания оператора к критическим событиям.</p>
           </div>
 
           <h2 id="режимы-работы">Режимы работы</h2>
@@ -599,6 +855,29 @@ Alpha.Alarms.App.exe SetAdvancedFilter "Importance>=667"</code></pre>
     </div>
   </div>
 </footer>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
 
 </body>
 </html>

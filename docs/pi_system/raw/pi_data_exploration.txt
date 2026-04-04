@@ -1,0 +1,1653 @@
+PI World 2020 Lab
+PI System: From Data Exploration to Notification
+
+OSIsoft, LLC
+1600 Alvarado Street
+San Leandro, CA 94577
+All rights reserved. No part of this publication may be reproduced, stored in a retrieval
+system, or transmitted, in any form or by any means, mechanical, photocopying,
+recording, or otherwise, without the prior written permission of OSIsoft, LLC.
+OSIsoft, the OSIsoft logo and logotype, Managed PI, OSIsoft Advanced Services,
+OSIsoft Cloud Services, OSIsoft Connected Services, OSIsoft EDS, PI ACE, PI
+Advanced Computing Engine, PI AF SDK, PI API, PI Asset Framework, PI Audit Viewer,
+PI Builder, PI Cloud Connect, PI Connectors, PI Data Archive, PI DataLink, PI DataLink
+Server, PI Developers Club, PI Integrator for Business Analytics, PI Interfaces, PI JDBC
+Driver, PI Manual Logger, PI Notifications, PI ODBC Driver, PI OLEDB Enterprise, PI
+OLEDB Provider, PI OPC DA Server, PI OPC HDA Server, PI ProcessBook, PI SDK, PI
+Server, PI Square, PI System, PI System Access, PI Vision, PI Visualization Suite, PI
+Web API, PI WebParts, PI Web Services, RLINK and RtReports are all trademarks of
+OSIsoft, LLC.
+All other trademarks or trade names used herein are the property of their respective
+owners.
+U.S. GOVERNMENT RIGHTS
+Use, duplication or disclosure by the US Government is subject to restrictions set forth
+in the OSIsoft, LLC license agreement and/or as provided in DFARS 227.7202, DFARS
+252.227-7013, FAR 12-212, FAR 52.227-19, or their successors, as applicable.
+No part of this publication may be reproduced, stored in a retrieval system, or
+transmitted, in any form or by any means, mechanical, photocopying, recording or
+otherwise, without the written permission of OSIsoft, LLC.
+
+2|Page
+
+Table of Contents
+Contents
+Table of Contents .......................................................................................................................................... 3
+PI System software........................................................................................................................................ 4
+1.
+
+2.
+
+3.
+
+4.
+
+5.
+
+6.
+
+Lab Overview......................................................................................................................................... 5
+1.1
+
+Objective ....................................................................................................................................... 5
+
+1.2
+
+Gathering Domain Knowledge – PI Vision .................................................................................... 5
+
+1.3
+
+Process Improvement Idea – PI Vision .......................................................................................... 7
+
+Exploration and Data Engineering ...................................................................................................... 11
+2.1
+
+Objective ..................................................................................................................................... 11
+
+2.2
+
+Define and Label Dryer Operating States – Asset Analytics ........................................................ 11
+
+2.3
+
+Calculate Dryer Utilization Metrics – Asset Analytics ................................................................. 21
+
+Contextualization and Data Preparation............................................................................................. 23
+3.1
+
+Objective ..................................................................................................................................... 23
+
+3.2
+
+Prepare Dryer Regeneration Features - Event Frame Template................................................. 23
+
+3.3
+
+Generate Regeneration Data for Analysis - Event Frames .......................................................... 27
+
+Data Analysis and Qualification .......................................................................................................... 30
+4.1
+
+Objectives.................................................................................................................................... 30
+
+4.2
+
+Problem Assessment – PI integrator for Business Analytics and Power BI................................. 30
+
+4.3
+
+Model Development – PI DataLink ............................................................................................. 41
+
+Operationalization and Notification ................................................................................................... 47
+5.1
+
+Objective ..................................................................................................................................... 47
+
+5.2
+
+Forecast Deployment – AF Analytics........................................................................................... 47
+
+5.3
+
+Proactive Solution – PI Notifications........................................................................................... 51
+
+Summary ............................................................................................................................................. 57
+6.1
+
+7.
+
+Revisit Learning Objectives ......................................................................................................... 57
+
+Appendix ............................................................................................................................................. 58
+7.1
+
+Predictive Model Development and Variable Selection ............................................................. 58
+
+Save the Date!....................................................................................................................... 61
+
+3|Page
+
+PI System software
+The VM (virtual machine) used for this lab has the following PI System software installed:
+
+Software
+
+Version
+
+PI Data Archive
+
+2018 SP3
+
+PI Asset Framework (PI AF) server
+
+2018 SP3
+
+PI Asset Framework (PI AF) client (PI System Explorer)
+
+2018 SP3
+
+PI Analysis & PI Notifications Services
+
+2018 SP3
+
+PI Vision
+PI Integrator for Business Analytics
+PI DataLink
+
+2019
+2018 R2 SP1
+2019 SP1 (5.5.1)
+
+For details on PI System software, please see http://www.osisoft.com/pi-system/pi-capabilities/productlist/
+
+4|Page
+
+1. Lab Overview
+1.1
+
+Objective
+
+In this lab, we use analytical features of PI System to evaluate and then implement an idea for
+improving plant operation. First, we’ll use Asset Analytics to add descriptive features to gain
+process insight from the raw measurement data. The PI Integrator for Business Analytics will be
+used to provide data to Power BI where we’ll perform multidimensional analysis allowing us to
+validate our idea and quantify its value. Using DataLink, we develop a simple predictive model
+for real-time operationalization in Asset Analytics. Then finally, we’ll use PI Notification to
+recommend a process action based on the result of this prediction.
+
+1.2
+
+Gathering Domain Knowledge – PI Vision
+The data we are using was taken from a years’ operation of two liquid feed
+dryers. These are large cylindrical vessels (right), filled with molecular sieve
+pellets. They are used to continuously remove moisture from a hydrocarbon
+stream in an oil refinery. The liquid feed stream must be completely dry
+before it combines with a strong acid which serves as a catalyst for the
+chemical reaction. Even small amounts of water entering the reaction
+create a highly corrosive environment that will damage and compromise the
+equipment metallurgy.
+
+The dryers are designed to be redundant, cycling between two operating
+states. The “Drying” state is when dryer is actually removing moisture from
+the liquid fed to the reactor. Once saturated, the dryer is switched to a
+“Regenerating” state. In this state, a hot vapor stream is used to remove
+water from the molecular sieve pellets inside the dryer. Thus, the dryers are cycled back and
+forth between operating states to continuously remove moisture from the feed before it combines
+with the strong acid catalyst for the chemical reaction.
+
+The Feed Drying Process – Before
+Solidify your process knowledge by looking at the process measurement data in PI Vision.
+1. From the desktop icon, open ’PI Vision’ application.
+2. From the PI Vision display thumbnails, double-click on the ‘Drying Process – Before’ tile
+to open the display shown below.
+
+5|Page
+
+In the display above, Dryer A is in its “Drying” state while Dryer B is in its “Regenerating” state.
+The moist liquid feed flows into the top of Dryer A, water is adsorbed in the molecular sieve pellet
+bed and the dried liquid flows out the bottom and on to the reactor. Meanwhile, a small amount
+of the feed is heated, vaporized and sent to Dryer B, which is in its “Regenerating” state. The hot
+vapor stream raises the temperature of Dryer B’s bed, driving water out of the molecular sieve
+and thus preparing it for its next drying cycle once Dryer A is saturated.
+The process measurements available for this lab are shown in the display’s value and trend
+objects.
+Shown as values are:
+Feed Flow - the moist, undried, liquid feed, (barrels per day)
+Flow to Vaporizer - a small amount of feed which gets vaporized to regenerate molecular
+sieve pellets (barrels per day)
+Vapor Temp. - vapor temperature, (Deg. F)
+Show as values and trends are:
+Outlet Temp. - Dryer A orange) - temperature of stream leaving Dryer A, (Deg. F).
+Outlet Temp. - Dryer B yellow – temperature of stream leaving Dryer B, (Deg. F).
+Notice, there is no variable in the display showing the dryer’s current state. However, the Outlet
+Temperature trend in the middle of the display shows the dryer outlet temperatures peaking in an
+alternating fashion as they rise and fall with each regeneration. These temperature patterns will
+be the basis for everything we do in this lab.
+3. Select the ‘Outlet Temperatures’ trend and using the time scroll at the bottom adjust
+display end time to find a time when Dryer A is in its “regenerating” state. This will occur
+when Dryer A’s outlet temperature, the orange trace is peaking. An example of this
+operation is shown below, everything works the opposite way.
+
+6|Page
+
+1.3
+
+Process Improvement Idea – PI Vision
+
+After several years of service, the molecular sieve beds will reach their end-of-life and need to be
+replaced. The replacement of both beds will occur at the next planned refinery shutdown. The
+most efficient way to manage the condition of these beds is to treat them equally throughout their
+service life. The condition each bed sees could be measured by the amount of time they operate
+in a particular state, however a more equitable metric is one based on the volume of moist
+hydrocarbon feed they see during the drying cycle. The feedrate to this process can vary greatly
+so times of high throughput are more taxing than times when the feedrate is low.
+Our idea for process improvement is to provide more visibility and proactive management of the
+dryers’ molecular sieve beds. We would like to display an indication of dryer state and to provide
+a running total of barrels processed by each dryer for the life of this load of molecular sieve. This
+will show how well we are managing the beds over time. As additional assistance, we would like
+to provide an estimate of how long the next regenerating cycle will take for a dryer currently in its
+“Drying” state. AF Notifications can send an email reminder to the process operator whenever
+the estimated regeneration duration exceeds a prescribed time.
+
+The Feed Drying Process – After
+Take a look at the implementation of our idea. During the lab, you’ll be going through the steps
+to make this happen.
+1. Click the
+logo on the upper left-hand corner of the PI vision display.
+This will return you to the display thumbnails.
+2. Double-click on the ‘Drying Process – After tile to open the display shown below.
+
+7|Page
+
+The same process measurements are shown however, we have added several others to add
+visibility into the dryer’s current state, the total barrels of hydrocarbon feed it has dried and a
+prediction of the time required for the next regenerating cycle.
+Additional values are:
+Dryer State – multi-stated value, “Drying”, “Regenerating”, or “Standby”
+Drying Cycle Barrels – total barrels of feed through Dryer during current “Drying” cycle
+(barrels).
+Next Regeneration Cycle Duration – predictive model results estimating duration of next
+regenerating cycle (hrs.)
+Additional trends are:
+Lifetime Barrels - Dryer A Teal – total barrels of feed through Dryer A during “Drying”
+cycles (barrels).
+Lifetime Barrels - Dryer B Cyan – total barrels of feed through Dryer A during “Drying”
+cycles (barrels).
+
+The AF Model
+Of course, everything we do in this lab is based on an AF database. For this lab we use one
+named ‘Dryers’. Familiarize yourself with the Dryers by completing the following steps.
+
+1. From the Windows taskbar, open PI System Explorer
+and be sure you’re
+connected to the ‘Dryers’ database and that the Elements view is selected in the lower
+left-hand corner.
+2. Select the Dryer A element and the Attributes tab at the top. Take a look at the various
+attributes configured for each dryer. (We won’t be using all of them for this lab.)
+
+8|Page
+
+3. With Dryer A element still selected, click the Analysis tab at the top. Here are the Asset
+Analytics we’ll be using to help implement our improvement idea.
+
+Both Dryer A and B elements have been derived from the Dryer template. The lab exercises
+will be done in this template so everything we do will be applied both dryers.
+4. Select the Library view in the lower left-hand corner of PI System Explorer. Under the
+Templates branch of the hierarchy, expand Element Templates to expose the Dryer
+template we are using for this lab. Click on the Dryer template and select the Analysis
+Template tab at the top.
+
+We will be configuring an email notification to proactively remind process operators when it
+may be time to switch dryers. Notification rules are also configured in asset templates.
+9|Page
+
+5. Select the Notification rule Template tab at the top of the Dryer template.
+
+10 | P a g e
+
+2. Exploration and Data Engineering
+2.1
+
+Objective
+
+There are two objectives for this exercise. First, we’ll calculate the operating state of each dryer
+based on patterns in its outlet temperature. Status tags named ‘Dryers:My State A’ and
+‘Dryers:My State B’ have been created to store your results. This will require some trial and
+error to configure a rule that accurately identifies the state of each dryer and that works well for
+all of 2019. You will be using the Preview Results and Backfill/Recalculate features of Asset
+analytics to test and evaluate your results.
+The second objective will be to calculate the total volume of hydrocarbon feed each dryer sees
+during “Drying” cycles only. We will review the Asset Analysis configuration for the calculation of
+two totals:
+Lifetime Barrels – accumulated volume of feed during all drying cycles in 2019 (barrels)
+Drying Cycle Barrels – total volume of feed during each drying cycle (barrels)
+
+2.2
+
+Define and Label Dryer Operating States – Asset Analytics
+
+Take a closer look at the dryer outlet temperature patterns in PI Vision.
+1. Open PI Vision from the desktop.
+2. Click the
+logo on the upper left-hand corner of the PI vision display.
+This will return you to the display thumbnails.
+3. From the PI Vision display thumbnails, double-click on the ‘Drying Process – Before’ tile
+to open this display.
+4. Expand the ‘Outlet Temperatures’ trend by double-clicking on it.
+
+This trend clearly shows the heating and cooling of the dryer’s molecular sieve bed during the
+regenerating cycle. We will use Asset Analytics to develop a rule, based on this outlet temperature
+pattern, to identify each operating state and record it in a PI Tag. Sometimes rule development
+requires several tries to get it right. This will be the case here as we work through the process to
+develop the best rule for providing the labelling required for the rest of our analysis.
+11 | P a g e
+
+Good Operating State
+Configure an Asset Analytic that defines dryer’s “Regenerating” cycle when be when its outlet
+temperature goes above 170 Deg. F.
+
+1. From the Windows taskbar, open PI System Explorer
+connected to the ‘Dryers’ database.
+
+and be sure you’re
+
+2. In the lower left-hand corner of PI System Explorer, select the Library view. Under the
+Templates branch of the hierarchy, expand Element Templates to expose the Dryer
+template we are using for this lab. Click on the Dryer template.
+3. To access the Asset Analytics defined for this template, click on the Analysis Templates
+tab at the top of the window.
+
+4. Click on the New Analysis Template icon and change the name of your new Analysis
+Template to ‘My Dryer State’. By default, you have created a new Expression type
+analysis. This is what we need.
+5. Uncheck Enable analysis when created from template to prevent automatically
+enabling this analytic. We have some testing to do first.
+
+💡
+12 | P a g e
+
+By default, new Analysis Templates are configured to automatically
+start when elements created from this template. In many cases you
+will want to test your analysis first. Unchecking the ‘Enable analysis
+
+Tip
+
+when created from template’ option will give you complete control as
+to when your analysis is run.
+
+6. Copy and paste the following equation into the Expression field for Variable1 of the My
+Dryer State.
+
+// State based on dryer outlet temperature.
+If 'Outlet Temperature' >= 170
+Then (If PrevVal('My Operating State','*')="Regenerating"
+Then NoOutput()
+Else "Regenerating")
+Else (If PrevVal('My Operating State', '*') = "Drying"
+Then NoOutput()
+Else "Drying")
+This analysis simply changes the dryer state value to “Regenerating” whenever a temperature
+value greater than 170 is observed. Once it falls below 170, the state is “Drying”. Values are only
+posted upon a change in state.
+7. The Dryer template has already been configured to have an attribute named ‘My
+Operating State’ which point to the PI tags ‘Dryers:My State A’ and ‘Dryers:My State
+B’ for Dryer elements Dryer A and Dryer B, respectively.
+To the right of the Expression field, under Output Attribute, click the Map link and assign
+the ‘My Operating State’ template attribute.
+Also note that the Example Element for this template has be set to Dryer A. These
+means that all evaluations and preview calculations will be done using Dryer A data. You
+can change to another element by clicking the link and selecting a different one, e.g. Dryer
+B.
+You can rename the variable of your analysis from ‘Variable1’ to ‘MyStateRule’, (spaces
+are not allowed in variable names).
+
+8. Preview the results of this analytic using the Preview Results feature of Asset Analytics.
+Right-click on the ’My Dryer State’ analytic in the Analysis list. Select Preview Results.
+13 | P a g e
+
+9. In the Preview Results window, set the Start Time to 11/10/19 and the End Time to
+11/15/19. Click Generate Results to run the analysis for this time range. Select the
+Multiple option for the Value Scale.
+
+💡
+Note
+14 | P a g e
+
+We are not saving results to PI tags yet. The Preview is just giving us
+a way to check the results for errors within the Asset Analytics
+environment.
+
+The Preview shows a table and trend of analysis result over the specified time range. The results
+table list the value of each variable for each calculation interval. In the trend, the stepped blue
+trace shows the dryer’s operating state and the red trace is the dryer outlet temperature. There
+appears to be something indecisive at the beginning of the regeneration cycles. We would expect
+to see one step indicating the switch from the “Drying” to “Regenerating” state regeneration cycle
+and we are getting several before there is a clear indication that the dryer is in the “Regenerating”
+step.
+10. Investigate the problem by zooming in on the trend to get more a more detailed view of
+the data. Draw a box around the areas of interest until you determine the problem. Use
+the Revert button to return to the original trend.
+
+11. Further investigate these result in Excel. Click the Export Results button in the lower
+right-hand corner of the Preview and download the data to a .CSV file on your desktop.
+Open the file in Excel and scroll down the rows. The problem is more clearly illustrated
+below.
+
+Apparently, the output temperature oscillates around 170 Deg. F at the start of the regeneration
+cycle before it rises consistently. We must try a better approach.
+
+15 | P a g e
+
+Better Operating State
+Configure an Asset Analytic that defines dryer’s regeneration cycle starts when the rolling hourly
+average of its outlet temperature goes above 170 Deg. F. This should solve the oscillation outlet
+temperature problem.
+1. Select the My Dryer State analysis and, using copy and paste, replace the Expression
+for MyStateRule with the one shown below.
+
+// State based on rolling one-hour average of dryer outlet temperature.
+If TagAvg('Outlet Temperature','*-1h','*') >= 170
+Then (If PrevVal('My Operating State','*')="Regenerating"
+Then NoOutput()
+Else "Regenerating")
+Else (If PrevVal('My Operating State', '*') = "Drying"
+Then NoOutput()
+Else "Drying")
+Feeling more confident, we will test this analysis using the Backfill\Recalculate feature of Asset
+Analytics. We will run the backfill from the ’Dryer A’ element which will publish results into the PI
+Tag, ‘Dryers:My State A’, which we have previously configured. We’ll check things over in PI
+Vision when we’re done.
+2. To run our analysis from the Dryer A element, we must first check in our changes to the
+Dryer template. Click Check In at the top of PI System Explorer.
+
+3. Select the Elements view in the lower left-hand corner of PI system explorer. Click on
+the Dryer A element and go to its Analysis tab at the top.
+4. Enable the ‘My Dryer State’ analysis by selecting it and clicking the Enable Analysis
+button at the top. You will see a green checkmark appear once the analysis is running.
+
+16 | P a g e
+
+5. Right-click on the ’My Dryer State’ analysis in the Analysis list. Select
+Backfill\Recalculate. In the dialog, enter a Start Time of 1/1/19 and an End time of
+12/31/19. Check ‘Permanently delete existing data and recalculate’. Click Start to
+backfill the results.
+
+6. Once the green checkmark show up in the Backfilling column, disable the analysis by
+clicking the Disable Analysis button at the top.
+
+7. Open PI vision from the desktop. Launch a new PI Vision by clicking the
+link in the upper right-hand corner of the browser. Under Assets, navigate the Dryers AF
+Database and select Dryer A. Make sure a trend selected as the default visualization
+object (upper left-hand corner). Drag attribute My Operating State onto the blank PI
+Vision display to create a trend of this value. Select attribute Outlet Temperature and
+
+17 | P a g e
+
+drag it on top of the trend to add its trace. Change the start and end times of the display
+to be 1/1/19 and 1/15/19, respectively.
+
+8. Scroll the display through the year and visually inspect the results. Using an average
+value of the Outlet Temperature works much better for defining the start and end times of
+each regeneration cycle.
+9. Return to the Assets pane, navigate the Dryers AF Database and select Dryer B. Select
+this dryer’s attribute Outlet Temperature and drag it on top of the trend to add its trace.
+Scroll the display to set the time range to someplace around 2/9/19 to 2/22/19.
+
+Upon further review, it appears there are times when the dryer is neither in a Drying or
+Regenerating state. We can define a third state, Standby, to account for this time. Minimize the
+PI Vision window.
+
+18 | P a g e
+
+Best Operating State
+Configure an Asset Analytic that defines all three states of the dryer’s operation, “Drying”,
+“Regenerating” and “Standby”.
+1. Return to the Library view in PI System Explorer. Select the Dryer Element Template
+ad click on the Analysis Templates tab at the top of the window.
+2. Select the My Dryer State analysis and, using copy and paste, replace the Expression
+for MyStateRule with the one shown below.
+
+// Check for Regeneration State.
+If TagAvg('Outlet Temperature','*-1h','*') >= 170
+Then (If PrevVal('My Operating State','*')="Regenerating"
+Then NoOutput()
+Else "Regenerating")
+// Check for Standby State.
+Else (If 'Outlet Temperature' >= 120
+Then (If PrevVal('My Operating State', '*') = "Standby"
+Then NoOutput()
+Else "Standby")
+// Must be Drying state.
+Else (If PrevVal('My Operating State', '*') = "Drying"
+Then NoOutput()
+Else "Drying"))
+3. Check in your changes by clicking Check In at the top of PI System Explorer.
+Feeling even more confident, we will backfill the results into the PI Tags for both dryers.
+4. In the lower left-hand corner of PI System Explorer, select the Management view. Here
+is where you manage all the Asset Analytics configured for an AF Database. This
+includes enabling, disabling and backfilling calculations.
+5. Select the ‘My Dryer State’ analyses for the Dryer A and B elements. On the right-hand
+side under Operations, click Enable.
+
+19 | P a g e
+
+6. Once the
+appears in the Status column the analyses are up and running. Again
+under Operations, click on Queue. This exposes the backfilling configuration dialog.
+Configure the Start and End times to be ‘1/1/19’ and ‘12/31/19’, respectively. Check
+‘Permanently delete existing data and recalculate’. This will allow the backfill service
+to overwrite the results we stored for Dryer A in the previous step. And finally, click Queue
+start backfilling results for the two dryers.
+
+7. Once
+appear under the Backfilling column, disable the analysis by clicking
+Disable.
+8. Reopen the PI vision display. You should see that the state tag has correctly identified
+the “Standby” state.
+
+20 | P a g e
+
+2.3
+
+Calculate Dryer Utilization Metrics – Asset Analytics
+
+We have successfully defined a rule for determining dryer operating states and populated PI Tags
+with these values. Now we can add two analyses to measure the utilization of the molecular sieve
+beds. The first will calculate the volume, in barrels throughput, for each drying cycle. The second
+will be a running total for all drying cycles since the start of 2019, when this load of molecular
+sieve was first put into service. As you will see, these calculations are only possible because we
+first created the required process context in the PI System, i.e. the dryer operating state values.
+1. Return to the Library view in PI System Explorer. Select the Dryer Element Template
+and click on the Analysis Templates tab at the top of the window.
+2. Select the Total Dried Barrels analysis.
+
+The Total Dried Barrels analysis generates two results which are stored into PI Tags referenced
+by the AF Attributes Drying Cycle Barrels and Lifetime Barrels. This is a three-step analysis
+that breaks down as follows;
+Assign a variable, PreviousFeedFlowEvent to contain the timestamp of the last archive value of
+the Feed Flow attribute (BPD).
+
+// Find timestamp of last archive event for Process Flow.
+PrevEvent('Feed Flow', '*')
+Calculate Drying Cycle Barrels. Check for bad values of either the previously archived or current
+value of the Feed Flow, the endpoints of the incremental total. If good values are returned, add
+the incremental total to the Drying Cycle Barrels attribute when the dryer is in a Drying state.
+Otherwise reset its value to zero. If either value of the Feed Flow is bad, do nothing.
+
+// Calculate total feed processed during this drying cycle.
+If Not(BadVal(PrevVal('Feed Flow','*'))) And Not(BadVal('Feed Flow'))
+Then (If 'Best Operating State'="Drying"
+Then 'Drying Cycle Barrels' + TagTot('Feed Flow', PreviousFeedFlowEvent,'*')
+Else 0)
+21 | P a g e
+
+Else NoOutput()
+
+💡
+Note
+
+In this calculation we are converting a flow rate in barrels/day to a
+volume, barrels. The ‘TagTot’ function handles this conversion AND
+also handles cases where values stored in the PI Archive are not
+evenly time spaced.
+
+Calculate Lifetime Barrels. Check for bad values of either the previously archived or current
+value of the Feed Flow, the endpoints of the incremental total. If good values are returned, add
+the incremental total to the Lifetime Barrels attribute when the dryer is in a Drying state.
+Otherwise do nothing. If either value of the Feed Flow is bad, do nothing.
+
+// Calculate total of feed processed during life of drying bed.
+If Not(BadVal(PrevVal('Feed Flow','*'))) And Not(BadVal('Feed Flow'))
+Then (If 'Best Operating State' = "Drying"
+Then 'Lifetime Barrels' + TagTot('Feed Flow', PreviousFeedFlowEvent,'*')
+Else NoOutput())
+Else NoOutput()
+5.
+
+Open PI Vision from the desktop.
+
+6. Click the
+logo on the upper left-hand corner of the PI vision display.
+This will return you to the display thumbnails.
+7. From the PI Vision display thumbnails, double-click on the ‘Total Barrels Dried’ tile to
+open this display.
+
+22 | P a g e
+
+3. Contextualization and Data Preparation
+3.1
+
+Objective
+
+In this exercise we will configure Event Frames to prepare useful process information for each
+dryer regeneration cycle. The Event Frame attributes we choose are ones we will find useful for
+qualifying our idea and for building the model to estimate the duration of the next dryer
+regeneration cycle.
+
+3.2
+
+Prepare Dryer Regeneration Features - Event Frame Template
+
+Event Frames produce records, stored in the PI System, containing the start time, end time and
+duration of significant processing periods, like dryer regeneration cycles. We can add other
+values, pertaining to the regeneration cycles, to the Event Frame records using Asset Analytics.
+Here, we will add the following attributes of interest.
+•
+
+Average Outlet Temperature, Deg. F.
+
+•
+
+Maximum Outlet Temperature, Deg. F.
+
+•
+
+Average Regenerating Temperature, Deg. F.
+
+•
+
+Maximum Regenerating Temperature, Deg. F.
+
+•
+
+Drying Cycle Barrels, barrels
+
+•
+
+Drying Cycle Duration, hrs.
+
+•
+
+Regen Cycle Vapor, barrels
+
+There are two steps in configuring Event Frames. The first is creating an Event Frame template
+which defines the naming pattern and attributes. The second is configuring the Asset Analytic to
+trigger the start and end of the Event Frame period. In this example, we will also generate values
+for several of the attributes in the above list using Asset Analytics. This is a very powerful feature,
+as you will see.
+An Event Frame template has been created for you to use. After walking through its configuration,
+we will configure an analytic to generate the event Frames themselves.
+1. In PI System Explorer, select the Library view. Under the Templates branch of the
+hierarchy, expand Event Frame Templates and select the My Dryer Regeneration
+Cycle template. The Naming Pattern is specified under the General tab. Event Frame
+names use substitution parameters. Click the
+to get some hints.
+
+at the far right-hand of the name field
+
+23 | P a g e
+
+2.
+
+Select the Attribute Templates tab at the top to see the list of attributes. Expand the
+attribute configuration dialog by clicking the
+along the right-hand boarder of PI System
+Explorer. Select the Avg Outlet Temp attribute.
+
+There are two attribute categories for this template, Asset Analytic Calculations and Asset
+Attribute Aggregations. Let’s take a look at the second group first.
+3. Click through the list of Asset Attribute Aggregations. These values will be calculated
+when the Event Frame ends and are derived from the attributes defined in the associated
+element. In this case, the Dryer A and Dryer B elements. They all have a PI Point Data
+Reference since their values will come from a PI Point aggregation.
+The following table shows the expression syntax used to define these attributes.
+Attribute
+
+Settings
+
+Avg Outlet Temp
+
+.\Elements[.]|Outlet Temperature;TimeRangeMethod=Average
+
+Avg Regen Temp
+
+.\Elements[.]|Regenerant Temperature;TimeRangeMethod=Average
+
+Max Outlet Temp
+
+.\Elements[.]|Outlet Temperature;TimeRangeMethod=Maximum
+
+Max Regen Temp
+
+.\Elements[.]|Regenerant Temperature;TimeRangeMethod=Maximum
+
+24 | P a g e
+
+4. Click on any one of the attributes in the Asset Analytic Calculation list. Notice there are
+no settings specified and they have no Data Reference specified. These are merely
+placeholders to contain the result of an Asset Analytics calculation which occurs upon the
+end or close of the Event Frame. We will configure this calculation next section.
+5. Under Element Templates, return to the Dryer template and select Analysis Templates
+tab at the top.
+6. Make a copy of the Dryer Regeneration Events analysis by right-clicking on it and
+selecting Copy. Then, right-click again and select Paste. Select the copied analysis,
+Dryer Regeneration Events1 and rename it to My Dryer Regeneration Events.
+7. Change the Event Frame Template this analysis will use to be My Dryer Regeneration
+Cycle. This is done from the Event Frame Template dropdown shown below.
+
+8. Click the Map link for each Output at Close expression and match it with its corresponding
+Attribute in the Event Frame Template. Be careful the order is not the same.
+9. Review the Start Trigger expression. When this condition it TRUE, the Event Frame
+starts. Once it becomes FALSE, the Event Frame ends.
+
+StartTrigger
+
+// Use Operating State as Event Frame trigger. By default,
+// Event Frame will end when Operating State returns
+// to "Standby" or "Drying".
+'Best Operating State'="Regenerating"
+
+Two of the values we want included in the Event Frame are calculated with respect to the
+Drying cycle that immediately precedes a Regeneration Cycle. To find out when the last
+
+25 | P a g e
+
+Drying cycle started, we use two Variable expressions to perform a two-step backward
+search into the PI Archive to retrieve timestamps of these events.
+Name
+PreviousRegenEvent
+
+PreviousDryingEvent
+
+Expression
+// Search backwards for last "Regenerating" event time.
+FindEq('Best Operating State','*','-7d', "Regenerating")
+
+// Search backwards for last "Drying" event time,
+// prior to last "Regenerating" event.
+FindEq('Best Operating State',PreviousRegenEvent, '-7d', "Drying")
+
+10. We use Output Expressions to calculate the needed aggregations the remaining values for
+our Event Frame Template. These expressions leverage the Event Frame Start and End
+times, as well as, the timestamp variable retrieved above. They are evaluated when the Event
+Frame closes and are posted as values to the “placeholder” attributes we have configured in
+the Event Frame Template.
+
+Name
+RegenCycleVapor
+
+DryingCycleBarrels
+
+DryingCycleDuration
+
+Expression
+// Calculate total flow to vaporizer during tis regeneration cycle.
+TagTot('Regenerant Vapor Flow', EventFrame("StartTime"),
+EventFrame("EndTime"))
+
+// Drying Cycle Barrels in previous Drying cycle.
+TagMax('Drying Cycle Barrels', PreviousDryingEvent, '*')
+
+// Duration in hours of previous Drying cycle.
+TimeEq('Best Operating State', PreviousDryingEvent,'*',"Drying")
+/3600
+
+11. Click the Evaluate button to preview the results and make sure there are no errors. If it
+all looks good, Check In your changes.
+
+26 | P a g e
+
+3.3
+
+Generate Regeneration Data for Analysis - Event Frames
+
+Generate the Event Frames to capture the data needed to analyze the dryer regenerations for
+2019.
+1. Return to the Management view in PI System Explorer. Select the ‘My Dryer
+Regeneration Events’ analyses for the Dryer A and B elements. On the right-hand side
+under Operations, click Enable.
+
+2. Once the
+appears in the Status column the analyses are up and running. Again
+under Operations, click on Queue. This exposes the backfilling configuration dialog.
+Configure the Start and End times to be ‘1/1/19’ and ‘12/31/19’, respectively. Check
+‘Permanently delete existing data and recalculate’. This will allow the backfill service
+to overwrite the results we stored for Dryer A in the previous step. And finally, click Queue
+start backfilling Event Frames for the two dryers.
+
+27 | P a g e
+
+3. Once the
+Disable.
+
+appears under the Backfilling column, disable the analysis by clicking
+
+4. Select the Event Frames view in the lower left-hand corner of PI System Explorer. Launch
+the Event Frame Search from the top menu.
+
+5. Set the Search to ‘Ending After’ and the Template to ‘My Dryer Regeneration Cycle’.
+Click Search to find the Event Frames matching this criteria.
+
+28 | P a g e
+
+6. The default Event Frame search does not show attributes in the results. Click the
+at
+the upper right-hand corner of the results grid and click Select Attributes to bring up the
+dialog below.
+
+7. Click
+to select all attributes. Click OK. Then click OK in the Event Frame Search
+dialog. This brings all Event Frame records into PI System Explorer. We are now ready
+to extract this data from PI for analysis.
+
+29 | P a g e
+
+4. Data Analysis and Qualification
+4.1
+
+Objectives
+
+The previous sections of this lab have so far provided us with the data set necessary to start to
+formulate a model to predict the behavior of the regeneration times for the dryers. In the following
+section we will be taking the event frame Dryer Regeneration Cycle data and analyzing this set of data to
+find relationships between the parameters we have and the resulting regeneration times.
+The objective of this section is to analyze the Dryer Regeneration Cycle event frame data using various
+tools at our disposal including Power BI and Excel, and to qualify which variables are important to take
+into account for our predictive model. We will also be demonstrating how the PI System can enable data
+analysis and qualification within these tools through the use of the PI Integrator for Business Analytics as
+well as the PI DataLink Add-In for Excel.
+In the following section we will:
+•
+•
+•
+•
+
+Export the Dryer event frame data into a .CSV file using the PI Integrator for Business Analytics
+Import the .CSV Dryer data into Power BI and examine the relationships between the dryer
+operating states to confirm the initial problem assessment
+Examine the Dryer Event Frame data in Excel using PI DataLink and decide on a variable to use
+for predicting Dryer Regeneration Time
+Utilize basic charting and best fit line functionality within Excel to generate a linear model to
+predict Dryer Regeneration Time
+
+In addition to providing you with hands-on experience using the PI Integrator for Business Analytics and
+Power BI, the main reason we are going through the trouble of bringing in this data into Power BI is to
+confirm our initial hypothesis that there is in fact an imbalance in the use of these two dryers.
+Remember that the overall goal of this analytics project is to formulate a model to predict and
+standardize the dryer phases in order utilize the dryers in a more balanced way. It is extremely beneficial
+from a financial and maintenance standpoint to have these dryers end of life around the same time, and
+the goal of looking at the dryer phases in Power BI is to confirm that they are not currently being used
+evenly. From a bigger picture perspective, it is helpful to do this sort of ‘sanity check’ in the middle of a
+larger analytics project to confirm that the problems you are trying to solve are in fact real, and that the
+project is worth taking to the next stages of completion.
+
+4.2 Problem Assessment – PI integrator for Business Analytics and
+Power BI
+From the Windows taskbar, open PI System Explorer and review the ‘Dryers’
+database. We will be using the PI Integrator for Business Analytics to create an
+event frame view publication based on the event frames built upon this asset model.
+The publication target will be a .CSV file posted in the subdirectory C:\PI World\ (this
+
+30 | P a g e
+
+is also the ‘PI World’ folder shortcut on the desktop). This .CSV file will provide the
+data for populating our dataset and analyzing in Power BI.
+1. Open the PI Integrator for Business Analytics from the desktop shortcut.
+2. Click Create Event View on the top menu. Name your view ‘My Dryer
+Regenerations’ and click Create View.
+
+3. On the Select Data page, select the Dryers database. Select one of the listed event
+frames under the Source Events Section on the left. Drag and drop this event into the
+Search Shape area in the middle of the screen under Event Shape.
+4. On the event frame that was just dragged to the center, click on the Edit
+pencil icon to the right to bring up the Edit Filters option. Adjust the filter to
+use the ‘Dryer Regeneration’ event frame template rather than the Event
+Frame Name.
+
+5. With the same event frame highlighted on the left section under Source
+Events, notice the attributes associated with these event frames just below in
+the Attributes Section.
+31 | P a g e
+
+6. Click and drag each of these attributes to the center of the screen under the
+‘Dryer Regeneration Cycle’ parent that was just created in the middle of the
+screen. Your event shape should now look like the one below:
+
+7. With the shape selected and the filters set, you should see 100+ event
+frames matching the criteria listed in the Matches area on the right.
+
+32 | P a g e
+
+8. Click on the Next button on the upper right corner to proceed to the Modify
+View page.
+9. The Modify View page shows a preview of the first 100 rows of data from the
+first 100 event frames matching the Event Shape. Set the time range, 1/1/19
+5:00 AM to 12/31/19 12:00 AM, to match the available PI data for the lab.
+Click Apply.
+
+10. Highlight the Event Frame Duration column to bring up the Column Details
+pane on the right. Adjust the Data Type to ‘Single’ to get the additional digits
+for duration.
+
+33 | P a g e
+
+11. Click Next to proceed to the Publish page.
+12. Select CSV File as the Target Configuration and click Publish, then Confirm
+to publish the data as a .CSV file.
+
+13. The file name will be the name of the asset view, My Dryer Regenerations,
+and it will be in the subdirectory, C:\PI World (this is also the ‘PI World’ folder
+shortcut on the desktop). This target was configured using the Administration
+pages of the PI Integrator for Business Analytics.
+Assessment of Dryer Regeneration Data in Power BI
+Now that we have the years’ worth of dryer regeneration event data in .CSV file
+format, we can easily ingest it into Power BI for further analysis. Within Power BI, we
+will be plotting the dryer states (Drying, Standby, Regenerating) for each dryer as a
+function of time (using weeks as our unit of time). This type of analysis lends itself
+very well to the capabilities of Power BI and illustrates the benefits of using the PI
+Integrator for BA to shape the data.
+1. From the desktop, open the Power BI Report ‘Regeneration Analysis.pbix’
+2. Alternatively, if you’d like to build out the Power BI Report yourself, follow
+these steps:
+I.
+
+From the desktop, open the ‘Power BI Desktop’ application.
+
+II.
+
+Import the ‘Dryer Regenerations.csv’ file. Click on the ‘Get Data’
+option at the top of the application and choose the ‘Text/CSV’ file
+option. Click on ‘Connect’
+
+34 | P a g e
+
+III.
+
+Choose the ‘Dryer Regenerations.csv’ file in the C:\PI World
+location and click ‘Open’
+
+IV.
+
+Click ‘Load’ to import the dataset into Power BI.
+
+35 | P a g e
+
+V.
+
+Add a column to the dataset to assign the week number. Click on the
+‘Data’ View
+rather than the ‘Report’ view
+on the top left of
+the application to see the tabular dataset we just imported. Click on
+the ‘New Column’ action on the top toolbar.
+
+VI.
+
+In the formula bar with the new column highlighted, type the following
+and click the check box to commit :
+Week = WEEKNUM('Dryer Regenerations’[TimeStamp])
+
+VII.
+
+Add a column to the dataset to note which dryer is involved in each
+event. Click on the ‘Data’ View
+rather than the ‘Report’ view
+on the top left of the application to see the tabular dataset we just
+imported. Click on the ‘New Column’ action on the top toolbar. In the
+formula bar with the new column highlighted, type the following and
+click the check box to commit :
+Dryer = LEFT('Dryer Regenerations’[Dryer Regeneration Cycle], 7)
+
+36 | P a g e
+
+VIII.
+
+Add a new measure to calculate the total time each dryer is in the
+‘Drying’ stage. Click on the ‘New Measure’ action on the top toolbar.
+
+IX.
+
+In the formula bar with the new measure column highlighted,
+type/paste the following and click the check box to commit :
+Drying Time = CALCULATE(SUM('Dryer Regenerations'[Drying Cycle
+Duration]), FILTER(ALLEXCEPT('Dryer Regenerations','Dryer
+Regenerations'[Dryer],'Dryer Regenerations'[Event Frame Duration]),'Dryer
+Regenerations'[Week]<=MAX('Dryer Regenerations'[Week])))
+
+X.
+
+Add a new measure to calculate the total time each dryer is in the
+‘Regenerating’ stage. Click on the ‘New Measure’ action on the top
+toolbar. In the formula bar with the new measure column highlighted,
+type/paste the following and click the check box to commit:
+Regenerating Time = CALCULATE(SUM('Dryer Regenerations'[Event Frame
+Duration]),FILTER(ALLEXCEPT('Dryer Regenerations','Dryer
+Regenerations'[Dryer],'Dryer Regenerations'[Event Frame Duration]),'Dryer
+Regenerations'[Week]<=MAX('Dryer Regenerations'[Week])))
+
+XI.
+
+Add a new measure to calculate the total time each dryer is in the
+‘Regenerating’ stage. Click on the ‘New Measure’ action on the top
+toolbar. In the formula bar with the new measure column highlighted,
+type/paste the following and click the check box to commit:
+Standby Time = CALCULATE(DISTINCTCOUNT('Dryer
+Regenerations'[Week])*168-SUM('Dryer Regenerations'[Event Frame Duration])SUM('Dryer Regenerations'[Drying Cycle Duration]),FILTER(ALLEXCEPT('Dryer
+Regenerations','Dryer Regenerations'[Dryer],'Dryer Regenerations'[Event Frame
+Duration]),'Dryer Regenerations'[Week]<=MAX('Dryer Regenerations'[Week])))
+
+XII.
+
+Switch back to the ‘Report’ View
+. We now want to build out three charts
+displaying each of the Dryer States as a function of Week for each dryer. Your
+report will eventually look like the one below:
+
+37 | P a g e
+
+XIII.
+
+Create a Line Chart for Drying Time by Week and Dryer. Choose the Line
+Chart Visual and populate the fields as shown:
+
+XIV.
+
+Create a Line Chart for Standby Time by Week and Dryer. Choose the Line
+Chart Visual and populate the fields as shown:
+
+XV.
+
+Create a Line Chart for Regenerating Time by Week and Dryer. Choose the
+Line Chart Visual and populate the fields as shown:
+
+38 | P a g e
+
+XVI.
+
+Create four Card visualizations to calculate the average hours of Drying and
+Regenerating times for each cycle in each dryer. For the Average Drying time
+card, populate the Fields with the Drying Cycle Duration item and choose to
+display the Average value. In the dropdown, choose ‘New Quick Measure.’
+Choose the ‘Filtered Value’ Calculation. Drag the Dryer item into the Filter field
+and filter on Dryer A.
+
+39 | P a g e
+
+XVII.
+XVIII.
+
+40 | P a g e
+
+Repeat this process three more times for the average hours Dryer and
+Regeneration times for each cycle in each dryer.
+Once complete, your report should look similar to the one below:
+
+3. Let’s take a moment to analyze the 2019 Dryer Operating States Power BI
+report above. From this report, we can quickly see that there is a clear
+imbalance between the two dryers in terms of utilization. On average, Dryer A
+has longer drying cycle times than Dryer B. Conversely, Dryer B has longer
+Regenerating cycle times on average.
+
+💡
+Tip
+
+Plotting this data in Power BI, a Business Analytics tool,
+makes it easy to see the cumulative use of each dryer
+throughout the year using weeks as the unit of time. The
+plots above are cumulative slices of data rather than the
+simple 2-d (x,y) plotting that excel is capable of. This is why
+we are using Power BI at this step of the project.
+
+With this visual, we can confirm that the problem we are trying to solve does in
+fact exist and it is worth moving forward with the project.
+
+4.3
+
+Model Development – PI DataLink
+
+In the previous section, we illustrated the use of the PI Integrator for BA to publish
+data into Power BI for analysis. In this section, we will illustrate how PI Datalink and
+Excel can also be used to analyze our Dryer dataset and how we can use basic
+Excel functionality to generate a linear model to predict regenerating times for each
+dryer, which we can use for our simple predictive model.
+At this point in the Analytics project, it’s important to get assistance from Subject
+Matter Experts (SMEs) who understand the process we are modeling – to ensure we
+end up with helpful and meaningful results. Our SME in this case has indicated that
+the Drying Cycle Barrels variable that we have – which corresponds to the number
+of barrels dried in the previous drying cycle – will be the best one to predict
+preceding regeneration cycle time.
+
+💡
+Note
+
+For a brief discussion/explanation on why we decided on Drying Cycle
+Barrels as our predictive variable to inform regeneration time, see the
+Appendix section 7.1.
+
+1. On the desktop, open up the Excel file ‘PI World Dryer Regen
+Duration.xlsx’
+2. There are three sheets in the ‘PI World Dryer Regen Duration.xlsx’ file.
+a. The first sheet titled ‘Dryer A’ has also been built out for you. Since
+we’ve chosen the Drying Cycle Barrels as our dependent variable for
+our linear prediction model, we are focusing on that variable here. The
+event frame search has brought in the Duration and Drying Cycle
+Barrels data for the year 2019. We’ve also filtered out any event
+frames with a prior Drying Cycle Duration of less than 10 hours – you
+can see how this can be done in the Event Frame search in the next
+step. This purpose of this filter is to remove any “false starts” in the
+41 | P a g e
+
+data, when a drying cycle is shorter than typical. This would result in a
+skewed prediction and we will account for this in our regeneration
+prediction forecast.
+This sheet plots the Regeneration Cycle duration as a function of the
+Drying Cycle Barrels variable – the number of barrels the dryer
+processed in the previous drying cycle.
+This scatter chart has a linear best-fit line indicating the relationship
+that the Drying Cycle Barrels variable has on the Regeneration Cycle
+Time. We will be using this equation of the derived linear regression
+line as our model to predict Regeneration Cycle Duration.
+
+💡
+Note
+
+This is clearly a rather simple predictive model that could be more
+advanced, but for the purposes of this lab we are focusing on the
+methodology of starting analytics and data science projects with the
+common tools at our disposal to get us started and familiarized with
+the basics.
+
+b. The second sheet titled ‘My Dryer B’ has not yet been built out for
+you. To give you experience importing event frame data into Excel
+using PI DataLink, follow the steps below to build out the same charts
+as ‘Dryer A’ and to develop our linear regression model for Dryer B. If
+you’d prefer to use a pre-built sheet for Dryer B, it is the last sheet in
+the workbook titled ‘Dryer B’.
+42 | P a g e
+
+i. Bring in all the event frame data for the year 2019 using PI
+DataLink. Make sure you’re in the ‘PI DataLink’ ribbon add-in
+to Excel. Click on ‘Explore’ tool in the events tool section of PI
+DataLink.
+
+ii. Enter the following parameters for your event frame search
+such that it looks like the one below and click Apply:
+1. Database: \\PISRV01\Dryers
+2. Event Name: *
+3. Search Start: 1/1/2019
+4. Search End: 12/31/2019
+5. Event Template: Dryer Regeneration Cycle
+6. Element Name: Dryer B
+7. Element Template: *
+8. +More Search Options>Attribute Value Filters:
+‘Drying Cycle Duration’ > 10
+9. Select Columns to Display:
+•
+
+Event Name
+
+•
+
+Drying Cycle Barrels
+
+•
+
+Duration
+
+43 | P a g e
+
+iii. Add a column to the end of the dataset (should be column D)
+to convert the duration into hours. To do this, simply multiply
+the imported duration by 24 and change the format of the cells
+in that column to be of type Number with two decimals.
+44 | P a g e
+
+iv. Once the event frame data is brought into the ‘Dryer B’ sheet,
+we can now use Excel’s charting functionality to plot the
+Regeneration Cycle duration as a function of each variable.
+v. Within Excel, click on the Insert ribbon at the top and choose
+the Scatter plot
+
+vi. Right click on the scatter plot and click ‘Select Data.’ On the
+Select Data window, the range of values for Duration (Hours)
+will be the dependent y-axis on this chart and the Drying Cycle
+Barrels variable will be on the x-axis.
+vii. On this chart, click to Add a Chart Element of a Linear
+Trendline. Format the trendline to Display Equation on chart
+and to Display R-squared value on chart. Once complete,
+you should have a chart that looks like the one below:
+
+45 | P a g e
+
+We now have a linear regression model for each dryer using the variable of Drying
+Cycle Barrels, or the number of barrels dried during the preceding drying cycle, that
+we will use to predict the proceeding Regeneration Cycle Duration in the next
+section.
+Dryer A
+Y = 0.0003X + 9.6722
+Where Y = Regeneration Duration and X = Drying Cycle Barrels
+Dryer B
+Y = 0.0006X + 9.5749
+Where Y = Regeneration Duration and X = Drying Cycle Barrels
+
+46 | P a g e
+
+5. Operationalization and Notification
+5.1
+
+Objective
+
+The purpose of this last section of this analytics project is to operationalize the linear model we derived
+in the previous section to generate a prediction for dryer regeneration time. In the following section we
+will:
+•
+•
+
+5.2
+
+Create a forecasting analytic using AF Analytics to predict dryer regeneration times
+Create a notification to alert operators when dryer regeneration times are predicted to be 11
+hours or more
+
+Forecast Deployment – AF Analytics
+
+From the Windows taskbar, open PI System Explorer and be sure you’re connected
+to the ‘Dryers’ database.
+First off, we will be using an AF Table to store the coefficients of our linear
+regression lines from the previous section.
+1. Navigate to the Library and the Dryer Data under Tables. The table and the
+coefficients for each Dryer’s equation have been built for you. Take a moment
+to confirm that these are correct.
+
+We will be creating an AF Analytic for the forecast equation at the template level for
+the dryers.
+1. Navigate to the Library and the Dryer template under Element Templates.
+2. Click on the Analysis Templates Tab and click on the New Analysis
+Template option.
+
+Name your new Analysis Template ‘My Dryer Regeneration Cycle Time
+Forecast.’ This analysis has already been build out under the name ‘Dryer
+47 | P a g e
+
+Regeneration Cycle Time’ but we want you to be able to build out the
+expression on your own. By default, you have created a new Expression
+type analysis. This is what we need.
+3. We will be creating a multi-line analysis utilizing the multi-variable capability
+of AF Analytics. The first step in our analysis is to find the last drying event.
+We will be making use of new AF Analytics functions that allow for array
+calculations. Let’s us the RecordedValuesByCount function to grab the past
+10 states of the dryer. Create a variable called PastTenStates and input the
+following formula:
+RecordedValuesByCount('Best Operating State','*',10)
+
+This operation will create an array of 10 values consisting of the past 10
+states the dryer has had. To view the output of the operation, click on
+Evaluate and hover your mouse over the Blue Information Symbol next to
+the evaluation.
+
+4. We now want to filter this array to only capture the states where the dryer is
+in “Drying” mode. Create another variable called PastDryingStates and
+input the following formula:
+FilterData(PastTenStates,$val="Drying")
+
+This operation will create an array of filtered values consisting of the past
+“Drying” phases and their associated timestamps.
+
+5. Let’s grab the most recent drying event. Create a new variable called
+LastDryingEvent and input the following:
+TimeStamp(PastDryingStates[1])
+
+This operation grabs the timestamp of first value in the PastDryingStates
+array, or the most recent drying phase’s associated timestamp.
+6. We want the analysis to check how long the dryer has been in the drying
+state. Create a new variable called HrsIntoDryingCycle and input the
+following:
+
+48 | P a g e
+
+TimeEq('Best Operating State', LastDryingEvent, '*',
+"Drying")/3600
+
+This operation will output (in hours) the length of time that the dryer has been
+in the drying phase.
+7. Finally, we want to input our forecasting equation. Create a new variable
+called ForecastedRegenCycleDuration and input the following:
+If 'Best Operating State' = "Drying" And HrsIntoDryingCycle >= 10
+Then 'Regeneration Cycle Model Slope' * 'Drying Cycle Barrels' +
+'Regeneration Cycle Model Intercept'
+Else 0
+
+This operation first checks that the dryer is in the drying phase and if it has
+been in the drying phase longer than 10 hours. If those conditions are met, it
+then applies the coefficients from our linear regression model stored in the
+Dryer Data table previously created. Otherwise, if the initial conditions aren’t
+met, then the forecast is not performed. Remember – we only want this
+prediction to be made when the dryer is in the current drying phase.
+
+💡
+Note
+
+Why did we add the condition in the previous equation to check if the
+Drying Phase has been longer than 10 hours?
+Remember that during our modeling, we filtered out event frame data
+where any Drying Cycle Durations shorter than 10 hours. It’s important
+to account for these filters in your prediction logic.
+
+8. The Dryer template has already been configured to have an attribute named ‘My
+Forecasted Regeneration Cycle Time Forecast’ which point to the PI tags ‘Dryer A.My
+Dryer Regeneration Cycle Time Forecast.%ID%’ and ‘Dryer B.My Dryer
+Regeneration Cycle Time Forecast_%ID%’ for Dryer elements Dryer A and Dryer B,
+respectively.
+To the right of the Expression field, under Output Attribute, click the Map link and assign
+the ‘My Forecasted Regeneration Cycle Time Forecast’ template attribute for the
+ForecastedRegenCycleDuration variable.
+Also note that the Example Element for this template has be set to Dryer A. These
+means that all evaluations and preview calculations will be done using Dryer A data. You
+can change to another element by clicking the link and selecting a different one, e.g. Dryer
+B.
+9. Check in your changes by clicking Check In at the top of PI System Explorer.
+10. We now have our complete analysis which is forecasting the duration of the
+regeneration cycle using the Drying Cycle Barrels of the preceding drying
+phase as a predictor. Your complete analysis should look like the one below,
+and should evaluate like the one below:
+
+49 | P a g e
+
+11. You can use the Preview Results feature of AF Analytics to confirm that the
+Analysis is functioning. Right-click on your analysis and click on Preview
+Results.
+
+12. In the lower left-hand corner of PI System Explorer, select the Management view. Here
+is where you manage all the Asset Analytics configured for an AF Database. This
+includes enabling, disabling and backfilling calculations.
+13. Select the ‘My Dryer Regeneration Cycle Time Forecast’ analyses for the Dryer A and
+B elements. On the right-hand side under Operations, click Enable.
+14. Once the
+appears in the Status column the analyses are up and running. Again
+under Operations, click on Queue. This exposes the backfilling configuration dialog.
+Configure the Start and End times to be ‘*-7d’ and ‘*’, respectively. And finally, click
+Queue start backfilling results for the two dryers.
+
+50 | P a g e
+
+5.3
+
+Proactive Solution – PI Notifications
+
+Now that we have a working analysis whose output will tell us the predicted duration
+for each regeneration phase, we want to be able to take this one step further – to
+notify operators when to end the drying phase for one dryer and begin regeneration
+(switch which dryer is active). Remember, the ultimate goal here is to balance the
+use of each dryer such that they will have a similar end of life – significantly reducing
+replacement costs and required downtime.
+In this last section we will:
+•
+
+Create an Event Frame analysis to store an event any time the expected
+Regeneration forecast is greater than or equal to 11 hours.
+
+•
+
+Create a notification rule to send an e-mail to the student01@pischool.int
+account any time the expected Regeneration forecast is greater than or equal
+to 11 hours.
+
+Analysis for Event Frame Generation
+1. An Event Frame template has been created for you to use. After walking through its
+configuration, we will configure an analytic to generate the Event Frames themselves. In
+PI System Explorer, select the Library view. Under the Templates branch of the
+hierarchy, expand Event Frame Templates and select the Regeneration Time
+Notification template. The Naming Pattern is specified under the General tab.
+2. Select the Attribute Templates tab at the top to see the list of attributes.
+Expand the attribute configuration dialog by clicking the
+hand boarder of PI System Explorer.
+
+along the right-
+
+3. You can see that this particular template will store the Forecasted Regeneration Cycle
+Time and the Last Drying Cycle Time. Just like in the previous event frame, these are
+merely placeholders to contain the result of an Asset Analytics calculation which occurs
+upon the end or close of the Event Frame. We will configure this calculation in the next
+steps.
+4. In PI System Explorer, navigate back to the Dryer element template in the Library under
+Element Templates. Click and navigate to the Analysis Templates tab.
+5. Create a new Analysis Template by clicking
+. Rename it ‘My Dryer Notification’. Set
+the Analysis Type to Event Frame Generation. Uncheck Enable analysis when
+creating from template. Assign the Event Frame Template to Regeneration Time
+Notification. Note that the Example Element has been assigned to Dryer A by default.
+6. Similar to our My Dryer Regeneration Cycle Time Forecast, we will be using AF
+Analytics array functions to grab the timestamp of the latest drying event.
+a. We will be creating a multi-line analysis utilizing the multi-variable
+capability of AF Analytics. The first step in our analysis is to find the
+last drying event. We will be making use of new AF Analytics
+functions that allow for array calculations. Let’s us the
+RecordedValuesByCount function to grab the past 10 states of the
+dryer. Create a variable called PastTenStates and input the following
+formula:
+51 | P a g e
+
+RecordedValuesByCount('Best Operating State','*',10)
+
+This operation will create an array of 10 values consisting of the past
+10 states the dryer has had. To view the output of the operation, click
+on Evaluate and hover your mouse over the Blue Information
+Symbol next to the evaluation.
+b. We now want to filter this array to only capture the states where the
+dryer is in “Drying” mode. Create another variable called
+PastDryingStates and input the following formula:
+FilterData(PastTenStates,$val="Drying")
+
+This operation will create an array of filtered values consisting of the
+past “Drying” phases and their associated timestamps.
+c. Let’s grab the most recent drying event. Create a new variable called
+LastDryingEvent and input the following:
+TimeStamp(PastDryingStates[1])
+
+This operation grabs the timestamp of first value in the
+PastDryingStates array, or the most recent drying phase’s
+associated timestamp.
+7. Add a Start Trigger with the following logic:
+'My Dryer Regeneration Cycle Time Forecast’ >= 11
+8. Add an End Trigger with the following logic:
+'My Dryer Regeneration Cycle Time Forecast’ >= 11
+
+This event frame will be captured and begin and end when the
+predicted regeneration cycle duration is greater than or equal to 11.
+9. To write to the Forecasted Regeneration Cycle Time and the Last Drying
+Cycle Time attributes of the Event Frame template, we will be using Output
+Expressions.
+a. Add an output expression called CurrentForecast and input the
+following expression
+TagVal('My Dryer Regeneration Cycle Time Forecast’,
+EventFrame("StartTime"))
+
+This expression will output the value of the predicted regeneration
+time at the start time of the event frame.
+Map this output expression to the Forecasted Regeneration Cycle
+Time attribute of the Event Frame Template
+b. Add an output expression called LastDryingCycle and input the
+following expression
+LastDryingEvent
+
+This will write the value of the LastDryingEvent variable you created
+previously.
+
+52 | P a g e
+
+Map this output expression to the Last Drying Cycle Time attribute of
+the Event Frame Template.
+10. Your complete My Dryer Notification Event Frame should look like this:
+
+11. Click the Evaluate button to preview the results and make sure there are no errors. If it
+all looks good, Check In your changes.
+12. Return to the Management view in PI System Explorer. Select the ‘My Dryer
+Notification’ analyses for the Dryer A and B elements. On the right-hand side under
+Operations, click Enable.
+13. Once the
+appears in the Status column the analyses are up and running. Again
+under Operations, click on Queue. This exposes the backfilling configuration dialog.
+Configure the Start and End times to be ‘*-7d’ and ‘*’, respectively. And finally, click
+Queue start backfilling Event Frames for the two dryers.
+Create a Notification Rule
+The next step from here is to create a New Notification Rule Template from this My
+Dryer Notification Event Frame.
+1. Under the Analysis Details on the top right of PI System Explorer, click on the
+blue hyperlinked text that says “Create a new notification rule template for
+My Dryer Notification”
+2. Call this new notification rule template “My Dryer Notification”
+3. Under the Subscriptions section, click on View/Edit Subscriptions
+4. Expand student01 and drag the E-mail endpoint under student01 into the
+Subscriptions section. Click OK and Check In.
+Configure Notification Message Formatting
+
+53 | P a g e
+
+1. Click on the blue Manage Formats link in the Subscriptions section. Select the line
+with Global Default Email (color changes to light blue) and click on the Duplicate icon
+above. Rename the duplicated format as My Dryer Notification Email.
+2. Change the subject of the e-mail to:
+3. Remove the items for Server, Database, and Severity.
+4. Add an informative message to tell the operators the predicted regeneration time and
+instruct them to switch dryers. It should like similar to this:
+
+5. At the bottom of the design window, add a link to the ‘Drying Process – After’ PI Vision
+Display.
+a. Click on the Insert Link option and enter the URI of the PI Vision page showing
+the drying states: https://pisrv01/PIVision/#/Displays/10/Drying-Process--After. Click Continue.
+b. Enter PI Vision Drying Process in the Text to Display field.
+c. Set the time context for the PI Vision link:
+i. Enter a new Key for starttime with a value of ‘*-7d’.
+ii. Enter a new Key for endtime with a value of ‘*’.
+iii. Your create link window should look like below when completed:
+
+d. Click OK and Check In.
+6. Your message configuration window should look like the one below when complete:
+
+54 | P a g e
+
+7. Click on the Test Send button and enter in the student01@pischool.int email address.
+8. Open up Outlook from the Desktop or the Taskbar. You should have received the test
+e-mail. Open the e-mail and confirm the formatting and that the PI Vision link works.
+Confirming Notifications
+1. Return to the Management view in PI System Explorer. Select the ‘My Dryer
+Notification’ analyses for the Dryer A and B elements. On the right-hand side under
+Operations, click Enable.
+2. Once the
+appears in the Status column the analyses are up and running. Again
+under Operations, click on Queue. This exposes the backfilling configuration dialog.
+Configure the Start and End times to be ‘*-7d’ and ‘*’, respectively. And finally, click
+Queue start backfilling Event Frames for the two dryers.
+
+55 | P a g e
+
+You should be receiving e-mails after the analysis has been running for some time and
+the conditions for the Dryer Notification are met. Below is an example of what your emails will look like with the link to the PI Vision page:
+
+56 | P a g e
+
+6. Summary
+6.1
+
+Revisit Learning Objectives
+
+Thank you for completing this lab with us! In this lab we:
+•
+
+Explored features of several OSIsoft products in one lab.
+
+•
+
+Learned how to interact with the PI System.
+
+•
+
+Discovered how its features can work in concert to take an improvement idea
+and impact an actual operating problem.
+
+•
+
+Transitioned PI Users into PI Power Users, enabling them to make a larger
+contribution in addressing process problems based on an improved
+understating of available tools and their domain expertise.
+
+57 | P a g e
+
+7. Appendix
+7.1
+
+Predictive Model Development and Variable Selection
+
+There is a hidden sheet in the ‘PI World Dryer Regen Duration.xlsx’ Excel file on
+the lab VM desktop that has been built out for you. If you right click on the sheet
+ribbon and click Unhide > ‘Regen Variables’ you will be able to see this sheet. This
+sheet plots event frame duration (or the Regeneration cycle duration) as a function of
+key variables.
+The purpose of this sheet is to identify an appropriate variable to use that will be a
+good predictor of the time it takes the dryer to regenerate. The variables we have
+are:
+•
+
+Average Regen Temp (the average temperature of the dryer throughout the
+regeneration phase)
+
+•
+
+Regen Vapor Flow (the total flow of regeneration vapor throughout the
+regeneration phase)
+
+•
+
+Drying Cycle Duration (the duration of the drying phase preceding the
+regeneration phase)
+
+•
+
+Drying Cycle Barrels (the amount of barrels processed during the drying
+phase preceding the regeneration phase)
+
+Avg Regen Temp and Regen Vapor Flow appear to be good indicators of Regen
+Duration – meaning there definitely appears to be a correlation between these
+58 | P a g e
+
+variables and the regeneration duration. Would these variables be a good choice for
+predicting the regeneration time?
+The answer is of course, no. The reason being is that these variables are collected
+during the regeneration phase itself, and thus cannot be used to predict the duration
+of the regeneration phase. This is important to know for this analytics project and this
+lesson can be taken to other analytics projects as well.
+
+💡
+Tip
+
+Having the domain knowledge on the process to know
+which variables are appropriate to use for modeling and
+forecasting is extremely important.
+A common story we hear from analytics and data science
+projects is that the end results often propose “obvious”
+answers or suggestions. This highlights the importance of
+working with, or including Subject Matter Experts
+throughout the course of your analytics projects.
+
+So that leaves us with two variables: Drying Cycle Duration and Drying Cycle
+Barrels. Drying Cycle Duration seems like a potentially good candidate, however the
+drawback with simply using duration as our predictor is that the flow or the speed of
+the barrels processed during the drying phase is extremely variable and unknown.
+For example, one drying phase might have a shorter duration but process more feed
+because of a higher flow than another drying phase. Given that knowledge, the
+Drying Cycle Barrels is the best option we have to use as a variable for our
+predictive model for regeneration duration.
+
+59 | P a g e
+
+60 | P a g e
+
+Save the Date!
+OSIsoft PI World Users Conference in Amsterdam; October 26-29, 2020.
+Register your interest now to receive updates and notification early bird registration opening.
+https://pages.osisoft.com/UC-EMEA-2020-Q4-10-26-PI-World-AMS-Register-YourInterest_Register-Your-Interest.html
+
+PI SYSTEM LEARNING
+CONTINUE YOUR PI SYSTEM LEARNING
+After the conference, the PI SYSTEM LEARNING
+does not have to stop. All registered attendees for PI
+World SFO 2020 will have access to all PI World
+Hands-on Lab cloud environments for 21 days using
+the discount cod below. You will receive detailed
+instructions via email after the conference.
+
+Discount Code: 2020PIWSF-LAB-100
+Offer expires July 3, 2020
+
+61 | P a g e
+
+

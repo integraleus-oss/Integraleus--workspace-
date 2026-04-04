@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Миграция с AVEVA на Альфа платформу в нефтедобыче: как мы это делали — СПЕЦТЕХ</title>
+<meta name="description" content="AVEVA ушла из России — лицензии не продлить, обновлений нет, поддержки нет. Практический опыт миграции с AVEVA на Альфа платформу на промыслах Западной Сибири: 10 000–30 000 сигналов, IEC 104, Modbus, параллельная работа и переключение.">
+
+<meta property="og:image" content="https://specialtechnology.ru/blog/og-migration-aveva.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="canonical" href="https://specialtechnology.ru/blog/migration-aveva-to-alpha-oilfield.html">
+<meta property="og:title" content="Миграция с AVEVA на Альфа платформу в нефтедобыче: как мы это делали">
+<meta property="og:description" content="AVEVA ушла из России — лицензии не продлить, обновлений нет, поддержки нет. Практический опыт миграции с AVEVA на Альфа платформу на промыслах Западной Сибири: 10 000–30 000 сигналов, IEC 104, Modbus, параллельная работа и переключение.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://specialtechnology.ru/blog/migration-aveva-to-alpha-oilfield.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content { background: #ffffff !important; }
+:root.theme-light .mobile-nav a { color: #1a2332; }
+:root.theme-light .mobile-nav a:hover { color: var(--volt); }
+:root.theme-light .mobile-menu-close { color: #4a5d75; }
+:root.theme-light .mobile-menu-close:hover { color: var(--volt); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-guides{color:var(--lime);border-color:var(--lime);background:var(--lime-lo);}
+.tag-migration{color:var(--flame);border-color:var(--flame);background:var(--flame-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+.article-body table{border-collapse:collapse;width:100%;margin:20px 0;border:1px solid var(--wire);}
+.article-body th{background:var(--steel);color:var(--text);font-weight:600;padding:12px;text-align:left;border:1px solid var(--wire);}
+.article-body td{padding:12px;border:1px solid var(--wire);color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--volt);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.warning-box{background:rgba(255,107,53,0.08);border:1px solid var(--flame);border-left:4px solid var(--flame);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--flame);margin-bottom:12px;}
+.warning-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.warning-box p:last-child{margin-bottom:0;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-title { font-size: 24px; overflow-wrap: break-word; }
+  .article-meta { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Миграция с AVEVA на Альфа платформу в нефтедобыче: как мы это делали",
+  "author": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "СПЕЦТЕХ",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://specialtechnology.ru/automiq-favicon.png"
+    }
+  },
+  "datePublished": "2026-04-01",
+  "description": "AVEVA ушла из России — лицензии не продлить, обновлений нет, поддержки нет. Практический опыт миграции с AVEVA на Альфа платформу на промыслах Западной Сибири: 10 000–30 000 сигналов, IEC 104, Modbus, параллельная работа и переключение.",
+  "image": "https://specialtechnology.ru/preview-desktop.png",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://specialtechnology.ru/blog/migration-aveva-to-alpha-oilfield.html"
+  }
+}
+</script>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+<div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Миграция с AVEVA на Альфа платформу</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-migration">Миграция</span>
+            <span class="article-date">1 апреля 2026</span>
+            <span class="article-read">15 мин</span>
+            <span class="article-author">Автоматчик</span>
+          </div>
+          <h1 class="article-title">Миграция с AVEVA на Альфа платформу в нефтедобыче: как мы это делали</h1>
+          <p class="article-subtitle">AVEVA ушла из России — лицензии не продлить, обновлений нет, поддержки нет. На промыслах Западной Сибири десятки диспетчерских пунктов работают на InTouch и System Platform, и часы тикают. Мы прошли несколько таких миграций — с AVEVA на Альфа платформу. В этой статье — наш практический опыт: что получилось, где споткнулись и что бы сделали иначе.</p>
+        </header>
+
+        <div class="article-body">
+
+          <h2 id="что-стояло-и-что-ставили">Что стояло и что ставили</h2>
+
+          <p>Первый шаг — честная инвентаризация. На каждом объекте мы составляли карту: какие компоненты AVEVA реально работают, а какие «стоят на всякий случай».</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Компонент AVEVA</th>
+                <th>Что поставили</th>
+                <th>Почему именно это</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>InTouch / System Platform</td>
+                <td><strong>Alpha.HMI 2.0</strong></td>
+                <td>Единый дизайнер + визуализатор, скрипты на Alpha.Om и JS</td>
+              </tr>
+              <tr>
+                <td>AVEVA Historian</td>
+                <td><strong><a href="historian-licensing.html">Alpha.Historian 4.0</a></strong></td>
+                <td>800 000 записей/с на запись, LZMA-сжатие, работает на Linux</td>
+              </tr>
+              <tr>
+                <td>OI Server / DAServer</td>
+                <td><strong>Alpha.Server 6.4</strong></td>
+                <td>Встроенные IEC 104, Modbus — без OPC-прослойки</td>
+              </tr>
+              <tr>
+                <td>Alarm Provider</td>
+                <td><strong><a href="alarms.html">Alpha.HMI.Alarms 3.3</a></strong></td>
+                <td>Квитирование, подавление, агрегатор по веткам</td>
+              </tr>
+              <tr>
+                <td>AVEVA Reports</td>
+                <td><strong>Alpha.Reports 1.1</strong></td>
+                <td>Конструктор + планировщик + веб-интерфейс</td>
+              </tr>
+              <tr>
+                <td>Galaxy (объектная модель)</td>
+                <td><strong>Alpha.DevStudio 4.1</strong></td>
+                <td>Типизация, CLI для массовых операций, SVN/Git</td>
+              </tr>
+              <tr>
+                <td>InTouch Web</td>
+                <td><strong>Alpha.HMI.WebViewer 2.0</strong></td>
+                <td>Браузер, WebSocket, без клиентского ПО</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Ключевое архитектурное отличие (см. также статью об <a href="oil-refinery.html">автоматизации НПЗ</a>), которое мы оценили только в процессе: в AVEVA каждый компонент — отдельный продукт с отдельной историей. InTouch и Historian — разные кодовые базы. Альфа платформа — единая среда с общим протоколом Alpha.Link. На практике это значит меньше точек интеграции и меньше мест, где что-то может сломаться.</p>
+
+          <h2 id="аудит">Аудит: 2–3 недели, которые экономят месяцы</h2>
+
+          <p>На одном из первых проектов мы пропустили детальный аудит скриптов InTouch. Думали — «мнемосхемы простые, скриптов немного». Оказалось, что в QuickScript было зашито 40% логики сигнализации. На переписывание ушло три лишние недели.</p>
+
+          <p>С тех пор аудит — обязательный первый этап:</p>
+
+          <p><strong>Сигналы.</strong> Выгружаем полный реестр из Galaxy Repository (<code>aaDumpData</code>) или из InTouch (CSV через WindowMaker). Типовой промысел — 10 000–30 000 тегов: 60–70% дискретных, 25–35% аналоговых, остальное — служебные.</p>
+
+          <p><strong>Коммуникации.</strong> Документируем каналы: IEC 104 с кустов, Modbus TCP к локальным ПЛК, OPC DA к сторонним системам. Фиксируем адреса, циклы опроса, тайм-ауты. И тут первый приятный момент: Alpha.Server 6.4 имеет встроенные модули IEC-104 Master и Modbus TCP Master (полный список — в статье о <a href="protocols.html">промышленных протоколах</a>). Сторонние OPC-серверы (MatrikonOPC, KEPServerEX) — больше не нужны. Цепочка «RTU → OPC-сервер → SCADA» сокращается до «RTU → Alpha.Server».</p>
+
+          <p><strong>Скрипты и мнемосхемы.</strong> Считаем экраны, оцениваем объём QuickScript. Автоконвертация из InTouch невозможна — форматы несовместимы. Но это не страшно: это возможность переделать мнемосхемы нормально.</p>
+
+          <h2 id="проектирование">Проектирование: типизация решает</h2>
+
+          <p>Вот где Альфа платформа по-настоящему экономит время. В DevStudio мы строили иерархию объектов промысла и создавали <strong>типы</strong> — аналог ArchestrA Templates в Galaxy, но проще.</p>
+
+          <p>Тип «Скважина ЭЦН» — это объект с 42 сигналами, формулами, привязками к IEC 104 и уставками тревог. Создаётся один раз. Для 200 скважин — 200 экземпляров одного типа с разными адресами. Тиражирование занимает минуты.</p>
+
+          <p>Разница с AVEVA: в Galaxy шаблон привязан к конкретному типу объекта (AppEngine, Area, DIO). В DevStudio все объекты равноправны — нет деления на «платформенные» и «пользовательские».</p>
+
+          <h2 id="историан">Историан: не потерять данные и не потерять голову</h2>
+
+          <p><a href="historian.html">Alpha.Historian 4.0</a> — собственный NoSQL TSDB, не требующий внешних СУБД. Вот что нас впечатлило:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>AVEVA Historian</th>
+                <th>Alpha.Historian 4.0</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Скорость записи</strong></td>
+                <td>Зависит от конфигурации</td>
+                <td>800 000 записей/с</td>
+              </tr>
+              <tr>
+                <td><strong>Скорость чтения</strong></td>
+                <td>Зависит от конфигурации</td>
+                <td>1 600 000 записей/с</td>
+              </tr>
+              <tr>
+                <td><strong>Сжатие</strong></td>
+                <td>Swinging Door (lossy)</td>
+                <td>LZMA (lossless, коэфф. 0.2–0.5)</td>
+              </tr>
+              <tr>
+                <td><strong>ОС</strong></td>
+                <td>Только Windows</td>
+                <td>Windows + Linux</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Важный нюанс: AVEVA Historian теряет точки уже при записи (Swinging Door — lossy-сжатие). Alpha.Historian хранит всё и сжимает на уровне файлов. Мы пересматривали deadband для каждого проекта: для промысловых сигналов 0.5–1% от диапазона и интервал 1–5 секунд — оптимальный баланс.</p>
+
+          <p><strong>Что делать со старыми архивами?</strong> Мы оставляли AVEVA Historian в режиме «только чтение» на 6–12 месяцев, параллельно записывая новые данные в Alpha.Historian. Для критичных сигналов потом перегоняли историю через OPC HDA Client.</p>
+
+          <h2 id="резервирование">Резервирование: журнал транзакций</h2>
+
+          <p>Для нефтедобычи резервирование сервера — не опция, а требование. Мы были приятно удивлены тем, как это реализовано в Альфа платформе.</p>
+
+          <p>Master-Slave репликация построена на <strong>журнале транзакций</strong> — центральном тракте, через который проходят все события Alpha.Server. Журнал непрерывно реплицируется с Master на Slave. Slave не дублирует вычисления — только принимает результаты. Это экономит ресурсы и исключает расхождение состояний.</p>
+
+          <p>При штатном переходе новый Master продолжает с позиции, следующей за последней обработанной старым. Инициализация на типовых конфигурациях (десятки тысяч сигналов) — доли секунды. За всё время эксплуатации мы ни разу не наблюдали потери данных при штатных переходах.</p>
+
+          <p>Дополнительно — <strong>файловая буферизация</strong> между узлами. При разрыве связи между Alpha.Server и Historian данные копятся в локальном буфере на диске и отправляются после восстановления. На промыслах с нестабильными каналами (радиорелейка, спутник) этот механизм спасал многочасовые архивы.</p>
+
+          <h2 id="тревоги">Тревоги: гибче, чем в AVEVA</h2>
+
+          <p>Alpha.HMI.Alarms 3.3 оказался серьёзным шагом вперёд. Помимо стандартных уставок HiHi/Hi/Lo/LoLo, мы использовали:</p>
+
+          <ul>
+            <li><strong>Логические условия</strong> на Alpha.Om — «давление на выходе насоса &lt; давления на входе + 0.5 МПа И насос в работе». В AVEVA для этого пришлось бы городить расчётный тег + alarm limit.</li>
+            <li><strong>Подавление (shelving)</strong> — при ремонте куста одной кнопкой убираем десятки тревог от отключённого оборудования. С логированием: кто, когда, на какой срок.</li>
+            <li><strong>Агрегатор</strong> — на общем плане промысла каждый куст = один индикатор: зелёный / жёлтый / красный. Диспетчер видит картину целиком, не листая экраны.</li>
+          </ul>
+
+          <h2 id="параллельная-работа">Параллельная работа и переключение</h2>
+
+          <p>Переключение «в один день» на промысловом объекте — неприемлемый риск. Наш алгоритм:</p>
+
+          <ol>
+            <li>Alpha.Server подключается к тем же RTU параллельно — IEC 104 допускает несколько Master.</li>
+            <li>Данные пишутся в оба историана 2–4 недели.</li>
+            <li>Диспетчеры обучаются на второй станции (Alpha.Imitator с реальными данными).</li>
+            <li>Переключение после подтверждения корректности.</li>
+          </ol>
+
+          <div class="warning-box">
+            <div class="warning-box-title">Подводный камень</div>
+            <p>Некоторые старые RTU поддерживают ограниченное число TCP-соединений. Проверяйте спецификацию каждого RTU заранее.</p>
+          </div>
+
+          <p>Для Modbus — сложнее: протокол не предусматривает двух Master на одной шине. Мы использовали OPC-сервер как промежуточный слой на переходный период.</p>
+
+          <p>Развёртывание через CLI:</p>
+
+          <pre><code>devstudio.cli.exe build --solution "Промысел.asln" --config Release
+devstudio.cli.exe deploy --target 192.168.1.10 --config Release
+devstudio.cli.exe deploy-commit --target 192.168.1.10
+# Откат при проблемах:
+devstudio.cli.exe deploy-rollback --target 192.168.1.10</code></pre>
+
+          <h2 id="linux-и-кии">Linux и КИИ: два зайца одним выстрелом</h2>
+
+          <p>Нефтедобывающие объекты — КИИ по ФЗ-187. Переход на Альфа платформу позволяет одновременно решить две задачи импортозамещения:</p>
+
+          <ul>
+            <li><strong>SCADA</strong>: AVEVA → Альфа платформа (в реестре российского ПО)</li>
+            <li><strong>ОС</strong>: Windows → Astra Linux / РЕД ОС / Альт</li>
+          </ul>
+
+          <p>AVEVA на Linux не работает. Alpha.Server и Alpha.Historian — работают. Плюс отсутствие зависимости от COM/DCOM: Alpha.Link — чистый TCP, проще настраивать межсетевые экраны, нет DCOM-портов как вектора атаки.</p>
+
+          <h2 id="сроки-и-команда">Сроки и команда</h2>
+
+          <p>Наша оценка для типового объекта (20 000 сигналов, 150 кустов, ДНС, УПН):</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Этап</th>
+                <th>Длительность</th>
+                <th>Люди</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Аудит</td>
+                <td>2–3 недели</td>
+                <td>1–2 инженера</td>
+              </tr>
+              <tr>
+                <td>Проектирование</td>
+                <td>4–6 недель</td>
+                <td>2 инженера + проектировщик</td>
+              </tr>
+              <tr>
+                <td>Мнемосхемы</td>
+                <td>6–8 недель</td>
+                <td>2–3 HMI-разработчика</td>
+              </tr>
+              <tr>
+                <td>Historian + Reports</td>
+                <td>2–3 недели</td>
+                <td>1 инженер</td>
+              </tr>
+              <tr>
+                <td>Тестирование</td>
+                <td>3–4 недели</td>
+                <td>2 инженера + тестировщик</td>
+              </tr>
+              <tr>
+                <td>Параллельная работа</td>
+                <td>2–4 недели</td>
+                <td>1 инженер на объекте</td>
+              </tr>
+              <tr>
+                <td><strong>Итого</strong></td>
+                <td><strong>5–7 месяцев</strong></td>
+                <td><strong>4–6 человек</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Каждый следующий ДП мигрировал быстрее предыдущего — типовые решения из первого проекта тиражировались.</p>
+
+          <h2 id="что-вынесли-из-опыта">Что вынесли из опыта</h2>
+
+          <ul>
+            <li><strong>Аудит — не формальность.</strong> 2–3 недели на инвентаризацию экономят месяцы.</li>
+            <li><strong>Типизация — главный ускоритель.</strong> Один тип «Кустовая площадка» на 200 экземпляров.</li>
+            <li><strong>Не копировать, а проектировать.</strong> Миграция — шанс упростить архитектуру.</li>
+            <li><strong>Параллельная работа обязательна.</strong> IEC 104 позволяет два Master — используйте.</li>
+            <li><strong>Начинайте с пилота.</strong> Один ДП (10–20 кустов), полный цикл, потом тиражирование.</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Ссылки</div>
+            <p>Альфа платформа — <a href="https://automiq.ru" style="color:var(--volt);text-decoration:none">automiq.ru</a></p>
+            <p>К. Силкин. Альфа платформа: обзор архитектуры и возможностей использования // Control Engineering Россия, №1(100), 2023</p>
+            <p>Д. Ракитин, Е. Вертопрахова. Среда исполнения Альфа платформы: новые механизмы и модель резервирования // CE Россия, №1-2(105), 2024</p>
+            <p>IEC 60870-5-104:2006 — Telecontrol equipment and systems</p>
+            <p>ФЗ-187 «О безопасности критической информационной инфраструктуры РФ»</p>
+            <p><em>Альфа платформа — продукт АО «Атомик Софт», входит в Единый реестр российского ПО.</em></p>
+          </div>
+
+        </div>
+
+<div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Рассматриваете миграцию с AVEVA?</div>
+  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Поможем с оценкой объекта, проектированием и переходом на Альфа платформу</div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Узнать больше об Альфа платформе</a>
+    <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Рассчитать стоимость</a>
+  </div>
+</div>
+
+<div style="margin-top:32px">
+  <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="devstudio-migration.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Перенос проектов Alpha.DevStudio с Windows на Astra Linux</a>
+    <a href="crossplatform.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Кроссплатформенность: Linux и Windows</a>
+    <a href="architecture.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Архитектура Альфа платформы</a>
+  </div>
+</div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#что-стояло-и-что-ставили">Что стояло и что ставили</a></li>
+              <li><a href="#аудит">Аудит: экономим месяцы</a></li>
+              <li><a href="#проектирование">Проектирование: типизация</a></li>
+              <li><a href="#историан">Историан: данные</a></li>
+              <li><a href="#резервирование">Резервирование</a></li>
+              <li><a href="#тревоги">Тревоги</a></li>
+              <li><a href="#параллельная-работа">Параллельная работа</a></li>
+              <li><a href="#linux-и-кии">Linux и КИИ</a></li>
+              <li><a href="#сроки-и-команда">Сроки и команда</a></li>
+              <li><a href="#что-вынесли-из-опыта">Что вынесли из опыта</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="devstudio-migration.html" class="related-item">
+                <div class="related-item-title">Перенос DevStudio: Windows → Astra Linux</div>
+                <div class="related-item-meta">Гайды · 12 мин</div>
+              </a>
+              <a href="crossplatform.html" class="related-item">
+                <div class="related-item-title">Кроссплатформенность Альфа платформы</div>
+                <div class="related-item-meta">Платформы · 6 мин</div>
+              </a>
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="hmi.html" class="related-item">
+                <div class="related-item-title">Alpha.HMI 2.0: визуализация</div>
+                <div class="related-item-meta">Визуализация · 15 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
+
+</body>
+</html>

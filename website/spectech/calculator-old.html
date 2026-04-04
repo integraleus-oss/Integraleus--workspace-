@@ -76,7 +76,8 @@
 :root.theme-light body {
   color: var(--text);
 }
-:root.theme-light body::before {
+:root.theme-light section,.container,.page,.product-hero,.product-tabs-nav,footer,.tabs,.contact,.cta-section,.partners,.certificates,.technologies,.catalog{position:relative;z-index:2}
+body::before {
   background-image:
     repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(0,40,80,0.2) 60px),
     repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(0,40,80,0.2) 60px);

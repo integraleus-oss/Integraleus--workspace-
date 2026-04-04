@@ -1,0 +1,2171 @@
+UX/UI
+Design 2022
+A Comprehensive UI & UX Guide to Master Web
+Design and Mobile App Sketches for Beginners and
+Pros
+
+Carl Jones
+OceanofPDF.com
+
+Copyright
+Copyright©2022 Carl Jones
+All rights reserved. No part of this book may be reproduced or used in any
+manner without the prior written permission of the copyright owner, except
+for the use of brief quotations in a book review.
+While the advice and information in this book are believed to be true and accurate at the date of
+publication, neither the authors nor the editors nor the publisher can accept any legal responsibility
+for any errors or omissions that may be made. The publisher makes no warranty, express or implied,
+with respect to the material contained herein.
+Printed on acid-free paper.
+
+Printed in the United States of America
+© 2022 by Carl Jones
+OceanofPDF.com
+
+Table of Contents
+CHAPTER ONE
+What is Design?
+How is Design Related to Technology?
+What is UI/UX Design?
+Difference between UI Design and UX Design
+Opportunities for UI/UX Designers
+User Persona for UX Design
+Types of User Personas
+Creating Personas
+Components of a Persona
+User Research for UX Design
+Quantitative UX Research
+Qualitative UX Research
+Attitudinal vs. Behavioral Research
+Method Types
+User Research in the Design Process
+User Flow in UX Design
+Creating User Flow
+Wireframes in UX Design
+CHAPTER TWO
+UI Design: Visual Design Principles
+Understanding Design Thinking
+Concept of Empathy in UX/UI Design
+Mindful Users Surveys and Interviews
+Creating mindful personas
+
+Designing Mindful Interfaces
+Tools for UI Designs
+Lucidchart
+Adobe XD
+Figma
+Webflow
+Things to Note While Using UI Tools
+Creating Wireframes
+Starting Out
+Adding Details
+Digital Wireframe & Usability Tests
+How to Use Balsamiq to Create Wireframes
+Overview of Balsamiq
+Creating a Simple Wireframe in Balsamiq
+CHAPTER THREE
+Typography of UI Design
+Why Typography Matters
+Application of Typesetting
+What to consider in Typography
+Applying Contrasts
+Classification of Typefaces
+Scripts
+Selecting and Using Typefaces
+Font Formats
+Using a Typeface
+Text Typeface
+Display Typeface
+
+Translating Text to Display
+Fonts Weighting and Styles on Figma
+CHAPTER FOUR
+Designs System and FIGMA
+Why have a Design System?
+Popular Design Systems
+Material Design
+Human Interface Guidelines
+Atlaskit
+Lightning
+Polaris
+Using Figma
+Setting up a Figma Account
+Getting Started
+Creating a Frame
+Creating Shapes and Color
+Corner Radius Adjustment & Circle
+Using Icons and Images
+Figma Community
+CHAPTER FIVE
+Psychology of Colors in UI Designs
+Color Psychology
+The Golden Ratio Rule
+Color Rules in UI Design
+What to Consider when Choosing Colors
+Color Palettes
+Studying the Color Wheel
+
+Contrast is Crucial
+CHAPTER SIX
+Grid System in UI Designs
+12 Column Grid
+Breaking the Grid
+UI Modes and Modals
+About The Author
+OceanofPDF.com
+
+CHAPTER ONE
+What is Design?
+Design may be a common word used in various spaces but it is more
+significant than we assume. In simple terms, design is thinking and solving
+a problem in the most practical manner. It is taking a good look and
+function of something before it is created or publicized. Design in a more
+solid term, is the creative process that organizes and presents information
+for a specific purpose.
+Before you design a craft, you must first comprehend the information or
+message, and then research, envision, and develop and produce a solution
+or a concept to communicate that information or tell a story vividly. We can
+only use our skills in line with layout, color, typography, and other creative
+tools to bring our vision to life once we have a strong idea that has been
+established through the design process.
+Since the invention of the print press, which enabled production on a mass
+scale, graphic design has been used to communicate and spread messages
+across the globe. Through the evolution of technology today, we are
+surrounded by an abundance of visual communication.
+Today, design (graphic design in particular), is implemented across a broad
+spectrum of media both print and digital such as: advertising, branding, web
+design, interface design, magazine layout, paper engineering and
+packaging, TV, motion graphics, infographics, signage, art and installations,
+and digital arts. If you are looking to pursue a career in design, you will
+inevitably end up creating work across one of those sectors.
+
+How is Design Related to
+Technology?
+The relationship between design and technology is fundamentally about
+converting ideas and raw materials into the products and services that are
+needed for our daily activities. Everything around us has been designed
+from the user interface of our latest digital app, to the car we drive, the
+clothes we wear, the buildings we live or visit, to the TV programs – they
+have all been designed.
+Advancements in recent technologies have resulted in changes in
+approaches and adaptation. These technologies have infiltrated every aspect
+of our lives, as well as the way we solve challenges. On a cultural level, we
+see trends collide as a reflection of global events. This is also applicable in
+design, which manifests itself as a kaleidoscope of colors and materials that
+modify our surroundings in unexpected ways.
+
+What is UI/UX Design?
+
+The term UX/UX is becoming a popular term in the design industry and
+picking up steam as one of the elite skills to have in the 21st century.
+UI/UX on the surface of value is essentially understanding the customer and
+designing an experience that covers various different aspects such as tech,
+and understanding the requirement of a user or customer.
+UI which stands for User Interface is one part of the user experience. It is
+one of the touch points that a customer interfaces with – what they see and
+what they interact with regardless of whatever medium is used to interact.
+The interface, which communicates the brand or product or service to the
+customer, is the User Interface (UI). As a result of its essentiality in terms
+of communicating to your target audience, UI plays a huge role in the
+communication of the service of the product or service to the customer.
+
+The optimal advantage of a good user interface is visualization. What is
+seen on the design interface (the visual aspect) is the UI design. In addition,
+it is accompanied by the visual presentation, text and how it is read and
+comprehended. The general customer is naturally not accustomed with
+reading or assimilating a whole lot of information. This means that giving
+the content hierarchy by visualizing it, making it legible and easy to
+understand are the most important decisions that need to be taken while
+defining a user interface.
+On the other hand, UX which stands for User Experience, encompasses the
+entire process of purchasing or integrating a product. This spans through
+branding, design, product use and function. The process begins before the
+
+product is finally made available to the users or customers. It is that part of
+the design that takes into perspective sets of experiences that are integrated
+from the stage of reflection to the point when the product or service gets to
+the user.
+
+In UX design, you need to be able to take control of the entire customer
+journey; having an understanding of the various factors that play vital parts
+in the experience. This entails being involved in the marketing and research
+and defining the experience for the user or customer. The User Experience
+design is clearly in contrast to the User Interface design, which concentrates
+on the interface of the product or service alone. This is not to say that a UI
+designer cannot get involved in marketing research and user
+conceptualization. However, the journey of the UI designer begins at the
+visualization stage where they make the interface intuitive and easy to use.
+
+Difference between UI Design and
+UX Design
+In simple terms, UI design or User Interface design is about the aesthetic
+experience of a product or service, while UX design or User Experience
+design is about designing the whole experience of a product or service from
+conceptualization to purchase.
+For instance in a mobile app, a UX designer prior to the app being designed
+has decided what features would be in that product, how they work and how
+
+you feel while using them. On the other hand, a UI designer would have
+also taken part in designing that mobile app, but they would be thinking
+about how things should look from the purview of aesthetics and layout
+while the app is being engaged.
+If Netflix was just getting started today and seeks to hire people to push
+their service, they would want to hire a UX designer to help understand and
+decipher new ways for users to watch movies. In addition, they would hire
+UI designers to visually represent those new ways of watching in a way that
+is easy for people to interact with.
+
+Although both designers work really closely, the UX designer is saddled
+with the role of understanding people’s behavioral patterns and needs,
+coming up with concepts and new ways of addressing those needs, and
+giving them new ways to make their movie streaming experience easier.
+They are designing the experience of watching movies with Netflix. The UI
+designer, on his part, takes all of that information but is purely focused on
+the visual representation of those features, ideas, and tools. They lay them
+out and visually represent them so that users can see how they use what
+they have created easily.
+
+The skills that you learn as a user interface designer are more specific to
+typography, layout and the finer or visual aspects of a design (product or
+service). Notwithstanding, as a user experience designer, it is good to have
+this understanding but you need to be able to locate the larger picture by
+understanding the customer better and defining the roadmap for the product
+or services.
+
+Opportunities for UI/UX Designers
+A holistic look at businesses, products or services today, put all of them at a
+forefront of the digital movement – several businesses in America today
+own digital interfaces. The minute a business owns a digital interface, the
+requirement for having a UI or a UX designer arises.
+In recent years, this has heavily evolved. There was initially the thought
+that having the design tech alone would provide an interface, which would
+be enough for users. However, as a result of the intense competition
+between businesses, people have realized that the UI or UX designer can
+add enough value to enhance a business or take it to the next level.
+UI/UX design is now becoming a term that businesses and companies are
+paying more attention to and are always trying to look beyond just the
+technology. There is the realization now that the UX is just as integral as the
+UI and businesses are beginning to understand that the design plays a role
+from the initial stage of a product and this role has become in-depth with
+more insight than usual.
+
+User Persona for UX Design
+In UX designs, personas are fictitious users with fake image and name, but
+show the goals and behaviors of your real users. They are fictitious, yet
+realistic and detailed descriptions of the users of your product who exhibit
+similar attitudes, goals, and behaviors in relation to your product. Usually,
+personas are extracted from User Interviews. There could be multiple
+personas based on work roles.
+Personas help to shape the design towards the goals and personality of the
+user while keeping in mind the pain points of the user. They are printed and
+
+hung in front of the design and development team for better alignment with
+user goals.
+UX personas are more robust when paired with an empathy. This way,
+professionals can get in the shoes of the people that are designing for by
+keeping the user journey in mind. Before getting ahead to create UX
+personas it is important to get a hang of why you need a persona to design a
+tech product:
+▪
+
+To Help You Make Design and Feature Choices: Personas help you
+determine who you are creating the product and service for. This
+allows you to be able to navigate design and feature decisions to meet
+the needs, motivations and desires of core customers.
+
+▪
+
+To Communicate Consumers’ Need Properly to Designers: In
+addition to making design choices, by creating personas, you will also
+be able to settle disputes among product and design teams, since you
+will have a better way of understanding your primary customers’
+needs and expectations.
+
+Types of User Personas
+There are two main types of user personas: Marketing Personas and UX
+Personas.
+1. Marketing personas: Marketing personas are created using market
+research from your current customers and are valuable for segmenting
+and targeting.
+2. UX Personas: UX Personas are created to help product teams
+empathize with a real group of people to understand their goals and
+aspirations. UX personas are created from various research methods
+and are used to drive product user experience.
+While it may be tempting to construct a large number of UX personas, it is
+crucial that you stick to one or two. This can be a little far fetched because
+you may feel like your product users have so many different behaviors and
+motivations, so they should each have a different persona. However, a
+
+persona is a combination or aggregation of those behaviors and motivations.
+In light of this, one or two personas should represent a larger group.
+Furthermore, it is important to note that creating too many personas can
+allow your team to lose focus on the most pertinent part of your core user
+group that the persona is meant to represent. If you have five personas, for
+example, it may be too difficult for you to keep all of them in mind while
+making decisions. In addition, your team may have a hard term referencing,
+let alone recalling, those personas on a day-to-day basis.
+
+Focusing on one or two personas allows your team to develop empathy for
+them. User researchers, designers and product managers are aware that
+empathy is the key to designing world-class products.
+
+Creating Personas
+In order to create accurate personas, your personas must be based on
+research. Research is used to understand the shared behavior and needs
+among your product users. It is highly recommended that you speak to at
+least five users per product type. For example, if it is identified that your
+business needs two personas, you should speak to at least five users for
+each persona type – 10 users total.
+Ideally, you should conduct moderated research sessions. The benefit of a
+moderated session is that you have a discussion guide to guide the
+
+conversation. Consequently, you will then have the ability to sidetrack and
+ask follow-up questions to unravel relevant details.
+If your business or the business you are designing for does not have the
+time or the budget to complete the full research, you can always begin with
+the persona that is based on assumptions, competitor analysis or internal
+stakeholder interviews.
+Look for trends, personalities, qualities, and traits that the participants share
+when examining the findings of the moderated interviews. For instance, if
+you notice that your participants mentioned that they do not trust companies
+to protect their data and have recently stopped using social media because
+they are increasingly concerned with personal security, it is a good data
+point to add to your persona.
+It is also worth noting that the purpose of designing personas is to assist
+product and business teams in focusing on their consumers' goals and
+needs. Personas, when used effectively, can assist the team in resolving
+design and feature issues. This way, the team is able to focus on the wants
+and needs of their core persona rather than their own personal views about
+the design questions at hand while making these selections.
+
+Components of a Persona
+Image: In selecting an image, you must keep in mind that it should be a real
+individual – someone who represents your target customer. Rather than a
+celebrity or a cartoon, use someone that represents the age, gender and
+personality of your persona.
+Name: Giving your persona a name is the next step. Your persona is a
+reflection of your primary user, thus, it is critical to give it a name. When it
+comes to design and feature decisions, you should think of them as a real
+person with thoughts, feelings, and behaviors to which you can relate. The
+name adds a human element and creates a storyline narrative to aid problem
+solving.
+Bio & Quote: Next, give you a short bio based on the research you
+conducted. You can use personal and employment data points that were
+shared during your interviews. On the other hand, a quote for your person
+
+should be included. Your quote can be a quick snapshot of their personality
+or something that is important to them.
+Brand: You should include different brands that represent your persona.
+These brands allow you to add contacts to your persona and will act as your
+mood board. When you look back at your persona at a later date, those
+brands can help trigger empathy for your persona.
+Behaviors: Next, you should add beliefs and behaviors. These behavior
+patterns will help unravel a lot about your personas attitudes towards
+different situations.
+Goals: The next thing you should outline is your persona’s goals. It is
+pertinent to understand their aspirations since you want your product or
+service to fit into these goals.
+Pain points: Next, you should attempt to understand their pain points. What
+things frustrate your persona? Once you understand their frustrations, you
+can solve for them and build better products that fit their needs.
+Personality: While including personality is a great touch, it is not
+completely necessary.
+Motivations: Next, you should include what inspires or drives your
+personas. It can be beneficial to show this in a more visual way.
+
+User Research for UX Design
+The deliberate process of gathering insights about your users in order to
+make accurate and smart design decisions is what is referred to as UX
+Research. It ensures a user-centric approach and is key to defining the right
+problem statement and coming up with effective solutions.
+Using the most-appropriate research methods, the needs, goals and pain
+points of your users will be unearthed. UX research also allows you to
+validate and invalidate your assumptions and continuously test the usability
+of your design.
+When opting for a research method, it is important to consider the kinds of
+outcome that each can deliver. The data gathered throughout the research
+process may be qualitative or qualitative, and attitudinal or behavioral.
+
+Quantitative UX Research
+Quantitative data is anything that can be measured. Quantitative approaches
+allow you to quantify your product or service's usability. Furthermore, they
+enable you to compare different designs and see if one performs much
+better than the other.
+
+Qualitative UX Research
+Qualitative research focuses on the motivations or reasons for the behavior
+of users. Quantitative data is more rigid, whereas qualitative data is more
+descriptive and open-ended.
+Another distinction that could be made is the data collection methods used
+in qualitative and quantitative studies. Qualitative research is based on
+direct observation. You may, for example, get information on users'
+behaviors or attitudes by watching them in action. Quantitative studies, on
+the other hand, could use an online survey to collect data.
+
+Attitudinal vs. Behavioral Research
+When conducting UX user research, you will also make a distinction
+between attitudinal and behavioral research. This takes into perspective the
+distinguishing feature between what people say and what they do.
+Attitudinal research gets the user to report certain information about
+themselves. This helps to understand people's stated beliefs, expectations
+and expectations. For example, you might conduct an interview with a user
+to find out their opinions on certain concepts or to discover their
+motivations for using a certain app. This research is particularly used for
+gleaning insight that would not be apparent when observing the user. In the
+event that your user would like a specific feature to be added, they can tell
+you this through their interaction with a product and its current state.
+Behavioral research, which is often termed the holy grail of UX research,
+refers to any direct observation method and seeks to understand what
+people do in a given situation. Direct observation is incredibly beneficial
+since it provides an accurate picture of how people interact with your
+product in the actual world. A/B testing and eye tracking, for example, can
+
+show you exactly which action a user does when presented with a specific
+layout.
+
+Method Types
+A/B Testing; A/B testing is a quantitative behavioral research method used
+to compare two different design options.
+Surveys and Questionnaires: This method is an extremely flexible
+technique for collecting both quantitative and qualitative data. Surveys and
+questionnaires are attitudinal in nature as they are based on what the user
+says.
+Card Sorting: Card sorting is a quantitative research method used for
+determining information architecture labels and structure.
+Eye Tracking: This is another quantitative method used to collect
+behavioral data. Using special equipment you will track users’ eyes as they
+move around an interface.
+Diary Studies: Here, users discuss and describe certain aspects of their
+daily lives that are relevant to the products you are designing.
+Interviews: User interviews are a qualitative attitudinal technique where
+you will engage with the user one-on-one at a face-to-face or via video.
+
+User Research in the Design Process
+When you're just starting out, you'll want to concentrate on getting to know
+your users and the problem at hand. Your purpose at this point in the design
+process is to look for fresh ideas and directions. Typically, designers will
+use a mixture of both qualitative and quantitative methods such as still
+studies, diary studies, surveys and data mining.
+Once you have established the direction for your design, you will move into
+the building or execution phase. In terms of user experience research, the
+emphasis will now be on analyzing your designs and ensuring that they are
+meeting the needs of your users.
+At this point, your research methods will be aimed at improving the
+usability and optimization of your designs. You will mostly use qualitative
+methods such as card sorting, usability studies and desirability studies.
+
+Once you have finalized your designs and you have a working product, you
+will want to gauge how well it performs. This may be in comparison to the
+previous version of the product or a direct competitor. To do this, your
+focus will mainly be on quantitative UX research methods sure as usability
+benchmarking, surveys and A/B testing.
+Throughout the product development process, new questions or areas of
+investigation will arise. Whenever you decide to conduct fixed research, it
+is vital to determine specific objectives and then choose the research
+methods that best serve these.
+Whatever method you have decided to opt for, it is also important to be
+mindful about conducting both qualitative and quantitative research
+together. Note that you cannot skip one in favor of the other. A good
+mixture of both methods will help you paint a full picture and ultimately
+avoid misleading conclusions.
+A qualitative interview, for instance, will give you great insight into your
+user. However, unless you verify these findings later on with quantitative
+methods, you can be sure if your observations relate to just a single person
+or a large group of people. This is also the same for quantitative data. It is
+great to have all the data in your possession, but unless you understand the
+meaning behind it, you cannot use it to its optimal potential.
+
+User Flow in UX Design
+A user flow in the UX design space helps visualize the path taken by a
+customer or user on a website or app to complete a task. The user flow
+takes them from an entry point through a set of steps towards a successful
+outcome in final action such as purchasing products.
+The user flow shown below is an ecommerce flowchart example.
+Essentially, what this showcases is the actual flow of a user when they are
+on an e-commerce website and they are trying to purchase a product. As
+depicted, they will be starring on the homepage, and then they go and look
+at a product they are interested in. In addition, they can view images, read
+the description of the product and might take action and add that product to
+their cart or wish list. They might also exit the shop there or continue
+shopping.
+
+A user flow can be used to communicate to your team the end-to-end view
+of a customer’s journey and attaining their goal. It is broken down step by
+step in a way that is easy for your broader team, development or project
+managers, stakeholders to understand. Additionally, it shows where your
+team can optimize certain areas within their app, platform or experience.
+
+Creating User Flow
+To create a user flow, it is important that you put into consideration three
+vital factors:
+▪
+▪
+▪
+
+Who they customer is and denomination do they represent
+What the goals and objectives of the customer are
+What the required steps are for the customer or user to achieve their
+goals
+
+Creating user flows is all about breaking down and reverse engineering
+each possible step and option a user can take in attempting to accomplish
+their goal. This way, you can help and account for ways to help them in
+getting to their goal a little bit easier and faster.
+
+Wireframes in UX Design
+
+In UX designs, wireframes are commonly used to layout content and
+functionality on a page, which takes into account the controls of the page,
+what the user ultimately needs and what would be the user’s journey from
+start to finish. All of this helps you establish in your research what you have
+done before, so you know what the user is going to need and what their
+journey through the product is going to look like.
+The aim of a wireframe is to provide a visual understanding of an app or
+website page. Think of it as the skeleton or bare bones of your final design.
+They loosely shape the final product, giving you reliable ideas of where
+everything will eventually go. It would also provide you with a base so that
+you can do usability tests on your real users.
+There are low fidelity wireframes, which means they are very simple,
+minimal and most importantly static – they do not include any interactions
+or animations. On the other hand, high fidelity wireframes are usually more
+complex and require using a specific tool. They are, however, not yet
+clickable or interactive. Once you have completed the wireframe phase, you
+are ready to move on to prototyping.
+
+With your wireframe, you do not need to worry about things like the color
+scheme, type of fonts, or imagery to use. All you need to get is the
+fundamentals on a page. You can decide what elements to include, the
+position on the page and how they will interact with each other.
+Wireframes can be designed both on a pen on paper or digitally. Some
+designers prefer pen on page as it is easy to sketch all your thoughts on
+paper, while others prefer to go down the digital route so that they can share
+and collaborate with their team much easier.
+Programs used for digital wireframing can include - but not limited - Adobe
+Xd, Figma, and UXPin.
+OceanofPDF.com
+
+CHAPTER TWO
+UI Design: Visual Design Principles
+Design principles are guiding stars for designers. They ensure designers
+make the best decisions for their users and for the product or the service
+they are working on. The design principle is essentially a value statement
+that is tied to the goals of the product or service. This includes what it wants
+to achieve for users and the overall objective of the design.
+Design principles should not be mistaken for team mottos or manifestoes.
+Mottos do not help designers know what to do in a given situation where
+they need to make a trade-off time decision. Instead, design principles need
+to be clear about what they advocate and why. They should take a stand on
+which value will trump others. In addition, they should inspire empathy for
+the user, because after all, that is whom you are designing for.
+When designers have design principles to refer to, it is more likely that they
+will make decisions that help products and services meet the desired goal.
+In addition, they will less likely make decisions based on their own personal
+preference.
+More importantly, design principles are only useful if they are being used.
+If you do not have a design principle, create them with others rather than
+creating them on your own. Design principles are more likely to be
+accepted and remembered if others have had a hand in creating them. Once
+created, don’t let them build dust, socialize them.
+
+Understanding Design Thinking
+Design thinking can be explained in two ways. The first being just a
+mindset: it is an ideology of approaching every problem in a user-centered
+way. Where the complexity comes in is in the second part of that definition
+which is a six-step process.
+These six steps are instituted to help you practice that ideology of usercentered design.
+Empathize: Here, you want to pull qualitative data like user interviews,
+direct observation, contextual inquiry, diary studies and what your real
+users need.
+Defining: A lot of people think about coming up with ideas in the opposite
+way. They come with a ton of different ideas and then narrow. Design
+thinking flips this on its head. It stipulates that you come up with the idea
+and define the problem before you consider the solutions.
+Ideation: Once you have identified the problem, you bring that into the
+ideation stage. This is when you start to consider the wide range of potential
+solutions. You generate your ideas and slowly start to narrow them down.
+
+Prototyping: This is when your ideas start to manifest for the first time.
+Here, you can test them with end users and start to iterate until they are at a
+place where they represent what the end product may be.
+Testing: At this stage, you test your ideas to make sure that your user
+knows how to use them and they truly resonate with their needs.
+Implement: This final stage is where you become proactive. You put your
+vision into effect so that it actually touches an end user’s life.
+It is important to note that design thinking benefits extend far beyond the
+process itself. It fosters collaboration, helps create design artifacts that you
+can return to and most importantly, it gives you a tangible way to always
+make sure that you are keeping the user at the center of your products.
+Nothing in design thinking is new. Instead pulls methodology from all of
+the different genres that have existed much longer and applying them in a
+new way.
+
+Concept of Empathy in UX/UI
+Design
+Empathy should not be confused for sympathy. Empathy refers to the
+capacity or ability to imagine oneself in the situation of another
+experiencing the emotions, ideas, or the opinions of the users or perhaps
+conjuring up a similar personal experience that has occurred. It is seeing
+things from the point of view of the other by truly imagining being in their
+position and trying to feel what they are feeling.
+Empathy goes a step further into engaging with and imagining the feelings
+of the users through your emotions. This does not always have to be
+associated with bad things, as you also understand how excited someone
+feels.
+Many times through UX research, you may feel a great deal of sympathy
+for your users, but you may fall short of empathy because you are not really
+trying to tap into the experience they are having either through imagination
+or actively reliving your own similar experience. Even after you feel that,
+you understand the user holistically through your research.
+
+Empathy is an exercise that you get better at overtime by being clear about
+your intentions and consistent with your practices. The first step towards
+empathy is to start to become mindful of your intentions with each thought
+and action you take and then practice going deeper into your engagement
+with yourself and with others.
+
+Mindful Users Surveys and
+Interviews
+If you are about to conduct an interview or survey, you can center yourself
+and set an intention that makes the user feel relaxed and comfortable.
+Ensure that you practice the interview questions in a natural and relaxed
+manner with the intention of truly encompassing that feeling.
+
+Creating mindful personas
+If you are creating a user persona, you can have the intention that you want
+to be as accurate as you can and paint a true picture of the user and imagine
+yourself living their life or having their experience. Once you have created
+the persona, role-play as if you were them. Rely on your imagination and
+get in tune with your feelings about it. Don’t just imagine you understand
+the persona, try and imagine feeling what the person might be feeling.
+
+Designing Mindful Interfaces
+If you are designing the user interface for a product and the business people
+demand that they want the text bigger, even though that might throw off the
+entire visual hierarchy and balance, rather than be upset with them, try to
+put yourself in their shoes. Imagine all the research and reasoning they must
+have gone through to arrive at that conclusion. Set aside your ego, step into
+their shoes and feel what they must be feeling. This way, you can take the
+action with the intention of choosing a font size that works for everyone by
+both calmly and clearly defending your decisions and openly listening to
+feedback without judgment. Empathy takes practice; you start by taking an
+honest look at our motivations.
+
+Tools for UI Designs
+Every designing tool has two main criteria: it should deliver high quality
+output and in the least possible time and effort. The more these differences,
+the better the tool is considered.
+There are several tools and techniques you can use to build wireframes and
+prototypes but it also depends on what your client or the organization you
+represent wants.
+
+Lucidchart
+Lucidchart is a visual and cross-platform collaboration tool for businesses
+and individuals that aids the creation of diagrams and flowcharts and
+wireframes. This tool can be used across products and in collaboration with
+engineering teams for brainstorming and managing your projects.
+
+As a product designer, Lucidchart can be used to create user flows, user
+journeys and the wireframes at the beginning of the design process to gain
+clarity around the whole project. If you work with stakeholders, clients or
+people who are not familiar with design tools, using Lucidchart will help
+you facilitate remote collaborations, share your process, and gather
+feedback all in one piece. Additionally, the tool comes with tons of free
+templates you can use in your project.
+
+Adobe XD
+Adobe XD is a vector based design tool for designing and prototyping
+products. The tool is often described as similar to Photoshop or Illustrate.
+Although you can achieve similar results using XD, the tool has been
+specially created for designing websites and apps.
+
+Adobe XD is majorly used for designing landing pages for marketing
+websites. You can easily link your sets from the component library and use
+them in your projects. Adobe XD works astutely in gathering feedback
+from users or other team members.
+If you are familiar with Photoshop, you should not have any problems using
+Adobe XD as they both share a similar interface. In addition, Adobe XD
+has an incredibly useful feature called Auto Animate and the results are
+impressive.
+
+Figma
+Figma is an interface tool but is fully functional in your browser window,
+meaning that your files are all saved online and you do not have to worry
+about losing them. With its free web-based feature, platform-wise
+compatibility is not an issue. Figma comes with tons of useful plugins and
+
+an app called Figma Mirror that allows you to see your design from your
+smartphone or table.
+
+Figma is also an outstanding tool when it comes to collaborating. On
+Figma, multiple designers can work on the same file in real time just like
+Google Docs. While designing, you can see the pointers of other designers
+and the changes being implemented in real time. It is very astute for
+collaboration and working together in a team.
+Procreate
+Procreate is a powerful application for sketching, illustrating and
+prototyping artworks, all exclusively from your iPad. If you are familiar
+with Photoshop, you are going to find features such as brushes or layers
+very easy to use.
+
+Procreate can mostly be used for wireframing landing pages during the
+ideation phase to explore a variety of different options and select the best
+one. The goal is to generate as many ideas as possible and iterate the best
+possible solution. The faster you can generate ideas, the sooner you move
+on to the next step.
+
+Webflow
+Webflow is a website building tool that gives you the power to design, build
+and launch responsive websites in hours. Although it is just one web
+building platform, you can go from wireframing to the final product.
+
+Webflow can be used to build interactive prototypes, but only after you
+have prepared different solutions in Adobe XD or Figma. In most cases, it
+takes more time to build a functional prototype in Webflow than designing a
+mock-up on Figma or Adobe XD.
+
+Things to Note While Using UI Tools
+▪
+
+A prototype is not the final product so do not expect it to be pixel
+perfect. Instead, ensure that it has a high degree of interactivity so it
+can be built and tested fast.
+
+▪
+
+You do not need an expensive tool for sketching. Simple tools such as
+pen, paper, and sticky notes can suffice. More importantly, you do not
+need to be a fantastic drawing artist to sketch designs.
+
+▪
+
+Do not get too obsessed with the details, or too attached with a
+particular solution, in case it fails the usability testing. If you do not
+get things right the first time, ensure that you get feedback from the
+users to improve your prototypes.
+
+Creating Wireframes
+
+Essentially, wireframes are used to define and plan the information
+hierarchy on a page or screen. This gave a first-hand layout of how items in
+the page should be organized and what content should be included.
+Additionally, it gives a description of how space should be allocated and
+what functionalities are available. This includes positioning elements such
+as buttons, menus and headings.
+Working out the information hierarchy for your wireframe depends on how
+you want the user to process the information on the page and this is based
+on your user research. A wireframe is a very basic blueprint of the eventual
+product's appearance. It's basically a black-and-white diagram, either handdrawn or digitally generated.
+
+Wireframes are helpful for a number of reasons, but above all, they allow
+you to organize your ideas and get clarity on how the final product should
+be laid out. In addition, they help you to ensure consistency throughout the
+user interface, as you will determine how certain types of information
+should be displayed on every screen.
+It is important to have layout and functionality clear before you start adding
+things like color and fonts, as they can be distracting. Wireframes are
+necessary in-between steps without all the bells and whistles. It is also a
+good technique to figure out how your user interacts with your interface.
+
+Starting Out
+Once you have done your competitor analysis and conducted the initial user
+research, you are ready to start hatching ideas. You may start by sketching
+out ideas in their roughest form exploring different avenues you might take
+with this particular product. You are ready to move on to proper wireframes
+when you have refined your ideas and they start taking shapes.
+There are different methods of producing wireframes. They include:
+Hand-drawn Wireframes: These can be created with pen or paper, or on a
+whiteboard. These are handy for getting your designs down quickly and
+they are easy to edit. Hand-drawing your wireframes is a great method to
+keep things simple and avoid getting bogged down in superfluous details.
+
+Digital Wireframes: Once you have completed your hand-drawn
+wireframes, you will move on to digital wireframing. To create digital
+wireframing, you will need a wireframing tool or software. There are
+several wireframing tools out there to choose from.
+The good thing about digital wireframing is that it allows you to keep track
+of the progress of your wireframes and document certain decisions you
+make along the way. Digital wireframes are also easier to share.
+
+Find Inspiration: Before you start designing your own wireframes, it is
+important you find a good source of inspiration. Take a look at some
+examples of wireframes for a similar product to the one you are designing.
+Most decent portfolios will contain wireframes, so browse through
+platforms such as Dribble and Behance to see what other designers have
+done.
+Building Blocks: To create building blocks for your wireframes, start by
+hand – grab a pen or marker and a stash of paper. At this stage, you need to
+ask the following question: what are the intended user and business goals
+when interacting with this page? In other words, this looks at what the user
+wants to achieve and the actions the business wants the user to complete.
+This could be something like adding an item to a shopping cart for example.
+The next set of things you should put into consideration is how you can
+organize the content to support the goals of the user and business. In
+addition, you should also consider what information should be prominent
+and what buttons or touch points the user needs in order to complete the
+desired action. This in turn will get you thinking about where your main
+message and logo should go, and what the user should see first when they
+land on a page. You also need to consider where to place your call-to-action
+and what the user expects to see in certain areas of the page.
+
+Adding Details
+Once you have got the foundation in place, it is time to fill in the details. It
+is recommended that you work from top to bottom, then left to right. For
+the details you are going to be filling, at this stage it is important that you
+define usability conventions such as putting the navigation at the top next to
+the logo. In other cases, you could place a search box in the top right corner
+for example.
+At this juncture, you also need to put into consideration spacing, layout and
+information hierarchy. Here, you take a holistic look at what information is
+most and least important, as well as what your calls to action are. For
+instance, if you are building an e-commerce app your call to action may be
+a button with the text “Add to Cart”. Next, think about what images you
+want to include, where you want to include them, and what size they should
+be.
+Throughout the entire wireframing process, there are three big boxes you
+should be looking to tick: clarity, user confidence and simplicity.
+In clarity, your wireframing needs to make it clear what the page is
+depicting and what the user can do there. Moving forward, you have to
+ascertain that the page satisfies the user needs by completing their desired
+actions without too much thought.
+The goal of user confidence is to instill trust in your business through
+effective design. The product interface should be predictable and
+comfortable through easy navigation and clear calls to action. If your page
+is unpredictable with buttons and boxes in unexpected places, user
+confidence will rapidly sink. When creating your wireframe, use familiar
+navigational processes, place buttons, and commonly use intuitive
+positions.
+On the other hand, simplicity is all about keeping out the noise. When
+creating your wireframes, avoid information overload. Excessive content,
+links and buttons can be overwhelming and distracting for the user.
+Ultimately, it makes it difficult for them to achieve their goals. The user
+journey should be as smooth and seamless as possible, hence the need to
+think carefully when deciding what needs to be included on each screen.
+
+Note that wireframes are not about colors or aesthetics; they are about
+intuitive and logical layout, as well as information hierarchy.
+
+Digital Wireframe & Usability Tests
+Before converting your hand-drawn wireframes into digital format, you
+might need to get feedback on your work so far. If you have got the time
+and resources, consider conducting some quick usability tests to highlight
+any big flaws that you might have missed.
+There are several and countless digital wireframing tools out there in the
+digital space. Take your time to experiment and find the one that is suitable
+for you. This author recommends Balsamiq as it limits you and keeps you
+from adding too many colors and details. Most tools, like Balsamiq, offer
+plenty of guidance, so you will easily get a grip in no time.
+When designing an app or a website, you will create a wireframe for each
+screen or page, eventually ending up with a complete set of wireframes.
+You will need to turn your wireframes into prototypes in order to test them.
+This can be accomplished with the use of software that converts your
+wireframes into a clickable mock-up. Next, you will conduct user testing to
+see how the user interacts with your design identifying any bugs, flaws or
+blind spots.
+
+How to Use Balsamiq to Create
+Wireframes
+Balsamiq wireframes is a digital application for creating wireframes, which
+are like digital sketches of a user interface. It helps you visualize and
+communicate your product and feature ideas before building them.
+Balsamiq also has pre-built user interface templates for web, desktop and
+mobile applications.
+The application is used by entrepreneurs, product managers, designers,
+developers, and more. Balsamiq wireframes save development time,
+because changes to wireframes are fast and easy. In addition, it allows
+everyone involved in the project to participate and come to agreement
+before development begins.
+
+Overview of Balsamiq
+
+When you launch Balsamiq, the first thing you notice is the canvas, which
+is the blank area in the center where you will be creating your wireframes.
+The basic process for creating a wireframe is to first select a control from
+the User Interface Library, located at the top of the screen. It has different
+types of controls that you can add. There are two ways to add a control. One
+is to drag it from the User Interface Library onto the canvas. The other way
+is to simply double click it.
+The next thing to point out is the Property Inspector on the right side of the
+canvas. This is where you can select and change properties for the various
+types of controls – the size of the text and colors for example. Depending
+on which control is selected, you will see different properties there. Also,
+when no control is selected, you will notice that the panel gives you an
+option to edit notes for your current wireframe. Each wireframe can have its
+own set of notes. In addition, there is a panel for the project as a whole, so
+you can enter notes for the overall project. There are also some other
+properties for the overall project such as the font size, default selection
+color and the skin.
+On the left corner of the Balsamiq interface, you will see the Navigator,
+which houses the list of all your wireframes. If you want to create a new
+
+wireframe, click on the ‘plus’ + button on the top left corner of the screen.
+As you build your wireframes, they will be previewed on the canvas.
+
+When you have the thumbnail view shown and you add controls, they are
+updated in the thumbnail as well. You can also rearrange them in a different
+order by dragging them. There is also the list view, which you can see by
+clicking the icon on the left. This is useful if you have a lot of wireframes
+and want to see a list of all of them.
+There is also something called the Thumbnail Grid view. This is where you
+can see all of your wireframes as thumbnails at once. You can also
+rearrange them in any manner you choose. This is a good way to see an
+overview of all of your wireframes.
+
+Another thing you can do is turn the various panels on and off to use the
+space more efficiently or more to your liking. If you want, you can turn off
+the navigator panel so that you only see the canvas. When this happens, you
+will see some new icons appear which allows you to navigate to the other
+wireframes that you have, or you can click on these arrows to quickly
+switch between them. Additionally, you can turn on and off the panel on the
+right as well as the UI Library. Controls can also be added to the canvas
+with the UI Library hidden.
+In both the thumbnail and grid views, you will see a small arrow. When you
+click on the arrow, there will be some other actions such as rename,
+duplicate, trash and alternates. You can also right click to bring up the same
+menu. If you want to quickly rename a wireframe you can simply doubleclick and click Rename. To rename the project as a whole, you can doubleclick on the name of the project and enter a new name.
+
+As you would expect, you can cut, copy and paste controls using the
+standard keyboard shortcuts. You can also duplicate controls by pressing
+Ctrl or Command > D. By default, the control will be slightly offset from
+the original. However, if you move it and duplicate it again, it will be offset
+by the same amount as the first control you duplicated. This can be quite
+useful to space things out evenly. To delete a control, press the Delete key.
+You can select a control by clicking on it at once. To select multiple
+controls, you can draw a rectangle around the controls you want to select
+with your mouse. You can also press Shift while clicking on other controls
+to add them to the selection. You can deselect the control by pressing
+Command or Control when clicking on it. Furthermore, if you double click
+on a control, you can edit its contents.
+
+Creating a Simple Wireframe in
+Balsamiq
+In this guide, we will be creating a simple login page for a new music app.
+For emphasis, we will be naming this page Balsamiq Music.
+To begin, start by dragging a window control onto the canvas and hand it a
+specific name. Once this is done, customize the properties based on your
+preference and then resize it. Next, add a title and logo to the screen. Use
+the image control and select an already-imported image. You could select
+
+the image for the assets category of the UI Library. Once this is done, use
+the alignment guide to align the properties. Group them to make it easier to
+align them with other controls you will be including.
+
+Next, you will have to build the login form. You can switch to the forms
+category of the UI Library to see what you have available to work with. Use
+the label and text input controls for the Username field. For the Password,
+you can duplicate the Username controls and change to Password. Next,
+show a checkbox to allow the user information to be remembered. The
+checkbox control is domicile in the UI Library, but instead of dragging it,
+use the Quick Add Search to add it. Once you get familiar with the controls,
+this will become a much faster way to add them.
+
+The control names are also aliased to other common names, so you can try
+some keywords if you do not remember the name of the control. The
+combobox control for example shows up if you search for a drop down, pull
+down, or list. Next, edit the checkbox control and move it below the
+Password field. Add a link to help the user if they have forgotten their
+password. Once you are satisfied with the content and alignment of these
+form controls, group them so that you can move them around as a whole as
+you keep building the wireframe.
+Next, add a button to log in. You can do this using the Quick Add option.
+Press the forward slash key to put the cursor in the quick add box. If you
+want it to be a bit bigger than the default size, increase the text and resize
+the button. At this point, it is important that you do some fine-tuning on the
+spacing and alignment to see how it looks.
+
+Moving forward, add a few more controls to complete your first screen.
+Balsamiq wireframe has the Font Awesome icon set so there are tons of
+icons to choose from. The icon and label control is a nice way to use an
+icon and text together. You can use some of the text markup codes to make
+the text look like a link. You can also add a rectangle around the properties
+to make it stand out a bit more, as shown below. You can right click to
+move it to the back. To better define it, you can also include a background
+color. Note that colors in wireframes should be used sparingly especially in
+their early phases. Shades of gray can be helpful for defining different
+sections of the page, but anything more than that can be distracting at this
+point. Next, align everything together.
+
+Creating a Complex Wireframe
+Once you have created a simple wireframe, you are set to use some new
+controls to create a more complex screen. With the previous example
+(Balsamiq Music) that was highlighted, you will create the homepage,
+which you see after you have logged in. Here, you will have all the music
+content, a panel on the right depicting what is currently in play, as well a
+featured artist area at the top.
+
+Start by cloning the previous wireframe and then clear out the contents.
+Begin the wireframe by defining the different parts of the screen. You can
+
+always show the UI Library by pressing Ctrl or Command > L. Remember
+that many controls can be searched by other names, so you do not have to
+remember the control name exactly.
+On the canvas, you will have the list of albums and some tabs for accessing
+the other parts of the app. Next, add a rectangle at the bottom right corner of
+the canvas for the “now playing” area. The area at the top will be for the
+featured artist.
+
+Titles or subtitles are good for labeling sections. Add a subtitle called
+“Featured” for the featured artist section, then add an image. Add another
+subtitle but make it smaller so it does not compete with the other one, as
+well as some placeholder text. To better indicate that this will be a longer
+block of text, you can type the word “lorem” and get lorem ipsum
+placeholder text.
+
+Next, move on to the tabbed area below. You can have four different
+sections there: My Music, Explore, Radio, and My account. The My Music
+tab will be a list of all the albums in the user’s library. You would want to
+show that it might be a long list by showing a scroll bar using the Property
+Inspector. Add another subtitle to label this section. Next, create some
+thumbnail placeholders for the albums. Use the image control for the album
+art, and add some text for the album name and artist. Use the text
+formatting codes to make the first line bold, and center the test using the
+Property Inspector. Align them both and duplicate a bunch of times.
+
+Notice that the last row goes outside of the window border. You could just
+resize the window to make it fit, but it will look even more realistic if you
+can show the last row as cut off, because it is a scrolling list. Images and
+group controls can be cropped to only show a part of them. Use this
+technique to cut off the bottom of the group.
+
+For the “Now Playing” panel on the right, start by quickly adding some
+audio player control and icons. Once you get familiar with the controls and
+icons, you will find any icon you need for the section. In this case, you can
+use icons such as volume, shuffle, repeat and the likes. Next, take one of the
+album thumbnails and put it over on the now playing section. You can
+double click into the groups and copy it, then press the home icon to get
+back out. This is an easier way than ungrouping, copying, and regrouping.
+
+Next, all that is left for this wireframe is a track list. For that, use the data
+grid control. Paste some text on the control, resize and rejig the properties a
+bit.
+
+OceanofPDF.com
+
+CHAPTER THREE
+Typography of UI Design
+
+In UI design, it is normal for you to hear common terms such as typeface,
+font, typography, type family used interchangeably. Knowing their distinct
+differences can be very helpful as a UI or web designer.
+Type classification is the main style category or group. The most common
+ones used on the web for UI designs are Sans Serif, Serif, Slab Serif and
+Handwriting or Script. There is also Display/Decorative, Monospace and
+Blackletter. While there are other type classification, those are more
+commonly used in graphic and print design where the focus is more on
+aesthetics rather than readability, usability, responsiveness and interaction.
+Typeface is the design or style of the actual alphabetic letters themselves.
+The most common typefaces used are Helvetica Neue, Alfa Slab One,
+Times New Roman, and Open Sans.
+On the other hand, a font is a digital representation of a single version of a
+typeface with one weight, one width and one style. For example, Helvetica
+Neue Bold is completely different from Helvetica New Italic or Helvetica
+New Regular. Likewise, Alfa Slab One Regular, Time News Roman, Open
+Sans Condensed are all individual fonts.
+Type Family is the collection of all of the fonts. For instance, Helvetica
+Regular, Helvetica Oblique, Helvetica Light Oblique, Helvetica Bold,
+Helvetica Bold Oblique all together form the type family of Helvetica with
+all of the fonts.
+Typography is how the font is applied, arranged and treated in context. For
+example, you could have some texts with a header that is in a thick black
+letter Serif font, a Sans Serif body and a subtitle that is all-caps and has
+
+your brand color. Typography typically refers to the placement of text, how
+much spacing is between them and the grouping.
+
+Why Typography Matters
+The right typography harmonizes with the other components on the
+interface. It also invites the user to understand what their next step is and
+ultimately helps them accomplish their goal. The most important
+characteristics of typography is clarity and readability, which are key in
+how they interact with a website or application.
+A design is made or broken by its typography. It evokes emotions and
+creates a sense of understanding or connection to a brand when done well.
+Equally just as successfully, it can slip away unnoticed as it makes reading
+so easy and pleasurable that the readers do not fixate on the letterforms
+themselves. This way, the typography communicates without getting in the
+way. Poor typography gives people a lower impression of a brand, product
+or service. Even worse, it can make an experience difficult or confusing.
+Typography is a major component of branding. When you look at other
+products you use and observe their typography, you will notice that the
+company has chosen a typeface that aligns with the brand message. It also
+aligns and differentiates itself from other brands. Typefaces conjure various
+connotations that are influenced by culture and cognitive biases and they
+affect how we feel about the brands.
+
+Topographical hierarchy is the process of using sizing, colors, contrasts and
+alignment to guide the users on what they should pay attention to first. The
+following should be put into consideration:
+
+Size: In most cases, your headings will be large, while your subheadings are
+going to be smaller than the heading and the body text even smaller.
+Contrast: Like hierarchy, contrast helps you to emphasize which message
+and ideas you want the user to pay special attention to. For example, if you
+have a darker and bolder font, users are going to pay more attention to that.
+Consistency: This is applied when you want to avoid cluttered and messy
+interface, which is integral in UI design. It is important to establish a
+consistent hierarchy for your typography. This way, all of your headings
+and body copies stay consistent throughout the user experience.
+White or Negative Space: Although this typically goes unnoticed by the
+users, it is also vital in establishing hierarchy and making sure that the
+interface is uncluttered.
+Alignment: This is the process of unifying and composing text graphics
+and images to ensure equal spacing, sizing and distance between each
+element. For example, aligning your text to the right might seem very
+counterintuitive for people who read left to right.
+
+Application of Typesetting
+UI designers spend a lot of time composing the text and adjusting the
+spacing between letters and lines. This art of arranging text is what is
+referred to as typesetting. There are three fundamental techniques that you
+will need to typeset your text:
+Kerning: Kerning is the practice of adjusting the spacing between each
+character making it feel evenly distributed across the interface.
+Tracking: Tracking is more concerned with the spacing between the words
+to ensure that they are not too close together or too far apart.
+Leading: Leading is the practice of adjusting the space between the lines of
+text.
+
+What to consider in Typography
+Reflect on Personality and Tone
+Before selecting your font and text placement, it is important that you think
+about your chosen app and website and intended audience. Here, you are
+
+more concerned about how you want them to feel when interacting with
+your app. In addition, you take a significant look at the tone you want to
+achieve from your audience. Once you have put these factors into
+consideration, it will help you narrow down the interface options and help
+you choose a font that reflects the type of feeling that you want your users
+to have.
+Stick to One Typeface
+With aesthetics being a key part of UI design, it might be tempting to use
+several types of typefaces. However, using too many typefaces will make
+the app cluttered and disoriented, especially for the users. Sticking to one
+typeface will not only help you achieve a cohesive interface, it will also
+make it a lot more interactive with the users. Ideally, your chosen
+typography will have enough range so that you can choose your primary
+and secondary fonts. Your primary font is going to be used for all of your
+larger text like headings, while the secondary fonts will be used more for
+buttons as well as body text.
+Readability
+Readability of texts is essential when putting out texts on an interface.
+Shape of letters, space between letters, space between lines and width of
+lines all affect a person’s ability to easily read texts. It is a common trait in
+humans to quickly scan texts instead of reading every word. Improving the
+scan ability of text is something that UI/UX designers should seek to
+achieve.
+When selecting a font, it is very important to put readability into
+consideration. Some of the most readable Serif fonts are Times New Roman
+and Georgia. You will also find readable Sans Serif fonts such as Helvetica,
+Futura and Arial.
+Accessibility
+Accessibility is a core component of product design because it seeks to
+make a product service easy to use. Designing for accessibility means the
+product is easy to use, not just for those who are differently abled. Note that
+the people who use a product you are designing may have a physical
+
+cognitive language or learning disability. They may have color blindness,
+low vision, or use a screen reader to navigate the web.
+As far as a design goes, if you adhere to the best practices of typography
+your design will naturally be set up to be quite accessible. Your users will
+benefit immensely when you select a typeface with distinct, easy-to-read
+characters and sufficient contrast, as well as effectively applying heading
+levels, generating clear visual hierarchy, preserving proper alignment, and
+keeping the text adequately sized.
+
+Applying Contrasts
+In typography, contrast can refer to a variety of things. The first is
+concerned with the letter shapes of a typeface. The vertical and horizontal
+strokes of a typeface with great contrast would be thick. There would also
+be little to no change in stroke thickness in a typeface with low contrast.
+Contrast can also refer to the text itself and how it interacts with the
+interface. For instance, pure black text on a pure white background creates
+high contrasts, whereas a light gray on a medium gray creates low contrast.
+According to the WCAG contrast guidelines, body text color should have a
+contrast ratio of at least 4.5:1, when compared to its background color.
+Large text that is 18 points and larger, should have a contrast ratio of at least
+3:1.
+Text Color Contrast
+In the same vein, contrast can mean a few different things in typography.
+The first is the simplest and it is probably what comes to your mind. This is
+the actual color of text, such as red, blue, yellow etc. Page contrast can be
+created with changes in color. To make your interface readable by all, it is
+important that you also put those with color blindness conditions into
+consideration.
+Common color blindness conditions include red green and blue yellow.
+People with color blindness have difficulty discerning the differences
+between the two. Avoid pairing color text and backgrounds in those colors.
+Thankfully, there are browser plugins and other tools, which allow you to
+test how those with color blindnesses see your design.
+
+Another important aspect of color contrast is the overall density of ink or
+text on a page. If you want, you can utilize different weights of the typeface
+at different sizes to create even color on a page. There are lighter weights at
+larger sizes and regular weights at smaller sizes. Alternatively, you can
+create uneven color by setting your headings to be bolder weights while
+keeping the paragraphs the same. Heavy areas of color can create emphasis
+if needed.
+
+Classification of Typefaces
+Knowing different type genres will help you select a proper typeface for the
+projects at hand and make you a better designer overall. For example, if you
+are working with a client that wants the mood of their website to convey
+eloquence, you need to know what classes or styles of typefaces that lean
+towards that bent.
+In another instance, if you are designing a website that is heavily influenced
+by a certain time, you should utilize a typeface that would have been
+appropriate to genres at that time. The way typefaces look conveys a
+message to the reader. Knowing these genres will help you see how your
+type interacts and what makes it distinct.
+Over the years, typefaces have been classified in different ways; however,
+there are three major genres (along with their sub-genres) that are key to
+your designs: Serif, Sans Serifs and Scripts.
+
+Serifs
+As you have previously learned, typefaces can have serifs on their letter
+forms. Within the serif genre, there are a lot of nuances that sets apart
+different serifs into sub-genres. These sub-genres include: Humanist, Old
+Style, Transitional, Didone and Slab.
+1. Humanist Typefaces: These have strong calligraphic influence on
+interface. They tend to have diagonal stress, lower stroke contrast and
+a relatively small height. While they are not as common today, they
+include fonts such as Janson, Kennerly, and Centaur.
+
+2. Old Style Typefaces: With the introduction of Old Style, letter forms
+were getting more refined as type and less influenced by calligraphy.
+These tend to have less diagonal stress and the serifs are more wedgelike. Some examples include: Goudy Old Style, Palatino, Perpetua,
+and Plantin.
+
+3. Transitional Typefaces: The trend of decreasing calligraphic flow
+continued after Old Style. Transitional typefaces have vertical stress,
+thinner and flatter serifs, alongside exaggerated contrast between
+thicks and thins. Some examples include: Baskerville, Bookman, and
+Clearface.
+
+4. Didone Typefaces: With the introduction of these typefaces, the
+influence of the pen was nowhere to be found. The serifs became
+even thinner without any sign of bracketing. Here, contrast is taken to
+the extreme with thick verticals and ultra-thin horizontals. These
+
+typefaces can be regarded as reminiscent of high fashion culture.
+They work great at large sizes with ample amounts of white spaces
+around them. However, as body copy at small sizes, their serifs and
+horizontals can quickly get lost. Some examples include: Bodoni and
+Didot.
+
+5. Slab Typefaces: Slab serifs have extremely thick slab-like serifs and
+low contrast. This came about in the early 19th century and was
+heavily used for headlines and advertising due to their bold
+appearance. Most of these are utilized at large sizes but they are also
+great in small text sizes. Some examples include: Rockwell,
+Clarendon, and Egyptienne.
+
+Sans Serifs
+Sans Serifs do not have serifs on their letter forms. They include typefaces
+such as Grotesque, Neo-grotesque, Humanist Sans and Geometrics.
+1. Grotesque Typefaces: These became popular in the late 19th century.
+Although sans serifs are seen as completely normal today, they were
+not as referenced when introduced as they are now. The design of an
+earlier one – Akzidenz-Grotesk – has been theorized to be derived
+from Didone, because the typefaces have similar metrics when the
+serifs from Didone are removed. As seen in other genres, san serifs
+
+are typically low contrast. Some examples of Grotesque also include
+Franklin Gothic.
+
+2. Neo-Grotesque: The Neo-Grotesque refines some of the peculiarities
+in early Grotesques. Helvetica and Univers are some of the common
+sans serif typefaces. Although there is a desire for simplicity, NeoGrotesques are not always great candidates for body copy due to their
+simplicity and similarity in letter forms. These can often affect
+legibility at small sizes.
+
+3. Humanists Sans Typefaces: Not to be confused with Humanist
+serifs, these go back to calligraphic roots with greater variations in
+line width. They are often the most legible of the san serif typefaces,
+hence their popular use as website body copy. On their legibility, the
+modulation of the line thickness creates distinct character shapes.
+This makes it easier to distinguish, so it is easier to recognize words.
+Humanist letter forms also have wide apertures which in most cases
+help to avoid mixing up letters. Some examples of Humanist sans
+include Tahoma, Gill Sans, and Frutiger.
+
+4. Geometrics Typefaces: As the name implies, Geometrics letter forms
+are based on geometric shapes like circles and squares. Some
+examples include Futura, Bank Gothic and Gotham.
+
+Scripts
+Scripts are typefaces based on handwriting. They are subdivided into two:
+Formal and Casual Scripts.
+
+1. Formal Scripts: These are based on letter forms from writing
+masters in the 17th and 18th centuries. They have some contrast
+between thick and thin as they were inspired by the way a quill or
+nimble pen would handle the letter forms. They tend to be more
+elegant and work well for events like weddings in this day and age.
+
+2. Casual Scripts: These are somewhat freer and casual. They tend to
+be more lighthearted or easygoing then their serious eloquent
+counterparts. The contrast can range from low to high, depending on
+the typeface. They were often inspired by the way; a brush or marker
+would handle the letter forms.
+
+Selecting and Using Typefaces
+The standard set of fonts on your computer are called system fonts.
+Android, IOS, Windows and Mac each have a different selection. These are
+immediately usable on your computer; however, there is a relatively small
+selection.
+If you choose to design with a system font, when it is time to develop it
+with code, you can either find a web font that allows everyone to see the
+font, even if they do not have it installed, or you can create a font stack in
+your code. Luckily, system fonts are not the only option for UI designs,
+there are tons of fonts available for download and they are easy to install.
+To install a font, find a font foundry or a font distributor website, and sort
+by the features you are looking for. When you find your preferred font,
+download and install it on your computer.
+
+Font Formats
+You may notice that there are more than one file per font style. This can
+happen if there are different formats. The common font formats include:
+OpenType (.oft); TrueType (.ttf); EOT (.eot); WOFF (.woff); WOFF2
+(.woff2); and SVG (.svg).
+▪
+
+Files with an (.otf) extension are opentype fonts. This is the preferred
+format because it includes the most customization options and has
+widespread support across platforms.
+
+▪
+
+Files with a (.ttf) extension are truetype fonts – they were previously
+used before the open type format. While they still work well, they do
+not have the extras that opentype fonts have.
+
+▪
+
+Files with an (.eot) extension use a format created by Microsoft. They
+are meant to be used on the web, however, they only work in internet
+explorer.
+
+▪
+
+Files with a (.woff) extension are the preferred format for web fonts.
+These files are compressed, which means they load even faster.
+
+▪
+
+Files with a (.woff2) extension are newer iterations of WOFF. The
+difference between the two is that they are more compressed. It is
+well supported across all the major browsers.
+
+▪
+
+Files with a (.svg) extension are not recommended unless you are
+trying to support a very old version of Safari.
+
+Using a Typeface
+Good typography starts by choosing a good typeface. No matter how nice a
+graphical element looks on a page, a choice of a bad typeface can ruin it
+rapidly. When entering into the process of choosing a typeface, it is
+important to consider where it would appear.
+A good consideration of the aforementioned will determine if you are
+looking for a text type face that is engineered for small sizes to a variety of
+
+settings or a display typeface which tends to be more flashy and works well
+on larger size. These two descriptors deal with the size and function for
+which a typeface is intended.
+
+Text Typeface
+It is often smart to choose a text typeface before a display, because much of
+the copy on a website will be set in this choice. When choosing a text
+typeface on the web, your first priority is legibility. If a site’s body copy is
+hard to read, then visitors will not stick around for long.
+The first thing to consider is if the typeface has a good x-height. An xheight that is too low will make the lowercase letters hard to read and tell
+apart at small sizes. An x-height can also be too high if it is nearing the cap
+height making it hard to discern what is uppercase or lowercase. A general
+measurement to go by is if the x-height is around 60 to 75 percent of the
+cap height, then you have got yourself a good candidate for a text typeface.
+
+Additionally, the white space around the letter forms also has an impact on
+legibility. If the space between letters - also known as letter spacing – is too
+narrow or too tight, then at smaller sizes, the letters can be muddled
+together, which has an adverse effect on legibility. Looser letter spacing
+allows the letter forms to still breathe at small size. While it is true that you
+have some form of control over letters spacing with code, it is not advisable
+to manually letter space body text. Find a typeface that already has proper
+looser letter spacing for text.
+Next, you would want to ensure that the typeface has overall even color as
+it balances the positive space of characters and the negative space of white
+space. It is necessary to avoid making the text too dense in certain areas or
+characters, which can break the reading flow. A trick you can employ is to
+blur your eye as you look at the typeface. If dark splashes or uneven places
+of color show up, mark the typeface off your list.
+
+Other areas that deal with whitespace are counters. A counter is the fully or
+partially closed white space inside letter forms like “o”, “b”, or “e”. Large
+or open counters can also aid legibility because they are less prone to close
+up at smaller sizes.
+Another thing you should consider is the mood of the typeface matching the
+content at hand. Familiarize yourself with the content by taking the time to
+read it thoroughly. Next, write down some ways to describe it in your own
+words – is it serious, light-hearted, witty, pointed or classy? As you peruse
+typefaces, have these in the back of your mind and see if a typeface speaks
+in that certain mood.
+Always consider who your audience is and what kind of styles of typefaces
+they might be accustomed to. It is important to consider what their
+industries and genres are. You might not want to choose something that has
+been overused, but you can still plan according to these norms and create
+familiarity or earn trust by choosing a proper typeface that speaks in the
+right mood.
+Furthermore, with text faces, it should be noted that mood could be
+conveyed with the slightest subtleties in the letter forms. A simple change
+in the way a serif is handled can mean the world of a difference in text,
+because there is a lot of it on the page. Ensure that you do not go for
+something that is overly ornate or has a lot of character, as it will have too
+much going on for body copy. The mood of the typeface should fit the
+content at hand, but do not sacrifice legibility just because you like the
+mood of another typeface better.
+Most pertinently, a typeface has everything you need to make it legible and
+alluring. You would hate to get halfway through designing a layout and
+realize that the font does not contain a certain character or symbol that is
+needed. Things to consider are: the range or weights of the typeface, italic
+styles of the typeface, different widths for versatility, small caps, and the
+accent or characters included for language support.
+In addition, you should also consider what kind of numerical figures are
+needed. To clarify these, there are a few different styles of numerical figures
+including Old Style and Lining figures.
+
+Old Style figures vary in height and descend below the baseline in most
+cases. These are very apt for text and body copy as they flow well with the
+rhythm set by the text and they are necessary when using small caps.
+
+On the hand, lining figures all have the same height and baseline and they
+are generally apt for display, headlines or setting with uppercase only.
+
+Conclusively, designers sometimes utilize a versatile text family that works
+for both small and large text sizes. Other times, a single typeface will not
+work for all text sizes because abnormal intricacies can appear in the letter
+forms at different sizes. Additionally, you might want to have some variety
+with your type.
+
+Display Typeface
+Display Typefaces are meant for larger sizes such as big headlines, site
+titles or pull quotes. This allows for a bit more expressive and creative
+opportunities with letter forms.
+Great intricacies like thin serfs would be lost at small point sizes, but they
+can shine as displays. Big bold condensed texts with narrow counters would
+close up at body text sizes, but here you can soak them all in. A nice casual
+sign painter script would hardly be legible in paragraphs, but as displays, it
+can flow beautifully as heading.
+To choose a display typeface, first ensure that it is legible and readable. Just
+because the type is bigger does not mean that every character of a typeface
+
+will be legible. If a user cannot read a headline or a title, then the message
+has not been enhanced by good typography.
+While there is much more room for expression with display typefaces, it is
+critical that you choose a well-designed legible typeface. A cool typeface in
+a specimen image does not translate to being usable. Ensure that you make
+use of the blurry eye test to see if the typeface has an even overall color in
+all of its characters. Most font sites include a type tester with their
+typefaces. Write out example headlines to make sure it is evenly spaced and
+see what sizes it works best at. Display types should have a bit tighter
+spacing than text typefaces.
+Other things that can help readability and display faces are short ascenders
+and descenders. In the setting of headlines, these features help reduce
+choppiness in the text. One of the big questions you would want to ask is:
+does the mood of the typeface match the content? For text faces, it all boils
+down to channeling the mood with subtle nuances in typefaces. However,
+with display, you have a bit more room for expressiveness in the mood.
+If you are creating a website or app that is set around a certain period, look
+for typefaces that are true to that period. Although this might be more
+extensive research, instead of choosing the mood you think the period
+should look like, you will be truly conveying the real message.
+Next, you will also want to think about who your users are. If you are
+creating a site for people in a specific industry (web developers for
+example), then that affects how you choose a typeface. For instance, if you
+want to display snippets of example code in a blog post, coding programs
+like Atom or Sublime text are used by web developers and default to
+monospaced typefaces. These are fonts originally created for typewriters
+whose characters all occupy the same amount of horizontal space. They are
+great for codes since it is easier to distinguish symbols and layout tabular
+data in plain text.
+
+However, they would not be a great choice for body text due to decreased
+legibility and long paragraphs. Although you can still play into that industry
+norm with the code snippet. By utilizing a monospaced font, you can
+typographically make the snippet appear as it would in an actual code
+environment.
+Essentially, you should take into account who your readers are and what
+styles of typefaces might be the right fit for their industry. Similar to text
+typefaces, take into account the budget and make sure a display face has
+everything you need in regards weights, style or accents. It is also possible
+to have good typography with a single weighted font for your display face.
+
+Translating Text to Display
+In some cases, there might be a scenario where you land a client who
+already has a typeface for their brands. This process is sometimes as simple
+as finding the web font version of that typeface. Other times, there might
+not be web font licenses available for the type face yet. In this case, you
+would want to find a typeface that channels a similar mood and style to the
+print version, as you translate their brand for the web.
+You could run through the internet to get alternatives to the typeface.
+However, it is important that you utilize all the knowledge in this guide to
+make a well-informed decision for an alternative that best fits the client’s
+needs. You might arrive at a different conclusion than those online forums.
+
+Think about where the typeface fits in best, what makes it legible, if its
+mood matches the content and audience, and what factor will cosplay in the
+design. The answer to these questions should help guide you in a good
+direction and leave room for your own personal taste and design choices.
+
+Fonts Weighting and Styles on Figma
+In this section, we will be looking at the different weights of Open Sans
+using Figma. As shown below, there are different weights including light,
+light italic, regular italic, and so on. Some fonts have additional styles such
+as hairline, which is thinner than thin and ultra which is thicker than extra
+bold or black.
+
+For the entire text block, the family name is set as Open Sans, however the
+text within is a different weight or style. To operate, click into the text to
+see what it is set to. If you see a message about missing fonts, download all
+the styles of Open Sans from Google fonts. Figma only has a few styles preinstalled.
+In addition to these settings, you can also make the text underlined, and also
+format it in all caps. This is preferable to typing it in all uppercase letters. It
+is much easier to switch back to the title case if you decide to change it
+later. Texts can also be formatted in small caps, but only if the font supports
+it. In the case of Open Sans, small caps are not supported.
+OceanofPDF.com
+
+CHAPTER FOUR
+Designs System and FIGMA
+According to Audrey Hacq, a design system is the single source of truth,
+which groups all the elements that will allow a team to design, realize and
+develop a product. Design systems not only help designers to create more
+scalable, efficient and consistent design projects, it also helps the business
+owners, developers and other members of the team to be on the same page
+in an easy and efficient way.
+Design systems enable so much, like enormous time savings for designers,
+developers, and product teams. They also ensure better UX design and code
+inter/intra products. In addition, you get a higher consistency in design,
+code and brand. Increased team communication and collaboration is also
+one of the vast benefits of having a design system. Positive by-products of
+these are more satisfied users and customers and a shared design vision
+among and across product teams.
+
+Why have a Design System?
+Consistency: Consistency plays a vital role in the application of a design
+system. For instance, if you are working on a project which has a hundred
+screens, a design allows you to essentially create a one point source of truth
+in order to be consistent when it comes to factors like typography, color
+styles, and other components – elements that are going to be used multiple
+
+times in design project, such as buttons, input fields, menus, headers,
+footers and the likes. Consistency is for sure one of the most important
+things to consider when you want to have a solid system.
+Higher Quality: Another advantage of having an apt design system is that
+the project is going to have a higher quality. Due to the influx of a
+consistent flow and the establishment of certain rules, your design project
+becomes more scalable. Consistency throughout an upper throttle website
+indirectly gives a sense of professionalism and makes the branding looks
+good. When designing for a client, for instance, the project must be treated
+like a personal brand. A design system can surely help in raising the quality
+of a project – both the actual quality and the perceived quality by the users.
+Enhanced Communication with Development Team: Design systems
+helps to promote better communication with development teams and other
+team members involved in the project. It allows them to be on the same
+page and flow effectively. For instance, if you are working between
+designers, a design system can help the team balance the choice of color,
+typography, buttons, as well as the use of a shared library. Additionally, a
+design system can also help for team members to be shareholders – since
+they are on the same page as regards the elements of the project. With
+design systems, a design can also be approached from the approach of
+hierarchy regarding decision-making. It helps to make viable decisions and
+help the development and branding team.
+Design systems typically consist of three parts: a style guide (or multiple
+style guides), a pattern library, and a component library.
+1. Style Guide(s): A style guide contains information about, and
+examples of, how things should be done consistently across a
+product, a website, or suite of products or websites. The most
+common types of style guide relates to brand design: elements like
+font, colors and trademarks. UI/UX style guides that tell design
+directions and visual interaction design standards are necessary for
+any design system.
+Content style guides that include information about areas like
+language and tone of voice are also highly effective. Style guides
+
+usually come in the form of a document. They can be a section of an
+intranet but are often saved as a PDF or some other static medium.
+This, of course, makes it hard to edit and it brings forth document
+management issues.
+2. Pattern Library: Pattern libraries include UI elements, like forms
+and buttons, what they are formed, and when to use them. Here, every
+pattern library has been usability tested, and the design has been
+iterated. This inadvertently means that the designs that make it to the
+library are the team’s best work in that area.
+3. Component Library: Component’s libraries take things to the next
+level and are UI patterns, including code. Most organizations see
+huge cost savings at this point because not only do designers get a
+head start on designs, but developers do not need to rewrite code that
+a colleague has already done. Additionally, just as UX designs have
+been tested for usability, code has been reviewed and improved. The
+code that makes it into the library is tight and fast.
+The style guides, pattern library, and component library, comprise the
+design system. As for the library you use for your design system, it will
+depend on your front-end technology stack – this you can do using popular
+tools.
+
+Popular Design Systems
+With the prevalent rate of a lot of design techniques and applications on the
+internet, it is not out of place for anyone to be lost in the hundreds of design
+systems available all over the internet and not be able to decide which the
+right fit is for them. Here are the top five designs systems you can use or
+learn from:
+
+Material Design
+Google’s Material Design is the most popular of the bunch. Introduced back
+in 2014 during the announcement of Android 5.0 Lollipop, material design
+has come a long way and can be considered as one of the most mature and
+widely used design systems of them all. Material design is inspired by the
+
+physical world and its textures, including how they reflect light and cast
+shadows.
+
+Material surfaces match the mediums of paper on mink. You can even
+diversify further on material design existing guidelines to expand your
+visual language and provide a flexible foundation for innovation and
+planned expression. If you want to dive deeper and understand the system,
+there are material resource guidelines to help you get started.
+In addition, material design is the most well-documented design system
+there is, which makes it even more user friendly, adaptable and easy to use.
+
+Human Interface Guidelines
+Apple’s Human Interface Guidelines has always been in the spotlight as
+regards whether it is truly a design system. Whichever the case may be, the
+human interface guideline is more inclined towards explaining different UI
+elements and patterns along with guidelines of uses, rather than a common
+repository for both developers and designers to refer to.
+
+Apple always has a way of doing things differently. This is evident in the
+provision of the component library for the UI design tools and the
+guidelines to apply them. Although, there is a separate documentation for
+developers. The human interface guideline by Apple provides in-depth
+information and human resources for designing apps that integrate
+seamlessly with their platforms.
+
+Atlaskit
+Atlaskit by Atlassian is the most complete design system used in their
+product. Atlassian tries to solve problems such as design inconsistency and
+scalability. Atlassian designers wanted to spend more time on core
+problems and less time answering the same questions.
+
+Atlassian’s design system is certainly one of the ambitious products created
+from the need to solve complex problems. Atlaskit is a blueprint for product
+development. It incorporates design patterns and code components to form
+a common language. Atlaskit documentation has been reviewed to be
+extremely good. It comprises a ‘getting started’ guide, component, an API
+documentation, design guidelines and code repository. Additionally, it is
+open to feedback and welcomes code report issues and review – all bound
+by their code of conduct.
+
+Lightning
+Another incredible design system is Lightning by Salesforce. Lightning has
+everything from design guidelines to an enormous component library. The
+component library is one-of-a-kind; each UI element is documented in
+detail with different states that you can interact with. It has also progressed
+from a design system to a CSS framework.
+
+With this design system, you can build application with the look and feel of
+lightning experience without writhing a single line of CSS. Salesforce
+Lightning Design System has a CSS framework that gives you access to the
+icons, color palettes and fonts that developers use to create lightning
+experience. This is evidently the power of component-based design.
+
+Polaris
+Polaris is Shopify’s design system. While Lightning is based on pure
+HTML and CSS, Polaris has scored snippets for both react and HTML.
+Although you may not be impressed with the component library, it is
+important to note that a good design system is not one that looks split and
+fancy, but one that is the most usable across the company or team to build
+models faster. Ensuring consistent experience across the platform should be
+your main goal. You can refer to the documentation of lightning and
+Polaris to pull your own design system.
+
+Using Figma
+Figma is a vector design tool that runs in the browser. It can be used to
+brainstorm ideas, iterate on designs, create prototypes, and get feedback at
+any stage of the creative process. Figma has a few advantages that makes it
+the most-preferred among UI designers.
+
+First, and most importantly for beginners, it is free to get started if you are
+working all by yourself. It also has great collaboration that allows members
+of a team to work in sync and share their works, having multiple people
+working on the same design file at the same time. Figma is also a very fast
+software that works on any computer – whether you have a Mac or a
+Windows PC. In addition, it has a mobile companion app where you can
+preview your designs on a mobile screen.
+
+Setting up a Figma Account
+On the official Figma website (figma.com), you can set up a free Figma
+account. With the Figma account, you can create teams and shared
+workspaces where you can collaborate on files and organize them in
+projects. You can also select between a free beginner team and a paid
+professional team. You can obtain all of Figmas professional features for
+free if you are a student or educator.
+
+Once you have created your team, you can invite members to collaborate.
+This will grant them access to all of your team's projects and files. Here,
+you have complete control over the level of access each team member gets.
+In the Figma help center, search for "Teams" to learn more about forming
+teams and inviting members.
+
+Getting Started
+To kick-start your Figma adventure, there are a lot of free Figma resources
+on the internet that you can use to practice and incorporate into your
+designs so you do not have to begin from scratch. On Google, search for
+“Figma resources” and select from the option available. Once you locate a
+resource, you can copy the template to your Figma account. As a beginner,
+this is a lot better than creating a new file and building your resource from
+scratch.
+Once you select a resource, you can see it in a new browser tab, and there
+might be others viewing the file at the same time. At the top of the template,
+you will see a “View only” inscription, which means that you cannot make
+edits or adjustments to the file. To be able to make edits to the file, click on
+the name and select Duplicate to your Draft. If you are signed into Figma,
+it is going to create a copy of the template in your Figma account.
+
+With the template in your Figma account, you can scroll up and down to see
+the different screens in the file. In addition, you can rearrange them as
+opposed to the original file. In your Figma account, you will have a vertical
+arrangement, which allows you to move any of the screens around. You can
+also zoom out to see all of your screens or zoom in to see a particular
+screen.
+
+Creating a Frame
+The Figma editor is where your journey on canvas starts. The canvas serves
+as the foundation for all of your designs; it is where you will place all of
+your frames, images, text, and shapes. There are no bounds to your
+creativity but you should know that the canvas extends approximately
+65,000 points in each direction. With the great expanse – the canvas – you
+need something to put your designs in.
+On the left side of Figma’s interface is the layer panel which gives you
+access to a bunch of layers. When you select an element, you get the
+settings for that element on the right side of the interface. In this guide, we
+are going to be creating a rectangle out of the resource that was adopted for
+our design. Note that the template on the screen is known as a Frame.
+Frames are the containers you place your shape, text and image layers in.
+You can think of each frame in the canvas as a single screen of your design.
+The toolbar contains the tools you need for creating layers. You can select
+the frame tool in the toolbar or activate it by pressing the F key on your
+keyboard. You can create frames with precise size using the frame presets in
+the right-hand sidebar.
+Figma adds a frame to your canvas when you select a preset, and the
+sidebar on the left is no longer vacant. Everything you put on the canvas
+will end up in the layers panel as well.
+For the template that was adopted, when you click on the preset, it shows
+that it uses an iPhone 11 pro max – a standard size. Hit the “F” key on your
+keyboard again to go into the frame mode and select the iPhone 11 pro max
+template. Once this is done, Figma automatically puts in a frame of the
+accurate size. Next, place that next to the original frame and start copying
+the design.
+
+Creating Shapes and Color
+Assuming you want to replicate the colors on the original frame, the easiest
+way to accomplish this is to give the whole frame a background color or
+draw a rectangle (flowing from what was depicted in the template). Hit “R”
+on your keyboard to initiate the rectangle and draw it to your preferred size.
+To change the color of the frame, click on it and select from the options on
+the right side of the screen. Note that, when you select something on your
+canvas, the settings for that element will be on the right. You can use the
+eyedropper from the color panel to pick the color on the original frame to
+your frame.
+
+Since we are creating a similar design to the original frame, create the
+second card by drawing another rectangle and try to have it to be
+approximately of similar height. Again, grab the eyedropper tool to pick the
+color from the original frame to the new rectangle you have created.
+
+Corner Radius Adjustment & Circle
+If you have a keen eye, you would notice that the original frame has some
+adjustment in its corners. Under the position and dimension properties in
+the Design panel, you would find the tool for corner radius adjustment.
+Here, you can change the X coordinate, the Y coordinate, the Width, Height
+and the angle of rotation of a shape or text.
+With the corner radius tool, you can adjust how rounded the corners on the
+original frame are. If you have an additional corner radius not needed,
+simply extend the frame to get rid of it. Alternatively, you can go to the
+corner radius tool and click on independent corners. What this allows you to
+do is set each corner independently. If you change a corner of your shape to
+zero, it will no longer be rounded.
+
+The next step to take here is to create the circle. To create one, go to the
+shapes menu and select Ellipse (you can also initiate this tool by clicking
+“O” on your keyboard. With this tool, you will be able to draw a circle with
+an aspect ratio. If you want it to be a perfect circle, hold shift on your
+keyboard, and it will be a well-rounded circle.
+
+If you want to find out the exact dimension of your circle, double-click on
+the circle in the original frame to view the dimension (104 in this case) and
+replicate on the frame you are creating. To replicate, go to the options on
+the right and change the dimension of the circle (type 104 in the box).
+
+To copy the position of the circle, double-click on the circle on the original
+frame. Next, hold the Option key (Mac) or the Alt key (Windows), and it
+will show you the distance from all of the neighboring elements
+surrounding the circle. Do the same on the circle on your frame and
+navigate to get the same number on the original frame.
+
+Using Icons and Images
+Icons are elements that you will often need when designing mobile
+interfaces. You can run through Google for free Figma icons. When you see
+a preferred icon from any resource, simply copy and paste in your frame.
+Additionally, Figma also helps you with positioning of the icon – it
+automatically centralizes it as you move it around. Alternatively, you can
+double-click on the icon on the original frame and paste in your frame.
+
+Another part of Figma that will be very handy for you is getting free images
+to use in your designs. One good resource that you can use in Unsplash,
+which allows you to have free images. Once you locate an image, rightclick on it and copy. Go back to your Figma file, select the background and
+hit Command or Control > V to paste.
+
+Figma Community
+The Figma community is a space where creators can share resources in the
+form of design files and plugins. For instance, if you use a wireframe UI kit,
+you can duplicate a file and add it to your drafts. From the files, you can
+copy components and paste into your wireframes. In addition, you can
+publish these components to a library instead to make them available to
+your team.
+Next, open the file in the editor, click the arrow next to the file name, and
+select move to project. Since components can only be published in a team,
+move them to a project in your team. Go to the same menu and select
+publish components and styles. You can also enter a description of your
+library and press publish to share it to your team.
+Back in your original file, you can access the library in the assets panel on
+the left side bar. Click the book icon to open the library's modal. Next,
+toggle the switch to enable the wireframe in your file. To resize the left side
+bar, hover over the edge until the cursor appears, then click and drag to
+resize.
+OceanofPDF.com
+
+CHAPTER FIVE
+Psychology of Colors in UI Designs
+Colors refers to the different colors of each element within the interface it is
+used to evoke feeling or emotion. The art and science of using colors is key
+in UI/UX designs. Color theory is a concept that explains how people
+perceive color and the visual impact of colors that mix, match, or contrast
+with one another. This includes the messages that colors convey as well as
+the techniques employed to recreate color.
+
+There are several elements of color and they include Hue, Chroma, Value,
+Saturation, Tones, Tints and Shades.
+Hue: Hue is the base color of pure pigment of color at a base level. This is
+also referred to as the colors of the rainbow. In order to apply Hue, you use
+the Hue Scale.
+Chroma: Chroma is the purity of a color. It can be thought of as the
+brightness of a color in comparison to white. To apply Chroma, tweak the
+value from left to right when you are using the scale. For example, to give
+brightness, you will have to sit up and to the left.
+
+Value: Value refers to how light to dark a color is. Lighter colors have a
+higher value. In order to do this, tweak values from top to bottom. For
+instance, if you were to go lighter, you would move upwards on the scale to
+get a lighter value.
+Saturation. Saturation refers to how strong or weak a color is (high
+saturation being strong). When you want to apply saturation, what you
+would do is go from top right to bottom left. Low saturation stays on the
+left, while high saturation stays on the right.
+Tones: Tones are created when gray is added to a hue. Generally, it is duller
+or softer than looking at pure hues. In order to apply tone, you could add
+gray to the color or move from right to left and vice versa.
+Tints: Tints are color in its natural state. In order to apply tints, you will
+need to add white to the color or move up and to the left.
+Shades: Shades are created when black is added to a hue, making it darker.
+It is often indirectly used to describe tint or tone, but technically, shade only
+applies to hues made darker by the addition of black. To apply shades, add
+colors in the bottom left to hue.
+
+Color Psychology
+As an important piece of UI design, color psychology refers to how colors
+determine human emotions and behaviors. We react to colors based on a
+complex series of interactions between our personal tastes, our family
+upbringing, and our cultural background.
+Each color evokes a distinct set of feelings. Color psychology may
+significantly improve user experience and promote desired behaviors (such
+as conversion rates). Testing designs with real users is such a vital part of
+creating a color palette in choosing colors for your designs. What this
+means is that you should not settle for the first color palette that you opt for.
+It is important that it is appropriate.
+
+The Golden Ratio Rule
+The Golden Ratio is the number used when two quantities are divided in a
+way that their ratio is the same as the ratio of their sum to the larger one of
+
+the two quantities. That number is 1.618, also known as Phi. To apply this
+to your color rule, simply multiply an element’s size by 1.618 to figure out
+the size of another element, or overlay the Golden Spiral to adjust their
+placement. You can use the Golden Ratio to guide you in your layouts,
+typography, imagery and more.
+
+Typographical Hierarchy: To apply the golden ratio to typography
+hierarchy, decide the order of importance for the various typography
+elements within the design. For example, if you have three font elements
+that you are using (A, B & C). If C is set at a 10 point font, what you will
+do is multiply that by 1.68 to get a rough guide for the larger sized
+elements.
+Images: For images, you will overlay the spiral on your images to see
+which elements sit where, and if they significantly create harmony. Using
+the Golden Spiral, you are ultimately working out where focal points need
+to be, how to centralize a headline for maximum impact, or which elements
+need to be shifted to give the design more energy.
+Layout: When you are challenged with a bunch of different things in a
+single layout, it is always useful to use the Golden Spiral to guide your
+pavement of each element. We are naturally drawn to the center of the
+spiral, so it is often to place your most important messages there.
+
+Color Rules in UI Design
+Branding Color: As a rule of color, it is important that you keep your core
+colors to one or two. This way people can associate your colors with your
+
+product or service.
+Functional: These refers to the colors that make up the architecture of your
+UI. For example, this may include your Nav bar, modals, text and links.
+Feedback: Use colors to indicate the state of an action. For instance, you
+can use them as a success or failure banner. If you upload your image on
+your site, you would put up a success or failure banner, that way you give
+them feedback as to whether the task was completed.
+Accent: These colors are used to highlight copy metrics or important
+information.
+Neutral: These are the bookends of your color palette. What you can do
+here is take one of the main colors of your color palette and give it a little
+bit of brightness or darkness that creates an additional neutral color for your
+color palette.
+Interactions: These are the states of symbols or elements in your design
+system that have multiple colors. For example, buttons, hover, active,
+resting state.
+Contrast: Contrast ensures that your colors, visuals and typography work
+hand in hand.
+Colorblind: There are different types of colorblindness. Ensure that you
+follow accessibility guidelines when working with colors.
+
+What to Consider when Choosing
+Colors
+60-30-10 Rule: To bring balance into the composition, the colors should be
+combined in the proportion of 60%-30%-10%. This means that the biggest
+part should go to the dominant hue, then the third of the composition takes
+the secondary color, and the 10% will go to accent colors.
+Strive to Color Harmony: The second thing to consider is to strive for
+color harmony. Color harmony is all about the arrangement of the colors
+and design in the most attractive and effective way for users’ perception.
+Consider the Psychology of Colors: Each color has its own influence on
+our mind and the knowledge of the possible reactions can help designers to
+
+transfer the right message and call users to make the expected action.
+
+Color Palettes
+Color palettes refer to the combination of colors used by UI designers when
+designing an interface. When used correctly, color palettes form the visual
+foundation of your brand. In addition, they help to maintain consistency,
+and make your user interface aesthetically pleasing and enjoyable to use.
+There are various types of color schemes that you can follow in order to
+initially create your color palette. Some examples include: monochromatic,
+analogous, complimentary, split-complementary, triadic, tetradic.
+▪
+
+Monochromatic: Monochromatic color schemes are made up of
+different tones, shades and tints within a specific hue.
+
+▪
+
+Analogous: Analogous uses three colors that are next to each other on
+the 12-spoke color wheel (which you can simply just search and you
+will be able to utilize). Traditionally, analogous colors schemes have
+the same chroma level, but by using tones, shades and tints, you add
+interest to the schemes and adapt them to your needs for designing
+websites or designing a user interface.
+
+▪
+
+Complimentary: Complimentary is created by combining colors
+from opposite sides of the color wheel. In their most basic form, these
+schemes consist of only two colors but can easily be expanded using
+tones, tints, and shades.
+
+▪
+
+Split- Complementary: In split-complementary, instead of using
+colors that are opposites, you use colors on either side of the hue or
+opposite your base hue.
+
+▪
+
+Triadic: Triadic schemes are made up of hues equally spaced around
+the 12-spoke color wheel.
+
+▪
+
+Tetradic: Tetradic is the richest of all the schemes because it uses four
+colors arranged into complementary color pairs. It is probably the
+most complex one to create but you can do more research to find
+some good examples.
+
+Studying the Color Wheel
+In UI design, it is important to know all the different ways to come up with
+color combinations, using the basic color wheel. Know how the color
+schemes and combinations go together, and then start building cohesive
+color palettes to use inside of your projects.
+Once you have created a color palette based off the color wheel and you
+want to make all the colors synonymous, pick a color and lay over your
+palette. Set one of the blending modes so that you can see through it and
+then change transparency to bring a consistent look and feel to all of your
+colors in your palette.
+
+Additionally, you must know your target audience and their demography. It
+is vital to understand whom the interface you are designing is built for.
+Ensure that you are applying colors that make sense for your target
+demographic or audience. For example, when you look at applications or
+interfaces that are made for children, they are usually much more colorful –
+they have more than two colors. There are explosions of colors in websites
+or applications made for children because kids are an explosion of
+excitement, energy, and imagination.
+
+Contrast is Crucial
+To create a topnotch UI design that is astute in colors, ensure that your
+contrast is on point. This means that your body copy on the background
+must have a good contrast in order for it to be legible, readable and
+understandable. Your typography should not only stand out but must have
+the correct weight, color and size applied, so that you can look appealing on
+your interface.
+To check your contrast, desaturate your entire project and turn everything to
+grayscale to see if the different elements stand out from each other. This is
+very apt for accessibility and your general interface.
+
+OceanofPDF.com
+
+CHAPTER SIX
+Grid System in UI Designs
+A grid system is a structure of invisible lines and columns that allow you to
+line up your design neatly and in an organized way, keeping everything
+space in a manner that helps the user. Grid systems are structural
+foundations for design projects as they allow you to make your project look
+and feel better by creating consistent rhythm and spacing. In addition, they
+allow you to play with layouts but still keep that organized rhythm to
+enhance professionalism.
+
+Grids are fantastic because they create predictability in structure. They
+allow new and returning users to quickly get their bearing and easily find
+what they are looking for. Grids provide a consistent reference point,
+making readability and scannability easier. People scan more than they read
+and that enables them to quickly find information they are looking for.
+Grids also establish a structure, which enables designers to quickly organize
+information, making the site cleaner and more professional as a result. They
+can also help establish break points when they make device-independent
+designs. In a nutshell, they are a great way to create structure.
+
+Grid systems are made out of a series of columns. These columns stretch
+from top to bottom – vertical elements in each of the columns in your grid
+system should be the exact same size. In addition, you have the gutters,
+which are the spaces in between the columns. With gutters, you can dictate
+what their sizes should be depending on your project or the layout that you
+want.
+On the other hand, margins in UI designs are the empty area on the left and
+right hand side of your grid system that consists of the columns and gutter.
+It is the space that allows you to place them exactly where you need to in
+the center of your project – whether it is a website or an interface. It is
+unprofessional for the grids to extend all the way out of the edges of your
+project. The importance of margins is that they help you create a containing
+element where everything in your project will fit inside (outside of that are
+the margins.
+
+12 Column Grid
+The 12 Column Grid is the industry standard for grid systems. It is the most
+common type of grid system that you will use in your projects, especially
+for web design projects. 12 is identified as a great number for the grid
+system because the columns can be evenly spaced and can be divisible by
+other numbers.
+For instance, if you want to create a two-column layout, they will each take
+up six of those 12 columns. Consequently, as you move down to smaller
+screen sizes, you will decrease the amount of columns in your grid.
+
+Breaking the Grid
+You can strategically break the grid in order to emphasize important
+content. However, it has to be done sparingly, so that the site structure stays
+intact. There is a time and place to break the grid, but first and foremost you
+must ensure that the majority of your project abides by the rules of the grid.
+Therefore, when you break it, it looks intentional and professional.
+Large feature images or hero images are great examples of breaking the
+grid. They can expand outside the constraints of the grid system, and they
+can also be the full width of the browser. This allows them to be massive
+
+and exciting, while still having the rest of the content constrained inside of
+the grid system.
+In addition to hero images, you create asymmetrical elements that lead off
+the side of the page and dip into your grid system. You can also do value
+propositions and image elements that barely break outside of the grid
+system.
+Let’s review this example from a website:
+
+This website uses a three-column grid system. However, the grid is broken
+at five specific moments in order to draw attention towards certain things.
+For example, the hero image is very large, falling outside the grid area. The
+CTA is also slightly outside the grid, drawing the user’s eye.
+
+The other section, as shown above, has its own grid: a five-column
+structure; which breaks the three-column grid, but in a way that emphasizes
+the contents of that section.
+A grid system can seem authoritative and right at first glance, but it does
+provide a set of boundaries and rules that allows users to quickly find
+information. It also enables designers to quickly organize information.
+Good designers know when to follow the rules, while great designers know
+exactly when and why to break them. True creativity lies in the ability to
+see constraints as opportunities.
+
+UI Modes and Modals
+Modes are pervasive in interfaces around us. For instance, if you press the
+volume up button in a locked button in a locked phone, no action will occur.
+However, if the same phone is unlocked, pressing the same button will raise
+the volume. The same action – pushing the volume button – has different
+effects, depending on the current state of the phone.
+Another classic example of a mode is the use of the Caps Lock key on a
+typical keyboard. With the Caps Lock key off, pressing the key for the letter
+A in a text editor will display a lowercase A. With Caps Lock on, the
+simple action will result in an uppercase A. Thus, the Caps Lock key is a
+mode switcher.
+
+The use of modes becomes necessary in UI design, because certain input
+actions fit well with multiple functionalities. For example, if you want to
+sign a PDF document, moving the finger on the screen is the most natural
+action for drawing your signature. However, traditionally, using the finger is
+used for scrolling. Therefore, to allow for that gesture to have different
+results, a special edit mode will have to be defined.
+Modes are often a source of user error. This is usually because of the hidden
+state problem – people hardly realize which state the system is in and they
+expect that their actions will have a different result. As a result, UX
+researchers often ignore modes.
+A special type of mode is a modal. A modal is a type of popup window.
+What is special about a modal is that users cannot interact with the
+background content until they dismiss the window. Thus, modals put the
+system into a new mode. When the modal is on, clicking on any of the
+background visible links does not do anything anymore. Although, it is
+important to note that not every popup is a modal. Some allow you to
+interact with the background. These are called non-modal dialogs.
+Modes are a way of dealing with interface complexity. Often, the designer
+may have a limited input vocabulary and a lot of possible functions that an
+interface needs to support. As a result, they will end up reusing some of that
+input vocabulary for two different commands.
+In some cases, modes often lead to user errors, because users do not realize
+they are in the wrong mode or do not know how to get to a mode or out of a
+mode. However, in certain solutions like drawing on a touchscreen, modes
+may be the only reasonable solution to a design problem.
+OceanofPDF.com
+
+About The Author
+
+Carl Jones is the founder of Afterswitch Design, a leading
+behavior research and UX design consultancy specializing in using
+behavior economics and decision design to drive consumer
+decision making. He is a behavior design instructor working with
+over 50 companies to solve their most important behavior
+challenges.
+Carl holds a Bachelors and Master’s Degree in Creative Art from
+Florida International University (FIU), Miami, Florida. He also
+holds several certifications in Web Development and Programming.
+
+OceanofPDF.com
+
+

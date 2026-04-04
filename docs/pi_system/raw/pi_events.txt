@@ -1,0 +1,1977 @@
+Event Frames and Notifications
+
+Table of contents
+1
+
+INTRODUCTION ............................................................................................................... 4
+
+2
+
+PI SYSTEM SOFTWARE USED IN THIS CLASS...................................................................... 5
+
+3
+
+EVENT FRAMES IN PI AF................................................................................................... 6
+
+3.1. WHAT ARE PI EVENT FRAMES? .....................................................................................................6
+3.2. BACKGROUND: COURSE SCENARIO ..............................................................................................7
+3.3. BACKGROUND: WHAT ARE EVENT FRAME TEMPLATES? ...............................................................9
+3.3.1
+Hands-On: Create an Event Frame template ............................................................................ 10
+3.3.2
+Hands-On: Add attributes to your event frame template ........................................................ 11
+3.4. CREATING AN EF GENERATION ANALYSIS ................................................................................... 15
+3.5. BACKFILLING EVENT FRAME ANALYSIS ....................................................................................... 19
+3.6. DEFINING AN OUTPUT EXPRESSION FOR AN EVENT FRAME ANALYSIS ........................................ 22
+
+4
+
+CONSUMING EVENT FRAMES ........................................................................................ 24
+
+4.1. EVENT FRAMES IN PSE ............................................................................................................... 24
+4.1.1
+Knowledge check: Event Frame Searches, Acknowledgement and Annotation ...................... 27
+4.1.2
+Knowledge check: Advanced Event Frame Searches ................................................................ 28
+4.2. EVENT FRAME REPORTS IN EXCEL WITH PI DATALINK ................................................................. 29
+4.3.1
+Knowledge check: Creating Event Frame reports with PI DataLink ......................................... 30
+4.5.1
+Knowledge check: Using Pivot Charts to summarize Event Frames ......................................... 32
+4.3. EVENT FRAMES IN PI VISION ...................................................................................................... 36
+4.5.2
+Find Related Events .................................................................................................................. 37
+4.5.3
+Background: New course scenario for PI Vision ....................................................................... 39
+4.5.4
+Knowledge check: Find Events .................................................................................................. 41
+4.5.5
+Background: Get Event Details ................................................................................................. 43
+4.5.6
+Knowledge check: Event Details ............................................................................................... 44
+4.5.7
+Background: Compare Similar Events by Name or Type .......................................................... 45
+4.5.8
+Knowledge check : Compare Events ......................................................................................... 45
+4.5.9
+Background: Pinning Events ..................................................................................................... 50
+4.5.10 Knowledge check: Pinning an Event ......................................................................................... 50
+4.5.11 Background : Event tables ........................................................................................................ 52
+4.5.12 Knowledge check: Add an event table...................................................................................... 52
+
+5
+
+COMMUNICATING IMPORTANT EVENTS ........................................................................ 54
+
+5.1. INTRODUCING NOTIFICATIONS .................................................................................................. 55
+5.1.1
+Background: Notification components ..................................................................................... 55
+5.2. DELIVERING NOTIFICATIONS ...................................................................................................... 58
+5.3.1
+Background: Email Delivery Channel ........................................................................................ 58
+5.3.2
+Knowledge check: Email delivery configuration and checkout ................................................ 59
+5.3.3
+Background: Web service delivery channel .............................................................................. 61
+5.3. CONFIGURING NOTIFICATIONS .................................................................................................. 62
+5.3.4
+Background: Trigger conditions ................................................................................................ 62
+5.3.5
+Hands-on: Configuring a notification rule ................................................................................ 64
+5.3.6
+Background: Trigger criteria options ........................................................................................ 65
+5.4. FORMATTING THE INFORMATION TO DELIVER ........................................................................... 67
+5.3.7
+Hands-on: Customize Notifications message content & format .............................................. 68
+5.5. ACKNOWLEDGING NOTIFICATIONS ............................................................................................ 70
+5.3.8
+Knowledge check: Commenting and acknowledging events.................................................... 71
+5.3.9
+Knowledge check: Validating the acknowledgment process.................................................... 72
+5.6. ADDING CONTACTS ................................................................................................................... 74
+5.6.1
+Background: Active Directory (AD) access for contacts............................................................ 74
+5.6.2
+Background: Searching for contacts ......................................................................................... 75
+5.6.3
+Background: Adding contact information................................................................................. 75
+5.6.4
+Background: Notifications groups ............................................................................................ 76
+5.6.5
+Background: Notifications escalation teams ............................................................................ 76
+5.6.6
+Background: Subscribing contacts to Notifications .................................................................. 77
+5.6.7
+Background: Dynamic email delivery endpoints (since AF 2017 R2)........................................ 77
+5.6.8
+Background: Sending Notification alerts in escalation sequence............................................. 77
+
+6
+
+(OPTIONAL) ADMINISTRATOR TASKS ............................................................................. 80
+
+6.1. INSTALLING THE PI NOTIFICATIONS SERVICES ............................................................................. 80
+6.2. ACCOUNT PERMISSIONS FOR THE PI NOTIFICATION SERVICE ...................................................... 84
+6.2.1
+Configure Data Archive access for PI Notifications Service ...................................................... 84
+6.2.2
+PI AF object and local machine permissions for PI Notifications Service ................................. 85
+6.3. TROUBLESHOOTING THE PI NOTIFICATIONS SERVICE .................................................................. 86
+6.3.1
+Configure logging for the PI Notifications Service .................................................................... 86
+6.3.2
+Access Performance Counters .................................................................................................. 86
+
+7
+
+FINAL EXAM .................................................................................................................. 87
+
+1 Introduction
+Before reading this section, please refer to the following course YouTube video:
+Course Introduction
+
+In this course you will learn about Event Frames and Notifications that are a powerful combination of
+features in Asset Framework that help you capture, store, find, compare and analyze important system
+events and their related data. With notifications, you can send alerts to users in real time about
+conditions in the system that need specific attention. Corresponding actions can then be taken to be
+pro-active or to resolve the problem of the current situation.
+By the end of this Course you’ll be able to:
+
+
+
+
+
+
+Describe the uses and functions of Event Frames and the PI Notifications service.
+Understand the features and advantages of using Event Frame templates.
+Create Event Frames via asset analytics.
+Interact with different AVEVA PI System products that utilize Event Frames.
+Install and troubleshoot the PI Notifications service, and create a notification based on an Event
+Frame.
+
+Throughout this class we will assume you have a basic knowledge of the PI System. If you are new to the
+PI System, we encourage you to complete the PI System Basics class that is available for free on our
+Learning Page.
+The course consists of text-based lessons, and video lectures. You are encouraged to follow along with
+all video lectures using your Training Cloud Environment. Text-based lessons contain background theory,
+exercises, documentation, and other useful information.
+Lessons are categorized using the following key words:
+1. Hands-On: These lessons contain hands-on exercises with video step-by-step walkthroughs.
+While we are demonstrating how to use different functions of Event Frames and Notifications,
+you are encouraged to do the same on your virtual environment.
+2. Knowledge check: Exercises with step-by-step solutions to complete on your own using your
+virtual environment, or quizzes to keep your skills sharp.
+3. Background: Readings or videos containing useful background information to assist your
+understanding. These lessons are optional but encouraged as they will give you a more wellrounded understanding of the features of Event Frames and Notifications. Throughout these
+sections we will link out to reference documentation. You may be examined on the content
+inside these references, but as the exam is open book, you're welcome to visit these references
+during the exam.
+
+In the next lesson we'll cover the Learning Cloud Environment used in this class.
+
+2 PI System software used in this class
+SOFTWARE
+
+VERSION
+
+PI Data Archive 2018 SP3
+
+3.4.445.688
+
+PI AF Server 2018 SP3
+
+2.10.9.593
+
+PI Analysis Service 2018 SP3
+
+2.10.6.195
+
+AVEVA PI Vision 2022
+
+3.7.1.0
+
+PI DataLink 2022
+
+5.6.0.0
+
+3 Event Frames in PI AF
+3.1. What are PI Event Frames?
+Before reading this section, please refer to the following course YouTube video:
+What are PI Event Frames?
+
+Events are important process or business time periods that represent something happening
+that affects your operations. In the AVEVA PI System, events are known as event frames.
+Thanks to Event Frames, you can analyze your PI data in the context of these events rather
+than by continuous time periods. Instead of searching by time, Event Frames enables users
+to easily search the AVEVA PI System for the events they are trying to analyze or report on.
+With Event Frames, the AVEVA PI System helps you capture, store, find, compare and
+analyze the important events and their related data.
+Event Frames represent occurrences in your process that you want to know about, for
+example:
+
+
+Downtime tracking
+
+
+
+Environmental monitoring
+excursions
+
+
+
+Process excursions
+
+
+
+Product tracking batches
+
+
+
+Equipment startups and shut
+downs
+
+
+
+Operator shifts
+
+The following table presents some of the features and advantages of Event Frames:
+1. Reference multiple elements within the same
+event.
+Flexibility
+
+2. Support multiple overlapping events on a AF
+element.
+3. Capture any event; a “batch” is just one type of
+capturable event.
+
+Powerful search
+
+4. Search by time range, type of event or event
+frame attribute.
+
+5. Most common search attributes can be
+configures as indexed attributes to speed up
+end-user searches
+Scalability
+
+6. Event Frames are extremely scalable.
+
+An Event Frame is defined by three characteristics:
+
+
+Name.
+
+
+
+Start time and end time: defines the event’s time range.
+
+
+
+Context: event attributes and related assets.
+
+References:
+
+
+For more information see "Event frames in PI AF" in Asset Framework and PI System
+Explorer User Guide
+
+3.2. Background: Course scenario
+PI Big Tires Co. has been falling behind their production schedule because, for various
+reasons, the tires presses are frequently down. To improve the situation they want to use
+Event Frames in AF to track the downtime periods for all their presses in Houston, Montreal
+and Philadelphia.
+The Maintenance engineer has asked you to trace the root cause for every downtime. The
+curing press can be in one of five states, which have different criticality.
+
+They want to have a record of the investigations performed by the maintenance team.
+Therefore, it should be possible to acknowledge and save individual comments for each
+Downtime Event Frame.
+
+To approach this problem in this course you will complete the following tasks:
+1. Create an event frame template for the press downtime events. Set up a Naming
+pattern and enable the Can be acknowledge option.
+2. Add attributes to the previously created event frame template. Your goal is to capture the value
+of the press status attribute at the start of the problem, the length of the downtime duration
+and production loss (knowing that producing 1 tire takes approximately 5 minutes).
+3. Create an EF generation analysis to track the downtime events in your curing
+presses. Distinguish the different Press Status values and associate them with
+corresponding severities:
+a. Planned Maintenance and Press set-up - assign an Information severity level.
+b.
+
+Maintenance – assign a Minor severity level.
+
+c. No Operator – assign a Major severity level.
+4. Schedule it as Event-Triggered.
+5. Backfill the analyses for all presses for the time since midnight today.
+6. Set up a downtime log entry, which provides the information, whether it was a
+minor issue (when duration was less than 10 minutes) or whether it had a critical
+production impact.
+
+3.3. Background: What are event frame templates?
+Using event frame templates, you can define and standardize the related data (event frame attributes)
+associated with different types of events. For consistency, it is recommended to create event frame
+objects from templates. To learn more, see Base and derived templates. You can use event frame
+attributes to provide additional context around the event that are useful for searches and reports. For
+example, downtime events often have a reason code that users want to search for or filter on during
+analysis of their downtime events.
+You can also configure event frame attributes to reference process data in the context of the event. For
+example, a temperature excursion event is likely to have an attribute for the maximum temperature.
+You can configure event frames to record those values for you. Additionally, for each event type, you
+can configure an index for the most frequently searched attributes. This approach enables faster and
+easier searches on the PI AF server when you track several event types or millions of events.
+Data references in event frame templates
+When you create event frames dynamically with event frame templates, you typically need to reference
+elements, attributes, templates or other related objects based on those event frame templates. Because
+each individual event frame occurs in a slightly different context, you can use substitution parameters to
+reference other PI AF objects dynamically, rather than static, absolute references. For example, you can
+use a downtime event frame template for any number of assets, such as a pump, motor, boiler,
+compressor, and so on.
+In PI point data references, substitution parameters are useful for:
+
+
+
+Building tag name references based on hierarchy or other attribute values.
+Referencing other PI point attributes, such as from an event frame to the primary referenced
+element.
+
+The main limitation of PI point data references is that the element attribute must also be a PI point data
+reference.
+In String Builder data references, substitution parameters are useful for:
+
+
+
+
+
+Obtaining numeric values or string values when referenced element attributes do not have a PI
+point data reference.
+Creating a string by concatenating multiple values from referenced element attributes and other
+text.
+Passing a time context, including the end time of the event frame.
+Obtaining the name of referenced elements or their parents.
+
+The limitation of String Builder data references is that they do not perform unit of measure conversions
+or perform aggregations or calculations.
+
+A specific syntax is required to reference attributes from event frame templates, as described in Data
+references to attributes in the primary referenced element and Data references to attributes in other
+elements.
+
+3.3.1 Hands-On: Create an Event Frame template
+During this section, please refer to the following course YouTube video:
+Create an Event Frame Template
+
+Activity description
+In this activity, you will learn how to create an event frame template.
+Approach
+1. Connect to PISRV01 machine and from the Start menu open PI System Explorer
+(PSE).
+2. Click on Database and connect to the PI Big Tires Co. AF database and click OK.
+3. Select Library from the navigator panel and select the Event Frame Templates tab
+and click on the blue New template link.
+4. Name it Press Downtime and give it a description - Press Downtime event.
+5. The Naming Pattern field enables you to dynamically build the name of the event
+frames produced from the template so that each event frame will have a unique,
+identifiable name. Use the arrow on the right (
+) for a list of available substitution
+parameters. The most common ones are presented in the following table:
+%ELEMENT%
+
+Referenced element. Asset where
+the event happened.
+
+%..\ELEMENT%
+
+Name of the parent element of the
+referenced element. To retrieve
+further ancestors, use the ..\
+notation, such as %..\..\Element%.
+
+%TEMPLATE%
+
+Name of the event frame template.
+
+%STARTTIME:yyyyMM-dd
+HH:mm:ss.fff%
+
+Event start time and format.
+
+6. What naming pattern should we set so the downtime events are called something
+like the following?
+DownTime HOU.Press.01 (Houston) 2023-05-24 23:22:21
+
+Note: In case the Naming Pattern field is not set, event frames created with asset analytics will be
+named NameOfTheAnalysis – Starttime (i.e. Press Downtime – 2023-07-25 11:20:00).
+Answer: Set the Naming Pattern as Downtime %ELEMENT% (%..\ELEMENT%)
+%STARTTIME:yyyy-MM-dd HH:mm:ss% where HH is 24-hour format.
+7. To track, whether the event frames was read by an operator, enable the Can be
+Acknowledged option (
+
+).
+
+8. Check-in you changes.
+
+3.3.2 Hands-On: Add attributes to your event frame template
+
+During this section, please refer to the following course YouTube video:
+Add attributes to the event frame template
+
+Activity description
+In this activity, you will learn how to add attributes to your event frame template.
+Approach
+1. Double click on your event frame template to open it up.
+2. The attributes you want captured in an event frame will need to be defined under
+the attribute templates. Click new attribute template.
+3. The first thing that you want to track is the reason, why the press had a downtime.
+It is the value of the Press Status attribute at the start of the problem.
+On the Attributes tab, click on the blue New Attribute link. For the attribute name,
+enter Reason Code. For the description enter Reason code for the press downtime
+event. For value type, select Press Status from enumeration sets. For Data
+Reference select PI Point. Click on Settings.
+
+For the PI point data select attribute and type in the following syntax:
+.\Elements[.]|Press Status.
+For By Time Range select Start Time. Click on OK.
+
+You will get the Press Status value for the beginning of the event frame period as it
+has been recorded before.
+Note: If the value type was reset, switch it back to Press Status.
+Event Frame Attributes
+The generic format for attributes of event frames is .\Elements[.]|Attribute.
+The attribute reference starts with .\Elements[.]| to indicate the primary element of the event
+frame's Elements collection. .\ is the current reference, [.] is the default object of the collection.
+The pipe character (|) is used to separate the element from the attribute name.
+
+4. Add an event duration attribute. For the attribute name, enter Duration. For the
+description enter The length of the downtime duration.
+For value type, select Double. For Data Reference select PI Point. Click on Settings.
+For the PI point data select attribute and type in the following syntax:
+.\Elements[.]|Press Status.
+Note: Even though there is not a specific attribute describing the duration, you still
+need to pick an attribute. You can choose any attribute from the referenced
+element.
+
+For By Time select Not Supported. For By Time Range select Count. Click on OK.
+
+5. Producing one tire takes approximately 5 minutes. Based on the duration of the
+press downtime the number of tires can be calculated that could have been
+produced in case the press would have been running.
+Add a Production Loss attribute (default UOM: tires, value type: Double, data
+reference: Formula) and enter a calculation to get the number of tires with a
+division by 5:
+
+6. Check in the changes.
+
+3.4. Creating an EF generation analysis
+
+During this section, please refer to the following course YouTube video:
+Create an Event Frame Generation analysis
+
+Activity description
+In this activity you will learn how to create an EF generation analysis to track the downtime
+events in your curing presses.
+Approach
+Tip: Before you create an EF generation analysis, be sure an event frame template is available for it.
+1. Select Library from the navigator panel and select the Templates > Element
+Templates tab and click on the Press template.
+2. Under the Analysis Templates tab click on the blue Create a new analysis template
+link. Choose Event Frame Generation for the Analysis Type. Give a meaningful name
+and description to your analysis.
+An event frame analysis is based on an event frame template, go ahead and select
+the Press Downtime template from the dropdown list.
+
+Triggering Conditions (Start Trigger Only)
+It is time to enter the conditions that will trigger the start and end event: StartTrigger and
+EndTrigger. These conditions are entered as expressions using the Performance Equations
+(PE) syntax.
+When a single condition triggers both the start and the end of an event frame, only the
+StartTrigger expression is needed. When the expression evaluates to TRUE the event frame
+is started, and when it evaluates to FALSE the event frame is closed. For example a tank’s
+level rising above a threshold might start an overflow event, the event would end when
+level is below the threshold.
+
+Triggering Conditions (Start and End Trigger)
+You can specify an EndTrigger expression when the start and end conditions are different:
+
+In the case with Start and End Triggers, the end of the event is dependent on the End Trigger
+condition only. So after the event has started, the event ends when the End Trigger
+becomes true, independent from whether the Start Trigger is True or False.
+
+Tip: If using start and end triggers, make sure the expressions never evaluate to TRUE at the same time
+since this may lead to event frames with zero second durations. Try to configure your event frames to
+use only a StartTrigger expression.
+For example, if the temperature rises in your reactor the foam level rises accordingly. When
+the temperature drops again, the foam level drops as well, but with some delay in time.
+You would like to capture the time, when temperature is too high until foam level is back to
+normal:
+
+Defining Triggering Condition for the Press
+Downtime
+Since AF 2016 it is possible to define several start trigger conditions and associate them with
+different event frame severities. This meets our requirement to have event frames with
+different severity based on the reason why the press was down. Let us look at the first
+situation, when the press stopped running because of a Planned maintenance or a Press setup.
+The expression to start the event in that case is:
+'Press Status'="Planned Maintenance" or 'Press Status'="Press set-up"
+
+Assign an Information severity level.
+To enter start and end triggers, click on blue Add… link and select
+corresponding option from the dropdown.
+
+Enter the start and end trigger expressions and assign the severity levels as follows:
+
+Tip: Use the StartTrigger True for option to require the start trigger remain true for a set time interval
+before creating the event frame. This is useful for attributes with continuous, non-stepped data to
+prevent spikes in the input data from generating unwanted event frames.
+
+Scheduling an Event Frame Analysis
+The last thing to do is to schedule the event frame analysis. As with expressions and rollups, two
+scheduling options are available: Event-Trigger and Periodic. For this exercise, schedule it as EventTriggered.
+Since you set up the analysis at a template level the analyses should be started automatically. Confirm
+that this analysis was applied to all of the equipment pieces by navigating back under elements.
+If you want to see if event frames are being generated, navigate to the event frames tab. Right click and
+do a new search, and this brings up the event frame search menu.
+I know that downtime was in the name of my event frame so I'm going to do the wild card asterisk,
+downtime, asterisk, and do a search.
+
+3.5. Backfilling Event Frame analysis
+During this section, please refer to the following course YouTube video:
+Backfilling Event Frame analysis
+
+Activity description
+The analysis we have created will monitor the Press Status from now on. However, with the
+Backfill function of analysis, it is possible to also backfill past periods in time! This means
+that the archived values for Press Status will be examined and event frames with dates in
+the past will be created accordingly.
+In this activity your goal is to backfill the event frames since today at midnight.
+Approach
+1. Use the Management plugin in the Navigator Panel
+to backfill multiple event frames. Initially, all analyses in that AF
+database will be listed.
+To work with a specific set of analyses (all the downtime analyses
+for all presses), you can define and save a search that will filter just
+those analyses:
+2. Click on the green
+
+sign to add a new search:
+
+3. For the search name, enter Press Downtime Analyses and select Template under the
+Add Criteria dropdown.
+4. From the Template dropdown, select Press Template\Downtime and click on OK. Result:
+the list of analyses on the right hand side lists twelve analyses (four from each location).
+5. To perform a backfill for all Presses click on the checkbox on top of the list to select all
+presses.
+
+6. Click on blue Queue backfilling or recalculation for 12 selected analyses link.
+For Start Time, enter a t (=today midnight), for End Time enter a * (=now).
+Acknowledge that existing event frames in the time range will be deleted, then click on
+Queue button.
+
+Note with regard to the required acknowledgement: For an event-frame-generation analysis (different
+to the backfill case in context with non event-frame-generation analyses), data is automatically deleted
+and recalculated. This is the only mode allowed. Be aware that annotations on those event frames will
+be lost.
+
+Automatic Recalculation: (AF 2017 R2 and later)
+In case you expect that data from your inputs will be late-arriving or be out-of-order, you can request
+automatic recalculation for an analysis. The Management list allows to set this option for multiple
+analyses within one command. To set the option on an individual analysis base, use Advanced Options
+on the Analyses tab of an element or an element template.
+
+The Backfilling column will show the progress of the backfill activity.
+
+After backfilling is completed, switch to the Elements tab and select one of the presses. On
+the General tab and click on the blue Event Frames link. You will get a list with all event
+frames linked with that element.
+(optional) Verification: what is the start time of the first event frame?
+_____________________
+(The first event will be from some time past today midnight, because we backfilled from today midnight
+onwards.)
+
+3.6. Defining an output expression for an event frame
+analysis
+Activity description
+When the downtime event is closed, we want to set a downtime log entry, which provides
+the information, whether it was a minor issue (when duration was less than 10 minutes) or
+whether it had a critical production impact.
+Explore the option to output the result of an expression in an event frame attribute at the
+time when an event frame is closed.
+Approach
+1. Add a string attribute to the event frame template for press downtimes.
+2. Define an expression with a string result depending on the event duration.
+3. Store the expression output in an event frame attribute.
+Step-by-Step Instructions
+1. Add a string attribute Downtime Log Entry into the Press Downtime event frame
+template:
+
+2. Open the Downtime analysis in the Press element template.
+3. Click on blue Add… link on top of the triggers section and select Output Expression
+option from the dropdown.
+For the expression, enter
+IF EventFrame("Duration") > 600
+then "* critical production impact *"
+else "minor issue"
+
+Note: To start a new line, insert Shift-Enter.
+4. Click on the blue Map link at the right hand side, and select the Downtime Log Entry
+attribute.
+
+5. Check-in your changes.
+6. Search for event frames and confirm that you are getting expected values:
+
+4 Consuming Event Frames
+Event Frames are stored in the AF Server. Visualization clients, such as PI Vision and PI
+Datalink access the AF Server to retrieve the events and their related data providing you
+with powerful tools to analyze important events.
+Note: PI ProcessBook, PI BatchView, and PI Manual Logger do not support event frame visualization.
+
+4.1. Event Frames in PSE
+In this section, we will be exploring how to consume event frames in PI System Explorer
+(PSE). As an administrator, you can use PSE to search for events and analyze them. The
+results are presented in a practical table format that features a Gantt chart and columns for
+the attributes. Moreover, this is a quick way of verifying the creation of event frames.
+In order to access event frames in PSE, click on the Event Frames plugin under the navigator
+panel.
+Note: Unlike elements, it is not possible to browse events. You actually have to search for them.
+
+The following screenshot presents the main features of the Event Frames plugin:
+
+Event Frame Search Results
+Event frames are listed with their information such as the event frame name, a Gantt
+diagram, the event duration, the severity, and the start and end time:
+
+Displaying the Event Frame attributes
+By default, the event attributes are not displayed in the result window.
+By right-clicking and selecting Column Visibility, you will be able to choose the attributes you
+want to display.
+
+Tip: To change the column visibility you can also click on the Settings icon
+search results.
+
+in the header row of the
+
+Column
+(Meaning)
+
+Column
+(Header Icon)
+
+EF Row
+Information
+
+Is Template
+
+Meaning
+Hover with the mouse over this column to
+get the event frame template.
+
+<empty>
+Is Locked
+
+Event frame is not based on an event frame
+template.
+Captured Values: values for the event frame
+attributes are saved in AF (see note below).
+
+<empty>
+Is Annotated
+
+Values for the event frame attributes are
+not saved in AF (see note below).
+Event Frame is annotated. Hover with the
+mouse over the icon to get the
+annotation(s).
+Use EF right mouse button menu option
+Annotate… to enter new annotations.
+
+<empty>
+
+Is Not
+Acknowledged
+
+Event Frame is not annotated.
+Use EF right mouse button menu option
+Annotate… to enter new annotations.
+Event Frame can be acknowledged.
+Use EF right mouse button menu option
+Acknowledge… to acknowledge the EF.
+Event Frame is acknowledged.
+Hover with the mouse over the icon to get
+acknowledgement info (by whom?, when?).
+
+<empty>
+
+Event Frame cannot be acknowledged.
+Whether an event frame can be
+acknowledged is defined in the
+corresponding event frame template
+(General tab)
+
+Note: You capture values to save the values for event frame attributes in a table in the PI AF
+database. This can improve performance since PI AF does not execute any data references.
+If you add new attributes to event frames with captured values, you should recapture those
+values to ensure that values are also captured for the new attributes.
+
+4.1.1 Knowledge check: Event Frame Searches, Acknowledgement and
+Annotation
+Activity description
+You want to get the details for any downtimes after 10PM yesterday triggered by a “No
+Operator” root cause so you can annotate the events, and acknowledge them.
+
+Approach
+Use the Event Frame Search window to perform the following:
+1. Select New Search from the right mouse button menu of the Event Frame search root.
+2. Enter following criteria: start time: y+22h, event frame template: Press Downtime,
+element name: *Hou*, Reason Code= No Operator ( you have to use Add Criteria to
+enter that)
+
+Hint: you can enter the criteria one by one and click on Search every time. If you enter more criteria,
+then you get less event frames that match your criteria. Click on OK when the returned event frames
+meet the desired scope.
+3. Rename your narrowed down search: Downtime Events No Operator after 10PM
+yesterday
+Background: Once performed, your searches and their criteria are saved. Use Rename from the
+context menu of a search to assign a descriptive name for the search. To further refine an existing
+search, while keeping the existing search saved, select New Search from the context menu of the
+search and then modify the new one.
+4. Add columns for the Reason Code and the Event Duration attributes. Verify the Reason
+Code is No Operator in every case.
+5. Select the first event frame and add annotation: “Bob was busy with representative
+from press manufacturer.” (Hint: Right-click on an event frame and select Annotate…)
+
+6. Select all event frames that started before midnight and acknowledge them in one
+action. (Hint: Select event frames, right click on your selection and select
+Acknowledge…)
+
+4.1.2 Knowledge check: Advanced Event Frame Searches
+Activity description
+Perform the following event frame searches in PSE:
+
+
+Find all downtime events for Montreal’s press2 for the last 12 hours.
+
+
+
+Add columns to show the Production Lost and Reason code.
+
+
+
+Narrow down your search to find events that lasted more than 10 minutes.
+
+
+
+Narrow down your search to find downtime events caused by Press set-up.
+
+Approach
+Use the Event Frame Search window to perform your searches. Make sure to add the
+necessary search criteria.
+
+4.2. Event Frame Reports in Excel with PI Datalink
+During this section, please refer to the following course YouTube videos:
+
+
+Use the Explore Events Function in PI DataLink to Build Event Reports
+
+
+
+When and How to Use the Compare Events Function in PI DataLink
+
+Explore versus Compare Events functions
+You can use PI Datalink (2014 or later) to import event frames from AF into Excel and then
+create reports for viewing and analyzing those events. Pivot tables and pivot charts are
+great Excel features for summarizing the data and getting better insight into event frames
+Under the PI Datalink ribbon in Excel you will find two functions (buttons) to import event
+frame data into Excel: The Explore Events function and the Compare Events function.
+The Explore Events function returns one event per row, which is useful to analyze events
+sharing the same EF template.
+
+Here: maximum temperature of event frame named Batch 1222 has been highlighted above
+in yellow (89.56).
+In case an event frame has child events, it is possible to also list child elements in further
+lines below the parent event. In the example below, there are nine child event frames
+(Material Add 1, Agitate, ,…):
+
+Here: the maximum temperature of child event frames Material Add 1 and Agitate have
+been highlighted in green (12.45 and 13.08).
+The second function, Compare Events, allows you to compare hierarchical events, in other
+words, events with child events. The compare events function shows attributes from both
+the parent event and the child event(s). In the following example maximum temperature for
+the complete production batch as well as for the first child event frames Material Add 1 and
+Agitate is returned:
+
+4.3.1 Knowledge check: Creating Event Frame reports with PI DataLink
+Activity description
+Management wants to answer the following questions about the downtime events:
+1. What is the most offending cause of downtimes?
+2. How much production are we losing because of downtime events?
+The best way to find an answer to these questions is by creating an Excel report which
+imports the event frames into an Excel spreadsheet. Excel offers some useful business
+intelligence tools that will help us aggregate the data so management can make decisions.
+
+Approach
+We will be using PI Datalink to import the event frame information and then use Excel
+PowerPivot and PowerChart to analyze the downtime events.
+Building the DownTime Analysis Report
+For this exercise, you will be using a template: Press DownTime Analysis.xlsx, located in the
+class\exercises folder. The template contains two sheets; we will be importing the event
+frames data into the Raw Data sheet, which will be read from the Report sheet via a pivot
+table and a pivot chart.
+Since we want to analyze the downtime events which are all based on the
+same EF template, we will be taking advantage of the Explore function in PI
+Datalink. Go to the Raw Data sheet, set the cursor into cell A2 and click on
+the Explore function in the PI Datalink ribbon
+
+Configuring the Explore Events Function
+The Explore Events pane will show up. This
+pane offers several fields for you to refine
+your event frames search. Moreover, it
+features a results preview section.
+For the Search start and Search end fields
+point to the corresponding cells on the
+Report sheet (see figure).
+Keep * for event name and element name.
+Note: It is expected you will not get Event
+Frames that are not yet finished. To
+exclude Event Frames that are not
+finished, click on More Search Options and
+select entirely in range under the search
+mode.
+Select the seven columns to display; you can as well set the column order. The columns are
+actually the event frame attributes. The following columns are needed for the analysis:
+
+Hit OK to display all event frame information in the Raw Data sheet.
+
+Just by looking at this spreadsheet, it is very difficult to identify the most offending
+downtime cause or the production lost. By using an Excel tool, Pivot tables, we will be able
+to automatically extract, organize, and summarize the event frame data. PivotTables, and
+their graphical companions, Pivot Charts, are very versatile and easy to create. No formulas
+needed!
+
+4.5.1 Knowledge check: Using Pivot Charts to summarize Event Frames
+Activity description
+Use Excel Pivot Chart functionalities to summarize event frame information.
+Approach
+1. Go to the Report sheet, select the Insert ribbon and select the PivotCharts option to
+create a PivotTable and a PivotChart.
+
+2. As input for the PivotTable select the cell
+range in the Raw Data sheet where the
+ExploreEvents function has returned the data
+(including the header line).
+Then choose to place the PivotTable and
+PivotChart in the Report sheet.
+Tip: if you want to correct the source area later in
+time, select all cells of your PivotTable (or choose the
+Analyse ribbon), then from the Analyse Ribbon, select
+Change Data Source.
+
+The PivotChart field list should now be shown in your Excel worksheet and a range of the
+worksheet should be designated where the pivot table will be located, as shown below.
+
+3. Select the PivotTable, and review the PivotTable Field list. These fields come from
+the column names of the Raw Data sheet.
+4. To perform a downtime analysis for our Event Frames based on the corresponding
+reason code, select the Reason Code line and drag into the Values area. The applied
+Aggregation for the reason codes is COUNT, because these are non-numeric values.
+Select the Reason Code line again and drag into the Axis (Categories) area:
+
+5. Select the Production Loss line and drag into the Values area. The aggregation
+applied for these numeric values is SUM. Your PIVOT table is extended by another
+row, which summarizes corresponding production losses, based on the reason
+codes:
+
+Tip1: if the PivotTable Fields pane was closed and you want to have it available again, select a cell of
+your PivotTable. From the right-mouse button menu, select Show Field List.
+Tip2: to change the aggregation that is applied to your data, select the dropdown icon on the field, and
+choose Value Field Settings… to select another aggregation type.
+
+6. Let us enhance our Pivot table for analysis depending on individual press
+selections.
+Which column of our data represents a press ?
+
+7. Select a cell in the Pivot table, and select the Analyze ribbon from the Pivot
+Table tools. Click on insert slicer, select primary element and click on OK.
+8. The slicer for the primary element is added. It allows selecting any combination of one or more
+presses for our analysis. Check various combinations (use Shift- and Ctrl-key for selections in the
+slicer):
+
+
+all presses
+
+
+
+PHI. Press01 only
+
+
+
+all “Number 01”- presses (i.e. HOU.Press.01, MTL.Press.01 and PHI. Press01)
+
+
+
+all presses in Houston
+
+The PivotTable and the PivotChart will update to show you what reason code is causing
+most of the downtime events. In the screenshot above, it is clear that during the observed
+period of time, planned maintenance has caused most of the production losses for the
+Houston Presses.
+
+4.3. Event Frames in PI Vision
+PI Vision enables you to view and analyze your data during the time range of a particular
+event. For example, you may want to examine the performance of an asset during an
+operator shift or compare the data for several assets during a downtime period. You can
+compare multiple events on a single trend, analyze root causes, investigate an event by
+examining it in detail, and annotate it with notes that you can share with colleagues.
+Each event has a severity level associated with it. The severity level is marked in the Events
+pane with a color-coded bar in front of each event. Severity levels have the following default
+levels, names and color codes:
+Level 5: Critical
+Level 4: Major
+Level 3: Minor
+Level 2: Warning
+Level 1: Information
+Level 0: None (no color)
+
+4.5.2 Find Related Events
+PI Vision enables you to view and analyze PI data during the time range of an event. For
+example, you may want to examine the performance of an asset during an operator shift or
+compare the data for several assets during a downtime period.
+To view events, open the
+Events tab on the left side.
+Here you will find events
+related to your process, the
+color to the left of each event
+indicates its severity. By
+default, the time range of the
+display and the context of the
+symbols in the display
+determine which events are
+shown in the Events list. To
+discover additional events,
+modify the time range or
+choose Edit Search Criteria.
+When editing the search criteria, there are a number of filtering options to
+find the Event Frames you are looking for, as shown at left.
+
+Select an event to find its Data Items (event attributes) and its start and end time.
+
+By right clicking on an event, you can choose Apply Time Range apply the event’s time range
+to the display.
+
+4.5.3 Background: New course scenario for PI Vision
+Note: In this segment of the course, you will be introduced to a new database called "OSIsoft Plant" that
+will be used for training purposes. Prior to commencing the PI Vision exercises, we encourage you to
+carefully review the details provided below in order to become familiar with the database.
+The next practical exercises dedicated to PI Vision will use a fictitious manufacturing plant, OSIsoft Plant.
+Initially this simple plant has two production lines; each line has one mixing tank and one storage tank.
+
+Each tank has different analogue process variables such as Internal and External Temperatures, Flow Rate,
+Pressure and Level; values continuously collected from devices in the Plant.
+Other data associated with these tanks such as the manufacturer, model and installation date are stored
+in the maintenance sheets available on tables in an SQL Server. The information related to the material
+flowing in these tanks is also kept in tables on the plant’s SQL Servers. Despite the fact that these tables
+may be available in a relation database, this information cannot be easily integrated with the historical
+data stored in the Data Archive. To integrate the time series data with SQL based data, the Asset
+Framework with an asset hierarchy is utilised, bringing all the data and information into one place - the
+PI System.
+A collection of PI Points has been built in the PI Data Archive for storing the process variable values along
+with their timestamps. The plant hierarchy in the PI Asset Framework brings all the important information
+and data into one place, as shown below.
+
+4.5.4 Knowledge check: Find Events
+Activity Description
+In “Industrial Plants of The World”, the process engineer has set up Downtime tracking using
+AF Event Frames. An Event is created when the tank level drops below 10% full. You have
+been asked to provide details on how much production was lost in the last event.
+Approach:
+Step 1: Create a New Display
+Step 2: Select Events
+
+Step 3: Select Edit search Criteria
+Step 4: Set Database dropdown to OSIsoft Plant
+Step 5: Under Asset Name select ANY, then click APPLY.
+
+ What is the last value for Lost Production? (Hint: the event highest in the list is the last one)
+____________
+ When did it occur? _____________
+ What was the Reason Code? ______________
+ How many minutes did the Event last for? ___________
+
+4.5.5 Background: Get Event Details
+Choosing Event Details will create a trend and table with
+information about the event, click an item to add it to the trend.
+On the right, will also see the Actions and Comments associated
+with an event. If you have access to do so, you can add a new
+comment to the Event Frame and ‘Acknowledge’ it. The access
+is controlled in PI System Explorer with the Annotate permission.
+
+4.5.6 Knowledge check: Event Details
+Activity Description
+You have been asked to provide more details about the event you have analyzed in the last
+directed activity including:
+
+
+
+
+
+% Full for the beginning and end of the event
+Event duration
+Reason Code at the start of the event
+Tank status at the beginning and end of the Event.
+
+Approach:
+Step 1: Follow steps in the previous activity to obtain a list of Events.
+Step 2: Right click an Event and select Event Details.
+Step 3: Acknowledge the event with the Green Acknowledge button in the top right-hand corner. Why
+might you do this?
+Step 4: Click the top two graph symbols. What
+happened?
+
+Step 5: Fill in the table:
+% Full for the beginning and end of the event
+Event duration
+Reason Code at the start of the event
+Tank status at the beginning and end of the event.
+
+4.5.7 Background: Compare Similar Events by Name or Type
+During this section, please refer to the following course YouTube videos:
+View & Compare related Event Frames
+
+PI Vision lets you compare events such as process downtime, process excursions, operator
+shifts, or batches. With the event comparison feature, you can analyze process data across
+multiple events on a single overlay trend. The feature is designed to help you identify
+similarities and differences between events, assess sub-events, and determine root causes.
+Choosing Compare Similar Events will open a list of similar events with overlaid trends and a
+Gantt chart. You can hide events or highlight an event in the overlay trends. Additionally,
+you can drag more attributes to the display area to create more overlay trends.
+
+4.5.8 Knowledge check : Compare Events
+Activity Description
+The visualization and acknowledge of the events have been found really useful by managers
+and operators but they have asked you to show them how to compare the most recent
+event with similar events in the past for the same asset.
+Approach:
+Step 1: Create a New Display
+Step 2: Select Events
+
+Step 3: Select Edit search Criteria
+
+Step 4: Set Database dropdown to OSIsoft Plant
+Step 5: Under Asset Name select ANY, then click APPLY.
+Step 6: Right click on the first event and
+select “Compare Similar Events by Type”.
+
+Step 7: A Gantt diagram will appear in the lowest part of the display.
+
+Step 8: Drag and drop the lost production into the display
+
+Step 9: Drag and drop Maximum Internal Temperature, Maximum External Temperature and
+Temperature Difference (Hint: you can drag and drop them individually into the same trend or if you
+click and hold Ctrl in your keyboard you can make multiple attribute selection.
+
+Step 10: Change line style for Temperatures’ attributes:
+ In the trend that created in Step 9 click on the gear icon
+ Click on the Internal Temperature attribute
+ Change the line style at the line style drop down menu
+
+ Do the same for the External Temperature attribute.
+ Once the changes have been made, click on the gear icon again to exit Trend configuration
+settings
+After an initial review, operators requested us to separate Maximum temperatures and
+Temperature Difference into different trends so they can easily analyze the information:
+Step 11: Create a trend for Maximum Internal and External temperatures and another for Temperature
+difference:
+ In the trend that created in Step 9 click on the gear icon
+ Click on the Temperature Difference attribute
+ Click on the X button next to attribute’s name
+
+ Click on the gear icon again to exit Trend configuration settings.
+Step 12: Drag and drop Temperature Difference into the display, now we have two different trends:
+
+Step 13: Save your display, name it “Downtime Comparison <your initials>”.
+Operators will use this display to further analyze what is happening when there are Downtimes, help
+them analyze the information by using different functionalities:
+Step 14: If you click different events at the Events pane or at the Gantt chart the trends related to that
+event will be highlighted allowing you to identify specific details for that particular event.
+Step 15: Pan an event comparison:
+ At the Temperature Difference trend move the cursor to the bottom of the trend until the cursor
+changes to a drag cursor
+ Click the highlighted lower section of the trend and drag the trend left or right to pan across the
+time range backwards or forwards
+ See how panning across an individual trend will change the time range of all displayed event
+comparisons. The duration of the time range will not be affected.
+Step 16: Zoom in on an event comparison:
+ At the Temperature Difference trend drag your pointer over an area of your interest.
+ Release the pointer. You will see how the trend redraws, zooming in on the area you selected
+(The start time and end time of all trend traces are adjusted accordingly, also the corresponding
+area of the Gantt chart is highlighted)
+ To remove the Zoom, click the Revert button
+
+at the top right corner on your screen.
+
+Step 17: Maximize an event comparison:
+ At the Temperature Difference trend click on the Maximize Trend button
+corner of the trend.
+ Click on the Collapse Trend button
+
+in the upper right
+
+to restore the trend to its original size.
+
+4.5.9 Background: Pinning Events
+Once you created an event comparison screen, you can pin events from the search results as
+your reference event. Pinned events are your benchmark events that remain at the top of
+the Events pane even after you perform new event searches. Once you no longer want an
+event to be pinned at the top of the pane, you can remove it from the Pinned events list.
+
+4.5.10 Knowledge check: Pinning an Event
+Activity Description
+While investigating these tank events you noticed that the shortest event is the event
+against which you can compare all other events. You want to highlight so you can easily
+compare this event against others.
+Approach:
+Step 1: In your display from the previous exercise right-click the event in the Events pane
+corresponding to the shortest event on the Gantt chart and click Pin Event. The pinned
+event appears at the top of the pane in the Pinned section and have yellow legend marker
+next to them.
+Step 2: After you pin an event, you can perform the following operations:
+Step 3: To highlight the pinned event on the Overlay Trend, select the event in the Events pane.
+Step 4: To add another pinned event, right-click that event and click Pin Event.
+Step 5: To save the pinned event, save the event comparison display by clicking the Save button.
+Step 6: To unpin your pinned event, right-click it and click Unpin Event.
+Step 7: Here you have an example.
+
+4.5.11 Background : Event tables
+The events table provides a dynamically updating, tabular view of events that meet specified criteria. Upon
+creation, the table shows the events from the Events pane, based on the criteria in the Edit Search Criteria
+menu. After you create an events table, you can change the events inside the table by changing the criteria
+in the Search Criteria pane. You can sort events in the table, and the sorting options on the events table are
+saved with the display.
+Use the Configure Table pane to configure the columns, style, and criteria for events of an events table.
+Upon creation, the table shows the events from the Events pane, and those search settings are copied to the
+Configure Table pane. After you create the table, use the Search Criteria menu to change the search criteria
+that sets the events that appear in the table. The Configure Table pane opens automatically when you
+create an events table.
+
+4.5.12 Knowledge check: Add an event table
+Activity Description
+Your manager found very interesting all the event configuration, but he/she would love to see those events
+related to one tank in the tank display together with the rest of attributes. You talk them about the event
+frame tables and they ask you to add one into the Tank General overview display. They want something like:
+
+Approach:
+Step 1: Go to the PI Vision homepage if it is not already open and open the display Tank General Overview. Click on the
+design mode icon.
+Step 2: Open the event frame icon. It should have a blue star indicating that there are some events related to the asset
+on the display.
+
+Event Frames and Notifications
+
+PAGE 53 OF 87
+
+Step 3: Mark the box next to “Automatically refresh the list”.
+
+Step 4: Click on “Create Event Table”
+
+and move the table to the lower part of the display.
+
+Step 5: A menu is opened on the right, on the Columns section, remove the asset by
+selecting it and clicking on the down arrow.
+
+Step 6: Attributes can also be added directly by dragging and dropping from the event details. Add the Temperature
+Difference to the table.
+
+Step 7: Click on save.
+Step 8: Now the events can be acknowledged using the display. Click on the green acknowledge button in the table (you
+should be out of the design mode). Every time you acknowledge an event you need to click on save.
+Step 9: Use the asset switching to see the different events for the other tanks.
+
+Event Frames and Notifications
+
+PAGE 54 OF 87
+
+5 Communicating Important Events
+During this section, please refer to the following course YouTube video:
+What are Notifications?
+
+Notifications, which is a feature in Asset Framework, allows alerts to users in real time about conditions in
+their system that need specific attention. Corresponding actions can be taken to be pro-active or to resolve
+the problem of the current situation. The information is either sent via email or is passed onto a Web
+Service.
+The recipients for the notifications (“subscribers”) have the option to acknowledge notifications. In case a
+situation, that requires action, is not acknowledged in time, notifications can be sent out again.
+Examples for the use of notifications are:
+
+
+
+
+
+Temperature is outside the normal range
+Equipment is shutdown
+Runtime counters have elapsed indicating a maintenance is required
+Amount of supply material is below a critical minimum level
+
+Note: Notifications have been revised in the AF 2016 R2 version. In previous versions, there was a different concept for
+the Notifications, which is now referred to as “Legacy Notifications”. When upgrading the PI System to 2016 R2, existing
+legacy notifications can be migrated to the new concept using a dedicated migration tool.
+
+Event Frames and Notifications
+
+PAGE 55 OF 87
+
+5.1. Introducing Notifications
+With AF 2016 R2, notifications are triggered when new Event Frames are generated in AF. Conditions for the
+trigger are defined in notification rules.
+The event frames generation may be related to different sources. It can be performed by asset analytics, by
+an Event Frame Generator (EFGen) interface, by a custom AF SDK application or a manual creation.
+
+5.1.1 Background: Notification components
+
+PI Notifications Service
+The PI Notifications Service processes event frames defined in the Asset Framework (AF) in real-time and
+sends out email and web service notifications. The service is installed from the AF Server 2016 R2 Install Kit.
+Notification Rule tab (PI System Explorer)
+Notification Rules can be defined for individual elements or be created as a template. The User Interface for
+configuring notification rules in PI System Explorer is in a dedicated tab on elements and element templates:
+
+Event Frames and Notifications
+
+PAGE 56 OF 87
+
+The definition includes the trigger criteria, adding subscribers to the notification rule, and formatting the
+message to suit the needs of your organization.
+Management Plug-In (PI System Explorer)
+Allows management of analyses and notification rules on the AF Server.
+
+Event Frames and Notifications
+
+PAGE 57 OF 87
+
+Event Frames and Notifications
+
+PAGE 58 OF 87
+
+5.2. Delivering Notifications
+During this section, please refer to the following course YouTube video:
+Delivering Notifications
+
+Notifications Delivery Channels provide for the mechanism by which alerts are delivered to subscribers.
+With the standard installation of Notifications, the following delivery channels are available:
+
+Email
+Email delivery channel supports sending emails with notification alerts via an SMTP Mail Server.
+
+Web Service
+Web service channel supports providing information to a web service by calling one of its methods.
+Note: Legacy Notifications in earlier AF versions also supported OCS and Custom delivery channels. These are not
+supported with the new Notifications in AF 2016 R2
+
+5.3.1 Background: Email Delivery Channel
+The settings for the Email delivery channel allow you to configure the primary and backup SMTP server to
+relay the emails as well as the “From” email address for the alerts. The IT department should indicate which
+servers and ports to use for the primary and backup SMTP servers. As for the “Sender Email”, this address is
+not validated and can thus be set to any address desired (i.e.: PINotifications@domain.com). In most cases,
+the Allow contacts to set sender email should not be enabled.
+Note: In the Training Cloud Environment (TCE) use notifications@pischool.int.
+
+Event Frames and Notifications
+
+PAGE 59 OF 87
+
+Once the email delivery channel is setup, most email addresses should be provided by Active Directory (AD).
+If the AD does not include all email addresses needed, it will be possible to create additional emails within
+the Contacts section of PSE.
+
+5.3.2 Knowledge check: Email delivery configuration and checkout
+Activity description
+The goal of this exercise is to understand the required settings for the email delivery.
+Approach
+1. From PSE, select Contacts in the Navigator and navigate to Tools > Delivery Channel Plugins, then
+from the Email Delivery Channel Plug-In context menu select the Settings.
+
+2. In case of the Training Cloud Environment (TCE), the mail server is installed on PISRV01.
+Note: The mail server on PISRV01 is configured just for some user accounts in the pischool.int domain.
+3. Click on the Test… button to send a test email to student01@pischool.int.
+
+Event Frames and Notifications
+
+PAGE 60 OF 87
+
+4. Start Microsoft Office Outlook and verify reception of the test email.
+Note: If you start Outlook the first time, you will be prompted to enter the password for student01, student02 and
+student03. Enter the password (enter same password for all the three accounts), select the option to save the password
+and click on OK.
+
+Event Frames and Notifications
+
+PAGE 61 OF 87
+
+5.3.3 Background: Web service delivery channel
+The web service delivery channel allows Notifications to contact and provide information to a web service by
+calling one of its methods. To use this delivery channel, a web service must thus be available on a web
+server.
+About Web Services
+A web service is a method of communication between two electronic devices over the web. In most cases, it is a service
+hosted on a web server that provides methods to its clients. Those methods will usually wait for incoming information
+from one end, then crunch the data, to finally return the data to the same client or pass that information to another
+one.
+There are many web services commercially available, and many development environments offer templates
+and other tools to develop custom Web services.
+Example: A custom Web Service could process the received information and generate corresponding work
+orders in a customer Maintenance System:
+
+Event Frames and Notifications
+
+PAGE 62 OF 87
+
+5.3. Configuring Notifications
+Configuring a notification rule includes specifying the trigger criteria, adding subscribers to the notification
+rule, and formatting the message to suit the needs of your organization.
+1. Select element or element template on which Notification Rule will be created
+2. Create a new Notification Rule:
+a. Define the notification trigger conditions
+b. Add the subscribers
+c. Format the Notification message
+3. Test the Notification
+
+Note: If you have created a notification rule for an individual element, you can extend the scope to the corresponding
+element template by using the Convert to Template function.
+
+5.3.4 Background: Trigger conditions
+The Notification Rules define the criteria that identify, which event frame generation will initiate a new
+notification.
+There are two possible trigger criteria modes for the Notification Rules:
+
+Event Frames and Notifications
+
+
+
+PAGE 63 OF 87
+
+Analysis
+Event Frame Search
+
+Use the Analysis mode to trigger a notification rule on event frames generated by a particular analysis.
+
+Use Event Frame Search mode to trigger a notification rule based on event frame name, template and
+category. In the Event Frame Search mode, you can select a configured event frame template, from the
+drop-down list, and then configure the name and category for the event frames that will trigger your
+notifications. The name may contain wildcard characters that are supported by event frame search.
+
+For both the modes, you can add additional trigger criteria using event frame attribute values. Criteria can
+be any specified for any attribute in the event frame template that is specified in the notification rule trigger
+criteria. For example, if your event frame template defines an event like "downtime" but you only want an
+email about "unplanned" downtime, you can configure an attribute value condition where a "reason code"
+attribute on the "downtime" event frame template has a value indicating "unplanned" downtime.
+
+Event Frames and Notifications
+
+PAGE 64 OF 87
+
+Note: Very often at work, the measure of success is made on how many things are produced. For Notifications, the more
+alerts that are produced, very often the less successful the use of Notifications becomes. If too many alerts are provided
+to a recipient, she/he probably won’t be able to give each one of them the appropriate attention or response. This will
+make the implementation useless, as all of the alerts will become noise to the recipients.
+
+5.3.5 Hands-on: Configuring a notification rule
+
+During this section, please refer to the following course YouTube video:
+Configuring a notification rule
+
+Activity description
+PI Big Tires Co. is monitoring the downtime periods for all their presses in Houston, Montreal and
+Philadelphia. The operational personnel has asked to receive notification emails whenever a press is down
+due to No Operator press status.
+Approach
+1. Select Press from Element Templates. Select Analysis Templates tab, select the Downtime Analysis.
+2. Click on the blue link to create a new notification rule template:
+
+3. On Notification Rule Templates tab change the name to Press Downtime Notification and give it a
+description - Press Downtime due to No Operator.
+4. In the Trigger section, select the blue View/Edit Trigger link.
+5. Select the link to add attribute criteria
+6. Add Reason code Equal No Operator. Click on OK.
+
+Event Frames and Notifications
+
+PAGE 65 OF 87
+
+7. In the Subscriptions section, select the blue View/Edit Subscriptions link.
+8. Expand student01 so that the email occurs and drag it into the Subscriptions section. Click OK. Check
+In.
+
+9. Start Outlook for student01 and monitor if you are receiving any emails.
+
+5.3.6 Background: Trigger criteria options
+When the Trigger Criteria are defined, following options can be set:
+
+Resend Interval
+The time interval after which PI Notifications Service will send additional alerts until the event frame
+matching the notification rule is acknowledged or closed.
+
+Event Frames and Notifications
+
+PAGE 66 OF 87
+
+Non-Repetition Interval
+The time interval during which PI Notifications Service will not send similar alerts associated with the
+same notification rule.
+
+Event Frame Can be acknowledged
+Option to enable event frame to be acknowledged; the event frame template is also modified accordingly.
+This option is automatically selected if the event frame template has been configured for acknowledgement
+Severity Option
+This option applies only to event frame generation analyses. If you have configured multiple start triggers
+for your analysis, you may choose to be notified in these ways:
+
+
+
+
+When the current trigger severity is higher than any trigger severity encountered so far.
+When the current trigger severity is higher than the previous trigger severity.
+Every time a trigger condition is true, regardless of its relative severity to other previous triggers.
+
+Event Frames and Notifications
+
+PAGE 67 OF 87
+
+5.4. Formatting the information to deliver
+The Notifications software includes a complete formatting tool, which enables you to define the formatting,
+and information that is included in email alerts.
+
+Global default formats
+The system provides one global format that is used as the default format. You can edit or rename the global
+format, but cannot delete it. Additional formats can be added. To access global default formats, navigate to
+Tools -> Global Formats .
+
+Custom delivery formats
+To edit or add specific Custom delivery formats for a particular Notification Rule, select the blue Message
+Formats link. The formats can be distinguished by their corresponding icons:
+
+Event Frames and Notifications
+
+PAGE 68 OF 87
+
+5.3.7 Hands-on: Customize Notifications message content & format
+During this section, please refer to the following course YouTube video:
+Formatting the information to deliver
+
+Activity description
+The goal of this exercise is to customize Notifications message content and format for the Equipment downtime email.
+Approach
+1. From PSE, navigate to Library > Element Templates and select the “Press” template.
+2. Select the “Press downtime notification” template and then click on the blue Manage Formats link
+under the Subscriptions tab.
+3. Select the line with Global Default Email (color changes to light blue), and click on the Duplicate
+icon above. Rename the new format as “Equipment downtime email”.
+About Formatting Messages
+The Formats window has a Content section on the right side to add extra content to the message. From that Content
+pane, simply drag and drop, or double-click on the desired content to add it to the message. Only generic content can
+be added within the Global Formats section. Specific content can be added when configuring the Message tab for a
+specific notification rule or a notification rule template.
+4. Select the Equipment downtime email format and modify the formatting to match the figure below.
+5. To highlight some parts of the text, use the controls highlighted in the screenshot above. When you
+add the Hyperlink, select the option to send the link as text:
+
+We will be able to use the link and open a related display in PI Vision. When sending an email to
+someone outside the organization with no access to PI Vision use the option to send a screenshot.
+Note: the mail server used in the Training Cloud Environment (TCE) for this class does not support to include screenshots
+in the email!
+
+Event Frames and Notifications
+
+PAGE 69 OF 87
+
+6. To perform a test send click on the
+button.
+For the Email address, enter student01@pischool.int:
+
+7. Click OK.
+8. Make sure the “Press downtime notification” template is still selected and then click on the blue
+View/Edit Subscriptions link under the Subscriptions tab.
+9. Click on the drop down menu and select the Equipment Downtime Email format under
+Configuration:
+
+10. Check-in your changes.
+
+Event Frames and Notifications
+
+PAGE 70 OF 87
+
+5.5. Acknowledging Notifications
+Acknowledgements of Notifications can be used to confirm that important notifications are read and acted
+on.
+Note: A pre-requisite for the Acknowledgement feature is that the Can be Acknowledged setting in the event frame
+template has been checked.
+
+Ways of acknowledging
+Acknowledgment can be performed in two ways:
+
+
+Display the event in PI System Explorer (Event Frame Search Result). Select the context menu
+function Acknowledge…
+
+When acknowledged, the red exclamation mark
+changes into an
+. When you hover with the mouse over
+the OK you get information about who and when the acknowledgement was made.
+
+
+
+Open the corresponding Event details display in PI Vision. Click on the Acknowledgement link for the
+event frame.
+To display the corresponding event details, either follow the Event Details link in the notification
+email or use the event search options in PI Vision.
+
+Event Frames and Notifications
+
+PAGE 71 OF 87
+
+5.3.8 Knowledge check: Commenting and acknowledging events
+Activity description
+Press02 in Houston is critical for the whole operation at that site. If the press is not running, it is the duty of student01 to
+add a comment on the problem and to acknowledge the notification to document that action has been taken.
+Approach
+1. In Outlook, open the latest notification email for Press02.
+(If the email is quite new there is a high chance that the status has not yet returned to Running)
+2. Click on the blue Events Details Hyperlink link. Details page for the event will be displayed in PI
+Vision.
+
+3. If the press is still not running, the event is still ongoing. In that case, the end time is displayed as In
+Progress. In case you continue to observe the display for some time, the time span covered in the
+trend will increase until the press is running again (PI Vision update rate is 15 seconds).
+
+4. Add and remove trend lines by selecting and unselecting them in the list below the trend.
+
+Event Frames and Notifications
+
+PAGE 72 OF 87
+
+5. Add a text into the comment field and click on the Add button to enter.
+6. Click on the Acknowledge button to acknowledge the event. Information about the notifications
+being sent, the comment and the acknowledgement are shown in PI Vision.
+
+5.3.9 Knowledge check: Validating the acknowledgment process
+Activity description
+The goal of this exercise is to compare the commenting and acknowledgment of notification alerts in PI
+Vision and PI System Explorer.
+Approach
+1. Open the PI System Explorer and select Event Frames in the Navigator.
+2. Select New Search… from Event Frame Searches context menu
+3. Set Search to: Starting After
+4. Set Search Start to: *-30m
+5. Set Template to: Press downtime. Click on Search.
+
+Event Frames and Notifications
+6. Click on the Wheel icon
+
+PAGE 73 OF 87
+
+in the header line of the results.
+
+7. Click on Select Attributes. Click on
+icon to add all four (4) attributes. Click on OK. The list will be
+extended by the four selected attributes. Click on OK.
+
+8. Rename default Search name to Press Downtime Last 30 Minutes
+9. Verify whether the event frames have an annotation icon. If you hover over the Annotation icon it
+displays Notification sent to 1 subscriber(s).
+
+10. Verify that comment and acknowledgement information from the previous exercise is displayed in
+PI System Explorer.
+11. To acknowledge alerts in PI System Explorer, select one or several lines of the event frame list. From
+the context menu, select Acknowledge… The icon in the acknowledgement column changes from
+Unacknowledged
+
+to Acknowledged
+
+.
+
+Event Frames and Notifications
+
+PAGE 74 OF 87
+
+5.6. Adding contacts
+During this section, please refer to the following course YouTube video:
+Setup Contacts, Delivery Endpoints, Groups, & Escalation Teams for Notifications
+
+The Contacts section of the navigator panel of PSE allows for the definition of contacts. The contacts will be
+receiving the notification messages once they are triggered. This section defines the various types of contact
+objects that can be created and used by Notifications.
+
+5.6.1 Background: Active Directory (AD) access for contacts
+Notifications normally gets the contacts and their addresses from the configured domain AD database. This
+prevents the administrator from having to do the tedious task of entering all of the potential subscribers and
+their contact information in order to start using Notifications.
+Each AF server provides the option to specify the domain and contact sub-folder, as well as the account
+needed to access Active Directory and retrieve contact names. By default, the account under which the AF
+server application service is running is used for Active Directory access. The AD access is configurable in the
+AF Server Properties dialog box (with Contacts being selected in the Navigator, go to Tools > Active Directory
+Properties).
+
+By default, the AF server is installed using a virtual account, NT SERVICE\AFService. However, the AF server
+service account can be changed. If the AF server service account does not have the necessary permission to
+read the Active Directory, no contact names will be retrieved in the Contacts list. If your Active Directory
+security is configured to allow the AF server service account to read the Active Directory, this is the simplest
+option.
+In the Active Directory Domain Name text box, enter the full DNS name of the Active Directory domain from
+which the contact names will be retrieved for the PI Notifications Service Contacts.
+In the Active Directory Contact Sub-Folder text box, enter the path to the folder containing the list of
+contacts for this domain. In larger Active Directory domains, contacts may be organized within sub-folders.
+The use of sub-folders can allow for faster retrieval of a list of Active Directory contacts.
+
+Event Frames and Notifications
+
+PAGE 75 OF 87
+
+5.6.2 Background: Searching for contacts
+Because the AD database are often very large, contacts information is only available from search results. To
+search for contacts, click the
+button under the Contacts section or use the search field. The star
+(*) can be used as a wildcard for that search. In case of the Training Cloud Environment (TCE) a search for
+student* will return all the student AD users (student01, student02, student03, student04).
+
+5.6.3 Background: Adding contact information
+Activity description
+For those who do not have entries in AD you can enter custom contacts one at a time. This may be
+appropriate for vendors or other contacts not in your company who you may want to receive notifications.
+Custom contacts are available to all AF databases.
+Approach
+Adding a custom contact in PSE:
+1. To create a custom contact, select Contacts from the navigator panel.
+2. Select New > New Contact from the toolbar and enter your name for the contact Name.
+3. Right click the contact for you and select New Delivery Endpoint
+4. Enter a delivery endpoint name (e.g. <your name> at Work). From the Delivery Channel dropdown,
+select Email.
+Fill in your work email address and check in your changes.
+
+5. (optional) Enter a second delivery endpoint for the home email address.
+
+Event Frames and Notifications
+
+PAGE 76 OF 87
+
+Note: in the Training Cloud Environment (TCE) there are only some email addresses in the pischool.int AD you can
+actually use for sending emails to.
+
+5.6.4 Background: Notifications groups
+A Notifications Group is an unordered collection of delivery endpoints, which includes Active Directory
+recipients. If a notification is configured to send a message to a Notifications Group, the message is sent to
+all members of the group simultaneously.
+
+5.6.5 Background: Notifications escalation teams
+An escalation team is a delayed delivery group, which receives alerts on a notification only if a specified time
+period called the Escalation Period has elapsed, and the acknowledgement requirement is not satisfied.
+Acknowledgments will be discussed in a later section, but it is the ability to inform the Notifications server
+that the alert was acknowledged by a contact.
+A notification alert is sent to the first contact on the list. If the notification is not acknowledged within a
+specified time, then notification messages are sent sequentially to the remaining members of the escalation
+team until the notification instance is acknowledged.
+Building escalation teams is very similar to building groups and so they can be included in the subscribers’
+area of a notification. Keep in mind that if an escalation team is added to a notification, that does not
+require acknowledgements, they will never receive alerts.
+
+Event Frames and Notifications
+
+PAGE 77 OF 87
+
+5.6.6 Background: Subscribing contacts to Notifications
+To maintain subscribers of a notification, navigate to the Notification Rules tab for a selected element or a
+selected element template, and then click View/Edit Subscriptions in the Subscriptions pane.
+To add contacts, endpoints or groups to existing notifications, drag and drop them into the Subscriptions list.
+To remove, select a line with a subscription and click on the Unsubscribe icon on the top.
+
+5.6.7 Background: Dynamic email delivery endpoints (since AF 2017 R2)
+You can configure an email delivery endpoint as a value of an attribute. This provides an additional flexibility
+in situations where notification emails can be sent to different recipients without making changes to the
+notification rule template.
+
+5.6.8 Background: Sending Notification alerts in escalation sequence
+Activity description
+The goal of this exercise is to:
+ Assign several contacts to an escalation team
+ Understand and apply options for an escalation team.
+ Explore the sequence of notifications for an escalation team.
+You want to change the strategy, which people in the organization are informed in case of a Press downtime
+due to No Operator. In order to avoid a confusion during the period when you change the strategy, you
+want to suspend the notification emails during the time, when you reconfigure the system.
+Two people from the operational personnel, the tank operator and the safety engineer can handle the
+situation when the press is down. The tank operator should be informed first. In case he does not take
+action within 5 minutes, the safety engineer should be informed as well. Do not send email to student01
+anymore.
+Use the following email addresses:
+Tank Operator: student02@pischool.int
+Safety Engineer: student03@pischool.int
+Note, that if you are executing this exercise in a local language environment, email addresses for local language accounts
+corresponding to student02 and student03 are not supported.
+
+Event Frames and Notifications
+
+PAGE 78 OF 87
+
+Approach
+1. Open the PI System Explorer and select Management in the Navigator. Choose Notification Rules
+type.
+
+Note: The status displayed here is based on the notification rule configuration only. The status does not give
+information on whether the notification is running or in error.
+2. Enable the check box in the header line to select all notifications for the twelve (12) presses, then
+click Disable selected notification rules.
+Tip: By selecting any combination of lines with rules, you can start or stop the selected rules.
+3. Select Contacts in the Navigator.
+4. Create a new escalation team called Press Personnel Escalation Team by right clicking the Escalation
+Teams folder and selecting New Escalation Team.
+5. In the right-hand side Contacts window, select Contacts > New Search… Search for the contacts with
+Name= student*
+6. Expand student02 and drag the email address (student02 - Email) into the escalation list area (is
+empty in the beginning). Repeat the same for student03. Select a 5 minutes Escalation period. Do
+not repeat the escalation sequence, if the alert was not acknowledged.
+
+7. Select Library in the Navigator and open the Notification Rule Templates for the Press element
+template.
+8. Click on the blue View/Edit Subscriptions link
+
+Event Frames and Notifications
+
+PAGE 79 OF 87
+
+9. Expand Escalation Teams in the Contacts section and drag Press Personnel Escalation Team to the
+Subscriptions list. Click on the dropdown icon of the team name to expand the team members.
+Select Equipment Downtime Email for both.
+10. Select the line(s) with the other subscriptions and click on the Unsubscribe
+
+icon on the top.
+
+11. Click on OK to exit the View/Edit Subscriptions dialog box.
+12. Check in the changes.
+13. Select Management in the Navigator. Start the notifications in the same way as they were stopped
+before.
+
+Event Frames and Notifications
+
+PAGE 80 OF 87
+
+6 (Optional) Administrator tasks
+6.1. Installing the PI Notifications services
+Use the PI Server install kit to install PI Notifications Service. This section provides details specifically on installing
+the PI Notifications Service through the install kit.
+Before you start:
+
+•
+
+Ensure that the computer on which you are installing PI Notifications Service meets all the system
+requirements. See System requirements for PI Notifications Service.
+
+•
+
+Install the PI AF server. A connection is required to PI AF Server to complete the installation.
+
+Process:
+1. Go to the directory where you downloaded the PI Server install kit, and double-click the setup file to launch the
+installation.
+The Welcome page opens.
+2. Click Next.
+The Feature Selection page opens.
+3. In the Server Roles tab, select PI Notifications Service.
+A list of components to be installed is displayed in the Summary panel.
+
+Event Frames and Notifications
+
+PAGE 81 OF 87
+
+4. Click Next.
+The AF Server page opens.
+5. Enter the PI AF server name to associate with PI Notifications Service.
+6. Click Next to proceed with the setup.
+The Certificates Selection page opens.
+7. Take one of the following actions:
+ To enable TLS certificates encryption for OpenID Connect (OIDC), ensure that the Configure certificate
+for TLS Encryption option is selected.
+If you do not provide a certificate, a certificate will be automatically generated for you when this option
+is selected.
+
+
+If you do not plan to use TLS, deselect the Configure certificate for TLS Encryption option and proceed
+to step 10.
+
+Event Frames and Notifications
+
+PAGE 82 OF 87
+
+8. Click Select to choose a new certificate.
+The Select Certificate dialog opens. Any certificate that is already installed and meets certificate requirements
+will be detected and displayed in this dialog.
+9. Select OK.
+The SSL Certificate thumbprint is displayed in the TLS Certificate section. The TLS certificate thumbprint is
+required for encryption.
+10. Select Next to advance to the Notifications page.
+11. On the Notifications page, enter the following information:
+ SMTP Server: Port number (The default port number for the SMTP server is 25.)
+ Optional. Backup SMTP Server: Port number
+From Email Address: The email address (name@domain.com) to be used with PI Notifications Service.
+
+Event Frames and Notifications
+
+PAGE 83 OF 87
+
+12. Select the Use TLS checkboxes to enable TLS encryption for the SMTP server or backup SMTP server connection.
+Specify the PI Vision Server URL address to integrate PI Notifications Service with AVEVA PI Vision.
+13. Select Next.
+The Service Accounts window appears.
+14. Specify the service account for PI Notifications Service.
+Select the default account NT SERVICE\PINotificationsService or specify a different service account. If the AF
+Server is remote to PI Notifications Service, then you must use a domain account or a Managed Service Account
+because the service account credentials will be mapped to the Notifications identity on the AF Server. If your
+computer is in a Workgroup, the installation must be run silently and additional steps might be necessary to
+guarantee that PI Notifications Service has access to AF Server. Since PI Notifications Service also needs read
+access to PI Points, a domain account or Managed Service Account may also be desired for configuring Windows
+integrated security in PI Data Archive.
+15. Click Next to proceed with the setup.
+The Summary window appears, listing the selected features and version numbers scheduled for the installation.
+16. Click Install.
+The Installation Progress page opens, then the Complete page opens when the installation is complete.
+Note: If you cancel the installation before it is complete, the PI AF SQL database might have already been
+created and you will need to remove the database manually.
+17. Take one of the following actions:
+ If you did not select to enable TLS certificates, click Close to exit the setup.
+ If you enabled TLS certificates encryption, ensure the OpenID Connect Authentication requires
+configuration option is selected and then select Yes to restart now or No to restart later.
+ To bypass running the OpenID Connect Configurator utility, deselect the OpenID Connect
+Authentication requires configuration option, then select Yes or No.
+See Register PI Server components with the AVEVA Identity Manager if you selected the "Configure
+certificate for TLS Encryption" option and want to use OIDC for claims-based authentication.
+18. Optional. Run the migration tool.
+Run the PI Notification Migration tool if you have existing legacy notifications that you want to migrate to
+notification rules. The migration tool can be launched from PI System Explorer only if PI Notifications Service is
+installed on the machine; the PINotificationsMigrationTool.exe command is located in
+the %PIHOME64%\Notifications directory.
+
+Event Frames and Notifications
+
+PAGE 84 OF 87
+
+6.2. Account permissions for the PI Notification service
+The account that PI Notifications Service uses requires read access to the PI point database (PIPOINT) on each Data
+Archive server that the service accesses. The PI Notifications Service account also requires specific permissions to PI
+AF objects and local directories.
+
+6.2.1 Configure Data Archive access for PI Notifications Service
+The account that PI Notifications Service uses must have read access to the necessary PI points on any Data Archive that
+the service accesses.
+1. Use PI SMT to grant the PI Notifications Service account read access to the PIPOINT database on any Data
+Archive to which PI Notifications Service requires access:
+a. Create a new PI identity (Security > Identities, Users, & Groups).
+We recommend that an account being used for a service should only have the minimum required
+privilege, that is, the least required privilege. Therefore, administrative accounts or groups such as
+'piadmin' or 'piadmins' should not be used as a service account.
+b. Give the identity read and write access to the PIPOINT database (Security > Database Security).
+For more information on access permissions for PI points, see the PI SMT topic PI point access
+permissions.
+c. Create a mapping between the PI identity and the account that runs the service (Security > Mappings
+and Trusts).
+If you are using the virtual account, you will need to use the PI AF server machine's computer account to
+create the mapping. See also the Microsoft article Understanding Computer Accounts.
+After you grant the PI Notifications Service account access to the PIPOINT database, the service will, by default,
+have the necessary access to all points subsequently created on that Data Archive server.
+2. For any pre-existing points that you will use for notifications, make sure that the PI Notifications Service account
+has the following access permissions:
+PtSecurity
+DataSecurity
+
+(r)
+(r)
+
+3. You can use PI SMT or PI Builder to configure the point access for PI Notifications Service.
+
+Event Frames and Notifications
+
+PAGE 85 OF 87
+
+6.2.2 PI AF object and local machine permissions for PI Notifications Service
+The PI Notifications Service setup process using the PI Server install kit creates the PI AF identity Notifications, maps
+the PI Notifications Service account to that identity, and grants that identity the PI AF object permissions shown in
+the following tables. The setup process also grants the PI Notifications Service account permission to access the
+local machine directory.
+
+•
+
+If an account has administration privileges on the PI AF server, then the account has all security rights to all objects
+within the PI AF server, including all databases. This is true whether the account is granted or denied specific
+rights on individual objects.
+
+•
+
+If you change the PI Notifications Service log on account after installation, you must make sure the new user has
+permissions to access necessary AF objects. The easiest way to do this is to add a mapping for the user to the
+Notifications identity in the PI AF Server. The sections below describe the necessary permissions in detail.
+PI AF Object
+
+Permissions
+
+PI AF server and children1
+
+Read/Write, Read/Write Data
+
+Event Frames
+
+Read/Write, Read/Write Data, Annotate
+
+1
+
+Children of PI AF server include but are not limited to database, elements, element templates, notification rules,
+enumeration sets, contacts, and categories.
+Local Machine Directory
+
+Permissions
+
+%ProgramData%\OSIso \PINo ﬁca ons
+
+Read, Write, Modify
+
+Event Frames and Notifications
+
+PAGE 86 OF 87
+
+6.3. Troubleshooting the PI Notifications Service
+6.3.1 Configure logging for the PI Notifications Service
+Notifications message logs contain useful information to troubleshoot issues with PI Notifications Service. Adjusting
+the severity level and verbosity of message logs can assist with identifying issues more easily and better
+troubleshooting.
+At the end of installation, the notifications folder (%PIHOME64%\Notifications or <Drive name>:\Program
+Files\PIPC\Notifications) contains the:
+
+•
+•
+
+PINotifications.exe.config file for each process and
+the Notifications.UserNLog.config file for NLog configuration, a popular logging tool for troubleshooting.
+
+Caution: Increasing the debug level from the default can flood the logs and decrease performance. Do not leave the
+debug level higher than the default for longer than necessary.
+%programdata%\OSIsoft\PINotifications\Logs is the default directory that the logs are written to. More information
+on configuring logging can be found here.
+
+6.3.2 Access Performance Counters
+The PI Notifications Service has performance counters for monitoring the status of notification rules.
+To gather statistics around PI Notifications service, use Windows performance counters. You can view and access
+available performance counters with the Windows Performance Monitor.
+
+1. On the Windows system hosting the service, click Control Panel > System and Security > Administrative Tools. A
+list of administrative tools are listed.
+
+2. Double-click Performance Monitor to open Windows Performance Monitor.
+3. Expand Monitoring Tools and click on Performance Monitor in the navigation panel on the left.
+4. Click the
+button. The Add Counters window appears.
+5. In the Available counters panel, expand PI Notifications Service. The list of PI Notifications Service performance
+counters is here.
+
+For a full list of the available counters explained, have a look at this article.
+
+Event Frames and Notifications
+
+7 Final Exam
+The final exam in this course is taken online. Please check the course listing online for more details.
+
+PAGE 87 OF 87
+
+

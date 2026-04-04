@@ -1,7 +1,10 @@
+# Custom 404 error page
+ErrorDocument 404 /404.html
+
 # Priority: index.html over index.php (WordPress)
 DirectoryIndex index.html index.php
 
-# Security headers
+# Security headers and Cache Control
 <IfModule mod_headers.c>
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set X-Content-Type-Options "nosniff"
@@ -9,6 +12,21 @@ DirectoryIndex index.html index.php
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+    
+    # Remove bad default cache headers
+    Header unset Cache-Control
+    Header unset Pragma
+    Header unset Expires
+    
+    # HTML files: Cache for 1 hour
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "max-age=3600, must-revalidate"
+    </FilesMatch>
+    
+    # Static assets: Cache for 1 year
+    <FilesMatch "\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|pdf|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=31536000, public"
+    </FilesMatch>
 </IfModule>
 
 # Block access to hidden files and logs
@@ -33,9 +51,15 @@ DirectoryIndex index.html index.php
 # Disable directory listing
 Options -Indexes
 
-# Force HTTPS (Reg.ru: nginx terminates SSL, proxies to Apache as HTTP)
+# URL redirects and HTTPS enforcement
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    
+    # Redirect www to non-www (301 permanent redirect)
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    
+    # Force HTTPS (Reg.ru: nginx terminates SSL, proxies to Apache as HTTP)
     RewriteCond %{HTTPS} off
     RewriteCond %{HTTP:X-Forwarded-Proto} !https
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
 <script>
 (function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
@@ -26,14 +28,17 @@
 <meta property="og:description" content="Российская платформа цифровых двойников сварочных процессов. Расчёт за минуты вместо дней.">
 <meta property="og:type" content="product">
 <meta property="og:url" content="https://specialtechnology.ru/wertsim.html">
-<link rel="canonical" href="https://specialtechnology.ru/wertsim.html">
+
+<meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/wertsim.html">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink:        #05080f;
-  --ink1:       #080d1a;
-  --ink2:       #0c1525;
-  --steel:      #111e35;
+  --ink:        #0a0e1a;
+  --ink1:       #0f1424;
+  --ink2:       #151b2e;
+  --steel:      #1a2340;
   --wire:       #192d48;
   --wire2:      #1f3a5f;
 
@@ -59,9 +64,10 @@
 }
 
 /* ── LIGHT THEME ── */
-:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+:root.theme-light section,.container,.page,.product-hero,.product-tabs-nav,footer,.tabs,.contact,.cta-section,.partners,.certificates,.technologies,.catalog{position:relative;z-index:2}
+body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
-  --ink:        #f0f2f5;
+  --ink:        #f5f6f8;
   --ink1:       #ffffff;
   --ink2:       #f7f8fa;
   --steel:      #e8ecf0;
@@ -89,7 +95,7 @@
 :root.theme-light body {
   color: var(--text);
 }
-body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:1;}
 
 
 :root.theme-light nav {
@@ -98,9 +104,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 }
 :root.theme-light .btn-volt {
   color: #ffffff;
+  border-radius: 6px;
 }
 :root.theme-light .btn-flame {
   color: #ffffff;
+  border-radius: 6px;
 }
 :root.theme-light input[type=range]::-webkit-slider-thumb {
   border-color: var(--ink1);
@@ -221,7 +229,7 @@ nav {
   justify-content: space-between;
   padding: 0 48px;
   height: 72px;
-  background: #05080f;
+  background: #0a0e1a;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
   transition: height 0.3s ease, background 0.3s ease;
@@ -283,7 +291,7 @@ nav {
   top: 100%;
   left: -12px;
   min-width: 200px;
-  background: #05080f;
+  background: #0a0e1a;
   backdrop-filter: blur(16px);
   border: 1px solid var(--wire);
   border-radius: 8px;
@@ -352,11 +360,13 @@ nav {
 .btn-volt {
   background: var(--volt);
   color: var(--ink);
+  border-radius: 6px;
 }
 
 .btn-flame {
   background: var(--flame);
   color: var(--text);
+  border-radius: 6px;
 }
 
 .btn-cta-primary {
@@ -590,7 +600,7 @@ nav {
 .product-tabs-nav {
   position: sticky;
   top: 72px;
-  background: #05080f;
+  background: #0a0e1a;
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--wire);
   padding: 16px 0;
@@ -972,9 +982,79 @@ footer {
 /* ══════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════ */
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
 @media (max-width: 900px) {
-  .nav-links { display: none; }
-  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; }
+    .hamburger { display: block; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .nav-cta .btn-volt { font-size: 10px; padding: 6px 12px; border-radius: 6px; }
   nav { padding: 0 16px; }
 }
 @media (max-width: 768px) {
@@ -1008,8 +1088,27 @@ footer {
   }
 }
 @media (max-width: 480px) {
-  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  * { max-width: 100%; box-sizing: border-box; }
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; border-radius: 6px; }
+}
   .nav-logo img { height: 20px !important; max-width: 90px !important; }
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
 }
 </style>
 </head>
@@ -1034,6 +1133,7 @@ footer {
     <li><a href="blog.html">Блог</a></li>
     <li><a href="index.html#contact">Контакты</a></li>
   </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta">
     <a href="#contact" class="btn btn-flame">Консультация</a>
   </div>
@@ -1042,6 +1142,22 @@ footer {
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
   </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
 <!-- ══════════ PRODUCT PAGE ══════════ -->
 <div class="product-hero">
@@ -1063,7 +1179,7 @@ footer {
         
         <h1 class="product-name">CAE WeRTSim</h1>
         <div class="product-version">Computer-Aided Engineering «Welding and Related Technologies Simulation»</div>
-        <p class="product-tagline">Инновационная система для быстрого инженерного анализа в области сварки и родственных технологий — платформа цифровых двойников сварочных и родственных технологий</p>
+        <p class="product-tagline">Платформа цифровых двойников сварочных и родственных технологий. Быстрый инженерный анализ сварки, наплавки, резки, пайки и аддитивных процессов</p>
         
         <div class="product-pills">
           <span class="ppill">CAE</span>
@@ -1500,6 +1616,22 @@ function toggleTheme() {
   var isLight = root.classList.toggle('theme-light');
   localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
+</script>
+
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
 </script>
 
 <!-- Cookie Banner -->

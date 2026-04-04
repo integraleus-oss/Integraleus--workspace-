@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
-Sitemap: https://specialtechnology.ru/sitemap.xml
-
-User-agent: *
 Disallow: /deploy.php
+Disallow: /send_form.php
+Disallow: /send_calc.php
+Disallow: /category/
+Disallow: /author/
+Disallow: /2023/
+
+Host: specialtechnology.ru
+Sitemap: https://specialtechnology.ru/sitemap.xml

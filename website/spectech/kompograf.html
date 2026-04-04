@@ -2,6 +2,8 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
 <script>
 (function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();
 </script>
@@ -21,15 +23,19 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://specialtechnology.ru/kompograf.html">
 <meta property="og:locale" content="ru_RU">
-<link rel="canonical" href="https://specialtechnology.ru/kompograf.html">
+
+<meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/kompograf.html">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#05080f;--ink1:#080d1a;--ink2:#0c1525;--steel:#111e35;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
+:root{--ink:#0a0e1a;--ink1:#0f1424;--ink2:#151b2e;--steel:#1a2340;--wire:#192d48;--wire2:#1f3a5f;--volt:#00c8f0;--volt-lo:rgba(0,200,240,0.08);--volt-glow:rgba(0,200,240,0.4);--flame:#ff6b35;--flame-lo:rgba(255,107,53,0.1);--lime:#1de9b6;--lime-lo:rgba(29,233,182,0.08);--crimson:#ff3d57;--amber:#ffb800;--text:#e2eaf4;--text2:#94b3d0;--text3:#4a6d8f;--ff-head:'Exo 2',sans-serif;--ff-mono:'JetBrains Mono',monospace;--ease:cubic-bezier(.22,.68,0,1.2)}
 
 /* ── LIGHT THEME ── */
-:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+:root.theme-light section,.container,.page,.product-hero,.product-tabs-nav,footer,.tabs,.contact,.cta-section,.partners,.certificates,.technologies,.catalog{position:relative;z-index:2}
+body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
 :root.theme-light {
-  --ink:        #f0f2f5;
+  --ink:        #f5f6f8;
   --ink1:       #ffffff;
   --ink2:       #f7f8fa;
   --steel:      #e8ecf0;
@@ -57,7 +63,7 @@
 :root.theme-light body {
   color: var(--text);
 }
-body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:50;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:1;}
 
 
 :root.theme-light nav {
@@ -66,9 +72,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 }
 :root.theme-light .btn-volt {
   color: #ffffff;
+  border-radius: 6px;
 }
 :root.theme-light .btn-flame {
   color: #ffffff;
+  border-radius: 6px;
 }
 :root.theme-light input[type=range]::-webkit-slider-thumb {
   border-color: var(--ink1);
@@ -161,7 +169,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 body{background:var(--ink);color:var(--text);font-family:var(--ff-head);overflow-x:hidden}
 a{color:var(--volt);text-decoration:none;transition:color .2s}a:hover{color:#fff}
 .container{max-width:1200px;margin:0 auto;padding:0 40px}
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:#05080f;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;position:fixed;top:0;left:0;right:0;z-index:999;background:#0a0e1a;backdrop-filter:blur(16px);border-bottom:1px solid var(--wire)}
 .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .nav-logo-text{font-size:16px;font-weight:800;letter-spacing:3px;color:var(--text);text-transform:uppercase}
 .nav-links{display:flex;gap:28px;list-style:none;align-items:center}
@@ -194,7 +202,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 60px
 .product-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
 .ppill{padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border-radius:20px;background:var(--volt-lo);color:var(--volt);border:1px solid rgba(0,200,240,0.15)}
 .ppill.accent{background:var(--flame-lo);color:var(--flame);border-color:rgba(255,107,53,0.2)}
-.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden}
+.product-cta-card{background:var(--ink1);border:1px solid var(--wire);border-radius:12px;overflow:hidden;}
 .cta-card-head{padding:24px;border-bottom:1px solid var(--wire);text-align:center}
 .cta-price-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:8px}
 .cta-price{font-size:28px;font-weight:900;color:var(--text)}
@@ -260,8 +268,87 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
 .footer-bottom{border-top:1px solid var(--wire);margin-top:40px;padding-top:24px;text-align:center}
 .footer-copy{font-size:13px;color:var(--text3)}
 .f-badge{font-size:11px;padding:4px 10px;border-radius:12px;background:var(--steel);color:var(--text3);font-family:var(--ff-mono)}
-@media(max-width:900px){
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media(max-width:900px){ .hamburger { display: block !important; }
+  .nav-cta { display: none !important; }
   nav{padding:0 24px}.nav-links{display:none}.container{padding:0 24px}
+  .product-hero { padding: 90px 0 40px; }
+  .product-hero-grid { grid-template-columns: 1fr; gap: 24px; }
+  .product-cta-card { position: static; }
+  .product-name { font-size: 24px; overflow-wrap: break-word; }
+  .product-version { font-size: 11px; }
+  .product-tagline { font-size: 14px; }
+  .product-vendor-badge { font-size: 11px; flex-wrap: wrap; }
+  .product-pills { flex-wrap: wrap; gap: 6px; }
+  .ppill { font-size: 10px; padding: 3px 8px; }
+  .breadcrumb { font-size: 11px; flex-wrap: wrap; }
   .product-hero-grid{grid-template-columns:1fr}
   .overview-grid{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr;text-align:center}
@@ -270,8 +357,27 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
   .arch-level-name{min-width:auto}
 }
 @media (max-width: 480px) {
-  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; }
+  * { max-width: 100%; box-sizing: border-box; }
+  .nav-cta .btn { font-size: 9px; padding: 5px 8px; letter-spacing: 0.5px; border-radius: 6px; }
   .nav-logo img { height: 20px !important; max-width: 90px !important; }
+}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
 }
 </style>
 </head>
@@ -295,12 +401,29 @@ footer p{font-size:14px;color:var(--text3);line-height:1.6}
     <li><a href="blog.html">Блог</a></li>
     <li><a href="index.html#contact">Контакты</a></li>
   </ul>
+  <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta"><a href="index.html#contact">Связаться</a></div>
   <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
   </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
 
 <!-- HERO -->
 <div class="product-hero">
@@ -927,6 +1050,22 @@ function toggleTheme() {
   var isLight = root.classList.toggle('theme-light');
   localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
 }
+</script>
+
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
 </script>
 
 <!-- Cookie Banner -->

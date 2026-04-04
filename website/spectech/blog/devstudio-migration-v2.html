@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Перенос проектов Alpha.DevStudio с Windows на Astra Linux: что реально ждёт на практике — СПЕЦТЕХ</title>
+<meta name="description" content="Практический опыт переноса проектов Alpha.DevStudio 4.1 с Windows на Astra Linux. Кодировки, пути, регистр файлов, DLL → .so и типичные грабли из реальных проектов.">
+
+<meta property="og:image" content="https://specialtechnology.ru/blog/og-devstudio-migration.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/blog/devstudio-migration.html">
+<meta property="og:title" content="Перенос проектов Alpha.DevStudio с Windows на Astra Linux: что реально ждёт на практике">
+<meta property="og:description" content="Практический опыт переноса проектов Alpha.DevStudio 4.1 с Windows на Astra Linux. Кодировки, пути, регистр файлов, DLL → .so и типичные грабли из реальных проектов.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://specialtechnology.ru/blog/devstudio-migration.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-guides{color:var(--lime);border-color:var(--lime);background:var(--lime-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+.article-body table{border-collapse:collapse;width:100%;margin:20px 0;border:1px solid var(--wire);}
+.article-body th{background:var(--steel);color:var(--text);font-weight:600;padding:12px;text-align:left;border:1px solid var(--wire);}
+.article-body td{padding:12px;border:1px solid var(--wire);color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--volt);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.warning-box{background:rgba(255,107,53,0.08);border:1px solid var(--flame);border-left:4px solid var(--flame);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--flame);margin-bottom:12px;}
+.warning-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.warning-box p:last-child{margin-bottom:0;}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-title { font-size: 24px; overflow-wrap: break-word; }
+  .article-meta { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Перенос проектов Alpha.DevStudio с Windows на Astra Linux: что реально ждёт на практике","description":"Практический опыт переноса проектов Alpha.DevStudio 4.1 с Windows на Astra Linux. Кодировки, пути, регистр файлов, DLL → .so и типичные грабли из реальных проектов.","author":{"@type":"Organization","name":"СПЕЦТЕХ","url":"https://specialtechnology.ru"},"publisher":{"@type":"Organization","name":"СПЕЦТЕХ"},"datePublished":"2026-04-01","url":"https://specialtechnology.ru/blog/devstudio-migration.html"}</script>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+<div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Перенос проектов Alpha.DevStudio с Windows на Astra Linux</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-guides">Гайды</span>
+            <span class="article-date">1 апреля 2026</span>
+            <span class="article-read">12 мин</span>
+            <span class="article-author">Автоматчик</span>
+          </div>
+          <h1 class="article-title">Перенос проектов Alpha.DevStudio с Windows на Astra Linux: что реально ждёт на практике</h1>
+          <p class="article-subtitle">Задача звучала просто: взять проект Alpha.DevStudio 4.1, разработанный на Windows 10, и запустить на Astra Linux. На деле — три дня отладки, десяток неочевидных проблем и несколько уроков, которые мы теперь фиксируем, чтобы следующая миграция прошла за полдня.</p>
+        </header>
+
+        <div class="article-body">
+
+          <h2 id="зачем-вообще-переносить">Зачем вообще переносить</h2>
+
+          <p>Импортозамещение — не абстрактная инициатива, а конкретные требования заказчиков. На нескольких проектах мы столкнулись с ситуацией: АСУ ТП работает на Альфа платформе, проект разрабатывался под Windows, а серверы на площадке — Astra Linux. Alpha.DevStudio 4.1 поддерживает обе ОС (а ещё Ubuntu, Альт и РЕД ОС), так что принципиальных препятствий нет. Но дьявол, как обычно, в деталях.</p>
+
+          <p>Эта статья — про те самые детали: структура проекта, кодировки, пути, DLL и типичные грабли, на которые мы наступили сами.</p>
+
+          <h2 id="что-внутри-проекта-devstudio">Что внутри проекта DevStudio</h2>
+
+          <p>Прежде чем переносить, полезно понимать, что именно мы переносим. Проект Alpha.DevStudio — это набор файлов и папок:</p>
+
+          <ul>
+            <li><strong>Файл решения</strong> — контейнер, содержит ссылки на входящие проекты</li>
+            <li><strong>Файлы проектов</strong> — конфигурация каждого модуля</li>
+            <li><strong>Папки конфигураций</strong> — скомпилированные модули (.binom)</li>
+            <li><strong>Исходники</strong> — процедуры Alpha.Om, формулы, HMI-схемы (.om, .xml)</li>
+            <li><strong>Ресурсы</strong> — изображения (.png, .svg), шрифты (.ttf), библиотеки (.dll)</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Структура проекта</div>
+            <p>Типичная структура: папки <strong>Components</strong> (объекты), <strong>Scripts</strong> (Alpha.Om), <strong>HMI</strong> (мнемосхемы), <strong>Resources</strong> (внешние файлы). Всё это нужно перенести целиком, ничего не потеряв и не сломав ссылки.</p>
+          </div>
+
+          <h2 id="три-главных-различия">Три главных различия между Windows и Linux</h2>
+
+          <h3 id="пути-к-файлам">Пути к файлам</h3>
+
+          <p>На Windows мы привыкли к:</p>
+
+          <pre><code>C:\Alpha\Projects\MyProject\Components\Tank01.xml</code></pre>
+
+          <p>На Linux это превращается в:</p>
+
+          <pre><code>/opt/alpha/projects/MyProject/Components/Tank01.xml</code></pre>
+
+          <p>Обратные слеши → прямые, буква диска исчезает. DevStudio умеет адаптировать разделители автоматически при открытии проекта. Но если в конфигурации где-то зашит абсолютный путь вроде <code>D:\MyProject\Images\valve.png</code> — Linux его не поймёт. Мы нашли такие ссылки в трёх местах из пяти проектов, которые переносили.</p>
+
+          <p><strong>Решение:</strong> перед миграцией пройдитесь по конфигурации и замените абсолютные пути на относительные. Это можно сделать ещё на Windows, и проект продолжит работать.</p>
+
+          <h3 id="регистр-символов">Регистр символов</h3>
+
+          <p>На Windows <code>Tank01.xml</code>, <code>tank01.xml</code> и <code>TANK01.XML</code> — один и тот же файл. На Linux — три разных файла.</p>
+
+          <p>На одном из проектов у нас в конфигурации была ссылка <code>valve.png</code>, а файл на диске назывался <code>Valve.PNG</code>. На Windows всё работало, на Linux — мнемосхема не нашла изображение. Причём ошибка не всегда очевидна: компиляция проходит, а картинка просто не отображается в HMI.</p>
+
+          <div class="warning-box">
+            <div class="warning-box-title">Частая ошибка</div>
+            <p>Проект компилируется на Windows, но падает на Linux из-за неточного совпадения регистра в именах файлов. Проверяйте имена <strong>до</strong> переноса.</p>
+          </div>
+
+          <p><strong>Решение:</strong> перед переносом проведите аудит имён файлов. Проще всего привести все имена к нижнему регистру и обновить ссылки. На Linux это можно проверить командой:</p>
+
+          <pre><code># Поиск файлов с заглавными буквами в расширениях
+find /opt/alpha/projects/MyProject -name "*.PNG" -o -name "*.BMP" -o -name "*.XML"</code></pre>
+
+          <h3 id="кодировки-cp1251-vs-utf8">Кодировки: CP1251 vs UTF-8</h3>
+
+          <p>Самая коварная проблема. На Windows текстовые файлы нередко оказываются в кодировке CP1251 (она же Windows-1251). На Linux стандарт — UTF-8. Если в скриптах Alpha.Om или в комментариях XML есть русские символы в CP1251, на Linux они превращаются в кракозябры.</p>
+
+          <p>Признаки проблемы:</p>
+
+          <ul>
+            <li>Нечитаемые комментарии в скриптах</li>
+            <li>Ошибки компиляции на именах объектов с кириллицей</li>
+            <li>Искажённый текст на мнемосхемах HMI</li>
+          </ul>
+
+          <p>На практике мы столкнулись с этим на проекте, где имена сигналов содержали русские названия (например, «Давление_входное»). На Windows компилировалось, на Linux — ошибка.</p>
+
+          <p><strong>Решение:</strong> конвертировать файлы в UTF-8 до переноса. Проверить кодировку можно утилитой <code>file</code>:</p>
+
+          <pre><code>file -i Scripts/*.om
+# Если видите charset=iso-8859-1 или charset=unknown-8bit — скорее всего CP1251</code></pre>
+
+          <p>Для конвертации:</p>
+
+          <pre><code>iconv -f CP1251 -t UTF-8 script.om > script_utf8.om
+mv script_utf8.om script.om</code></pre>
+
+          <h2 id="пошаговая-миграция">Пошаговая миграция: как мы это делаем</h2>
+
+          <p>За несколько проектов у нас выработался алгоритм из пяти этапов.</p>
+
+          <h3 id="этап-1-аудит">Этап 1. Аудит на исходной системе</h3>
+
+          <p>Открываем проект в DevStudio на Windows и фиксируем:</p>
+
+          <ul>
+            <li>Список внешних зависимостей (вкладки Dependencies и References в свойствах проекта)</li>
+            <li>Все файлы с русскими символами — проверяем кодировку</li>
+            <li>Абсолютные пути в конфигурации — заменяем на относительные</li>
+            <li>Внешние DLL-библиотеки — составляем список, ищем Linux-аналоги (.so)</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">На заметку</div>
+            <p>Этот этап занимает от часа до полного рабочего дня, в зависимости от размера проекта. Но он экономит дни на следующих этапах.</p>
+          </div>
+
+          <h3 id="этап-2-подготовка-архива">Этап 2. Подготовка архива</h3>
+
+          <ul>
+            <li>Закрываем DevStudio (убеждаемся, что файлы не залочены)</li>
+            <li>Копируем папку проекта целиком, включая подпапки</li>
+            <li>Если используются кастомные библиотеки — экспортируем отдельно</li>
+            <li>Фиксируем версии всех модулей</li>
+          </ul>
+
+          <p>Мы используем Git для версионирования проектов DevStudio (поддерживается наравне с SVN). Это сильно упрощает жизнь: можно откатиться, сравнить изменения, вести параллельные ветки под Windows и Linux.</p>
+
+          <h3 id="этап-3-перенос-файлов">Этап 3. Перенос файлов</h3>
+
+          <p>Варианты доставки:</p>
+
+          <ul>
+            <li><strong>SCP/SFTP</strong> — для сетевого переноса (наш основной способ)</li>
+            <li><strong>USB</strong> — для изолированных систем без сети</li>
+            <li><strong>tar-архив</strong> — универсальный вариант</li>
+          </ul>
+
+          <pre><code># Копирование по SCP
+scp -r user@windows-host:/C/Alpha/Projects/MyProject /opt/alpha/projects/
+
+# Или через архив
+tar -xzf myproject.tar.gz -C /opt/alpha/projects/
+
+# Права доступа
+chmod -R 755 /opt/alpha/projects/MyProject
+chown -R alpha:alpha /opt/alpha/projects/MyProject</code></pre>
+
+          <h3 id="этап-4-адаптация">Этап 4. Адаптация на Linux</h3>
+
+          <p>Здесь основная работа:</p>
+
+          <ol>
+            <li><strong>Кодировки</strong> — конвертируем CP1251 → UTF-8 (если не сделали на этапе 1)</li>
+            <li><strong>Пути</strong> — DevStudio адаптирует разделители автоматически, но абсолютные пути нужно исправить вручную</li>
+            <li><strong>Регистр файлов</strong> — проверяем соответствие между именами файлов и ссылками</li>
+            <li><strong>DLL → .so</strong> — заменяем Windows-библиотеки на Linux-аналоги (подробнее ниже)</li>
+            <li><strong>Шрифты</strong> — устанавливаем в систему, если HMI использует нестандартные</li>
+          </ol>
+
+          <pre><code># Установка шрифтов в Astra Linux
+sudo cp *.ttf /usr/share/fonts/truetype/
+sudo fc-cache -fv
+fc-list | grep "НужныйШрифт"</code></pre>
+
+          <h3 id="этап-5-тестирование">Этап 5. Тестирование</h3>
+
+          <p>Чек-лист, который мы проходим на каждом проекте:</p>
+
+          <ol>
+            <li><strong>Компиляция</strong> — проект собирается без ошибок</li>
+            <li><strong>Загрузка конфигурации</strong> — Alpha.Server принимает проект</li>
+            <li><strong>HMI</strong> — мнемосхемы открываются, русский текст отображается, изображения на месте</li>
+            <li><strong>Скрипты Alpha.Om</strong> — процедуры выполняются корректно</li>
+            <li><strong>Связь с оборудованием</strong> — драйверы подключаются к контроллерам</li>
+            <li><strong>Архивирование</strong> — исторические данные пишутся</li>
+            <li><strong>Тревоги</strong> — аварийные ситуации обрабатываются</li>
+          </ol>
+
+          <p>Для автоматизации проверок используем CLI DevStudio (<code>devstudio.cli.exe</code> с командами <code>compile</code>, <code>build</code>, <code>deploy</code>, <code>deploy-status</code>). Это позволяет встроить проверку в CI/CD.</p>
+
+          <h2 id="проблема-dll-so">Проблема DLL → .so: самое сложное</h2>
+
+          <p>Windows DLL не работают в Linux. Точка. Если проект использует внешние .dll для интеграции с оборудованием или нестандартных вычислений, нужна замена.</p>
+
+          <div class="warning-box">
+            <div class="warning-box-title">Критическая проблема</div>
+            <p><strong>Windows DLL не работают в Linux.</strong> Если проект использует внешние .dll для интеграции с оборудованием, потребуются Linux-эквиваленты (.so файлы) или альтернативные решения.</p>
+          </div>
+
+          <p>Что мы делаем на практике:</p>
+
+          <ol>
+            <li><strong>Ищем Linux-версии от вендора</strong> — многие производители оборудования уже предоставляют кроссплатформенные SDK</li>
+            <li><strong>Перепроектируем на стандартные протоколы</strong> — заменяем проприетарные DLL на связку через Modbus TCP или OPC UA. Это вообще хорошая практика, даже без миграции</li>
+            <li><strong>Wine</strong> — теоретически возможно, но для продакшена мы не рекомендуем. Непредсказуемое поведение, проблемы с производительностью</li>
+            <li><strong>Контейнеризация</strong> — в крайнем случае, изолируем Windows-компонент в виртуальной машине</li>
+          </ol>
+
+          <div class="info-box">
+            <div class="info-box-title">Из практики</div>
+            <p>На одном проекте замена проприетарной DLL на OPC UA заняла два дня, но в итоге система стала надёжнее: стандартный протокол вместо закрытой библиотеки, мониторинг подключения из коробки.</p>
+          </div>
+
+          <h2 id="типичные-ошибки">Типичные ошибки, на которые мы наступили</h2>
+
+          <p><strong>«Модуль не найден»</strong> — чаще всего проблема путей. Проверяем ссылки в конфигурации проекта, наличие модулей в указанных директориях. На Linux путь <code>/opt/Alpha/</code> и <code>/opt/alpha/</code> — разные вещи.</p>
+
+          <p><strong>«Ошибка кодировки в имени объекта»</strong> — кириллица в CP1251. Конвертируем в UTF-8, перекомпилируем.</p>
+
+          <p><strong>Изображения не отображаются в HMI</strong> — регистр имён файлов. На Windows <code>Logo.PNG</code> находился по ссылке <code>logo.png</code>, на Linux — нет.</p>
+
+          <p><strong>Медленная загрузка проекта</strong> — проверяем права доступа и расположение файлов. Сетевые папки (NFS/SMB) работают заметно медленнее локального диска. Антивирус на Linux тоже может сканировать файлы проекта в реальном времени.</p>
+
+          <pre><code># Правильные права для файлов проекта
+find /opt/alpha/projects/MyProject -type f -exec chmod 644 {} \;
+find /opt/alpha/projects/MyProject -type d -exec chmod 755 {} \;</code></pre>
+
+          <h2 id="требования-к-окружению">Требования к окружению на Linux</h2>
+
+          <p>Alpha.DevStudio 4.1 на Linux требует:</p>
+
+          <ul>
+            <li><strong>.NET 8.0 Runtime</strong> — обязательно</li>
+            <li><strong>libgdiplus</strong> — для графических компонентов</li>
+            <li><strong>SVN</strong> — если проект версионируется через Subversion (Git работает из коробки)</li>
+          </ul>
+
+          <p>Поддерживаемые ОС: Astra Linux, Ubuntu, Альт, РЕД ОС. На каждой из них мы запускали проекты — принципиальных различий между дистрибутивами нет, но на Astra Linux нужно учитывать особенности мандатного контроля доступа.</p>
+
+          <h2 id="мониторинг-после-переноса">Мониторинг после переноса</h2>
+
+          <p>Миграция не заканчивается успешной компиляцией. На первом проекте мы считали, что раз собралось и запустилось — значит, готово. Через неделю выяснилось, что один из скриптов Alpha.Om работал на 30% медленнее из-за некорректной работы с временными файлами (путь был зашит с обратными слешами, и система каждый раз создавала новый файл вместо перезаписи).</p>
+
+          <p>Мы рекомендуем после миграции сравнить ключевые метрики:</p>
+
+          <ul>
+            <li><strong>Время загрузки проекта</strong> — должно быть сопоставимо с Windows</li>
+            <li><strong>Скорость обновления HMI</strong> — частота перерисовки мнемосхем</li>
+            <li><strong>Использование CPU и памяти</strong> — резкий рост указывает на проблему</li>
+            <li><strong>Пропускная способность I/O</strong> — количество обрабатываемых сигналов в секунду</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Инструменты мониторинга</div>
+            <p><strong>Alpha.Diagnostics 2.2</strong> помогает собрать эти данные. Мы обычно оставляем мониторинг на первые две недели после переноса.</p>
+          </div>
+
+          <h2 id="когда-миграция-не-нужна">Когда миграция не нужна</h2>
+
+          <p>Честность требует сказать: не всегда перенос оправдан.</p>
+
+          <ul>
+            <li><strong>Критическая зависимость от Windows DLL</strong>, для которых нет Linux-аналогов и замена нецелесообразна — проще оставить на Windows или вынести в отдельный сервис</li>
+            <li><strong>Устаревший проект</strong>, который проще пересоздать с нуля на целевой платформе</li>
+            <li><strong>Система с коротким жизненным циклом</strong> — если через год планируется полная замена, тратить время на миграцию нет смысла</li>
+          </ul>
+
+          <h2 id="что-мы-вынесли-из-практики">Что мы вынесли из практики</h2>
+
+          <p>Несколько принципов, к которым мы пришли после нескольких миграций:</p>
+
+          <ul>
+            <li><strong>Начинайте с аудита, не с копирования.</strong> Час аудита экономит день отладки</li>
+            <li><strong>Используйте Git с первого дня.</strong> Версионирование проектов DevStudio через Git (или SVN) — страховка при любых проблемах</li>
+            <li><strong>Пишите в UTF-8 изначально.</strong> Если проект ещё на этапе разработки — сразу настройте UTF-8. Это устранит целый класс проблем</li>
+            <li><strong>Избегайте абсолютных путей.</strong> Относительные пути работают на обеих платформах</li>
+            <li><strong>Тестируйте на Linux регулярно, а не один раз в конце.</strong> Мы запускаем компиляцию на Linux через CLI (<code>devstudio.cli.exe compile</code>) в CI после каждого коммита</li>
+            <li><strong>Для новых проектов сразу ведите кроссплатформенную разработку.</strong> Без проприетарных DLL, без кириллицы в CP1251, без абсолютных путей — и переезд будет безболезненным</li>
+          </ul>
+
+        </div>
+
+<div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Планируете миграцию на Astra Linux?</div>
+  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Поможем с переносом проектов Alpha.DevStudio и настройкой кроссплатформенной среды разработки</div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Узнать больше об Альфа платформе</a>
+    <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Рассчитать стоимость</a>
+  </div>
+</div>
+
+<div style="margin-top:32px">
+  <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="devstudio.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Alpha.DevStudio 4.1: среда разработки проектов АСУ ТП</a>
+    <a href="crossplatform.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Кроссплатформенность: Linux и Windows</a>
+    <a href="architecture.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Архитектура Альфа платформы</a>
+  </div>
+</div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#зачем-вообще-переносить">Зачем вообще переносить</a></li>
+              <li><a href="#что-внутри-проекта-devstudio">Что внутри проекта DevStudio</a></li>
+              <li><a href="#три-главных-различия">Три главных различия</a></li>
+              <li class="toc-h3"><a href="#пути-к-файлам">Пути к файлам</a></li>
+              <li class="toc-h3"><a href="#регистр-символов">Регистр символов</a></li>
+              <li class="toc-h3"><a href="#кодировки-cp1251-vs-utf8">Кодировки CP1251 vs UTF-8</a></li>
+              <li><a href="#пошаговая-миграция">Пошаговая миграция</a></li>
+              <li class="toc-h3"><a href="#этап-1-аудит">Аудит</a></li>
+              <li class="toc-h3"><a href="#этап-2-подготовка-архива">Подготовка архива</a></li>
+              <li class="toc-h3"><a href="#этап-3-перенос-файлов">Перенос файлов</a></li>
+              <li class="toc-h3"><a href="#этап-4-адаптация">Адаптация на Linux</a></li>
+              <li class="toc-h3"><a href="#этап-5-тестирование">Тестирование</a></li>
+              <li><a href="#проблема-dll-so">Проблема DLL → .so</a></li>
+              <li><a href="#типичные-ошибки">Типичные ошибки</a></li>
+              <li><a href="#требования-к-окружению">Требования к окружению</a></li>
+              <li><a href="#мониторинг-после-переноса">Мониторинг после переноса</a></li>
+              <li><a href="#когда-миграция-не-нужна">Когда миграция не нужна</a></li>
+              <li><a href="#что-мы-вынесли-из-практики">Что мы вынесли из практики</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="devstudio.html" class="related-item">
+                <div class="related-item-title">Alpha.DevStudio 4.1: среда разработки</div>
+                <div class="related-item-meta">DevStudio · 11 мин</div>
+              </a>
+              <a href="crossplatform.html" class="related-item">
+                <div class="related-item-title">Кроссплатформенность Альфа платформы</div>
+                <div class="related-item-meta">Платформы · 6 мин</div>
+              </a>
+              <a href="architecture.html" class="related-item">
+                <div class="related-item-title">Архитектура Альфа платформы</div>
+                <div class="related-item-meta">SCADA · 12 мин</div>
+              </a>
+              <a href="hmi.html" class="related-item">
+                <div class="related-item-title">Alpha.HMI 2.0: визуализация</div>
+                <div class="related-item-meta">Визуализация · 15 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
+
+</body>
+</html>

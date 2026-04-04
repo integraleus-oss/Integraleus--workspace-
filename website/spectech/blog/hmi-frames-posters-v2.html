@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/automiq-favicon.png">
+<link rel="apple-touch-icon" href="/automiq-favicon.png">
+<script>(function(){var t=localStorage.getItem('sptech-theme');if(t==='light')document.documentElement.classList.add('theme-light');})();</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+ (function(m,e,t,r,i,k,a){
+ m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+ m[i].l=1*new Date();
+ for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+ })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=107569860', 'ym');
+
+ ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Как мы строим мнемосхемы в Alpha.HMI: фреймы, навигация и грабли компоновки — СПЕЦТЕХ</title>
+<meta name="description" content="Практический опыт построения мнемосхем в Alpha.HMI 2.0: фреймовая модель, UUID-навигация, относительная адресация, типизация компонентов и типичные ошибки компоновки экранов АСУ ТП.">
+
+<meta property="og:image" content="https://specialtechnology.ru/blog/og-hmi-frames.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630"><link rel="canonical" href="https://specialtechnology.ru/blog/hmi-frames-posters.html">
+<meta property="og:title" content="Как мы строим мнемосхемы в Alpha.HMI: фреймы, навигация и грабли компоновки">
+<meta property="og:description" content="Практический опыт построения мнемосхем в Alpha.HMI 2.0: фреймовая модель, UUID-навигация, относительная адресация, типизация компонентов и типичные ошибки компоновки экранов АСУ ТП.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://specialtechnology.ru/blog/hmi-frames-posters.html">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #05080f;
+  --ink1:     #080d1a;
+  --ink2:     #0c1525;
+  --steel:    #111e35;
+  --wire:     #192d48;
+  --wire2:    #1f3a5f;
+  --volt:     #00c8f0;
+  --volt-lo:  rgba(0,200,240,0.08);
+  --volt-med: rgba(0,200,240,0.18);
+  --volt-glow:rgba(0,200,240,0.35);
+  --flame:    #ff6b35;
+  --flame-lo: rgba(255,107,53,0.1);
+  --lime:     #1de9b6;
+  --lime-lo:  rgba(29,233,182,0.08);
+  --crimson:  #ff3d57;
+  --amber:    #ffb800;
+  --violet:   #a78bfa;
+  --text:     #e2eaf4;
+  --text2:    #94b3d0;
+  --text3:    #4a6d8f;
+  --ff:       'Exo 2', sans-serif;
+  --mono:     'JetBrains Mono', monospace;
+  --serif:    'Bitter', serif;
+  --ease:     cubic-bezier(.22,.68,0,1.2);
+}
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+:root.theme-light {
+  --ink: #f5f6f8;
+  --ink1: #ffffff;
+  --ink2: #f7f8fa;
+  --steel: #e8ecf0;
+  --wire: #d0d7e0;
+  --wire2: #bcc5d0;
+  --volt: #0088cc;
+  --volt-lo: rgba(0,136,204,0.08);
+  --volt-glow: rgba(0,136,204,0.25);
+  --flame: #e85d2a;
+  --flame-lo: rgba(232,93,42,0.08);
+  --lime: #15a87e;
+  --lime-lo: rgba(21,168,126,0.08);
+  --crimson: #e0294a;
+  --amber: #d9a000;
+  --text: #1a2332;
+  --text2: #4a5d75;
+  --text3: #8a9bb5;
+  color-scheme: light;
+}
+:root.theme-light body { color: var(--text); }
+:root.theme-light nav { background: rgba(255,255,255,0.95); border-bottom-color: var(--wire); }
+:root.theme-light .nav-logo-text { color: var(--text); }
+:root.theme-light .logo-dark-theme { display: none !important; }
+:root.theme-light .logo-light-theme { display: block !important; }
+:root.theme-light .article-body { color: var(--text); }
+:root.theme-light .article-body h2,
+:root.theme-light .article-body h3 { color: var(--text); }
+:root.theme-light .article-body pre { background: var(--ink2); border-color: var(--wire); color: var(--text); }
+:root.theme-light .article-body code { background: var(--ink2); color: var(--text); }
+:root.theme-light .article-body blockquote { border-left-color: var(--volt); background: var(--ink2); }
+:root.theme-light .article-body table { border-color: var(--wire); }
+:root.theme-light .article-body th { background: var(--steel); color: var(--text); }
+:root.theme-light .article-body td { border-color: var(--wire); color: var(--text); }
+:root.theme-light footer { background: var(--steel); }
+:root.theme-light .breadcrumb a { color: var(--text2); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--ink);color:var(--text);font-family:var(--ff);overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(25,45,72,0.1) 60px);pointer-events:none;z-index:0;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:var(--ink1);} ::-webkit-scrollbar-thumb{background:var(--wire2);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:60px;background:rgba(5,8,15,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--wire);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo-text{font-size:15px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--text);}
+.nav-links{display:flex;align-items:center;list-style:none;gap:0;}
+.nav-links li{position:relative;}
+.nav-links a{font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);text-decoration:none;padding:8px 14px;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--volt);}
+.nav-links li:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+.nav-dropdown{position:absolute;top:100%;left:0;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;min-width:200px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .25s;z-index:200;list-style:none;margin:0;padding:8px 0;}
+.nav-dropdown li{margin:0;}
+.nav-dropdown a{display:block;padding:6px 16px;font-size:16px;letter-spacing:1px;color:var(--text2);}
+.nav-dropdown a:hover{color:var(--volt);background:var(--volt-lo);}
+.nav-cta{margin-left:20px;}
+.btn{display:inline-block;padding:8px 16px;border:1px solid;border-radius:3px;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;}
+.btn-volt{background:var(--volt);border-color:var(--volt);color:var(--ink);}
+.btn-volt:hover{background:transparent;color:var(--volt);}
+
+/* PAGE */
+.page{position:relative;z-index:1;padding-top:60px;}
+.container{max-width:1160px;margin:0 auto;padding:0 40px;}
+
+/* Breadcrumb */
+.breadcrumb{padding:20px 0;border-bottom:1px solid var(--wire);}
+.breadcrumb-links{display:flex;align-items:center;gap:8px;font-size:16px;}
+.breadcrumb-links a{color:var(--text3);text-decoration:none;transition:color .2s;}
+.breadcrumb-links a:hover{color:var(--volt);}
+.breadcrumb-links span{color:var(--text3);}
+.breadcrumb-current{color:var(--text2);}
+
+/* Article layout */
+.article-layout{display:grid;grid-template-columns:1fr 280px;gap:40px;padding:40px 0 80px;align-items:start;}
+
+/* Article */
+.article{max-width:720px;}
+.article-header{margin-bottom:40px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+.post-tag{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;}
+.tag-visual{color:var(--lime);border-color:var(--lime);background:var(--lime-lo);}
+.article-date,.article-read,.article-author{font-family:var(--mono);font-size:16px;color:var(--text3);}
+.article-title{font-size:clamp(28px,4vw,44px);font-weight:800;text-transform:none;letter-spacing:-0.5px;line-height:1.1;color:var(--text);margin-bottom:16px;}
+.article-subtitle{font-size:18px;color:var(--text2);line-height:1.5;margin-bottom:24px;}
+
+/* Article body */
+.article-body{line-height:1.7;font-size:16px;}
+.article-body h2{font-size:26px;font-weight:700;color:var(--text);margin:40px 0 20px 0;padding-bottom:8px;border-bottom:2px solid var(--wire2);}
+.article-body h3{font-size:21px;font-weight:600;color:var(--text);margin:32px 0 16px 0;}
+.article-body h4{font-size:18px;font-weight:600;color:var(--text);margin:24px 0 12px 0;}
+.article-body p{margin-bottom:20px;color:var(--text2);}
+.article-body ul,.article-body ol{margin:20px 0;padding-left:24px;color:var(--text2);}
+.article-body li{margin-bottom:8px;}
+.article-body strong{color:var(--text);font-weight:600;}
+.article-body em{color:var(--volt);font-style:normal;}
+.article-body code{font-family:var(--mono);font-size:14px;background:var(--ink2);color:var(--lime);padding:2px 6px;border-radius:2px;}
+.article-body pre{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:20px;margin:24px 0;overflow-x:auto;font-family:var(--mono);font-size:14px;line-height:1.6;}
+.article-body pre code{background:none;padding:0;color:var(--text2);}
+
+/* Info boxes */
+.info-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--lime);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.info-box-title{font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;color:var(--lime);margin-bottom:12px;}
+.info-box p{margin-bottom:12px;color:var(--text2);font-size:15px;}
+.info-box p:last-child{margin-bottom:0;}
+
+.script-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--amber);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.script-box .info-box-title{color:var(--amber);}
+
+.warning-box{background:var(--ink1);border:1px solid var(--wire2);border-left:4px solid var(--crimson);border-radius:0 4px 4px 0;padding:20px;margin:24px 0;}
+.warning-box .info-box-title{color:var(--crimson);}
+
+/* Mode comparison */
+.mode-comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:30px 0;}
+.mode-item{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;padding:20px;}
+.mode-title{font-family:var(--mono);font-size:16px;font-weight:600;color:var(--lime);margin-bottom:12px;letter-spacing:1px;}
+.mode-desc{color:var(--text2);font-size:15px;line-height:1.5;}
+
+/* Component grid */
+.component-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:24px 0;}
+.component-item{background:var(--ink2);border:1px solid var(--wire);border-radius:4px;padding:16px;text-align:center;}
+.component-name{font-family:var(--mono);font-size:14px;color:var(--lime);margin-bottom:6px;}
+.component-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+
+/* Tables */
+.article-body table {
+  width: 100%; 
+  margin: 24px 0; 
+  border-collapse: collapse; 
+  border: 1px solid var(--wire);
+  background: var(--ink1);
+}
+.article-body th {
+  background: var(--steel); 
+  color: var(--text); 
+  padding: 12px 16px; 
+  text-align: left; 
+  font-weight: 600;
+  border-bottom: 1px solid var(--wire);
+}
+.article-body td {
+  padding: 12px 16px; 
+  border-bottom: 1px solid var(--wire); 
+  color: var(--text2);
+}
+.article-body tr:hover {
+  background: var(--volt-lo);
+}
+
+/* Sidebar */
+.article-sidebar{position:sticky;top:80px;}
+.sidebar-block{background:var(--ink1);border:1px solid var(--wire);border-radius:4px;margin-bottom:20px;}
+.sb-head{font-family:var(--mono);font-size:16px;letter-spacing:2px;text-transform:uppercase;color:var(--volt);padding:14px 18px;border-bottom:1px solid var(--wire);}
+.sb-body{padding:18px;}
+.toc-list{list-style:none;padding:0;}
+.toc-list li{margin-bottom:8px;}
+.toc-list a{color:var(--text2);text-decoration:none;font-size:15px;transition:color .2s;display:block;padding:4px 0;border-bottom:1px solid transparent;}
+.toc-list a:hover{color:var(--volt);border-bottom-color:var(--volt);}
+.toc-list li.toc-h3{padding-left:16px;font-size:14px;}
+.related-list{display:flex;flex-direction:column;gap:16px;}
+.related-item{display:block;color:var(--text);text-decoration:none;transition:color .2s;}
+.related-item:hover{color:var(--volt);}
+.related-item-title{font-size:16px;font-weight:600;line-height:1.4;margin-bottom:4px;}
+.related-item-meta{font-family:var(--mono);font-size:14px;color:var(--text3);}
+
+/* Footer */
+footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30px;}
+.footer-content{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-brand{font-size:18px;font-weight:800;color:var(--text);letter-spacing:2px;margin-bottom:16px;}
+.footer-content p{color:var(--text2);font-size:15px;line-height:1.6;margin-bottom:20px;}
+.f-badge{display:inline-block;background:var(--steel);color:var(--volt);font-family:var(--mono);font-size:15px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;border:1px solid var(--wire);}
+.footer-col-title{font-weight:700;color:var(--text);margin-bottom:16px;font-size:15px;text-transform:uppercase;letter-spacing:1px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:8px;}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:16px;transition:color .2s;}
+.footer-links a:hover{color:var(--volt);}
+.footer-bottom{border-top:1px solid var(--wire);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:15px;color:var(--text3);}
+
+/* Mobile hamburger */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.hamburger:hover { color: var(--volt); }
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+.mobile-menu.active {
+  opacity: 1;
+  visibility: visible;
+}
+.mobile-menu-content {
+  background: #0a0e1a;
+  padding: 60px 32px 40px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.mobile-menu-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 24px;
+  cursor: pointer;
+}
+.mobile-menu-close:hover { color: var(--volt); }
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+.mobile-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  transition: color 0.3s ease;
+}
+.mobile-nav a:hover { color: var(--volt); }
+
+@media (max-width: 900px) {
+  .hamburger { display: block; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none !important; }
+  .nav-cta { display: none !important; }
+  .container { padding: 0 16px; }
+  .article-body { overflow-wrap: break-word; word-break: break-word; }
+  .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
+  .article-body pre { overflow-x: auto; max-width: 100%; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-body table { display: block; overflow-x: auto; max-width: 100%; }
+  .breadcrumb { font-size: 12px; flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .container{padding:0 20px;}
+  .article-title { font-size: 24px; overflow-wrap: break-word; }
+  .article-meta { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+  .article-layout{grid-template-columns:1fr;gap:20px;}
+  .mode-comparison{grid-template-columns:1fr;}
+  .component-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+  .footer-content{grid-template-columns:1fr 1fr;gap:30px;}
+}
+:root.theme-light body::before{background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,40,80,0.2) 60px);}
+
+/* Light theme mobile menu */
+:root.theme-light .mobile-menu,
+:root.theme-light .mobile-menu-content {
+  background: #ffffff !important;
+}
+:root.theme-light .mobile-nav a {
+  color: #1a2332;
+}
+:root.theme-light .mobile-nav a:hover {
+  color: var(--volt);
+}
+:root.theme-light .mobile-menu-close {
+  color: #4a5d75;
+}
+:root.theme-light .mobile-menu-close:hover {
+  color: var(--volt);
+}
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border: 1px solid var(--volt); border-radius: 50%;
+  background: transparent; cursor: pointer; transition: all 0.3s; padding: 0;
+  margin-left: 8px; flex-shrink: 0; color: var(--volt);
+}
+.theme-toggle:hover { background: var(--volt); color: #fff; }
+.theme-toggle svg { width: 18px; height: 18px; stroke: currentColor; }
+.theme-toggle .icon-moon { display: block; }
+.theme-toggle .icon-sun { display: none; }
+:root.theme-light .theme-toggle .icon-moon { display: none; }
+:root.theme-light .theme-toggle .icon-sun { display: block; }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Как мы строим мнемосхемы в Alpha.HMI: фреймы, навигация и грабли компоновки","description":"Практический опыт построения мнемосхем в Alpha.HMI 2.0: фреймовая модель, UUID-навигация, относительная адресация, типизация компонентов и типичные ошибки компоновки экранов АСУ ТП.","author":{"@type":"Organization","name":"СПЕЦТЕХ","url":"https://specialtechnology.ru"},"publisher":{"@type":"Organization","name":"СПЕЦТЕХ"},"datePublished":"2026-04-01","url":"https://specialtechnology.ru/blog/hmi-frames-posters.html"}</script>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">
+    <div class="nav-logo-text">СПЕЦТЕХ</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Главная</a></li>
+    <li><a href="#">Продукты</a>
+      <ul class="nav-dropdown">
+        <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+        <li><a href="../wertsim.html">CAE WeRTSim</a></li>
+        <li><a href="../infteh.html">ИнфТех ДатаПлат</a></li>
+      </ul>
+    </li>
+    <li><a href="../calculator.html">Калькулятор</a></li>
+    <li><a href="../blog.html" class="active">Блог</a></li>
+    <li><a href="../index.html#contact">Контакты</a></li>
+  </ul>
+    <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
+  <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+<div class="nav-cta">
+    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-menu-content">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
+    <nav class="mobile-nav">
+      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
+      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
+      <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
+      <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
+      <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
+      <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
+      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+    </nav>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- BREADCRUMB -->
+  <div class="container">
+    <div class="breadcrumb">
+      <div class="breadcrumb-links">
+        <a href="../index.html">Главная</a>
+        <span>/</span>
+        <a href="../blog.html">Блог</a>
+        <span>/</span>
+        <span class="breadcrumb-current">Как мы строим мнемосхемы в Alpha.HMI</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="article-layout">
+
+      <!-- MAIN ARTICLE -->
+      <article class="article">
+        <header class="article-header">
+          <div class="article-meta">
+            <span class="post-tag tag-visual">Визуализация</span>
+            <span class="article-date">1 апр. 2026</span>
+            <span class="article-read">10 мин</span>
+            <span class="article-author">Автоматчик</span>
+          </div>
+          <h1 class="article-title">Как мы строим мнемосхемы в Alpha.HMI: фреймы, навигация и грабли компоновки</h1>
+          <p class="article-subtitle">Каждый проект АСУ ТП рано или поздно упирается в визуализацию. Контроллеры настроены, сигналы идут, а оператору нужен экран, где всё понятно с первого взгляда. Если вы проектируете интерфейсы в Alpha.HMI 2.0, эта статья сэкономит вам время.</p>
+        </header>
+
+        <div class="article-body">
+
+          <p>На нескольких проектах мы прошли путь от простых статичных мнемосхем до модульной архитектуры с десятками переиспользуемых компонентов — и собрали коллекцию ошибок, которые хотим разобрать.</p>
+
+          <h2 id="экранные-формы">Экранные формы: из чего состоит мнемосхема</h2>
+
+          <p>Любая визуализация в Alpha.HMI начинается с экранной формы. Форма — это контейнер, в котором живут графические примитивы (прямоугольники, эллипсы, линии, кривые, линии-коннекторы), UI-компоненты (кнопки, чекбоксы, слайдеры, выпадающие списки, индикаторы прогресса, гистограммы, панели вкладок), текстовые элементы (текст, rich text, поля ввода, текстовые редакторы) и эффекты (градиенты, мигание, звук, таймеры).</p>
+
+          <p>Формы группируются по папкам, одна из них назначается главной — она открывается при старте визуализатора. Размеры задаются вручную или подбираются автоматически.</p>
+
+          <p>Звучит просто. На практике главная сложность — не нарисовать элементы, а правильно их расположить.</p>
+
+          <h3 id="иерархия-информации">Иерархия информации: кто на экране главный</h3>
+
+          <p>На одном из проектов мы столкнулись с классической проблемой: оператор жаловался, что «всё мелькает и непонятно, куда смотреть». Мнемосхему рисовал инженер, который разместил параметры равномерно по экрану — логично с точки зрения P&ID, но бесполезно для оператора в ночную смену.</p>
+
+          <p>Мы пришли к простой таблице приоритетов, которая с тех пор стала стандартом на наших проектах:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Приоритет</th>
+                <th>Что размещаем</th>
+                <th>Где на экране</th>
+                <th>Визуальный вес</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Критический</td>
+                <td>Аварийные сигналы, аварийные остановы</td>
+                <td>Верх экрана, центр</td>
+                <td>Яркие цвета, крупный шрифт</td>
+              </tr>
+              <tr>
+                <td>Высокий</td>
+                <td>Основные параметры процесса</td>
+                <td>Центральная область</td>
+                <td>Контрастные цвета</td>
+              </tr>
+              <tr>
+                <td>Средний</td>
+                <td>Управляющие элементы</td>
+                <td>Боковые панели</td>
+                <td>Стандартные цвета</td>
+              </tr>
+              <tr>
+                <td>Низкий</td>
+                <td>Справочная информация</td>
+                <td>Нижняя часть, углы</td>
+                <td>Приглушённые тона</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="info-box">
+            <div class="info-box-title">Результат</div>
+            <p>После перекомпоновки по этой схеме оператор стал замечать предаварийные состояния на 2–3 секунды раньше. Для процессов с быстрой динамикой это существенно.</p>
+          </div>
+
+          <h2 id="фреймовая-модель">Фреймовая модель: форма внутри формы</h2>
+
+          <p>Фрейм в Alpha.HMI — это форма, встроенная в другую форму, с автоматическим масштабированием содержимого. Концепция простая, но именно она превращает набор отдельных экранов в модульную систему.</p>
+
+          <h3 id="проблема-40-насосов">Проблема: 40 одинаковых насосов</h3>
+
+          <p>На проекте водоподготовки у нас было около 40 насосных агрегатов. Каждый — с одинаковым набором параметров: давление на входе/выходе, расход, температура подшипников, состояние (работа/стоп/авария). Первый вариант: нарисовать 40 отдельных мнемосхем. Это работает, но при любом изменении (добавили параметр, поменяли цветовую схему) нужно править 40 экранов.</p>
+
+          <h3 id="решение-типовой-фрейм">Решение: типовой фрейм</h3>
+
+          <p>Мы создали одну экранную форму «Насос» и встроили её фреймами в общую мнемосхему участка. Каждый фрейм масштабирует содержимое под свой размер. Изменения в форме «Насос» автоматически подтягиваются во всех 40 местах.</p>
+
+          <p>Типовые применения фреймов, которые у нас прижились:</p>
+
+          <div class="mode-comparison">
+            <div class="mode-item">
+              <div class="mode-title">📊 Экранные формы оборудования</div>
+              <div class="mode-desc">Унифицированные представления насосов, резервуаров, теплообменников, задвижек.</div>
+            </div>
+            <div class="mode-item">
+              <div class="mode-title">📋 Информационные панели</div>
+              <div class="mode-desc">Панели трендов (alpha.hmi.charts), таблицы параметров (alpha.hmi.tables), журналы событий как встраиваемые компоненты.</div>
+            </div>
+          </div>
+
+          <h3 id="типизация">Типизация: пользовательские типы как аналог ООП</h3>
+
+          <p>Фреймы решают визуальную часть, но Alpha.HMI предлагает ещё один уровень переиспользования — <em>пользовательские типы</em>. По сути, это аналог классов в объектно-ориентированном программировании: вы описываете тип с набором свойств, а потом создаёте экземпляры с индивидуальными значениями.</p>
+
+          <p>Каждый экземпляр может иметь параметры инициализации и собственные свойства. Глобальные объекты доступны из любой формы проекта. Поддерживаемые типы данных: <code>bool</code>, <code>int1</code>–<code>int8</code>, <code>uint1</code>–<code>uint8</code>, <code>float</code>, <code>double</code>, <code>string</code>, <code>timestamp</code>, <code>variant</code>. Значения могут быть начальными, вычисляемыми, с формулами по условию. Есть поддержка массивов.</p>
+
+          <div class="script-box">
+            <div class="info-box-title">Типизация + фреймы</div>
+            <p>Один раз спроектировали компонент «Клапан» с логикой, визуализацией и привязкой к данным — и переиспользуете его по всему проекту.</p>
+          </div>
+
+          <h2 id="навигация">Навигация: UUID, SendToAll и SendMessageByID</h2>
+
+          <h3 id="проблема-ссылки">Проблема: ссылки ломаются при реорганизации</h3>
+
+          <p>В ранних проектах мы привязывали переходы между экранами к именам форм. Переименовал папку — сломал навигацию на половине мнемосхем.</p>
+
+          <h3 id="навигация-по-uuid">Решение: навигация по UUID</h3>
+
+          <p>Каждая форма в Alpha.HMI имеет уникальный UUID. Навигация по UUID устойчива к переименованиям и перемещениям форм в дереве проекта. Мы переключились на UUID-навигацию и с тех пор ни разу не чинили битые ссылки после рефакторинга структуры проекта.</p>
+
+          <h3 id="межоконное-взаимодействие">Межоконное взаимодействие</h3>
+
+          <p>Когда экранов много и они живут в разных окнах, нужен механизм обмена сообщениями. Alpha.HMI предоставляет два варианта:</p>
+
+          <ul>
+            <li><strong>SendToAll()</strong> — широковещательная отправка всем открытым формам. Удобно для команд типа «обновить данные» или «переключить режим отображения»</li>
+            <li><strong>SendMessageByID()</strong> — адресная отправка конкретной форме по UUID. Используем, когда нужно передать параметры или дать команду конкретному окну</li>
+          </ul>
+
+          <p>Помимо сообщений, для обмена данными между формами работают <em>глобальные объекты</em> (общие переменные, доступные отовсюду) и <em>источники данных AP</em> — центральное хранилище состояния через TCP-подключение к Alpha.Server (порт 4388).</p>
+
+          <h3 id="иерархия-навигации">Рекомендуемая иерархия навигации</h3>
+
+          <p>Структура, которая хорошо зарекомендовала себя на наших проектах:</p>
+
+          <ol>
+            <li><strong>Главная мнемосхема</strong> — общий обзор процесса, ключевые параметры</li>
+            <li><strong>Узловые мнемосхемы</strong> — детализация по участкам или технологическим узлам</li>
+            <li><strong>Детальные формы</strong> — параметры конкретного оборудования, управление</li>
+            <li><strong>Служебные экраны</strong> — настройки, диагностика, справка</li>
+          </ol>
+
+          <div class="warning-box">
+            <div class="info-box-title">Правило вложенности</div>
+            <p>Не более 4 уровней вложенности. Глубже — оператор начинает теряться.</p>
+          </div>
+
+          <h2 id="относительная-адресация">Относительная адресация: me, parent, here</h2>
+
+          <p>При работе с фреймами и типизированными компонентами жёсткая привязка к именам объектов — путь к хрупкому коду. Alpha.HMI поддерживает относительную адресацию в скриптах:</p>
+
+          <ul>
+            <li><strong>me/this</strong> — ссылка на текущий объект</li>
+            <li><strong>parent</strong> — ссылка на родительский контейнер</li>
+            <li><strong>here</strong> — ссылка на текущую форму</li>
+          </ul>
+
+          <div class="info-box">
+            <div class="info-box-title">Результат</div>
+            <p>Мы используем относительную адресацию во всех переиспользуемых компонентах. Один и тот же скрипт работает в любом экземпляре фрейма без модификации. Без этого механизма модульная архитектура на фреймах была бы сильно ограничена.</p>
+          </div>
+
+          <h2 id="скрипты">Скрипты: Alpha.Om и JavaScript</h2>
+
+          <p>Для логики визуализации в Alpha.HMI используются два языка: <strong>Alpha.Om</strong> (собственный язык платформы версии 1.4) и <strong>JavaScript</strong>.</p>
+
+          <p>Alpha.Om — это не язык общего назначения. Он спроектирован для формул и процедур, привязанных к сигналам. Пользовательские функции с аргументами, вызов внешних функций из DLL/SO — всё это поддерживается.</p>
+
+          <p>JavaScript применяется для более сложных вычислений и интеграции.</p>
+
+          <p>Что могут скрипты:</p>
+          <ul>
+            <li>Обрабатывать события интерфейса</li>
+            <li>Обновлять свойства элементов по условию</li>
+            <li>Обмениваться сообщениями между формами (SendToAll, SendMessageByID)</li>
+            <li>Вызывать пользовательские и внешние функции</li>
+          </ul>
+
+          <div class="script-box">
+            <div class="info-box-title">Важно</div>
+            <p>Конкретные API-сигнатуры зависят от версии Alpha.HMI — уточняйте в документации вашей версии.</p>
+          </div>
+
+          <h2 id="оптимизация">Оптимизация производительности</h2>
+
+          <p>На проектах с сотнями элементов на экране производительность отрисовки становится критичной. Вот принципы, к которым мы пришли опытным путём.</p>
+
+          <h3 id="минимизация-перерисовки">Минимизация перерисовки</h3>
+
+          <ul>
+            <li>Группируйте статические элементы (фон, подписи, рамки) в фоновые слои — они не перерисовываются при обновлении динамических данных</li>
+            <li>Используйте события изменения значений вместо циклического опроса. Alpha.HMI поддерживает подписку на изменения через источники данных AP</li>
+            <li>Ограничивайте частоту обновления динамических элементов — не каждый параметр нужно обновлять 10 раз в секунду</li>
+          </ul>
+
+          <h3 id="эффективное-использование-ресурсов">Эффективное использование ресурсов</h3>
+
+          <ul>
+            <li>Закрывайте неиспользуемые формы. Открытая, но невидимая форма продолжает потреблять ресурсы</li>
+            <li>Применяйте пользовательские типы для однотипных элементов — это экономит память по сравнению с копированием</li>
+            <li>Кэшируйте результаты сложных вычислений в скриптах</li>
+          </ul>
+
+          <p>Alpha.HMI предоставляет встроенные инструменты диагностики: счётчики обновлений (частота перерисовки элементов), профилировщик скриптов (время выполнения процедур), мониторинг памяти. Мы рекомендуем периодически проверять эти метрики, особенно после добавления новых экранов.</p>
+
+          <h2 id="типичные-ошибки">Типичные ошибки компоновки</h2>
+
+          <p>За несколько проектов мы собрали список граблей, на которые наступают чаще всего.</p>
+
+          <div class="warning-box">
+            <div class="info-box-title">Перегрузка информацией</div>
+            <p><strong>Проблема:</strong> на одном экране — 200+ элементов. Оператор видит пёструю кашу.<br>
+            <strong>Решение:</strong> правило «7±2» — не более 9 логических групп информации на экране. Если параметров больше — выносите детали на вложенные формы через фреймы.</p>
+          </div>
+
+          <div class="warning-box">
+            <div class="info-box-title">Неконсистентная цветовая схема</div>
+            <p><strong>Проблема:</strong> зелёный на одном экране означает «норма», на другом — «открыто», на третьем — «готов к работе».<br>
+            <strong>Решение:</strong> создайте палитру стандартных цветов на старте проекта и строго её придерживайтесь. Зафиксируйте соответствие «цвет — состояние» в проектной документации.</p>
+          </div>
+
+          <h3 id="ошибки-навигации">Ошибки навигации</h3>
+
+          <ul>
+            <li><strong>Нарушение иерархии</strong> — переходы напрямую с обзорных экранов к детальным, минуя промежуточные уровни. Оператор теряет контекст</li>
+            <li><strong>Отсутствие «хлебных крошек»</strong> — оператор не понимает, где он находится в структуре интерфейса</li>
+            <li><strong>Слишком глубокая вложенность</strong> — более 4 уровней навигации затрудняют работу</li>
+          </ul>
+
+          <h3 id="ошибки-в-скриптах">Ошибки в скриптах</h3>
+
+          <ul>
+            <li>Использование жёстких имён объектов вместо относительной адресации (<code>me</code>/<code>this</code>, <code>parent</code>, <code>here</code>). При копировании компонента скрипт продолжает ссылаться на оригинал</li>
+            <li>Недокументированные API-вызовы, которые ломаются при обновлении версии</li>
+            <li>Отсутствие обработки ошибок в скриптах — одна ошибка может заморозить обновление всего экрана</li>
+          </ul>
+
+          <h2 id="полезные-возможности">Что ещё полезно знать</h2>
+
+          <p>Несколько возможностей Alpha.HMI, которые стоит держать в голове при проектировании:</p>
+
+          <ul>
+            <li><strong>Источники данных:</strong> OPC DA (только Windows) и TCP через Alpha.Link (кроссплатформенно, порт 4388). Для проектов на Linux (Astra Linux, РЕД ОС) — только TCP/Alpha.Link</li>
+            <li><strong>WebViewer:</strong> развёртывание мнемосхем как веб-приложения через IIS, Apache или Nginx. Удобно для удалённого мониторинга без установки клиента</li>
+            <li><strong>Встраиваемые компоненты:</strong> Alpha.HMI.Alarms 3.3 (кроссплатформенное управление тревогами), .NET-библиотеки, Qt-плагины (CMake + Qt 5.15.2)</li>
+            <li><strong>Графики и таблицы:</strong> библиотеки alpha.hmi.charts (оперативные и исторические данные) и alpha.hmi.tables (модели данных, столбцы, декораторы)</li>
+            <li><strong>CLI:</strong> alpha.hmi.cli — компиляция и выгрузка метаинформации из командной строки. Полезно для CI/CD</li>
+            <li><strong>Обновление без перезапуска:</strong> компонент «Менеджер проекта» позволяет проверить, загрузить и применить обновления с резервным копированием и откатом</li>
+          </ul>
+
+          <h2 id="итого">Итого</h2>
+
+          <p>Модульная визуализация в Alpha.HMI строится на нескольких ключевых принципах:</p>
+
+          <ul>
+            <li><strong>Фреймы</strong> для переиспользования — один компонент, десятки экземпляров</li>
+            <li><strong>Типизация</strong> для единообразия — пользовательские типы вместо копипаста</li>
+            <li><strong>UUID-навигация</strong> для устойчивости — ссылки не ломаются при рефакторинге</li>
+            <li><strong>Относительная адресация</strong> для универсальности — me/this, parent, here</li>
+            <li><strong>Иерархия информации</strong> для оператора — критичное наверх, справочное вниз</li>
+            <li><strong>Оптимизация</strong> для скорости — статика в фон, события вместо опроса</li>
+          </ul>
+
+          <p>Грамотная компоновка экранов — это не дизайнерская задача. Это инженерная задача, от которой зависит, заметит ли оператор предаварийное состояние вовремя.</p>
+
+          <p>Если вы проектируете визуализацию на Альфа платформе и хотите обсудить архитектуру экранов — пишите, поделимся опытом с конкретных проектов.</p>
+
+        </div>
+
+<div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Создавайте профессиональные мнемосхемы</div>
+  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Alpha.HMI 2.0 — мощная платформа визуализации для промышленной автоматизации</div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Подробнее о платформе</a>
+    <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Рассчитать стоимость</a>
+  </div>
+</div>
+
+<div style="margin-top:32px">
+  <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Читайте также</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <a href="hmi.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Alpha.HMI 2.0: мнемосхемы и скрипты</a>
+    <a href="devstudio.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Alpha.DevStudio 4.1: среда разработки</a>
+    <a href="alarms.html" style="display:block;padding:12px 16px;background:var(--ink1);border:1px solid var(--wire);border-radius:3px;text-decoration:none;color:var(--text);font-size:15px;font-weight:600;transition:border-color .2s">Alpha.HMI.Alarms 3.3: управление тревогами</a>
+  </div>
+</div>
+      </article>
+
+      <!-- SIDEBAR -->
+      <aside class="article-sidebar">
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Содержание</div>
+          <div class="sb-body">
+            <ul class="toc-list">
+              <li><a href="#экранные-формы">Экранные формы</a></li>
+              <li class="toc-h3"><a href="#иерархия-информации">Иерархия информации</a></li>
+              <li><a href="#фреймовая-модель">Фреймовая модель</a></li>
+              <li class="toc-h3"><a href="#типизация">Типизация (ООП)</a></li>
+              <li><a href="#навигация">Навигация: UUID</a></li>
+              <li class="toc-h3"><a href="#межоконное-взаимодействие">Межоконное взаимодействие</a></li>
+              <li><a href="#относительная-адресация">Относительная адресация</a></li>
+              <li><a href="#скрипты">Скрипты Alpha.Om</a></li>
+              <li><a href="#оптимизация">Оптимизация</a></li>
+              <li><a href="#типичные-ошибки">Типичные ошибки</a></li>
+              <li class="toc-h3"><a href="#ошибки-в-скриптах">Ошибки в скриптах</a></li>
+              <li><a href="#полезные-возможности">Полезные возможности</a></li>
+              <li><a href="#итого">Итого</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sidebar-block">
+          <div class="sb-head">// Похожие статьи</div>
+          <div class="sb-body">
+            <div class="related-list">
+              <a href="hmi.html" class="related-item">
+                <div class="related-item-title">Alpha.HMI 2.0: мнемосхемы и скрипты</div>
+                <div class="related-item-meta">Визуализация · 15 мин</div>
+              </a>
+              <a href="devstudio.html" class="related-item">
+                <div class="related-item-title">Alpha.DevStudio 4.1: среда разработки</div>
+                <div class="related-item-meta">Инструменты · 10 мин</div>
+              </a>
+              <a href="alarms.html" class="related-item">
+                <div class="related-item-title">Система тревог Alpha.HMI.Alarms</div>
+                <div class="related-item-meta">SCADA · 8 мин</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div>
+        <div class="footer-brand">СПЕЦТЕХ</div>
+        <p>АО «СПЕЦТЕХ» — официальный дистрибьютор российского программного обеспечения для промышленной автоматизации и АСУ ТП.</p>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <div class="f-badge">Россия</div>
+          <div class="f-badge">СНГ</div>
+        </div>
+      </div>
+
+      <div>
+
+        <div class="footer-col-title">Продукты</div>
+        <ul class="footer-links">
+          <li><a href="../alpha-platform.html">Альфа платформа</a></li>
+          <li><a href="#products">CAE WeRTSim</a></li>
+          <li><a href="#products">MES</a></li>
+          <li><a href="#capabilities">Возможности SCADA</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Компания</div>
+        <ul class="footer-links">
+          <li><a href="../index.html#about">О компании</a></li>
+          <li><a href="../index.html#tech">Технологии</a></li>
+          <li><a href="../index.html#partners">Партнёры</a></li>
+          <li><a href="../index.html#contact">Контакты</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Контакты</div>
+        <ul class="footer-links">
+          <li><a href="tel:+74957600939">+7 (495) 760-09-39</a></li>
+          <li><a href="mailto:info@special-tech.ru">info@special-tech.ru</a></li>
+          <li><a href="mailto:sales@special-tech.ru">sales@special-tech.ru</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 АО «СПЕЦТЕХ». Все права защищены.</div>
+      <div style="display:flex;gap:20px">
+        <span style="font-family:var(--mono);font-size:15px;color:var(--text3)">Московская обл., Сергиев Посад</span>
+      </div>
+      <div style="margin-top:12px;font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;opacity:0.7">ИНН 5042162563 · ОКВЭД 46.51.2 — Торговля оптовая программным обеспечением · ИТ-деятельность 2.01 (приказ Минцифры № 449 от 11.05.2023)</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleTheme() {
+  var root = document.documentElement;
+  var isLight = root.classList.toggle('theme-light');
+  localStorage.setItem('sptech-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+<script>
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+function closeMobileMenu() {
+    document.getElementById('mobile-menu').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.getElementById('mobile-menu').addEventListener('click', function(e) {
+    if (e.target === this) closeMobileMenu();
+});
+</script>
+
+</body>
+</html>
