@@ -1,0 +1,30 @@
+{
+  "lastCheck": "2026-04-04T07:03:00Z",
+  "gitverse": {
+    "repos": [
+      { "name": "IntRequirements_SimSYS", "lastUpdate": "2 дня назад (~2026-04-02)", "stars": 1, "lang": "Mermaid" },
+      { "name": "ComRequirements_SimSYS", "lastUpdate": "19 дней назад (~2026-03-16)", "stars": 0, "lang": "Python" },
+      { "name": "TestModel_Ont", "lastUpdate": "2 месяца назад", "stars": 0 },
+      { "name": "Standard_Ont", "lastUpdate": "2 месяца назад", "stars": 0 },
+      { "name": "Architecture_DC", "lastUpdate": "месяц назад", "stars": 0 },
+      { "name": ".gitverse", "lastUpdate": "23 дня назад", "stars": 0 }
+    ],
+    "totalRepos": 6
+  },
+  "projects": {
+    "count": 11,
+    "list": [
+      "Общесистемные требования SimSYS",
+      "Интеграционные требования SimSYS",
+      "ЦОТСИ (цифровые описания средств измерений)",
+      "Распределённый реестр ПроКСи",
+      "Пилотирование стандартов",
+      "Экосистема среды разработки SimSYS",
+      "Связь с ПроКСи",
+      "Онтология строительных объектов",
+      "Нормативно-справочные данные RDL",
+      "Архитектура платформенного решения",
+      "Пилотирование онтологий 4D/3D"
+    ]
+  }
+}
