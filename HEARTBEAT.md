@@ -16,6 +16,22 @@
 - Any new sessions from unknown sources?
 - Check error count in recent logs
 
+### 2b. AI token/limit monitoring (EVERY heartbeat — mandatory)
+- Run `scripts/heartbeat-token-limits.sh`.
+- Alert Станислав if the script prints `WARN`.
+- Thresholds:
+  - OpenAI Codex OAuth 5-hour window: warn if less than 20% left.
+  - OpenAI Codex OAuth weekly window: warn if less than 15% left.
+  - Active OpenClaw session context: warn if any active session is over 80%.
+- The script checks:
+  - `openclaw models status` for `openai-codex usage`.
+  - `openclaw sessions list --json --active 1440 --limit all` for context usage.
+  - `openclaw logs --plain` for new `rate_limit`, `subscription usage limit`, `Next reset`, `refresh_token_reused`, `fallback`, `context-overflow`, `anthropic`, and `claude` events.
+  - `claude auth status` for Claude login/subscription health.
+  - Claude `/usage` via a short tmux probe for 5-hour and weekly Claude usage.
+- Claude direct remaining-limit status is not available via `claude auth status`; `scripts/heartbeat-token-limits.sh` uses `/usage` as the direct source for now. If statusline JSON with `rate_limits` becomes available in a stable file/API, prefer that over the tmux probe.
+- State/dedup file: `memory/heartbeat-token-limits-state.json`.
+
 ### 2a. Telegram liveness (EVERY heartbeat — mandatory)
 - Run `openclaw status --deep 2>&1 | grep -A2 'Telegram'` — check State column
 - If State is NOT "OK":

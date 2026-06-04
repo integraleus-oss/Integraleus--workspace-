@@ -89,3 +89,12 @@ DATE: 2026-04-01
 TITLE: Автономия: граница «делаю молча» vs «спрашиваю»
 CONTENT: Делаю молча (без спроса): чтение файлов, web search, проверки статусов, обновление heartbeat-state, memory-файлы, коммиты в workspace. Предлагаю и жду подтверждения: отправка сообщений наружу, удаление файлов/данных, изменение конфигов (openclaw.json, auth-profiles), рестарт сервисов, apt upgrade, изменение cron-задач, изменение SOUL.md/AGENTS.md. Исключение: если пользователь дал явное «делай» — выполняю без повторных вопросов.
 RATIONALE: Чёткая граница убирает лишние вопросы на рутине и сохраняет контроль на важном. Вдохновлено режимом «советчик → автономия» из aigenthub.ru.
+
+---
+### ID: D-2026-06-04-01
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-06-04
+TITLE: OpenClaw/Codex/Claude token and limit monitoring
+CONTENT: OpenClaw can directly monitor OpenAI Codex OAuth usage via `openclaw models status`: 5-hour and weekly remaining windows with reset times. Claude CLI `auth status` only shows login and subscription type; direct Claude remaining-limit monitoring currently uses interactive `/usage` via a short tmux probe; statusline `rate_limits` should replace that if exposed through a stable file/API. OpenClaw session/context tokens and cron run usage are available via status/sessions/cron history. API-key quota exhaustion is monitored mostly through per-run usage and log/error patterns. Every heartbeat must run `scripts/heartbeat-token-limits.sh`, alerting on Codex 5h <20%, Codex week <15%, active session context >80%, Claude 5h usage >=80%, Claude weekly usage >=85%, and new rate-limit/auth/fallback/context-overflow log events.
+RATIONALE: Станислав попросил настроить слежение за лимитами токенов аккаунта и предупредительные алерты, чтобы Codex/Claude/OpenClaw не уходили в silent failure.
