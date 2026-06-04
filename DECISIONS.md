@@ -98,3 +98,30 @@ DATE: 2026-06-04
 TITLE: OpenClaw/Codex/Claude token and limit monitoring
 CONTENT: OpenClaw can directly monitor OpenAI Codex OAuth usage via `openclaw models status`: 5-hour and weekly remaining windows with reset times. Claude CLI `auth status` only shows login and subscription type; direct Claude remaining-limit monitoring currently uses interactive `/usage` via a short tmux probe; statusline `rate_limits` should replace that if exposed through a stable file/API. OpenClaw session/context tokens and cron run usage are available via status/sessions/cron history. API-key quota exhaustion is monitored mostly through per-run usage and log/error patterns. Every heartbeat must run `scripts/heartbeat-token-limits.sh`, alerting on Codex 5h <20%, Codex week <15%, active session context >80%, Claude 5h usage >=80%, Claude weekly usage >=85%, and new rate-limit/auth/fallback/context-overflow log events.
 RATIONALE: Станислав попросил настроить слежение за лимитами токенов аккаунта и предупредительные алерты, чтобы Codex/Claude/OpenClaw не уходили в silent failure.
+
+---
+### ID: D-2026-06-04-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-06-04
+TITLE: Alpha BPR Historian integration order is SDK-first
+CONTENT: Для Alpha BPR первый live smoke истории делаем через официальный Alpha.Domain.Client SDK: read-only browse/init тегов через Alpha.Server и короткий history read через Alpha.Historian. RMap не является первым шагом по умолчанию; это второй этап/SQL-слой, если он нужен или специалисты подтвердят его как штатный путь для стенда. Reports проверяется отдельным smoke после подтверждения history access, base URL, template/report id, auth/session behavior и URL/template variables. Dev PostgreSQL `54329` на main — это локальная BPR БД, не Home/RMap target.
+RATIONALE: Alpha.Domain.Client подтверждён install-folder docs и KB SCADA Systems как официальный SDK-путь к Runtime/Historian и требует меньше вмешательства в стенд. RMap требует изменений PostgreSQL через extension/FDW/user mapping/grants, поэтому должен идти после SDK-smoke или только при явном DB-admin окне.
+
+---
+### ID: D-2026-06-04-03
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-06-04
+TITLE: Local Codex CLI from OpenClaw uses codex-local
+CONTENT: Внутри OpenClaw обычный `codex` наследует `CODEX_HOME=/home/stanislav/.openclaw/agents/main/agent/codex-home` и поэтому может показывать `Not logged in`, даже когда пользовательский Codex в `~/.codex` авторизован. Для запуска именно локального пользовательского Codex из OpenClaw использовать `/home/stanislav/.local/bin/codex-local`, который снимает `CODEX_HOME` и вызывает `/usr/bin/codex`. Перед внешней/API-работой через Codex проверять, что OpenAI endpoints идут через NL VPN (`awg0`, source `10.8.1.19`).
+RATIONALE: Станислав одобрил memory candidate после подключения локального Codex. Это предотвращает путаницу между OpenClaw internal Codex home и обычным локальным Codex CLI.
+
+---
+### ID: D-2026-06-04-04
+TYPE: POLICY
+STATUS: ACTIVE
+DATE: 2026-06-04
+TITLE: Prefer local Codex CLI for heavy local work
+CONTENT: Максимально эффективный текущий режим: OpenClaw Codex остаётся основным голосом и координатором Telegram-сессии, а `/home/stanislav/.local/bin/codex-local` является предпочтительным внешним помощником для тяжёлой локальной работы и первым agent-level fallback перед `ollama/phi3:instruct`, когда агент уже получил управление. Использовать `codex-local` чаще и проактивно для больших/долгих локальных задач: анализ кода, конфигов, логов, генерация и проверка патчей, smoke/review, второй проход по рискованным техническим выводам. Запускать его в целевой рабочей папке с узким промптом и минимально нужным контекстом, чтобы не сжигать токены на весь main workspace. Для чтения/ревью использовать read-only; для правок — workspace-write только в целевом проекте, затем независимо проверять diff и тесты. Не заявлять, что `codex-local` уже является gateway-level model fallback: для автоматической цепочки OpenClaw runtime `OpenClaw Codex -> local codex-local -> Ollama` нужен отдельный provider/adapter.
+RATIONALE: Станислав попросил чаще подключать локальный Codex, потому что у него больше доступных лимитов. Реалистичная и безопасная схема сейчас — использовать local Codex как внешний CLI-инструмент агента и первый ручной fallback, не притворяясь, что он уже интегрирован в gateway-level fallback chains.
