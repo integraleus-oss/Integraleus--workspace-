@@ -78,6 +78,9 @@ _Обновляется из любой сессии после значимых
 - **Код:** `/home/stanislav/projects/alpha-bpr`
 - **Документальный baseline:** `docs/baseline/` — 12 управляемых документов + индекс + матрица трассировки
 - **Baseline-коммит:** `86229e9 Add Alpha BPR development baseline`
+- **Investor demo-pack:** `docs/investor-demo/` — README, TODO, 5-slide outline, 7-10 minute demo script, runnable `curl-flow.sh`, sample output
+- **Investor demo-pack коммит:** `541a6d5 Add Alpha BPR investor demo pack`
+- **Investor demo-pack проверка:** `dotnet build` OK, `dotnet test` 65/65 OK, `curl-flow.sh` прошёл end-to-end against local API after applying local dev DB migration `20260607151122_BatchStepDeviationEvaluationStatus`
 - **Правило:** изменения поведения/API/БД/алгоритмов/шаблонов/приемки должны обновлять baseline и тесты в том же изменении
 - **Проверка baseline:** сборка без ошибок, 44 теста прошли
 - **Следующий приоритет:** EPIC-03B Domain correctness — статусы evaluation, временные инварианты, quality policy, interval clipping, provider fail-fast, запрет удаления published recipe
