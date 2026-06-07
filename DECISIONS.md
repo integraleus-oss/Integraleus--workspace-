@@ -100,6 +100,15 @@ CONTENT: OpenClaw can directly monitor OpenAI Codex OAuth usage via `openclaw mo
 RATIONALE: Станислав попросил настроить слежение за лимитами токенов аккаунта и предупредительные алерты, чтобы Codex/Claude/OpenClaw не уходили в silent failure.
 
 ---
+### ID: D-2026-06-07-01
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-06-07
+TITLE: Main Codex account limits switch at 20%
+CONTENT: Heartbeat monitoring must run `scripts/codex-account-limit-switch.mjs` through `scripts/heartbeat-token-limits.sh`. The script probes each configured main Codex OAuth profile directly with Codex app-server `account/rateLimits/read` using isolated `authProfileId` requests. If the first account in `openai-codex` order is below 20% remaining on either the 5-hour or weekly window, or is blocked, and the other configured account is above 20% remaining on both windows and not blocked, it rewrites `openclaw models auth order --provider openai-codex` to put the healthier account first. If both accounts are low/blocked, it warns instead of switching blindly.
+RATIONALE: Станислав попросил следить за лимитами на обоих Codex аккаунтах и переключать порядок, когда активный аккаунт падает ниже 20%, но только если второй реально здоровее.
+
+---
 ### ID: D-2026-06-04-02
 TYPE: DECISION
 STATUS: ACTIVE
@@ -125,3 +134,30 @@ DATE: 2026-06-04
 TITLE: Prefer local Codex CLI for heavy local work
 CONTENT: Максимально эффективный текущий режим: OpenClaw Codex остаётся основным голосом и координатором Telegram-сессии, а `/home/stanislav/.local/bin/codex-local` является предпочтительным внешним помощником для тяжёлой локальной работы и первым agent-level fallback перед `ollama/phi3:instruct`, когда агент уже получил управление. Использовать `codex-local` чаще и проактивно для больших/долгих локальных задач: анализ кода, конфигов, логов, генерация и проверка патчей, smoke/review, второй проход по рискованным техническим выводам. Запускать его в целевой рабочей папке с узким промптом и минимально нужным контекстом, чтобы не сжигать токены на весь main workspace. Для чтения/ревью использовать read-only; для правок — workspace-write только в целевом проекте, затем независимо проверять diff и тесты. Не заявлять, что `codex-local` уже является gateway-level model fallback: для автоматической цепочки OpenClaw runtime `OpenClaw Codex -> local codex-local -> Ollama` нужен отдельный provider/adapter.
 RATIONALE: Станислав попросил чаще подключать локальный Codex, потому что у него больше доступных лимитов. Реалистичная и безопасная схема сейчас — использовать local Codex как внешний CLI-инструмент агента и первый ручной fallback, не притворяясь, что он уже интегрирован в gateway-level fallback chains.
+
+---
+### ID: D-2026-06-05-01
+TYPE: POLICY
+STATUS: ACTIVE
+DATE: 2026-06-05
+TITLE: Alpha BPR uses a controlled 12-document development baseline
+CONTENT: Для Alpha BPR обязательным является управляемый комплект из 12 baseline-документов в `/home/stanislav/projects/alpha-bpr/docs/baseline/`: Product Scope MVP, System Architecture, Module Requirements, Implementation Design, Development Validation Plan, API Specification, Database Schema Specification, Algorithm Specification, Template Schema Specification, QA/Golden Tests, Roadmap/Epic Breakdown и Definition of Done. Матрица трассировки связывает требования, реализацию, проверки и пробелы. Каждое изменение поведения, API, БД, алгоритма, шаблона или критериев приемки должно одновременно обновлять соответствующие документы и тесты. Реализованное, целевой MVP и заблокированные внешние контракты должны быть явно разделены.
+RATIONALE: Станислав подтвердил необходимость формального комплекта документов, чтобы руководство разработкой и команда Alpha BPR работали по единым инженерным правилам.
+
+---
+### ID: D-2026-06-06-01
+TYPE: POLICY
+STATUS: ACTIVE
+DATE: 2026-06-06
+TITLE: Main OpenClaw Codex account fallback order
+CONTENT: Для агента `main` рабочая конфигурация: каноническая основная модель `openai/gpt-5.5` с Codex runtime (`agentRuntime.id=codex`); config-level `auth.order.openai` может содержать Codex OAuth profile ids `openai-codex:stasiintegraleus@gmail.com` -> `openai-codex:integraleus55@gmail.com`, а effective runtime auth для `openai/gpt-5.5` идёт через authProvider `openai-codex`, где effectiveProfiles должны быть этими же двумя профилями в том же порядке. Фактическое переключение: `openai/gpt-5.5` + `openai-codex:stasiintegraleus@gmail.com` -> `openai/gpt-5.5` + `openai-codex:integraleus55@gmail.com` -> model fallback `ollama/phi3:instruct`. Отдельной третьей gateway-ступени `codex/gpt-5.5+oauth` сейчас нет: это не отдельный fallback после двух аккаунтов, а тот же Codex runtime/authProvider, через который работает `openai/gpt-5.5`. В model fallback не держать legacy routes `codex/gpt-5.5` и `openai-codex/gpt-5.5`. Проверка конфигурации: `openclaw models status --json`, `openclaw config get auth.order --json`, `openclaw models auth order get --provider openai-codex`, `openclaw models fallbacks list`; live account проверять отдельной `/codex account`, когда Gateway command path отвечает.
+RATIONALE: Станислав попросил сделать порядок без выдумок и ошибок: использовать canonical OpenClaw route `openai/gpt-5.5`, переключать нужные Codex OAuth-аккаунты внутри runtime auth, а на Ollama переходить только как model fallback.
+
+---
+### ID: D-2026-06-07-02
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-06-07
+TITLE: Deliverable tasks start with an artifact
+CONTENT: Для любой обещанной deliverable-задачи (документы, demo-pack, презентация, скрипт, код, архив, отчёт) работа считается начатой только после появления минимального артефакта на диске. В первые 5-10 минут нужно создать целевую папку/файл или черновик. Рядом должен быть видимый чеклист в README/TODO или самом артефакте. Статусы давать только по фактам: какие файлы созданы/изменены, `git status`, что проверено, последний релевантный commit. Если за 30 минут нет материального артефакта, нужно прямо сообщить Станиславу, что результата ещё нет и почему. Большие deliverable дробить на маленькие полезные шаги. Долгую работу не оставлять в неуправляемом фоне: либо доводить текущий turn до результата, либо заводить явный TaskFlow/cron/checkpoint.
+RATIONALE: 2026-06-07 investor demo-pack для Alpha BPR не был доведён до артефакта из-за ухода в проверки, статусные ответы и удержания задачи "в голове". Станислав явно одобрил правило, чтобы такие сбои не повторялись.

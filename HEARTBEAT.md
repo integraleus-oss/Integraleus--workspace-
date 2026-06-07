@@ -25,6 +25,7 @@
   - Active OpenClaw session context: warn if any active session is over 80%.
 - The script checks:
   - `openclaw models status` for `openai-codex usage`.
+  - `scripts/codex-account-limit-switch.mjs` for per-Codex-OAuth-profile 5-hour/weekly remaining limits. If the first account in `openai-codex` order is below 20% remaining or blocked, and the other configured account is above 20% remaining on both windows, the script switches `openclaw models auth order` to put the healthier account first.
   - `openclaw sessions list --json --active 1440 --limit all` for context usage.
   - `openclaw logs --plain` for new `rate_limit`, `subscription usage limit`, `Next reset`, `refresh_token_reused`, `fallback`, `context-overflow`, `anthropic`, and `claude` events.
   - `claude auth status` for Claude login/subscription health.

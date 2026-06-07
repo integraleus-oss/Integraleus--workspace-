@@ -58,6 +58,7 @@ projects/humanlike-agent/    ← код
 
 ## Synology NAS (192.168.68.103)
 - **Доступ:** NFS через openclaw-home (192.168.68.125)
+- **SSH:** `openclaw-admin@192.168.68.103 -p 2222` с Home-ключом `~/.ssh/id_ed25519_synology_openclaw`; пользователь в `administrators`; sudo NOPASSWD включён через `/etc/sudoers.d/openclaw-admin`
 - **Монтирование:** `/mnt/synology/Documents` → `/volume1/Documents`
 - **Автомонт:** fstab, `_netdev,noatime`
 - **Squash:** Map all users to admin
@@ -73,6 +74,12 @@ projects/humanlike-agent/    ← код
 - ✅ Можно читать, анализировать, обрабатывать ЛОКАЛЬНО на openclaw-home
 - ✅ Можно показывать результаты анализа Станиславу в чате (без сырых данных)
 - ✅ Если нужно передать наружу — СПРОСИТЬ разрешение
+
+### 🔒 ROOT-LEVEL ИЗМЕНЕНИЯ НА SYNOLOGY (ОБЯЗАТЕЛЬНОЕ)
+**Любые root-level изменения на Synology выполнять только после личного явного разрешения Станислава через Telegram, Discord или терминал.**
+- ✅ Разрешены без отдельного подтверждения: read-only проверки, статус, логи, инвентаризация, диагностика без изменения состояния
+- ❌ Нельзя без явного разрешения: менять конфиги, пользователей, права, sudoers, firewall, пакеты, сервисы, диски, шары, задания, cron/task scheduler, удалять/перемещать файлы
+- Если есть сомнение, считать действие root-level изменением и сначала спросить
 
 ## API ключи
 

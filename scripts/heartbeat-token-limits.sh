@@ -43,6 +43,17 @@ else
   warn=1
 fi
 
+account_switch_output="$(timeout 120 scripts/codex-account-limit-switch.mjs 2>&1 || true)"
+if [[ -n "$account_switch_output" ]]; then
+  printf '%s\n' "$account_switch_output"
+  if grep -q '^WARN:' <<<"$account_switch_output"; then
+    warn=1
+  fi
+else
+  echo "WARN: Codex per-account switch check produced no output."
+  warn=1
+fi
+
 sessions_json="$(timeout 30 openclaw sessions list --json --active 1440 --limit all 2>/dev/null || true)"
 if [[ -n "$sessions_json" && "$sessions_json" == \{* ]]; then
   high_sessions="$(

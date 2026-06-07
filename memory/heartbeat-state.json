@@ -1,82 +1,278 @@
 {
   "lastChecks": {
-    "ssh_security": "2026-04-02T14:53:00Z",
-    "openclaw_health": "2026-04-02T14:53:00Z",
-    "system_changes": "2026-04-02T14:53:00Z",
-    "cron_review": "2026-04-02T14:53:00Z",
-    "cron_resources": "2026-04-01T09:43:00Z",
-    "garden": "2026-04-02T14:53:00Z",
-    "telegram_liveness": "2026-04-02T14:53:00Z",
-    "heartbeat": 1775098200,
-    "telegram": 1775098200
+    "ssh_security": "2026-06-07T22:33:45+03:00",
+    "openclaw_health": "2026-06-07T22:33:45+03:00",
+    "system_changes": "2026-06-07T18:32:36+03:00",
+    "cron_review": "2026-06-07T22:33:45+03:00",
+    "cron_resources": "2026-06-07T21:31:00+03:00",
+    "garden": "2026-06-07T18:32:36+03:00",
+    "telegram_liveness": "2026-06-07T22:33:45+03:00",
+    "heartbeat": "2026-06-07T22:33:45+03:00",
+    "telegram": 1780860825,
+    "cross_session_awareness": "2026-06-07T07:31:00+03:00",
+    "codex_oauth": "2026-06-07T18:32:36+03:00",
+    "cron_usage": "2026-06-07T21:31:00+03:00",
+    "security": 1780860825,
+    "system": 1780846356,
+    "cross_session": "2026-06-04T04:32:20.000Z",
+    "token_limits": "2026-06-07T22:33:45+03:00",
+    "tokenLimits": 1780860825,
+    "openclaw": 1780860825,
+    "cron": 1780860825
   },
   "telegramHealth": {
-    "checkedAt": 1775317500,
+    "checkedAt": 1780860825,
+    "lastCheck": 1780860825,
     "status": "ok",
-    "lastCheck": "2026-04-02T15:35:00Z",
     "consecutiveFailures": 0,
-    "note": "Telegram OK (218ms). Post apt-upgrade, pending reboot for kernel 6.8.0-107."
+    "note": "openclaw status --deep reports Telegram OK; accounts 2/2 and health probe OK.",
+    "lastStatus": "OK",
+    "accounts": "2/2",
+    "lastTelegramSessionCheck": {
+      "checkedAt": "2026-06-07T22:33:45+03:00",
+      "visibleSessions": 0,
+      "visibilityRestricted": true,
+      "note": "sessions list active 180 showed only current internal main session; Telegram deep probe itself is OK."
+    },
+    "state": "OK",
+    "recentRecoveredFallback": "2026-06-05 04:01 MSK DNS IP unreachable; alternative Telegram API IP used",
+    "lastCheckedAt": "2026-06-07T22:33:45+03:00",
+    "detail": "openclaw status --deep reports Telegram OK; accounts 2/2 and health probe OK."
   },
   "garden": {
-    "status": "ok",
-    "services": "all active",
-    "disk": "38%",
-    "lastCheck": "2026-04-02T05:50:00Z",
-    "alert": null,
-    "note": "All services active, no OAuth errors, known IPs only."
+    "status": "unreachable",
+    "lastCheck": 1780846356,
+    "alert": "SSH root@31.128.32.68 failed: Permission denied (publickey). Could not verify Garden health/security/OAuth.",
+    "note": "Repeated known issue; Garden health/security/OAuth cannot be verified until SSH access is restored.",
+    "sshStatus": "failed",
+    "sshError": "Permission denied (publickey)",
+    "ssh": "Permission denied (publickey)",
+    "reachable": false,
+    "oauthVerified": false,
+    "knownIssue": true,
+    "lastCheckedAt": "2026-06-07T18:32:36+03:00"
   },
   "codexOAuth": {
     "status": "ok",
-    "lastCheck": "2026-03-31T19:11:40Z",
-    "note": "No Codex OAuth refresh errors in main logs over the last 2 hours"
+    "lastCheck": "2026-06-07T20:31:00+03:00",
+    "note": "Main user journal check for Codex OAuth refresh/token failure patterns returned no matches in the last 2 hours."
   },
   "cronUsage": {
-    "lastCheck": "2026-04-01T09:43:00Z",
+    "lastCheck": 1780857176,
     "jobs": {
-      "BBQ Daily Digest": 22476,
-      "Daily Server Monitoring": 15677,
-      "system-monitor:daily": 17250
+      "SU1531 flight check": {
+        "enabled": false,
+        "lastRunStatus": "error",
+        "lastRunTokens": 36504,
+        "lastRunDurationMs": 52228,
+        "lastRunAtMs": 1774587600018
+      }
     },
-    "dailyTotal": 55403,
-    "note": "All within normal range. No anomalies."
+    "dailyTotal": 0,
+    "dailyTotalTokens": 0,
+    "weeklyVisibleTotalTokens": 36504,
+    "maxSingleRunTokens": 36504,
+    "maxSingleRunDurationMs": 52228,
+    "note": "Only historical disabled SU1531 run is visible; 36.5k tokens and 52s duration are below heartbeat alert thresholds, and there are no recent cron results.",
+    "lastReviewedJob": "Resume Alpha BPR after Codex limit reset retry",
+    "lastRunTokens": 102616,
+    "lastRunDurationMs": 664876,
+    "issue": "run misread remaining percentage as used percentage; retry prompt corrected and force-run",
+    "dailyKnownTokens": 128556,
+    "alert": null,
+    "lastCheckedAt": "2026-06-07T21:31:00+03:00"
   },
   "notes": {
-    "mainDisk": "80%",
-    "mainLoad": "normal",
-    "pendingUpdates": 17,
+    "mainDisk": "/dev/nvme0n1p2 937G 52G 839G 6% / as of 2026-06-03T21:32:22.000Z",
+    "mainLoad": "normal as of 2026-05-23T06:33:42.405Z",
+    "pendingUpdates": "92 apt packages upgradable as of 2026-06-04T07:32Z.",
     "novaUser": "system user (UID 120), created 2026-03-28 by package install (blender deps batch), password locked, no SSH access, harmless",
     "discordSecurity": "CRITICAL warning in openclaw status: Discord guilds groupPolicy=open allows any non-denied channel to trigger (mention-gated)",
     "reverseProxyWarning": "gateway.trustedProxies empty while reverse proxy headers not trusted",
-    "openclawUpdate": "Updated to 2026.4.1 on 2026-04-02 ~10:32 MSK.",
-    "cronDeliveryIssue": "RESOLVED 2026-04-01: all three cron jobs delivered successfully at 10:00-10:30 MSK.",
-    "mainSecurity": "No new external SSH logins, shell users unchanged (root, ops, nova), UFW rules unchanged",
+    "openclawUpdate": "Updated to stable/latest 2026.5.19 on 2026-05-21 ~09:17 MSK; doctor --fix ran; gateway restarted and running app 2026.5.19.",
+    "cronDeliveryIssue": "Historical disabled SU1531 job still shows delivery-channel error from 2026-03-27; no enabled visible cron jobs or new runs as of 2026-06-03T20:31:00.000Z.",
+    "mainSecurity": "Home check 2026-06-04T09:32Z: no unexpected shell users; recent last entries are local tmux pseudo-logins; sshd_config.d empty; UFW and sshd effective config still limited by non-root context.",
     "gardenCronLanguage": "Garden Server Weekly Check result at 2026-03-30T10:04 MSK still arrived in English and used an outdated known-IP baseline; cron prompt update likely not applied yet.",
-    "gardenStatus": "No changes detected on Garden; SSH baseline and services unchanged.",
+    "gardenStatus": "Garden SSH still fails with Permission denied (publickey) as of 2026-06-04 16:31 MSK; Garden health/security/OAuth cannot be verified.",
     "diskAlert": "Main disk 86% (5.6G free) as of 2026-04-02. Easy wins: apt clean ~614M, puppeteer cache ~626M.",
     "dayRollover": "2026-04-01 started; created new daily memory file.",
     "openrouterAuth": "Added openrouter:default API key to auth-profiles.json on 2026-04-01. Qwen3-Coder-Free fallback now operational.",
     "nodeVersion": "22.22.2 (upgraded from 22.22.1)",
     "gardenOAuth": "Codex refresh token invalid on Garden. Access token expires in ~9 days. Needs openclaw configure --section model.",
-    "pendingKernel": "linux 6.8.0-107 available, will need reboot"
+    "pendingKernel": "linux 6.8.0-107 available, will need reboot",
+    "mainStatus": "Telegram OK in openclaw status --deep as of 2026-06-04 16:31 MSK.",
+    "compaction401": "2026-05-17T06:28Z: gateway logs show OpenAI full summarization failed with 401 missing api.responses.write scope; compaction continued via fallback, but API key/project scopes should be checked if this repeats.",
+    "mainUptime": "up 2 days, 1 hour, 26 minutes as of 2026-06-04T07:32Z.",
+    "telegramNetwork": "2026-06-02 11:00 MSK: Telegram API DNS/IP fallback warnings appeared; deep status OK at 11:32 MSK, fallback handled it.",
+    "openclawUpdateAvailable": "OpenClaw npm update 2026.5.28 available as of 2026-05-31T05:32:03.308Z; not urgent.",
+    "mainCodexOAuth": "Current OK as of 2026-06-04 16:31 MSK: token script found no new matching limit/auth/fallback/context events after the earlier 14:28-14:43 MSK WARN episode.",
+    "openclawModelHarnessWarning": "Recent Codex plugin fallback at 2026-05-31 21:16 MSK appears followed by @openclaw/codex 2026.5.28 install and successful gateway restart; watch for recurrence.",
+    "quietHours": "At 2026-05-31T03:31Z (06:31 MSK), quiet hours active; no critical condition found.",
+    "crossSessionAwareness": "2026-06-06 morning scan visibility-limited; no direct/group sessions visible in tree-restricted scope.",
+    "openclawHealth": "Gateway reachable/app 2026.5.28, Telegram deep OK, main/home-monitor on OpenAI Codex as of 2026-06-04 20:33 MSK."
   },
   "cronStatus": {
-    "checkedAt": 1775033000,
+    "checkedAt": 1780522342,
+    "lastCheck": "2026-06-05T07:32:45+03:00",
     "errors": [],
-    "note": "All cron jobs OK as of 2026-04-01 10:30 MSK"
+    "note": "Only visible cron job is disabled historical SU1531 flight check; last error is delivery-channel related, not a timeout, so no failover.",
+    "totalJobs": 1,
+    "timeoutFailovers": 0
   },
   "mainSecuritySnapshot": {
-    "checkedAt": 1774977991,
+    "checkedAt": 1779701534,
+    "lastCheck": "2026-05-25T09:32:14.237Z",
     "ufw": "active",
-    "recentLast": "no new external logins in last -5 beyond known 157.22.180.83 on Mar 25",
+    "recentLast": "last -5 unchanged: only local/LAN sessions and reboots; latest user login 192.168.68.116 on May 12.",
     "shellUsers": [
       "root",
-      "ops",
-      "nova"
+      "stanislav"
     ],
-    "sshdConfigFiles": [
-      "50-cloud-init.conf",
-      "60-cloudimg-settings.conf",
-      "99-hardening.conf"
-    ]
+    "sshd": {
+      "permitrootlogin": "without-password",
+      "passwordauthentication": "no"
+    },
+    "sshdConfigFiles": []
+  },
+  "heartbeat": 1780781535,
+  "telegram": 1780781535,
+  "openclawHealth": {
+    "checkedAt": 1780860825,
+    "lastCheck": 1780860825,
+    "version": "2026.5.28",
+    "status": "ok",
+    "gatewayReachable": true,
+    "telegramDeep": "OK",
+    "gateway": "reachable",
+    "gatewayService": "systemd user running",
+    "telegram": "OK 2/2 in deep probe",
+    "sessions": "53 active; main direct active 1m ago",
+    "mainSessionTokens": "55k/272k (20%)",
+    "homeMonitorTokens": "67k/272k (25%)",
+    "note": "Gateway reachable; Telegram deep OK; no active session exceeds 80%; tasks audit clean.",
+    "tasks": "audit clean",
+    "mainContextPct": 28,
+    "homeMonitorContextPct": 25,
+    "lastCheckedAt": "2026-06-07T22:33:45+03:00"
+  },
+  "crossSessionAwareness": {
+    "lastCheck": 1780806660,
+    "status": "limited",
+    "activeSessionCount": 7,
+    "note": "openclaw sessions list --json --active 1440 showed only current/internal direct main sessions; no visible Telegram/Discord group/direct sessions with channel metadata to summarize.",
+    "visibleSessions": 7,
+    "visibility": "tree/direct internal sessions only"
+  },
+  "system": {
+    "lastCheckedAt": "2026-06-07T16:31:00+03:00",
+    "aptUpgradableCountOutput": 92,
+    "rootDiskUse": "7%",
+    "uptime": "5 days 7h",
+    "load": "1.09 0.33 0.16"
+  },
+  "mainSecurity": {
+    "status": "limited",
+    "lastCheck": "2026-06-05T12:32:01+03:00",
+    "users": "root, stanislav",
+    "recentLast": "No new human login in last -5; only reboot entries since 2026-06-02 09:05 MSK, last human login remains stanislav from 192.168.68.116 on 2026-05-12.",
+    "sshd": "sshd -T produced no visible matching output in non-root context",
+    "ufw": "requires root: ERROR: You need to be root to run this script",
+    "sshdConfigFiles": [],
+    "note": "No new shell users, no new human logins, no files listed in /etc/ssh/sshd_config.d."
+  },
+  "systemChanges": {
+    "status": "ok",
+    "lastCheck": "2026-06-07T18:32:36+03:00",
+    "disk": "/dev/nvme0n1p2 937G 55G 836G 7% /",
+    "pendingUpdates": 92,
+    "uptime": "up 5 days, 9 hours, 26 minutes",
+    "note": "No disk pressure; apt upgradable count remains 92."
+  },
+  "ssh_security": {
+    "status": "unchanged_expected",
+    "lastCheck": "2026-06-07T22:33:45+03:00",
+    "shellUsers": [
+      "root:/bin/bash",
+      "stanislav:/bin/bash",
+      "alpha-auditor:/bin/bash"
+    ],
+    "lastLoginsNote": "Recent last -5 entries are local tmux pseudo-logins from heartbeat/CLI activity; no remote human login IPs shown.",
+    "sshdEffectiveConfig": "sshd -T produced no visible matching output in non-root context",
+    "sshdConfigD": "empty",
+    "sshdConfigDFiles": [],
+    "ufwStatus": "requires root: ERROR: You need to be root to run this script",
+    "note": "No new shell users, no remote human logins in last -5, no files listed in /etc/ssh/sshd_config.d; alpha-auditor is expected from Alpha audit setup on 2026-06-03."
+  },
+  "cronReview": {
+    "lastCheck": "2026-06-07T22:33:45+03:00",
+    "jobsTotal": 0,
+    "timeoutFailovers": 0,
+    "note": "openclaw cron list --json returned no visible jobs; no timeout failover needed."
+  },
+  "security": {
+    "lastCheckedAt": "2026-06-07T22:33:45+03:00",
+    "recentLogins": "local tmux pseudo-logins only",
+    "shellUsers": [
+      "root",
+      "stanislav",
+      "alpha-auditor"
+    ],
+    "ufw": "requires root",
+    "changed": false
+  },
+  "crossSession": {
+    "lastCheck": "2026-06-07T07:31:00+03:00",
+    "visibleSessions": 7,
+    "visibilityRestricted": true,
+    "summary": "Only current/internal direct main sessions visible in 24h scan; no external Telegram/Discord group context exposed."
+  },
+  "tokenLimits": {
+    "lastCheckedAt": "2026-06-07T22:33:45+03:00",
+    "codex": {
+      "fiveHourRemainingPct": 77,
+      "weeklyRemainingPct": 50,
+      "activeOrderFirst": "openai-codex:stasiintegraleus@gmail.com",
+      "fiveHourReset": "about 2h",
+      "weeklyReset": "about 6d"
+    },
+    "codexAccounts": [
+      {
+        "profile": "openai-codex:stasiintegraleus@gmail.com",
+        "fiveHourRemainingPct": 77,
+        "weeklyRemainingPct": 50,
+        "blocked": false
+      },
+      {
+        "profile": "openai-codex:integraleus55@gmail.com",
+        "fiveHourRemainingPct": 99,
+        "weeklyRemainingPct": 0,
+        "blocked": true
+      }
+    ],
+    "claude": {
+      "fiveHourUsedPct": 0,
+      "weeklyUsedPct": 15
+    },
+    "warn": false,
+    "note": "scripts/heartbeat-token-limits.sh reported healthy Codex active account, no account switch needed, no active sessions over 80%, and no matching limit/auth/fallback/context log events.",
+    "warnings": []
+  },
+  "codexAuthOrder": {
+    "lastCheck": "2026-06-06T23:32:35+03:00",
+    "provider": "openai-codex",
+    "order": [
+      "openai-codex:stasiintegraleus@gmail.com",
+      "openai-codex:integraleus55@gmail.com"
+    ],
+    "modelFallbacks": [
+      "ollama/phi3:instruct"
+    ],
+    "status": "ok"
+  },
+  "cron": {
+    "lastCheckedAt": "2026-06-07T16:31:00+03:00",
+    "visibleJobs": 0,
+    "timeoutFailoverNeeded": false,
+    "note": "No visible cron jobs in current scope."
   }
 }

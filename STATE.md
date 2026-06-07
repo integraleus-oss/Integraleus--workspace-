@@ -20,6 +20,16 @@ _Обновляется из любой сессии после значимых
 - **home-monitor Telegram account:** `@Homegnom_bot`, accountId `home-monitor`, allowlist только `109592643`, routed to agent `home-monitor`, session `dmScope=per-account-channel-peer`.
 - **home-monitor agent model:** `ollama/phi3:instruct`; token нового бота хранится в `~/.openclaw/openclaw.json` и не должен попадать в ответы/логи.
 
+### OpenClaw Model/Auth Routing
+- **main default model:** `openai/gpt-5.5` with Codex runtime (`agentRuntime.id=codex`).
+- **main Codex account auth order:** config-level `auth.order.openai` may list `openai-codex:stasiintegraleus@gmail.com` -> `openai-codex:integraleus55@gmail.com`; effective runtime auth for `openai/gpt-5.5` uses authProvider `openai-codex` with the same two effectiveProfiles in that order.
+- **main effective switch sequence:** `openai/gpt-5.5` + `openai-codex:stasiintegraleus@gmail.com` -> `openai/gpt-5.5` + `openai-codex:integraleus55@gmail.com` -> `ollama/phi3:instruct`.
+- **main model fallback:** after Codex OAuth profile failover, fall back directly to `ollama/phi3:instruct`; there is no separate third gateway step named `codex/gpt-5.5+oauth`, because Codex OAuth is the runtime/authProvider used by `openai/gpt-5.5`.
+- **main Codex limit switching:** `scripts/heartbeat-token-limits.sh` now runs `scripts/codex-account-limit-switch.mjs`, which checks both configured Codex OAuth accounts directly. If the first account in order has less than 20% remaining on either 5-hour or weekly quota, or is blocked, and the other account has more than 20% remaining on both windows, heartbeat rewrites `openclaw models auth order --provider openai-codex` to put the healthier account first.
+- **Legacy route cleanup:** do not keep `codex/gpt-5.5` or `openai-codex/gpt-5.5` in configured model fallbacks; `openclaw doctor --fix` repairs older Codex refs to canonical `openai/*`.
+- **Status display caveat:** compact status may show only `gpt-5.5` with runtime `OpenAI Codex`; it does not display the selected `openai-codex` OAuth profile. Verify live account with `/codex account` when responsive.
+- **Verify/restore config:** `openclaw models status --json`, `openclaw config get auth.order --json`, `openclaw models auth order get --provider openai-codex`, `openclaw models auth order set --provider openai-codex openai-codex:stasiintegraleus@gmail.com openai-codex:integraleus55@gmail.com`, `openclaw models fallbacks list`.
+
 ### Garden (31.128.32.68)
 - **OS:** Ubuntu, **Disk:** 48 ГБ (38% занято)
 - **OpenClaw:** установлен (gateway active)
@@ -63,6 +73,14 @@ _Обновляется из любой сессии после значимых
 - **Claude CLI:** `/usr/bin/claude` logged in as `integraleus50@gmail.com`, Pro; use as auxiliary reviewer/second opinion with normal safety boundaries.
 
 ## Проекты
+
+### Alpha BPR
+- **Код:** `/home/stanislav/projects/alpha-bpr`
+- **Документальный baseline:** `docs/baseline/` — 12 управляемых документов + индекс + матрица трассировки
+- **Baseline-коммит:** `86229e9 Add Alpha BPR development baseline`
+- **Правило:** изменения поведения/API/БД/алгоритмов/шаблонов/приемки должны обновлять baseline и тесты в том же изменении
+- **Проверка baseline:** сборка без ошибок, 44 теста прошли
+- **Следующий приоритет:** EPIC-03B Domain correctness — статусы evaluation, временные инварианты, quality policy, interval clipping, provider fail-fast, запрет удаления published recipe
 
 ### specialtechnology.ru
 - **Хостинг:** Reg.ru (u1899769@server182)

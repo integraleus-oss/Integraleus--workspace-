@@ -60,6 +60,34 @@ After significant discussions:
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 
+## Deliverable Execution Protocol
+
+For any promised deliverable task (docs, demo pack, presentation, script, code
+change, archive, report, or other tangible artifact), do not treat the work as
+started until a minimal artifact exists on disk.
+
+Mandatory rules:
+
+1. **File first, then reasoning.** Within the first 5-10 minutes, create the
+   target folder/file or a concrete draft in the repository/workspace.
+2. **Visible checklist.** Keep a small checklist in the artifact itself or in a
+   nearby `TODO.md`/README section. Track files, verification, and commit/export
+   status there, not only in chat or memory.
+3. **Fact-based status only.** Progress reports must say what files were
+   created/changed, current `git status`, what was verified, and the latest
+   relevant commit. Avoid vague "working on it" reports.
+4. **30-minute no-artifact alarm.** If no material artifact exists within 30
+   minutes, tell Stanislav clearly that there is no artifact yet and why.
+5. **Small useful increments.** Split big deliverables into independently useful
+   files/steps and finish them one by one.
+6. **No unmanaged background drift.** For long work, either stay in the current
+   turn until there is a result, or create an explicit TaskFlow/cron/checkpoint
+   mechanism. Do not rely on memory across heartbeat/compaction without a
+   written checkpoint.
+
+If these rules conflict with a desire to keep investigating, make the artifact
+first and continue investigation from that checkpoint.
+
 ## External vs Internal
 
 **Safe to do freely:**
@@ -124,6 +152,10 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 ## Tools
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
+
+**OpenClaw Codex account order:** for agent `main`, the canonical primary model is `openai/gpt-5.5` with Codex runtime (`agentRuntime.id=codex`). In config, `auth.order.openai` may contain the Codex OAuth profile ids `openai-codex:stasiintegraleus@gmail.com` first, then `openai-codex:integraleus55@gmail.com`; at runtime, `openai/gpt-5.5` uses authProvider `openai-codex`, whose effectiveProfiles must be the same two profiles in that order. The exact switch sequence is `openai/gpt-5.5` + `openai-codex:stasiintegraleus@gmail.com` -> `openai/gpt-5.5` + `openai-codex:integraleus55@gmail.com` -> `ollama/phi3:instruct`. There is no separate third gateway fallback step named `codex/gpt-5.5+oauth`; Codex OAuth is the runtime/authProvider behind `openai/gpt-5.5`. The model fallback list must then fall back directly to `ollama/phi3:instruct`; do not put legacy `codex/gpt-5.5` or `openai-codex/gpt-5.5` in the fallback chain. Compact status may show only `gpt-5.5` with runtime `OpenAI Codex`, not the active OAuth profile. Verify config with `openclaw models status --json`, `openclaw config get auth.order --json`, `openclaw models auth order get --provider openai-codex`, and `openclaw models fallbacks list`; verify the live account separately with `/codex account` when the Gateway command path is responsive.
+
+**OpenClaw Codex account limits:** heartbeat must run `scripts/heartbeat-token-limits.sh`, which now includes `scripts/codex-account-limit-switch.mjs`. That script probes both configured Codex OAuth accounts directly through Codex app-server `account/rateLimits/read` with isolated `authProfileId` requests. If the first account in `openai-codex` order is below 20% remaining on either 5h or weekly window, or blocked, and the other account is above 20% remaining on both windows and not blocked, it rewrites `openclaw models auth order --provider openai-codex` to put the healthier account first. If both are low/blocked, warn instead of switching blindly.
 
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 

@@ -9,6 +9,7 @@
 ## ACTIVE POINTERS
 - User profile and timezone → `USER.md`
 - Operating rules for the assistant → `AGENTS.md`
+- Main Codex auth/fallback order → `STATE.md` / `DECISIONS.md`: canonical primary model `openai/gpt-5.5` with Codex runtime; config-level `auth.order.openai` may list the Codex OAuth profiles, while effective runtime auth is `openai` via authProvider `openai-codex` with effectiveProfiles `openai-codex:stasiintegraleus@gmail.com` -> `openai-codex:integraleus55@gmail.com`; model fallback `ollama/phi3:instruct`; legacy `codex/gpt-5.5` is not in fallback chain
 
 ## KNOWLEDGE BASES
 - **Alpha-Bot** → `docs/bots/ALPHA_BOT.md` — Telegram-бот + веб-виджет, консультант по Альфа платформе, гибридный RAG, калькулятор тегов
