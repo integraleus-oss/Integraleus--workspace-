@@ -22,7 +22,7 @@ trap 'rm -f "$tmp_state"' EXIT
 echo "Token/limit heartbeat check:"
 
 models_status="$(timeout 30 openclaw models status 2>&1 || true)"
-usage_line="$(printf '%s\n' "$models_status" | grep -E 'openai-codex usage:' | tail -1 || true)"
+usage_line="$(printf '%s\n' "$models_status" | grep -E '(openai-codex|openai) usage:' | tail -1 || true)"
 if [[ -n "$usage_line" ]]; then
   five_left="$(printf '%s\n' "$usage_line" | sed -nE 's/.*5h ([0-9]+)% left.*/\1/p')"
   week_left="$(printf '%s\n' "$usage_line" | sed -nE 's/.*Week ([0-9]+)% left.*/\1/p')"
@@ -39,7 +39,7 @@ if [[ -n "$usage_line" ]]; then
     warn=1
   fi
 else
-  echo "WARN: could not read openai-codex usage from 'openclaw models status'."
+  echo "WARN: could not read Codex/OpenAI usage from 'openclaw models status'."
   warn=1
 fi
 

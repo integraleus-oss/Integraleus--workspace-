@@ -5,10 +5,15 @@ import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const PROVIDER = 'openai-codex';
-const PROFILES = [
+const LEGACY_PROVIDER = 'openai-codex';
+const PROVIDER = 'openai';
+const LEGACY_PROFILES = [
   'openai-codex:stasiintegraleus@gmail.com',
   'openai-codex:integraleus55@gmail.com',
+];
+const PROFILES = [
+  'openai:stasiintegraleus@gmail.com',
+  'openai:integraleus55@gmail.com',
 ];
 const THRESHOLD = Number(process.env.CODEX_ACCOUNT_REMAINING_MIN ?? '20');
 
@@ -26,10 +31,20 @@ function findCodexDist() {
   const candidates = fs.readdirSync(projectsDir)
     .filter((name) => name.startsWith('openclaw-codex-'))
     .map((name) => path.join(projectsDir, name, 'node_modules/@openclaw/codex/dist'))
-    .filter((dir) => fs.existsSync(path.join(dir, 'request-CF4f5hWY.js')) && fs.existsSync(path.join(dir, 'config--tW89bHH.js')))
+    .filter((dir) => {
+      if (!fs.existsSync(dir)) return false;
+      const files = fs.readdirSync(dir);
+      return files.some((file) => /^request-.*\.js$/.test(file)) && files.some((file) => /^config-.*\.js$/.test(file));
+    })
     .sort();
   if (candidates.length === 0) throw new Error(`Codex plugin dist not found under ${projectsDir}`);
   return candidates[candidates.length - 1];
+}
+
+function findDistFile(dist, prefix) {
+  const file = fs.readdirSync(dist).find((name) => name.startsWith(prefix) && name.endsWith('.js'));
+  if (!file) throw new Error(`Codex plugin ${prefix}*.js not found under ${dist}`);
+  return path.join(dist, file);
 }
 
 function remainingFromLimit(limit) {
@@ -81,22 +96,39 @@ async function main() {
   const authStatePath = path.join(agentDir, 'auth-state.json');
   const config = readJson(configPath);
   const authState = fs.existsSync(authStatePath) ? readJson(authStatePath) : {};
-  const order = authState.order?.[PROVIDER] ?? config.auth?.order?.[PROVIDER] ?? config.auth?.order?.openai ?? PROFILES;
-  const current = order.find((profile) => PROFILES.includes(profile)) ?? PROFILES[0];
-  const other = PROFILES.find((profile) => profile !== current);
+  const profileStorePath = path.join(agentDir, 'auth-profiles.json');
+  const profileStore = fs.existsSync(profileStorePath) ? readJson(profileStorePath) : {};
+  const availableProfiles = new Set(Object.keys(profileStore.profiles ?? {}));
+  const activeProfiles = PROFILES.every((profile) => availableProfiles.has(profile)) ? PROFILES : LEGACY_PROFILES;
+  const order =
+    authState.order?.[PROVIDER]
+    ?? config.auth?.order?.[PROVIDER]
+    ?? authState.order?.[LEGACY_PROVIDER]
+    ?? config.auth?.order?.[LEGACY_PROVIDER]
+    ?? activeProfiles;
+  const normalizedOrder = order.map((profile) => {
+    const legacyIndex = LEGACY_PROFILES.indexOf(profile);
+    return legacyIndex >= 0 && activeProfiles === PROFILES ? PROFILES[legacyIndex] : profile;
+  });
+  const current = normalizedOrder.find((profile) => activeProfiles.includes(profile)) ?? activeProfiles[0];
+  const other = activeProfiles.find((profile) => profile !== current);
 
   const dist = findCodexDist();
-  const { l: resolveRuntime } = await import(pathToFileURL(path.join(dist, 'config--tW89bHH.js')).href);
-  const { t: request } = await import(pathToFileURL(path.join(dist, 'request-CF4f5hWY.js')).href);
+  const configModule = await import(pathToFileURL(findDistFile(dist, 'config-')).href);
+  const requestModule = await import(pathToFileURL(findDistFile(dist, 'request-')).href);
+  const resolveRuntime = configModule.resolveCodexAppServerRuntimeOptions ?? configModule.d ?? configModule.l;
+  const request = requestModule.requestCodexAppServerJson ?? requestModule.t;
+  if (typeof resolveRuntime !== 'function') throw new Error('Codex runtime resolver export not found');
+  if (typeof request !== 'function') throw new Error('Codex request export not found');
   const pluginConfig = config.plugins?.entries?.codex?.config ?? config.plugins?.entries?.codex ?? {};
 
   const summaries = {};
-  for (const profile of PROFILES) {
+  for (const profile of activeProfiles) {
     summaries[profile] = await readRateLimitsForProfile({ profile, config, pluginConfig, agentDir, request, resolveRuntime });
   }
 
   console.log('Codex account limit check:');
-  for (const profile of PROFILES) console.log(`- ${fmt(profile, summaries[profile])}`);
+  for (const profile of activeProfiles) console.log(`- ${fmt(profile, summaries[profile])}`);
   console.log(`active_order_first: ${current}`);
 
   const currentMin = minRemaining(summaries[current]);
