@@ -19,6 +19,8 @@ _Обновляется из любой сессии после значимых
 - **Alpha-Bot:** работает (bot.py), RAG через ollama + ChromaDB
 - **HumanLike Agent:** установлен, миссии не настроены
 - **SSH:** key-only, UFW active (22/80/443)
+- **Tailscale:** `openclaw-vps` / `100.127.146.46`; принимает subnet routes (`--accept-routes=true`). Доступ к домашней подсети `192.168.68.0/24` идёт через `tailscale0` via `openclaw-home`.
+- **Synology через Tailscale:** с VPS проверено 2026-06-11 11:03 MSK: `192.168.68.103` ping 3/3 ~17.5 ms, DSM `5000/5001`, NFS `2049`, SSH `2222` доступны.
 - **Каналы:** Telegram default OK -> `main`; Telegram `home-monitor` / `@Homegnom_bot` OK -> agent `home-monitor`; Discord OK
 - **Последнее обновление:** 2026-05-17
 
@@ -56,6 +58,7 @@ _Обновляется из любой сессии после значимых
 - **OS:** Ubuntu 24.04.4 LTS, kernel 6.17.0-23-generic
 - **CPU:** AMD Ryzen / GEEKOM A6, **RAM:** 16 ГБ DDR5, **SSD:** ~1 ТБ NVMe (6% занято на 2026-05-13)
 - **Tailscale IP:** 100.114.189.16, **LAN:** 192.168.68.125
+- **Tailscale subnet router:** approved/active route `192.168.68.0/24`; `AllowedIPs` and `PrimaryRoutes` include the home subnet. IP forwarding enabled via `/etc/sysctl.d/99-tailscale-subnet-router.conf`.
 - **OpenClaw:** 2026.5.20, gateway local loopback `127.0.0.1:18789`, Telegram OK
 - **Роль:** рабочий Alpha Platform стенд + Home OpenClaw host; hardening делать осторожно через карту зависимостей Alpha/n8n/Caddy
 - **SSH:** `PasswordAuthentication yes`, `22/tcp Anywhere`; key-login для `stanislav@openclaw-home` НЕ подтверждён — до `key-login-ok` не отключать пароли и не убирать SSH Anywhere, если это текущий рабочий доступ
