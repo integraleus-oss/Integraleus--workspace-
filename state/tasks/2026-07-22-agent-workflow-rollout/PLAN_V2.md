@@ -341,12 +341,14 @@ Status:
 - [x] Approve v2 direction.
 - [x] Decide template home: `templates/agent-workflow/`.
 - [x] Create templates.
-- [ ] Run one dry test on a harmless LOW/MEDIUM task.
+- [x] Run one dry test on a harmless LOW/MEDIUM task.
 
 Phase 0 local result:
 
 - Approval received from Stanislav in Telegram on 2026-07-22.
 - Templates created in `templates/agent-workflow/`.
+- Dry run recorded in `DRY_RUN_TASK_NOTE.md`.
+- Evidence recorded in `PHASE0_EVIDENCE.md`.
 - Canonical rule files are not changed by Phase 0.
 
 ### Phase 1: OpenClaw Shared Memory pilot

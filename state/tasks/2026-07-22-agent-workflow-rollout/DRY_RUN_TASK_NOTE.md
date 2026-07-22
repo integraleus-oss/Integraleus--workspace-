@@ -47,12 +47,13 @@ Forbidden:
 
 ## Checks
 
-- [ ] `rg --files templates/agent-workflow`
-- [ ] `git diff --check -- templates/agent-workflow state/tasks/2026-07-22-agent-workflow-rollout`
+- [x] `rg --files templates/agent-workflow`
+- [x] `git diff --check -- templates/agent-workflow state/tasks/2026-07-22-agent-workflow-rollout`
 
 ## Result
 
-- Pending.
+- Pass. All seven template files are present.
+- Pass. `git diff --check` reported no whitespace errors.
 
 ## Next
 
