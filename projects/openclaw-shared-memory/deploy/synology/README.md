@@ -15,7 +15,7 @@ This profile is for running the OpenClaw shared memory Postgres/pgvector store o
 ## Security Boundary
 
 - Do not expose this database to the public internet.
-- Bind to the LAN only, preferably Synology firewall allowlist for trusted LAN/Tailscale hosts.
+- Bind to an explicit LAN or Tailscale IP only; never wildcard `0.0.0.0`.
 - Use a strong password in `.env`; do not commit it.
 - Do not import Synology file contents into memory canon unless Stanislav explicitly approves that source.
 - Root-level Synology changes require explicit approval before execution.
@@ -38,17 +38,19 @@ If using Container Manager, create a Project from this folder.
 
 ## LAN Endpoint
 
-Default compose mapping:
+Compose mapping:
 
 ```text
-192.168.68.103:55432 -> postgres:5432
+${OPENCLAW_MEMORY_BIND_HOST}:55432 -> postgres:5432
 ```
 
 Connection string example:
 
 ```text
-postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory
+postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory
 ```
+
+Store the password in `.pgpass`, a local secret manager, or an equivalent client-side secret store. Do not put database passwords directly in shell commands.
 
 ## First Run
 

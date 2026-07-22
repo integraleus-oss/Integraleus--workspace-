@@ -16,6 +16,8 @@ def test_memory_draft_accepts_valid_record() -> None:
     )
 
     draft.validate()
+    assert len(draft.content_hash()) == 64
+    assert draft.content_hash() == draft.content_hash()
 
 
 def test_memory_draft_rejects_unknown_privacy_class() -> None:
@@ -30,4 +32,3 @@ def test_memory_draft_rejects_unknown_privacy_class() -> None:
 
     with pytest.raises(ValueError):
         draft.validate()
-

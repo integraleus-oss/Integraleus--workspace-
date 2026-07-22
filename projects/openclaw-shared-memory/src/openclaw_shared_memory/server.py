@@ -36,6 +36,24 @@ def build_parser() -> argparse.ArgumentParser:
     promote.add_argument("record_id")
     promote.add_argument("--actor", required=True)
     promote.add_argument("--reason", required=True)
+    promote.add_argument("--privacy-class", required=True)
+    promote.add_argument("--scope", required=True)
+    promote.add_argument("--source", required=True)
+    promote.add_argument("--confidence", required=True, type=float)
+
+    reject = sub.add_parser("reject_candidate")
+    reject.add_argument("record_id")
+    reject.add_argument("--actor", required=True)
+    reject.add_argument("--reason", required=True)
+
+    archive = sub.add_parser("archive_record")
+    archive.add_argument("record_id")
+    archive.add_argument("--actor", required=True)
+    archive.add_argument("--reason", required=True)
+
+    list_candidates = sub.add_parser("list_candidates")
+    list_candidates.add_argument("--scope")
+    list_candidates.add_argument("--limit", type=int, default=50)
 
     search = sub.add_parser("search_memory")
     search.add_argument("query")
@@ -89,7 +107,23 @@ def main(argv: list[str] | None = None) -> int:
             )
             _print_json(row)
         elif args.command == "promote_to_shared":
-            _print_json(repo.promote_to_shared(args.record_id, args.actor, args.reason))
+            _print_json(
+                repo.promote_to_shared(
+                    args.record_id,
+                    args.actor,
+                    args.reason,
+                    args.privacy_class,
+                    args.scope,
+                    args.source,
+                    args.confidence,
+                )
+            )
+        elif args.command == "reject_candidate":
+            _print_json(repo.reject_candidate(args.record_id, args.actor, args.reason))
+        elif args.command == "archive_record":
+            _print_json(repo.archive_record(args.record_id, args.actor, args.reason))
+        elif args.command == "list_candidates":
+            _print_json(repo.list_candidates(args.scope, args.limit))
         elif args.command == "search_memory":
             _print_json(repo.search_memory(args.query, args.scope, args.status, args.limit))
         elif args.command == "get_with_audit":

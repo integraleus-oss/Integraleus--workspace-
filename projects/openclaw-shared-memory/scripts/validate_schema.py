@@ -26,6 +26,24 @@ def main() -> int:
         ],
     )
     require_contains(
+        ROOT / "migrations" / "002_hardening.sql",
+        [
+            "openclaw_memory_reader",
+            "openclaw_memory_writer",
+            "openclaw_memory_promoter",
+            "openclaw_memory_backup",
+            "openclaw_memory_admin",
+            "CREATE EXTENSION IF NOT EXISTS pgcrypto",
+            "content_hash",
+            "ENABLE ROW LEVEL SECURITY",
+            "FORCE ROW LEVEL SECURITY",
+            "prevent_memory_audit_mutation",
+            "BEFORE TRUNCATE ON memory_audit_log",
+            "security_invoker",
+            "current_shared_canon",
+        ],
+    )
+    require_contains(
         ROOT / "docker-compose.yml",
         [
             "pgvector/pgvector:pg16",
@@ -38,10 +56,60 @@ def main() -> int:
         [
             "propose_memory",
             "promote_to_shared",
+            "reject_candidate",
+            "archive_record",
+            "list_candidates",
             "supersede",
             "search_memory",
             "get_with_audit",
             "pg_advisory_xact_lock",
+            "_require_promoter",
+            "writable_privacy_classes",
+            "content_hash",
+        ],
+    )
+    require_contains(
+        ROOT / "deploy" / "synology" / "docker-compose.synology.yml",
+        [
+            "OPENCLAW_MEMORY_BIND_HOST",
+            "?set OPENCLAW_MEMORY_BIND_HOST",
+        ],
+    )
+    require_contains(
+        ROOT / "scripts" / "export_markdown_mirror.py",
+        [
+            "OPENCLAW_MEMORY_MIRROR_PRIVACY_CLASSES",
+            "Refusing plaintext mirror export",
+            "privacy_class = ANY",
+        ],
+    )
+    require_contains(
+        ROOT / "scripts" / "backup_memory.sh",
+        [
+            "OPENCLAW_MEMORY_REAL_DATA",
+            "OPENCLAW_MEMORY_BACKUP_AGE_RECIPIENT",
+            "Refusing real-data plaintext backup",
+        ],
+    )
+    require_contains(
+        ROOT / "scripts" / "restore_drill.sh",
+        [
+            "sha256sum -c",
+            "Refusing restore drill",
+            "drill, test, or scratch",
+        ],
+    )
+    require_contains(
+        ROOT / "scripts" / "run_phase0_safety_tests.py",
+        [
+            "PHASE0_DB_SAFETY_OK",
+            "openclaw_memory_reader",
+            "writer cannot promote",
+            "audit update is blocked",
+            "audit truncate is blocked",
+            "app refuses forbidden propose",
+            "non-allowlisted actor cannot promote",
+            "get_with_audit denies forbidden record",
         ],
     )
     print("VALIDATION_OK")

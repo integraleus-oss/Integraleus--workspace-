@@ -12,4 +12,8 @@ cp "$ROOT/deploy/synology/README.md" "$OUT/README.md"
 cp "$ROOT/deploy/synology/RUNBOOK.md" "$OUT/RUNBOOK.md"
 cp "$ROOT/deploy/synology/CHECKLIST.md" "$OUT/CHECKLIST.md"
 cp "$ROOT/migrations/"*.sql "$OUT/migrations/"
+grep -q 'OPENCLAW_MEMORY_BIND_HOST.*:' "$OUT/docker-compose.yml" || {
+  echo "PACKAGE_FAIL missing explicit bind host guard" >&2
+  exit 1
+}
 echo "PACKAGE_OK $OUT"

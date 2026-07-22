@@ -7,6 +7,8 @@
 - Confirm target path and share permissions.
 - Confirm the database must stay LAN/Tailscale-only.
 - Generate a strong database password outside git.
+- Decide the bind address: Tailscale IP preferred, LAN IP acceptable.
+- Put client passwords in `.pgpass` or a local secret manager, not in shell commands.
 
 ## Deploy
 
@@ -27,7 +29,7 @@ On Synology:
 ```bash
 cd /volume1/docker/openclaw-shared-memory
 cp .env.synology.example .env
-# edit .env and set POSTGRES_PASSWORD before start
+# edit .env and set POSTGRES_PASSWORD plus OPENCLAW_MEMORY_BIND_HOST before start
 docker compose --env-file .env up -d
 docker compose ps
 ```
@@ -43,8 +45,8 @@ Expected:
 From OpenClaw Home:
 
 ```bash
-psql "postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory" -c "select version();"
-psql "postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory" -c "\\dt"
+psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" -c "select version();"
+psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" -c "\\dt"
 ```
 
 ## Apply Migration Manually
@@ -52,8 +54,10 @@ psql "postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memo
 If the migration did not run on first boot:
 
 ```bash
-psql "postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory" \
+psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" \
   -f migrations/001_initial_schema.sql
+psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" \
+  -f migrations/002_hardening.sql
 ```
 
 ## Smoke Test
@@ -61,7 +65,7 @@ psql "postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memo
 From this project on OpenClaw Home:
 
 ```bash
-export OPENCLAW_MEMORY_DATABASE_URL="postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory"
+export OPENCLAW_MEMORY_DATABASE_URL="postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory"
 PYTHONPATH=src python3 -m openclaw_shared_memory.server propose_memory \
   --record-type decision \
   --title "Synology shared memory smoke" \
@@ -77,8 +81,10 @@ Promote only disposable smoke records during testing.
 ## Backup
 
 ```bash
-OPENCLAW_MEMORY_DATABASE_URL="postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory" \
+OPENCLAW_MEMORY_DATABASE_URL="postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" \
 OPENCLAW_MEMORY_BACKUP_DIR="./backups" \
+OPENCLAW_MEMORY_REAL_DATA=1 \
+OPENCLAW_MEMORY_BACKUP_AGE_RECIPIENT="age1..." \
 scripts/backup_memory.sh
 ```
 
@@ -87,8 +93,9 @@ scripts/backup_memory.sh
 Use a disposable database, not production:
 
 ```bash
-OPENCLAW_MEMORY_DRILL_DATABASE_URL="postgresql://openclaw_memory:<password>@192.168.68.103:55432/openclaw_memory_drill" \
-scripts/restore_drill.sh backups/openclaw-memory-YYYYMMDDTHHMMSS+0300.dump
+OPENCLAW_MEMORY_DRILL_DATABASE_URL="postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory_drill" \
+OPENCLAW_MEMORY_RESTORE_AGE_IDENTITY="/path/to/local-age-identity.txt" \
+scripts/restore_drill.sh backups/openclaw-memory-YYYYMMDDTHHMMSS+0300.dump.age
 ```
 
 ## Rollback

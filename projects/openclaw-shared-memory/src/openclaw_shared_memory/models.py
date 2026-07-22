@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -21,6 +22,9 @@ PRIVACY_CLASSES = {
     "shared_safe",
     "external_forbidden",
 }
+
+DEFAULT_READABLE_PRIVACY_CLASSES = {"project", "shared_safe"}
+DEFAULT_MIRROR_PRIVACY_CLASSES = {"shared_safe"}
 
 
 @dataclass(frozen=True)
@@ -49,3 +53,17 @@ class MemoryDraft:
         if not 0 <= self.confidence <= 1:
             raise ValueError("confidence must be between 0 and 1")
 
+    def content_hash(self) -> str:
+        self.validate()
+        material = "\n".join(
+            [
+                self.record_type,
+                self.scope,
+                self.privacy_class,
+                self.title,
+                self.body,
+                self.source,
+                self.source_ref or "",
+            ]
+        )
+        return hashlib.sha256(material.encode("utf-8")).hexdigest()

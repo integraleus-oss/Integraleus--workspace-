@@ -13,6 +13,11 @@ DATABASE_URL = os.environ.get(
     "postgresql://openclaw_memory:openclaw_memory_dev@127.0.0.1:55432/openclaw_memory",
 )
 MIRROR_DIR = Path(os.environ.get("OPENCLAW_MEMORY_MIRROR_DIR", "./mirror"))
+MIRROR_PRIVACY_CLASSES = {
+    part.strip()
+    for part in os.environ.get("OPENCLAW_MEMORY_MIRROR_PRIVACY_CLASSES", "shared_safe").split(",")
+    if part.strip()
+}
 
 
 def safe_name(value: str) -> str:
@@ -21,6 +26,14 @@ def safe_name(value: str) -> str:
 
 
 def main() -> int:
+    if not MIRROR_PRIVACY_CLASSES:
+        raise SystemExit("OPENCLAW_MEMORY_MIRROR_PRIVACY_CLASSES must not be empty")
+
+    allowed_plaintext = {"shared_safe"}
+    unsafe = MIRROR_PRIVACY_CLASSES - allowed_plaintext
+    if unsafe:
+        raise SystemExit(f"Refusing plaintext mirror export for privacy classes: {sorted(unsafe)}")
+
     MIRROR_DIR.mkdir(parents=True, exist_ok=True)
     with psycopg.connect(DATABASE_URL, row_factory=dict_row) as conn:
         rows = conn.execute(
@@ -29,8 +42,10 @@ def main() -> int:
                    source, source_ref, owner, confidence, tags, created_at, updated_at
             FROM memory_records
             WHERE status IN ('shared', 'superseded', 'archived')
+              AND privacy_class = ANY(%s)
             ORDER BY scope, record_type, updated_at DESC
-            """
+            """,
+            (list(sorted(MIRROR_PRIVACY_CLASSES)),),
         ).fetchall()
 
     index_lines = ["# OpenClaw Shared Memory Mirror", ""]
@@ -73,4 +88,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

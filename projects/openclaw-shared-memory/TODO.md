@@ -18,13 +18,14 @@ Status date: 2026-07-22
 - [x] Claude plan audit completed
 - [x] Implementation plan v2 created
 - [x] Visual architecture/data-flow diagram created
-- [ ] First local Postgres instance started
-- [ ] Migration applied to a real database
-- [ ] Phase 0 hardening patch implemented
-- [ ] Phase 0 DB-backed safety tests implemented
+- [x] First local Postgres instance started
+- [x] Migration applied to a disposable local database
+- [x] Phase 0 hardening patch implemented
+- [x] Phase 0 DB-backed safety tests implemented
+- [x] Phase 0 hardening evidence note created
 - [ ] OpenClaw MCP registration wired into runtime config
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
-- [ ] Restore drill run against a disposable database
+- [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow
 
 ## Boundaries
