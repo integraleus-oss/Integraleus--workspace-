@@ -5,6 +5,7 @@ import os
 import asyncio
 import json
 import logging
+import re
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -33,6 +34,8 @@ from analytics import (
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 MAX_HISTORY = 10
 SUMMARIZE_THRESHOLD = 20  # саммаризировать после стольких сообщений
@@ -347,6 +350,13 @@ function escHtml(t) {
 
 async def handle_api_chat(request: web.Request) -> web.Response:
     """API endpoint для веб-виджета."""
+    allowed_chat_origin = os.getenv("CHAT_ALLOWED_ORIGIN", "https://bot.specialtechnology.ru")
+    if request.headers.get("Origin") != allowed_chat_origin:
+        return web.json_response({"error": "Forbidden"}, status=403)
+
+    if request.content_length and request.content_length > 8192:
+        return web.json_response({"error": "Request too large"}, status=413)
+
     try:
         data = await request.json()
     except Exception:
@@ -357,6 +367,10 @@ async def handle_api_chat(request: web.Request) -> web.Response:
 
     if not message:
         return web.json_response({"error": "Empty message"}, status=400)
+    if len(message) > 2000:
+        return web.json_response({"error": "Message too long"}, status=400)
+    if not isinstance(session_id, str) or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,80}", session_id):
+        session_id = "web_anonymous"
 
     # Сохраняем сообщение и трекаем
     save_message(session_id, "user", message)
@@ -468,6 +482,7 @@ async def handle_health(request: web.Request) -> web.Response:
 async def main():
     token = os.getenv("TELEGRAM_BOT_TOKEN")
     port = int(os.getenv("PORT", "8090"))
+    bind_host = os.getenv("WEB_HOST", "127.0.0.1")
 
     # ─── Инициализация ───
     init_conv_db()
@@ -492,28 +507,42 @@ async def main():
     app_web.router.add_get("/widget.js", handle_widget_js)
     app_web.router.add_get("/health", handle_health)
 
-    # CORS
+    # CORS is intentionally narrow: the public widget runs from this backend
+    # domain in an iframe and should not become a general-purpose browser API.
     from aiohttp.web_middlewares import middleware
+    allowed_origins = {
+        origin.strip()
+        for origin in os.getenv(
+            "ALLOWED_ORIGINS",
+            "https://bot.specialtechnology.ru,https://specialtechnology.ru,https://www.specialtechnology.ru",
+        ).split(",")
+        if origin.strip()
+    }
 
     @middleware
     async def cors_middleware(request, handler):
+        origin = request.headers.get("Origin", "")
         if request.method == "OPTIONS":
+            if origin and origin not in allowed_origins:
+                return web.Response(status=403)
             resp = web.Response()
         else:
             resp = await handler(request)
-        resp.headers["Access-Control-Allow-Origin"] = "*"
-        resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        if origin in allowed_origins:
+            resp.headers["Access-Control-Allow-Origin"] = origin
+            resp.headers["Vary"] = "Origin"
+            resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return resp
 
     app_web.middlewares.append(cors_middleware)
 
     runner = web.AppRunner(app_web)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", port, reuse_address=True)
+    site = web.TCPSite(runner, bind_host, port, reuse_address=True)
     await site.start()
 
-    logger.info(f"Web server started on port {port}")
+    logger.info(f"Web server started on {bind_host}:{port}")
     logger.info(f"Widget: http://localhost:{port}/widget")
 
     # Запускаем Telegram polling

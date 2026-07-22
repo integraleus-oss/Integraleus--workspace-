@@ -327,7 +327,7 @@ def detect_topic(text: str) -> str | None:
         "Alpha.Server": ["server", "сервер сигналов", "ввод-вывод"],
         "Alpha.HMI": ["hmi", "мнемосхем", "визуализац"],
         "Alpha.Historian": ["historian", "архивирован", "архив данных"],
-        "Alpha.Alarms": ["тревог", "alarm", "квитирован"],
+        "Alpha.HMI.Alarms": ["тревог", "alarm", "квитирован"],
         "Alpha.Reports": ["отчёт", "отчет", "report"],
         "Alpha.DevStudio": ["devstudio", "ide", "среда разработки"],
         "Лицензирование": ["лицензи", "цена", "стоимость", "купить", "тариф"],
