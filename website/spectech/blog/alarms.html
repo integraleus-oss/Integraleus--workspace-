@@ -19,8 +19,8 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Система тревог Alpha.Alarms 3.30 — СПЕЦТЕХ</title>
-<meta name="description" content="Полный обзор системы управления тревогами Alpha.Alarms 3.30. Группы приоритетов, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.">
+<title>Система тревог Alpha.HMI.Alarms 3.3 — СПЕЦТЕХ</title>
+<meta name="description" content="Обзор системы управления тревогами Alpha.HMI.Alarms 3.3. Приоритеты, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.">
 
 <meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
 <meta property="og:image:width" content="1200">
@@ -401,7 +401,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Система тревог Alpha.Alarms 3.30",
+  "headline": "Система тревог Alpha.HMI.Alarms 3.3",
   "author": {
     "@type": "Organization",
     "name": "СПЕЦТЕХ"
@@ -415,7 +415,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     }
   },
   "datePublished": "2026-03-12",
-  "description": "Полный обзор системы управления тревогами Alpha.Alarms 3.30. Группы приоритетов, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.",
+  "description": "Обзор системы управления тревогами Alpha.HMI.Alarms 3.3. Приоритеты, режимы работы, квитирование и подавление тревог в SCADA для АСУ ТП.",
   "image": "https://specialtechnology.ru/preview-desktop.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -481,7 +481,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
         <span>/</span>
         <a href="../blog.html">Блог</a>
         <span>/</span>
-        <span class="breadcrumb-current">Система тревог Alpha.Alarms 3.30</span>
+        <span class="breadcrumb-current">Система тревог Alpha.HMI.Alarms 3.3</span>
       </div>
     </div>
   </div>
@@ -498,13 +498,13 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             <span class="article-read">9 мин</span>
             <span class="article-author">Редакция СпецТех</span>
           </div>
-          <h1 class="article-title">Система тревог Alpha.Alarms 3.30</h1>
-          <p class="article-subtitle">Полный обзор системы управления тревогами Alpha.Alarms 3.30. Рассматриваем группы приоритетов, режимы работы, функции квитирования и подавления тревог в промышленных системах автоматизации.</p>
+          <h1 class="article-title">Система тревог Alpha.HMI.Alarms 3.3</h1>
+          <p class="article-subtitle">Обзор системы управления тревогами Alpha.HMI.Alarms 3.3. Рассматриваем группы приоритетов, режимы работы, функции квитирования и подавления тревог в промышленных системах автоматизации.</p>
         </header>
 
         <div class="article-body">
 
-          <p>Alpha.Alarms 3.30 — программный модуль для управления тревогами и событиями в системах промышленной автоматизации, входящий в состав Альфа платформы. Система обеспечивает операторов критически важной информацией о состоянии технологических процессов.</p>
+          <p>Alpha.HMI.Alarms 3.3 — кроссплатформенный модуль управления тревогами и событиями в Альфа платформе. Он может использоваться в Windows, Linux и веб-сценариях, помогает операторам видеть активные условия, квитировать события и анализировать историю тревог.</p>
 
           <h2 id="группы-важности-событий">Группы важности событий</h2>
 
@@ -624,10 +624,10 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             <li>Возможно добавление комментария оператора</li>
           </ul>
 
-          <pre><code>// Пример API для квитирования
-Alpha.Alarms.AckSelected();           // Квитировать выбранные
-Alpha.Alarms.AckAll();               // Квитировать все
-Alpha.Alarms.GetUnacknowledgedEventsCount(); // Количество неквитированных</code></pre>
+          <div class="info-box">
+            <div class="info-box-title">Практическая проверка</div>
+            <p>Перед внедрением стоит заранее согласовать матрицу квитирования: какие роли могут подтверждать тревоги, когда требуется комментарий оператора и какие события должны оставаться видимыми до устранения причины.</p>
+          </div>
 
           <h3 id="подавление-тревог">Подавление тревог</h3>
           <p><em>Подавление (Suppression)</em> позволяет временно скрыть события от определённых источников без их фактического отключения. Это полезно при:</p>
@@ -639,7 +639,7 @@ Alpha.Alarms.GetUnacknowledgedEventsCount(); // Количество некви�
 
           <h2 id="фильтрация-и-поиск">Фильтрация и поиск</h2>
 
-          <p>Alpha.Alarms предоставляет мощные инструменты для работы с большими объёмами событий:</p>
+          <p>Alpha.HMI.Alarms предоставляет инструменты для работы с большими объёмами событий:</p>
 
           <h3 id="типы-фильтров">Типы фильтров</h3>
           <ul>
@@ -686,13 +686,13 @@ SetAdvancedFilter "Importance>=334 AND Source LIKE 'PUMP*' AND NOT Acknowledged"
           <h3>Экспорт и интеграция</h3>
           <ul>
             <li><em>Экспорт</em> — .xlsx, .xml, .csv форматы</li>
-            <li><em>Интеграция с Alpha.Trends</em> — просмотр графиков сигналов</li>
+            <li><em>Интеграция с графиками alpha.hmi.charts</em> — просмотр оперативных и исторических данных по сигналам</li>
             <li><em>Просмотр экранных форм</em> — интеграция с ПК «Лоцман»</li>
             <li><em>Печать</em> — таблица событий, реал-тайм на матричном принтере</li>
           </ul>
 
           <h3>Встраиваемый компонент</h3>
-          <p>Alpha.Alarms может использоваться как <strong>компонент в проектах Alpha.HMI</strong> с богатым API для программного управления:</p>
+          <p>Alpha.HMI.Alarms может использоваться как <strong>компонент в проектах Alpha.HMI</strong> и как самостоятельный экран для работы с тревогами:</p>
 
           <ul>
             <li>30+ свойств для настройки отображения</li>
@@ -701,19 +701,13 @@ SetAdvancedFilter "Importance>=334 AND Source LIKE 'PUMP*' AND NOT Acknowledged"
             <li>Интеграция с Alpha.Security для разграничения прав</li>
           </ul>
 
-          <h2 id="варианты-запуска">Варианты запуска</h2>
+          <h2 id="варианты-запуска">Варианты использования</h2>
 
-          <h3>Стандартное приложение</h3>
-          <p>Запуск через меню Пуск или <code>Alpha.Alarms.App.exe</code></p>
+          <h3>Операторский экран</h3>
+          <p>Панель тревог можно использовать как отдельный рабочий экран для диспетчера или встроить в состав операторского интерфейса.</p>
 
-          <h3>Командная строка</h3>
-          <p>Гибкая настройка через параметры запуска:</p>
-
-          <pre><code># Примеры запуска
-Alpha.Alarms.App.exe mode operative
-Alpha.Alarms.App.exe mode historical Begin "01.01.2026-00:00:00" End "31.01.2026-23:59:59"
-Alpha.Alarms.App.exe ActiveViewMode ActiveConditions
-Alpha.Alarms.App.exe SetAdvancedFilter "Importance>=667"</code></pre>
+          <h3>Исторический анализ</h3>
+          <p>Исторический режим помогает расследовать инциденты, сравнивать последовательность событий и готовить выгрузки для разбора смены или технической службы.</p>
 
           <h3>Встраивание в Alpha.HMI</h3>
           <p>Интеграция панели тревог непосредственно в мнемосхемы операторских станций.</p>
@@ -727,7 +721,7 @@ Alpha.Alarms.App.exe SetAdvancedFilter "Importance>=667"</code></pre>
             <li><strong>Защищённое хранение</strong> — целостность данных о событиях</li>
           </ul>
 
-          <p>Alpha.Alarms 3.30 обеспечивает операторов надёжной системой управления тревогами, соответствующей требованиям промышленных стандартов безопасности и эффективности.</p>
+          <p>Alpha.HMI.Alarms 3.3 обеспечивает операторов системой управления тревогами, которая подходит для современных кроссплатформенных SCADA-проектов и помогает удерживать критические события в фокусе смены.</p>
 
         </div>
       

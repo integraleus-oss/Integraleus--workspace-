@@ -113,6 +113,13 @@ $reserve  = clean($_POST['reserve'] ?? '', 10);
 $historian = clean($_POST['historian'] ?? '', 200);
 $reports  = clean($_POST['reports'] ?? '', 200);
 $addons   = clean($_POST['addons'] ?? '', 2000);
+$pageUrl  = clean($_POST['page_url'] ?? '', 500);
+$referrer = clean($_POST['referrer'] ?? '', 500);
+$utmSource = clean($_POST['utm_source'] ?? '', 160);
+$utmMedium = clean($_POST['utm_medium'] ?? '', 160);
+$utmCampaign = clean($_POST['utm_campaign'] ?? '', 200);
+$utmTerm = clean($_POST['utm_term'] ?? '', 200);
+$utmContent = clean($_POST['utm_content'] ?? '', 200);
 
 // --- Validate email ---
 $rawEmail = trim($_POST['email'] ?? '');
@@ -151,6 +158,16 @@ $body .= "  Имя:    $name\n";
 $body .= "  Email:  $email\n";
 if ($phone) $body .= "  Тел:    $phone\n";
 if ($comment) $body .= "\nКомментарий:\n$comment\n";
+
+$body .= "\n----------------------------------------\n";
+$body .= "Атрибуция:\n";
+$body .= "  Страница: " . ($pageUrl ?: 'не передана') . "\n";
+$body .= "  Referrer: " . ($referrer ?: 'не передан') . "\n";
+$body .= "  UTM source: " . ($utmSource ?: 'не указан') . "\n";
+$body .= "  UTM medium: " . ($utmMedium ?: 'не указан') . "\n";
+$body .= "  UTM campaign: " . ($utmCampaign ?: 'не указан') . "\n";
+$body .= "  UTM term: " . ($utmTerm ?: 'не указан') . "\n";
+$body .= "  UTM content: " . ($utmContent ?: 'не указан') . "\n";
 
 $body .= "\n----------------------------------------\n";
 $body .= "IP: $ip\n";

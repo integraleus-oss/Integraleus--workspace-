@@ -15,6 +15,29 @@ k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNo
 ym(107569860, "init", {clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
+<script>
+(function () {
+  var counterId = 107569860;
+
+  window.spectechCalcGoal = function (goalName) {
+    if (typeof window.ym === 'function') {
+      window.ym(counterId, 'reachGoal', goalName);
+    }
+  };
+
+  window.spectechAppendAttribution = function (fd) {
+    if (!fd) return;
+    var params = new URLSearchParams(window.location.search);
+    fd.append('page_url', window.location.href);
+    fd.append('referrer', document.referrer || '');
+    fd.append('utm_source', params.get('utm_source') || '');
+    fd.append('utm_medium', params.get('utm_medium') || '');
+    fd.append('utm_campaign', params.get('utm_campaign') || '');
+    fd.append('utm_term', params.get('utm_term') || '');
+    fd.append('utm_content', params.get('utm_content') || '');
+  };
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Калькулятор лицензий — СПЕЦТЕХ</title>
 <link rel="canonical" href="https://specialtechnology.ru/calculator.html">
@@ -3022,12 +3045,15 @@ function sendProjectEmail() {
   fd.append('total_price', formatPrice(total));
   fd.append('items_text', itemsText);
   appendExtraFields(fd);
+  if (typeof window.spectechAppendAttribution === 'function') window.spectechAppendAttribution(fd);
 
   // Show sending state on the main send button
   const btn = document.getElementById('btn-send-calc');
   const origText = btn.innerHTML;
   btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>Отправка...';
   btn.disabled = true;
+
+  if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_submit');
 
   fetch('/send_calc.php', { method: 'POST', body: fd })
     .then(r => {
@@ -3036,6 +3062,7 @@ function sendProjectEmail() {
     })
     .then(data => {
       if (data.ok) {
+        if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_success');
         btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>✓ Проект отправлен!';
         btn.style.borderColor = 'var(--lime)';
         btn.style.color = 'var(--lime)';
@@ -3189,12 +3216,15 @@ function sendConfigEmail() {
   fd.append('addons', addonLines.join('\n'));
   fd.append('total_price', document.getElementById('r-total')?.textContent || '');
   appendExtraFields(fd);
+  if (typeof window.spectechAppendAttribution === 'function') window.spectechAppendAttribution(fd);
 
   // Show sending state
   const btn = document.getElementById('btn-send-calc');
   const origText = btn.textContent;
   btn.textContent = 'Отправка...';
   btn.disabled = true;
+
+  if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_submit');
 
   fetch('/send_calc.php', { method: 'POST', body: fd })
     .then(r => {
@@ -3203,6 +3233,7 @@ function sendConfigEmail() {
     })
     .then(data => {
       if (data.ok) {
+        if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_success');
         btn.textContent = '✓ Отправлено!';
         btn.style.borderColor = 'var(--lime)';
         btn.style.color = 'var(--lime)';
@@ -3464,11 +3495,19 @@ function submitWizard() {
   fd.append('email', email);
   fd.append('phone', phone);
   fd.append('comment', 'Компания: ' + company + '\nСрочность: ' + (urgMap[urg]||urg) + '\nОписание: ' + desc);
+  appendExtraFields(fd);
+  if (typeof window.spectechAppendAttribution === 'function') window.spectechAppendAttribution(fd);
+
+  if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_submit');
 
   fetch('/send_calc.php', { method: 'POST', body: fd })
     .then(r => r.json())
     .then(data => {
-      if (!data.ok) console.error('Mail send failed');
+      if (data.ok) {
+        if (typeof window.spectechCalcGoal === 'function') window.spectechCalcGoal('calculator_success');
+      } else {
+        console.error('Mail send failed');
+      }
     })
     .catch(e => console.error('Wizard submit error:', e));
 
@@ -4177,7 +4216,5 @@ updateSurveyUI();
   </div>
 </div>
 <script>if(!localStorage.getItem('sptech-cookies'))document.getElementById('cookie-banner').style.display='block';</script>
-
-<script src="https://bot.specialtechnology.ru/widget.js"></script>
 </body>
 </html>

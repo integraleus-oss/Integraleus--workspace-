@@ -18,6 +18,52 @@
 
  ym(107569860, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
+<script>
+(function () {
+  var counterId = 107569860;
+
+  function sendGoal(goalName) {
+    if (typeof window.ym === 'function') {
+      window.ym(counterId, 'reachGoal', goalName);
+    }
+  }
+
+  function populateFormAttribution(form) {
+    if (!form || !form.querySelector) return;
+    var params = new URLSearchParams(window.location.search);
+    var fields = {
+      page_url: window.location.href,
+      referrer: document.referrer || '',
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+      utm_term: params.get('utm_term') || '',
+      utm_content: params.get('utm_content') || ''
+    };
+
+    Object.keys(fields).forEach(function (name) {
+      var input = form.querySelector('input[name="' + name + '"]');
+      if (input) input.value = fields[name];
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (new URLSearchParams(window.location.search).get('status') === 'ok') {
+      sendGoal('lead_form_success');
+    }
+
+    document.querySelectorAll('form[action="/send_form.php"]').forEach(populateFormAttribution);
+  });
+
+  document.addEventListener('submit', function (event) {
+    var form = event.target;
+    if (form && form.matches && form.matches('form[action="/send_form.php"]')) {
+      populateFormAttribution(form);
+      sendGoal('lead_form_submit');
+    }
+  });
+})();
+</script>
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="Яндекс.Метрика" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1231,6 +1277,45 @@ section { position: relative; z-index: 1; }
   font-size: 15px;
 }
 
+.form-group.consent-group {
+  margin-bottom: 12px;
+}
+
+.form-group.consent-group:last-of-type {
+  margin-bottom: 16px;
+}
+
+.form-group label.consent-label {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.form-group label.consent-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin: 2px 0 0;
+  padding: 0;
+  justify-self: start;
+  accent-color: var(--volt);
+}
+
+.form-group label.consent-label span {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
 .form-group input,
 .form-group textarea,
 .form-group select {
@@ -1701,9 +1786,17 @@ nav.scrolled {
   .tech-grid { grid-template-columns: 1fr; }
   .cta-btns { flex-direction: column; }
   .contact-container { grid-template-columns: 1fr !important; }
-  .form-group label[style*="display:flex"] { font-size: 11px !important; gap: 6px !important; }
-  .form-group label[style*="display:flex"] input[type="checkbox"] { width: 16px; height: 16px; min-width: 16px; }
-  .form-group label[style*="display:flex"] span { word-break: break-word; }
+  .contact-form { padding: 24px 18px; }
+  .form-group label.consent-label {
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 9px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .form-group label.consent-label span {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
 }
 /* Catalog */
 .catalog-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px;background:var(--wire); }
@@ -1826,6 +1919,7 @@ nav.scrolled {
     <li><a href="calculator.html">Калькулятор</a></li>
     <li><a href="#tech">Технологии</a></li>
     <li><a href="#partners">Партнёры</a></li>
+    <li><a href="obuchenie.html">Обучение</a></li>
     <li><a href="blog.html">Блог</a></li>
     <li><a href="#contact">Контакты</a></li>
   </ul>
@@ -1855,6 +1949,7 @@ nav.scrolled {
       <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
       <a href="#tech" onclick="closeMobileMenu()">Технологии</a>
       <a href="#partners" onclick="closeMobileMenu()">Партнёры</a>
+      <a href="obuchenie.html" onclick="closeMobileMenu()">Обучение</a>
       <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
       <a href="#contact" onclick="closeMobileMenu()">Контакты</a>
     </nav>
@@ -2611,6 +2706,14 @@ nav.scrolled {
           <p style="color: var(--text2); font-size: 14px; line-height: 1.5;">Ответ — в течение 1 рабочего дня. Бесплатно подберём конфигурацию и рассчитаем стоимость лицензий.</p>
         </div>
         <form action="/send_form.php" method="POST">
+          <input type="text" name="website" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="page_url" value="">
+          <input type="hidden" name="referrer" value="">
+          <input type="hidden" name="utm_source" value="">
+          <input type="hidden" name="utm_medium" value="">
+          <input type="hidden" name="utm_campaign" value="">
+          <input type="hidden" name="utm_term" value="">
+          <input type="hidden" name="utm_content" value="">
           <div class="form-group">
             <label for="name">Имя *</label>
             <input type="text" id="name" name="name" placeholder="Иван Петров" required>
@@ -2660,15 +2763,15 @@ nav.scrolled {
             <label for="message">Сообщение</label>
             <textarea id="message" name="message" placeholder="Опишите задачу: что автоматизируете, сколько точек учёта, текущая система"></textarea>
           </div>
-          <div class="form-group" style="margin-bottom:12px;">
-            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:13px;color:var(--text2);line-height:1.4;">
-              <input type="checkbox" id="consent-pd" name="consent_pd" required style="margin-top:2px;flex-shrink:0;accent-color:var(--volt);">
+          <div class="form-group consent-group">
+            <label class="consent-label">
+              <input type="checkbox" id="consent-pd" name="consent_pd" required>
               <span>Я даю согласие на обработку моих персональных данных в соответствии с <a href="consent.html" target="_blank" style="color:var(--volt);text-decoration:underline;">Согласием на обработку персональных данных</a></span>
             </label>
           </div>
-          <div class="form-group" style="margin-bottom:16px;">
-            <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:13px;color:var(--text2);line-height:1.4;">
-              <input type="checkbox" id="consent-comm" name="consent_comm" required style="margin-top:2px;flex-shrink:0;accent-color:var(--volt);">
+          <div class="form-group consent-group">
+            <label class="consent-label">
+              <input type="checkbox" id="consent-comm" name="consent_comm" required>
               <span>Я согласен на получение ответа и информационных материалов от АО «СПЕЦТЕХ» по указанным контактным данным в соответствии с <a href="consent.html" target="_blank" style="color:var(--volt);text-decoration:underline;">Согласием</a></span>
             </label>
           </div>
@@ -2730,6 +2833,7 @@ nav.scrolled {
           <li><a href="wertsim.html">CAE WeRTSim</a></li>
           <li><a href="#products">MES</a></li>
           <li><a href="#capabilities">Возможности SCADA</a></li>
+          <li><a href="obuchenie.html">Обучение</a></li>
         </ul>
       </div>
 
@@ -2739,6 +2843,7 @@ nav.scrolled {
           <li><a href="#about">О компании</a></li>
           <li><a href="#tech">Технологии</a></li>
           <li><a href="#partners">Партнёры</a></li>
+          <li><a href="obuchenie.html">Обучение</a></li>
           <li><a href="blog.html">Блог</a></li>
           <li><a href="privacy.html">Конфиденциальность</a></li>
           <li><a href="#contact">Контакты</a></li>
@@ -3080,8 +3185,6 @@ function toggleTheme() {
     }
 }
 </script>
-
-<script src="https://bot.specialtechnology.ru/widget.js"></script>
 
 <!-- Cookie Banner -->
 <div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--ink1);border-top:1px solid var(--wire);padding:16px 24px;font-size:13px;color:var(--text2);">

@@ -51,6 +51,9 @@ DirectoryIndex index.html index.php
 # Disable directory listing
 Options -Indexes
 
+# Retired WordPress surfaces: return Gone to reduce crawl waste and exposure.
+RedirectMatch 410 ^/(wp-login\.php|wp-admin(/.*)?|wp-content(/.*)?|wp-includes(/.*)?|wp-json(/.*)?)$
+
 # URL redirects and HTTPS enforcement
 <IfModule mod_rewrite.c>
     RewriteEngine On
