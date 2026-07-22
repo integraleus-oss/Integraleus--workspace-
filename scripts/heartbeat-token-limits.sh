@@ -39,8 +39,13 @@ if [[ -n "$usage_line" ]]; then
     warn=1
   fi
 else
-  echo "WARN: could not read Codex/OpenAI usage from 'openclaw models status'."
-  warn=1
+  echo "codex_usage: not exposed by 'openclaw models status'; using per-account Codex app-server check below."
+fi
+
+if [[ "${CODEX_ACCOUNT_AUTO_SWITCH:-0}" == "1" ]]; then
+  echo "codex_account_auto_switch: enabled"
+else
+  echo "codex_account_auto_switch: disabled (set CODEX_ACCOUNT_AUTO_SWITCH=1 to allow auth order changes)"
 fi
 
 account_switch_output="$(timeout 120 scripts/codex-account-limit-switch.mjs 2>&1 || true)"
@@ -54,7 +59,7 @@ else
   warn=1
 fi
 
-sessions_json="$(timeout 30 openclaw sessions list --json --active 1440 --limit all 2>/dev/null || true)"
+sessions_json="$(timeout 30 openclaw sessions list --json --all-agents --active 1440 --limit all 2>/dev/null || true)"
 if [[ -n "$sessions_json" && "$sessions_json" == \{* ]]; then
   high_sessions="$(
     printf '%s' "$sessions_json" |
@@ -63,7 +68,7 @@ if [[ -n "$sessions_json" && "$sessions_json" == \{* ]]; then
         | select(.contextTokens and .totalTokens and .contextTokens > 0)
         | .ratio = ((.totalTokens / .contextTokens) * 100)
         | select(.ratio >= $threshold)
-        | "\(.key) \(.modelProvider // "?")/\(.model // "?") \((.ratio * 10 | round / 10))% (\(.totalTokens)/\(.contextTokens))"
+        | "\(.key) \(.selectedModel // .configuredModel // .modelProvider // "?")/\(.model // "?") \((.ratio * 10 | round / 10))% (\(.totalTokens)/\(.contextTokens))"
       ' 2>/dev/null || true
   )"
   if [[ -n "$high_sessions" ]]; then
@@ -142,7 +147,13 @@ elif [[ "$CLAUDE_USAGE_PROBE" == "1" ]]; then
   warn=1
 fi
 
-logs="$(timeout 30 openclaw logs --plain --limit "$LOG_LIMIT" 2>/dev/null | grep -Ei 'rate_limit|subscription usage limit|Next reset|refresh_token_reused|fallback|context-overflow|anthropic|claude' || true)"
+logs="$(
+  timeout 30 openclaw logs --plain --limit "$LOG_LIMIT" 2>/dev/null |
+    grep -Ei 'rate_limit|subscription usage limit|Next reset|refresh_token_reused|fallback|context-overflow|anthropic|claude' |
+    grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}T' |
+    grep -Ev '^[[:space:]]*(-|•|[0-9]+[.)])[[:space:]]' |
+    grep -Eiv '^[0-9T:+.-]+ info (Fallbacks \([0-9]+\):|- |gateway: auto-enabled plugins|agent model:|anthropic plugin config present)' || true
+)"
 if [[ -n "$logs" ]]; then
   old_hashes="$(jq -r '.seenLogHashes[]? // empty' "$STATE_FILE" 2>/dev/null || true)"
   new_events=""

@@ -16,6 +16,8 @@ const PROFILES = [
   'openai:integraleus55@gmail.com',
 ];
 const THRESHOLD = Number(process.env.CODEX_ACCOUNT_REMAINING_MIN ?? '20');
+const AUTO_SWITCH = process.env.CODEX_ACCOUNT_AUTO_SWITCH === '1';
+const DRY_RUN = process.env.CODEX_ACCOUNT_SWITCH_DRY_RUN === '1';
 
 function homePath(value) {
   if (!value) return value;
@@ -24,6 +26,34 @@ function homePath(value) {
 
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function runJson(command, args) {
+  const result = spawnSync(command, args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (result.status !== 0) return null;
+  try {
+    return JSON.parse(result.stdout);
+  } catch {
+    return null;
+  }
+}
+
+function profileAlias(profile) {
+  const legacyIndex = LEGACY_PROFILES.indexOf(profile);
+  if (legacyIndex >= 0) return PROFILES[legacyIndex];
+  const currentIndex = PROFILES.indexOf(profile);
+  if (currentIndex >= 0) return LEGACY_PROFILES[currentIndex];
+  return null;
+}
+
+function canonicalProfile(profile, availableProfiles) {
+  if (availableProfiles.has(profile)) return profile;
+  const alias = profileAlias(profile);
+  if (alias && availableProfiles.has(alias)) return alias;
+  return profile;
 }
 
 function findCodexDist() {
@@ -98,20 +128,33 @@ async function main() {
   const authState = fs.existsSync(authStatePath) ? readJson(authStatePath) : {};
   const profileStorePath = path.join(agentDir, 'auth-profiles.json');
   const profileStore = fs.existsSync(profileStorePath) ? readJson(profileStorePath) : {};
-  const availableProfiles = new Set(Object.keys(profileStore.profiles ?? {}));
-  const activeProfiles = PROFILES.every((profile) => availableProfiles.has(profile)) ? PROFILES : LEGACY_PROFILES;
+  const modelsStatus = runJson('openclaw', ['models', 'status', '--json']);
+  const statusOpenaiProfiles = modelsStatus?.auth?.oauth?.providers
+    ?.find((provider) => provider.provider === PROVIDER)
+    ?.effectiveProfiles
+    ?.map((profile) => profile.profileId)
+    ?.filter((profile) => PROFILES.includes(profile) || LEGACY_PROFILES.includes(profile));
+  const availableProfiles = new Set([
+    ...Object.keys(profileStore.profiles ?? {}),
+    ...(modelsStatus?.auth?.oauth?.profiles ?? []).map((profile) => profile.profileId),
+  ]);
+  const activeProfiles = statusOpenaiProfiles?.length >= 2
+    ? statusOpenaiProfiles.slice(0, 2)
+    : PROFILES.every((profile) => availableProfiles.has(profile))
+      ? PROFILES
+      : LEGACY_PROFILES;
   const order =
-    authState.order?.[PROVIDER]
-    ?? config.auth?.order?.[PROVIDER]
-    ?? authState.order?.[LEGACY_PROVIDER]
-    ?? config.auth?.order?.[LEGACY_PROVIDER]
-    ?? activeProfiles;
-  const normalizedOrder = order.map((profile) => {
-    const legacyIndex = LEGACY_PROFILES.indexOf(profile);
-    return legacyIndex >= 0 && activeProfiles === PROFILES ? PROFILES[legacyIndex] : profile;
-  });
+    statusOpenaiProfiles?.length >= 2
+      ? statusOpenaiProfiles.slice(0, 2)
+      : authState.order?.[PROVIDER]
+        ?? config.auth?.order?.[PROVIDER]
+        ?? authState.order?.[LEGACY_PROVIDER]
+        ?? config.auth?.order?.[LEGACY_PROVIDER]
+        ?? activeProfiles;
+  const normalizedOrder = order.map((profile) => canonicalProfile(profile, new Set(activeProfiles)));
   const current = normalizedOrder.find((profile) => activeProfiles.includes(profile)) ?? activeProfiles[0];
   const other = activeProfiles.find((profile) => profile !== current);
+  if (!other) throw new Error(`could not determine second Codex account profile from: ${activeProfiles.join(', ')}`);
 
   const dist = findCodexDist();
   const configModule = await import(pathToFileURL(findDistFile(dist, 'config-')).href);
@@ -138,14 +181,26 @@ async function main() {
 
   if (currentLow && otherHealthy) {
     const nextOrder = [other, current];
-    const result = spawnSync('openclaw', ['models', 'auth', 'order', 'set', '--provider', PROVIDER, ...nextOrder], {
+    const orderProvider = LEGACY_PROFILES.some((profile) => order.includes(profile)) ? LEGACY_PROVIDER : PROVIDER;
+    const commandOrder = orderProvider === LEGACY_PROVIDER
+      ? nextOrder.map((profile) => profileAlias(profile) ?? profile)
+      : nextOrder;
+    const switchMessage = `would switch Codex auth order to ${commandOrder.join(' -> ')} because ${current} is below ${THRESHOLD}% and ${other} is healthy.`;
+    if (!AUTO_SWITCH || DRY_RUN) {
+      if (DRY_RUN) console.log(`DRY_RUN: ${switchMessage}`);
+      else console.log(`WARN: ${switchMessage}`);
+      console.log(`WARN: Codex auth order not changed; ${DRY_RUN ? 'dry-run is enabled.' : 'auto-switch is disabled; set CODEX_ACCOUNT_AUTO_SWITCH=1 to allow changing auth order.'}`);
+      process.exitCode = 1;
+      return;
+    }
+    const result = spawnSync('openclaw', ['models', 'auth', 'order', 'set', '--provider', orderProvider, ...commandOrder], {
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     if (result.status !== 0) {
       throw new Error(`failed to switch Codex auth order: ${result.stderr || result.stdout || `exit ${result.status}`}`);
     }
-    console.log(`WARN: switched Codex auth order to ${nextOrder.join(' -> ')} because ${current} is below ${THRESHOLD}% and ${other} is healthy.`);
+    console.log(`WARN: switched Codex auth order to ${commandOrder.join(' -> ')} because ${current} is below ${THRESHOLD}% and ${other} is healthy.`);
     return;
   }
 
