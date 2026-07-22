@@ -188,3 +188,75 @@ DATE: 2026-06-08
 TITLE: Personal agent operating profile
 CONTENT: Документ `agent_rules_for_personal_agent_2026-06-08.md`, присланный Станиславом 2026-06-08, принят как обязательный рабочий профиль персонального агента с приоритетом системных правил OpenClaw/Codex, `AGENTS.md`, `SOUL.md` и уже одобренных решений. Обязательные принципы: не говорить "готово" без проверяемого результата; не придумывать факты, команды, тесты, логи, файлы, ссылки или цитаты; перед кодовыми изменениями читать релевантный контекст, оценивать blast radius, проверять текущий diff и после изменений запускать применимые проверки; для внешних действий, деплоя, production restart, auth/env/config, БД/миграций, удаления данных, установки зависимостей и других труднообратимых действий получать явное подтверждение; длинные deliverable и operational задачи вести через task-local state `state/tasks/<date>-<slug>/status.md`; security incidents логировать структурно в `logs/security_log.json` без записи секретов; память пополнять только durable high-signal фактами без секретов и шума; финальный отчёт разделять на сделано, подтверждено, не проверено/риски.
 RATIONALE: Станислав явно попросил изучить документ и сделать правила обязательными, затем ответил `Approve` на Decisions Candidate. Правило объединяет новый документ с уже действующим режимом безопасности, памяти и deliverable-протоколом.
+
+---
+### ID: D-2026-06-20-01
+TYPE: POLICY
+STATUS: ACTIVE
+DATE: 2026-06-20
+TITLE: Supervised local Codex and Claude CLI workflow
+CONTENT: Для совместной работы локального Codex CLI и Claude Code CLI использовать supervised-схему: OpenClaw является диспетчером/супервизором, Codex по умолчанию writer/test-runner, Claude по умолчанию reviewer/second opinion, если явно не назначен writer. Новые задачи вести через `/home/stanislav/agent-runs/<date>-<slug>/` с `TASK.md`, `STATUS.md`, `HANDOFF.md`, `events.jsonl`, `logs/`, `artifacts/`. Для каждого проекта должен быть один активный writer; текущий writer фиксируется convention-only lock-файлом в `/home/stanislav/agent-runs/_locks/`. Второй агент читает, ревьюит и предлагает, но не правит проект без смены writer-lock. Запускать будущие Codex/Claude задачи из реального project root (`codex -C <project>`, `cd <project> && claude`), а не из `/home/stanislav`. Текущие Termius-сессии не переносить насильно: дождаться checkpoint, зафиксировать `STATUS.md`/`HANDOFF.md`, затем следующий шаг вести уже через supervised ledger. Dashboard v1 должен быть read-only; pause/stop/control кнопки добавлять только после стабильной наблюдаемости.
+RATIONALE: 2026-06-20 аудит активных Termius-сессий показал, что Codex и Claude работали из `/home/stanislav`, состояние было размазано между терминалами, session logs, Synology exchange и git status, а single-writer граница не была явно зафиксирована. Станислав попросил подготовить безрисковый переход к схеме, где OpenClaw следит за работой агентов, а он может наблюдать через браузер/dashboard без терминалов.
+
+---
+### ID: D-2026-06-24-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-06-24
+TITLE: Home Ollama local fallback prefers qwen2.5:3b over qwen3:4b
+CONTENT: На openclaw-home `qwen3:4b` удалён после теста 2026-06-24: на CPU он давал около 15-16 tok/s, имел тяжёлый Qwen3 reasoning overhead и часть простых задач не завершал финальным ответом до лимита. `qwen3:8b` не ставить без отдельной причины. `qwen2.5:3b` прошёл 4 из 5 локальных fallback-задач и одну частично: около 22-25 tok/s, без reasoning overhead; использовать его как основной кандидат для быстрого локального OpenClaw fallback. Для exact code-only/strict-format задач применять более жёсткий system prompt/шаблон или постобработку.
+RATIONALE: Станислав одобрил Memory Candidate после сравнительного теста `qwen3:4b` и `qwen2.5:3b` на задачах: русский текст, Alpha-док, короткий код, классификация сообщения, RAG-вопрос. Отчёты: `reports/local-ai/qwen3-4b-eval-2026-06-24.md` и `reports/local-ai/qwen2.5-3b-eval-2026-06-24.md`.
+
+---
+### ID: D-2026-06-24-02
+TYPE: POLICY
+STATUS: ACTIVE
+DATE: 2026-06-24
+TITLE: MVP work uses Claude for product thinking and Codex for execution
+CONTENT: Для MVP-работы использовать гибридный режим: Claude Code применять для product thinking, архитектуры, UI/design и ревью сложных фич; Codex применять как быстрый writer/test-runner для итераций, shell/git/tests/API и каркасов. Большие MVP вести через supervised Ralph-like loop: `SPEC`/`TODO` -> small tasks -> tests -> commit -> review. Не запускать длинные автономные Codex loops при низкой weekly quota; сначала проверить текущие лимиты и при необходимости назначить Claude planner/reviewer, а Codex оставить для коротких исполнительских проходов.
+RATIONALE: Станислав одобрил Memory Candidate после изучения Kinescope-ролика "Claude Code или Codex - что подходит для создания MVP" и предыдущего обсуждения Ralph Loop. Практический вывод: Claude Code надёжнее для целостного продукта, дизайна и сложной автономной работы; Codex быстрее и дешевле для инженерных итераций, но требует нарезки задач и контроля контекста.
+
+---
+### ID: D-2026-07-01-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-01
+TITLE: Alpha BPR Home production-pilot closeout accepted
+CONTENT: 2026-06-30 Alpha BPR Home production-pilot autonomously closed through backup/restore drill, restart/reboot soak, real host reboot gate, post-reboot readiness, HMI/BFF, Alpha.Reports, PS01/FILL Historian freshness, and final closeout commit `d479a68 Close Alpha BPR production pilot`. Remaining boundaries are human production sign-off, TLS/domain/CA/browser-trust decisions, missing future secrets/licenses, and explicit go-to-market/show/sell approval.
+RATIONALE: Станислав одобрил Memory Candidate после финального отчёта по production-pilot closeout в Telegram topic `HOME:Alpha-BPR`.
+
+---
+### ID: D-2026-07-01-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-01
+TITLE: Alpha BPR Home production-pilot release/show package accepted
+CONTENT: Alpha BPR Home production-pilot baseline `d479a68 Close Alpha BPR production pilot` is tagged locally as `home-production-pilot-2026-06-30`. A docs-only release/show package was added and committed as `88ae13c Add Alpha BPR production pilot show package`, including release handoff, show route, pre-show checks, explicit boundaries, and next production-readiness backlog. The Alpha BPR repo was clean after the commit.
+RATIONALE: Станислав одобрил Memory Candidate после выполнения release/handoff + show package для Telegram topic `HOME:Alpha-BPR`.
+
+---
+### ID: D-2026-07-01-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-01
+TITLE: Alpha BPR production-readiness docs pack accepted
+CONTENT: Alpha BPR production-readiness docs pack was added and committed as `423b12c Add Alpha BPR production readiness pack`. It includes a readiness checklist, monitoring/backup plan, TLS/sign-off decision sheet, and standalone HTML diagrams/charts with architecture, readiness flow, and backlog/backup cadence. The Alpha BPR repo was clean after the commit.
+RATIONALE: Станислав одобрил Memory Candidate после выполнения production-readiness pack с диаграммами/графиками/архитектурными схемами для Telegram topic `HOME:Alpha-BPR`.
+
+---
+### ID: D-2026-07-02-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-02
+TITLE: pm-claude-skills deferred for marketing and sales
+CONTENT: Тему `pm-claude-skills` считать отложенной рабочей веткой для маркетинга, продаж и документов. Позже можно вернуться к выборочной адаптации skills под договоры, письма, КП и регламенты: `proposal-writer`, `contract-review`, `process-documentation`, `sop-writer`, `compliance-checklist`. С Alpha Presale эту ветку не смешивать.
+RATIONALE: Станислав ответил `Делай` на Memory Candidate в Telegram topic `Общий офис / Маркетинг и продажи` после предложения зафиксировать эту тему как отложенную durable-ветку.
+
+---
+### ID: D-2026-07-07-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-07
+TITLE: Test Home LLM GPU needs with rented GPU server first
+CONTENT: Станислав рассматривает GPU для openclaw-home ради повышения уровня локальных LLM. Предпочтительный путь перед покупкой: сначала тестировать уровень моделей на арендованном GPU-сервере RTX 3090/4090 на 1-3 дня, а не покупать eGPU вслепую. eGPU к Home через USB4 считать экспериментом для проверки совместимости, не базовым вариантом; для устойчивого локального решения предпочтительнее отдельный NVIDIA GPU node минимум с 24GB VRAM.
+RATIONALE: Станислав одобрил Memory Candidate после обсуждения стоимости, проката видеокарт и аренды GPU-серверов в Telegram direct 2026-07-07.
