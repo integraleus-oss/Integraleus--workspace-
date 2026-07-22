@@ -1,0 +1,252 @@
++ date
+Fri Jun 19 04:16:29 PM MSK 2026
++ runuser -u stanislav -- bash -lc 'export XDG_RUNTIME_DIR=/run/user/1000; openclaw gateway stop'
+Stopped systemd service: openclaw-gateway.service
++ npm i -g openclaw@latest
+
+changed 285 packages in 9s
+
+66 packages are looking for funding
+  run `npm fund` for details
++ runuser -u stanislav -- bash -lc 'export XDG_RUNTIME_DIR=/run/user/1000; openclaw doctor --fix'
+▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+██░▄▄▄░██░▄▄░██░▄▄▄██░▀██░██░▄▄▀██░████░▄▄▀██░███░██
+██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██
+██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██
+▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                       OPENCLAW                       
+ 
+┌  OpenClaw doctor
+[state-migrations] Auto-migrated legacy state:
+- Migrated 26 Telegram message dispatch dedupe entries → plugin state
+- Removed Telegram message dispatch dedupe legacy source (plugin state:telegram.message-dispatch-dedupe:default)
+- Migrated Memory Core short-term recall -> SQLite plugin state (12 row(s))
+- Archived Memory Core short-term recall legacy source -> /home/stanislav/.openclaw/workspace/agents/main/memory/.dreams/short-term-recall.json.migrated
+│
+◇  Doctor changes ─────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  - Migrated 26 Telegram message dispatch dedupe entries → plugin state       │
+│  - Removed Telegram message dispatch dedupe legacy source (plugin            │
+│    state:telegram.message-dispatch-dedupe:default)                           │
+│  - Migrated Memory Core short-term recall -> SQLite plugin state (12         │
+│    row(s))                                                                   │
+│  - Archived Memory Core short-term recall legacy source ->                   │
+│    /home/stanislav/.openclaw/workspace/agents/main/memory/.dreams/short-ter  │
+│  m-recall.json.migrated                                                      │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────╯
+│
+◇  Auth profile SQLite migration ───────────────────────────────────────╮
+│                                                                       │
+│  - ~/.openclaw/agents/main/agent/auth-profiles.json /                 │
+│    ~/.openclaw/agents/main/agent/auth-state.json                      │
+│  - ~/.openclaw/agents/home-monitor/agent/auth-profiles.json /         │
+│    ~/.openclaw/agents/home-monitor/agent/auth-state.json              │
+│  - openclaw doctor --fix imports legacy auth profile JSON into the    │
+│    per-agent SQLite database and removes the old files after backup.  │
+│                                                                       │
+├───────────────────────────────────────────────────────────────────────╯
+│
+◇  Doctor changes ─────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  - Migrated auth profile JSON for                                            │
+│    ~/.openclaw/agents/main/agent/auth-profiles.json into SQLite              │
+│    (backups:                                                                 │
+│    ~/.openclaw/agents/main/agent/auth-profiles.json.sqlite-import.178187502  │
+│  4846.bak,                                                                   │
+│    ~/.openclaw/agents/main/agent/auth-state.json.sqlite-import.178187502484  │
+│  6.bak).                                                                     │
+│  - Migrated auth profile JSON for                                            │
+│    ~/.openclaw/agents/home-monitor/agent/auth-profiles.json into SQLite      │
+│    (backups:                                                                 │
+│    ~/.openclaw/agents/home-monitor/agent/auth-profiles.json.sqlite-import.1  │
+│  781875024861.bak,                                                           │
+│    ~/.openclaw/agents/home-monitor/agent/auth-state.json.sqlite-import.1781  │
+│  875024862.bak).                                                             │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────╯
+[agents/model-registry] model catalog load issue: Failed to load models.json: Provider openrouter, model meta-llama/llama-3.2-3b-instruct:free: no "api" specified. Set at provider or model level.
+
+File: /home/stanislav/.openclaw/agents/main/agent/plugins/openrouter/catalog.json
+│
+◇  Doctor changes ──────────────────────────────────────────────────╮
+│                                                                   │
+│  Refreshed stale configured plugin "codex" from @openclaw/codex.  │
+│                                                                   │
+├───────────────────────────────────────────────────────────────────╯
+│
+◇  Doctor changes ─────────────────────────────────────────────────────────────╮
+│                                                                              │
+│  Migrated auth profile JSON for                                              │
+│  ~/.openclaw/agents/main/agent/auth-profiles.json into SQLite (backups:      │
+│  ~/.openclaw/agents/main/agent/auth-profiles.json.sqlite-import.17818750248  │
+│  46.bak,                                                                     │
+│  ~/.openclaw/agents/main/agent/auth-state.json.sqlite-import.1781875024846.  │
+│  bak).                                                                       │
+│  Migrated auth profile JSON for                                              │
+│  ~/.openclaw/agents/home-monitor/agent/auth-profiles.json into SQLite        │
+│  (backups:                                                                   │
+│  ~/.openclaw/agents/home-monitor/agent/auth-profiles.json.sqlite-import.178  │
+│  1875024861.bak,                                                             │
+│  ~/.openclaw/agents/home-monitor/agent/auth-state.json.sqlite-import.178187  │
+│  5024862.bak).                                                               │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────╯
+│
+◇  OAuth refresh errors (agent: main) ───────────────────────────────────╮
+│                                                                        │
+│  - openai:integraleus@gmail.com: OAuth refresh failed — Try again; if  │
+│    this persists, run `openclaw models auth login --provider openai`.  │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  Model auth (agent: main) ─────────────────────────────────────────────╮
+│                                                                        │
+│  - openai:integraleus@gmail.com: expired (0m) — Re-auth via `openclaw  │
+│    models auth login --provider openai` or `openclaw configure`.       │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  OAuth refresh errors (agent: home-monitor) ───────────────────────────╮
+│                                                                        │
+│  - openai:integraleus@gmail.com: OAuth refresh failed — Try again; if  │
+│    this persists, run `openclaw models auth login --provider openai`.  │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  Model auth (agent: home-monitor) ─────────────────────────────────────╮
+│                                                                        │
+│  - openai:integraleus@gmail.com: expired (0m) — Re-auth via `openclaw  │
+│    models auth login --provider openai` or `openclaw configure`.       │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  Legacy state detected ──────────────────────────────────────────────────────╮
+│                                                                              │
+│  - Telegram sent-message cache:                                              │
+│    /home/stanislav/.openclaw/agents/main/sessions/sessions.json.telegram-se  │
+│  nt-messages.json                                                            │
+│    → plugin state (telegram.sent-messages)                                   │
+│  - Telegram message dispatch dedupe:                                         │
+│    /home/stanislav/.openclaw/agents/main/sessions/sessions.json.telegram-me  │
+│  ssage-dispatch-home-monitor.json                                            │
+│    → plugin state                                                            │
+│    (telegram.message-dispatch-dedupe.8001c27439650c5c5a6b4ed94163b5dd)       │
+│                                                                              │
+├──────────────────────────────────────────────────────────────────────────────╯
+│
+◇  Plugin registry ───────────────────────────────────────────╮
+│                                                             │
+│  Plugin registry refreshed: 69/97 enabled plugins indexed.  │
+│                                                             │
+├─────────────────────────────────────────────────────────────╯
+│
+◇  State integrity ────────────────────────────────────────────────────────╮
+│                                                                          │
+│  - Found 7 orphan transcript files in ~/.openclaw/agents/main/sessions.  │
+│    These .jsonl files are no longer referenced by sessions.json, so      │
+│    they are not part of any active session history.                      │
+│    Doctor can archive them safely by renaming each file to               │
+│    *.deleted.<timestamp>.                                                │
+│    Examples: 3a541f74-4bdc-4694-ba67-733946c87247.jsonl,                 │
+│    4bf2ee89-1c41-4530-b4a8-d951ad17b385.jsonl,                           │
+│    5e45907c-6460-422f-bb98-646921788845.jsonl, and 4 more                │
+│                                                                          │
+├──────────────────────────────────────────────────────────────────────────╯
+│
+◇  Gateway service config ───────────────────────────────────────────────╮
+│                                                                        │
+│  - Gateway service was installed by OpenClaw 2026.6.1; current CLI is  │
+│    2026.6.8.                                                           │
+│    (/home/stanislav/.config/systemd/user/openclaw-gateway.service)     │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  Gateway service config ──────────────────────────────────────────────╮
+│                                                                       │
+│  Run `openclaw gateway install --force` when you want to replace the  │
+│  gateway service definition.                                          │
+│                                                                       │
+├───────────────────────────────────────────────────────────────────────╯
+│
+◇  Security ─────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  - WARNING: openclaw.json contains plaintext secret-bearing config     │
+│    fields.                                                             │
+│    Paths: gateway.auth.token, models.providers.ollama.apiKey,          │
+│    channels.telegram.accounts.default.botToken,                        │
+│    channels.telegram.accounts.home-monitor.botToken,                   │
+│    channels.discord.token                                              │
+│    Agents or workspace tools that can read config files may see these  │
+│    API keys/tokens.                                                    │
+│    Migrate them to SecretRefs with openclaw secrets configure or       │
+│    openclaw secrets apply, then verify with openclaw secrets audit     │
+│    --check.                                                            │
+│  - Run: openclaw security audit --deep                                 │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+[agents/model-registry] model catalog load issue: Failed to load models.json: Provider openrouter, model meta-llama/llama-3.2-3b-instruct:free: no "api" specified. Set at provider or model level.
+
+File: /home/stanislav/.openclaw/agents/main/agent/plugins/openrouter/catalog.json
+│
+◇  Skills status ───────────╮
+│                           │
+│  Eligible: 20             │
+│  Missing requirements: 0  │
+│  Blocked by allowlist: 0  │
+│                           │
+├───────────────────────────╯
+│
+◇  Plugins ──────╮
+│                │
+│  Loaded: 69    │
+│  Imported: 0   │
+│  Disabled: 28  │
+│  Errors: 0     │
+│                │
+├────────────────╯
+│
+◇  Gateway ──────────────╮
+│                        │
+│  Gateway not running.  │
+│                        │
+├────────────────────────╯
+│
+◇  Gateway connection ──────────────────────────────╮
+│                                                   │
+│  Gateway target: ws://127.0.0.1:18789             │
+│  Source: local loopback                           │
+│  Config: /home/stanislav/.openclaw/openclaw.json  │
+│  Bind: loopback                                   │
+│                                                   │
+├───────────────────────────────────────────────────╯
+│
+◇  Memory search ────────────────────────────────────────────────────────╮
+│                                                                        │
+│  Memory search provider "ollama" is configured, but the gateway could  │
+│  not confirm embeddings are ready.                                     │
+│  Verify: openclaw memory status --deep                                 │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
+│
+◇  Gateway ───────────────────────────────────────────────────────────────╮
+│                                                                         │
+│  Runtime: stopped (state inactive, sub dead, last exit 0, reason 1)     │
+│  Service is loaded but not running (likely exited immediately).         │
+│  File logs: /tmp/openclaw/openclaw-2026-06-19.log                       │
+│  Logs: journalctl --user -u openclaw-gateway.service -n 200 --no-pager  │
+│  Restart attempts: /home/stanislav/.openclaw/logs/gateway-restart.log   │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────╯
+Restarted systemd service: openclaw-gateway.service
+│
+└  Doctor complete.
+
++ runuser -u stanislav -- bash -lc 'export XDG_RUNTIME_DIR=/run/user/1000; openclaw gateway install --force'
+
+Installed systemd service: /home/stanislav/.config/systemd/user/openclaw-gateway.service
+Previous unit backed up to: /home/stanislav/.config/systemd/user/openclaw-gateway.service.bak
++ runuser -u stanislav -- bash -lc 'export XDG_RUNTIME_DIR=/run/user/1000; openclaw gateway restart'
+Restarted systemd service: openclaw-gateway.service
++ date
+Fri Jun 19 04:17:35 PM MSK 2026

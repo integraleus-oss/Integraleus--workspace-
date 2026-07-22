@@ -1,0 +1,26 @@
+Fri Jun 19 04:13:54 PM MSK 2026
+Updating OpenClaw...
+
+Stopping managed gateway service before package update...
+Stopped systemd service: openclaw-gateway.service
+
+Update Result: ERROR
+  Root: /usr/lib/node_modules/openclaw
+  Reason: global install stage
+  Before: 2026.6.1
+  After: 2026.6.1
+
+Steps:
+  ✗ global install stage (0ms)
+      EACCES: permission denied, mkdtemp '/usr/lib/node_modules/.openclaw-update-stage-kpBGFu'
+
+Recovery hints:
+  - Detected permission failure (EACCES). Re-run with a writable global prefix or sudo (for system-managed Node installs).
+  - If you recover with sudo/manual package install on a managed Gateway, stop the Gateway first so it does not load files while the package tree is being replaced.
+  - Example: npm config set prefix ~/.local && npm i -g openclaw@latest
+  - System install outline: openclaw gateway stop -> sudo <system-npm> i -g openclaw@latest -> openclaw gateway install --force -> openclaw gateway restart.
+
+Total time: 11.21s
+Restarted systemd service: openclaw-gateway.service
+Restarted managed gateway service after failed update.
+Fri Jun 19 04:14:15 PM MSK 2026
