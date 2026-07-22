@@ -8,7 +8,7 @@ Task packet: `PLAN_V2.md`
 
 Phase 0 created reusable agent-workflow templates under `templates/agent-workflow/` after Stanislav approved `PLAN_V2.md` as the direction for Phase 0.
 
-Canonical rule files were not changed.
+Phase 0 did not intentionally edit canonical rule files. Current `git status` shows existing modified canonical/state files outside this Phase 0 work: `MEMORY.md`, `STATE.md`, `TOOLS.md`.
 
 Reusable workflow captured as pending Skill Workshop proposal:
 
@@ -50,7 +50,7 @@ Result:
 
 - [x] templates exist
 - [x] `git diff --check` clean
-- [x] no canonical rule files changed
+- [x] no canonical rule files intentionally edited as part of Phase 0
 - [x] no production/root/Synology/access/external-send action performed
 
 ## Review

@@ -1,0 +1,19 @@
+dream_report_transfer_manifest_version: 1
+created_at: 2026-07-05T09:05:00+03:00
+created_on_host: openclaw-home
+source_role: main_frozen_source
+source_path: /home/stanislav/work/openclaw-knowledge-base/2026-06-17_transfer
+source_policy: read_only_reference_for_this_task_no_runtime_or_config_change
+bundle_path: /home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-07-05-dream-report-main-to-home-transfer/bundle/dream-report-main-source-20260705T0905MSK.tar.gz
+bundle_sha256: d4c13324190e227d6cee0638c97b0e95b9ca9157f1da69b7062370be653a6ef5
+home_role: active_owner_file_import
+home_import_path: /home/stanislav/.openclaw/workspace/agents/main/memory/dream-report-active/2026-06-17_transfer
+main_post_transfer_role: auditor_reference_only
+file_count: 583
+dir_count: 53
+source_bytes: 13280439
+import_bytes: 13280439
+verification: sha256sum -c passed; source/import checksum lists match
+external_sends: none
+commits: none
+config_runtime_changes: none

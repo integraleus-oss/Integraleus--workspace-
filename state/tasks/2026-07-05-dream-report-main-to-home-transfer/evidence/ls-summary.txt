@@ -1,0 +1,13 @@
+/home/stanislav/.openclaw/workspace/agents/main/memory/dream-report-active:
+total 8.0K
+drwxr-xr-x 8 stanislav stanislav 4.0K Jul  5 09:05 2026-06-17_transfer
+-rw-rw-r-- 1 stanislav stanislav  616 Jul  5 09:06 OWNERSHIP.md
+
+/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-07-05-dream-report-main-to-home-transfer/bundle:
+total 2.9M
+-rw-rw-r-- 1 stanislav stanislav  960 Jul  5 09:06 MANIFEST.yml
+-rw-rw-r-- 1 stanislav stanislav  228 Jul  5 09:06 bundle.sha256
+-rw-rw-r-- 1 stanislav stanislav 2.8M Jul  5 09:06 dream-report-main-source-20260705T0905MSK.tar.gz
+-rw-rw-r-- 1 stanislav stanislav  445 Jul  5 09:06 manifest-artifacts.sha256
+-rw-rw-r-- 1 stanislav stanislav  62K Jul  5 09:06 source-files.sha256
+-rw-rw-r-- 1 stanislav stanislav  59K Jul  5 09:06 source-inventory.tsv
