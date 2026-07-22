@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+dist/
+backups/*.dump
+backups/*.sha256
+mirror/*.md
+!mirror/.gitkeep

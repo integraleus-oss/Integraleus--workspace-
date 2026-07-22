@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenClaw Shared Memory Architecture</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --ink: #172033;
+      --muted: #5d697c;
+      --line: #7b8495;
+      --trusted: #e9f4ee;
+      --process: #eef3fb;
+      --store: #f7f0df;
+      --risk: #f8e9e6;
+      --gate: #ece8f6;
+      --border: #aab2c0;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 18px 42px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p {
+      margin: 0 0 22px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    section {
+      margin-top: 24px;
+    }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+    .diagram {
+      width: 100%;
+      height: auto;
+      background: #ffffff;
+      border: 1px solid #d9dee7;
+    }
+    .label {
+      font-size: 15px;
+      font-weight: 700;
+      fill: var(--ink);
+    }
+    .small {
+      font-size: 12px;
+      fill: var(--muted);
+    }
+    .zone {
+      fill: none;
+      stroke: #ccd3df;
+      stroke-width: 2;
+      stroke-dasharray: 8 6;
+    }
+    .box {
+      stroke: var(--border);
+      stroke-width: 1.5;
+      rx: 6;
+      ry: 6;
+    }
+    .trusted { fill: var(--trusted); }
+    .process { fill: var(--process); }
+    .store { fill: var(--store); }
+    .risk { fill: var(--risk); }
+    .gate { fill: var(--gate); }
+    .arrow {
+      stroke: var(--line);
+      stroke-width: 2;
+      fill: none;
+      marker-end: url(#arrow);
+    }
+    .blocked {
+      stroke: #b54a3a;
+      stroke-width: 2.5;
+      fill: none;
+      marker-end: url(#arrow-red);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>OpenClaw Shared Memory</h1>
+    <p>Визуализация базы знаний, зон доверия и потоков данных для Synology LAN/Tailscale deployment.</p>
+
+    <section>
+      <h2>1. Архитектура и зоны доверия</h2>
+      <svg class="diagram" viewBox="0 0 1120 560" role="img" aria-label="OpenClaw Shared Memory architecture">
+        <defs>
+          <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+            <path d="M2,2 L10,6 L2,10" fill="none" stroke="#7b8495" stroke-width="2"></path>
+          </marker>
+          <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+            <path d="M2,2 L10,6 L2,10" fill="none" stroke="#b54a3a" stroke-width="2"></path>
+          </marker>
+        </defs>
+
+        <rect class="zone" x="24" y="70" width="312" height="404"></rect>
+        <text class="small" x="42" y="96">Local clients</text>
+
+        <rect class="zone" x="396" y="70" width="310" height="404"></rect>
+        <text class="small" x="414" y="96">OpenClaw Home gateway</text>
+
+        <rect class="zone" x="766" y="70" width="330" height="404"></rect>
+        <text class="small" x="784" y="96">Synology LAN/Tailscale only</text>
+
+        <rect class="box trusted" x="52" y="128" width="246" height="70"></rect>
+        <text class="label" x="74" y="158">OpenClaw agents</text>
+        <text class="small" x="74" y="180">main, heartbeat, future agents</text>
+
+        <rect class="box trusted" x="52" y="232" width="246" height="70"></rect>
+        <text class="label" x="74" y="262">Local PCs</text>
+        <text class="small" x="74" y="284">approved LAN/Tailscale clients</text>
+
+        <rect class="box gate" x="424" y="128" width="254" height="84"></rect>
+        <text class="label" x="446" y="160">MCP/API gateway</text>
+        <text class="small" x="446" y="182">caller identity + privacy policy</text>
+        <text class="small" x="446" y="198">markdown fallback on read failure</text>
+
+        <rect class="box process" x="424" y="250" width="254" height="84"></rect>
+        <text class="label" x="446" y="282">Workflow service</text>
+        <text class="small" x="446" y="304">propose, promote, reject</text>
+        <text class="small" x="446" y="320">supersede, search, audit</text>
+
+        <rect class="box gate" x="424" y="372" width="254" height="74"></rect>
+        <text class="label" x="446" y="402">Role boundary</text>
+        <text class="small" x="446" y="424">reader / writer / promoter / backup</text>
+
+        <rect class="box store" x="794" y="116" width="268" height="88"></rect>
+        <text class="label" x="816" y="148">Postgres + pgvector</text>
+        <text class="small" x="816" y="170">canonical records</text>
+        <text class="small" x="816" y="186">RLS + future embeddings</text>
+
+        <rect class="box store" x="794" y="244" width="268" height="80"></rect>
+        <text class="label" x="816" y="276">Append-only audit</text>
+        <text class="small" x="816" y="298">immutable transition history</text>
+
+        <rect class="box store" x="794" y="364" width="268" height="80"></rect>
+        <text class="label" x="816" y="396">Mirror + backups</text>
+        <text class="small" x="816" y="418">filtered markdown + encrypted dumps</text>
+
+        <path class="arrow" d="M298 164 C352 164 364 164 424 164"></path>
+        <path class="arrow" d="M298 268 C352 268 364 170 424 170"></path>
+        <path class="arrow" d="M678 170 C724 170 740 160 794 160"></path>
+        <path class="arrow" d="M678 292 C724 292 740 286 794 286"></path>
+        <path class="arrow" d="M678 410 C724 410 740 188 794 188"></path>
+        <path class="arrow" d="M928 204 L928 244"></path>
+        <path class="arrow" d="M928 324 L928 364"></path>
+
+        <path class="blocked" d="M176 410 C332 530 826 530 962 454"></path>
+        <text class="small" x="340" y="512">No direct public internet, no direct uncontrolled DB writes</text>
+      </svg>
+    </section>
+
+    <section>
+      <h2>2. Поток данных и guardrails</h2>
+      <svg class="diagram" viewBox="0 0 1120 620" role="img" aria-label="OpenClaw Shared Memory data flow">
+        <defs>
+          <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+            <path d="M2,2 L10,6 L2,10" fill="none" stroke="#7b8495" stroke-width="2"></path>
+          </marker>
+          <marker id="arrow2-red" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+            <path d="M2,2 L10,6 L2,10" fill="none" stroke="#b54a3a" stroke-width="2"></path>
+          </marker>
+        </defs>
+
+        <rect class="box trusted" x="44" y="72" width="218" height="70"></rect>
+        <text class="label" x="66" y="104">Agent local note</text>
+        <text class="small" x="66" y="126">private SQLite / daily log</text>
+
+        <rect class="box process" x="330" y="72" width="224" height="70"></rect>
+        <text class="label" x="352" y="104">propose_memory</text>
+        <text class="small" x="352" y="126">candidate only</text>
+
+        <rect class="box gate" x="622" y="72" width="224" height="70"></rect>
+        <text class="label" x="644" y="104">Human review gate</text>
+        <text class="small" x="644" y="126">reason, scope, privacy</text>
+
+        <rect class="box store" x="914" y="72" width="170" height="70"></rect>
+        <text class="label" x="936" y="104">Shared canon</text>
+        <text class="small" x="936" y="126">approved durable record</text>
+
+        <path class="arrow" marker-end="url(#arrow2)" d="M262 107 L330 107"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M554 107 L622 107"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M846 107 L914 107"></path>
+
+        <rect class="box process" x="330" y="206" width="224" height="76"></rect>
+        <text class="label" x="352" y="238">reject / archive</text>
+        <text class="small" x="352" y="260">candidate disposition</text>
+
+        <rect class="box process" x="622" y="206" width="224" height="76"></rect>
+        <text class="label" x="644" y="238">supersede</text>
+        <text class="small" x="644" y="260">new record, old preserved</text>
+
+        <rect class="box store" x="914" y="206" width="170" height="76"></rect>
+        <text class="label" x="936" y="238">Audit log</text>
+        <text class="small" x="936" y="260">append-only</text>
+
+        <path class="arrow" marker-end="url(#arrow2)" d="M442 142 L442 206"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M734 142 L734 206"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M846 244 L914 244"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M999 142 L999 206"></path>
+
+        <rect class="box gate" x="44" y="366" width="218" height="82"></rect>
+        <text class="label" x="66" y="398">Reader policy</text>
+        <text class="small" x="66" y="420">caller + allowed privacy</text>
+        <text class="small" x="66" y="436">RLS backstop</text>
+
+        <rect class="box process" x="330" y="366" width="224" height="82"></rect>
+        <text class="label" x="352" y="398">search/get/list</text>
+        <text class="small" x="352" y="420">explicit columns</text>
+        <text class="small" x="352" y="436">audit-aware retrieval</text>
+
+        <rect class="box store" x="622" y="354" width="224" height="106"></rect>
+        <text class="label" x="644" y="386">Filtered outputs</text>
+        <text class="small" x="644" y="408">markdown mirror: shared_safe/project</text>
+        <text class="small" x="644" y="424">backup: encrypted for real data</text>
+        <text class="small" x="644" y="440">restore: disposable DB only</text>
+
+        <rect class="box risk" x="914" y="354" width="170" height="106"></rect>
+        <text class="label" x="936" y="386">Blocked paths</text>
+        <text class="small" x="936" y="408">public internet</text>
+        <text class="small" x="936" y="424">cloud mirror</text>
+        <text class="small" x="936" y="440">silent promotion</text>
+
+        <path class="arrow" marker-end="url(#arrow2)" d="M262 407 L330 407"></path>
+        <path class="arrow" marker-end="url(#arrow2)" d="M554 407 L622 407"></path>
+        <path class="blocked" marker-end="url(#arrow2-red)" d="M890 384 L930 384"></path>
+        <path class="blocked" marker-end="url(#arrow2-red)" d="M890 424 L930 424"></path>
+
+        <path class="blocked" marker-end="url(#arrow2-red)" d="M442 282 C442 330 980 312 998 354"></path>
+        <text class="small" x="512" y="326">forbidden privacy classes never enter plaintext mirror</text>
+      </svg>
+    </section>
+  </main>
+</body>
+</html>
