@@ -88,6 +88,58 @@ Mandatory rules:
 If these rules conflict with a desire to keep investigating, make the artifact
 first and continue investigation from that checkpoint.
 
+## Workspace Reference Docs
+
+`AGENTS.md` is the live entry point. Keep it concise and route specialized
+rules to reference docs instead of duplicating long policy blocks here.
+
+Reference docs:
+
+- `AGENT-RULES.md` — overview and index for the local personal-agent rules.
+- `RESPONSE-STYLE.md` — response style, status reporting, and channel format.
+- `SALES-RULES.md` — sales, presale, Alpha proposal, contract, and compliance
+  guardrails.
+- `TECHNICAL-RULES.md` — engineering, infrastructure, OpenClaw, bot, Synology,
+  Alpha BPR, and UI guardrails.
+- `TERMS-AND-DEFINITIONS.md` — shared vocabulary for agent work, state,
+  artifacts, infrastructure, and Alpha terms.
+
+When a task clearly falls under one of these reference docs, read the relevant
+doc before acting. If a reference doc conflicts with `AGENTS.md`, system or
+developer instructions, the higher-priority instruction wins and the reference
+doc should be corrected.
+
+## Agent Task Packaging Protocol
+
+When coordinating Codex, Claude Code, subagents, or other coding agents, treat
+agent time as a slow but high-value engineering batch, not as instant
+autocomplete.
+
+Mandatory rules:
+
+1. **Batch small work.** Do not spend a full autonomous run on one tiny UI/text
+   tweak when related fixes can be grouped. Prefer packages such as "review this
+   screen, collect 5-10 UI/UX defects, fix them, update tests, run smoke" over
+   one-off button or copy changes.
+2. **Artifact before autonomy.** Serious agent work starts only after a durable
+   artifact exists: `state/tasks/.../TODO.md`, `WORKTREE_AUDIT.md`,
+   `EVIDENCE.md`, an updated project `TODO.md`, or an equivalent checklist.
+   If no file exists, the work has not really started.
+3. **Assign clear roles.** Use a managed pipeline: the primary agent selects the
+   slice, keeps boundaries, and edits; Codex review looks for regressions, test
+   gaps, and inconsistencies; Claude review gives an independent second pass,
+   especially for UX and edge cases; the main agent decides what to commit,
+   reject, or move to TODO.
+4. **Limit active fronts.** Keep at most one main project plus one background
+   infrastructure/health track active unless Stanislav explicitly asks for more.
+   Parallel agent runs should reduce risk or waiting time, not scatter focus.
+5. **Write task packets.** Before launching or delegating a meaningful run,
+   specify goal, boundaries, allowed and forbidden files, expected artifact,
+   checks, acceptance criteria, blocker behavior, and commit/no-commit rules.
+6. **Optimize for finished increments.** Do not optimize for the fastest answer.
+   Optimize for fewer rework loops: a useful run should end in a verified
+   commit, a documented blocker, or a concrete next TODO.
+
 ## External vs Internal
 
 **Safe to do freely:**
