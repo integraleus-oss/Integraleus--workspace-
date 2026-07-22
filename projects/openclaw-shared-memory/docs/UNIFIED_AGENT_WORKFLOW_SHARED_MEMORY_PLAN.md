@@ -18,7 +18,7 @@ The combined project is an infrastructure layer for long-running multi-agent wor
 - Phase 0 hardening committed as `8f68760`.
 - Phase 1 disposable local DB pilot committed as `f262317`.
 - Phase 1 proved role-scoped login users, candidate lifecycle, RLS/privacy denial, mirror allowlist, backup/restore drill, and unsafe guard checks.
-- Agent Workflow templates exist in `templates/agent-workflow/`:
+- Agent Workflow templates exist at the workspace root, outside this project directory: `/home/stanislav/.openclaw/workspace/agents/main/templates/agent-workflow/`.
   - `TASK_NOTE.md`
   - `TASK_PACKET.md`
   - `AUDIT_PACKET.md`
@@ -53,7 +53,8 @@ No artifact becomes canon by existing on disk. It becomes canon only through an 
 - Real memory import is not automatic.
 - Real promotion, supersede, reject, and archive remain human-approved.
 - External review packets must be redacted and must not contain secrets, `.env`, raw Synology contents, private chats, dumps, backups, or unnecessary local context.
-- `personal_stanislav` and `external_forbidden` must not enter plaintext mirror or external review packets.
+- Plaintext mirror is allowlist-only. Current safe default is `shared_safe`; `project`, `personal_stanislav`, and `external_forbidden` must not enter plaintext mirror unless a later explicit policy changes this.
+- `personal_stanislav` and `external_forbidden` must not enter external review packets.
 - Backups containing real memory must be encrypted.
 - Direct DB access by other machines is pilot/diagnostic only; final client path should be through OpenClaw Home MCP/API gateway.
 
@@ -98,7 +99,7 @@ Evidence:
 - `docs/PHASE1_LOCAL_PILOT_EVIDENCE.md`
 - commit `f262317`
 
-Remaining before Phase 2:
+Remaining before Phase 2, assigned to Phase 1.5:
 
 - Make backup LOGIN `BYPASSRLS` provisioning explicit in Synology/deploy runbook.
 - Tighten negative tests to assert expected DB/app error types.
@@ -114,11 +115,16 @@ Use the Agent Workflow templates on this project itself before any Synology or r
 
 Tasks:
 
-- Add `docs/AGENT_WORKFLOW_BRIEF.md` for this project, based on `templates/agent-workflow/AGENT_BRIEF.md`.
+- Add `docs/AGENT_WORKFLOW_BRIEF.md` for this project, based on `/home/stanislav/.openclaw/workspace/agents/main/templates/agent-workflow/AGENT_BRIEF.md`.
 - Add a task packet for the Phase 2 preparation package.
 - Add `SECURITY_PRECHECK.md` for any Claude/Codex review packet.
 - Add a redacted `AUDIT_PACKET.md` template instance for the next review.
 - Add an evidence note showing which raw context is allowed locally and which context is excluded from review.
+- Add one sample redacted Memory Candidate derived only from evidence.
+- Close the three pre-Phase2 follow-ups:
+  - explicit backup LOGIN `BYPASSRLS` provisioning in Synology/deploy runbook;
+  - negative tests assert expected error types;
+  - mirror, backup, restore, and container-stop checks are automated in the pilot runner.
 - Confirm that Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5` remains pending unless explicitly applied.
 
 Exit gate:
@@ -128,6 +134,7 @@ Exit gate:
 - No external send occurs without explicit approval.
 - No Synology/runtime/real memory changes.
 - A concise Memory Candidate can be produced from evidence without raw private data.
+- The three pre-Phase2 follow-ups are resolved or explicitly carried as blockers.
 
 ### Phase 2 - Synology Deployment Preparation
 
@@ -139,7 +146,7 @@ Prepare a NAS deployment package and approval request, but do not touch Synology
 
 Tasks:
 
-- Update Synology runbook with explicit backup LOGIN `BYPASSRLS` provisioning.
+- Verify Synology runbook includes explicit backup LOGIN `BYPASSRLS` provisioning from Phase 1.5.
 - Make endpoint choice explicit:
   - preferred: Tailscale-only bind;
   - fallback: LAN IP `192.168.68.103` only if approved.
@@ -292,13 +299,14 @@ Deliverables:
 - `docs/PHASE2_SECURITY_PRECHECK.md`
 - `docs/PHASE2_AUDIT_PACKET.md`
 - `docs/PHASE2_PREP_EVIDENCE.md`
+- `docs/PHASE2_SAMPLE_MEMORY_CANDIDATE.md`
 - updated `TODO.md`
 
 Stop after the local planning/evidence package. Do not deploy to Synology, do not change OpenClaw runtime config, do not import real memory, and do not apply the pending Skill Workshop proposal without explicit approval.
 
 ## Open Questions
 
-- Should the future gateway expose `propose_memory` before Synology pilot, or only after Synology is stable?
-- Should `project` privacy class be allowed in local mirror, or should production mirror default remain `shared_safe` only?
-- Which endpoint should Phase 3 prefer on Synology: Tailscale IP only or LAN IP `192.168.68.103`?
-- Should backup/restore jobs live on Synology Task Scheduler later, or remain driven from OpenClaw Home?
+- Phase 4: should the future gateway expose `propose_memory` before Synology pilot, or only after Synology is stable?
+- Phase 1.5: should plaintext mirror remain `shared_safe` only for production-like usage? Current plan assumes yes.
+- Phase 3: which endpoint should Synology prefer: Tailscale IP only or LAN IP `192.168.68.103`?
+- Phase 3/5: should backup/restore jobs live on Synology Task Scheduler later, or remain driven from OpenClaw Home?

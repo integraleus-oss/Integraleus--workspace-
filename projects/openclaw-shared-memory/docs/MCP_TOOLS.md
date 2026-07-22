@@ -36,6 +36,41 @@ Required:
 - `record_id`
 - `actor`
 - `reason`
+- `privacy_class`
+- `scope`
+- `source`
+- `confidence`
+
+Promotion must repeat and confirm the candidate privacy class, scope, source, and confidence. This is an intentional guard against accidental or silent promotion.
+
+### reject_candidate
+
+Rejects one candidate without deleting it.
+
+Required:
+
+- `record_id`
+- `actor`
+- `reason`
+
+### archive_record
+
+Archives one shared record without deleting it.
+
+Required:
+
+- `record_id`
+- `actor`
+- `reason`
+
+### list_candidates
+
+Lists candidate records visible under the caller privacy policy.
+
+Optional:
+
+- `scope`
+- `limit`
 
 ### search_memory
 
@@ -61,4 +96,24 @@ Required:
 
 ### supersede
 
-Creates a shared replacement and marks the old record superseded. The Python repository already has this operation; the CLI parser should expose it before runtime wiring.
+Creates a shared replacement and marks the old record superseded. Supersede is allowed only for current `shared` records that have not already been superseded.
+
+Required:
+
+- `old_record_id`
+- replacement `record_type`
+- replacement `title`
+- replacement `body`
+- replacement `privacy_class`
+- replacement `source`
+- replacement `created_by`
+- `actor`
+- `reason`
+
+Optional:
+
+- replacement `scope`
+- replacement `source_ref`
+- replacement `owner`
+- replacement `confidence`
+- replacement `tags`

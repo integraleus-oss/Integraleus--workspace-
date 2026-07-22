@@ -27,6 +27,9 @@ Status date: 2026-07-22
 - [x] Phase 1 role-scoped login user pilot verified
 - [x] Phase 1 local pilot evidence note created
 - [x] Unified Agent Workflow / Shared Memory development plan created
+- [x] Claude audit for unified plan completed
+- [x] Unified plan fixes from Claude audit applied
+- [x] MCP tool contract updated after Phase 0/1 hardening
 - [ ] Before Phase 2: make backup login BYPASSRLS provisioning explicit in Synology/deploy runbook
 - [ ] Before Phase 2: tighten Phase 1 negative tests to assert expected error types
 - [ ] Before Phase 2: fold mirror/backup/restore/container-stop checks into an automated pilot runner
