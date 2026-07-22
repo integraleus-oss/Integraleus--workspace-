@@ -102,12 +102,15 @@ ALTER TABLE memory_audit_log ENABLE ROW LEVEL SECURITY;
 ALTER TABLE memory_records FORCE ROW LEVEL SECURITY;
 ALTER TABLE memory_embeddings FORCE ROW LEVEL SECURITY;
 ALTER TABLE memory_audit_log FORCE ROW LEVEL SECURITY;
+-- The actual backup LOGIN role must be provisioned with BYPASSRLS.
+-- Role attributes such as BYPASSRLS are not inherited from this NOLOGIN group.
 
 DROP POLICY IF EXISTS memory_records_select_policy ON memory_records;
 CREATE POLICY memory_records_select_policy ON memory_records
 FOR SELECT
 USING (
   pg_has_role(current_user, 'openclaw_memory_admin', 'member')
+  OR pg_has_role(current_user, 'openclaw_memory_backup', 'member')
   OR privacy_class IN ('project', 'shared_safe')
 );
 

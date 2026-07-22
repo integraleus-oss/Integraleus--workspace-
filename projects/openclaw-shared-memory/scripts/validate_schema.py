@@ -37,6 +37,7 @@ def main() -> int:
             "content_hash",
             "ENABLE ROW LEVEL SECURITY",
             "FORCE ROW LEVEL SECURITY",
+            "actual backup LOGIN role must be provisioned with BYPASSRLS",
             "prevent_memory_audit_mutation",
             "BEFORE TRUNCATE ON memory_audit_log",
             "security_invoker",
@@ -110,6 +111,17 @@ def main() -> int:
             "app refuses forbidden propose",
             "non-allowlisted actor cannot promote",
             "get_with_audit denies forbidden record",
+        ],
+    )
+    require_contains(
+        ROOT / "scripts" / "run_phase1_local_pilot.py",
+        [
+            "PHASE1_LOCAL_PILOT_OK",
+            "ocsm_phase1_reader",
+            "OPENCLAW_MEMORY_READER_DATABASE_URL",
+            "writer cannot update directly",
+            "backup_can_see_forbidden",
+            "BYPASSRLS",
         ],
     )
     print("VALIDATION_OK")
