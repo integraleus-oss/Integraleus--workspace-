@@ -8,6 +8,10 @@ TOOLS.md
 # Large files
 docs/lacerta/
 docs/tabler-icons-*.zip
+*.zip
+*.zip.sha256
+*.tar.gz
+*.pptx
 
 # Media & screenshots
 *.jpg
@@ -24,6 +28,13 @@ docs/tabler-icons-*.zip
 *.bak
 *.tmp
 calc_log.txt
+work_summary.md
+
+# Generated task/export payloads
+output/**/backups-*/
+state/tasks/**/backups/
+state/tasks/**/gsc-exports/
+state/tasks/**/*.log
 
 # Bot runtime
 projects/*/venv/
