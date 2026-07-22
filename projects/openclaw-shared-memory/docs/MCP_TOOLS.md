@@ -62,4 +62,3 @@ Required:
 ### supersede
 
 Creates a shared replacement and marks the old record superseded. The Python repository already has this operation; the CLI parser should expose it before runtime wiring.
-

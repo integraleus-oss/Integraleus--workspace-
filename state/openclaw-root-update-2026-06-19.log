@@ -14,8 +14,8 @@ changed 285 packages in 9s
 ██░███░██░▀▀░██░▄▄▄██░█░█░██░█████░████░▀▀░██░█░█░██
 ██░▀▀▀░██░█████░▀▀▀██░██▄░██░▀▀▄██░▀▀░█░██░██▄▀▄▀▄██
 ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
-                       OPENCLAW                       
- 
+                       OPENCLAW
+
 ┌  OpenClaw doctor
 [state-migrations] Auto-migrated legacy state:
 - Migrated 26 Telegram message dispatch dedupe entries → plugin state

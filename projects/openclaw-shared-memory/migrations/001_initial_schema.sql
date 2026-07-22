@@ -114,4 +114,3 @@ FOR EACH ROW
 EXECUTE FUNCTION set_memory_record_updated_at();
 
 COMMIT;
-

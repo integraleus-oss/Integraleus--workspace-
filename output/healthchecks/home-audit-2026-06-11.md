@@ -1,7 +1,7 @@
 # Home Server Audit - 2026-06-11
 
-Audit time: 2026-06-11 10:08-10:12 MSK  
-Host: `openclaw-home`, Ubuntu 24.04.4 LTS, kernel `6.17.0-35-generic`, GEEKOM A6  
+Audit time: 2026-06-11 10:08-10:12 MSK
+Host: `openclaw-home`, Ubuntu 24.04.4 LTS, kernel `6.17.0-35-generic`, GEEKOM A6
 Scope: read-only local audit, no configuration changes applied.
 
 ## Checklist

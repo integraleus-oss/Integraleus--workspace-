@@ -57,4 +57,3 @@ psql "$OPENCLAW_MEMORY_DATABASE_URL" -f migrations/001_initial_schema.sql
 ## Status
 
 See `TODO.md`. This scaffold is not wired into OpenClaw runtime yet.
-

@@ -63,4 +63,3 @@ Retrieval must return:
 4. Import a small owner-approved subset from `DECISIONS.md` and `STATE.md`.
 5. Wire an OpenClaw MCP tool to read shared canon.
 6. Only then consider replacing direct markdown writes for durable shared facts.
-

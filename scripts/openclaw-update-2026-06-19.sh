@@ -69,4 +69,3 @@ LOG="/home/stanislav/.openclaw/workspace/agents/main/state/openclaw-update-2026-
   echo "=== OpenClaw update job finished: $(date '+%Y-%m-%d %H:%M:%S %Z (%z)') ==="
   exit "${STATUS_RC}"
 } >>"${LOG}" 2>&1
-

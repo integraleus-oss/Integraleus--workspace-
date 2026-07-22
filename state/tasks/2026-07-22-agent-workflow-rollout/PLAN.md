@@ -442,4 +442,3 @@ Findings first, severity ordered, with file/line references where possible.
 - Нужно ли оформлять это как reusable skill через Skill Workshop?
 - Нужно ли после подтверждения обновить `AGENTS.md`, или лучше держать как отдельный регламент?
 - Какие проекты считать активными прямо сейчас: shared memory, NAS migration, sites, Alpha-Bot, cleanup?
-
