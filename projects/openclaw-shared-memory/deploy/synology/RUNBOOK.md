@@ -7,7 +7,9 @@
 - Confirm target path and share permissions.
 - Confirm the database must stay LAN/Tailscale-only.
 - Generate a strong database password outside git.
-- Decide the bind address: Tailscale IP preferred, LAN IP acceptable.
+- Confirm the bind address. Default for this project is LAN `192.168.68.103`;
+  VPN may be enabled only as a private route into the home LAN, not as public
+  exposure. A Synology Tailscale IP may be selected later if explicitly approved.
 - Put client passwords in `.pgpass` or a local secret manager, not in shell commands.
 - Plan distinct LOGIN roles for app access (`reader`, `writer`, `promoter`,
   `backup`) instead of sharing the admin database user.

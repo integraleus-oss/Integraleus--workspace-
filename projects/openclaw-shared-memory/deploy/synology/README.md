@@ -15,7 +15,9 @@ This profile is for running the OpenClaw shared memory Postgres/pgvector store o
 ## Security Boundary
 
 - Do not expose this database to the public internet.
-- Bind to an explicit LAN or Tailscale IP only; never wildcard `0.0.0.0`.
+- Bind to an explicit local-network address only; never wildcard `0.0.0.0`.
+- Default boundary is LAN `192.168.68.0/24`. VPN is acceptable only as a private
+  route into the home LAN, not as public exposure.
 - Use a strong password in `.env`; do not commit it.
 - Do not import Synology file contents into memory canon unless Stanislav explicitly approves that source.
 - Root-level Synology changes require explicit approval before execution.

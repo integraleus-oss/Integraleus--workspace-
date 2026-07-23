@@ -16,8 +16,10 @@ package and checks.
 Approved target, if granted:
 
 - Host: Synology NAS `192.168.68.103`
-- Preferred bind: Tailscale-only IP if available and explicitly selected
-- Fallback bind: LAN IP `192.168.68.103` only if explicitly selected
+- Network boundary: local network only
+- Preferred bind for this boundary: LAN IP `192.168.68.103`
+- VPN use: allowed only as a private route into the home LAN, not as public exposure
+- Tailscale-only bind: optional later hardening if Synology has a stable Tailscale IP and Stanislav explicitly selects it
 - Path: `/volume1/docker/openclaw-shared-memory`
 - Port: `55432`
 - Public internet exposure: forbidden
@@ -27,7 +29,8 @@ Approved target, if granted:
 ## Required Human Choices
 
 - [ ] Approve deployment: yes/no
-- [ ] Select bind address: Tailscale IP or LAN `192.168.68.103`
+- [x] Select network boundary: local network only, with VPN allowed only as a private route into the home LAN
+- [ ] Confirm bind address: LAN `192.168.68.103`, unless Stanislav later selects a Synology Tailscale IP
 - [ ] Approve target path: `/volume1/docker/openclaw-shared-memory`
 - [ ] Confirm where generated passwords should be stored locally
 - [ ] Confirm encrypted backup recipient for real data before any real-data backup
@@ -72,6 +75,7 @@ docker compose --env-file .env ps
 
 - importing `MEMORY.md`, `STATE.md`, `DECISIONS.md`, daily notes, chats, or Synology file contents;
 - exposing Postgres to WAN or wildcard `0.0.0.0`;
+- treating "VPN enabled" as permission for public exposure;
 - changing Synology users, DSM firewall, shares, scheduled tasks, packages, or root-level settings unless separately approved;
 - changing OpenClaw runtime/MCP config;
 - enabling agent writes to canon;

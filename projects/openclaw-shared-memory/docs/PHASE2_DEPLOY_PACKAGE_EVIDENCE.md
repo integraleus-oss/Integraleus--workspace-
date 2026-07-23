@@ -17,6 +17,7 @@ Task packet: `docs/PHASE2_PREP_TASK_PACKET.md`
 - `docs/PHASE2_DEPLOY_PACKAGE_EVIDENCE.md` - this evidence file.
 - `docs/PHASE3_APPROVAL_REQUEST.md` - exact approval request for future Synology deployment.
 - `TODO.md` - updated Phase 2 prep checklist.
+- `deploy/synology/README.md`, `deploy/synology/RUNBOOK.md`, and `docs/PHASE3_APPROVAL_REQUEST.md` - clarified local-network-only boundary: LAN-first, VPN only as a private route into the home LAN.
 
 ## Commands Run
 
@@ -49,6 +50,7 @@ Result:
 - Archive also contains empty runtime directories: `backups/`, `data/`, `mirror/`.
 - Checksum verification passed: `synology-openclaw-shared-memory.tar.gz: OK`.
 - Secret scan found no actual `.env`, dumps, encrypted backups, db files, sessions, secrets, tokens, API keys, private keys, wildcard bind values, or non-placeholder password assignments in the package/archive.
+- Network boundary is recorded as local-network-only. Default bind remains LAN `192.168.68.103`; VPN may be enabled only as a private route into the home LAN and does not imply public exposure.
 - `pytest`: 2 passed.
 - `compileall`: passed for `src` and `scripts`.
 - `bash -n`: passed for package and Phase 1 pilot runner scripts.
