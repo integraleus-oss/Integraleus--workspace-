@@ -29,6 +29,15 @@ write-phase approval:
 Direct SQL, backup, restore, and memory import operations must not be exposed as
 MCP tools.
 
+Current runtime registration uses OpenClaw MCP server
+`openclaw-shared-memory-readonly`. OpenClaw maps it to provider-safe tool names
+with prefix `openclaw-shared-memory-readonl__`, so the effective runtime tools
+are:
+
+- `openclaw-shared-memory-readonl__search_memory`
+- `openclaw-shared-memory-readonl__get_with_audit`
+- `openclaw-shared-memory-readonl__list_candidates`
+
 ### propose_memory
 
 Creates a candidate record.
