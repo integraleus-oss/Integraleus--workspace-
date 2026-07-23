@@ -19,12 +19,13 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Анализ технических барьеров создания инструментального ПО промышленного уровня в России: от компиляторов IEC 61131-3 до сертификации ФСТЭК. Реальные вызовы архитекторов SCADA и разработчиков ПЛК.">
+<meta name="description" content="Разработка промышленного ПО в России: SCADA, HMI, IDE для ПЛК, IEC 61131-3, OPC UA, сертификация ФСТЭК и риски импортозамещения АСУ ТП.">
 
 <meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630"><meta name="keywords" content="разработка ПО АСУ ТП, IEC 61131-3, SCADA разработка, компиляторы ПЛК, промышленное ПО, CODESYS, OPC UA, сертификация ФСТЭК, российское ПО для автоматизации">
-<title>Трудности в разработке современного инструментального ПО в России — СПЕЦТЕХ</title>
+<title>Разработка промышленного ПО: SCADA, ПЛК и IEC 61131-3 — СПЕЦТЕХ</title>
+<link rel="canonical" href="https://specialtechnology.ru/blog/industrial-software-dev.html">
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Bitter:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -382,7 +383,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Трудности в разработке современного инструментального ПО в России",
+  "headline": "Разработка промышленного ПО: SCADA, ПЛК и IEC 61131-3",
   "author": {
     "@type": "Organization",
     "name": "СПЕЦТЕХ"
@@ -396,7 +397,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     }
   },
   "datePublished": "2026-03-12",
-  "description": "Анализ технических барьеров создания инструментального ПО промышленного уровня в России: от компиляторов IEC 61131-3 до сертификации ФСТЭК. Реальные вызовы архитекторов SCADA и разработчиков ПЛК.",
+  "dateModified": "2026-07-22",
+  "description": "Разработка промышленного ПО в России: SCADA, HMI, IDE для ПЛК, IEC 61131-3, OPC UA, сертификация ФСТЭК и риски импортозамещения АСУ ТП.",
   "image": "https://specialtechnology.ru/preview-desktop.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -404,17 +406,39 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   }
 }
 </script>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "СПЕЦТЕХ", "item": "https://specialtechnology.ru/"},
+      {"@type": "ListItem", "position": 2, "name": "Блог", "item": "https://specialtechnology.ru/blog.html"},
+      {"@type": "ListItem", "position": 3, "name": "Разработка промышленного ПО", "item": "https://specialtechnology.ru/blog/industrial-software-dev.html"}
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "Почему разработка промышленного ПО сложнее обычного IT?", "acceptedAnswer": {"@type": "Answer", "text": "Промышленное ПО работает в контуре АСУ ТП, где важны детерминизм, отказоустойчивость, совместимость с протоколами, длительный жизненный цикл и требования безопасности."}},
+      {"@type": "Question", "name": "Какие части промышленного ПО сложнее всего импортозамещать?", "acceptedAnswer": {"@type": "Answer", "text": "Наиболее сложны runtime и IDE для ПЛК, графические движки HMI/SCADA, коммуникационные стеки, OPC UA, сертификация и сопровождение промышленных внедрений."}},
+      {"@type": "Question", "name": "Как оценить риски перехода на российское промышленное ПО?", "acceptedAnswer": {"@type": "Answer", "text": "Нужен аудит текущей архитектуры: ПЛК, SCADA, протоколы, серверы, клиенты, архивы, отчёты, требования ИБ и доступность компетенций эксплуатации."}}
+    ]
+  }
+]
+</script>
 </head>
 
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="../index.html" class="nav-logo">
+  <a href="/" class="nav-logo">
     <div class="nav-logo-text">СПЕЦТЕХ</div>
   </a>
   <ul class="nav-links">
-    <li><a href="../index.html">Главная</a></li>
+    <li><a href="/">Главная</a></li>
     <li><a href="#">Продукты</a>
       <ul class="nav-dropdown">
         <li><a href="../alpha-platform.html">Альфа платформа</a></li>
@@ -424,7 +448,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     </li>
     <li><a href="../calculator.html">Калькулятор</a></li>
     <li><a href="../blog.html" class="active">Блог</a></li>
-    <li><a href="../index.html#contact">Контакты</a></li>
+    <li><a href="/#contact">Контакты</a></li>
   </ul>
     <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
 <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
@@ -432,7 +456,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 </button>
 <div class="nav-cta">
-    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+    <a href="/#contact" class="btn btn-volt">Связаться</a>
   </div>
 </nav>
 
@@ -440,14 +464,14 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <div class="mobile-menu-content">
     <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
     <nav class="mobile-nav">
-      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
-      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="/" onclick="closeMobileMenu()">Главная</a>
+      <a href="/#products" onclick="closeMobileMenu()">Продукты</a>
       <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
       <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
       <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
       <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
       <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
-      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+      <a href="/#contact" onclick="closeMobileMenu()">Контакты</a>
     </nav>
   </div>
 </div>
@@ -458,7 +482,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <div class="container">
     <div class="breadcrumb">
       <div class="breadcrumb-links">
-        <a href="../index.html">Главная</a>
+        <a href="/">Главная</a>
         <span>/</span>
         <a href="../blog.html">Блог</a>
         <span>/</span>
@@ -479,8 +503,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             <span class="article-read">16 мин</span>
             <span class="article-author">Редакция СпецТех</span>
           </div>
-          <h1 class="article-title">Трудности в разработке современного инструментального ПО в России</h1>
-          <p class="article-subtitle">Россия строит собственные SCADA, MES и IDE для ПЛК. За 4 года после ухода западных вендоров задача перешла из плоскости «хочется» в плоскость «иначе остановятся заводы». Но создание инструментального ПО промышленного уровня — это не перепись интерфейса на Qt и не обёртка над open-source библиотекой.</p>
+          <h1 class="article-title">Разработка промышленного ПО: SCADA, ПЛК и IEC 61131-3</h1>
+          <p class="article-subtitle">Россия строит собственные SCADA, HMI и IDE для ПЛК. После ухода западных вендоров задача перешла из плоскости «хочется» в плоскость «иначе остановятся заводы». Но создание инструментального ПО промышленного уровня — это не перепись интерфейса на Qt и не обёртка над open-source библиотекой.</p>
         </header>
 
         <div class="article-body">
@@ -706,11 +730,12 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
         </div>
 
         <div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
-          <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Разработка промышленного ПО</div>
-          <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Российские решения для автоматизации</div>
+          <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Оцените промышленное ПО для АСУ ТП</div>
+          <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Поможем сопоставить SCADA, ПЛК, протоколы, HMI, архивы, отчёты и требования к импортозамещению</div>
           <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
             <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Альфа платформа</a>
-            <a href="../index.html#contact" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Консультация</a>
+            <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Рассчитать лицензии</a>
+            <a href="/#contact" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Консультация</a>
           </div>
         </div>
 
@@ -810,10 +835,10 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
       <div>
         <div class="footer-col-title">Компания</div>
         <ul class="footer-links">
-          <li><a href="../index.html#about">О компании</a></li>
-          <li><a href="../index.html#tech">Технологии</a></li>
-          <li><a href="../index.html#partners">Партнёры</a></li>
-          <li><a href="../index.html#contact">Контакты</a></li>
+          <li><a href="/#about">О компании</a></li>
+          <li><a href="/#tech">Технологии</a></li>
+          <li><a href="/#partners">Партнёры</a></li>
+          <li><a href="/#contact">Контакты</a></li>
         </ul>
       </div>
 

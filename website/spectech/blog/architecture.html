@@ -19,8 +19,8 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Архитектура Альфа платформы: Alpha.SCADA, HMI, Historian — СПЕЦТЕХ</title>
-<meta name="description" content="Как устроена Альфа платформа для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование, протоколы и расчет лицензий.">
+<title>Архитектура Alpha.SCADA: Server, HMI, Historian — СПЕЦТЕХ</title>
+<meta name="description" content="Архитектура Alpha.SCADA и Альфа платформы для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование и расчет лицензий.">
 
 <meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
 <meta property="og:image:width" content="1200">
@@ -368,7 +368,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Архитектура Альфа платформы: Alpha.SCADA, HMI, Historian",
+  "headline": "Архитектура Alpha.SCADA: Server, HMI, Historian",
   "author": {
     "@type": "Organization",
     "name": "СПЕЦТЕХ"
@@ -382,8 +382,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     }
   },
   "datePublished": "2026-03-12",
-  "dateModified": "2026-07-21",
-  "description": "Как устроена Альфа платформа для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование, протоколы и расчет лицензий.",
+  "dateModified": "2026-07-22",
+  "description": "Архитектура Alpha.SCADA и Альфа платформы для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование и расчет лицензий.",
   "image": "https://specialtechnology.ru/preview-desktop.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -391,17 +391,39 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   }
 }
 </script>
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "СПЕЦТЕХ", "item": "https://specialtechnology.ru/"},
+      {"@type": "ListItem", "position": 2, "name": "Блог", "item": "https://specialtechnology.ru/blog.html"},
+      {"@type": "ListItem", "position": 3, "name": "Архитектура Alpha.SCADA", "item": "https://specialtechnology.ru/blog/architecture.html"}
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "Из каких компонентов состоит архитектура Alpha.SCADA?", "acceptedAnswer": {"@type": "Answer", "text": "В типовой архитектуре проверяются Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, клиентские подключения, WEB-доступ и резервирование."}},
+      {"@type": "Question", "name": "Когда нужна резервная архитектура SCADA?", "acceptedAnswer": {"@type": "Answer", "text": "Резервирование рассматривают, если отказ сервера не должен останавливать операторский контур или нарушать сбор технологических данных."}},
+      {"@type": "Question", "name": "Как архитектура влияет на расчет лицензий?", "acceptedAnswer": {"@type": "Answer", "text": "От архитектуры зависят серверные лицензии, клиенты, WEB-доступ, архивы, отчёты и дополнительные компоненты платформы."}}
+    ]
+  }
+]
+</script>
 </head>
 
 <body>
 
 <!-- NAV -->
 <nav>
-  <a href="../index.html" class="nav-logo">
+  <a href="/" class="nav-logo">
     <div class="nav-logo-text">СПЕЦТЕХ</div>
   </a>
   <ul class="nav-links">
-    <li><a href="../index.html">Главная</a></li>
+    <li><a href="/">Главная</a></li>
     <li><a href="#">Продукты</a>
       <ul class="nav-dropdown">
         <li><a href="../alpha-platform.html">Альфа платформа</a></li>
@@ -411,7 +433,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     </li>
     <li><a href="../calculator.html">Калькулятор</a></li>
     <li><a href="../blog.html" class="active">Блог</a></li>
-    <li><a href="../index.html#contact">Контакты</a></li>
+    <li><a href="/#contact">Контакты</a></li>
   </ul>
     <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
 <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
@@ -419,7 +441,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <svg class="icon-sun" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
 </button>
 <div class="nav-cta">
-    <a href="../index.html#contact" class="btn btn-volt">Связаться</a>
+    <a href="/#contact" class="btn btn-volt">Связаться</a>
   </div>
 </nav>
 
@@ -427,14 +449,14 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <div class="mobile-menu-content">
     <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
     <nav class="mobile-nav">
-      <a href="../index.html" onclick="closeMobileMenu()">Главная</a>
-      <a href="../index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="/" onclick="closeMobileMenu()">Главная</a>
+      <a href="/#products" onclick="closeMobileMenu()">Продукты</a>
       <a href="../alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
       <a href="../wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
       <a href="../infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
       <a href="../calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
       <a href="../blog.html" onclick="closeMobileMenu()">Блог</a>
-      <a href="../index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+      <a href="/#contact" onclick="closeMobileMenu()">Контакты</a>
     </nav>
   </div>
 </div>
@@ -445,7 +467,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <div class="container">
     <div class="breadcrumb">
       <div class="breadcrumb-links">
-        <a href="../index.html">Главная</a>
+        <a href="/">Главная</a>
         <span>/</span>
         <a href="../blog.html">Блог</a>
         <span>/</span>
@@ -466,8 +488,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             <span class="article-read">12 мин</span>
             <span class="article-author">Редакция СпецТех</span>
           </div>
-          <h1 class="article-title">Архитектура Альфа платформы: от сбора данных до визуализации</h1>
-          <p class="article-subtitle">Подробный разбор архитектуры российской SCADA-системы Альфа. Рассматриваем ключевые компоненты: Alpha.Server для сбора данных, Alpha.HMI для визуализации, Alpha.Historian для архивирования и Alpha.Reports для отчётности.</p>
+          <h1 class="article-title">Архитектура Alpha.SCADA: от сбора данных до визуализации</h1>
+          <p class="article-subtitle">Разбор архитектуры Альфа платформы для АСУ ТП: Alpha.Server для сбора данных, Alpha.HMI для визуализации, Alpha.Historian для архивирования, Alpha.Reports для отчётности и резервирование.</p>
         </header>
 
         <div class="article-body">
@@ -660,8 +682,8 @@ function updateTankLevel() {
         </div>
       
 <div style="margin-top:48px;padding:32px;background:var(--ink1);border:1px solid var(--wire);border-radius:4px;text-align:center">
-  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Рассчитайте архитектуру и лицензии Alpha.SCADA</div>
-  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Подберем редакцию Alpha.One+, Alpha.SCADA или Alpha.Platform, серверы, рабочие места, архивы и отчеты</div>
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px">Переведите архитектуру в состав лицензий</div>
+  <div style="font-size:15px;color:var(--text2);margin-bottom:20px">Подберем редакцию Alpha.One+, Alpha.SCADA или Alpha.Platform, серверы, рабочие места, архивы, отчёты и WEB-доступ</div>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
     <a href="../alpha-platform.html" style="display:inline-block;padding:10px 24px;background:var(--volt);color:var(--ink);font-family:var(--ff-mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border-radius:3px">Подобрать редакцию</a>
     <a href="../calculator.html" style="display:inline-block;padding:10px 24px;background:transparent;color:var(--volt);font-family:var(--ff-mono);font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;border:1px solid var(--volt);border-radius:3px">Рассчитать лицензии</a>
@@ -746,7 +768,7 @@ function updateTankLevel() {
         <ul class="footer-links">
           <li><a href="../alpha-platform.html">Альфа платформа</a></li>
           <li><a href="#products">CAE WeRTSim</a></li>
-          <li><a href="#products">MES</a></li>
+          <li><a href="../dataplat.html">ИнфТех ДатаПлат</a></li>
           <li><a href="#capabilities">Возможности SCADA</a></li>
         </ul>
       </div>
@@ -754,10 +776,10 @@ function updateTankLevel() {
       <div>
         <div class="footer-col-title">Компания</div>
         <ul class="footer-links">
-          <li><a href="../index.html#about">О компании</a></li>
-          <li><a href="../index.html#tech">Технологии</a></li>
-          <li><a href="../index.html#partners">Партнёры</a></li>
-          <li><a href="../index.html#contact">Контакты</a></li>
+          <li><a href="/#about">О компании</a></li>
+          <li><a href="/#tech">Технологии</a></li>
+          <li><a href="/#partners">Партнёры</a></li>
+          <li><a href="/#contact">Контакты</a></li>
         </ul>
       </div>
 

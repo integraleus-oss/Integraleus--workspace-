@@ -455,12 +455,12 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-logo">
+  <a href="/" class="nav-logo">
     <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
     <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
   <ul class="nav-links">
-    <li><a href="index.html">Главная</a></li>
+    <li><a href="/">Главная</a></li>
     <li><a href="#">Продукты</a>
       <ul class="nav-dropdown">
         <li><a href="alpha-platform.html">Альфа платформа</a></li>
@@ -470,11 +470,11 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     </li>
     <li><a href="calculator.html">Калькулятор</a></li>
     <li><a href="blog.html" class="active">Блог</a></li>
-    <li><a href="index.html#contact">Контакты</a></li>
+    <li><a href="/#contact">Контакты</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta">
-    <a href="index.html#contact" class="btn btn-volt">Связаться</a>
+    <a href="/#contact" class="btn btn-volt">Связаться</a>
   </div>
   <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -486,14 +486,14 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   <div class="mobile-menu-content">
     <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
     <nav class="mobile-nav">
-      <a href="index.html" onclick="closeMobileMenu()">Главная</a>
-      <a href="index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="/" onclick="closeMobileMenu()">Главная</a>
+      <a href="/#products" onclick="closeMobileMenu()">Продукты</a>
       <a href="alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
       <a href="wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
       <a href="infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
       <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
       <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
-      <a href="index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+      <a href="/#contact" onclick="closeMobileMenu()">Контакты</a>
     </nav>
   </div>
 </div>
@@ -508,8 +508,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <h1 class="blog-title">Экспертный<br><span>блог</span></h1>
           <p class="blog-sub">Технические руководства, обзоры платформ Альфа, кейсы внедрения и обновления программных продуктов для инженеров АСУ ТП</p>
           <div class="blog-cats">
-            <div class="cat-pill active">Все статьи <span class="pill-cnt">18</span></div>
-            <div class="cat-pill">SCADA <span class="pill-cnt">8</span></div>
+            <div class="cat-pill active">Все статьи <span class="pill-cnt">20</span></div>
+            <div class="cat-pill">SCADA <span class="pill-cnt">12</span></div>
             <div class="cat-pill">Протоколы <span class="pill-cnt">3</span></div>
             <div class="cat-pill">Визуализация <span class="pill-cnt">2</span></div>
             <div class="cat-pill">Архивирование <span class="pill-cnt">2</span></div>
@@ -536,7 +536,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <div class="post-featured-img">
             <div class="post-feat-visual">
               <svg class="feat-diagram" width="600" height="200" viewBox="0 0 600 200" fill="none">
-                <!-- Alpha Platform Data Flow Diagram -->
+                <!-- Alpha.Platform Data Flow Diagram -->
                 <rect x="40" y="80" width="90" height="40" rx="3" stroke="#00c8f0" stroke-width="1.5"/>
                 <text x="85" y="98" text-anchor="middle" font-family="monospace" font-size="10" fill="#00c8f0">Alpha.Server</text>
                 <text x="85" y="108" text-anchor="middle" font-family="monospace" font-size="8" fill="#00c8f0">Сбор данных</text>
@@ -753,6 +753,193 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             </div>
           </div>
 
+          <div class="post-card" onclick="location.href='blog/devstudio-migration.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 7h10"/><path d="M4 12h16"/><path d="M4 17h10"/><path d="M17 8l3 4l-3 4"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-guide">Гайды</span>
+                <span class="post-date">12 янв. 2026</span>
+                <span class="post-read">11 мин</span>
+              </div>
+              <div class="post-card-title">Миграция проектов Alpha.DevStudio</div>
+              <div class="post-card-excerpt">Как планировать перенос проектов, проверять конфигурации, зависимости, драйверы и сценарии тестирования после миграции.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/historian-licensing.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6a8 3 0 1 0 16 0a8 3 0 1 0 -16 0"/><path d="M4 6v12a8 3 0 0 0 16 0v-12"/><path d="M8 12h8"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-archive">Архивирование</span>
+                <span class="post-date">09 янв. 2026</span>
+                <span class="post-read">9 мин</span>
+              </div>
+              <div class="post-card-title">Лицензирование Alpha.Historian</div>
+              <div class="post-card-excerpt">Как оценить объём архива, нагрузку записи и чтения, требования хранения и состав лицензий для исторических данных.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/hmi-frames-posters.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="5" width="16" height="12" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="M8 9h8"/><path d="M8 13h5"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-visual">Визуализация</span>
+                <span class="post-date">07 янв. 2026</span>
+                <span class="post-read">10 мин</span>
+              </div>
+              <div class="post-card-title">Фреймы и постеры в Alpha.HMI</div>
+              <div class="post-card-excerpt">Практика организации мнемосхем, экранов, повторно используемых фреймов и операторских представлений.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/energy-scada.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 3l-7 10h5l-1 8l7 -10h-5l1 -8"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">29 дек. 2025</span>
+                <span class="post-read">8 мин</span>
+              </div>
+              <div class="post-card-title">SCADA для энергетики</div>
+              <div class="post-card-excerpt">Что учитывать при автоматизации энергетических объектов: протоколы, резервирование, тревоги, архивирование и отчётность.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/migration-aveva-to-alpha-oilfield.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 18h16"/><path d="M7 18v-7"/><path d="M12 18v-12"/><path d="M17 18v-9"/><path d="M5 8l3 -3l3 3"/><path d="M13 10l3 -3l3 3"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">22 дек. 2025</span>
+                <span class="post-read">12 мин</span>
+              </div>
+              <div class="post-card-title">Миграция с AVEVA на Альфа для нефтепромысла</div>
+              <div class="post-card-excerpt">Как переносить диспетчеризацию добычи: инвентаризация тегов, мнемосхем, исторических данных, тревог и отчётов.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/oil-refinery.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20h16"/><path d="M6 20v-10l6 -4v14"/><path d="M12 10l6 -4v14"/><path d="M8 14h2"/><path d="M14 14h2"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">18 дек. 2025</span>
+                <span class="post-read">9 мин</span>
+              </div>
+              <div class="post-card-title">SCADA для нефтеперерабатывающего производства</div>
+              <div class="post-card-excerpt">Особенности НПЗ: непрерывные процессы, технологические зоны, тревоги, архивы, отчёты и требования к доступности.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/ot-security-mistakes.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--flame)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3l8 4v5c0 5 -3.5 8 -8 9c-4.5 -1 -8 -4 -8 -9v-5l8 -4"/><path d="M9 12l2 2l4 -5"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-guide">Гайды</span>
+                <span class="post-date">15 дек. 2025</span>
+                <span class="post-read">8 мин</span>
+              </div>
+              <div class="post-card-title">Типовые ошибки OT-безопасности</div>
+              <div class="post-card-excerpt">Какие просчёты чаще всего мешают безопасной эксплуатации АСУ ТП и как заранее заложить контроль доступа и аудит.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/plc-import-substitution.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--volt)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6"/><path d="M9 13h6"/><path d="M9 17h4"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">22 июля 2026</span>
+                <span class="post-read">10 мин</span>
+              </div>
+              <div class="post-card-title">Импортозамещение ПЛК и SCADA</div>
+              <div class="post-card-excerpt">Как оценивать совместимость контроллеров, протоколов, HMI, архивов и отчётов при замене зарубежного ПО.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/import-substitution.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--lime)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12h16"/><path d="M12 4v16"/><path d="M7 7l10 10"/><path d="M17 7l-10 10"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">22 июля 2026</span>
+                <span class="post-read">9 мин</span>
+              </div>
+              <div class="post-card-title">Импортозамещение промышленного ПО</div>
+              <div class="post-card-excerpt">Практический подход к выбору российской платформы, этапам пилота, рискам миграции и расчёту лицензий.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/scada-comparison.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 6h14"/><path d="M5 12h14"/><path d="M5 18h14"/><path d="M9 4v16"/><path d="M15 4v16"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-scada">SCADA</span>
+                <span class="post-date">21 июля 2026</span>
+                <span class="post-read">11 мин</span>
+              </div>
+              <div class="post-card-title">Сравнение SCADA-платформ</div>
+              <div class="post-card-excerpt">Критерии выбора SCADA: архитектура, протоколы, резервирование, HMI, архив, отчётность, поддержка Linux и стоимость владения.</div>
+            </div>
+          </div>
+
+          <div class="post-card" onclick="location.href='blog/industrial-software-dev.html'">
+            <div class="post-card-thumb">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/><path d="M14 4l-4 16"/>
+              </svg>
+            </div>
+            <div class="post-card-body">
+              <div class="post-card-meta">
+                <span class="post-tag tag-guide">Гайды</span>
+                <span class="post-date">22 июля 2026</span>
+                <span class="post-read">9 мин</span>
+              </div>
+              <div class="post-card-title">Разработка промышленного ПО</div>
+              <div class="post-card-excerpt">Что важно в промышленной разработке: надёжность, сопровождаемость, диагностика, интеграция и проверяемые сценарии внедрения.</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -806,7 +993,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
           <div class="sb-head">// Теги</div>
           <div class="sb-body">
             <div class="tag-cloud">
-              <span class="tag-bubble">Alpha Platform</span>
+              <span class="tag-bubble">Alpha.Platform</span>
               <span class="tag-bubble">SCADA</span>
               <span class="tag-bubble">Alpha.Server</span>
               <span class="tag-bubble">Alpha.HMI</span>
@@ -869,10 +1056,10 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
       <div>
         <div class="footer-col-title">Компания</div>
         <ul class="footer-links">
-          <li><a href="index.html#about">О компании</a></li>
-          <li><a href="index.html#tech">Технологии</a></li>
-          <li><a href="index.html#partners">Партнёры</a></li>
-          <li><a href="index.html#contact">Контакты</a></li>
+          <li><a href="/#about">О компании</a></li>
+          <li><a href="/#tech">Технологии</a></li>
+          <li><a href="/#partners">Партнёры</a></li>
+          <li><a href="/#contact">Контакты</a></li>
         
           <li><a href="privacy.html">Конфиденциальность</a></li></ul>
       </div>

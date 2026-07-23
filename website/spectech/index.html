@@ -69,7 +69,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>АО «СПЕЦТЕХ» — Российские технологии для промышленной автоматизации</title>
 <meta name="description" content="АО «СПЕЦТЕХ» — официальный дистрибьютор российского ПО для промышленной автоматизации и АСУ ТП. Альфа платформа, CAE WeRTSim. Калькулятор лицензий, техподдержка.">
-<meta name="keywords" content="СПЕЦТЕХ, SCADA, АСУ ТП, Альфа платформа, Alpha Platform, CAE WeRTSim, промышленная автоматизация, российское ПО, импортозамещение, Атомик Софт">
+<meta name="keywords" content="СПЕЦТЕХ, SCADA, АСУ ТП, Альфа платформа, Alpha.Platform, CAE WeRTSim, промышленная автоматизация, российское ПО, импортозамещение, Атомик Софт">
 <meta property="og:title" content="АО «СПЕЦТЕХ» — Российские технологии для промышленной автоматизации">
 <meta property="og:description" content="Официальный дистрибьютор российского ПО для промышленной автоматизации. Альфа платформа SCADA, CAE WeRTSim.">
 <meta property="og:type" content="website">
@@ -911,6 +911,41 @@ section { position: relative; z-index: 1; }
   left: 0;
   color: var(--lime);
   font-weight: bold;
+}
+
+.seo-quick-links {
+  margin-top: 34px;
+  padding: 22px;
+  border: 1px solid var(--wire);
+  background: rgba(0,200,240,0.03);
+}
+.seo-quick-links-title {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+.seo-quick-links-list {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.seo-quick-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 8px 12px;
+  border: 1px solid var(--wire2);
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 14px;
+  background: var(--ink2);
+}
+.seo-quick-link:hover {
+  color: var(--volt);
+  border-color: var(--volt);
 }
 
 /* ══════════════════════════════════════
@@ -2205,6 +2240,24 @@ nav.scrolled {
         <div class="stat-note">техническая поддержка</div>
       </div>
     </div>
+
+    <div class="seo-quick-links">
+      <div class="seo-quick-links-title">// Быстрые переходы по каталогу</div>
+      <div class="seo-quick-links-list">
+        <a href="dataplat.html" class="seo-quick-link">ДатаПлат</a>
+        <a href="dataplat-reports.html" class="seo-quick-link">ДатаПлат.Отчёты</a>
+        <a href="dpp-alarms.html" class="seo-quick-link">DPP.Alarms</a>
+        <a href="dpp-balance.html" class="seo-quick-link">DPP.Balance</a>
+        <a href="dpp-dobycha.html" class="seo-quick-link">DPP.Добыча</a>
+        <a href="dpp-tm.html" class="seo-quick-link">DPP.ТМ</a>
+        <a href="dpp-ur.html" class="seo-quick-link">DPP.УР</a>
+        <a href="infteh.html" class="seo-quick-link">ИнфТех</a>
+        <a href="ipredicta.html" class="seo-quick-link">iPredicta</a>
+        <a href="lacerta.html" class="seo-quick-link">Lacerta</a>
+        <a href="wertsim.html" class="seo-quick-link">CAE WeRTSim</a>
+        <a href="kompograf.html" class="seo-quick-link">КомпоГраф</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2307,7 +2360,7 @@ nav.scrolled {
   <div style="margin-top:60px">
     <div class="products-grid">
 
-      <!-- Alpha Platform -->
+      <!-- Alpha.Platform -->
       <a href="alpha-platform.html" class="product-card fade-in" style="text-decoration:none;color:inherit;display:block">
         <div class="product-icon">
           <svg width="48" height="48" viewBox="0 0 52 52" fill="none">

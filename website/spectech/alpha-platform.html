@@ -23,7 +23,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Альфа платформа v6.4 — SCADA-система от АО «Атомик Софт» | СПЕЦТЕХ</title>
 <meta name="description" content="Альфа платформа — российская SCADA для создания АСУ ТП любого масштаба. До 1 000 000 тегов, кроссплатформенность, Alpha.Historian, Alpha.HMI. Лицензии от 149 000 ₽.">
-<meta name="keywords" content="Альфа платформа, Alpha Platform, SCADA, АСУ ТП, Атомик Софт, Alpha.Server, Alpha.HMI, Alpha.Historian, промышленная автоматизация">
+<meta name="keywords" content="Альфа платформа, Alpha.Platform, SCADA, АСУ ТП, Атомик Софт, Alpha.Server, Alpha.HMI, Alpha.Historian, промышленная автоматизация">
 <meta property="og:title" content="Альфа платформа — SCADA для промышленной автоматизации">
 <meta property="og:description" content="Российская SCADA-система. До 1 000 000 тегов, Linux и Windows, 1.6М чтений/сек. Лицензии от 149 000 ₽.">
 <meta property="og:type" content="product">
@@ -1298,13 +1298,13 @@ footer p {
 <body>
 <!-- ══════════ NAV ══════════ -->
 <nav>
-  <a href="index.html" class="nav-logo">
+  <a href="/" class="nav-logo">
     <img src="logo-white.png" alt="СПЕЦТЕХ" class="logo-dark-theme" style="height:32px;">
     <img src="logo-dark.png" alt="СПЕЦТЕХ" class="logo-light-theme" style="height:32px;display:none;">
   </a>
   <ul class="nav-links">
-    <li><a href="index.html">Главная</a></li>
-    <li><a href="index.html#products">Продукты</a>
+    <li><a href="/">Главная</a></li>
+    <li><a href="/#products">Продукты</a>
       <ul class="nav-dropdown">
         <li><a href="alpha-platform.html">Альфа платформа</a></li>
         <li><a href="wertsim.html">CAE WeRTSim</a></li>
@@ -1313,7 +1313,7 @@ footer p {
     </li>
     <li><a href="calculator.html">Калькулятор</a></li>
     <li><a href="blog.html">Блог</a></li>
-    <li><a href="index.html#contact">Контакты</a></li>
+    <li><a href="/#contact">Контакты</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta">
@@ -1329,14 +1329,14 @@ footer p {
   <div class="mobile-menu-content">
     <button class="mobile-menu-close" onclick="toggleMobileMenu()" aria-label="Закрыть меню">✕</button>
     <nav class="mobile-nav">
-      <a href="index.html" onclick="closeMobileMenu()">Главная</a>
-      <a href="index.html#products" onclick="closeMobileMenu()">Продукты</a>
+      <a href="/" onclick="closeMobileMenu()">Главная</a>
+      <a href="/#products" onclick="closeMobileMenu()">Продукты</a>
       <a href="alpha-platform.html" onclick="closeMobileMenu()">— Альфа платформа</a>
       <a href="wertsim.html" onclick="closeMobileMenu()">— CAE WeRTSim</a>
       <a href="infteh.html" onclick="closeMobileMenu()">— ИнфТех ДатаПлат</a>
       <a href="calculator.html" onclick="closeMobileMenu()">Калькулятор</a>
       <a href="blog.html" onclick="closeMobileMenu()">Блог</a>
-      <a href="index.html#contact" onclick="closeMobileMenu()">Контакты</a>
+      <a href="/#contact" onclick="closeMobileMenu()">Контакты</a>
     </nav>
   </div>
 </div>
@@ -1347,9 +1347,9 @@ footer p {
     <div class="product-hero-grid">
       <div>
         <div class="breadcrumb">
-          <a href="index.html">Главная</a><span class="breadcrumb-sep">/</span>
-          <a href="index.html#products">Каталог</a><span class="breadcrumb-sep">/</span>
-          <a href="index.html#products">SCADA</a><span class="breadcrumb-sep">/</span>
+          <a href="/">Главная</a><span class="breadcrumb-sep">/</span>
+          <a href="/#products">Каталог</a><span class="breadcrumb-sep">/</span>
+          <a href="/#products">SCADA</a><span class="breadcrumb-sep">/</span>
           <span class="breadcrumb-cur">Альфа платформа</span>
         </div>
         
@@ -1458,7 +1458,7 @@ footer p {
             </div>
             <div class="feat-line">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
-              Web-клиент Alpha.WebViewer
+              Web-клиент Alpha.HMI.WebViewer
             </div>
             <div class="feat-line">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#00c8f0" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1513,7 +1513,7 @@ footer p {
           <tr><td>Alpha.HMI.Alarms 3.3</td><td>Тревоги и события, приоритеты 1-1000, квитирование, кроссплатформенный (Windows, Linux, веб)</td></tr>
           <tr><td>Alpha.DevStudio</td><td class="spec-val-hi">IDE, Linux native с 2025</td></tr>
           <tr><td>alpha.hmi.charts</td><td>Встроенные графики трендов в Alpha.HMI, оперативные и исторические данные</td></tr>
-          <tr><td>Alpha.WebViewer</td><td>Веб-клиент</td></tr>
+          <tr><td>Alpha.HMI.WebViewer</td><td>Веб-клиент для HMI-проектов через браузер</td></tr>
           <tr><td>Alpha.Security</td><td>Управление доступом</td></tr>
         </tbody>
       </table>
@@ -1692,6 +1692,20 @@ footer p {
         <div class="impl-industry"><span style="color:var(--lime)">⬡</span> ЖКХ и BMS</div>
       </div>
       <p style="color:var(--text2);font-size:13px;margin-top:24px;">Подробные кейсы внедрения — по запросу. Источник: <a href="http://automiq.ru/stories/" target="_blank" style="color:var(--volt)">automiq.ru/stories</a></p>
+    </div>
+
+    <div style="margin-top:48px;padding:24px;border:1px solid var(--wire);background:rgba(0,200,240,0.03);">
+      <div style="font-family:var(--ff-mono);font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">// Материалы по внедрению Альфа</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        <a href="blog/hmi.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Alpha.HMI и мнемосхемы</a>
+        <a href="blog/alarms.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Alpha.HMI.Alarms</a>
+        <a href="blog/historian.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Alpha.Historian</a>
+        <a href="blog/reports.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Alpha.Reports</a>
+        <a href="blog/devstudio.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Alpha.DevStudio</a>
+        <a href="blog/devstudio-migration.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Миграция проектов</a>
+        <a href="blog/crossplatform.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Linux и Windows</a>
+        <a href="blog/protocols.html" style="color:var(--text);text-decoration:none;border:1px solid var(--wire2);padding:14px;background:var(--steel);">Промышленные протоколы</a>
+      </div>
     </div>
 
   </div>

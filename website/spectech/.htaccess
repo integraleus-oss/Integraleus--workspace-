@@ -57,6 +57,9 @@ RedirectMatch 410 ^/(wp-login\.php|wp-admin(/.*)?|wp-content(/.*)?|wp-includes(/
 # URL redirects and HTTPS enforcement
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Canonical homepage URL for crawlers and old internal links.
+    RewriteRule ^index\.html$ / [R=301,L]
     
     # Redirect www to non-www (301 permanent redirect)
     RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
