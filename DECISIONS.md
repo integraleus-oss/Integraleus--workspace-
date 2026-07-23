@@ -260,3 +260,21 @@ DATE: 2026-07-07
 TITLE: Test Home LLM GPU needs with rented GPU server first
 CONTENT: Станислав рассматривает GPU для openclaw-home ради повышения уровня локальных LLM. Предпочтительный путь перед покупкой: сначала тестировать уровень моделей на арендованном GPU-сервере RTX 3090/4090 на 1-3 дня, а не покупать eGPU вслепую. eGPU к Home через USB4 считать экспериментом для проверки совместимости, не базовым вариантом; для устойчивого локального решения предпочтительнее отдельный NVIDIA GPU node минимум с 24GB VRAM.
 RATIONALE: Станислав одобрил Memory Candidate после обсуждения стоимости, проката видеокарт и аренды GPU-серверов в Telegram direct 2026-07-07.
+
+---
+### ID: D-2026-07-23-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-23
+TITLE: OpenClaw Shared Memory Phase 1.5 workflow pilot accepted
+CONTENT: Phase 1.5 Agent Workflow integration for OpenClaw Shared Memory completed in commit `4bee741`: project-specific workflow artifacts, redacted Phase 2 review packet, security precheck, evidence, sample Memory Candidate, explicit backup `BYPASSRLS` runbook step, typed negative-test assertions, and automated local pilot runner were added. No Synology, runtime, real-memory, or external-review action was performed.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the Phase 1.5 completion report.
+
+---
+### ID: D-2026-07-23-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-23
+TITLE: OpenClaw Shared Memory Phase 2 prep package accepted
+CONTENT: Phase 2 preparation for OpenClaw Shared Memory completed in commit `c5dbe0d`: a reproducible Synology deploy package/archive/checksum flow, rollback procedure, deployment evidence, and draft Phase 3 approval request were added. The package was inspected for required files, checksum, no secrets, no wildcard bind, and tests passed. Synology deployment, OpenClaw runtime/MCP changes, real-memory import, external review, and push remain blocked until explicit approval.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the Phase 2 prep package completion report.
