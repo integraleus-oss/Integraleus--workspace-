@@ -1,6 +1,6 @@
 # Phase 3 Approval Request: Synology Pilot Deployment
 
-Status: draft, not approved
+Status: approved for Phase 3 Synology pilot only, blocked at preflight
 Date: 2026-07-23
 
 ## Request
@@ -99,7 +99,7 @@ without a separate explicit cleanup approval.
 
 ## Approval Record
 
-- Decision: pending
+- Decision: approved for Synology pilot deployment only
 - Approver: Stanislav
-- Channel/message: pending
-- Timestamp: pending
+- Channel/message: Telegram topic `HOME:1751`, "разворачивай на Synology, bind LAN 192.168.68.103"
+- Timestamp: 2026-07-23 14:31 MSK

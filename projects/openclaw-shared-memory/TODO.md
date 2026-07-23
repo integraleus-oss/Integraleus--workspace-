@@ -40,6 +40,7 @@ Status date: 2026-07-23
 - [x] Phase 2: generate and inspect Synology deploy package archive
 - [x] Phase 2: prepare exact Phase 3 approval request
 - [x] Phase 2: record local-network-only boundary with VPN as private LAN route only
+- [ ] Phase 3: Synology pilot deployment blocked because Docker/Container Manager is unavailable on Synology SSH preflight
 - [ ] OpenClaw MCP registration wired into runtime config
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
