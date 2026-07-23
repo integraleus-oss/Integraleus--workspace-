@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import quote, urlparse, urlunparse
 
 import psycopg
+from psycopg import errors
 from psycopg import sql
 from psycopg.rows import dict_row
 
@@ -58,11 +59,19 @@ def digest(*parts: str) -> str:
     return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()
 
 
-def expect_error(label: str, fn) -> None:
+def expect_error(label: str, expected_error: type[BaseException], fn, message_contains: str | None = None) -> None:
     try:
         fn()
-    except Exception:
+    except expected_error as exc:
+        if message_contains and message_contains not in str(exc):
+            raise AssertionError(
+                f"Expected failure '{label}' to contain {message_contains!r}, got {exc!r}"
+            ) from exc
         return
+    except Exception as exc:
+        raise AssertionError(
+            f"Expected failure '{label}' to raise {expected_error.__name__}, got {type(exc).__name__}: {exc}"
+        ) from exc
     raise AssertionError(f"Expected failure did not happen: {label}")
 
 
@@ -150,16 +159,25 @@ def main() -> int:
     assert duplicate["idempotent"] is True
     assert any(row["id"] == candidate["id"] for row in repo.list_candidates(limit=20))
 
-    expect_error("reader cannot write directly", lambda: _reader_insert())
-    expect_error("writer cannot update directly", lambda: _writer_update(candidate["id"]))
-    expect_error("app refuses forbidden propose", lambda: repo.propose_memory(_forbidden_draft(), "must fail"))
+    expect_error("reader cannot write directly", errors.InsufficientPrivilege, lambda: _reader_insert())
+    expect_error("writer cannot update directly", errors.InsufficientPrivilege, lambda: _writer_update(candidate["id"]))
+    expect_error(
+        "app refuses forbidden propose",
+        PermissionError,
+        lambda: repo.propose_memory(_forbidden_draft(), "must fail"),
+        "privacy_class is not writable",
+    )
     expect_error(
         "non-allowlisted actor cannot promote",
+        PermissionError,
         lambda: repo.promote_to_shared(candidate["id"], "random-agent", "bad actor", "shared_safe", "openclaw", "phase1-pilot", 0.7),
+        "actor is not allowed",
     )
     expect_error(
         "confirmation mismatch blocks promote",
+        ValueError,
         lambda: repo.promote_to_shared(candidate["id"], "stanislav", "bad source", "shared_safe", "openclaw", "other-source", 0.7),
+        "promotion confirmation mismatch",
     )
 
     promoted = repo.promote_to_shared(
@@ -173,7 +191,11 @@ def main() -> int:
     )
     assert promoted["status"] == "shared"
     assert repo.get_with_audit(candidate["id"])["audit"]
-    expect_error("forbidden shared record is denied by get_with_audit", lambda: repo.get_with_audit(forbidden_id))
+    expect_error(
+        "forbidden shared record is denied by get_with_audit",
+        KeyError,
+        lambda: repo.get_with_audit(forbidden_id),
+    )
 
     replacement = MemoryDraft(
         record_type="decision",

@@ -9,6 +9,11 @@
 - Generate a strong database password outside git.
 - Decide the bind address: Tailscale IP preferred, LAN IP acceptable.
 - Put client passwords in `.pgpass` or a local secret manager, not in shell commands.
+- Plan distinct LOGIN roles for app access (`reader`, `writer`, `promoter`,
+  `backup`) instead of sharing the admin database user.
+- Confirm the backup LOGIN role will be granted `BYPASSRLS`. The NOLOGIN group
+  `openclaw_memory_backup` is not enough by itself because PostgreSQL role
+  attributes such as `BYPASSRLS` are not inherited from group membership.
 
 ## Deploy
 
@@ -59,6 +64,41 @@ psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" \
 psql "postgresql://openclaw_memory@192.168.68.103:55432/openclaw_memory" \
   -f migrations/002_hardening.sql
 ```
+
+## Provision Login Roles
+
+After migrations are applied, create distinct LOGIN roles on Synology. Generate
+strong passwords locally and store them in `.pgpass` or an approved local secret
+manager. Do not put passwords directly in shell history.
+
+Example pattern, replacing role names and generated passwords as needed:
+
+```sql
+CREATE ROLE ocsm_reader LOGIN PASSWORD '<generated-reader-password>' NOBYPASSRLS;
+CREATE ROLE ocsm_writer LOGIN PASSWORD '<generated-writer-password>' NOBYPASSRLS;
+CREATE ROLE ocsm_promoter LOGIN PASSWORD '<generated-promoter-password>' NOBYPASSRLS;
+CREATE ROLE ocsm_backup LOGIN PASSWORD '<generated-backup-password>' BYPASSRLS;
+
+GRANT openclaw_memory_reader TO ocsm_reader;
+GRANT openclaw_memory_writer TO ocsm_writer;
+GRANT openclaw_memory_promoter TO ocsm_promoter;
+GRANT openclaw_memory_backup TO ocsm_backup;
+```
+
+Verification:
+
+```sql
+SELECT rolname, rolbypassrls
+FROM pg_roles
+WHERE rolname IN ('ocsm_reader', 'ocsm_writer', 'ocsm_promoter', 'ocsm_backup')
+ORDER BY rolname;
+```
+
+Expected:
+
+- `ocsm_backup` has `rolbypassrls = true`.
+- all other app LOGIN roles have `rolbypassrls = false`.
+- only the backup URL is used by `OPENCLAW_MEMORY_BACKUP_DATABASE_URL`.
 
 ## Smoke Test
 

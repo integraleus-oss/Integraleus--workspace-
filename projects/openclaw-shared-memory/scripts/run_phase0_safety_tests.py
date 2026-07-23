@@ -8,6 +8,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import psycopg
+from psycopg import errors
 from psycopg.rows import dict_row
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,11 +42,19 @@ def digest(*parts: str) -> str:
     return hashlib.sha256("\n".join(parts).encode("utf-8")).hexdigest()
 
 
-def expect_error(label: str, fn) -> None:
+def expect_error(label: str, expected_error: type[BaseException], fn, message_contains: str | None = None) -> None:
     try:
         fn()
-    except Exception:
+    except expected_error as exc:
+        if message_contains and message_contains not in str(exc):
+            raise AssertionError(
+                f"Expected failure '{label}' to contain {message_contains!r}, got {exc!r}"
+            ) from exc
         return
+    except Exception as exc:
+        raise AssertionError(
+            f"Expected failure '{label}' to raise {expected_error.__name__}, got {type(exc).__name__}: {exc}"
+        ) from exc
     raise AssertionError(f"Expected failure did not happen: {label}")
 
 
@@ -119,6 +128,7 @@ def main() -> int:
 
         expect_error(
             "reader cannot insert",
+            errors.InsufficientPrivilege,
             lambda: as_role(
                 conn,
                 "openclaw_memory_reader",
@@ -135,6 +145,7 @@ def main() -> int:
 
         expect_error(
             "writer cannot promote/update",
+            errors.InsufficientPrivilege,
             lambda: as_role(
                 conn,
                 "openclaw_memory_writer",
@@ -145,6 +156,7 @@ def main() -> int:
 
         expect_error(
             "writer cannot insert external_forbidden",
+            errors.InsufficientPrivilege,
             lambda: as_role(
                 conn,
                 "openclaw_memory_writer",
@@ -161,15 +173,21 @@ def main() -> int:
 
         expect_error(
             "audit update is blocked",
+            errors.RaiseException,
             lambda: conn.execute("UPDATE memory_audit_log SET reason = 'mutated' WHERE record_id = %s", (safe_id,)),
+            "memory_audit_log is append-only",
         )
         expect_error(
             "audit delete is blocked",
+            errors.RaiseException,
             lambda: conn.execute("DELETE FROM memory_audit_log WHERE record_id = %s", (safe_id,)),
+            "memory_audit_log is append-only",
         )
         expect_error(
             "audit truncate is blocked",
+            errors.RaiseException,
             lambda: conn.execute("TRUNCATE memory_audit_log"),
+            "memory_audit_log is append-only",
         )
 
     os.environ["OPENCLAW_MEMORY_DATABASE_URL"] = DATABASE_URL
@@ -187,7 +205,12 @@ def main() -> int:
         source="phase0-safety",
         created_by="openclaw-main",
     )
-    expect_error("app refuses forbidden propose", lambda: repo.propose_memory(forbidden_draft, "must fail"))
+    expect_error(
+        "app refuses forbidden propose",
+        PermissionError,
+        lambda: repo.propose_memory(forbidden_draft, "must fail"),
+        "privacy_class is not writable",
+    )
 
     workflow_draft = MemoryDraft(
         record_type="decision",
@@ -205,6 +228,7 @@ def main() -> int:
 
     expect_error(
         "non-allowlisted actor cannot promote",
+        PermissionError,
         lambda: repo.promote_to_shared(
             candidate["id"],
             "random-agent",
@@ -214,9 +238,11 @@ def main() -> int:
             "phase0-safety",
             0.7,
         ),
+        "actor is not allowed",
     )
     expect_error(
         "promote confirmation mismatch",
+        ValueError,
         lambda: repo.promote_to_shared(
             candidate["id"],
             "stanislav",
@@ -226,6 +252,7 @@ def main() -> int:
             "phase0-safety",
             0.2,
         ),
+        "promotion confirmation mismatch",
     )
     promoted = repo.promote_to_shared(
         candidate["id"],
@@ -238,7 +265,7 @@ def main() -> int:
     )
     assert promoted["status"] == "shared"
     assert repo.get_with_audit(candidate["id"])["audit"]
-    expect_error("get_with_audit denies forbidden record", lambda: repo.get_with_audit(forbidden_id))
+    expect_error("get_with_audit denies forbidden record", KeyError, lambda: repo.get_with_audit(forbidden_id))
 
     replacement = MemoryDraft(
         record_type="decision",
@@ -252,7 +279,12 @@ def main() -> int:
     superseded = repo.supersede(candidate["id"], replacement, "stanislav", "phase0 supersede")
     assert superseded["supersedes_id"] == candidate["id"]
 
-    expect_error("supersede non-shared record", lambda: repo.supersede(candidate_id, replacement, "stanislav", "must fail"))
+    expect_error(
+        "supersede non-shared record",
+        ValueError,
+        lambda: repo.supersede(candidate_id, replacement, "stanislav", "must fail"),
+        "Only shared records can be superseded",
+    )
     rejected = repo.reject_candidate(candidate_id, "stanislav", "phase0 reject seed candidate")
     assert rejected["status"] == "rejected"
     archived = repo.archive_record(candidate["id"], "stanislav", "phase0 archive superseded")
