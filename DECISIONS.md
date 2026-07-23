@@ -296,3 +296,12 @@ DATE: 2026-07-23
 TITLE: OpenClaw Shared Memory pilot accepted on openclaw-home
 CONTENT: OpenClaw Shared Memory pilot was deployed on `openclaw-home` instead of Synology in commit `2607be5 feat: deploy shared memory pilot on openclaw home`. It runs as `openclaw-shared-memory-home-postgres`, bound to LAN `192.168.68.125:55432`, with runtime secrets outside git, role-scoped users, verified RLS/privacy smoke, mirror allowlist, backup, and restore drill. OpenClaw runtime/MCP remains disconnected, real memory was not imported, and Synology remains storage/backup candidate only.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the openclaw-home pilot deployment report.
+
+---
+### ID: D-2026-07-23-05
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-23
+TITLE: OpenClaw Shared Memory Phase 4 prep accepted
+CONTENT: Phase 4 prep for OpenClaw Shared Memory completed in commit `d61d50a docs: prepare shared memory phase 4 read-only gateway`: read-only MCP/API gateway task packet, precheck, approval request, evidence, MCP tool allowlist, TODO update, and `run_phase4_readonly_preflight.py` were added. The preflight verified reader-only smoke access, privacy denial, audit retrieval, candidate filtering, and direct write denial. OpenClaw runtime/MCP was not connected, Gateway was not restarted, real memory was not imported, and Phase 4 runtime wiring remains blocked until separate explicit approval.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the Phase 4 prep completion report.
