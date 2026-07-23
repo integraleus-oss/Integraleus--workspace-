@@ -287,3 +287,12 @@ DATE: 2026-07-23
 TITLE: OpenClaw Shared Memory Phase 3 network boundary
 CONTENT: For OpenClaw Shared Memory Phase 3, the deployment network boundary is local-network-only: default bind is Synology LAN `192.168.68.103`; VPN may be enabled only as a private route into the home LAN and does not imply WAN/public exposure. Tailscale-only bind is optional later hardening only after explicit selection.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after clarifying that the system must work only in the local network, while VPN may be enabled.
+
+---
+### ID: D-2026-07-23-04
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-23
+TITLE: OpenClaw Shared Memory pilot accepted on openclaw-home
+CONTENT: OpenClaw Shared Memory pilot was deployed on `openclaw-home` instead of Synology in commit `2607be5 feat: deploy shared memory pilot on openclaw home`. It runs as `openclaw-shared-memory-home-postgres`, bound to LAN `192.168.68.125:55432`, with runtime secrets outside git, role-scoped users, verified RLS/privacy smoke, mirror allowlist, backup, and restore drill. OpenClaw runtime/MCP remains disconnected, real memory was not imported, and Synology remains storage/backup candidate only.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the openclaw-home pilot deployment report.
