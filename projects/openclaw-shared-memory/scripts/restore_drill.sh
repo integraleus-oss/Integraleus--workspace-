@@ -15,6 +15,7 @@ TMP_DECRYPTED=""
 DRILL_DB="${DRILL_URL##*/}"
 DRILL_DB="${DRILL_DB%%\?*}"
 MAINTENANCE_URL="${DRILL_URL%/*}/postgres"
+SAFE_DRILL_URL="$(printf '%s' "$DRILL_URL" | sed -E 's#(postgres(ql)?://)[^/@]+@#\1<redacted>@#')"
 
 if [[ ! -f "$DUMP" ]]; then
   echo "Dump not found: $DUMP" >&2
@@ -56,4 +57,4 @@ fi
 createdb --maintenance-db="$MAINTENANCE_URL" "$DRILL_DB" 2>/dev/null || true
 pg_restore --clean --if-exists --dbname="$DRILL_URL" "$RESTORE_INPUT"
 psql "$DRILL_URL" -v ON_ERROR_STOP=1 -c "SELECT count(*) AS records FROM memory_records;"
-echo "RESTORE_DRILL_OK $DRILL_URL"
+echo "RESTORE_DRILL_OK $SAFE_DRILL_URL"

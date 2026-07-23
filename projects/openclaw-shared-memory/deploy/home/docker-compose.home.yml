@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: openclaw-shared-memory-home-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${OPENCLAW_MEMORY_BIND_HOST:?set OPENCLAW_MEMORY_BIND_HOST}:${OPENCLAW_MEMORY_PORT:-55432}:5432"
+    volumes:
+      - ${OPENCLAW_MEMORY_HOME_DATA_DIR:?set OPENCLAW_MEMORY_HOME_DATA_DIR}:/var/lib/postgresql/data
+      - ../../migrations:/docker-entrypoint-initdb.d:ro
+      - ${OPENCLAW_MEMORY_HOME_BACKUP_DIR:?set OPENCLAW_MEMORY_HOME_BACKUP_DIR}:/backups
+      - ${OPENCLAW_MEMORY_HOME_MIRROR_DIR:?set OPENCLAW_MEMORY_HOME_MIRROR_DIR}:/mirror
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
