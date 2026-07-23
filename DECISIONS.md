@@ -278,3 +278,12 @@ DATE: 2026-07-23
 TITLE: OpenClaw Shared Memory Phase 2 prep package accepted
 CONTENT: Phase 2 preparation for OpenClaw Shared Memory completed in commit `c5dbe0d`: a reproducible Synology deploy package/archive/checksum flow, rollback procedure, deployment evidence, and draft Phase 3 approval request were added. The package was inspected for required files, checksum, no secrets, no wildcard bind, and tests passed. Synology deployment, OpenClaw runtime/MCP changes, real-memory import, external review, and push remain blocked until explicit approval.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the Phase 2 prep package completion report.
+
+---
+### ID: D-2026-07-23-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-23
+TITLE: OpenClaw Shared Memory Phase 3 network boundary
+CONTENT: For OpenClaw Shared Memory Phase 3, the deployment network boundary is local-network-only: default bind is Synology LAN `192.168.68.103`; VPN may be enabled only as a private route into the home LAN and does not imply WAN/public exposure. Tailscale-only bind is optional later hardening only after explicit selection.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after clarifying that the system must work only in the local network, while VPN may be enabled.
