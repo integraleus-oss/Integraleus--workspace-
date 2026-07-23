@@ -42,6 +42,8 @@ Status date: 2026-07-23
 - [x] Phase 2: record local-network-only boundary with VPN as private LAN route only
 - [ ] Phase 3: Synology pilot deployment blocked because Docker/Container Manager is unavailable on Synology SSH preflight and not listed for DS218play in official DSM 7.3 package data
 - [x] Phase 3: openclaw-home LAN pilot deployment
+- [x] Phase 4 prep: read-only MCP/API gateway task packet, precheck, approval request, and preflight script prepared without runtime changes
+- [ ] Phase 4 runtime: read-only MCP/API gateway wiring blocked until explicit approval
 - [ ] OpenClaw MCP registration wired into runtime config
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
@@ -53,3 +55,4 @@ Status date: 2026-07-23
 - Current markdown memory remains the source used by agents until migration is explicitly approved.
 - No Synology data is imported or exported by default.
 - No memory entry is promoted to shared canon without an explicit reason, source, scope, and privacy class.
+- Phase 4 prep is documentation and read-only smoke verification only; it does not approve runtime wiring.

@@ -4,6 +4,31 @@ This project currently provides a CLI-compatible server skeleton. The same comma
 
 ## Tools
 
+## Phase 4 Read-Only Gateway Subset
+
+Phase 4 runtime wiring is not approved yet. When it is approved, the gateway
+must expose only this read-only subset:
+
+- `search_memory`
+- `get_with_audit`
+- `list_candidates`
+
+The gateway must use a reader-only DB role, require caller identity, filter by
+privacy allowlist, log access metadata without secrets or full private bodies,
+and fall back to the current markdown memory workflow if DB reads fail.
+
+The following commands remain CLI/project-internal only until a later explicit
+write-phase approval:
+
+- `propose_memory`
+- `promote_to_shared`
+- `reject_candidate`
+- `archive_record`
+- `supersede`
+
+Direct SQL, backup, restore, and memory import operations must not be exposed as
+MCP tools.
+
 ### propose_memory
 
 Creates a candidate record.
