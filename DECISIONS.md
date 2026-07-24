@@ -368,3 +368,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 6 Agent Workflow skill applied
 CONTENT: Phase 6 final Agent Workflow skill decision completed in commit `b592e94 docs: apply shared memory agent workflow skill`: Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5` was inspected as `v2 pending/create/clean`, applied through Skill Workshop, and re-inspected as `applied/create/v2/clean`. Live skill file `skills/agent-workflow-v2/SKILL.md` was created and committed. Phase 6 is closed; no Shared Memory DB write, runtime/MCP change, import, promotion, or migration/source-of-truth decision was performed. Follow-up: live skill text still contains proposal-era wording and should be cleaned up only through a separate Skill Workshop update/apply cycle.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6 final skill decision completion report.
+
+---
+### ID: D-2026-07-24-07
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 6.1 Agent Workflow skill wording cleanup accepted
+CONTENT: Phase 6.1 Agent Workflow live skill wording cleanup completed in commit `27625a3 docs: clean up agent workflow skill wording`: Skill Workshop update proposal `agent-workflow-v2-20260724-8fa58cd92a` was created for live skill `agent-workflow-v2`, inspected as `pending/update/v1/clean`, applied, and re-inspected as `applied/update/v1/clean`. Live `skills/agent-workflow-v2/SKILL.md` now says `Status: live skill`; proposal-era phrases `pending proposal, not applied`, `not a live rule`, `not installed`, and `later apply` are absent. No workflow gate was intentionally changed, and no Shared Memory DB write, runtime/MCP change, import, promotion, or migration/source-of-truth decision was performed.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6.1 skill wording cleanup completion report.
