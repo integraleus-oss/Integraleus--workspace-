@@ -47,7 +47,8 @@ Status date: 2026-07-24
 - [x] OpenClaw MCP registration wired into runtime config for read-only smoke tools
 - [x] Phase 4 runtime: verify tool availability from a fresh agent turn after MCP reload
 - [x] Phase 5 prep: controlled memory candidate import task packet, precheck, approval request, synthetic fixture, and dry-run planner
-- [ ] Phase 5 candidate-write pilot: blocked until separate approval naming exact files and candidate count
+- [x] Phase 5 tiny candidate-write pilot: import max 3 approved `DECISIONS.md` Shared Memory entries as candidates only
+- [ ] Phase 5 candidate review/promotion decision: blocked until separate approval
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow
