@@ -273,6 +273,8 @@ Phase 6 result:
 
 - `agent-workflow-v2-20260722-747ac395f5` was applied through Skill Workshop as
   `applied/create/v2/clean`.
+- Proposal-era live skill wording was cleaned up through Skill Workshop update
+  `agent-workflow-v2-20260724-8fa58cd92a` as `applied/update/v1/clean`.
 - No Shared Memory DB write, runtime/MCP change, import, promotion, or
   migration/source-of-truth change was part of this phase.
 

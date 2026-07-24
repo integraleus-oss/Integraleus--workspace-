@@ -109,8 +109,8 @@ Phase 6 final skill decision is closed: `agent-workflow-v2` has been applied
 through Skill Workshop. Phase 7 migration/source-of-truth work remains blocked
 until separate owner approval.
 
-Follow-up candidate: update the live skill wording so it no longer says it is a
-pending proposal.
+Follow-up resolved in Phase 6.1 by Skill Workshop update proposal
+`agent-workflow-v2-20260724-8fa58cd92a`.
 
 ## Verification Summary
 

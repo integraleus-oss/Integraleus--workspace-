@@ -5,7 +5,7 @@ description: "Reusable agent workflow with risk, evidence, and memory gates."
 
 # Agent Workflow v2
 
-Status: pending proposal, not applied
+Status: live skill
 
 ## Purpose
 
@@ -13,11 +13,11 @@ Provide a reusable workflow for internal and external agent work across OpenClaw
 
 The workflow defines how agent work is admitted, scoped, evidenced, reviewed, and optionally proposed for durable shared memory without leaking private context or bypassing owner approval.
 
-## Current Phase
+## Basis
 
-This is a revised pending proposal based on the OpenClaw Shared Memory Phase 1.5-5 pilot.
+This live skill is based on the OpenClaw Shared Memory Phase 1.5-5 pilot and the approved Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5`.
 
-It must not be applied, installed, or treated as canonical policy until Stanislav explicitly approves a later apply step.
+The skill is canonical workflow guidance for future matching work. It does not itself approve Synology changes, runtime/MCP changes, DB writes, memory import, promotion, external sends, or migration/source-of-truth changes; those remain separate approval gates.
 
 ## Core Workflow
 
@@ -51,7 +51,7 @@ Separate approval is required for each materially different gate:
 - Reject, archive, supersede, or bulk memory lifecycle actions.
 - Write-capable MCP/API exposure.
 - Migration or source-of-truth changes.
-- Applying, rejecting, or quarantining Skill Workshop proposals.
+- Applying, updating, rejecting, or quarantining Skill Workshop proposals.
 
 Prep packages, dry runs, and read-only inspection do not imply approval for the next gate.
 
@@ -145,11 +145,11 @@ Keep artifacts close to the project being worked on, usually under `docs/`, `sta
 
 Creating, updating, revising, applying, rejecting, or quarantining reusable skills must go through Skill Workshop. Do not manually edit pending proposal files to change lifecycle state.
 
-Revision is not application. Applying a proposal remains a separate explicit approval unless the user explicitly approves apply.
+An update proposal is not live until applied through Skill Workshop after explicit approval.
 
 ## Pilot Basis
 
-This revised proposal incorporates lessons from the OpenClaw Shared Memory Phase 1.5-5 pilot:
+This skill incorporates lessons from the OpenClaw Shared Memory Phase 1.5-5 pilot:
 
 - artifact-first task packets and evidence before risky work;
 - read-only MCP before write-capable tools;
@@ -162,6 +162,6 @@ This revised proposal incorporates lessons from the OpenClaw Shared Memory Phase
 - Synology/home-LAN deployment split;
 - dirty-worktree discipline.
 
-## Approval Boundary
+## Operational Boundary
 
-This proposal is still not a live rule, not installed, and not applied. Canonical workflow changes require a separate explicitly approved apply step after inspection of the revised proposal.
+This skill is live workflow guidance. It does not replace explicit owner approval for guarded actions. Canonical workflow changes to this skill require a separate Skill Workshop update/apply cycle.
