@@ -80,20 +80,18 @@ Missing or too generic:
 
 Revision has been approved and completed after this prep step.
 
-Current next action:
+Current status:
 
 ```text
-approve Phase 6 apply revised agent-workflow-v2 proposal
+agent-workflow-v2-20260722-747ac395f5 applied through Skill Workshop
 ```
 
-Applying the revised proposal is still a separate Skill Workshop lifecycle
-action. Leaving it pending deliberately is also acceptable if the workflow
-should remain advisory for now.
+The revised proposal was applied after separate owner approval. Phase 7
+migration/source-of-truth work remains blocked until a separate explicit
+approval.
 
 ## Explicitly Not Recommended Yet
 
-- Do not apply `agent-workflow-v2-20260722-747ac395f5` without separate
-  approval.
 - Do not reject it; it is structurally sound.
 - Do not quarantine it; scan is clean and there is no safety incident.
 - Do not begin Phase 7 migration/source-of-truth decision until the workflow

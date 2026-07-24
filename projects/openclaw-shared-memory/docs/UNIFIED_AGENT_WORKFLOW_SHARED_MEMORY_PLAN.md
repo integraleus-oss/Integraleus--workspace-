@@ -249,7 +249,7 @@ Exit gate:
 
 ### Phase 6 - Agent Workflow Skill Decision
 
-Status: revised proposal pending; final skill decision still blocked.
+Status: applied through Skill Workshop.
 
 Objective:
 
@@ -268,6 +268,13 @@ Exit gate:
 - Live skill, if applied, matches actual project practice.
 - Revised proposal is inspected before any final apply/reject/quarantine/leave
   pending decision.
+
+Phase 6 result:
+
+- `agent-workflow-v2-20260722-747ac395f5` was applied through Skill Workshop as
+  `applied/create/v2/clean`.
+- No Shared Memory DB write, runtime/MCP change, import, promotion, or
+  migration/source-of-truth change was part of this phase.
 
 ### Phase 7 - Migration Decision
 

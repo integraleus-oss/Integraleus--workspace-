@@ -52,7 +52,7 @@ Status date: 2026-07-24
 - [ ] Phase 5 candidate review/promotion decision: continue broader review only after separate approval
 - [x] Phase 6 prep: inspect pending Agent Workflow skill proposal and prepare recommendation
 - [x] Phase 6 lifecycle action: revised pending `agent-workflow-v2` proposal through Skill Workshop
-- [ ] Phase 6 final skill decision: apply/reject/quarantine/leave pending only after separate approval
+- [x] Phase 6 final skill decision: applied revised `agent-workflow-v2` proposal through Skill Workshop
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow
