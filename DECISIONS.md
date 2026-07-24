@@ -341,3 +341,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 5 promotion accepted
 CONTENT: Phase 5 manual promotion pilot for OpenClaw Shared Memory completed in commit `64a3593 feat: promote shared memory phase 5 candidates`: the three owner-approved imported candidate records `19309b52-9d04-47cb-83c8-fba1024522f4`, `31ea008d-0ce1-4032-a499-2a75e34f6de6`, and `bf8b3331-7957-4e17-84e7-d9cf062b0c7c` were promoted from `candidate` to `shared` with privacy class `project`. Audit for each record shows `proposed` then `promoted`; the candidate queue no longer lists them; reader search finds all three shared records; write MCP tools remain unexposed; markdown remains source of truth until a separate migration decision.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 manual promotion pilot completion report.
+
+---
+### ID: D-2026-07-24-04
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 6 skill decision prep accepted
+CONTENT: Phase 6 Agent Workflow skill decision prep for OpenClaw Shared Memory completed in commit `d33f5d4 docs: prepare shared memory phase 6 skill decision`: pending Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5` was inspected through Skill Workshop and found pending/create/clean. It was compared against actual Shared Memory Phase 1.5-5 evidence. Recommendation is to revise before applying because the proposal is structurally sound but stale relative to real gates for read-only MCP, candidate-only import, manual promotion, privacy classes, markdown source-of-truth, role-scoped DB access, and dirty-worktree discipline. No Skill Workshop lifecycle action was performed.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6 skill decision prep completion report.
