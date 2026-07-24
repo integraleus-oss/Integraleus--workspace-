@@ -48,7 +48,8 @@ Status date: 2026-07-24
 - [x] Phase 4 runtime: verify tool availability from a fresh agent turn after MCP reload
 - [x] Phase 5 prep: controlled memory candidate import task packet, precheck, approval request, synthetic fixture, and dry-run planner
 - [x] Phase 5 tiny candidate-write pilot: import max 3 approved `DECISIONS.md` Shared Memory entries as candidates only
-- [ ] Phase 5 candidate review/promotion decision: blocked until separate approval
+- [x] Phase 5 manual promotion pilot: promote the 3 approved imported Shared Memory candidates
+- [ ] Phase 5 candidate review/promotion decision: continue broader review only after separate approval
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow
