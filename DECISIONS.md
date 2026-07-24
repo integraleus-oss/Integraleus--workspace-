@@ -332,3 +332,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 5 tiny candidate import accepted
 CONTENT: Phase 5 tiny candidate-write pilot for OpenClaw Shared Memory completed in commit `215e8ee feat: import shared memory phase 5 candidates`: exactly three approved `DECISIONS.md` OpenClaw Shared Memory entries were imported into the DB as `project` privacy `candidate` records only. Candidate IDs are `19309b52-9d04-47cb-83c8-fba1024522f4`, `31ea008d-0ce1-4032-a499-2a75e34f6de6`, and `bf8b3331-7957-4e17-84e7-d9cf062b0c7c`. Each candidate has a `proposed` audit event, no promotion occurred, write MCP tools remain unexposed, and markdown remains the source of truth.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 tiny candidate-write pilot completion report.
+
+---
+### ID: D-2026-07-24-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 5 promotion accepted
+CONTENT: Phase 5 manual promotion pilot for OpenClaw Shared Memory completed in commit `64a3593 feat: promote shared memory phase 5 candidates`: the three owner-approved imported candidate records `19309b52-9d04-47cb-83c8-fba1024522f4`, `31ea008d-0ce1-4032-a499-2a75e34f6de6`, and `bf8b3331-7957-4e17-84e7-d9cf062b0c7c` were promoted from `candidate` to `shared` with privacy class `project`. Audit for each record shows `proposed` then `promoted`; the candidate queue no longer lists them; reader search finds all three shared records; write MCP tools remain unexposed; markdown remains source of truth until a separate migration decision.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 manual promotion pilot completion report.
