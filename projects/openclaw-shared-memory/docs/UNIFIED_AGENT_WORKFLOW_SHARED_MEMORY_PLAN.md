@@ -222,7 +222,7 @@ Exit gate:
 
 ### Phase 5 - Controlled Write Pilot
 
-Status: planned, human-approved only.
+Status: prep package prepared, write pilot still human-approved only.
 
 Objective:
 
@@ -230,6 +230,8 @@ Allow agents to propose records while canon-changing actions remain human-approv
 
 Tasks:
 
+- Prepare a controlled candidate import task packet, precheck, approval request,
+  synthetic fixture, and dry-run planner before any real import.
 - Enable `propose_memory` for trusted agents through gateway.
 - Import a tiny owner-approved subset from markdown as candidates, not shared records.
 - Review candidate queue.
@@ -243,6 +245,7 @@ Exit gate:
 - No automatic promotion.
 - Candidate review is usable.
 - Markdown remains operational source until migration decision.
+- Prep-only dry runs do not read or write real memory by default.
 
 ### Phase 6 - Agent Workflow Skill Decision
 

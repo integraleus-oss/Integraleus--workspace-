@@ -1,6 +1,6 @@
 # OpenClaw Shared Memory TODO
 
-Status date: 2026-07-23
+Status date: 2026-07-24
 
 ## Checklist
 
@@ -45,7 +45,9 @@ Status date: 2026-07-23
 - [x] Phase 4 prep: read-only MCP/API gateway task packet, precheck, approval request, and preflight script prepared without runtime changes
 - [x] Phase 4 runtime: read-only MCP/API gateway wiring approved and registered in OpenClaw `mcp.servers`
 - [x] OpenClaw MCP registration wired into runtime config for read-only smoke tools
-- [ ] Phase 4 runtime: verify tool availability from a fresh agent turn after MCP reload
+- [x] Phase 4 runtime: verify tool availability from a fresh agent turn after MCP reload
+- [x] Phase 5 prep: controlled memory candidate import task packet, precheck, approval request, synthetic fixture, and dry-run planner
+- [ ] Phase 5 candidate-write pilot: blocked until separate approval naming exact files and candidate count
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow
@@ -58,3 +60,4 @@ Status date: 2026-07-23
 - No memory entry is promoted to shared canon without an explicit reason, source, scope, and privacy class.
 - Phase 4 prep is documentation and read-only smoke verification only; it does not approve runtime wiring.
 - Phase 4 runtime exposes only read-only MCP tools; write tools and real memory import remain blocked.
+- Phase 5 prep is documentation and dry-run planning only; it does not approve write MCP exposure, DB candidate writes, real memory import, or promotion.
