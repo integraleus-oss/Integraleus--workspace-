@@ -323,3 +323,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 5 prep accepted
 CONTENT: Phase 5 memory import prep for OpenClaw Shared Memory completed in commit `9ab9a56 docs: prepare shared memory phase 5 import prep`: controlled markdown-to-candidate import task packet, import precheck, approval request, evidence, synthetic fixture, and dry-run planner were added. The planner validates candidate previews without DB writes, refuses protected real-memory paths such as `MEMORY.md` by default, and rejects secret-like content. Real-memory import, candidate writes, write MCP exposure, promotion/reject/archive/supersede, and replacing markdown as source of truth remain blocked until separate explicit approval.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 prep completion report.
+
+---
+### ID: D-2026-07-24-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 5 tiny candidate import accepted
+CONTENT: Phase 5 tiny candidate-write pilot for OpenClaw Shared Memory completed in commit `215e8ee feat: import shared memory phase 5 candidates`: exactly three approved `DECISIONS.md` OpenClaw Shared Memory entries were imported into the DB as `project` privacy `candidate` records only. Candidate IDs are `19309b52-9d04-47cb-83c8-fba1024522f4`, `31ea008d-0ce1-4032-a499-2a75e34f6de6`, and `bf8b3331-7957-4e17-84e7-d9cf062b0c7c`. Each candidate has a `proposed` audit event, no promotion occurred, write MCP tools remain unexposed, and markdown remains the source of truth.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 tiny candidate-write pilot completion report.
