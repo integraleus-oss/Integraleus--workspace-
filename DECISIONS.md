@@ -314,3 +314,12 @@ DATE: 2026-07-23
 TITLE: OpenClaw Shared Memory Phase 4 read-only MCP runtime accepted
 CONTENT: Phase 4 runtime read-only MCP wiring for OpenClaw Shared Memory completed in commit `520b15d feat: wire shared memory read-only mcp runtime`: `openclaw-shared-memory-readonly` was registered in OpenClaw `mcp.servers`, backed by `scripts/mcp_readonly_server.py`, exposing only provider-safe read-only tools `search_memory`, `get_with_audit`, and `list_candidates`. Runtime secrets remain outside git/config, Gateway was not restarted, MCP cache was reloaded, configured MCP smoke and read-only preflight passed, write tools and real-memory import remain blocked, and markdown memory remains fallback/source.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-23 after the Phase 4 runtime read-only MCP wiring report.
+
+---
+### ID: D-2026-07-24-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 5 prep accepted
+CONTENT: Phase 5 memory import prep for OpenClaw Shared Memory completed in commit `9ab9a56 docs: prepare shared memory phase 5 import prep`: controlled markdown-to-candidate import task packet, import precheck, approval request, evidence, synthetic fixture, and dry-run planner were added. The planner validates candidate previews without DB writes, refuses protected real-memory paths such as `MEMORY.md` by default, and rejects secret-like content. Real-memory import, candidate writes, write MCP exposure, promotion/reject/archive/supersede, and replacing markdown as source of truth remain blocked until separate explicit approval.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 5 prep completion report.
