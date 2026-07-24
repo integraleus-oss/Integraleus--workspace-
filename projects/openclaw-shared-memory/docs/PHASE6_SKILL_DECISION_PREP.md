@@ -78,21 +78,22 @@ Missing or too generic:
 
 ## Recommendation
 
-Revise the pending proposal before applying it.
+Revision has been approved and completed after this prep step.
 
-Recommended next action:
+Current next action:
 
 ```text
-approve Phase 6 revise agent-workflow-v2 proposal from Shared Memory phase evidence
+approve Phase 6 apply revised agent-workflow-v2 proposal
 ```
 
-The revision should keep the skill concise, but add the concrete gates learned
-from this pilot. Applying the current proposal as-is would make a useful but
-stale workflow live.
+Applying the revised proposal is still a separate Skill Workshop lifecycle
+action. Leaving it pending deliberately is also acceptable if the workflow
+should remain advisory for now.
 
 ## Explicitly Not Recommended Yet
 
-- Do not apply `agent-workflow-v2-20260722-747ac395f5` as-is.
+- Do not apply `agent-workflow-v2-20260722-747ac395f5` without separate
+  approval.
 - Do not reject it; it is structurally sound.
 - Do not quarantine it; scan is clean and there is no safety incident.
 - Do not begin Phase 7 migration/source-of-truth decision until the workflow

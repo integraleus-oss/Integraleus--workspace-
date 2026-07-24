@@ -249,7 +249,7 @@ Exit gate:
 
 ### Phase 6 - Agent Workflow Skill Decision
 
-Status: prep package prepared, lifecycle action still blocked.
+Status: revised proposal pending; final skill decision still blocked.
 
 Objective:
 
@@ -266,7 +266,8 @@ Exit gate:
 
 - Skill proposal is applied, revised, rejected, or left pending deliberately.
 - Live skill, if applied, matches actual project practice.
-- Prep-only recommendation is documented without changing the proposal lifecycle.
+- Revised proposal is inspected before any final apply/reject/quarantine/leave
+  pending decision.
 
 ### Phase 7 - Migration Decision
 
