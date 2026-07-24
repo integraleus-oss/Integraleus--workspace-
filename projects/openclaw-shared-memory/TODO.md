@@ -50,6 +50,8 @@ Status date: 2026-07-24
 - [x] Phase 5 tiny candidate-write pilot: import max 3 approved `DECISIONS.md` Shared Memory entries as candidates only
 - [x] Phase 5 manual promotion pilot: promote the 3 approved imported Shared Memory candidates
 - [ ] Phase 5 candidate review/promotion decision: continue broader review only after separate approval
+- [x] Phase 6 prep: inspect pending Agent Workflow skill proposal and prepare recommendation
+- [ ] Phase 6 lifecycle action: revise/apply/reject/leave pending only after separate approval
 - [ ] Existing MEMORY.md/STATE.md/DECISIONS.md imported after owner review
 - [x] Restore drill run against a disposable database
 - [ ] Owner approval recorded before replacing current memory workflow

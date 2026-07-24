@@ -249,7 +249,7 @@ Exit gate:
 
 ### Phase 6 - Agent Workflow Skill Decision
 
-Status: planned.
+Status: prep package prepared, lifecycle action still blocked.
 
 Objective:
 
@@ -258,7 +258,7 @@ Decide whether Agent Workflow should become a live reusable skill/process, and w
 Tasks:
 
 - Inspect pending proposal `agent-workflow-v2-20260722-747ac395f5` through Skill Workshop.
-- Compare proposal with this unified plan and real Phase 1.5 usage.
+- Compare proposal with this unified plan and real Phase 1.5-5 usage.
 - Revise if the proposal misses Shared Memory boundaries.
 - Apply only after explicit approval.
 
@@ -266,6 +266,7 @@ Exit gate:
 
 - Skill proposal is applied, revised, rejected, or left pending deliberately.
 - Live skill, if applied, matches actual project practice.
+- Prep-only recommendation is documented without changing the proposal lifecycle.
 
 ### Phase 7 - Migration Decision
 
