@@ -359,3 +359,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 6 skill proposal revision accepted
 CONTENT: Phase 6 Agent Workflow proposal revision completed in commit `27b1f08 docs: revise shared memory agent workflow proposal`: pending Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5` was revised from Shared Memory Phase 1.5-5 evidence and is now `v2`, `pending/create/clean`. The revised proposal adds concrete gates for artifact-first execution, separate approvals for runtime/DB/import/promotion/write MCP/source-of-truth changes, Memory Candidate admission, privacy classes, markdown source-of-truth boundary, role-scoped DB practice, Synology/home-LAN boundaries, and dirty-worktree discipline. No apply/reject/quarantine action, DB write, runtime/MCP change, import, promotion, or migration decision was performed.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6 proposal revision completion report.
+
+---
+### ID: D-2026-07-24-06
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-24
+TITLE: OpenClaw Shared Memory Phase 6 Agent Workflow skill applied
+CONTENT: Phase 6 final Agent Workflow skill decision completed in commit `b592e94 docs: apply shared memory agent workflow skill`: Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5` was inspected as `v2 pending/create/clean`, applied through Skill Workshop, and re-inspected as `applied/create/v2/clean`. Live skill file `skills/agent-workflow-v2/SKILL.md` was created and committed. Phase 6 is closed; no Shared Memory DB write, runtime/MCP change, import, promotion, or migration/source-of-truth decision was performed. Follow-up: live skill text still contains proposal-era wording and should be cleaned up only through a separate Skill Workshop update/apply cycle.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6 final skill decision completion report.
