@@ -386,3 +386,12 @@ DATE: 2026-07-25
 TITLE: OpenClaw Redis runtime state and queue layer direction
 CONTENT: Для OpenClaw Redis рассматривается не как память агента, а как временный runtime state / queue layer для диспетчера задач. Первый spike: heartbeat alert suppression. Later MVP candidates: Telegram inbound dedupe and task locks / active run registry. Все Redis-данные временные, с TTL, без сырого приватного контента; Postgres и Markdown остаются source of truth, Redis можно потерять без потери важных фактов. Подготовлены артефакты `state/tasks/openclaw-runtime-state-queue/TODO.md` и `docs/ops/openclaw-runtime-state-queue.md`; код и установка Redis пока не выполнялись.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:2257` on 2026-07-25 after the OpenClaw Runtime State & Queue Layer MVP artifact and integration audit were created.
+
+---
+### ID: D-2026-07-26-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-26
+TITLE: Cross-topic memory file boundaries
+CONTENT: When the same personal agent coordinates work across Telegram topics, keep `DECISIONS.md` as the approved durable decision register, keep `STATE.md` as a compact cross-topic index of current truth, gates, and pointers, keep `memory/YYYY-MM-DD.md` as chronological daily narrative, and keep detailed task work in `state/tasks/...`, `docs/ops/...`, or equivalent project artifacts. Do not duplicate long topic snapshots in `STATE.md`; move detailed history to daily memory and task packets. Live skills must change only through Skill Workshop, and runtime/code/Gateway changes require separate explicit approval.
+RATIONALE: Stanislav explicitly approved the proposed Memory Candidate in the main Telegram direct chat on 2026-07-26 after reviewing how `DECISIONS.md`, `STATE.md`, daily memory, task packets, live skills, Redis, code, and Gateway should be separated across topics.
