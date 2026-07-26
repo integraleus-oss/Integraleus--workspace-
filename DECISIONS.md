@@ -377,3 +377,12 @@ DATE: 2026-07-24
 TITLE: OpenClaw Shared Memory Phase 6.1 Agent Workflow skill wording cleanup accepted
 CONTENT: Phase 6.1 Agent Workflow live skill wording cleanup completed in commit `27625a3 docs: clean up agent workflow skill wording`: Skill Workshop update proposal `agent-workflow-v2-20260724-8fa58cd92a` was created for live skill `agent-workflow-v2`, inspected as `pending/update/v1/clean`, applied, and re-inspected as `applied/update/v1/clean`. Live `skills/agent-workflow-v2/SKILL.md` now says `Status: live skill`; proposal-era phrases `pending proposal, not applied`, `not a live rule`, `not installed`, and `later apply` are absent. No workflow gate was intentionally changed, and no Shared Memory DB write, runtime/MCP change, import, promotion, or migration/source-of-truth decision was performed.
 RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-07-24 after the Phase 6.1 skill wording cleanup completion report.
+
+---
+### ID: D-2026-07-25-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-25
+TITLE: OpenClaw Redis runtime state and queue layer direction
+CONTENT: Для OpenClaw Redis рассматривается не как память агента, а как временный runtime state / queue layer для диспетчера задач. Первый MVP: Telegram inbound dedupe, task locks / active run registry, heartbeat alert suppression. Все Redis-данные временные, с TTL, без сырого приватного контента; Postgres и Markdown остаются source of truth, Redis можно потерять без потери важных фактов. Подготовлены артефакты `state/tasks/openclaw-runtime-state-queue/TODO.md` и `docs/ops/openclaw-runtime-state-queue.md`; код и установка Redis пока не выполнялись.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:2257` on 2026-07-25 after the OpenClaw Runtime State & Queue Layer MVP artifact and integration audit were created.
