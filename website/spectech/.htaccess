@@ -60,6 +60,10 @@ RedirectMatch 410 ^/(wp-login\.php|wp-admin(/.*)?|wp-content(/.*)?|wp-includes(/
 
     # Canonical homepage URL for crawlers and old internal links.
     RewriteRule ^index\.html$ / [R=301,L]
+
+    # Drop internal mobile-check URLs from the calculator index surface.
+    RewriteCond %{QUERY_STRING} (^|&)check= [NC]
+    RewriteRule ^calculator\.html$ /calculator.html? [R=301,L]
     
     # Redirect www to non-www (301 permanent redirect)
     RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]

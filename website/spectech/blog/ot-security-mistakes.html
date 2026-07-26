@@ -324,6 +324,15 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
   .nav-links { display: none !important; }
   .nav-cta { display: none !important; }
   .container { padding: 0 16px; }
+  .article-layout { max-width: 100%; }
+  .article, .article-body, .sidebar-block { min-width: 0; max-width: 100%; }
+  .article-body > * { max-width: 100%; }
+  .article-body p, .article-body li, .article-body a, .article-body code { overflow-wrap: anywhere; }
+  .article-body pre, .article-body pre code { white-space: pre-wrap; word-break: break-word; }
+  .article-body pre code { display: block; width: 100%; overflow-wrap: anywhere; }
+  .article-body table { white-space: normal; }
+  .mode-comparison, .perf-stats, .priority-range, .component-grid, .action-grid { grid-template-columns: 1fr; }
+  .footer-content { grid-template-columns: 1fr; }
   .article-body { overflow-wrap: break-word; word-break: break-word; }
   .article-body h1, .article-body h2, .article-body h3 { overflow-wrap: break-word; }
   .article-body pre { overflow-x: auto; max-width: 100%; }

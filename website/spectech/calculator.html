@@ -834,25 +834,28 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
 /* ── RESPONSIVE ── */
 
 @media (max-width: 860px) {
+  html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
   nav { padding: 0 16px; }
   .nav-links { display: none !important; }
   .nav-cta { display: none !important; }
   .hamburger { display: block !important; }
-  .calc-layout  { grid-template-columns: 1fr; }
-  .wizard-wrap  { grid-template-columns: 1fr; }
+  .page, .container, .calc-layout, .calc-main, .result-panel, .wizard-wrap, .wizard-main, .wizard-card { min-width: 0; max-width: 100%; }
+  .calc-layout  { grid-template-columns: minmax(0, 1fr); }
+  .wizard-wrap  { grid-template-columns: minmax(0, 1fr); }
   .wizard-steps { position: static; }
   .cat-select-grid { grid-template-columns: 1fr 1fr; }
   .wiz-row { grid-template-columns: 1fr; }
   .container { padding: 0 20px; }
   .addon-row { flex-direction: column; gap: 6px; }
   .addon-label { flex: none; padding-top: 0; }
+  .result-panel { position: static; }
   .page-header { padding: 32px 0 40px; }
   .page-title { font-size: 28px; }
   .tabs { flex-wrap: wrap; }
   .tab { font-size: 12px; padding: 10px 16px; }
+  .btn { white-space: normal; min-height: 44px; }
   .cart-item { flex-direction: column; gap: 8px; }
   .cart-item-header { flex-direction: column; align-items: flex-start; gap: 8px; }
-
 }
 @media (max-width: 768px) {
   .footer-grid { grid-template-columns: 1fr !important; text-align: center; }
@@ -864,7 +867,65 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
   .product-select-grid { grid-template-columns: 1fr; }
   .cat-select-grid { grid-template-columns: 1fr; }
   .page-title { font-size: 24px; }
-  .page-sub { font-size: 13px; }
+  .page-sub { font-size: 16px; }
+  .page-eyebrow,
+  .calc-section-head span,
+  .prod-label-vendor,
+  .prod-label-base,
+  .field-lbl,
+  .check-addon,
+  .addon-hint,
+  .result-head-title,
+  .result-total-label,
+  .result-total-note,
+  .cart-header-title,
+  .cart-item-sku,
+  .cart-item-meta,
+  .cart-item-addons,
+  .wizard-steps-title,
+  .step-desc,
+  .wp-text,
+  .wp-pct,
+  .wch-sub,
+  .cat-opt-sub,
+  .wiz-label,
+  .wiz-hint,
+  .urg-time,
+  .sb-title,
+  .sb-edit,
+  .success-meta,
+  .wf-note { font-size: 12px; }
+  .calc-section-title,
+  .prod-label-name,
+  .check-lbl,
+  .addon-label,
+  .addon-check,
+  .r-name,
+  .r-val,
+  .cart-item-product,
+  .step-name,
+  .cat-opt-name,
+  .urg-name,
+  .summary-block,
+  .sum-row { font-size: 14px; }
+  [style*="font-size:9px"],
+  [style*="font-size:10px"],
+  [style*="font-size:11px"] { font-size: 12px !important; }
+  .addon-check[style],
+  label[style*="font-size:13px"],
+  span[style*="font-size:13px"],
+  div[style*="font-size:13px"] { font-size: 14px !important; }
+  input,
+  select,
+  textarea,
+  .addon-select,
+  .wiz-input,
+  .wiz-textarea,
+  .wiz-select { font-size: 16px; line-height: 1.4; }
+  .tabs { max-width: none; }
+  .tab { min-width: 0; letter-spacing: 1px; }
+  .calc-body, .result-body, .wizard-card-body { padding: 16px; }
+  div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
   nav { padding: 12px 16px; }
   .nav-links { display: none !important; }
   .nav-cta { display: none; }

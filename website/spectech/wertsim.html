@@ -375,9 +375,13 @@ nav {
   font-size: 16px;
   padding: 12px 20px;
   width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 8px;
   font-weight: 700;
   border-radius: 8px;
+  text-decoration: none;
   transition: all 0.2s ease;
 }
 
@@ -393,10 +397,14 @@ nav {
   font-size: 16px;
   padding: 12px 20px;
   width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 8px;
   font-weight: 600;
   border-radius: 8px;
   margin-top: 8px;
+  text-decoration: none;
   transition: all 0.2s ease;
 }
 
@@ -1135,7 +1143,7 @@ footer {
   </ul>
   <button class="hamburger" onclick="toggleMobileMenu()" aria-label="Открыть меню">☰</button>
   <div class="nav-cta">
-    <a href="#contact" class="btn btn-flame">Консультация</a>
+    <a href="/#contact" class="btn btn-flame">Консультация</a>
   </div>
   <button class="theme-toggle" onclick="toggleTheme()" title="Сменить тему" aria-label="Сменить тему">
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1198,14 +1206,14 @@ footer {
           <div class="cta-price-note">клиент-серверная архитектура · частное облако</div>
         </div>
         <div class="cta-card-body">
-          <button class="btn-cta-primary">
+          <a class="btn-cta-primary" href="/#contact">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
             Запросить демо
-          </button>
-          <button class="btn-cta-secondary">
+          </a>
+          <a class="btn-cta-secondary" href="/#contact">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="m7 10 5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             Связаться
-          </button>
+          </a>
           <div class="cta-card-features">
             <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>Полностью отечественная разработка</div>
             <div class="cta-feat"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="4,12 9,17 20,6" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/></svg>50+ лет исследований (1973-2025)</div>
@@ -1566,7 +1574,7 @@ ENDPROC
         <ul class="footer-links">
           <li><a href="#about">О нас</a></li>
           <li><a href="#careers">Карьера</a></li>
-          <li><a href="#contact">Контакты</a></li>
+          <li><a href="/#contact">Контакты</a></li>
           <li><a href="#blog">Блог</a></li>
         
           <li><a href="privacy.html">Конфиденциальность</a></li></ul>
