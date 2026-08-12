@@ -404,3 +404,12 @@ DATE: 2026-08-12
 TITLE: Local accepted integration point for the Codex-Claude orchestrator runner
 CONTENT: Treat local commit `9f00f70` (`feat(orchestrator): add local integration runner`) as the accepted integration point for the Codex-Claude orchestrator runner. Keep this workflow local without GitHub or push. The accepted point is protected by an encrypted Synology backup stored inside the home network. The next functional slice is connecting the runner to real local Codex and Claude launches with deterministic handling of `REWORK`, `FAILED_INFRA`, `ESCALATED`, and `ACCEPTED`; unattended activation and runtime/config changes remain separate approval gates.
 RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-12 after the integration slice passed targeted Claude closure, 14/14 integration tests, 84/84 core regression tests, py_compile and whitespace checks, was committed locally as `9f00f70`, and was included in a verified encrypted Synology backup.
+
+---
+### ID: D-2026-08-12-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-12
+TITLE: Accepted local production-CLI baseline for the Codex-Claude orchestrator
+CONTENT: Treat local commit `59d42a3` as the completed local production-CLI baseline for the Codex-Claude orchestrator. The accepted chain includes the bounded production entrypoint from `f5afeea`, strict task-packet and approved-worktree validation, fixed local Codex/Claude launchers, at most two Codex attempts and one policy-authenticated REWORK, fail-closed handling, deterministic policy admission, and a successful isolated canary ending `ACCEPTED / R17_ACCEPT`. Keep the workflow local without GitHub or push. The baseline is protected by a verified GPG AES-256 Synology backup inside the home network. The next implementation slice is an automatic builder for trusted review manifest, binding, and evidence inputs derived from the actual Codex change and observed gates. Unattended execution, cron, Gateway/runtime/config changes, deploy, and automatic commit/push remain separate approval gates.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-12 after the production CLI passed 58/58 integration tests, 84/84 core tests, py_compile and whitespace checks, independent targeted closure `PRODUCTION_CLI_CLOSURE_PASS`, and a one-attempt isolated canary accepted mechanically as `R17_ACCEPT`; commits `f5afeea` and `59d42a3` were created locally and the encrypted Synology backup was decrypted and checksum-verified.
