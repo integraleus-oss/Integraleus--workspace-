@@ -260,3 +260,9 @@ _Обновляется из любой сессии после значимых
 - Codex OAuth на main/openclaw-home был близок к истечению после обновления OpenClaw 2026.5.20; проверить/переавторизовать при сбоях модели
 - Ollama может зависать при массовой индексации без rate limiting (починено в коде, но старые процессы могут работать без фикса)
 - Gateway systemd service: disabled (не установлен как auto-start)
+
+## Codex-Claude deterministic orchestration — 2026-08-12
+
+- The local integration runner is closed and committed as `9f00f70 feat(orchestrator): add local integration runner`; targeted Claude closure, 14/14 integration tests, 84/84 core regression tests, py_compile, and whitespace checks passed.
+- `9f00f70` is the accepted local integration point under `D-2026-08-12-01`. No GitHub/push is used. A verified encrypted Synology backup exists inside the home network.
+- Remaining build boundary: connect the runner to real local Codex and Claude launches and deterministically follow `REWORK`, `FAILED_INFRA`, `ESCALATED`, and `ACCEPTED`. Runtime/config changes and unattended activation remain separate approval gates.

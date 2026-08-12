@@ -395,3 +395,12 @@ DATE: 2026-07-26
 TITLE: Cross-topic memory file boundaries
 CONTENT: When the same personal agent coordinates work across Telegram topics, keep `DECISIONS.md` as the approved durable decision register, keep `STATE.md` as a compact cross-topic index of current truth, gates, and pointers, keep `memory/YYYY-MM-DD.md` as chronological daily narrative, and keep detailed task work in `state/tasks/...`, `docs/ops/...`, or equivalent project artifacts. Do not duplicate long topic snapshots in `STATE.md`; move detailed history to daily memory and task packets. Live skills must change only through Skill Workshop, and runtime/code/Gateway changes require separate explicit approval.
 RATIONALE: Stanislav explicitly approved the proposed Memory Candidate in the main Telegram direct chat on 2026-07-26 after reviewing how `DECISIONS.md`, `STATE.md`, daily memory, task packets, live skills, Redis, code, and Gateway should be separated across topics.
+
+---
+### ID: D-2026-08-12-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-12
+TITLE: Local accepted integration point for the Codex-Claude orchestrator runner
+CONTENT: Treat local commit `9f00f70` (`feat(orchestrator): add local integration runner`) as the accepted integration point for the Codex-Claude orchestrator runner. Keep this workflow local without GitHub or push. The accepted point is protected by an encrypted Synology backup stored inside the home network. The next functional slice is connecting the runner to real local Codex and Claude launches with deterministic handling of `REWORK`, `FAILED_INFRA`, `ESCALATED`, and `ACCEPTED`; unattended activation and runtime/config changes remain separate approval gates.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-12 after the integration slice passed targeted Claude closure, 14/14 integration tests, 84/84 core regression tests, py_compile and whitespace checks, was committed locally as `9f00f70`, and was included in a verified encrypted Synology backup.
