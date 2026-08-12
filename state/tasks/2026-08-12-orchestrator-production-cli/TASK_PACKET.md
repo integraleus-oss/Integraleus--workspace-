@@ -1,6 +1,6 @@
 # Production CLI for bounded orchestrator
 
-Status: CANARY_ACCEPTED_AWAITING_SCOPED_COMMIT
+Status: COMPLETED_COMMITTED
 Risk: MEDIUM
 Owner: main agent
 Date: 2026-08-12
@@ -49,7 +49,7 @@ Forbidden:
 - [x] Run integration/core/syntax/whitespace checks.
 - [x] Independent two-axis review.
 - [x] Canary on a small real task in a separate worktree.
-- [ ] Scoped local commit after all gates.
+- [x] Scoped local commit after all gates (`f5afeea`).
 
 ## Acceptance criteria
 

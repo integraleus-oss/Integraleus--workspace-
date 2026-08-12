@@ -1,6 +1,6 @@
 # Evidence: production CLI for bounded orchestrator
 
-Status: CANARY_ACCEPTED_AWAITING_SCOPED_COMMIT
+Status: COMPLETED_COMMITTED
 Date: 2026-08-12
 Task packet: `state/tasks/2026-08-12-orchestrator-production-cli/TASK_PACKET.md`
 
@@ -51,4 +51,5 @@ cron, Synology, or secret operation was performed.
   CLI; automatic subject/binding generation is not claimed.
 - `FAILED_INFRA` is intentionally not emitted for write-Codex failure; uncertain
   partial writes escalate for inspection.
-- Scoped local commit remains the final gate; GitHub/push remains out of scope.
+- Scoped local commit: `f5afeea` (`feat(orchestrator): add bounded production
+  cycle CLI`). GitHub/push remains out of scope.
