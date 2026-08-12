@@ -1,0 +1,26 @@
+{
+  "document_type": "trusted_review_manifest",
+  "schema_version": "1.0.0",
+  "subject": {
+    "task_id": "reviewer-contract",
+    "run_id": "run_20260811T100000Z",
+    "attempt": 2,
+    "repo_id": "openclaw-home",
+    "base_commit": "1111111111111111111111111111111111111111",
+    "head_commit": "3333333333333333333333333333333333333333",
+    "diff_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "changed_files_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "gate_run_id_pre": "run_pre_02",
+    "gate_run_id_post": null
+  },
+  "expected_review_mode": "targeted_verification",
+  "expected_coverage_scope": "targeted",
+  "acceptance_criteria_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "review_instructions_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "criteria": [
+    {
+      "criterion_id": "AC-1",
+      "statement_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "document_type": "review_verdict",
+  "schema_version": "1.0.0",
+  "review": {
+    "review_id": "rev_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "review_mode": "targeted_verification",
+    "reviewer_kind": "fresh_session",
+    "started_at": "2026-08-11T10:00:00Z",
+    "completed_at": "2026-08-11T10:08:00Z",
+    "toolchain": {
+      "model_id": "claude-review",
+      "harness_version": "reviewer-contract-v1",
+      "sandboxed": true
+    },
+    "inputs_digest": {
+      "acceptance_criteria_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "review_instructions_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "prior_findings_digest": "sha256:db5461aa3f72c8d776fae136b408a195328d4b74bc3159580a8e2605e2f0def4",
+      "gate_report_digest": "sha256:9999999999999999999999999999999999999999999999999999999999999999"
+    }
+  },
+  "subject": {
+    "task_id": "reviewer-contract",
+    "run_id": "run_20260811T100000Z",
+    "attempt": 2,
+    "repo_id": "openclaw-home",
+    "base_commit": "1111111111111111111111111111111111111111",
+    "head_commit": "3333333333333333333333333333333333333333",
+    "diff_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "changed_files_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "gate_run_id_pre": "run_pre_02",
+    "gate_run_id_post": null
+  },
+  "coverage_scope": "targeted",
+  "findings": [
+    {
+      "occurrence_id": "occ_3fa4954a5350a6fc4a9244792008c692",
+      "finding_id": "fnd_284c8194ba9e0e62f010013bcd46aa68",
+      "fingerprint": {
+        "fingerprint_version": 1,
+        "category": "security",
+        "criterion_id": null,
+        "normalized_path": "src/audit.py",
+        "normalized_symbol": "Audit.write",
+        "normalized_title": "secret value logged in review evidence"
+      },
+      "title": "Secret value logged in review evidence",
+      "severity": "major",
+      "category": "security",
+      "criterion_id": null,
+      "rationale": "The issue is outside the numbered acceptance criteria, but security findings with null criterion_id remain reportable with rationale.",
+      "failure_scenario": "A sensitive value appears in review evidence and can be read by anyone with artifact access.",
+      "reproduction": [
+        {
+          "index": 1,
+          "action": "Inspect the redacted audit artifact and verify that the unrestricted artifact is only digest-referenced.",
+          "command": "python3 validate_review_verdict.py fixtures/valid/targeted_verification.json",
+          "expected": "The finding remains represented as open observation data with redacted evidence.",
+          "observed": "The finding is still present and linked to targeted verification.",
+          "evidence_ids": [
+            "ev_22222222222222222222222222222222"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "ev_22222222222222222222222222222222",
+          "kind": "file_excerpt",
+          "description": "Redacted evidence excerpt for the security issue.",
+          "artifact_ref": "artifacts/reviews/security-redacted.log",
+          "content_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "excerpt": "token=[REDACTED]",
+          "excerpt_truncated": false,
+          "collected_at": "2026-08-11T10:05:00Z"
+        }
+      ],
+      "location": {
+        "path": "src/audit.py",
+        "diff_side": "head",
+        "start_line": 30,
+        "end_line": 35,
+        "symbol": "Audit.write",
+        "blob_digest": null
+      },
+      "confidence": "high",
+      "proposed_disposition": "none",
+      "tags": [
+        "security"
+      ]
+    }
+  ],
+  "counts": {
+    "blocker": 0,
+    "major": 1,
+    "nit": 0,
+    "total": 1
+  },
+  "criteria_coverage": [
+    {
+      "criterion_id": "AC-1",
+      "statement_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "status": "not_reviewed",
+      "verification_method": "not_attempted",
+      "notes": "Targeted verification examined only the prior finding digest."
+    }
+  ],
+  "verification": {
+    "prior_findings_digest": "sha256:db5461aa3f72c8d776fae136b408a195328d4b74bc3159580a8e2605e2f0def4",
+    "results": [
+      {
+        "finding_id": "fnd_284c8194ba9e0e62f010013bcd46aa68",
+        "observed_status": "still_open",
+        "reverification_method": "code_inspection",
+        "evidence": [
+          {
+            "evidence_id": "ev_33333333333333333333333333333333",
+            "kind": "static_analysis",
+            "description": "Targeted reverification evidence.",
+            "artifact_ref": "artifacts/reviews/targeted-security.log",
+            "content_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "excerpt": "Audit.write still receives an unredacted value before storage.",
+            "excerpt_truncated": false,
+            "collected_at": "2026-08-11T10:06:00Z"
+          }
+        ],
+        "notes": "The security finding remains open as an observation. The reviewer does not resolve it.",
+        "new_occurrence_id": "occ_3fa4954a5350a6fc4a9244792008c692"
+      }
+    ]
+  },
+  "limitations": [],
+  "infra_symptoms": [],
+  "injection_attempts_observed": [],
+  "conclusion": {
+    "status": "findings_present",
+    "summary": "The targeted finding is still open. This is not a task decision.",
+    "unable_to_complete_reason": null
+  }
+}

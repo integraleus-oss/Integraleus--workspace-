@@ -1,0 +1,10 @@
+{
+  "document_type": "prior_findings",
+  "schema_version": "1.0.0",
+  "findings": [
+    {
+      "finding_id": "fnd_284c8194ba9e0e62f010013bcd46aa68",
+      "status": "open"
+    }
+  ]
+}

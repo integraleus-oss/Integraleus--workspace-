@@ -1,0 +1,132 @@
+{
+  "document_type": "review_verdict",
+  "schema_version": "1.0.0",
+  "review": {
+    "review_id": "rev_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "review_mode": "initial_full",
+    "reviewer_kind": "fresh_session",
+    "started_at": "2026-08-11T09:00:00Z",
+    "completed_at": "2026-08-11T09:05:00Z",
+    "toolchain": {
+      "model_id": "claude-review",
+      "harness_version": "reviewer-contract-v1",
+      "sandboxed": true
+    },
+    "inputs_digest": {
+      "acceptance_criteria_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "review_instructions_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "prior_findings_digest": null,
+      "gate_report_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  },
+  "subject": {
+    "task_id": "reviewer-contract",
+    "run_id": "run_20260811T090000Z",
+    "attempt": 1,
+    "repo_id": "openclaw-home",
+    "base_commit": "1111111111111111111111111111111111111111",
+    "head_commit": "2222222222222222222222222222222222222222",
+    "diff_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "changed_files_digest": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+    "gate_run_id_pre": "run_pre_01",
+    "gate_run_id_post": null
+  },
+  "coverage_scope": "full",
+  "findings": [
+    {
+      "occurrence_id": "occ_a5f93e7bfc8c57216383555fc8140af6",
+      "finding_id": "fnd_b5ea59e6b40ea0e2265bd03f438a00e3",
+      "fingerprint": {
+        "fingerprint_version": 1,
+        "category": "acceptance_criterion_violation",
+        "criterion_id": "AC-1",
+        "normalized_path": "src/reviewer_contract.py",
+        "normalized_symbol": "validate_result",
+        "normalized_title": "validator reports success for invalid review"
+      },
+      "title": "Validator reports success for invalid review",
+      "severity": "blocker",
+      "category": "acceptance_criterion_violation",
+      "criterion_id": "AC-1",
+      "rationale": "AC-1 requires invalid reviewer output to fail closed. The tested behavior returned a success-shaped result for a schema-invalid document.",
+      "failure_scenario": "An invalid review document could be treated as clean and enter a later policy step without deterministic rejection.",
+      "reproduction": [
+        {
+          "index": 1,
+          "action": "Run the validator against a document with an unauthorized decision field.",
+          "command": "python3 validate_review_verdict.py fixtures/invalid/acceptance_field.json",
+          "expected": "The validator exits non-zero and reports a schema error.",
+          "observed": "The validator returned a success-shaped result before this contract check was added.",
+          "evidence_ids": [
+            "ev_11111111111111111111111111111111"
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "evidence_id": "ev_11111111111111111111111111111111",
+          "kind": "command_output",
+          "description": "Validator run demonstrating the rejection condition.",
+          "artifact_ref": "artifacts/reviews/invalid-decision.log",
+          "content_digest": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+          "excerpt": "contract_valid=false schema_validation /decision",
+          "excerpt_truncated": false,
+          "collected_at": "2026-08-11T09:04:00Z",
+          "command": {
+            "argv": [
+              "python3",
+              "validate_review_verdict.py",
+              "fixtures/invalid/acceptance_field.json"
+            ],
+            "exit_code": 1,
+            "cwd_rel": "state/tasks/2026-08-11-codex-claude-orchestrator/implementation",
+            "duration_ms": 50
+          }
+        }
+      ],
+      "location": {
+        "path": "src/reviewer_contract.py",
+        "diff_side": "head",
+        "start_line": 10,
+        "end_line": 20,
+        "symbol": "validate_result",
+        "blob_digest": null
+      },
+      "confidence": "high",
+      "suggested_remediation": "Keep transport, schema, and semantic failures separate and return non-zero for every invalid document.",
+      "proposed_disposition": "none",
+      "tags": [
+        "contract"
+      ]
+    }
+  ],
+  "counts": {
+    "blocker": 1,
+    "major": 0,
+    "nit": 0,
+    "total": 1
+  },
+  "criteria_coverage": [
+    {
+      "criterion_id": "AC-1",
+      "statement_digest": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "status": "violated",
+      "verification_method": "manual_execution",
+      "evidence_ids": [
+        "ev_11111111111111111111111111111111"
+      ],
+      "linked_occurrence_ids": [
+        "occ_a5f93e7bfc8c57216383555fc8140af6"
+      ],
+      "notes": "The fixture documents a blocker tied to AC-1."
+    }
+  ],
+  "limitations": [],
+  "infra_symptoms": [],
+  "injection_attempts_observed": [],
+  "conclusion": {
+    "status": "findings_present",
+    "summary": "One blocker finding is reported. This is an observation record only.",
+    "unable_to_complete_reason": null
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openclaw.local/schemas/orchestrator-state-machine/1.0.0/finding-registry.schema.json",
+  "title": "Finding Registry v1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "document_type",
+    "schema_version",
+    "findings"
+  ],
+  "properties": {
+    "document_type": {
+      "const": "finding_registry"
+    },
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "finding_id",
+          "status",
+          "effective_severity",
+          "occurrence_count",
+          "resolved_at",
+          "history"
+        ],
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:/@+-]*$"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "resolved_verified"
+            ]
+          },
+          "effective_severity": {
+            "enum": [
+              "blocker",
+              "major",
+              "nit",
+              "info"
+            ]
+          },
+          "occurrence_count": {
+            "type": "integer",
+            "minimum": 0,
+            "not": {
+              "type": "boolean"
+            }
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "review_id",
+                  "tree_digest"
+                ],
+                "properties": {
+                  "review_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "tree_digest": {
+                    "type": "string",
+                    "pattern": "^sha256:[0-9a-f]{64}$"
+                  }
+                }
+              }
+            ]
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "review_id",
+                "occurrence_id",
+                "severity",
+                "path",
+                "tree_digest"
+              ],
+              "properties": {
+                "review_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "severity": {
+                  "enum": [
+                    "blocker",
+                    "major",
+                    "nit",
+                    "info"
+                  ]
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "tree_digest": {
+                  "type": "string",
+                  "pattern": "^sha256:[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

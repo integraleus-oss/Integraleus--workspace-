@@ -1,0 +1,15 @@
+# Narrow AppArmor user-namespace grant for bubblewrap.
+#
+# This follows Ubuntu's packaged pattern used for rootlesskit and other
+# sandbox launchers: the executable receives a named unconfined profile solely
+# so it can create its user namespace while the global
+# kernel.apparmor_restrict_unprivileged_userns=1 control remains enabled.
+
+abi <abi/4.0>,
+include <tunables/global>
+
+profile bwrap /usr/bin/bwrap flags=(unconfined) {
+  userns,
+
+  include if exists <local/bwrap>
+}
