@@ -16,6 +16,11 @@ to bounded local agent launches without changing OpenClaw runtime configuration.
 - `live_review_cycle.py` admits exact JSON from a successful fresh Claude
   launch into the existing validator/projection/policy path. Failed launches
   never produce a policy decision.
+- `managed_one_cycle.py` enforces a maximum of two implementation attempts and
+  one rework transition; exhausted or malformed flows escalate.
+- `managed_policy_review.py` admits only digest-matched durable policy output
+  from a live-review directory and derives bounded rework instructions solely
+  from policy-selected findings in the trusted projection.
 - `tests/test_integration.py` covers all four policy outcomes and fail-closed
   integration boundaries.
 

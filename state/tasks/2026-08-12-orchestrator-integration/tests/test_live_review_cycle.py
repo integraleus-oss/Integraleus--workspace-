@@ -10,6 +10,7 @@ from unittest.mock import patch
 import agent_launcher
 import test_integration
 from live_review_cycle import run_cycle
+from managed_policy_review import admit_live_review
 
 
 class LiveReviewCycleTests(unittest.TestCase):
@@ -46,6 +47,18 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertEqual(result["decision"]["outcome"], "REWORK")
         self.assertFalse((self.root / bundle_value["review_verdict"]).exists())
         self.assertTrue((self.root / "cycle/claude-launch/launch-result.json").exists())
+
+    def test_policy_decision_is_admitted_with_derived_rework_packet(self) -> None:
+        bundle = self.helper._run_bundle("managed-live-rework")
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review synthetic fixture and return exact JSON.")
+        cycle_root = self.root / "cycle"
+        with patch.object(agent_launcher, "CLAUDE_WRAPPER", self.wrapper_for(self.verdict)):
+            live_result = run_cycle(self.root, prompt, bundle, cycle_root)
+        admitted = admit_live_review(live_result, cycle_root)
+        self.assertEqual((admitted["outcome"], admitted["rule_id"]), ("REWORK", "R11_OPEN_FINDINGS"))
+        self.assertIn("fnd_b5ea59e6b40ea0e2265bd03f438a00e3", admitted["rework_packet"])
 
     def test_failed_launch_never_runs_policy(self) -> None:
         bundle = self.helper._run_bundle("never-policy")
