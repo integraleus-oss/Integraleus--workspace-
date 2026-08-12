@@ -1,0 +1,133 @@
+{
+  "conclusion": {
+    "status": "findings_present",
+    "summary": "The required correction is present and its regression test passes; one advisory coverage nit remains.",
+    "unable_to_complete_reason": null
+  },
+  "counts": {
+    "blocker": 0,
+    "major": 0,
+    "nit": 1,
+    "total": 1
+  },
+  "coverage_scope": "full",
+  "criteria_coverage": [
+    {
+      "criterion_id": "AC-1",
+      "evidence_ids": [
+        "ev_22ab65309140adbcd40f622a11f3905b"
+      ],
+      "linked_occurrence_ids": [
+        "occ_571ad9677e8d9ce74daa7058cc13801b"
+      ],
+      "notes": "The corrected implementation returned 5 for the required case and the unittest passed.",
+      "statement_digest": "sha256:30c472f31d6dcd7bbe036b8f0ae4eb3705d0dbcc6134c79f0b0e4db0f6704b0a",
+      "status": "satisfied",
+      "verification_method": "executed_test"
+    }
+  ],
+  "document_type": "review_verdict",
+  "findings": [
+    {
+      "category": "test_gap",
+      "confidence": "high",
+      "criterion_id": null,
+      "evidence": [
+        {
+          "artifact_ref": "evidence/unittest-post-pass.log",
+          "collected_at": "2026-08-12T18:20:00Z",
+          "command": {
+            "argv": [
+              "python3",
+              "-m",
+              "unittest",
+              "-v"
+            ],
+            "cwd_rel": "state/tasks/2026-08-12-orchestrator-one-cycle/synthetic-repo",
+            "duration_ms": 1,
+            "exit_code": 0
+          },
+          "content_digest": "sha256:22ab65309140adbcd40f622a11f3905b513dcd014107fef5b76e97de676f7b8c",
+          "description": "Observed synthetic unittest closure result.",
+          "evidence_id": "ev_22ab65309140adbcd40f622a11f3905b",
+          "excerpt": "test_adds (test_calc.CalcTests.test_adds) ... ok; Ran 1 test; OK",
+          "excerpt_truncated": false,
+          "kind": "test_result"
+        }
+      ],
+      "failure_scenario": "Uncovered negative, zero, or boundary inputs could regress without this single test detecting them.",
+      "finding_id": "fnd_6d26df1301d18d9a0eec6814760fb7f7",
+      "fingerprint": {
+        "category": "test_gap",
+        "criterion_id": null,
+        "fingerprint_version": 1,
+        "normalized_path": "test_calc.py",
+        "normalized_symbol": "CalcTests.test_adds",
+        "normalized_title": "single example provides narrow arithmetic coverage"
+      },
+      "location": {
+        "blob_digest": "sha256:70e5fd2ac98978729208634e4d3c82996ef6e1be7f14ab612e4e909f02f040df",
+        "diff_side": "head",
+        "end_line": 8,
+        "path": "test_calc.py",
+        "start_line": 5,
+        "symbol": "CalcTests.test_adds"
+      },
+      "occurrence_id": "occ_571ad9677e8d9ce74daa7058cc13801b",
+      "proposed_disposition": "none",
+      "rationale": "The required regression passes, but only one positive integer example is covered.",
+      "reproduction": [
+        {
+          "action": "Run the synthetic unittest suite.",
+          "command": "python3 -m unittest -v",
+          "evidence_ids": [
+            "ev_22ab65309140adbcd40f622a11f3905b"
+          ],
+          "expected": "The add regression passes.",
+          "index": 1,
+          "observed": "One test passed."
+        }
+      ],
+      "severity": "nit",
+      "suggested_remediation": "Optionally add zero and negative-input examples in a later non-blocking improvement.",
+      "tags": [
+        "tests"
+      ],
+      "title": "Single example provides narrow arithmetic coverage"
+    }
+  ],
+  "infra_symptoms": [],
+  "injection_attempts_observed": [],
+  "limitations": [],
+  "review": {
+    "completed_at": "2026-08-12T18:20:00Z",
+    "inputs_digest": {
+      "acceptance_criteria_digest": "sha256:30c472f31d6dcd7bbe036b8f0ae4eb3705d0dbcc6134c79f0b0e4db0f6704b0a",
+      "gate_report_digest": "sha256:22ab65309140adbcd40f622a11f3905b513dcd014107fef5b76e97de676f7b8c",
+      "prior_findings_digest": null,
+      "review_instructions_digest": "sha256:0b5a71bea03dcdf3690be0a426d66475bb4a3977cc287079a3ed1ad173304793"
+    },
+    "review_id": "rev_e405043ddebc99b4382c20b75141817b",
+    "review_mode": "final_full",
+    "reviewer_kind": "fresh_session",
+    "started_at": "2026-08-12T18:20:00Z",
+    "toolchain": {
+      "harness_version": "reviewer-contract-v1",
+      "model_id": "claude-review",
+      "sandboxed": true
+    }
+  },
+  "schema_version": "1.0.0",
+  "subject": {
+    "attempt": 2,
+    "base_commit": "a28551939ecc7d7e76f665a9a150a352b47ce85c",
+    "changed_files_digest": "sha256:1bfd28824cc4b85499e8c7f4092e61b1e1cad55435290a117942d3cfeaf68515",
+    "diff_digest": "sha256:31e8c330f6f8c0d378f569643ba8e1c111d80557cbd722f2d35e442deb84c52b",
+    "gate_run_id_post": "run_post_01",
+    "gate_run_id_pre": "run_pre_01",
+    "head_commit": "9d035e212859b347dc8fab8fc83a903a1292bd51",
+    "repo_id": "synthetic-calc",
+    "run_id": "run_20260812_honest_closure",
+    "task_id": "synthetic-add-closure"
+  }
+}

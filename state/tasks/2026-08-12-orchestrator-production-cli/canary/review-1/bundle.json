@@ -1,0 +1,10 @@
+{
+  "document_type": "local_orchestrator_run",
+  "schema_version": "1.0.0",
+  "run_name": "production-cli-canary-review-1",
+  "policy_fixture": "policy.json",
+  "review_verdict": "verdict.json",
+  "trusted_manifest": "manifest.json",
+  "projection_binding": "binding.json",
+  "prior_findings": null
+}

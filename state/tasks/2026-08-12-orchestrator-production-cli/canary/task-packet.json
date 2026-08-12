@@ -1,0 +1,13 @@
+{
+  "document_type": "production_cycle_task",
+  "schema_version": "1.0.0",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/production-cli-canary",
+  "task_note": "task.md",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-canary-runs/production-cli-canary-01",
+  "codex_timeout_seconds": 300,
+  "claude_timeout_seconds": 300,
+  "reviews": [
+    {"prompt": "review-1.md", "input_dir": "review-1", "bundle": "bundle.json"},
+    {"prompt": "review-2.md", "input_dir": "review-2", "bundle": "bundle.json"}
+  ]
+}

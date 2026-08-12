@@ -1,6 +1,6 @@
 # Managed one-cycle orchestrator
 
-Status: COMPLETED_AWAITING_SCOPED_COMMIT
+Status: COMPLETED_COMMITTED
 Baseline: `bada693`
 Risk: MEDIUM
 
@@ -27,10 +27,10 @@ decision.
 - [x] Run synthetic bounded agent-path trial.
 - [x] Independent review and bounded authority rework.
 - [x] Add fail-closed admission from live contract/projection/policy evidence.
-- [ ] Prove both live trial decisions through the admitted automatic chain.
+- [x] Prove both live trial decisions through the admitted automatic chain.
 - [x] Prove fresh live REWORK through contract/projection/policy/admission.
 - [x] Generate an honest closure contract bound to the actual synthetic repo.
 - [x] Admit fresh closure as `ACCEPTED / R17_ACCEPT`.
 - [x] Independent closure review.
-- [ ] Scoped local commit.
-- [ ] Final tests and scoped local commit.
+- [x] Scoped local commit (`1da5c7c`).
+- [x] Final tests and scoped local commit.

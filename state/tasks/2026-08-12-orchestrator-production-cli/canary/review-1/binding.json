@@ -1,0 +1,13 @@
+{
+  "attempt_epoch": 2,
+  "covered_paths": [
+    "calc.py",
+    "test_calc.py"
+  ],
+  "document_type": "review_projection_binding",
+  "reviewed_tree_digest": "sha256:5f2211235d620aa8882bdfcdd2ca82cc017085047d4b7d9cfebd55733a727ad2",
+  "run_id": "run_20260812_honest_closure",
+  "schema_version": "1.0.0",
+  "spec_digest": "sha256:30c472f31d6dcd7bbe036b8f0ae4eb3705d0dbcc6134c79f0b0e4db0f6704b0a",
+  "task_id": "synthetic-add-closure"
+}
