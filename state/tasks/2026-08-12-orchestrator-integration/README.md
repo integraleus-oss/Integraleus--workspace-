@@ -1,7 +1,7 @@
 # Local Orchestrator Integration
 
 This slice connects the accepted reviewer contract and deterministic policy core
-without launching agents or changing OpenClaw runtime configuration.
+to bounded local agent launches without changing OpenClaw runtime configuration.
 
 ## Components
 
@@ -11,6 +11,11 @@ without launching agents or changing OpenClaw runtime configuration.
 - `local_orchestrator_runner.py` snapshots explicit inputs into a new isolated
   run directory, invokes the adapter and policy, and writes deterministic JSON
   artifacts for audit and replay.
+- `agent_launcher.py` invokes only the approved local Codex/Claude wrappers via
+  fixed argv, bounds execution time, and preserves prompt/output/error digests.
+- `live_review_cycle.py` admits exact JSON from a successful fresh Claude
+  launch into the existing validator/projection/policy path. Failed launches
+  never produce a policy decision.
 - `tests/test_integration.py` covers all four policy outcomes and fail-closed
   integration boundaries.
 
@@ -67,7 +72,7 @@ the projection, policy decision, and content digests.
 
 ```sh
 python3 -m unittest discover -s tests -v
-python3 -m py_compile review_projection.py local_orchestrator_runner.py tests/test_integration.py
+python3 -m py_compile agent_launcher.py live_review_cycle.py review_projection.py local_orchestrator_runner.py tests/*.py
 ```
 
 The accepted core regression suite must also remain green:
