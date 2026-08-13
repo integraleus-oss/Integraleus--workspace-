@@ -41,7 +41,7 @@ Forbidden:
 - [x] Run isolated builder canary.
 - [x] Independent Standards + Spec closure review and live policy acceptance.
 - [x] Scoped local commit and evidence update.
-- [ ] Create and verify encrypted Synology backup after commit.
+- [x] Create and verify encrypted Synology backup after commit.
 
 ## Current review blocker
 

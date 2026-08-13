@@ -81,6 +81,13 @@ Status: accepted; live three-leg policy chain reached `R17_ACCEPT`
 Current verification: integration 83/83, accepted core 84/84, `py_compile` and
 `git diff --check` pass.
 
-The implementation, tests, task packet, and evidence were included in one
-scoped local commit. No Synology backup, GitHub push, Gateway/config, cron, or
-deploy action was performed.
+The implementation, tests, task packet, and evidence were included in scoped
+local commit `7fa0a0b`. Its encrypted Synology backup is stored at
+`/mnt/synology/Documents/openclaw-backups/encrypted/openclaw-orchestrator-7fa0a0b-2026-08-13.tar.gpg`
+with mode `600` and an adjacent external SHA-256 file. Verification passed by
+decrypting the archive, checking the relative internal SHA-256, running
+`git bundle verify`, and confirming `refs/heads/main` resolves exactly to
+`7fa0a0b19893fe4de38aaeca09c2cf543f6fa5f5`. The first generated copy exposed
+an absolute-path internal-checksum defect during an independent restore test;
+it was replaced at the same approved destination by the portable verified
+copy. No GitHub push, Gateway/config, cron, or deploy action was performed.
