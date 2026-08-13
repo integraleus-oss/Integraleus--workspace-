@@ -81,6 +81,10 @@ def run(bundle_path: Path, runs_root: Path) -> tuple[Path, dict[str, Any]]:
             if key not in fixture:
                 raise ProjectionError(f"policy fixture missing {key}")
         decision = POLICY.decide(fixture["task_policy"], fixture["ledger"], fixture["execution_report"], projection)
+        registry_after = POLICY.merge_finding_registry(
+            fixture["ledger"]["finding_registry"], projection,
+            fixture["execution_report"]["subject"]["tree_digest"],
+        )
         if decision.get("outcome") == "ACCEPTED" and not validation.get("contract_valid"):
             raise ProjectionError("fail-closed invariant violated")
     except Exception as exc:
@@ -97,6 +101,7 @@ def run(bundle_path: Path, runs_root: Path) -> tuple[Path, dict[str, Any]]:
     _write_json(run_dir / "review-validation.json", validation)
     _write_json(run_dir / "trusted-review-projection.json", projection)
     _write_json(run_dir / "decision.json", decision)
+    _write_json(run_dir / "registry-after.json", registry_after)
     manifest = {
         "document_type": "local_orchestrator_run_result",
         "schema_version": "1.0.0",
@@ -108,6 +113,7 @@ def run(bundle_path: Path, runs_root: Path) -> tuple[Path, dict[str, Any]]:
         "input_digests": {name: _sha256(path) for name, path in sorted(snapshots.items())},
         "projection_digest": _sha256(run_dir / "trusted-review-projection.json"),
         "decision_digest_file": _sha256(run_dir / "decision.json"),
+        "registry_digest_file": _sha256(run_dir / "registry-after.json"),
     }
     _write_json(run_dir / "run-result.json", manifest)
     return run_dir, manifest

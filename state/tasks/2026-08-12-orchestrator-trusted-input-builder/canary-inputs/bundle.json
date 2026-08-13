@@ -1,0 +1,1 @@
+{"document_type":"local_orchestrator_run","policy_fixture":"policy.json","prior_findings":null,"projection_binding":"binding.json","review_verdict":"verdict.json","run_name":"trusted-builder-canary-attempt-1","schema_version":"1.0.0","trusted_manifest":"manifest.json"}

@@ -1,0 +1,1 @@
+{"argv":["python3","-c","compile(open('src/value.py').read(), 'src/value.py', 'exec')"],"duration_ms":10,"exit_code":0,"gate_id":"syntax","stderr_digest":"sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","stdout_digest":"sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","timed_out":false}

@@ -48,6 +48,36 @@ class ManagedOneCycleTests(unittest.TestCase):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("REWORK", rework_packet="fix"))
         self.assertEqual(result["status"], "ESCALATED")
 
+    def test_second_review_can_request_bounded_review_only_final_full(self):
+        implemented = []
+        def implement(attempt, context, run_dir):
+            implemented.append(attempt)
+            return self.ok(attempt, context, run_dir)
+        def review(attempt, run_dir):
+            if attempt == 1:
+                return self.decision("REWORK", rework_packet="fix F-1")
+            if attempt == 2:
+                return self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
+                                     rework_packet="required final full review only")
+            return self.decision("ACCEPTED")
+        result = run_managed_cycle(self.root, implement, review)
+        self.assertEqual((result["status"], result["attempts_used"]), ("ACCEPTED", 3))
+        self.assertEqual(implemented, [1, 2])
+        self.assertEqual(result["history"][2]["implementation"]["status"], "SKIPPED_REVIEW_ONLY")
+
+    def test_first_review_can_request_final_full_without_second_codex_attempt(self):
+        implemented = []
+        def implement(attempt, context, run_dir):
+            implemented.append(attempt)
+            return self.ok(attempt, context, run_dir)
+        def review(attempt, run_dir):
+            return (self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
+                                  rework_packet="required final full review only")
+                    if attempt == 1 else self.decision("ACCEPTED"))
+        result = run_managed_cycle(self.root, implement, review)
+        self.assertEqual(result["status"], "ACCEPTED")
+        self.assertEqual(implemented, [1])
+
     def test_missing_rework_packet_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("REWORK"))
         self.assertEqual(result["status"], "ESCALATED")

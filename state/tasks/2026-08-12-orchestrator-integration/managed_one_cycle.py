@@ -59,6 +59,19 @@ def run_managed_cycle(
             if verdict.get("outcome") != outcome:
                 outcome = "ESCALATED"
             history.append({"attempt": attempt, "implementation": implementation, "review": verdict, "outcome": outcome})
+            if outcome == "REWORK" and rule_id == "R15_NEED_FULL_REVIEW":
+                final_dir = root / "review-only-final-full"
+                final_dir.mkdir()
+                final_verdict = review(max_attempts + 1, final_dir / "claude")
+                final_rule = (final_verdict.get("rule_id")
+                              if final_verdict.get("document_type") == "local_orchestrator_run_result" else None)
+                final_outcome = RULE_OUTCOMES.get(final_rule, "ESCALATED")
+                if final_verdict.get("outcome") != final_outcome or final_outcome == "REWORK":
+                    final_outcome = "ESCALATED"
+                history.append({"attempt": max_attempts + 1, "implementation": {"status": "SKIPPED_REVIEW_ONLY"},
+                                "review": final_verdict, "outcome": final_outcome})
+                final = final_outcome
+                break
             if outcome == "REWORK" and attempt < max_attempts:
                 rework_context = verdict.get("rework_packet")
                 if not isinstance(rework_context, str) or not rework_context.strip() or len(rework_context.encode()) > 8192:

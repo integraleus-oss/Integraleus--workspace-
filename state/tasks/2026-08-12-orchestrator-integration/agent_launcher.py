@@ -70,7 +70,11 @@ def launch(
     timed_out = False
     process: subprocess.Popen[str] | None = None
     try:
-        process = subprocess.Popen(argv, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
+        process = subprocess.Popen(
+            argv, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            start_new_session=True, env=env,
+        )
         try:
             stdout, stderr = process.communicate(timeout=timeout_seconds)
             exit_code = process.returncode

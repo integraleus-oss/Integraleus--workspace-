@@ -1,0 +1,7 @@
+diff --git a/src/value.py b/src/value.py
+index b15b1b0..c8fcecd 100644
+--- a/src/value.py
++++ b/src/value.py
+@@ -1 +1 @@
+-VALUE = 1
++VALUE = 2

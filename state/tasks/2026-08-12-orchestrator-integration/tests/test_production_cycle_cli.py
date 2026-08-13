@@ -121,6 +121,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertEqual(result["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 2)
         self.assertIn("Policy-authenticated rework:\nFix F-1", launch.call_args_list[1].args[2])
+        self.assertNotIn("Make the focused change.", launch.call_args_list[1].args[2])
 
     @patch("production_cycle_cli.agent_launcher.launch")
     def test_codex_timeout_escalates(self, launch):
@@ -165,6 +166,65 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.packet_path.write_text("not json", encoding="utf-8")
         code, output = self.invoke_main([str(self.packet_path)])
         self.assertEqual((code, output["status"]), (2, "ERROR"))
+
+    @patch("production_cycle_cli.admit_live_review")
+    @patch("production_cycle_cli.live_review_cycle.run_cycle")
+    @patch("production_cycle_cli.agent_launcher.launch")
+    def test_builder_packet_observes_change_and_connects_generated_bundle(self, launch, live, admit):
+        # Replace the fake Git marker with a real clean repository.
+        (self.project / ".git").rmdir()
+        import subprocess
+        subprocess.run(["git", "init", "-q", self.project], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.email", "test@example.invalid"], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.name", "Test"], check=True)
+        (self.project / "app.py").write_text("VALUE = 1\n")
+        subprocess.run(["git", "-C", self.project, "add", "."], check=True)
+        subprocess.run(["git", "-C", self.project, "commit", "-qm", "baseline"], check=True)
+        policy = self.packet_dir / "policy.json"
+        policy.write_text(json.dumps({"task_policy": {"budgets": {"rework": 1, "infra_total": 1,
+            "infra_per_signature": {}, "final_full": 1, "no_progress": 1},
+            "infra_signature_allowlist": []}}))
+        self.packet = {
+            "document_type": "production_cycle_task", "schema_version": "1.1.0",
+            "project_root": str(self.project), "task_note": "task.md", "run_root": str(self.root / "run"),
+            "codex_timeout_seconds": 30, "claude_timeout_seconds": 30,
+            "builder": {"task_id": "task", "repo_id": "fixture", "allowed_paths": ["app.py"],
+                "gates": [{"id": "syntax", "argv": ["python3", "-c",
+                    "compile(open('app.py').read(), 'app.py', 'exec')"]}],
+                "gate_timeout_seconds": 10,
+                "acceptance_criteria": [{"id": "AC-1", "statement": "VALUE is 2."}],
+                "review_instructions": "review-1.md", "policy_fixture": "policy.json",
+                "review_verdict": "verdict.json"},
+        }
+        self.write_packet()
+
+        def implement(*args, **kwargs):
+            (self.project / "app.py").write_text("VALUE = 2\n")
+            return {"status": "OK"}
+        launch.side_effect = implement
+
+        def inspect_bundle(project, prompt, bundle, live_root, timeout_seconds, pre_admission_verify=None,
+                           allow_format_retry=False, allow_contract_retry=False):
+            inputs = bundle.parent
+            binding = json.loads((inputs / "binding.json").read_text())
+            fixture = json.loads((inputs / "policy.json").read_text())
+            self.assertEqual(fixture["task_policy"]["run_id"], binding["run_id"])
+            self.assertEqual(fixture["execution_report"]["subject"]["tree_digest"],
+                             binding["reviewed_tree_digest"])
+            self.assertIn(str(inputs), prompt.read_text())
+            self.assertIn((inputs / "review-instructions.md").read_text().strip(), prompt.read_text())
+            self.assertIn("review-verdict.schema.json", prompt.read_text())
+            self.assertIn("conclusion.unable_to_complete_reason", prompt.read_text())
+            self.assertIsNotNone(pre_admission_verify)
+            self.assertTrue(allow_format_retry)
+            self.assertTrue(allow_contract_retry)
+            pre_admission_verify()
+            return {"status": "DECIDED"}
+        live.side_effect = inspect_bundle
+        admit.return_value = {"document_type": "local_orchestrator_run_result", "outcome": "ACCEPTED",
+                              "rule_id": "R17_ACCEPT"}
+        result = run_packet(self.packet_path)
+        self.assertEqual(result["status"], "ACCEPTED")
 
 
 if __name__ == "__main__":

@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import importlib.util
 import json
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +21,17 @@ if not (CORE / "orchestrator_policy.py").is_file():
 
 class ProjectionError(ValueError):
     pass
+
+
+class ContractValidationError(ProjectionError):
+    """Contract failure carrying the deterministic validator report."""
+
+    def __init__(self, validation: dict[str, Any]) -> None:
+        self.validation = validation
+        super().__init__(
+            "review verdict is not contract-valid: "
+            + json.dumps(validation, sort_keys=True, separators=(",", ":"))
+        )
 
 
 def _load_module(name: str, path: Path) -> Any:
@@ -45,21 +58,74 @@ def _digest(value: Any) -> str:
     return "sha256:" + hashlib.sha256(raw).hexdigest()
 
 
+def normalize_derived_review_ids(verdict: dict[str, Any]) -> dict[str, Any]:
+    """Canonicalize contract-derived IDs without changing review substance."""
+    normalized = copy.deepcopy(verdict)
+    review_id = normalized.get("review", {}).get("review_id")
+    findings = normalized.get("findings")
+    if not isinstance(review_id, str) or not isinstance(findings, list):
+        return normalized
+    occurrence_map: dict[str, str] = {}
+    finding_map: dict[str, str] = {}
+    for ordinal, finding in enumerate(findings, start=1):
+        if not isinstance(finding, dict) or not isinstance(finding.get("fingerprint"), dict):
+            continue
+        old_finding = finding.get("finding_id")
+        old_occurrence = finding.get("occurrence_id")
+        new_finding = VALIDATOR.expected_finding_id(finding["fingerprint"])
+        new_occurrence = VALIDATOR.expected_occurrence_id(review_id, new_finding, ordinal)
+        if isinstance(old_finding, str):
+            finding_map[old_finding] = new_finding
+        if isinstance(old_occurrence, str):
+            occurrence_map[old_occurrence] = new_occurrence
+        finding["finding_id"] = new_finding
+        finding["occurrence_id"] = new_occurrence
+    for coverage in normalized.get("criteria_coverage", []):
+        if isinstance(coverage, dict) and isinstance(coverage.get("linked_occurrence_ids"), list):
+            coverage["linked_occurrence_ids"] = [occurrence_map.get(item, item)
+                                                   for item in coverage["linked_occurrence_ids"]]
+    verification = normalized.get("verification")
+    if isinstance(verification, dict):
+        for result in verification.get("results", []):
+            if not isinstance(result, dict):
+                continue
+            if isinstance(result.get("finding_id"), str):
+                result["finding_id"] = finding_map.get(result["finding_id"], result["finding_id"])
+            if isinstance(result.get("new_occurrence_id"), str):
+                result["new_occurrence_id"] = occurrence_map.get(
+                    result["new_occurrence_id"], result["new_occurrence_id"])
+    return normalized
+
+
 def build_projection(
     verdict_path: Path,
     trusted_manifest_path: Path,
     projection_binding_path: Path,
     prior_findings_path: Path | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    validation = VALIDATOR.validate_document(
-        verdict_path,
-        trusted_manifest_path=trusted_manifest_path,
-        prior_findings_path=prior_findings_path,
-    )
+    raw_verdict = _load_json(verdict_path)
+    normalized_verdict = normalize_derived_review_ids(raw_verdict)
+    validation_path = verdict_path
+    temporary_path: Path | None = None
+    try:
+        if normalized_verdict != raw_verdict:
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", suffix=".json", delete=False) as handle:
+                json.dump(normalized_verdict, handle, sort_keys=True, separators=(",", ":"))
+                handle.write("\n")
+                temporary_path = Path(handle.name)
+            validation_path = temporary_path
+        validation = VALIDATOR.validate_document(
+            validation_path,
+            trusted_manifest_path=trusted_manifest_path,
+            prior_findings_path=prior_findings_path,
+        )
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
     if not validation.get("contract_valid"):
-        raise ProjectionError("review verdict is not contract-valid")
+        raise ContractValidationError(validation)
 
-    verdict = _load_json(verdict_path)
+    verdict = normalized_verdict
     binding = _load_json(projection_binding_path)
     allowed = {
         "document_type", "schema_version", "task_id", "spec_digest", "run_id",
