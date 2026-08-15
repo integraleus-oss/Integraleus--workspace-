@@ -1,6 +1,6 @@
 # Manual-001 — fail-closed external-read domain validation
 
-Status: PREPARED; NOT STARTED
+Status: ACCEPTED / R17_ACCEPT; ISOLATED RESULT ONLY; NOT TRANSFERRED
 
 - Source repository: `/home/stanislav/projects/home-agent-factory`.
 - Exact source commit: `3d9c27e6901fc98f8fbaaf3819eac5a33225e73f`.
