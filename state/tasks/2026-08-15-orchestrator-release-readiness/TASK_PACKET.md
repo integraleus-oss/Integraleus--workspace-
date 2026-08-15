@@ -27,13 +27,13 @@ the controlled-pilot operating boundary without activating any service.
 - [x] Task packet exists before release work.
 - [x] Activation-readiness packet completed.
 - [x] Current integration suite passes.
-- [ ] Release checkpoint committed and annotated tag created.
-- [ ] Git bundle created from the checkpoint.
-- [ ] Bundle encrypted to Synology with mode `600` and external SHA-256.
-- [ ] Encrypted artifact decrypted into a temporary local directory.
-- [ ] Internal SHA-256, `git bundle verify`, and exact tagged commit verified.
-- [ ] Temporary restore files removed.
-- [ ] `git status` clean; Gateway/cron unchanged.
+- [x] Release checkpoint committed and annotated tag created.
+- [x] Git bundle created from the checkpoint.
+- [x] Bundle encrypted to Synology with mode `600` and external SHA-256.
+- [x] Encrypted artifact decrypted into a temporary local directory.
+- [x] Internal SHA-256, `git bundle verify`, and exact tagged commit verified.
+- [x] Temporary restore files removed.
+- [x] `git status` clean; Gateway/cron unchanged.
 
 ## Acceptance criteria
 
