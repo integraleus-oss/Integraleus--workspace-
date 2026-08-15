@@ -69,12 +69,17 @@ class LiveReviewCycleTests(unittest.TestCase):
         path.chmod(path.stat().st_mode | stat.S_IXUSR)
         return path
 
-    def contract_retry_with_prose_wrapper(self, verdict: dict, *, final_exact: bool = True) -> Path:
+    def contract_retry_with_prose_wrapper(
+        self, verdict: dict, *, final_exact: bool = True, repair_control_character: bool = False
+    ) -> Path:
         path = self.root / "claude-contract-retry-with-prose-wrapper"
         invalid = json.loads(json.dumps(verdict))
         invalid["conclusion"].pop("unable_to_complete_reason", None)
         first = json.dumps({"result": json.dumps(invalid)})
-        repair_with_prose = json.dumps({"result": "Contract repaired.\n" + json.dumps(verdict)})
+        repair_candidate = json.loads(json.dumps(verdict))
+        if repair_control_character:
+            repair_candidate["conclusion"]["summary"] += "\ttransport"
+        repair_with_prose = json.dumps({"result": "Contract repaired.\n" + json.dumps(repair_candidate)})
         final = json.dumps({"result": json.dumps(verdict) if final_exact else "Still not exact JSON"})
         path.write_text(
             "#!/bin/sh\nset -eu\n"
@@ -100,6 +105,9 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertEqual(result["decision"]["outcome"], "REWORK")
         self.assertFalse((self.root / bundle_value["review_verdict"]).exists())
         self.assertTrue((self.root / "cycle/claude-launch/launch-result.json").exists())
+        initial_prompt = (self.root / "cycle/claude-launch/input-prompt.md").read_text()
+        self.assertIn("no decoded U+0000 through U+001F", initial_prompt)
+        self.assertIn("replace them with a single space", initial_prompt)
 
     def test_policy_decision_is_admitted_with_derived_rework_packet(self) -> None:
         bundle = self.helper._run_bundle("managed-live-rework")
@@ -172,7 +180,7 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertTrue((self.root / "cycle/claude-format-retry/verdict-extraction.json").is_file())
         retry_prompt = (self.root / "cycle/claude-format-retry/input-prompt.md").read_text()
         self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
-        self.assertIn("never emit literal tabs", retry_prompt)
+        self.assertIn("Never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_format_retry_is_single_and_second_malformed_reply_fails_closed(self) -> None:
@@ -213,7 +221,7 @@ class LiveReviewCycleTests(unittest.TestCase):
         retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
         self.assertIn("schema_validation", retry_prompt)
         self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
-        self.assertIn("never emit literal tabs", retry_prompt)
+        self.assertIn("Never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_contract_retry_is_single_and_second_invalid_reply_fails_closed(self) -> None:
@@ -237,7 +245,10 @@ class LiveReviewCycleTests(unittest.TestCase):
         prompt = self.root / "prompt.md"
         prompt.write_text("Review and obey the sealed contract.")
         verified = []
-        with patch.object(agent_launcher, "CLAUDE_WRAPPER", self.contract_retry_with_prose_wrapper(self.verdict)):
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER",
+            self.contract_retry_with_prose_wrapper(self.verdict, repair_control_character=True),
+        ):
             result = run_cycle(
                 self.root, prompt, bundle, self.root / "cycle",
                 pre_admission_verify=lambda: verified.append(True), allow_contract_retry=True,
@@ -249,7 +260,13 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertTrue((self.root / "cycle/claude-contract-format-retry/verdict-extraction.json").is_file())
         retry_prompt = (self.root / "cycle/claude-contract-format-retry/input-prompt.md").read_text()
         self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
-        self.assertIn("never emit literal tabs", retry_prompt)
+        self.assertIn("Never emit literal tabs", retry_prompt)
+        repair_candidate = json.loads(
+            json.loads((self.root / "cycle/claude-contract-retry/wrapper-output.json").read_text())["result"].split("\n", 1)[1]
+        )
+        self.assertIn("\t", repair_candidate["conclusion"]["summary"])
+        admitted = json.loads((self.root / "cycle/contract-repair-first-verdict.json").read_text())
+        self.assertNotIn("\t", admitted["conclusion"]["summary"])
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_contract_repair_format_retry_is_single_and_fails_closed(self) -> None:
