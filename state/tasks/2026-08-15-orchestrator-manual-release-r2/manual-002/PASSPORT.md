@@ -1,6 +1,6 @@
 # Manual-002 — integrated external-read contract
 
-Status: PREPARED; NOT STARTED
+Status: KNOWN REVIEW INFRA STOP; ONE CONTROLLED RETRY SCHEDULED AFTER 20:30 MSK
 
 - Source: `/home/stanislav/projects/home-agent-factory` at
   `3d9c27e6901fc98f8fbaaf3819eac5a33225e73f`.
