@@ -170,6 +170,9 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertIsNotNone(result["format_retry_launch"])
         self.assertEqual(len(verified), 3)
         self.assertTrue((self.root / "cycle/claude-format-retry/verdict-extraction.json").is_file())
+        retry_prompt = (self.root / "cycle/claude-format-retry/input-prompt.md").read_text()
+        self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
+        self.assertIn("never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_format_retry_is_single_and_second_malformed_reply_fails_closed(self) -> None:
@@ -209,6 +212,8 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertTrue((self.root / "cycle/contract-repair-first-admission/run-error.json").is_file())
         retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
         self.assertIn("schema_validation", retry_prompt)
+        self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
+        self.assertIn("never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_contract_retry_is_single_and_second_invalid_reply_fails_closed(self) -> None:
@@ -242,6 +247,9 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertIsNotNone(result["contract_format_retry_launch"])
         self.assertEqual(len(verified), 5)
         self.assertTrue((self.root / "cycle/claude-contract-format-retry/verdict-extraction.json").is_file())
+        retry_prompt = (self.root / "cycle/claude-contract-format-retry/input-prompt.md").read_text()
+        self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
+        self.assertIn("never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_contract_repair_format_retry_is_single_and_fails_closed(self) -> None:

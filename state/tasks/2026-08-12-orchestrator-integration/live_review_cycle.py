@@ -14,6 +14,14 @@ import local_orchestrator_runner
 from review_projection import ContractValidationError, ProjectionError
 
 
+CONTROL_CHARACTER_GUIDANCE = (
+    " Every JSON string must contain no decoded U+0000 through U+001F control "
+    "characters. Encode intended line breaks as the two characters \\n or replace "
+    "them with ` | `; never emit literal tabs, newlines, or other controls inside "
+    "a JSON string value."
+)
+
+
 def _write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 
@@ -81,7 +89,9 @@ def run_cycle(
                 + "\n\nFORMAT-ONLY RETRY (one retry maximum): Your prior response was rejected only "
                   "because it was not exact JSON. Re-read the same sealed inputs. Return exactly one JSON "
                   "object matching the required review-verdict contract, with no prose, markdown, or code fences. "
-                  "Do not change the substantive findings.\n"
+                  "Do not change the substantive findings."
+                + CONTROL_CHARACTER_GUIDANCE
+                + "\n"
             )
             active_launch_root = cycle_root / "claude-format-retry"
             format_retry_launch = agent_launcher.launch(
@@ -113,7 +123,9 @@ def run_cycle(
                 + "\n\nCONTRACT-ONLY REPAIR (one retry maximum): The prior exact-JSON verdict was "
                   "rejected by the deterministic contract validator. Preserve every substantive finding, "
                   "status, evidence item, digest, and conclusion meaning. Change only fields required to "
-                  "satisfy the sealed review-verdict.schema.json. Return exactly one JSON object with no prose.\n"
+                  "satisfy the sealed review-verdict.schema.json. Return exactly one JSON object with no prose."
+                + CONTROL_CHARACTER_GUIDANCE
+                + "\n"
                   "Exact validator report:\n"
                 + json.dumps(exc.validation, sort_keys=True, separators=(",", ":"))
                 + "\n"
@@ -140,7 +152,9 @@ def run_cycle(
                       "response was rejected only because it was not exact JSON. Re-read the same sealed "
                       "inputs and the same validator report. Return exactly the same repaired verdict as one "
                       "JSON object, with no prose, markdown, or code fences. Do not change any substantive "
-                      "finding, status, evidence item, digest, or conclusion meaning.\n"
+                      "finding, status, evidence item, digest, or conclusion meaning."
+                    + CONTROL_CHARACTER_GUIDANCE
+                    + "\n"
                 )
                 active_launch_root = cycle_root / "claude-contract-format-retry"
                 contract_format_retry_launch = agent_launcher.launch(
