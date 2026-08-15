@@ -1,6 +1,6 @@
 # Manual-002 result
 
-Status: `ESCALATED`; implementation retained; review infrastructure retry pending
+Status: `ESCALATED`; implementation retained; source transfer forbidden
 
 ## First run
 
@@ -36,3 +36,38 @@ The first retry packet was rejected before any agent launch with
 retained implementation worktree. This consumed no Codex or Claude attempt.
 The corrected retry uses a new clean detached worktree and a new evidence root;
 the failed preflight evidence remains preserved.
+
+## Corrected r3 run
+
+- Clean detached worktree:
+  `/home/stanislav/agent-runs/orchestrator-worktrees/manual-002-external-read-contract-r3`.
+- Evidence root:
+  `/home/stanislav/agent-runs/orchestrator-worktrees/manual-002-external-read-contract-run-r3`.
+- Codex: `OK`, 256463 ms; only the three allowed paths changed.
+- Claude initial review: `OK`, 503863 ms.
+- The initial verdict was rejected by the deterministic contract validator and
+  consumed the one allowed contract-only repair.
+- The repaired verdict still violated the sealed schema by adding unsupported
+  fingerprint property `normalized_symbol_placeholder`.
+- Terminal managed result: `ESCALATED`; no further retry was launched.
+- Cycle-result SHA-256:
+  `58614573aa36aeff9e540f115b361d53e6e4f5db6e66cd83bbb800d16c9b17db`.
+- Independent `npm test`: PASS — 10 tests, 0 failures.
+- Independent `git diff --check`: PASS.
+
+## Substantive unadmitted review evidence
+
+Although the verdict was not admissible and cannot authorize policy action, it
+contained one credible major observation that must be resolved in a new task:
+the runtime accepts IPv4-embedded/mapped IPv6 forms through `node:net.isIP`
+(for example `::ffff:192.0.2.1`), while the hand-written schema IPv6 pattern
+cannot match an address containing both colons and a dotted IPv4 tail. Runtime
+and schema therefore do not yet define one grammar.
+
+Additional advisory observations were inconsistent IP literal
+canonicalization, lack of an executable runtime-versus-schema agreement test,
+and mutable grant/allowedExternal containers around frozen arrays.
+
+Because the repair budget is exhausted and a major contract divergence remains,
+neither r1 nor r3 implementation is eligible for source transfer. A new bounded
+task packet and fresh full review are required.

@@ -1,6 +1,6 @@
 # Manual-002 — integrated external-read contract
 
-Status: KNOWN REVIEW INFRA STOP; ONE CONTROLLED RETRY SCHEDULED AFTER 20:30 MSK
+Status: ESCALATED; REVIEW REPAIR EXHAUSTED; NOT TRANSFERABLE
 
 - Source: `/home/stanislav/projects/home-agent-factory` at
   `3d9c27e6901fc98f8fbaaf3819eac5a33225e73f`.
