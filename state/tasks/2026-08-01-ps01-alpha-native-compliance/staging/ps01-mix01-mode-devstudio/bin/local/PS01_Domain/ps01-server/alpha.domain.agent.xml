@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Alpha.Domain.Agent>
+  <EntryPointNetAgent Name="1" Address="127.0.0.1" Port="1010" />
+  <InstalledComponents>
+    <Alpha.Server Name="Server" ServiceName="Alpha.Server" />
+  </InstalledComponents>
+  <Server>
+    <Components StoragePath="/var/lib/Alpha.Domain/Storage">
+      <Component InstalledName="Server" Name="Server" />
+    </Components>
+  </Server>
+  <Options LoggerLevel="2" />
+</Alpha.Domain.Agent>

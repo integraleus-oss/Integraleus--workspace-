@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<omx xmlns="system" migration="44" xmlns:dp="automation.deployment" xmlns:eth="automation.ethernet" xmlns:hs="history">
+  <link-unit name="System" uuid="612a25fb-08c9-4803-a3ac-fe521d478a86" target="Om.System" />
+  <link-unit name="History" uuid="f02e9423-aaab-4506-895c-268d8daa70c8" target="Om.History" />
+  <dp:domain name="PS01_Domain" uuid="bf30a2dc-5b1b-4d3c-b5e6-5a9aeb7c9460" address="local">
+    <eth:ethernet-net name="ProcessEthernet" uuid="7492e30e-04b8-4b69-9e79-7a8d27815715" />
+    <dp:domain-node name="ps01-historian" uuid="c55cb76d-589e-448d-a2f6-da0f3bdbc522" address="127.0.0.1">
+      <eth:ethernet-adapter name="Eth" uuid="93622575-7b58-4ef3-8290-9972e573f04c" network="ProcessEthernet" address="127.0.0.1" />
+      <hs:historian name="Historian" uuid="d59d51b0-a43f-4690-af25-39ac3386b279" base-type="unit.History.Historian">
+        <hs:historian-database name="values" uuid="e3fbe1ef-719d-45e3-af2e-0f9fd729e559" usage="values" base-type="unit.History.Database" />
+        <hs:historian-database name="alarms" uuid="69ed9e35-1444-46de-9d2b-2f7d939c1d49" usage="events" base-type="unit.History.Database" />
+      </hs:historian>
+    </dp:domain-node>
+  </dp:domain>
+</omx>

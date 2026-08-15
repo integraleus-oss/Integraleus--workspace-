@@ -19,8 +19,8 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/107569860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Архитектура Alpha.SCADA: Server, HMI, Historian — СПЕЦТЕХ</title>
-<meta name="description" content="Архитектура Alpha.SCADA и Альфа платформы для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование и расчет лицензий.">
+<title>Архитектура Alpha.SCADA для АСУ ТП: серверы и лицензии — СПЕЦТЕХ</title>
+<meta name="description" content="Как собрать архитектуру Alpha.SCADA для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование, WEB-доступ и расчет лицензий.">
 
 <meta property="og:image" content="https://specialtechnology.ru/preview-desktop.png">
 <meta property="og:image:width" content="1200">
@@ -377,7 +377,7 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "Архитектура Alpha.SCADA: Server, HMI, Historian",
+  "headline": "Архитектура Alpha.SCADA для АСУ ТП: серверы и лицензии",
   "author": {
     "@type": "Organization",
     "name": "СПЕЦТЕХ"
@@ -391,8 +391,8 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
     }
   },
   "datePublished": "2026-03-12",
-  "dateModified": "2026-07-22",
-  "description": "Архитектура Alpha.SCADA и Альфа платформы для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование и расчет лицензий.",
+  "dateModified": "2026-08-06",
+  "description": "Как собрать архитектуру Alpha.SCADA для АСУ ТП: Alpha.Server, Alpha.HMI, Alpha.Historian, Alpha.Reports, резервирование, WEB-доступ и расчет лицензий.",
   "image": "https://specialtechnology.ru/preview-desktop.png",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -497,13 +497,18 @@ footer{background:var(--ink1);border-top:1px solid var(--wire);padding:60px 0 30
             <span class="article-read">12 мин</span>
             <span class="article-author">Редакция СпецТех</span>
           </div>
-          <h1 class="article-title">Архитектура Alpha.SCADA: от сбора данных до визуализации</h1>
-          <p class="article-subtitle">Разбор архитектуры Альфа платформы для АСУ ТП: Alpha.Server для сбора данных, Alpha.HMI для визуализации, Alpha.Historian для архивирования, Alpha.Reports для отчётности и резервирование.</p>
+          <h1 class="article-title">Архитектура Alpha.SCADA для АСУ ТП: от сбора данных до расчета лицензий</h1>
+          <p class="article-subtitle">Разбор архитектуры Альфа платформы для АСУ ТП: Alpha.Server для сбора данных, Alpha.HMI для визуализации, Alpha.Historian для архивирования, Alpha.Reports для отчётности, резервирование и WEB-доступ.</p>
         </header>
 
         <div class="article-body">
 
           <p>Альфа платформа — это российская <a href="crossplatform.html">кроссплатформенная</a> SCADA-система, разработанная АО «Атомик Софт» (Automiq) для промышленной автоматизации. В этой статье разберём архитектуру платформы (включая <a href="reports.html">систему отчётности</a>, <a href="alarms.html">модуль тревог</a> и <a href="energy-scada.html">применение в энергетике</a>) и узнаем, как данные проходят путь от промышленных контроллеров до экранов операторов, используя различные <a href="protocols.html">промышленные протоколы связи</a>.</p>
+
+          <div class="info-box">
+            <div class="info-box-title">Что собрать перед расчетом</div>
+            <p>Для предварительного подбора Alpha.One+, Alpha.SCADA или Alpha.Platform нужны теги, рабочие места, серверы, требования к резервированию, архивам, отчётам, WEB-доступу и протоколам. Быстрый маршрут: <a href="../calculator.html">калькулятор лицензий СПЕЦТЕХ</a> или инженерная форма <a href="https://www.special-tech.ru/raschet-licenziy-scada/">расчета лицензий SCADA</a>.</p>
+          </div>
 
           <div class="arch-diagram">
             <svg width="700" height="400" viewBox="0 0 700 400" fill="none">
@@ -835,5 +840,6 @@ document.getElementById('mobile-menu').addEventListener('click', function(e) {
 });
 </script>
 
+<script src="/cross-site-analytics.js" defer></script>
 </body>
 </html>

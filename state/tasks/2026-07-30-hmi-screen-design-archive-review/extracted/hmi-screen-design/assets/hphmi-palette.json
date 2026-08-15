@@ -1,0 +1,124 @@
+{
+  "name": "High Performance HMI palette",
+  "source": "Rockwell Automation Process HMI Style Guide (PROCES-WP023A-EN-P), PlantPAx Library of Process Objects",
+  "note": "Reference implementation of ISA-101 / High Performance HMI principles. Alarm colors are reserved exclusively for alarms.",
+  "screen": {
+    "background": "#E0E0E0",
+    "tab_panel": "#E0E0E0",
+    "tab_background": "#C0C0C0"
+  },
+  "static": {
+    "text": "#3F3F3F",
+    "group_header": "#3F3F3F",
+    "column_header": "#3F3F3F",
+    "separator_outline": "#D8D8D8",
+    "mimic_line": "#A0A0A4",
+    "equipment_outline": "#A0A0A4",
+    "group_area_outline": "#E8E8E8",
+    "group_area_background": "#E8E8E8"
+  },
+  "alarm": {
+    "urgent": { "foreground": "#E22028", "background": "#FFFFFF" },
+    "high": { "foreground": "#EC8629", "background": "#FFFFFF" },
+    "medium": { "foreground": "#F5E11B", "background": "#3F3F3F" },
+    "low": { "foreground": "#916AAD", "background": "#FFFFFF" },
+    "config_error": { "foreground": "#000000", "background": "#FFFFFF" },
+    "fault": { "foreground": "#000000", "background": "#FFFFFF" },
+    "object_state_warning": { "foreground": "#3F3F3F", "background": "#EC8629" },
+    "hint_or_notification": { "foreground": "#E0E0E0", "background": "#000000" },
+    "simulation": { "foreground": "#E0E0E0", "background": "#000000" },
+    "other_abnormal": { "foreground": "#E0E0E0", "background": "#000000" },
+    "banner": { "foreground": "#FFFFFF", "background": "#000000" }
+  },
+  "equipment_state": {
+    "off_stopped_closed_deenergized": "#808080",
+    "on_running_open_energized": "#F0F0F0",
+    "out_of_service_failed": "#808080",
+    "manual": "#93C2E4",
+    "transitioning": "#93C2E4"
+  },
+  "input_elements": {
+    "label": "#3F3F3F",
+    "equipment": "#919191",
+    "field_enabled": "#3F3F3F",
+    "field_disabled": "#C0C0C0",
+    "checkbox_enabled": "#3F3F3F",
+    "checkbox_disabled": "#C0C0C0",
+    "radio_enabled": "#3F3F3F",
+    "radio_disabled": "#C0C0C0",
+    "background_enabled": "#FFFFFF",
+    "background_disabled": "#E0E0E0"
+  },
+  "data_display": {
+    "label": "#3F3F3F",
+    "equipment": "#919191",
+    "value": "#475CA7",
+    "chart_outline": "#C0C0C0",
+    "indicator": "#475CA7",
+    "indicator_background": "#C0C0C0"
+  },
+  "navigation": {
+    "button": "#C6C6C6",
+    "outline": "#AAAAAA",
+    "text": "#3F3F3F"
+  },
+  "lines": {
+    "primary_process": { "color": "#A0A0A4", "width_px": 3, "style": "solid" },
+    "secondary_process": { "color": "#A0A0A4", "width_px": 1, "style": "solid" },
+    "measurement_connection": { "color": "#A0A0A4", "width_px": 1, "style": "dash-dot" }
+  },
+  "typography": {
+    "family": "sans-serif (Arial in reference implementation)",
+    "base_size_pt": 10,
+    "roles": {
+      "operational_data_primary": { "size_pt": 11, "weight": "bold" },
+      "operational_data_secondary": { "size_pt": 10, "weight": "regular" },
+      "engineering_units": { "size_pt": 8, "weight": "regular" },
+      "display_element_text": { "size_pt": 8, "weight": "regular" },
+      "input_element_text": { "size_pt": 10, "weight": "regular" },
+      "toggle_on_off_text": { "size_pt": 8, "weight": "regular" },
+      "trend_labels": { "size_pt": 10, "weight": "regular" },
+      "equipment_status_faceplate": { "size_pt": 10, "weight": "bold" },
+      "comm_status_faceplate": { "size_pt": 10, "weight": "regular" },
+      "group_header_1": { "size_pt": 10, "weight": "bold" },
+      "group_header_2_overview": { "size_pt": 18, "weight": "regular" },
+      "screen_title": { "size_pt": 24, "weight": "bold" },
+      "process_area_header_1mon": { "size_pt": 12, "weight": "bold" },
+      "process_area_header_4mon": { "size_pt": 16, "weight": "bold" }
+    }
+  },
+  "spacing_px": {
+    "min_gap_mouse": 4,
+    "min_gap_touch": 10,
+    "control_button_gap": 10,
+    "navigation_button_gap": 2
+  },
+  "touch_targets_px": {
+    "control_button": { "min_width": 40, "min_height": 40 },
+    "navigation_button": { "min_width": 35, "min_height": 35 },
+    "help_and_trend_button": { "min_width": 32, "min_height": 32 },
+    "pagination_button": { "width": 36, "height": 26 },
+    "input_field": { "height": 20 },
+    "checkbox_radio_mouse": { "min_width": 20, "min_height": 20 },
+    "checkbox_radio_touch": { "min_width": 30, "min_height": 30 },
+    "toggle": { "height": 28 },
+    "equipment_icon_min": { "width": 30, "height": 30 },
+    "equipment_icon_typical": { "width": 40, "height": 40 }
+  },
+  "icons_px": {
+    "button_icon": 32,
+    "informational_icon": 16
+  },
+  "performance": {
+    "screen_refresh_rule": "2x the fastest data update rate",
+    "screen_switch_level_2_3_max_s": 2,
+    "screen_switch_level_1_4_max_s": 5,
+    "user_action_feedback_min_s": 0.5,
+    "user_action_feedback_max_s": 2
+  },
+  "alarm_audio": {
+    "frequency_range_hz": [500, 3000],
+    "max_volume_db": 85,
+    "rule": "unique sound per alarm class; distinct sounds per workstation in shared control rooms; prefer rising tones; avoid abrupt or interrupting sounds"
+  }
+}

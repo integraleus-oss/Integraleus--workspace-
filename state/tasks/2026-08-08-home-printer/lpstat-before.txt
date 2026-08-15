@@ -1,0 +1,14 @@
+scheduler is running
+system default destination: synology_usbprinter1
+device for homeprinter: ipp://192.168.68.103:631/printers/usbprinter1
+device for synology_usbprinter1: ipp://192.168.68.103:631/printers/usbprinter1
+device for usbprinter1_S218: implicitclass://usbprinter1_S218/
+device for usbprinter1_S218@S218.local: implicitclass://usbprinter1_S218%40S218.local/
+homeprinter accepting requests since Fri May 29 08:21:56 2026
+synology_usbprinter1 accepting requests since Sat May 16 12:22:25 2026
+usbprinter1_S218 accepting requests since Sat Aug  8 11:36:01 2026
+usbprinter1_S218@S218.local accepting requests since Sat Aug  8 00:00:03 2026
+printer homeprinter is idle.  enabled since Fri May 29 08:21:56 2026
+printer synology_usbprinter1 is idle.  enabled since Sat May 16 12:22:25 2026
+printer usbprinter1_S218 is idle.  enabled since Sat Aug  8 11:36:01 2026
+printer usbprinter1_S218@S218.local is idle.  enabled since Sat Aug  8 00:00:03 2026

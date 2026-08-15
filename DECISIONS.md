@@ -397,6 +397,79 @@ CONTENT: When the same personal agent coordinates work across Telegram topics, k
 RATIONALE: Stanislav explicitly approved the proposed Memory Candidate in the main Telegram direct chat on 2026-07-26 after reviewing how `DECISIONS.md`, `STATE.md`, daily memory, task packets, live skills, Redis, code, and Gateway should be separated across topics.
 
 ---
+### ID: D-2026-07-28-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-07-28
+TITLE: mattpocock skills selective adaptation
+CONTENT: Treat `mattpocock/skills` as a reference library for engineering discipline, not as a package to install wholesale into OpenClaw. First adapted directions are: pending Skill Workshop proposal `debugging-feedback-loop-20260728-74757679c8` for a standalone feedback-loop-first debugging skill, and applied `agent-workflow-v2` update `agent-workflow-v2-20260728-6b35940606`, which restored the full workflow gates while adding debugging default, two-axis review, tracer-bullet task slicing, and domain vocabulary discipline. The initial update proposal `agent-workflow-v2-20260728-e5caa32aae` was applied but required the corrective integrated update `agent-workflow-v2-20260728-6b35940606` so the live skill remained a full workflow rather than proposal text.
+RATIONALE: Stanislav approved the Memory Candidate in the main Telegram direct chat on 2026-07-28 after the repo review and pending proposal creation, then explicitly approved applying the `agent-workflow-v2` update and approved this memory correction.
+
+---
+### ID: D-2026-07-31-01
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-07-31
+TITLE: hmi-screen-design as Alpha.HMI HPHMI review layer
+CONTENT: Use the approved `hmi-screen-design` archive as the detailed HPHMI/ISA-101 reference layer for Alpha.HMI and SCADA mnemonic design/review. It supplies `CORE.md`, `COMPACT.md`, focused references, `rules/hmi-rules.json` with 84 atomic rules, and `assets/hphmi-palette.json`. The higher-priority Alpha Platform-first rule remains in force: requested Alpha Platform projects must be built with actual Alpha Platform means, while `hmi-screen-design` guides screen hierarchy, palette, object library style, labels, analog displays, alarms, trends, faceplates, controls, schematic completeness, rendered-screenshot review, and future lint/check tooling. Map the package to actual Alpha.HMI/WebViewer, Alpha.HMI.Alarms, alpha.hmi.charts, Alpha.Historian, Alpha.Reports, Alpha.Security, and Alpha.Imitator rather than treating it as an Alpha project or replacing local Alpha docs/examples.
+RATIONALE: Stanislav approved the Memory Candidate in the main Telegram direct chat on 2026-07-31 after the Telegram archive was recovered, inventoried, and reviewed in `state/tasks/2026-07-31-alpha-archive-review/REPORT.md`.
+
+---
+### ID: D-2026-08-01-01
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-08-01
+TITLE: Alpha Platform TZ requirements must be Alpha-native
+CONTENT: Если в любом техническом задании на систему АСУ ТП, SCADA/HMI или диспетчеризацию написано сделать проект средствами программного продукта Альфа платформа, то весь заявленный проект должен выполняться средствами Альфа платформы, включая серверную часть проекта и HMI. Внешние HTML/JS/API helper-страницы допустимы только как диагностика и не засчитываются как операторская поверхность, управление, аварии, тренды, архив, отчёты, безопасность, аудит, серверная конфигурация или приёмочное evidence. Сдаваемые требования нужно закрывать через нативные артефакты и проверенный runtime Alpha.Server, Alpha.Domain/AccessPoint, Alpha.HMI/WebViewer, Alpha.HMI.Alarms, alpha.hmi.charts, Alpha.Historian, Alpha.Reports, Alpha.Security, Alpha.Imitator и другие актуальные компоненты из `docs/alpha_platform/PRODUCT_CHEATSHEET.md`, если они требуются ТЗ.
+RATIONALE: Stanislav approved the Memory Candidate in the main Telegram direct chat on 2026-08-01 after rejecting the PS01 hybrid Alpha.HMI/WebViewer plus external HTML command helper as non-compliant with the TZ, then clarified that the rule applies to any ASU TP or dispatching TZ that names Alpha Platform and includes both server-side project work and HMI.
+## 2026-08-08 — Производственные Alpha-проекты как локальный reference corpus
+
+Decision: использовать локально сохранённые комплекты `12105`, `14443` и
+`20167` как reference corpus реальных паттернов Alpha.HMI, Alpha.DevStudio и
+Alpha.Server для Alpha-HMI-DEV, Alpha-BPR и Alpha-Presale.
+
+Boundaries:
+
+- переносить только проверенные архитектурные знания и адресные рекомендации;
+- не копировать в продуктовые проекты сырые IP-адреса, endpoint-имена,
+  абсолютные пути, бинарные зависимости, backup/output-дубли и небезопасные
+  настройки;
+- не считать статически найденные `.hmi`, `.omobj` и `.omx` доказательством
+  импорта, компиляции или runtime;
+- каждый повторно используемый объект должен пройти текущие Alpha.HMI gates:
+  происхождение, статическую проверку, адаптацию, импорт/компиляцию и требуемое
+  runtime/live evidence;
+- исторические библиотеки адаптировать к текущим компонентам Alpha Platform.
+
+Evidence:
+
+- `state/tasks/2026-08-08-shared-alpha-project-examples/REPORT.md`;
+- `state/tasks/2026-08-08-shared-alpha-project-examples/TODO.md`;
+- SHA-256 исходного архива:
+  `f380f1b91757de2a63eb0adbbb901f6f5cbd104020328df7611bb43ebdb05895`.
+
+Approval: Stanislav approved the Memory Candidate in Telegram direct chat on
+2026-08-08.
+
+---
+### ID: D-2026-08-10-01
+TYPE: RULE
+STATUS: ACTIVE
+DATE: 2026-08-10
+TITLE: Reusable verification sequence for native Alpha Platform projects
+CONTENT: For subsequent native Alpha Platform projects, use the verified sequence `backup -> native compile/rebuild -> timer-driven self-reset command logic -> direct runtime/OPC UA scenario tests -> HMI write permission/ACL test plus state readback -> mandatory rollback with configuration hashes, ports, services, and process/data-exchange tick verification`. Do not count an HMI command as end-to-end merely because the form renders live values or the button reaches TCPServer: the write must be accepted by an explicitly permitted client, change the command/runtime state, and return confirmed feedback to HMI. Keep command processing on an independent periodic timer rather than a self-triggering dependency cycle. When restoring a working stand, tolerate and explicitly report configured-tag versus deployed-node drift; verify the actually exchanged node set instead of assuming the CSV count equals runtime availability.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-10 after the NS1 iteration proved native compile/rebuild, Start/Stop and LOCAL/FAULT/NOT_READY runtime scenarios, exposed the Alpha.Om self-trigger cycle and the PS01 122-configured/95-runtime node drift, and restored PS01 with hashes, services, ports, and stable 95-tag exchange verified. Native HMI button write/readback remains an open gate until TCPServer client ACL is corrected and the scenario is repeated from HMI.
+
+---
+### ID: D-2026-08-11-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-11
+TITLE: Deterministic Codex-Claude engineering orchestration on OpenClaw Home
+CONTENT: Build the joint engineering workflow as OpenClaw orchestration with Codex as implementer, fresh-session Claude Code as independent structured reviewer, deterministic pre-review and post-fix gates, and a policy/state machine as the only acceptance authority. LLMs may create task packets, implementation, and findings, but may not vote on acceptance or silently lower severity. The protocol must include a JSON reviewer contract with severity floors and evidence fields; stable finding and occurrence identities; human-only accepted-risk/false-positive resolution; targeted fix verification plus one final full review; iteration and FAILED_INFRA budgets; whitelist-only infrastructure failure classification with unknown/repeated failures escalated; task-packet lint; task-type evidence manifests; isolated worktree runtime/dependencies; red-to-green evidence for critical changes; and advisory-by-default visual smoke. Target states are ACCEPTED, REWORK, FAILED_INFRA, and ESCALATED. Implementation order: reviewer JSON Schema and examples, state-machine/policy specification, then fresh `claude -p` wrapper integration and a bounded dry run.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-11 after jointly closing the acceptance, severity, review-churn, infrastructure-failure, evidence-completeness, and runtime-isolation gaps.
+
+---
 ### ID: D-2026-08-12-01
 TYPE: DECISION
 STATUS: ACTIVE
@@ -413,3 +486,39 @@ DATE: 2026-08-12
 TITLE: Accepted local production-CLI baseline for the Codex-Claude orchestrator
 CONTENT: Treat local commit `59d42a3` as the completed local production-CLI baseline for the Codex-Claude orchestrator. The accepted chain includes the bounded production entrypoint from `f5afeea`, strict task-packet and approved-worktree validation, fixed local Codex/Claude launchers, at most two Codex attempts and one policy-authenticated REWORK, fail-closed handling, deterministic policy admission, and a successful isolated canary ending `ACCEPTED / R17_ACCEPT`. Keep the workflow local without GitHub or push. The baseline is protected by a verified GPG AES-256 Synology backup inside the home network. The next implementation slice is an automatic builder for trusted review manifest, binding, and evidence inputs derived from the actual Codex change and observed gates. Unattended execution, cron, Gateway/runtime/config changes, deploy, and automatic commit/push remain separate approval gates.
 RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-12 after the production CLI passed 58/58 integration tests, 84/84 core tests, py_compile and whitespace checks, independent targeted closure `PRODUCTION_CLI_CLOSURE_PASS`, and a one-attempt isolated canary accepted mechanically as `R17_ACCEPT`; commits `f5afeea` and `59d42a3` were created locally and the encrypted Synology backup was decrypted and checksum-verified.
+
+---
+### ID: D-2026-08-13-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-13
+TITLE: Canonical origin and dedicated Metrika counter for special-tech.ru
+CONTENT: Use `https://www.special-tech.ru` as the single canonical origin for `special-tech.ru`. Redirect HTTP and non-www variants to it with permanent 301 redirects while preserving path and query string. Use dedicated Yandex Metrika counter `110922935` for this site.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:990` on 2026-08-13 after production redirects were deployed and verified, canonical/robots/sitemap/HSTS were checked, and the active dedicated counter was confirmed through the Metrika API.
+
+---
+### ID: D-2026-08-13-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-13
+TITLE: Distinct roles for the two SPETSTECH sites
+CONTENT: Treat `specialtechnology.ru` as the content and SEO site and `https://www.special-tech.ru` as the commercial site for license calculations, consultations, and leads. Do not duplicate full articles between the domains. Connect them with relevant contextual links, preserve source attribution through UTM campaign `cross_site_navigation`, and measure each direction separately with Yandex Metrika goals `content_site_click` on counter `110922935` and `commercial_site_click` on counter `107569860`.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:990` on 2026-08-13 after the same-period Metrika comparison, production publication of cross-site routes, creation of directional goals, Chromium UTM verification, production backup, and Yandex recrawl submission.
+
+---
+### ID: D-2026-08-13-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-13
+TITLE: Accepted trusted-input builder for the local Codex-Claude orchestrator
+CONTENT: Treat local commit `7fa0a0b` (`feat(orchestrator): seal trusted review inputs`) as the accepted trusted-input builder increment for the local Codex-Claude orchestrator. The production cycle derives digest-bound review manifests, projection bindings, evidence, policy inputs, and sealed reviewer contracts from the observed Git change and gate results. The managed chain permits at most two Codex implementation attempts followed, when policy requires it, by one separate review-only final-full leg; the final-full leg must record `SKIPPED_REVIEW_ONLY` and must not launch a third Codex attempt. Exact-JSON, schema, semantic, seal, and policy admission remain fail-closed, with separately bounded format-only and contract-only repair paths. Keep the workflow local without GitHub, push, deploy, unattended activation, or automatic commits unless separately approved.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-13 after clean canary r17 completed attempt 1 as authenticated REWORK, attempt 2 as targeted closure, and attempt 3 as review-only final-full, ending `ACCEPTED / R17_ACCEPT`. Verification passed with 83/83 integration tests, 84/84 accepted-core tests, `py_compile`, and `git diff --check`; the scoped increment was committed locally as `7fa0a0b`.
+
+---
+### ID: D-2026-08-15-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-15
+TITLE: Reviewer control-character transport edge closed for the local orchestrator
+CONTENT: Treat local commits `bb14bbc` (`fix(orchestrator): reinforce reviewer transport retries`) and `a5a7e55` (`test(orchestrator): reproduce reviewer control edge`) as the closed reviewer control-character transport increment. The controller states the decoded `U+0000` through `U+001F` prohibition from the initial review launch onward, supplies safe textual handling for intended newlines and tabs, and preserves strict fail-closed validation without sanitizing or silently rewriting reviewer JSON. Regression coverage must reproduce decoded `U+0009` in a contract-repair candidate and prove bounded recovery. Real-project smoke r3 reached `R17_ACCEPT`; post-review smoke r4 passed strict transport/schema and exposed the next independent semantic blocker, `bad_evidence_reference`. Keep the source `home-agent-factory` unchanged until a separate transfer/commit decision.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram direct chat on 2026-08-15 after focused 12/12, integration 83/83, core 84/84, `py_compile`, and `git diff --check` passed; independent commit review findings were addressed; r3 proved terminal acceptance and r4 proved the control-character edge no longer caused admission failure while semantic evidence-reference errors still failed closed.

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Alpha.HMI.WebViewer>
+  <WebSocket Address="127.0.0.1" Port="8081"/>
+  <Application ProjectPath="/home/stanislav/agent-handoff/alpha-platform/mixing-station-hmi-project/AlphaMixingStation.hmi" WwwRoot="/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-07-29-mix01-working-video/live-root" Theme="modern"/>
+</Alpha.HMI.WebViewer>

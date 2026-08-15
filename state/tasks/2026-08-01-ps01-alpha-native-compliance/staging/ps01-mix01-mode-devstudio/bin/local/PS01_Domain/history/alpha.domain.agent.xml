@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Alpha.Domain.Agent>
+  <EntryPointNetAgent Name="history" Address="127.0.0.1" Port="1010" />
+  <Options LoggerLevel="2" />
+</Alpha.Domain.Agent>

@@ -1,0 +1,36 @@
+%!PS-Adobe-3.0
+%%Title: Pantum CP1100 CMYK full-width diagnostic
+%%Pages: 1
+%%BoundingBox: 0 0 595 842
+%%EndComments
+/Helvetica-Bold findfont 18 scalefont setfont
+0 setgray
+45 805 moveto (PANTUM CP1100 - CMYK FULL-WIDTH TEST) show
+/Helvetica findfont 10 scalefont setfont
+45 785 moveto (Inspect each band for a vertical light stripe in the same position.) show
+
+% printable-width bands, 505 pt wide; center marked by thin white/black ticks only at edges
+0 1 1 0 setcmykcolor
+45 620 505 145 rectfill
+0 setgray 55 740 moveto (CYAN) show
+
+0 1 0 0 setcmykcolor
+45 450 505 145 rectfill
+0 setgray 55 570 moveto (MAGENTA) show
+
+0 0 1 0 setcmykcolor
+45 280 505 145 rectfill
+0 setgray 55 400 moveto (YELLOW) show
+
+0 0 0 1 setcmykcolor
+45 110 505 145 rectfill
+1 setgray 55 230 moveto (BLACK) show
+
+% center position indicators outside the solid inspection area
+0 setgray
+297 775 moveto 297 765 lineto stroke
+297 100 moveto 297 90 lineto stroke
+/Helvetica findfont 9 scalefont setfont
+260 75 moveto (CENTER OF SHEET) show
+showpage
+%%EOF

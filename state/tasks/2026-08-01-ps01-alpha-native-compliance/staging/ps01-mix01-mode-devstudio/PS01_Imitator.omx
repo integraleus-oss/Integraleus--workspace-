@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<omx xmlns="system" migration="44" xmlns:dp="automation.deployment" xmlns:eth="automation.ethernet" xmlns:srv="server" xmlns:ct="automation.control">
+  <link-unit name="System" uuid="f37b9963-6ce1-4643-9236-b34535ce8741" target="Om.System" />
+  <link-unit name="Server" uuid="6e8fecad-6dd2-4a57-b865-f8c7cf5cbc21" target="Om.Server" />
+  <dp:domain name="PS01_Imitator_Domain" uuid="242dbe18-1f3e-45d7-b19f-531aac4d9c7c" address="local">
+    <eth:ethernet-net name="ProcessEthernet" uuid="93633aab-ab70-4058-83d6-52a8636dd268" />
+    <dp:domain-node name="ps01-imitator" uuid="763cb590-9d00-45b8-9f03-920fb77ab814" address="127.0.0.1">
+      <srv:io-server name="Imitator" uuid="7de6d72a-be53-4d6e-9459-4f38680009d9">
+        <srv:opcua-module name="UaServer" uuid="11917a78-4fd0-4053-8235-c3dc5fb5dda6" />
+        <srv:modbus-tcp-slave-module name="ModbusTcpSlave" uuid="2bd0c2ea-1118-4090-93af-35a2201dc299" />
+        <dp:application-object name="PS01" uuid="53028d51-71f7-4760-b433-72378a5f1528">
+        <ct:parameter name="PS01_HDR_PRESS_OUT" uuid="a872f1f1-e5ea-48f0-a97a-5c86dda12e91" type="float32" />
+        <ct:parameter name="PS01_HDR_PRESS_IN" uuid="4f607681-932d-4b5a-8022-00564440b15c" type="float32" />
+        <ct:parameter name="PS01_HDR_FLOW" uuid="10110df4-e78d-47d3-8569-77fab05f36fe" type="float32" />
+        <ct:parameter name="PS01_TANK_LEVEL" uuid="ff4fcd64-d33b-4bb4-ac03-cdcb00ab3749" type="float32" />
+        <ct:parameter name="PS01_PRESS_SP" uuid="5cb3316a-a33d-4888-bfcc-18f12d7cb09a" type="float32" />
+        <ct:parameter name="PS01_STATION_MODE" uuid="c5946768-4c54-4576-b7d6-780fc0125863" type="int32" />
+        <ct:parameter name="PS01_LEAD_PUMP" uuid="296f9eef-cdb6-44f6-b7cb-ce5b879a12f6" type="int32" />
+        <ct:parameter name="PS01_PUMPS_RUNNING" uuid="ddb93a82-3318-4359-899e-8f24f11e70d1" type="int32" />
+        <ct:parameter name="PS01_NEXT_START" uuid="bcb16d4d-cdf5-4701-a6b9-063cff27ff3d" type="int32" />
+        <ct:parameter name="PS01_NEXT_STOP" uuid="9e3ff477-4f0d-42ca-a97a-61cf633c5c85" type="int32" />
+        <ct:parameter name="PS01_CAPACITY_LOW" uuid="4f071e83-7db3-456d-ae79-a1a04d1a9413" type="bool" />
+        <ct:parameter name="PS01_NO_PUMPS_AVAIL" uuid="142467c6-8e42-4c2d-80b8-ab8b47a2dfe6" type="bool" />
+        <ct:parameter name="PS01_AVR_ACT" uuid="92c08629-0d4f-4727-9efd-77b361310f54" type="bool" />
+        <ct:parameter name="PS01_DRY_RUN" uuid="d2add1fb-601f-40fd-af65-cbb480fe897f" type="bool" />
+        <ct:parameter name="PS01_LVL_LL" uuid="92f83423-1f09-4e2e-94c8-205dedaa7535" type="bool" />
+        <ct:parameter name="PS01_LEAK" uuid="9fafa405-e38f-423a-b73f-b2899d89d699" type="bool" />
+        <ct:parameter name="PS01_POWER_FAIL" uuid="c0839741-f5f9-4389-89a2-8cca5e173b79" type="bool" />
+        <ct:parameter name="PS01_HEARTBEAT" uuid="08937d7b-e686-4731-bacb-83af4bcb2b7d" type="int32" />
+        <ct:parameter name="PS01_P1_CURRENT" uuid="534d1733-54ce-437b-8e7c-8d8cd1624748" type="float32" />
+        <ct:parameter name="PS01_P1_SPEED" uuid="6104db23-e0af-4597-9dc2-28de2e8bfe19" type="float32" />
+        <ct:parameter name="PS01_P1_POWER" uuid="b9ba24fb-69b9-4cf9-80a1-74e4d030af76" type="float32" />
+        <ct:parameter name="PS01_P1_RUN" uuid="cde52e21-7171-4d31-9058-6ecfef634f06" type="bool" />
+        <ct:parameter name="PS01_P1_READY" uuid="e673217c-b7b1-49ea-a173-966253f68946" type="bool" />
+        <ct:parameter name="PS01_P1_FAULT" uuid="28db7e00-3a2f-426f-bcee-11e500a005c2" type="bool" />
+        <ct:parameter name="PS01_P1_LOCAL" uuid="8bde4e4c-5e2a-4da7-83c7-f8da5aa63985" type="bool" />
+        <ct:parameter name="PS01_P1_VFD_FAULT" uuid="f9b91fc0-e348-4847-a2be-ba43b86175ff" type="bool" />
+        <ct:parameter name="PS01_P1_VFD_READY" uuid="d7b65b2d-63eb-43a7-aeba-291996184419" type="bool" />
+        <ct:parameter name="PS01_P1_ENABLED" uuid="cacdbab3-82c0-4307-a8b6-15f9302dd83a" type="bool" />
+        <ct:parameter name="PS01_P1_CMD_START" uuid="e89f945b-2c40-4e37-bd20-e3c3c4377142" type="bool" />
+        <ct:parameter name="PS01_P1_CMD_STOP" uuid="6cd2c612-47ea-471a-b76a-96c235a401fb" type="bool" />
+        <ct:parameter name="PS01_P1_CMD_ENABLE" uuid="734655e0-900d-48e3-ae62-3a3a4ae07865" type="bool" />
+        <ct:parameter name="PS01_P1_CMD_DISABLE" uuid="618caef2-dcca-44d2-962b-6ecff846b51b" type="bool" />
+        <ct:parameter name="PS01_P1_RUNHOURS" uuid="f8f0bf16-a8b9-40a0-87c2-2782c12a8a6a" type="float32" />
+        <ct:parameter name="PS01_P1_STARTS" uuid="0702d34a-c6cc-4797-8533-bd00219447f5" type="int32" />
+        <ct:parameter name="PS01_P2_CURRENT" uuid="79c70e80-9dbd-473a-9f43-3b1263104f19" type="float32" />
+        <ct:parameter name="PS01_P2_SPEED" uuid="c5ed8d42-e279-40ce-8bf1-d51e47521e72" type="float32" />
+        <ct:parameter name="PS01_P2_POWER" uuid="75bfa255-aac9-4e33-bbcb-2c5ff602c4ac" type="float32" />
+        <ct:parameter name="PS01_P2_RUN" uuid="45d86de5-ba5a-40ba-b2a8-394095369fc6" type="bool" />
+        <ct:parameter name="PS01_P2_READY" uuid="a4a0e08f-eb8f-4864-942a-15527eb6a780" type="bool" />
+        <ct:parameter name="PS01_P2_FAULT" uuid="0ede3583-1ebd-4682-b3f1-17a573f279e3" type="bool" />
+        <ct:parameter name="PS01_P2_LOCAL" uuid="3237e8d2-7ec0-4fa6-956e-af38e8dd0bff" type="bool" />
+        <ct:parameter name="PS01_P2_VFD_FAULT" uuid="1ba9e7ec-8839-4462-a810-ce5b88262640" type="bool" />
+        <ct:parameter name="PS01_P2_VFD_READY" uuid="ba0c99a0-38ac-4379-9ce9-c13e99b56b32" type="bool" />
+        <ct:parameter name="PS01_P2_ENABLED" uuid="af6654bb-e3e6-4778-b005-ae98a4cc3975" type="bool" />
+        <ct:parameter name="PS01_P2_CMD_START" uuid="0a8cfa30-fb85-4e5f-a3ae-bc9be08d9975" type="bool" />
+        <ct:parameter name="PS01_P2_CMD_STOP" uuid="0cd2ef89-c9a3-42b3-a52a-d2d0d77d0506" type="bool" />
+        <ct:parameter name="PS01_P2_CMD_ENABLE" uuid="2153880b-0c2f-4a2f-95f6-81465cb11661" type="bool" />
+        <ct:parameter name="PS01_P2_CMD_DISABLE" uuid="a2c6a0ba-37eb-46cd-9e9d-5c787fb26bed" type="bool" />
+        <ct:parameter name="PS01_P2_RUNHOURS" uuid="9a232f2c-cf3e-4088-9543-e0a4cf09ff77" type="float32" />
+        <ct:parameter name="PS01_P2_STARTS" uuid="03b04644-c653-45a0-a4a1-5d7ab96a8c36" type="int32" />
+        <ct:parameter name="PS01_P3_CURRENT" uuid="1fb3c917-4368-4f85-9ef8-bdc431cfe4fc" type="float32" />
+        <ct:parameter name="PS01_P3_SPEED" uuid="6b285e8a-559f-48aa-8499-96e0119ce2ae" type="float32" />
+        <ct:parameter name="PS01_P3_POWER" uuid="2d050558-a8c3-4d07-bc9d-7be713aec851" type="float32" />
+        <ct:parameter name="PS01_P3_RUN" uuid="cace2c6b-2204-4f7d-86c4-e3d47c19521f" type="bool" />
+        <ct:parameter name="PS01_P3_READY" uuid="5ac922ce-57e2-4ea6-a9eb-3806fb189507" type="bool" />
+        <ct:parameter name="PS01_P3_FAULT" uuid="b8c02d21-2694-4b51-a74a-4ad8a9c3a285" type="bool" />
+        <ct:parameter name="PS01_P3_LOCAL" uuid="caf5143b-f8a0-4092-99b4-24c9a7ae02be" type="bool" />
+        <ct:parameter name="PS01_P3_VFD_FAULT" uuid="044dfd00-426b-42c9-b60f-638a0947ec0d" type="bool" />
+        <ct:parameter name="PS01_P3_VFD_READY" uuid="dc30eafb-1826-40f7-86df-57b78813000a" type="bool" />
+        <ct:parameter name="PS01_P3_ENABLED" uuid="c2023e68-cb85-462a-9ee0-56aa2d26c5eb" type="bool" />
+        <ct:parameter name="PS01_P3_CMD_START" uuid="9b6b26ab-5df4-4d19-8896-d0c66023ba1a" type="bool" />
+        <ct:parameter name="PS01_P3_CMD_STOP" uuid="b2b1fae0-670c-4666-a9c3-f5f9f0a1dc79" type="bool" />
+        <ct:parameter name="PS01_P3_CMD_ENABLE" uuid="44770070-86e4-4f30-a45a-a39a9c669ffe" type="bool" />
+        <ct:parameter name="PS01_P3_CMD_DISABLE" uuid="2cbf2c12-8ebf-47d6-b3d4-cd1a59f0ddec" type="bool" />
+        <ct:parameter name="PS01_P3_RUNHOURS" uuid="9fcc8e67-5344-48b0-88a2-94a63429d46e" type="float32" />
+        <ct:parameter name="PS01_P3_STARTS" uuid="66742fa6-6e50-4592-aa5b-3daa216eaf27" type="int32" />
+        <ct:parameter name="PS01_P4_CURRENT" uuid="bca050e8-4350-4a6f-8723-5c14737a3350" type="float32" />
+        <ct:parameter name="PS01_P4_SPEED" uuid="455b4964-95ea-4371-baee-82d04f99d109" type="float32" />
+        <ct:parameter name="PS01_P4_POWER" uuid="dd903fdc-a8b5-4727-8be4-6525450bff73" type="float32" />
+        <ct:parameter name="PS01_P4_RUN" uuid="e864d30c-a9c4-49e8-93b5-4c4f07be5c33" type="bool" />
+        <ct:parameter name="PS01_P4_READY" uuid="a23e8b72-3c2b-4e5f-b6dc-18056e44e644" type="bool" />
+        <ct:parameter name="PS01_P4_FAULT" uuid="424b2bcb-ecc7-4c34-ba5d-b99ceac2bca0" type="bool" />
+        <ct:parameter name="PS01_P4_LOCAL" uuid="6b4940c8-6bec-49d0-9512-c1dbb938f1ad" type="bool" />
+        <ct:parameter name="PS01_P4_VFD_FAULT" uuid="5350b335-f093-4fdb-8779-acc7c078353b" type="bool" />
+        <ct:parameter name="PS01_P4_VFD_READY" uuid="cbcf8b90-a322-49fe-8d57-ee7269aae238" type="bool" />
+        <ct:parameter name="PS01_P4_ENABLED" uuid="532ee547-f3f8-4399-b3eb-03c4277cba8f" type="bool" />
+        <ct:parameter name="PS01_P4_CMD_START" uuid="e7828c08-1209-4464-a7cf-57a3efc750ef" type="bool" />
+        <ct:parameter name="PS01_P4_CMD_STOP" uuid="bd8956ee-3548-49eb-9bba-e03e57357f1b" type="bool" />
+        <ct:parameter name="PS01_P4_CMD_ENABLE" uuid="fbfba577-0471-4f8b-a20b-19de9836406c" type="bool" />
+        <ct:parameter name="PS01_P4_CMD_DISABLE" uuid="4db81ff8-48a4-4eff-9357-469f5abdc509" type="bool" />
+        <ct:parameter name="PS01_P4_RUNHOURS" uuid="ce99a57c-94b6-4376-b649-bdbc69d313bd" type="float32" />
+        <ct:parameter name="PS01_P4_STARTS" uuid="0085d902-a900-42de-aad4-99c31f3afb1f" type="int32" />
+        <ct:parameter name="PS01_PID_KP" uuid="ba3a4fa9-cf66-4319-b15a-36b1adb4c1b7" type="float32" />
+        <ct:parameter name="PS01_PID_KI" uuid="80ad1379-a336-4e3c-83e6-924bd72ffedf" type="float32" />
+        <ct:parameter name="PS01_PID_KD" uuid="1d03f2a6-2d68-4190-8e86-d969b047a1d7" type="float32" />
+        <ct:parameter name="PS01_PRESS_HI_LIM" uuid="05a25321-f87a-423c-a466-e61fe12060a5" type="float32" />
+        <ct:parameter name="PS01_PRESS_LO_LIM" uuid="29cb2420-becf-43e6-8e45-c7b796f193aa" type="float32" />
+        <ct:parameter name="PS01_STAGE_UP_SPEED" uuid="69dd5ce1-0905-4d53-b18e-95a41f6ef8da" type="float32" />
+        <ct:parameter name="PS01_STAGE_DN_SPEED" uuid="7f5f3119-f34c-4e7e-a5bd-ed6a945a8068" type="float32" />
+        <ct:parameter name="PS01_STAGE_UP_DELAY" uuid="1eddf64f-6caa-4d56-9468-c30cd2cd89b5" type="int32" />
+        <ct:parameter name="PS01_STAGE_DN_DELAY" uuid="cad32435-24c4-4dc8-a6ea-9e4aef8ac68c" type="int32" />
+        <ct:parameter name="PS01_MAX_PUMPS" uuid="d0c0bdef-074b-4b89-9333-359d840e01a6" type="int32" />
+        <ct:parameter name="PS01_ROTATION_PERIOD" uuid="1f1a1f68-f3bf-415e-a646-0cee3cb39d99" type="int32" />
+        </dp:application-object>
+      </srv:io-server>
+    </dp:domain-node>
+  </dp:domain>
+</omx>

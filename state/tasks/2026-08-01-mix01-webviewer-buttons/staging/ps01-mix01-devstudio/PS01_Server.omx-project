@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Id="a2f44503-7d46-4ef7-a995-e30aec7ab28d" Version="1.0.0" OutputPath="bin">
+  <Files>
+    <SourceFile Name="PS01_Server.omx" />
+  </Files>
+</Project>

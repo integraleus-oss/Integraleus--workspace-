@@ -102,10 +102,10 @@ if [[ "$CLAUDE_USAGE_PROBE" == "1" && "$(command -v tmux || true)" != "" ]]; the
   claude_usage="$(
     set +e
     tmux new-session -d -s "$claude_session" "cd '$PWD' && TERM=xterm-256color claude --no-chrome" >/dev/null 2>&1
-    sleep 4
+    sleep 8
     tmux send-keys -t "$claude_session:0.0" -l -- "/usage" >/dev/null 2>&1
     tmux send-keys -t "$claude_session:0.0" Enter >/dev/null 2>&1
-    sleep 4
+    sleep 8
     tmux capture-pane -t "$claude_session:0.0" -p -S - 2>/dev/null
     tmux kill-session -t "$claude_session" >/dev/null 2>&1
   )"

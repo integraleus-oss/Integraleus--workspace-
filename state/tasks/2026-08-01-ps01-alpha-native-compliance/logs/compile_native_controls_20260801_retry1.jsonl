@@ -1,0 +1,13 @@
+{"source":"dotnetcore","message":{"type":"info","text":"Используемая среда выполнения .NET: '/usr/lib/dotnet/shared/Microsoft.NETCore.App/8.0.29'"}}
+{"source":"compile","message":{"type":"info","text":"< Компиляция началась >"}}
+{"source":"compile","message":{"type":"warning","unit":"Trends","element":"Trends.private.initialized.Handler_1","text":"Возможный логический цикл: изменение initialized приводит к повторному срабатыванию ValueChanged и изменению initialized"}}
+{"source":"compile","message":{"type":"error","unit":"PS01_FullAlphaPlatform","element":"SetpointsForm.BtnPressSp75.Click","text":"Невозможно найти метод с такими аргументами."}}
+{"source":"compile","message":{"type":"error","unit":"PS01_FullAlphaPlatform","element":"SetpointsForm.BtnPressSp80.Click","text":"Невозможно найти метод с такими аргументами."}}
+{"source":"compile","message":{"type":"error","unit":"PS01_FullAlphaPlatform","element":"SetpointsForm.BtnPressSp85.Click","text":"Невозможно найти метод с такими аргументами."}}
+{"source":"compile","message":{"type":"warning","unit":"Alarms","element":"SettingsEvents.BlinkSomeColumns.Handler_1","text":"Возможный логический цикл: изменение State приводит к повторному срабатыванию StateChanged и изменению State"}}
+{"source":"compile","message":{"type":"warning","unit":"Alarms","element":"SettingsEvents.BlinkAllColumns.Handler_1","text":"Возможный логический цикл: изменение State приводит к повторному срабатыванию StateChanged и изменению State"}}
+{"source":"compile","message":{"type":"warning","unit":"Alarms","element":"DateTimeMaster.Checkbox_1.Handler_1","text":"Возможный логический цикл: изменение State приводит к повторному срабатыванию StateChanged и изменению State"}}
+{"source":"compile","message":{"type":"warning","unit":"Alarms","element":"DateTimeMaster.Checkbox_2.Handler_1","text":"Возможный логический цикл: изменение State приводит к повторному срабатыванию StateChanged и изменению State"}}
+{"source":"compile","message":{"type":"warning","unit":"Alarms","element":"DateTimeMaster.Checkbox_3.Handler_1","text":"Возможный логический цикл: изменение State приводит к повторному срабатыванию StateChanged и изменению State"}}
+{"source":"compile","message":{"type":"info","text":"< Время компиляции: 2.485 секунд >"}}
+{"source":"compile","message":{"type":"info","text":"< Компиляция завершилась неудачно >"}}

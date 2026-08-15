@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Id="8b661e2d-2605-4593-ae71-9e985aef655f" Version="1.0.0" OutputPath="bin">
+  <Files>
+    <SourceFile Name="PS01_Imitator.omx" />
+  </Files>
+</Project>

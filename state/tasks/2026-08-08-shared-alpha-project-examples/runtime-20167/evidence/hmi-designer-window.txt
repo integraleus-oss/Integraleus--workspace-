@@ -1,0 +1,9 @@
+
+xwininfo: Window id: 0x21f (the root window) (has no name)
+
+  Root window id: 0x21f (the root window) (has no name)
+  Parent window id: 0x0 (none)
+     3 children:
+     0x20000c "Дизайнер Alpha.HMI": ()  1x1+0+0  +0+0
+     0x20000a "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/source/hmi/kns.hmi - Дизайнер Alpha.HMI": ("alpha.hmi.designer" "Дизайнер Alpha.HMI")  800x600+0+0  +0+0
+     0x200004 "Qt Selection Owner for alpha.hmi.designer": ()  3x3+0+0  +0+0

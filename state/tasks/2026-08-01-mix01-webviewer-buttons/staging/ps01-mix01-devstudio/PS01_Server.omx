@@ -1,0 +1,892 @@
+<?xml version='1.0' encoding='utf-8'?>
+<omx xmlns="system" xmlns:ct="automation.control" xmlns:dp="automation.deployment" xmlns:eth="automation.ethernet" xmlns:hist="history" xmlns:srv="server" migration="44">
+  <link-unit name="System" uuid="ced789bc-7f50-41b8-8122-28c4dd7c8b41" target="Om.System" />
+  <link-unit name="Server" uuid="f1f61a6e-a7f9-407a-b8c3-ca24801c31dd" target="Om.Server" />
+  <link-unit name="History" uuid="f02e9423-aaab-4506-895c-268d8daa70c8" target="Om.History" />
+  <dp:domain name="PS01_Domain" uuid="291a95e0-b22d-45ae-b681-39c58986da81" address="local">
+    <eth:ethernet-net name="ProcessEthernet" uuid="4d13d447-276c-4624-8017-676fa1474133" />
+    <dp:domain-node name="ps01-server" uuid="1ffef698-d2aa-406f-b40c-db50247db88d" address="127.0.0.1">
+      <eth:ethernet-adapter name="Eth" uuid="22792565-cdc4-4e4f-81cd-ae62dbd2208b" network="ProcessEthernet" address="127.0.0.1" />
+      <srv:io-server name="Server" uuid="5e14f75a-2f3b-4e4f-84c8-a95baca1ed3e">
+        <srv:opcaeserver-module name="AeServer" uuid="29159b15-f2aa-48d2-8186-5aaafdb280c1" />
+        <srv:opcua-module name="UaServer" uuid="cd2f9e27-c15f-424c-8faf-035a82855204" />
+        <srv:tcp-server name="TcpServer" port="4388" history-port="4950" uuid="7441caae-9bbd-414b-beeb-e053188769e1" wellknown-client-auth-method="None" anonimous-can-write="true" />
+        <srv:history-module name="HistoryModule" uuid="0f08014c-9aa7-4614-981c-6e6b43b91972">
+          <srv:historian-database-link database="history.Historian.default">
+            <attribute type="unit.Server.Attributes.History" />
+          </srv:historian-database-link>
+        </srv:history-module>
+        <dp:application-object name="Application" uuid="2aa33956-aba9-4d1e-b750-8a43b62c55b8">
+        <ct:object name="PS01" uuid="449f15f0-3383-4f65-bf71-9cf4c7206954"><ct:parameter name="PS01_HDR_PRESS_OUT" uuid="4cb94789-e772-40de-832a-dab587ca4513" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Давление нагнетания" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_HDR_PRESS_IN" uuid="14482571-9741-4efb-b85f-64211d8f42e6" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Давление всаса" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_HDR_FLOW" uuid="13b931ca-14ca-4d5b-893e-2e839f7018ea" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Расход коллектор" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_TANK_LEVEL" uuid="11a1002e-6e3c-4445-9ce9-0bfd575ef9c1" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Уровень приёмной ёмкости" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_PRESS_SP" uuid="4a2d2b24-a98c-4aa1-bf6e-303f266638e5" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Уставка давления" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_STATION_MODE" uuid="97e771e3-641b-4aa7-bb38-eeecbe790233" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Режим станции" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_LEAD_PUMP" uuid="c9ccbd59-af2a-4cc9-84da-bd29e57af48d" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Ведущий насос" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_PUMPS_RUNNING" uuid="5c62c430-bca4-460d-be4b-c9552550cfca" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Работает насосов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_NEXT_START" uuid="672d2ec9-7a4d-45b5-be62-cae1f6cc91fd" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Следующий на пуск" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_NEXT_STOP" uuid="dc0b4933-08a2-42a4-8a2d-2841b98dc022" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Следующий на останов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_CAPACITY_LOW" uuid="3c6e9adc-9c69-4e91-9d28-1567892d0e3d" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Недостаток производительности" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_NO_PUMPS_AVAIL" uuid="59e5b089-f4a0-4db3-9580-4cf66f4f5ee9" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Нет доступных насосов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_AVR_ACT" uuid="bbf5a8f8-9344-430b-b1a5-772d8bccc98e" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Сработал АВР" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_DRY_RUN" uuid="4698e1ae-8182-4b17-a0ef-7bf566a907da" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Сухой ход" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_LVL_LL" uuid="84889376-8d10-409d-a21b-6eb46070af75" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Нижний аварийный уровень" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_LEAK" uuid="204885f2-0886-489d-9181-b3503ba211d6" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Протечка/затопление" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_POWER_FAIL" uuid="b1e5c4bf-96c5-41a5-b3a2-2ca66fa11951" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пропадание питания" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_HEARTBEAT" uuid="fd757776-680b-4524-b939-cca24628359b" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Сторожевой счётчик" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_CURRENT" uuid="bf273535-0b57-469d-aeb4-128860dcca78" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Ток Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_SPEED" uuid="cf3ea768-a486-478e-bd6b-3ac19c4d8af9" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Скорость ЧРП Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_POWER" uuid="815f4330-a6ee-4e42-b0ed-5ed63842462a" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Мощность Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_RUN" uuid="d09c9a1e-b0ff-440b-8850-203f568b8ef8" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н1 в работе" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_READY" uuid="72cee532-603d-49c5-8ca6-b7cbdea81737" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н1 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_FAULT" uuid="87e8788e-f7d1-4cea-b9f8-72452679c47b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Авария Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_LOCAL" uuid="af66856b-cb75-4899-8f69-74bbf96b4969" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н1 местный" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_VFD_FAULT" uuid="39dcc477-db0f-4129-a4f5-1f3f3c0f27bb" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Отказ ЧРП Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_VFD_READY" uuid="10afef9f-cf84-40db-975d-5af262af7f12" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="ЧРП Н1 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_ENABLED" uuid="8c30cb3b-e26f-44ca-8246-8cdbbe20d717" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н1 разрешён" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_CMD_START" uuid="d3b4c058-94b6-45e1-8d48-414977e1a139" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуск Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_CMD_STOP" uuid="73d9e7c9-5c2c-4572-81a7-9f61876a4f8b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Стоп Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_CMD_ENABLE" uuid="9bd914bd-f148-402f-8e7b-909d58fcab66" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Разрешить Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_CMD_DISABLE" uuid="cdab7240-7fad-425a-a44e-cf51d4313112" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Запретить Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_RUNHOURS" uuid="3c941562-654a-4f4a-a451-cc136ae6ef35" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Наработка Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P1_STARTS" uuid="caa844f5-fdd0-4ff5-85d7-f1af4b08aaca" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуски Н1" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_CURRENT" uuid="0404e0e9-1ac2-45a3-bec1-f70c37bd338b" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Ток Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_SPEED" uuid="630c6869-cafb-4737-9527-c20973da7ac7" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Скорость ЧРП Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_POWER" uuid="97f358d5-2baf-4dc2-bdc6-b97e5d9ac495" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Мощность Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_RUN" uuid="a1b2f209-a778-4cc5-862d-a43d95b43512" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н2 в работе" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_READY" uuid="b16816da-9efb-4ddb-8fe0-8ca0d8001310" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н2 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_FAULT" uuid="d20c18e9-c298-4b28-8115-ef5e940044c2" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Авария Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_LOCAL" uuid="e9987e91-02b8-47b9-bdb2-3a6c74c27b2b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н2 местный" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_VFD_FAULT" uuid="3d18a568-b5b0-4ab6-8820-83c6ba956089" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Отказ ЧРП Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_VFD_READY" uuid="d603d99b-e34f-484a-83e2-8de4d4799471" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="ЧРП Н2 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_ENABLED" uuid="ef435368-3200-4bab-8051-a8d8745035c8" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н2 разрешён" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_CMD_START" uuid="23417fcb-74f3-46fa-b121-e3d0d906cae3" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуск Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_CMD_STOP" uuid="29d0ee37-ed6d-49ad-a11e-15cd29aae312" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Стоп Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_CMD_ENABLE" uuid="9da80883-bd30-40f4-acd7-f418372b467f" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Разрешить Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_CMD_DISABLE" uuid="d99b54d1-1d17-4862-b3fe-6cdd80f01921" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Запретить Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_RUNHOURS" uuid="9d6da83f-664f-4299-80e2-ab6a811f419b" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Наработка Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P2_STARTS" uuid="fe7647a3-1e44-4b45-9a78-2378c6b60486" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуски Н2" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_CURRENT" uuid="4ba35868-570b-48fa-b23e-a0794a080a63" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Ток Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_SPEED" uuid="1767b2b9-890a-4970-a4e5-5c94f3816477" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Скорость ЧРП Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_POWER" uuid="5edd2ebe-a837-4b74-ba1d-95d133ef3e75" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Мощность Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_RUN" uuid="0f3c4066-66e5-4a16-a7d9-5e669393eae1" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н3 в работе" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_READY" uuid="22bb7ca3-3296-4a8e-8884-69121b957e3c" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н3 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_FAULT" uuid="50bd912b-d801-42ee-bfdb-5a79ba01793b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Авария Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_LOCAL" uuid="540381dd-1569-4551-980a-c4d16034c247" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н3 местный" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_VFD_FAULT" uuid="bf85dfed-d3c4-4683-804b-2bf400d4cd44" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Отказ ЧРП Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_VFD_READY" uuid="360592f9-8ab2-4820-b77e-3f3bfdbcf980" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="ЧРП Н3 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_ENABLED" uuid="9e6f3a62-87fa-4c56-a741-03260ab7b23e" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н3 разрешён" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_CMD_START" uuid="71c0c5fc-dc6b-4a33-beb8-621d5394925e" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуск Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_CMD_STOP" uuid="2ec162a3-f201-47c8-97e0-2a2a7c7ef118" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Стоп Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_CMD_ENABLE" uuid="fe22734a-c246-4a9e-9950-3ae26a22368b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Разрешить Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_CMD_DISABLE" uuid="7efb9c84-2ef7-40c1-a162-d2497d0cdef7" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Запретить Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_RUNHOURS" uuid="a339c9cf-2a2d-47a8-86bd-033ffa7f39d9" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Наработка Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P3_STARTS" uuid="8ab18019-32c9-41a2-87fb-ed17ca041fa1" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуски Н3" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_CURRENT" uuid="5fe05f0b-ce3d-4b08-8af6-9758bb164440" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Ток Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_SPEED" uuid="86963426-8390-4b88-b3d7-a76a05b781f1" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Скорость ЧРП Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_POWER" uuid="688bc550-dd18-4caf-a9ed-26766b704790" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Мощность Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_RUN" uuid="8bc2ca88-55ff-4202-98ca-7cfbb7a4f77f" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н4 в работе" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_READY" uuid="643b0b5b-1bb8-42a7-be8e-918084ea7e96" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н4 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_FAULT" uuid="6218a101-dff4-4999-b07d-30b4f3af73c5" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Авария Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_LOCAL" uuid="9bec9d7b-3bb0-4136-bda8-8aca6a4eb7b4" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н4 местный" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_VFD_FAULT" uuid="ad415833-3d9f-4e4b-b07b-0d32448fd503" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Отказ ЧРП Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.Alarm">
+            <property name="value">{"Conditions":{"IsEnabled":"true"}}</property>
+          </attribute>
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_VFD_READY" uuid="200afdea-9ca0-445d-a7c3-91890772688a" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="ЧРП Н4 готов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_ENABLED" uuid="c463ba31-841f-4867-b940-37ecb41b240e" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Н4 разрешён" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_CMD_START" uuid="be5ef2c6-e387-4598-8fc8-7ce26f81bf08" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуск Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_CMD_STOP" uuid="295f926f-32c2-4e17-956b-fe0d9044d720" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Стоп Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_CMD_ENABLE" uuid="5f5caa9a-cf58-417b-9d61-259dcbb07a5a" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Разрешить Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_CMD_DISABLE" uuid="e05e0b5c-836d-443a-ae60-bb794a6d1e1b" type="bool" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Запретить Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_RUNHOURS" uuid="2030d809-3de3-4f1f-a9f5-f01f0f8f42e3" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Наработка Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_P4_STARTS" uuid="301888ad-b543-4f86-b88e-b9cf9609194a" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Пуски Н4" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          <attribute type="unit.Server.Attributes.History" />
+        </ct:parameter>
+        <ct:parameter name="PS01_PID_KP" uuid="224724de-4408-4854-b5c3-835b46928c79" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Kp" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_PID_KI" uuid="a0e081a0-c02f-4d10-a902-5fd64823e9f6" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Ki" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_PID_KD" uuid="65d60585-2bb4-433e-8073-2820004c4597" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Kd" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_PRESS_HI_LIM" uuid="c0d6746a-003a-4e32-9352-b9f0dcaceb9a" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Верхний предел давления" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_PRESS_LO_LIM" uuid="c4ccf51e-0e02-4017-b115-d5de55ded1db" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Нижний предел давления" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_STAGE_UP_SPEED" uuid="1a8c83cd-a581-432b-b713-5921b9c06a93" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Порог ввода ступени" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_STAGE_DN_SPEED" uuid="e15e6ce0-a93f-4631-902b-014b5d0ff322" type="float32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Порог снятия ступени" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_STAGE_UP_DELAY" uuid="8f341f49-515f-473d-a548-2a2739e849cf" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Задержка ввода ступени" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_STAGE_DN_DELAY" uuid="e1b7933f-39f6-43e2-ad91-ef274c24a026" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Задержка снятия" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_MAX_PUMPS" uuid="be8c61de-7053-404f-9cb8-538cd3317ee7" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Макс. рабочих насосов" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        <ct:parameter name="PS01_ROTATION_PERIOD" uuid="42345277-a978-4d47-b0eb-ef378729fea1" type="int32" direction="in-out" access-level="public">
+          <attribute type="unit.System.Attributes.Description" value="Период ротации" />
+          <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
+          
+        </ct:parameter>
+        </ct:object><ct:object name="MIX01" uuid="efa513b4-1bfc-5943-a21b-146ff7bb3d7c">
+            <ct:object name="info" uuid="c5c15522-04d6-5ce1-ab4a-68d474a796c8">
+              <ct:parameter name="objName" uuid="94c2f0ca-872c-5cb5-8552-ca50f0bca9c0" type="string" direction="in-out" access-level="public">
+                <attribute type="unit.System.Attributes.InitialValue" value="MIX01 Mixing Station" />
+              </ct:parameter>
+            </ct:object>
+            <ct:parameter name="Scada_Heartbeat" uuid="b80e8ef2-1e06-547c-89ad-5a3d5494ccca" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="SCADA heartbeat counter" />
+            </ct:parameter>
+            <ct:parameter name="Scada_Command_ID" uuid="5576459d-f6a1-5e1f-b68d-c572ce04ebbc" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Unique operator command sequence id" />
+            </ct:parameter>
+            <ct:parameter name="Scada_Command_Code" uuid="06c3a5fd-15f7-5d02-a0b9-ba86570c2435" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="0 None 1 Load order 2 Start 3 Pause 4 Resume 5 Stop 6 Cancel 7 Reset alarms 8 Manual command" />
+            </ct:parameter>
+            <ct:parameter name="Scada_Command_Trigger" uuid="05139068-aea1-5913-b795-2a5070039e0d" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Command trigger pulse/edge" />
+            </ct:parameter>
+            <ct:parameter name="Recipe_ID" uuid="9c1f1def-b327-5c58-8cc1-4dc479577a09" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="1001" />
+              <attribute type="unit.System.Attributes.Description" value="PLC-facing numeric recipe id mapped by HMI/BFF from BPR GUID/code" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Recipe_Version" uuid="d7c115c2-2254-506e-8252-c4ec4fb816d3" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="1" />
+              <attribute type="unit.System.Attributes.Description" value="Recipe version loaded to PLC" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Product_ID" uuid="9fb03103-dac6-5712-85a0-66f266f59b55" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="1" />
+              <attribute type="unit.System.Attributes.Description" value="PLC-facing numeric product id mapped by HMI/BFF from BPR GUID/code" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Batch_ID" uuid="72b04e39-c18d-523f-8664-bfde2ab8f59c" type="string" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="BATCH-DEMO-001" />
+              <attribute type="unit.System.Attributes.Description" value="Production order/batch id string, max 32 chars" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Batch_Volume_SP" uuid="96409217-ba7b-5b50-bebf-e7da99e0912f" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="1000.0" />
+              <attribute type="unit.System.Attributes.Description" value="Planned batch volume" />
+            </ct:parameter>
+            <ct:parameter name="Dose_A_SP" uuid="789e34f3-a296-5e4e-95a0-cfaf5d486bce" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="320.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component A target dose" />
+            </ct:parameter>
+            <ct:parameter name="Dose_B_SP" uuid="fc853bbd-64ef-5ab0-9c42-c29760579875" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="260.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component B target dose" />
+            </ct:parameter>
+            <ct:parameter name="Dose_C_SP" uuid="9eec548c-34d1-551d-b936-83f5c26c63a8" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="210.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component C target dose" />
+            </ct:parameter>
+            <ct:parameter name="Dose_D_SP" uuid="dd05815d-6a68-5c60-8ab2-224a48b62441" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="210.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component D target dose" />
+            </ct:parameter>
+            <ct:parameter name="Dose_Tolerance_SP" uuid="f99be619-ecdf-547d-8c38-75b6f1dfa268" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="16.0" />
+              <attribute type="unit.System.Attributes.Description" value="Dosing tolerance from recipe/order" />
+            </ct:parameter>
+            <ct:parameter name="Mixing_Time_SP" uuid="5ec437fe-2043-5732-b5bd-73a188c85e43" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="90" />
+              <attribute type="unit.System.Attributes.Description" value="Mixing time" />
+            </ct:parameter>
+            <ct:parameter name="Mode_Request" uuid="1a14cb1b-7e6f-5f1e-aac3-154282246f70" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="1" />
+              <attribute type="unit.System.Attributes.Description" value="Mode request: 1 Auto, 2 Manual, 3 Commissioning" />
+            </ct:parameter>
+            <ct:parameter name="Manual_Target" uuid="14b1caf7-a509-5eac-b83d-6498ff525ba2" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Manual target: 1 H1 2 H2 3 H3 4 H4 11 K1 12 K2 13 K3 14 K4 21 M1 22 M2" />
+            </ct:parameter>
+            <ct:parameter name="Manual_Action" uuid="39cdc4b2-2e0e-5c2a-aafc-7285db8bae67" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Manual action: 1 Start/Open, 2 Stop/Close" />
+            </ct:parameter>
+            <ct:parameter name="Plc_Heartbeat" uuid="7ae5f163-53d7-5517-bba7-ef799581244c" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC heartbeat counter" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Plc_Command_ID_Ack" uuid="2073e627-b2d5-5bd9-95f2-c9edbfad6fc1" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Last command id accepted/processed by PLC" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Plc_Command_Status" uuid="3370c1d0-ba75-58e2-bcd6-f04b311b03d9" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="0 None 1 Accepted 2 Executing 3 Done 4 Rejected 5 Error" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Plc_Command_ErrorCode" uuid="ea91f6b5-368f-50a1-9ee7-4740a36df15d" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Command rejection/error reason code" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="System_Ready" uuid="51cf52a7-37e0-5251-9c6f-2fd5a93a030a" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="PLC permissives ready" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Start_Inhibit_Code" uuid="3dfde73b-dbf8-5aa4-87a6-f595a63b9b51" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Primary start inhibit reason code" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Batch_Status" uuid="956fbc74-e795-548b-b13d-a57441a9b1c0" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Batch status code from TZ section 8.2" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Batch_Step" uuid="ff2bd930-8c24-5bdb-a539-2c20481db4ff" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Active batch step" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Active_Recipe_ID" uuid="a69d5967-2479-5268-bae8-3eb1b713d4d7" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Active recipe id accepted by PLC" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Active_Recipe_Version" uuid="0f2151e1-a23f-5fba-947c-63c9208697d0" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Active recipe version accepted by PLC" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Active_Batch_ID" uuid="2f6be748-fb82-57bd-9776-a87063ee7d4d" type="string" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="NONE" />
+              <attribute type="unit.System.Attributes.Description" value="Active production order/batch id in PLC" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Batch_Volume_SP_FB" uuid="fb668e1d-6d75-58e3-a173-4c51163ef1d7" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC accepted planned batch volume" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_A_SP_FB" uuid="bdde53d5-2648-58ee-9e1b-5323a7a3a609" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC accepted component A target dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_B_SP_FB" uuid="6d9d570d-f345-5258-93b1-713d6b589714" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC accepted component B target dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_C_SP_FB" uuid="358b1e4c-a23a-55aa-abb9-3a229bd62ee9" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC accepted component C target dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_D_SP_FB" uuid="2cba6145-a38e-5433-9e4c-750fea34b59f" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="PLC accepted component D target dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Flow_A_PV" uuid="6adc7ebe-2957-5f7e-9a18-2e7b316fff5a" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component A flow" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Flow_B_PV" uuid="0d42897b-3dd5-5382-8c6e-1fab801cd2a3" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component B flow" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Flow_C_PV" uuid="d53b0941-497e-555e-8bd2-ede93efa89a8" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component C flow" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Flow_D_PV" uuid="7853f110-c367-55a1-a397-3e37873347db" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component D flow" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_A_PV" uuid="c1747984-6a17-5887-89b9-204f869149fd" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component A actual accumulated dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_B_PV" uuid="0675e212-01ff-53c1-88c1-2bc04bfd5306" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component B actual accumulated dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_C_PV" uuid="98fdef29-d02e-5693-a22a-3e71e7c4002a" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component C actual accumulated dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Dose_D_PV" uuid="2d381f37-ed79-5453-967f-481ece6495cc" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="Component D actual accumulated dose" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Tank1_Level_PV" uuid="a8593f7b-2b7d-5af0-bb30-7299ad605a68" type="float32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0.0" />
+              <attribute type="unit.System.Attributes.Description" value="TK1 level" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Tank1_High_Level" uuid="70e6c706-5ceb-5736-9648-26f34f12ff2c" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="TK1 high level switch" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Alarm_Active" uuid="455cc4d2-d048-5619-8b0c-0962be65e642" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Any active alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Alarm_Code" uuid="fca9a974-6a42-58bc-9b60-d53334376115" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Primary active alarm code" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Alarm_Text_ID" uuid="1cd4e888-0391-58b7-9e4c-9a6312a01011" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Alarm text id" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump1_Status" uuid="d9f984d8-3a88-5438-9272-1270782a246e" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H1 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump2_Status" uuid="5b27d3a5-870d-50bd-a9c3-1ec63dd7f322" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H2 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump3_Status" uuid="b6bfc967-a1e0-5462-847d-8833bba881c1" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H3 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump4_Status" uuid="6fb2d84a-ee6c-55d2-8523-d41b5a7d6ac0" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H4 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump1_Alarm" uuid="88545713-5621-52d1-a682-eb77c58aed98" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H1 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump2_Alarm" uuid="206890a7-1ca4-5489-a0a9-6bfa1359ec91" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H2 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump3_Alarm" uuid="88fc634c-4d4d-539e-8774-ca72c6f69413" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H3 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Pump4_Alarm" uuid="bb34f2a8-c9e3-5f70-b9e3-764655d2c340" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Pump H4 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve1_Open_FB" uuid="63360a86-c5b0-547d-8da6-05993b40a5bf" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K1 open feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve2_Open_FB" uuid="c65da6b7-9f19-56a4-b43d-707544aad6bc" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K2 open feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve3_Open_FB" uuid="b73e1587-4617-552b-9426-72b6bd613eb7" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K3 open feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve4_Open_FB" uuid="344c8910-84de-5ffd-97ad-a0cf97fa679f" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K4 open feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve1_Closed_FB" uuid="1650ffb4-8a2d-5c5f-8992-6251519b6228" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K1 closed feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve2_Closed_FB" uuid="a9fabced-3669-576e-80e9-5c21186b271d" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K2 closed feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve3_Closed_FB" uuid="0615bfed-8133-5e8f-be41-dbbe93662a99" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K3 closed feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve4_Closed_FB" uuid="420d981c-02cb-569a-9f90-03e80190ffa1" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K4 closed feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve1_Alarm" uuid="d098d710-7977-5965-be73-16be6b37a247" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K1 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve2_Alarm" uuid="0d41364f-8842-5cb9-865e-eb63db958541" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K2 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve3_Alarm" uuid="f4ca26e3-8cd6-5f47-9ed5-82982c8d15d9" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K3 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Valve4_Alarm" uuid="e21de5e5-1e3a-57b0-be87-997fdd400f72" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Valve K4 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer1_Status" uuid="832b4178-5d0f-55cc-9549-82cc61e5be4a" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M1 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer2_Status" uuid="5717523e-2f4d-5bbf-a2cc-4524da6fe9bc" type="int32" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="0" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M2 status: 0 No data 1 Ready 2 Running 3 Stopped 4 Alarm 5 Manual 6 Unavailable" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer1_Run_FB" uuid="e25aaf59-7dbf-53cb-b1e8-536966c366e1" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M1 running feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer2_Run_FB" uuid="c86039c0-cb57-5402-bd11-02df19341800" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M2 running feedback" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer1_Alarm" uuid="6fef59f7-c4e9-5f8a-80d7-7ff8d550a0a2" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M1 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+            <ct:parameter name="Mixer2_Alarm" uuid="5d2e22cf-77e4-57e5-b871-04dc50ef149a" type="bool" direction="in-out" access-level="public">
+              <attribute type="unit.System.Attributes.InitialValue" value="false" />
+              <attribute type="unit.System.Attributes.Description" value="Mixer M2 alarm" />
+              <attribute type="unit.Server.Attributes.History" value="Deadband=&quot;0.001&quot; MinTime=&quot;1000&quot;" />
+            </ct:parameter>
+          </ct:object>
+        </dp:application-object>
+        <srv:hub-module name="HubModule" uuid="6428e520-db62-456f-a4a5-d65d8942dce2" />
+      </srv:io-server>
+    </dp:domain-node>
+    <dp:domain-node name="history" uuid="05667a99-f5c7-4e05-9e4a-5bb86a8d426d" address="history">
+      <srv:historian name="Historian" uuid="0bee8c7d-624a-478e-ad48-1ac92fc88acf" instance="Historian.Server">
+        <hist:historian-database name="default" uuid="8f35a474-a0bd-4695-872c-011f0eea061d" usage="values" base-type="unit.History.Database" />
+      </srv:historian>
+    </dp:domain-node>
+  </dp:domain>
+</omx>

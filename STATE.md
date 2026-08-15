@@ -200,6 +200,13 @@ _Обновляется из любой сессии после значимых
 - **Current boundary:** Redis is not installed, no code was changed, and Gateway was not changed or restarted.
 - **Next gate:** first spike should be heartbeat alert suppression. Later candidates are Telegram inbound dedupe and active run/task locks.
 
+### Cross-Session Snapshot — 2026-08-09 07:33 MSK
+- **Alpha-HMI-DEV:** reference-pattern catalog increment is implemented but not committed: 3585/3585 `.omobj` analyzed, 104 duplicate groups, 143 name conflicts, 146 UUID conflicts, 448 unresolved base-type dependencies, 658 quarantined objects, and zero automatic promotions into the canonical registry. Focused checks passed 29/29 and the report is deterministic.
+- **Alpha Presale:** the approved existing-project migration intake decision was recorded in project `DECISIONS.md` and `STATE.md` and committed as `e123176 Record approved migration intake decision`.
+- **Alpha BPR / memory search:** OpenClaw memory index was refreshed and verified clean: 573 files, 6093 chunks, Ollama `nomic-embed-text`, 768 dimensions, semantic search working; no gateway restart required.
+- **Home printer:** Windows network printing through the Home/Synology IPP chain should use Microsoft IPP Class Driver. The Pantum PCL6 driver breaks that network queue and is reserved for temporary direct USB calibration.
+- **Sites / Google:** Google Search Console still needs manual sitemap resubmission and URL-indexing requests for both sites; browser access is required.
+
 ### Cross-Session Snapshot — 2026-06-24 07:31 MSK
 - **Alpha BPR / Home WebViewer stand:** topic `HOME:14` reported commit `d81dda8 Keep Home Postgres running after Docker restart`. After Docker restart at `2026-06-23 21:57`, `alpha-bpr-postgres` stayed down and caused real workflow HTTP 500 on `POST /api/demo/create-order` while `/healthz`/`/readyz` still returned 200. Fix: started `alpha-bpr-postgres`, waited for `healthy`, set runtime policy and compose `restart: unless-stopped`, recorded decision/memory, and reran full `hmi-bff-webviewer-stand-preflight.sh` with workflow smoke successfully. Current reported state: API active, HMI/BFF active, nginx active, Postgres running/healthy, `https://192.168.68.125/alpha-bpr-hmi/readyz` ready with `bpr.status=reachable`.
 - **Alpha BPR / forwarded audit smoke:** later topic `HOME:14` reported new uncommitted increment `scripts/demo/hmi-bff-forwarded-audit-smoke.sh` plus docs/TODO/memory updates. It runs HMI/BFF workflow, reads `/api/audit`, and checks forwarded operator identity (`subject`, `role`, `workstation`, `POST`, `succeeded=true`). Verified: `bash -n`, run-from-other-directory guard without key, and `dotnet test AlphaBpr.sln --filter FullyQualifiedName~BprApiAuditTests` 8/8 OK. Final stand evidence not captured because `BPR_AUDIT_API_KEY` with `audit:read` was not explicitly provided/read; no commit made.
@@ -227,11 +234,22 @@ _Обновляется из любой сессии после значимых
 
 ### specialtechnology.ru
 - **Хостинг:** Reg.ru (u1899769@server182)
+- **Роль:** контентный и SEO-сайт (`D-2026-08-13-02`); полные статьи не дублировать на втором домене.
 - **Деплой:** `curl -X POST "https://specialtechnology.ru/deploy.php?key=spt2026deploy&file=FILENAME" --data-binary @file`
 - **Статус:** активен, 36+ страниц, 20 статей блога
 - **SEO:** GSC + Яндекс.Вебмастер подключены, sitemap 39 URL
 - **Последний деплой:** 2026-04-03 (перелинковка 79 ссылок)
 - **TODO:** alt-тексты, PageSpeed, Product-микроразметка, Яндекс.Бизнес
+
+### special-tech.ru
+- **Canonical origin:** `https://www.special-tech.ru` (`D-2026-08-13-01`).
+- **Роль:** коммерческий сайт для расчётов, консультаций и заявок (`D-2026-08-13-02`).
+- **Redirects:** HTTP and non-www variants return permanent `301` redirects to the canonical origin with path/query preservation; production verified 2026-08-13.
+- **Yandex Metrika:** dedicated active counter `110922935`.
+- **Yandex Webmaster:** HTTPS www and non-www hosts are verified; www is the main mirror.
+- **Cross-site analytics:** UTM campaign `cross_site_navigation`; goals `content_site_click` (`110922935`) and `commercial_site_click` (`107569860`).
+- **Yandex Webmaster:** Metrika is linked and counter-based crawling is enabled. Yandex Business still requires organization selection/creation and owner confirmation by phone code.
+- **Task evidence:** `state/tasks/2026-08-13-special-tech-yandex/TODO.md`.
 
 ### Alpha-Bot (@Idol50_bot)
 - **Статус:** работает на Main VPS
@@ -260,9 +278,33 @@ _Обновляется из любой сессии после значимых
 - Codex OAuth на main/openclaw-home был близок к истечению после обновления OpenClaw 2026.5.20; проверить/переавторизовать при сбоях модели
 - Ollama может зависать при массовой индексации без rate limiting (починено в коде, но старые процессы могут работать без фикса)
 - Gateway systemd service: disabled (не установлен как auto-start)
+## Local Alpha Reference Corpus — 2026-08-08
 
-## Codex-Claude deterministic orchestration — 2026-08-12
+- Production example sets `12105`, `14443`, and `20167` are stored locally
+  under `state/tasks/2026-08-08-shared-alpha-project-examples/`.
+- Canonical analysis report:
+  `state/tasks/2026-08-08-shared-alpha-project-examples/REPORT.md`.
+- These files are static reference inputs, not confirmed import/compile/runtime
+  evidence.
+- Routed guidance exists in Alpha-HMI-DEV, Alpha-BPR, and Alpha-Presale; reuse
+  the guidance selectively and keep raw installation-specific settings out of
+  product repositories.
 
-- The local integration runner is closed and committed as `9f00f70 feat(orchestrator): add local integration runner`; targeted Claude closure, 14/14 integration tests, 84/84 core regression tests, py_compile, and whitespace checks passed.
-- `9f00f70` is the accepted local integration point under `D-2026-08-12-01`. No GitHub/push is used. A verified encrypted Synology backup exists inside the home network.
-- Remaining build boundary: connect the runner to real local Codex and Claude launches and deterministically follow `REWORK`, `FAILED_INFRA`, `ESCALATED`, and `ACCEPTED`. Runtime/config changes and unattended activation remain separate approval gates.
+## Alpha NS1 native runtime — 2026-08-10
+
+- Current gate: native Alpha.DevStudio compile/rebuild and direct runtime/OPC UA Start, Stop, LOCAL, FAULT, and NOT_READY scenarios are proven.
+- Open acceptance item: Alpha.HMI reads/render live values, but TCPServer rejects button writes because the HMI client lacks write permission. Full HMI end-to-end remains unproven until ACL is corrected and command-to-feedback readback is repeated from the HMI buttons.
+- Working PS01 stand was restored and checked by original configuration hashes, active services, expected ports, and stable exchange over the 95 nodes present in runtime; the source CSV currently lists 122 tags.
+- Reusable execution rule is recorded as `D-2026-08-10-01`.
+- Task pointer: `state/tasks/alpha-ns1/TODO.md`.
+
+## Codex-Claude deterministic orchestration — 2026-08-11
+
+- Approved architecture is recorded as `D-2026-08-11-01`.
+- Reviewer contract and deterministic acceptance-state-machine slices are implemented and independently closed: final targeted/full Claude reviews passed, 84/84 tests and schema/fixture gates passed, and the mechanical policy run returned `ACCEPTED / R17_ACCEPT`.
+- The state-machine task packet is `COMPLETED`. The local integration runner is also closed and committed as `9f00f70 feat(orchestrator): add local integration runner`; targeted Claude closure, 14/14 integration tests, 84/84 core regression tests, py_compile, and whitespace checks passed.
+- `59d42a3` is the accepted local production-CLI baseline under `D-2026-08-12-02`; it includes the bounded managed cycle, fixed local agent launches, deterministic admission, fail-closed CLI validation, and a successful isolated canary ending `ACCEPTED / R17_ACCEPT` in one attempt. Verification: 58/58 integration tests, 84/84 core tests, py_compile/whitespace, and `PRODUCTION_CLI_CLOSURE_PASS`.
+- `7fa0a0b` is the accepted trusted-input builder increment under `D-2026-08-13-03`. It derives and seals review inputs from observed Git/gate state, preserves authenticated findings across rework, and limits implementation to two Codex attempts plus one policy-triggered review-only final-full leg. Clean canary r17 ended `ACCEPTED / R17_ACCEPT`; verification passed 83/83 integration tests, 84/84 core tests, `py_compile`, and whitespace checks.
+- `bb14bbc` and `a5a7e55` close the reviewer decoded-control-character transport edge under `D-2026-08-15-01`. The strict validator remains unchanged; the controller now carries explicit `U+0000`–`U+001F` guidance from the initial launch through bounded retries, and regression coverage reproduces decoded `U+0009`. Real-project r3 ended `R17_ACCEPT`; post-review r4 passed transport/schema but escalated fail-closed on semantic `bad_evidence_reference`. The next narrow slice is evidence-reference discipline followed by another clean smoke. The accepted smoke change remains only in isolated worktrees and was not transferred into source `home-agent-factory`.
+- No GitHub/push is used. A verified GPG AES-256 backup for `59d42a3` exists on Synology inside the home network.
+- The encrypted Synology backup for `7fa0a0b` was created after explicit approval and verified by external SHA-256, decryption, relative internal SHA-256, `git bundle verify`, and exact `refs/heads/main` commit match. Runtime/config changes, unattended activation, cron, deploy, and automatic commit/push remain separate approval gates.

@@ -1,0 +1,14 @@
+{
+  "written": {},
+  "readback": {
+    "Plc_Heartbeat": 80580,
+    "Scada_Command_ID": 66103,
+    "Scada_Command_Code": 7,
+    "Scada_Command_Trigger": false,
+    "Plc_Command_ID_Ack": 66103,
+    "Plc_Command_Status": 3,
+    "Plc_Command_ErrorCode": 0,
+    "Batch_Status": 0,
+    "Batch_Step": 0
+  }
+}

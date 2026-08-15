@@ -1,6 +1,6 @@
 ---
 name: "agent-workflow-v2"
-description: "Reusable agent workflow with risk, evidence, and memory gates."
+description: "Restore workflow gates and integrate review/slicing defaults."
 ---
 
 # Agent Workflow v2
@@ -15,7 +15,7 @@ The workflow defines how agent work is admitted, scoped, evidenced, reviewed, an
 
 ## Basis
 
-This live skill is based on the OpenClaw Shared Memory Phase 1.5-5 pilot and the approved Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5`.
+This live skill is based on the OpenClaw Shared Memory Phase 1.5-5 pilot, the approved Skill Workshop proposal `agent-workflow-v2-20260722-747ac395f5`, and the applied 2026-07-28 update adapting selected engineering workflow patterns from `mattpocock/skills`.
 
 The skill is canonical workflow guidance for future matching work. It does not itself approve Synology changes, runtime/MCP changes, DB writes, memory import, promotion, external sends, or migration/source-of-truth changes; those remain separate approval gates.
 
@@ -23,12 +23,47 @@ The skill is canonical workflow guidance for future matching work. It does not i
 
 1. Intake: identify project, goal, owner, risk tier, expected artifact, source of truth, and external-send risk.
 2. Artifact gate: create a durable `TASK_NOTE.md`, `TASK_PACKET.md`, or equivalent checklist before meaningful autonomous work.
-3. Context and security gate: locate local rules, privacy boundaries, approvals, secrets, Synology/home-LAN limits, and runtime constraints before edits or external review.
+3. Context and security gate: locate local rules, privacy boundaries, approvals, secrets, Synology/home-LAN limits, runtime constraints, and domain vocabulary before edits or external review.
 4. Implementation: make small scoped increments; keep subagents within assigned boundaries; do not expand scope silently.
 5. Evidence: record changed files, commands, checks, screenshots/logs/counts, IDs, commits, and residual risks as relevant.
-6. Review: use independent review for HIGH work and objective MEDIUM triggers; redact review packets before any external send.
+6. Review: use independent review for HIGH work and objective MEDIUM triggers; separate Standards findings from Spec findings; redact review packets before any external send.
 7. Memory candidate gate: propose concise durable memories in chat; only owner-approved candidates may enter the memory admission flow.
 8. Commit or handoff: report artifacts, checks, commit IDs, dirty worktree boundaries, pending approvals, and next gate.
+
+## Debugging Default
+
+When the work is a bug, regression, broken behavior, flaky failure, or performance issue, build a red-capable feedback loop before anchoring on a hypothesis.
+
+Prefer a failing test, existing narrowed test, CLI fixture, HTTP/curl script, Playwright/Puppeteer check, captured trace replay, throwaway harness, fuzz/property loop, or bisect script. The loop must exercise the user's reported symptom, be deterministic enough to rerun, and be captured in the task artifact.
+
+If no loop can be built with current access, report what was tried and ask for the missing artifact or approval: logs, trace/HAR, screen recording, environment access, or temporary instrumentation.
+
+## Two-Axis Review
+
+For code review, PR review, or review-since-ref tasks, separate findings into two axes:
+
+- Standards: whether the diff follows documented repo rules, local patterns, and review-smell heuristics.
+- Spec: whether the diff implements what the issue, task packet, PRD, or user request actually asked for.
+
+Do not let one axis hide the other. A change can be clean code that solves the wrong problem, or correct behavior that violates repo conventions.
+
+Before spawning reviewers, pin the fixed point, verify the diff is non-empty, list commits, and locate the spec/source of truth. If no spec exists, say so and run only the Standards axis.
+
+For Standards reviews with no local standard, use a lightweight smell baseline: mysterious names, duplicated code, primitive obsession, repeated switches, shotgun surgery, divergent change, speculative generality, message chains, and middle-man wrappers. Treat these as judgement calls unless a documented repo standard makes them hard rules.
+
+## Task Slicing Default
+
+When packaging work for Codex, Claude Code, subagents, or later TaskFlow, prefer tracer-bullet vertical slices.
+
+Each slice should deliver one narrow but complete, independently verifiable path through the affected behavior. Name its blockers explicitly. If work is a wide mechanical refactor that cannot land as vertical slices, use expand-contract sequencing: add the new form, migrate batches while keeping checks green, then remove the old form.
+
+Task packets should include goal, boundaries, allowed and forbidden files, expected artifact, checks, acceptance criteria, blocker behavior, commit/no-commit rule, and review expectations.
+
+## Domain Vocabulary Default
+
+When a task depends on domain terms, read the relevant `CONTEXT.md`, glossary, ADRs, product guardrails, or project notes before naming artifacts or writing tickets/specs.
+
+If a user term conflicts with the glossary, surface the conflict. If a fuzzy term becomes a real decision, propose the durable memory or documentation update through the normal approval path instead of silently changing canon.
 
 ## Risk Tiers
 
@@ -165,3 +200,7 @@ This skill incorporates lessons from the OpenClaw Shared Memory Phase 1.5-5 pilo
 ## Operational Boundary
 
 This skill is live workflow guidance. It does not replace explicit owner approval for guarded actions. Canonical workflow changes to this skill require a separate Skill Workshop update/apply cycle.
+
+## Source Note
+
+The 2026-07-28 engineering defaults were adapted selectively from `mattpocock/skills` at upstream HEAD `ed37663cc5fbef691ddfecd080dff42f7e7e350d`. The upstream repository was treated as a reference library, not installed wholesale.

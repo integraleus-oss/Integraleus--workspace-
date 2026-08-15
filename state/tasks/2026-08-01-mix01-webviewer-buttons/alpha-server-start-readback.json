@@ -1,0 +1,15 @@
+{
+  "written": {},
+  "readback": {
+    "Scada_Command_ID": 64852,
+    "Scada_Command_Code": 2,
+    "Scada_Command_Trigger": false,
+    "Plc_Command_ID_Ack": 64852,
+    "Plc_Command_Status": 3,
+    "Plc_Command_ErrorCode": 0,
+    "Batch_Status": 4,
+    "Batch_Step": 4,
+    "Tank1_Level_PV": 0.26499998569488525,
+    "Dose_A_PV": 3.4030001163482666
+  }
+}

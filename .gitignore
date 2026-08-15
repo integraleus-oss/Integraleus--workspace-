@@ -10,6 +10,7 @@ docs/lacerta/
 docs/tabler-icons-*.zip
 *.zip
 *.zip.sha256
+*.tar
 *.tar.gz
 *.pptx
 
@@ -27,8 +28,36 @@ docs/tabler-icons-*.zip
 # Temp files
 *.bak
 *.tmp
+*.pid
+**/__pycache__/
 calc_log.txt
 work_summary.md
+
+# Workspace-local runtime and export trees
+/media/
+/outbound/
+/tmp/
+/tmp_djvu_check/
+
+# Generated orchestration runs and fixtures
+state/tasks/**/runs/
+state/tasks/**/dry-run/
+state/tasks/**/managed-trial-r1/
+state/tasks/**/live-provenance-trial/
+state/tasks/**/synthetic-repo/
+
+# Large local Alpha project corpus; keep its reports and helper scripts only
+state/tasks/2026-08-08-shared-alpha-project-examples/source/
+state/tasks/2026-08-08-shared-alpha-project-examples/work/
+state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/build/
+state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/source/
+state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/xdg/
+state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/xdg-viewer/
+state/tasks/2026-08-08-shared-alpha-project-examples/runtime-20167/quarantine/
+state/tasks/2026-08-08-shared-alpha-project-examples/build/
+
+# Local system snapshots that may be root-owned or contain machine state
+state/tasks/2026-08-08-home-printer/printers.conf.before
 
 # Generated task/export payloads
 output/**/backups-*/

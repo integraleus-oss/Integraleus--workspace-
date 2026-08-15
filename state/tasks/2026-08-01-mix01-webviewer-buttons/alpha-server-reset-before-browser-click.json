@@ -1,0 +1,11 @@
+{
+  "written": {
+    "Scada_Command_ID": 65318,
+    "Scada_Command_Code": 7,
+    "Scada_Command_Trigger": true
+  },
+  "readback": {
+    "Batch_Status": 0,
+    "Plc_Command_ID_Ack": 64912
+  }
+}

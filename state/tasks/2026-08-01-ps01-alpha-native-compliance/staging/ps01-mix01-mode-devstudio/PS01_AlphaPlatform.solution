@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution Id="dbceca24-383e-4bed-9d3c-9885e92b8ef7">
+  <Projects>
+    <Project FilePath="PS01_Server.omx-project" />
+    <Project FilePath="PS01_Historian.omx-project" />
+    <Project FilePath="PS01_Imitator.omx-project" />
+  </Projects>
+</Solution>

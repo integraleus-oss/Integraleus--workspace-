@@ -1,0 +1,9 @@
+{
+  "written": {},
+  "readback": {
+    "Batch_Status": 0,
+    "Batch_Step": 0,
+    "Plc_Command_ID_Ack": 64912,
+    "Plc_Command_Status": 3
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "skill_name": "triz",
+  "notes": "Regression set for the TRIZ skill. Evals 1-12 test solving behaviour; 13-15 test routing and restraint (13 and 14 must NOT produce a full TRIZ run). Grade each expectation independently; report pass rate per eval and overall. Run after any change to SKILL.md or resources/.",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Наш тормозной диск должен быть лёгким для снижения неподрессоренной массы, но при этом выдерживать нагрев при экстренном торможении. Облегчаем — перегревается и коробится. Утолщаем — растёт масса. Как быть?",
+      "expected_output": "Full engineering run: IFR, both TC directions, matrix lookup with named principles, 2-4 concepts, no compromise presented as the answer.",
+      "expectations": [
+        "An Ideal Final Result is stated before any concepts are generated",
+        "The technical contradiction is formulated in BOTH directions (TC-1 and TC-2), not just one",
+        "Specific numbered inventive principles are named with their names, not just numbers",
+        "Each concept carries a source tag such as `Source: matrix` or `Source: separation-...`",
+        "Between 2 and 4 concepts are given, not a single option and not an unfiltered list of ten",
+        "No concept that merely trades weight against heat is presented as the solution; any compromise is explicitly labelled as weak",
+        "The response is in Russian, matching the user's language",
+        "No invented statistics or benchmark figures are presented as fact",
+        "If a concept matches known production technology, this is stated rather than implied as novel",
+        "The IFR is stated before the contradiction is formulated, not after"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "A sensor housing must be sealed against dust during operation but openable in seconds for field calibration. Sealing it properly makes it slow to open; making it quick to open compromises the seal.",
+      "expected_output": "Physical contradiction recognised and resolved by separation, not by the matrix alone.",
+      "expectations": [
+        "The conflict is identified as a physical contradiction (one element needs opposite properties)",
+        "At least one separation axis is applied explicitly (space, time, condition, or system level)",
+        "The separation principles resource is used rather than only the contradiction matrix",
+        "Concepts are evaluated against the IFR, noting whether new components or costs were added",
+        "Resources already present in the system are considered before introducing new components"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My LLM agent gives better answers with deeper multi-step reasoning, but users complain about latency. Shorter reasoning means worse answers. Solve this with TRIZ.",
+      "expected_output": "Software heuristic mode: contradiction discipline applied, matrix disclaimed or skipped, domain-native alternatives named.",
+      "expectations": [
+        "The response explicitly flags that this is a heuristic adaptation for software/AI systems rather than canonical matrix territory",
+        "Solutions are tagged `Source: heuristic-analogy` or an equivalent honest marker",
+        "The contradiction is sharpened to a physical/property contradiction and resolved by separation (e.g. in time or by condition)",
+        "Validated software-native alternatives (such as caching, model cascades, speculative decoding, or streaming) are named alongside the TRIZ-derived concepts",
+        "No claim is made that the contradiction matrix statistically supports a software recommendation",
+        "No invented percentages or effect sizes are stated as fact"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Клиенты хотят персонализированные предложения, но не готовы делиться личными данными. Разбери как бизнес-задачу по ТРИЗ.",
+      "expected_output": "Business heuristic mode with the ПП→ПТ→ПС chain and a second-order check.",
+      "expectations": [
+        "The business contradiction chain is used with its own notation (ПП, ПТ, ПС) rather than only the engineering terms",
+        "The contradiction matrix is NOT used for this business problem",
+        "Output is marked with a business heuristic source tag",
+        "A second-order check is performed: how competitors, regulators, or customers might respond to the proposed move",
+        "At least one concept exploits an existing resource (idle capacity, customer's own action, data already held) rather than adding new assets"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our microservice must log everything for debuggability, but logs are eating disk and I/O budget. Give me options with no compromise.",
+      "expected_output": "Contradiction resolved via separation and resource use; compromise explicitly rejected.",
+      "expectations": [
+        "The IFR is stated in a form where both full debuggability and negligible cost hold",
+        "At least two distinct separation axes are attempted (e.g. by condition and in time)",
+        "The response explicitly declines to present sampling-as-compromise as the answer, or labels it as the weak fallback",
+        "Existing system resources (data the system already produces or stores) are inventoried before new components are proposed"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Users keep reporting that our nightly batch job silently produces duplicate records about once a week. We cannot reproduce it. What is causing it?",
+      "expected_output": "Routes to subversion analysis (AFD-1) rather than the contradiction track.",
+      "expectations": [
+        "The problem is recognised as a failure-cause task and routed to subversion/AFD analysis rather than contradiction resolution",
+        "The question is inverted into 'how would we deliberately cause this failure using only the system's own resources'",
+        "Several distinct candidate failure mechanisms are generated, not one hypothesis",
+        "For each mechanism, an observable signature or verification step is given",
+        "The output is tagged with an AFD source marker"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "We are about to roll out an autonomous agent that can send emails on behalf of users. What could go wrong? Use TRIZ.",
+      "expected_output": "AFD-2 proactive risk prediction with resource-restricted adversarial framing.",
+      "expectations": [
+        "The response uses proactive subversion analysis (AFD-2) rather than a generic risk checklist",
+        "The adversarial framing is restricted to the system's own inputs, tools, and memory",
+        "Failure modes are walked systematically across resources or life stages rather than listed ad hoc",
+        "Candidate failures are ranked by damage and ease of triggering",
+        "The response prefers designing conditions where a failure cannot arise over adding barriers that fight it"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Our multi-agent pipeline has grown to seven agents: planner, retriever, generator, critic, formatter, validator, logger. It is slow and expensive. Simplify it.",
+      "expected_output": "Functional analysis and trimming applied with named rules.",
+      "expectations": [
+        "A function model is built: components with their functions stated as carrier-action-object",
+        "Functions are classified (useful/harmful, normal/insufficient/excessive) and cost is considered",
+        "Trimming rules A, B, or C are named explicitly when removing a component",
+        "For each trimmed component, it is stated who takes over its useful function",
+        "The result is a smaller architecture, not a list of micro-optimisations"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Где сейчас находится рынок сервисов доставки еды и куда он будет развиваться? Сделай прогноз по законам развития систем.",
+      "expected_output": "Prognosis using the laws layer: S-curve, ladders, next-rung forecasts.",
+      "expectations": [
+        "The system's position on the S-curve is diagnosed with a stated stage",
+        "At least two specific evolution laws or development lines are applied by name",
+        "For each line, the system's current rung is located and the next rung is named as the forecast",
+        "A counter-trend (anti-trend) is considered rather than only the forward direction",
+        "The response is in Russian, matching the user's language"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Мы проектируем агентную систему и упёрлись в клубок: автономия против контроля, глубина рассуждений против задержки, полнота контекста против стоимости, специализация агентов против сложности оркестрации. С чего начать?",
+      "expected_output": "OTSM network mode: build the network, find the key problem, only then solve.",
+      "expectations": [
+        "The situation is recognised as a multi-contradiction network rather than a single contradiction",
+        "Problems are normalised into element-feature-value form or an equivalent shared-parameter view",
+        "Shared parameters appearing across several trade-offs are identified explicitly",
+        "A key problem is selected with a stated ranking criterion (fan-out, recurrence, or driving character)",
+        "Only after the network analysis is the standard contradiction workflow applied to the key node",
+        "The response is in Russian, matching the user's language"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Look up the contradiction matrix for improving speed while force gets worse, and tell me which principles apply.",
+      "expected_output": "Uses the lookup script or the JSON correctly, with named principles and axis discipline.",
+      "expectations": [
+        "The correct parameter ids are identified (9 for speed, 10 for force)",
+        "The matrix lookup script is used, or the JSON is read with the row/column axes correctly oriented",
+        "Principles are reported with their names, not bare numbers",
+        "The asymmetry of the matrix is respected: the reverse pair is not silently treated as equivalent"
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Наш вентилятор охлаждения ноутбука шумит. Нужно сохранить охлаждение, но убрать шум. Разбери по краткому АРИЗ.",
+      "expected_output": "Compact ARIZ (7 steps) run with formal notation.",
+      "expectations": [
+        "The seven steps of Краткий АРИЗ are followed in order and are identifiable in the output",
+        "Both УП (deepened contradiction) directions are formulated",
+        "The ОП is written with the С / анти-С property notation",
+        "A deepening step (ОП₁) is attempted when the first sharpened contradiction resists separation",
+        "The response is in Russian, matching the user's language",
+        "The IFR is stated before the contradiction is formulated, not after"
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Our support team wants to add a validation step because a downstream service occasionally rejects malformed records — but that downstream service was patched last month and now auto-corrects them. Should we build the validation step?",
+      "expected_output": "False-problem check applied; the skill declines to solve as posed.",
+      "expectations": [
+        "The false-problem check is applied rather than a full inventive run",
+        "It is identified that the problem may be self-eliminating downstream or already fixed",
+        "The recommendation is to not build the step, or to verify the premise first",
+        "No contradiction matrix lookup is performed for this question"
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "Give me ten fun ideas for our team offsite.",
+      "expected_output": "Skill does not trigger a TRIZ run; no contradiction is manufactured.",
+      "expectations": [
+        "No TRIZ workflow (IFR, contradiction, matrix) is imposed on this request",
+        "No contradiction is invented where the user described none",
+        "TRIZ is not mentioned at all — the skill's non-application is not announced to the user",
+        "The request is answered directly; if context is missing, a first useful answer is given under stated assumptions rather than questions alone"
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "Explain what an ideal final result is and why TRIZ insists on it.",
+      "expected_output": "Explanatory answer without running a solving workflow.",
+      "expectations": [
+        "The concept is explained clearly, including the 'the function happens by itself' framing",
+        "No solving workflow is executed against a problem the user did not pose",
+        "The answer stays concise rather than dumping the full skill contents"
+      ]
+    }
+  ]
+}

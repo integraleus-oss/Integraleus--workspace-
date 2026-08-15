@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Id="d217d438-d6fe-4a69-a213-07900c7e2614" Version="1.0.0" OutputPath="bin">
+  <Files>
+    <SourceFile Name="PS01_Historian.omx" />
+  </Files>
+</Project>

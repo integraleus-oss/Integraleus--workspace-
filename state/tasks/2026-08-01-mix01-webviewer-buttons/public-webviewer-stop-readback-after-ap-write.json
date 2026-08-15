@@ -1,0 +1,13 @@
+{
+  "written": {},
+  "readback": {
+    "Scada_Command_ID": 65320,
+    "Scada_Command_Code": 5,
+    "Scada_Command_Trigger": false,
+    "Plc_Command_ID_Ack": 65320,
+    "Plc_Command_Status": 3,
+    "Plc_Command_ErrorCode": 0,
+    "Batch_Status": 12,
+    "Batch_Step": 4
+  }
+}

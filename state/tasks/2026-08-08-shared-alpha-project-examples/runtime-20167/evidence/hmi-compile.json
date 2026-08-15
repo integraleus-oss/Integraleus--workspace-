@@ -1,0 +1,598 @@
+{"source":"dotnetcore","message":{"type":"info","text":"Используемая среда выполнения .NET: '/usr/lib/dotnet/shared/Microsoft.NETCore.App/8.0.29'"}}
+{"source":"compile","message":{"type":"info","text":"< Компиляция началась >"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"MyAlarm.Button_1.Handler_1","text":"Неизвестная управляющая последовательность: \\a"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"MyAlarm.Button_2.Handler_1","text":"Неизвестная управляющая последовательность: \\h"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Table_1.TableModel_1.SqlQuery_1","text":"Устаревший элемент"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Button_1.Handler_1","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Button_1.Handler_1","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Button_1.Handler_1","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Button_1.Handler_1","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.Handler_2","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"WIT_Report.update.Handler_3","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastquit.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"faststop.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastplay.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_backup.Rectangle_91.Handler_11","text":"Неизвестная управляющая последовательность: \\h"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_backup.Rectangle_90.Handler_10","text":"Неизвестная управляющая последовательность: \\a"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_backup.Button_1.Handler_1","text":"Неизвестная управляющая последовательность: \\a"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_backup.Timer_update.Handler_1","text":"Неизвестная управляющая последовательность: \\h"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (MyUZO_Settings_old.TextFile_1.Path)","text":"Неизвестная управляющая последовательность: \\U"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (MyUZO_Settings.TextFile_1.Path)","text":"Неизвестная управляющая последовательность: \\U"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Table_1.TableModel_1.SqlQuery_1","text":"Устаревший элемент"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Initializer_1.Handler_4","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year.Timer_2.Handler_5","text":"Устаревший элемент: Table_1.TableModel_1.SqlQuery_1"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_6.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_6.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_6.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_9.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_9.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_9.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_UZO3)","text":"Целевой элемент (have_UZO3) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.have_UZO4)","text":"Целевой элемент (have_UZO4) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.is_RunF)","text":"Целевой элемент (is_RunF) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.crusher_main_109_I.QF1+KM1+M1_)","text":"Целевой элемент (QF1+KM1+M1_) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.centrifuge_main_164_I.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_6.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.Freq)","text":"Целевой элемент (Freq) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.Run)","text":"Целевой элемент (Run) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.RunR)","text":"Целевой элемент (RunR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.OpenClose)","text":"Целевой элемент (OpenClose) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.opentext)","text":"Целевой элемент (opentext) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.closetext)","text":"Целевой элемент (closetext) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.FI)","text":"Целевой элемент (FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.FI_1)","text":"Целевой элемент (FI_1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Вычисляемое значение (Conv_main_19.MyMenu.FI_2)","text":"Целевой элемент (FI_2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Conv_main_19.MyMenu.conv)","text":"Целевой элемент (conv) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_9.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_121.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.Width)","text":"Целевой элемент (Width) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.Height)","text":"Целевой элемент (Height) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.PenColor)","text":"Целевой элемент (PenColor) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.PenStyle)","text":"Целевой элемент (PenStyle) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.PenWidth)","text":"Целевой элемент (PenWidth) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.ImageFile)","text":"Целевой элемент (ImageFile) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.Active)","text":"Целевой элемент (Active) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.CurrentFrameNumber)","text":"Целевой элемент (CurrentFrameNumber) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_222.Speed)","text":"Целевой элемент (Speed) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_215_I_1.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_10.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_10.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.LE_bunker_10.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_UZO3)","text":"Целевой элемент (have_UZO3) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.have_UZO4)","text":"Целевой элемент (have_UZO4) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.is_RunF)","text":"Целевой элемент (is_RunF) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.feeder_main_15.QF1+KM1+M1_)","text":"Целевой элемент (QF1+KM1+M1_) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.Width)","text":"Целевой элемент (Width) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.Height)","text":"Целевой элемент (Height) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.PenColor)","text":"Целевой элемент (PenColor) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.PenStyle)","text":"Целевой элемент (PenStyle) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.PenWidth)","text":"Целевой элемент (PenWidth) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.ImageFile)","text":"Целевой элемент (ImageFile) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.Active)","text":"Целевой элемент (Active) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.CurrentFrameNumber)","text":"Целевой элемент (CurrentFrameNumber) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Предопределённое значение (Main_GK_KNS.Image_223.Speed)","text":"Целевой элемент (Speed) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_12.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_13.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Pump_main_116_I_14.Vent)","text":"Целевой элемент (Vent) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.prepath)","text":"Целевой элемент (prepath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.midpath)","text":"Целевой элемент (midpath) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.path)","text":"Целевой элемент (path) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.Shaker_main_123.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_2.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_2.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_2.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_4.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_4.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_4.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_3.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_3.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_3.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_1.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_1.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_1.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_5.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_5.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_5.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_6.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_6.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_6.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_7.mypreptH)","text":"Целевой элемент (mypreptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_7.myptH)","text":"Целевой элемент (myptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение (Main_GK_KNS.splitter_101d_7.mymidptH)","text":"Целевой элемент (mymidptH) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_16.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.Image_number)","text":"Целевой элемент (Image_number) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.is_RunF)","text":"Целевой элемент (is_RunF) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.Vent1)","text":"Целевой элемент (Vent1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.Vent2)","text":"Целевой элемент (Vent2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.Brake2)","text":"Целевой элемент (Brake2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.Brake1)","text":"Целевой элемент (Brake1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.is_RunFRunR)","text":"Целевой элемент (is_RunFRunR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).Conv_main_604.settings_set)","text":"Целевой элемент (settings_set) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_FI)","text":"Целевой элемент (have_FI) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_FI1)","text":"Целевой элемент (have_FI1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_mode_local)","text":"Целевой элемент (have_mode_local) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_mode_distance)","text":"Целевой элемент (have_mode_distance) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_mode_auto)","text":"Целевой элемент (have_mode_auto) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_mode_disabled)","text":"Целевой элемент (have_mode_disabled) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_track)","text":"Целевой элемент (have_track) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_sar)","text":"Целевой элемент (have_sar) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_FI2)","text":"Целевой элемент (have_FI2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_FI_LR)","text":"Целевой элемент (have_FI_LR) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_UPP)","text":"Целевой элемент (have_UPP) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_UZO1)","text":"Целевой элемент (have_UZO1) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Начальное значение ((ss1).feeder_main_17.have_UZO2)","text":"Целевой элемент (have_UZO2) не найден"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"faststop_1.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastquit_1.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastplay_1.notifying_int1_1.Handler_1","text":"Возможный логический цикл: изменение Value приводит к повторному срабатыванию ValueChanged и изменению Value"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mode_button","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Shaker_main_old","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Shaker_2","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Shaker_3","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"old_ContextMenuRun","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"feeder_old_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"old_ContextMenuOpenClose","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"old_ContextMenuFreq","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"analog_PT_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"analog_FT_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"drain_level","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"long_drain_level","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"drain_level_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Thickener_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Thickener_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_xl(4)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"analog_TE_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"MyAlarm","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"GroundPump_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"GroundPump_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Set_butn","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_vertical(1)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_horizontal(2)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Fan_main_old","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"alarm_colors","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Dummy_2","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mytrend_theme","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Scales","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"adjuster_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"adjuster_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_Zumph_Wide","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"oldModeMenu","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FP_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FP_L","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FP_R","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_drainage_L","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"airdryer_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"airdryer_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"old_Current_Freq_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"timer_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_main_xl","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_main_xxxl","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Diaphragm_pump_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Diaphragm_pump_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Roundvalve_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"roundvalve_vertical(3)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"roundvalve_horizontal(4)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"UPS","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Input","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_wheel_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_wheel_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_elevator_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_elevator_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_feeder_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_feeder_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"taker_local","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"decanter_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"decanter_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_%","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"taker_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"taker_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_crusher_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_feeder_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_reducer_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LFP_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LFP_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mixer_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mixer_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mixer_full_(1)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mixer_cut_(2)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Dummy_3","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_mixer_full_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_mixer_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_mixer_cut_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_position","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"roller_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"roller_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_xxxl(6)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"CH4","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"QF1+2KM+1M","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_bunker","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_just_LE","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"opening","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"NoOil_icon","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Tearing_icon","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuRun","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuOpenClose","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuFreq","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"myContextMenu","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"DustBlade_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"DustBlade_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Roundvalve_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_position","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Input_line","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Minitrend_theme","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Minitrend_theme_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"trafficlight_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"trafficlight_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SarMenu","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuFreq_2","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"compressor_discret_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"compressor_discret_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mode_Relay","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_cyclone","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"splitter_slider_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_crusher_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_feeder_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_reducer_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_local","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_local_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"arsh_repair_count","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_bunker_nolevel","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"splitter_inactive","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_backup","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuTrafficLights","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sensor_FT_HPNS","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"myModeMenu_313","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Pump_main_313","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sensor_thickener","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Thickener_Pump_image","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FPO_FP_ContextMenu","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FPO_FP_ContextMenuRun","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LE_Zumph_Wide_nolevel","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"cheg_sar_button","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_main_skr","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_skr(7)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Energo_main_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"QF1+2UZ+M1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_Fwd_Force","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Sqr","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastmenu_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"open_screen_icon","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Scales_main_%","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_%","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenu_Big_Centrifuges","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuRun_auto","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenuRunFRunR","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"global_tags","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"splitter_slider_main_bckp","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve__tst","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"MyUZO_Settings_old","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"ContextMenu_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"square_VALVE","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_main_extra","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_image_extra","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"splitter_main_UPD","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"dimension_warning_icon","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_everything_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_web_l","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_web_m","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_web_s","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_web_xxl","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"crusher_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Current_Freq_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"feeder_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FI_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FI1_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"FI2_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_year","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Shaker_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_elevator_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_wheel_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"splitter_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"UZO_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"UZO1_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"UZO2_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sensor_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"crusher_oil_pump_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Scales_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Scales_web_%","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"scale_wide_%_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_xxxl_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_skr_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_xl_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Pump_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Pump_main_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"valve_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fan_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"compressor_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"airdryer_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Diaphragm_pump_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"SKVP_feeder_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mseparator_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"decanter_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"sample_cutter_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"LFP_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Mixer_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"roller_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"metall_separator_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"DustBlade_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"trafficlight_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"compressor_discret_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"radial_thickener_web_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"taker_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"crusher_oil_pump_web","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"metall_detector_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"energo_test","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"INDEXER","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_stupid_xxl(5)","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Conv_stupid_main_xxl","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"service_time","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Fire_icon","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"track_menu_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastmenu_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"faststop_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastquit_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"fastplay_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Rectangle_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Alarm_new_backup","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"Pump_main_314","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"crusher_main_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"centrifuge_image_1","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"vibrator_main","text":"Тип не используется в проекте"}}
+{"source":"compile","message":{"type":"warning","unit":"ewr","element":"oil_pump_main","text":"Тип не используется в проекте"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/commenttemplates.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/presetfilters.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/viewfilter.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/suppression.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/severitygroups.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/printview.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/eventstyles.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/tableview.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/session.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/contextmenu.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/print.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/sorting.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/exportview.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/toolbox.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/acknowledge.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/queryprocessing.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"resource_manager","message":{"type":"warning","text":"Обнаружена коллизия имён ресурсов, ресурс 'AlarmSettings/alarm_local/export.json' присутствует в юнитах 'ewr' и 'Alarms'"}}
+{"source":"compile","message":{"type":"info","text":"< Время компиляции: 13.333 секунд >"}}
+{"source":"compile","message":{"type":"info","text":"< Компиляция завершилась успешно >"}}
+{"source":"compile","message":{"type":"info","text":"< Экспорт проекта в binom начался >"}}
+{"source":"compile","message":{"type":"info","text":"< Экспорт проекта в binom завершился успешно >"}}

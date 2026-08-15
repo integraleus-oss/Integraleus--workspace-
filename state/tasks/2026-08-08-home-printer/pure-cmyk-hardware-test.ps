@@ -1,0 +1,39 @@
+%!PS-Adobe-3.0
+%%Title: Pantum CP1100 Pure CMYK Hardware Test
+%%Pages: 1
+%%BoundingBox: 0 0 595 842
+%%EndComments
+
+/Helvetica-Bold findfont 18 scalefont setfont
+0 0 0 1 setcmykcolor
+50 805 moveto (PURE CMYK HARDWARE TEST) show
+
+/Helvetica findfont 11 scalefont setfont
+50 785 moveto (Direct PostScript setcmykcolor values; no RGB color definitions.) show
+
+% Pure cyan: C=100 M=0 Y=0 K=0
+0 1 1 0 setcmykcolor
+50 620 495 140 rectfill
+0 0 0 1 setcmykcolor
+60 735 moveto (CYAN  C=100% M=0% Y=0% K=0%) show
+
+% Pure magenta: C=0 M=100 Y=0 K=0
+0 1 0 0 setcmykcolor
+50 450 495 140 rectfill
+0 0 0 1 setcmykcolor
+60 565 moveto (MAGENTA  C=0% M=100% Y=0% K=0%) show
+
+% Pure yellow: C=0 M=0 Y=100 K=0
+0 0 1 0 setcmykcolor
+50 280 495 140 rectfill
+0 0 0 1 setcmykcolor
+60 395 moveto (YELLOW  C=0% M=0% Y=100% K=0%) show
+
+% Pure black: C=0 M=0 Y=0 K=100
+0 0 0 1 setcmykcolor
+50 110 495 140 rectfill
+0 0 0 0 setcmykcolor
+60 225 moveto (BLACK  C=0% M=0% Y=0% K=100%) show
+
+showpage
+%%EOF

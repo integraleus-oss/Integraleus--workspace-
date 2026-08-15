@@ -1,0 +1,37 @@
+8:      <eth:ethernet-adapter name="EthernetAdapter" uuid="439c6f91-cf82-4669-8b20-4bbb241f5c14" network="Ethernet" address="192.0.2.11" />
+12:        <srv:tcp-server name="TcpServer" history-port="4950" uuid="dd9fda55-5b2b-4b55-b3ce-0ecb0b5fde10" wellknown-client-auth-method="None" anonimous-can-write="false" />
+13:        <srv:history-module name="HistoryModule" uuid="b1ff4f48-1301-4a07-950b-b75351cdb668" write-values-on-activation="false">
+1078:        <srv:modbus-rtu-master name="MbRtuMstr_SU2_MOX1_P1" uuid="a25095b7-812a-47c4-a6c3-43eb379b97db" active="false">
+1084:        <srv:modbus-rtu-master name="MbRtuMstr_SU2_MOX1_P2" uuid="b19790c0-256c-4948-8af2-8a236abab711" active="false">
+1094:        <srv:modbus-tcp-master name="ModbusTcpMaster_SU2" logging-required="true" uuid="7b25cdb7-43ba-439e-829b-dd3dd3ade5fb" active="false">
+1101:        <srv:modbus-tcp-master name="ModbusTcpMaster_SU3" logging-required="true" uuid="244d9df7-2d7b-4b4c-b013-e6373c896eeb" active="false">
+1104:        <srv:modbus-tcp-master name="ModbusTcpMaster_SU4" logging-required="true" uuid="7267d8af-6ae9-44c9-a290-4e9c429ad0b3" active="false">
+1107:        <srv:modbus-tcp-master name="ModbusTcpMaster_SU5" uuid="a4c97275-73c4-4900-8cf4-62c4179d683d" logging-required="true" active="false">
+1111:        <srv:modbus-rtu-master name="MbRtuMstr_SU2_MOX2_P1" active="false" uuid="735f3e89-3a07-460c-b194-9c584aeb8f42">
+1114:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P11" active="false" uuid="6ee371f3-2962-41f4-a582-2f7eb77a15da" logging-required="false">
+1118:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P10" active="false" uuid="0f5317df-5c31-4271-a4fb-a6a1b93f2942" logging-required="false">
+1124:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX1_P7" active="false" uuid="bf83ed35-d0b4-4a03-8ed1-c5b9b2015d45">
+1128:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX1_P8" active="false" uuid="08f3bb06-ee6c-43ed-bd2a-0abbe3d2d237">
+1134:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX1_P9" active="false" uuid="807b3bb6-b85c-4242-8968-45f654b58ddd">
+1140:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX1_P10" active="false" uuid="5d86413e-d869-44c6-9267-5b9480c199b8">
+1146:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX1_P11" active="false" uuid="2e4d4554-e171-43e9-9664-3880091d6074">
+1152:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P1" active="false" uuid="f4e2b38b-4002-4837-a278-e4de76b22c5a">
+1158:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P9" active="false" uuid="83ba1b50-1d05-4d97-9527-c1943ee12885">
+1163:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P7" active="false" uuid="2c35bbbe-04c9-4532-9222-58e13ee256f3">
+1168:        <srv:modbus-rtu-master name="MbRtuMstr_SS_MOX2_P8" active="false" uuid="b23bd8e0-5f36-412c-86b1-bd59cf01cfec">
+1171:        <srv:modbus-rtu-master name="MbRtuMstr_SU3_MOX1_P1" uuid="237fedb2-7768-4d3c-a5b6-fb4e5dd45f4a" active="false">
+1175:        <srv:modbus-rtu-master name="MbRtuMstr_SU3_MOX1_P2" uuid="d51eea85-495b-4815-b395-4b222a711123" active="false">
+1181:        <srv:modbus-rtu-master name="MbRtuMstr_SU3_MOX2_P2" uuid="61e7f2a8-a0a3-452f-9ad5-42f8941eaef5" active="false">
+1338:      <eth:ethernet-adapter name="EthernetAdapter" network="Ethernet" address="192.0.2.12" uuid="882dc706-0ac7-4d10-8e37-597cc4f29826" />
+1343:      <eth:ethernet-adapter name="EthernetAdapter" uuid="a63fa3bc-1b81-474a-a7a7-4761ce7b6dea" network="Ethernet" address="192.0.2.13" />
+1346:      <eth:ethernet-adapter name="EthernetAdapter" uuid="a2d0546b-d634-47f5-8040-e5090bee5bb6" network="Ethernet" address="192.0.2.20" />
+1459:      <eth:ethernet-adapter name="EthernetAdapter" network="Ethernet" address="192.0.2.30" uuid="788dcb94-9bd0-471d-a5d3-b47fac3f6eb2" />
+1573:      <eth:ethernet-adapter name="EthernetAdapter" network="Ethernet" address="192.0.2.40" uuid="847ec653-84b0-4a94-a7e5-251cdf19e6cf" />
+1636:      <eth:ethernet-adapter name="EthernetAdapter" network="Ethernet" address="192.0.2.50" uuid="c35507c5-cb32-4f67-8872-2c549fcb8353" />
+1995:        <srv:tcp-server name="TcpServer" history-port="4950" uuid="74856317-1fd6-449d-8c6f-a497c1726c89" wellknown-client-auth-method="None" anonimous-can-write="false" />
+2007:    <sb:ethernet-serial-gateway name="SU2_MOX1" uuid="e3118e22-deb6-4a63-8f58-35d022d0d3d9" ip-address="192.0.2.22" ethernet-network="Ethernet">
+2073:    <sb:ethernet-serial-gateway name="SU2_MOX2" ip-address="192.0.2.24" ethernet-network="Ethernet" uuid="027628a0-5504-49a9-9497-d6cfb89971bc">
+2087:    <sb:ethernet-serial-gateway name="SU3_MOX1" ip-address="192.0.2.32" ethernet-network="Ethernet" uuid="7dd1836a-32e3-4c0b-b5a2-cf0e2f6e5fdb">
+2153:    <sb:ethernet-serial-gateway name="SU3_MOX2" ip-address="192.0.2.34" ethernet-network="Ethernet" uuid="82d30995-615d-4340-84ed-3da54cb12120">
+2169:    <sb:ethernet-serial-gateway name="SS_MOX1" uuid="746d26e2-a1a8-4bf4-9dde-2ba820e1123e" ethernet-network="Ethernet" ip-address="192.0.2.17">
+2379:    <sb:ethernet-serial-gateway name="SS_MOX2" ethernet-network="Ethernet" ip-address="192.0.2.18" uuid="72f3626d-567f-48c8-8206-04e6c291c499">
