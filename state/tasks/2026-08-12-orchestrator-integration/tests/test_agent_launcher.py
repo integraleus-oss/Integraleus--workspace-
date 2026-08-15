@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+import signal
 import stat
 import tempfile
+import threading
 import time
 import unittest
 from pathlib import Path
@@ -71,6 +73,48 @@ class AgentLauncherTests(unittest.TestCase):
             result = launch("codex", self.project, "hello", self.root / "run", timeout_seconds=1)
         self.assertLess(time.monotonic() - started, 4)
         self.assertEqual((result["status"], result["timed_out"]), ("FAILED", True))
+        time.sleep(3)
+        self.assertFalse(marker.exists())
+
+    def test_operator_interrupt_kills_wrapper_and_persists_structured_result(self) -> None:
+        marker = self.root / "late-marker"
+        wrapper = self.wrapper(f'(sleep 3; touch "{marker}") &\nwait\n')
+        timer = threading.Timer(0.2, lambda: os.kill(os.getpid(), signal.SIGINT))
+        timer.start()
+        try:
+            with patch.object(agent_launcher, "CODEX_WRAPPER", wrapper):
+                result = launch("codex", self.project, "hello", self.root / "run", timeout_seconds=5)
+        finally:
+            timer.cancel()
+        self.assertEqual((result["status"], result["exit_code"]), ("INTERRUPTED", 130))
+        self.assertFalse(result["timed_out"])
+        self.assertEqual(json.loads((self.root / "run/launch-result.json").read_text()), result)
+        time.sleep(3)
+        self.assertFalse(marker.exists())
+
+    def test_repeated_operator_interrupt_does_not_break_teardown_evidence(self) -> None:
+        marker = self.root / "late-marker"
+        wrapper = self.wrapper(f'(sleep 3; touch "{marker}") &\nwait\n')
+        first = threading.Timer(0.2, lambda: os.kill(os.getpid(), signal.SIGINT))
+        observed_handlers = []
+
+        def interrupt_during_teardown(process):
+            observed_handlers.append(signal.getsignal(signal.SIGINT))
+            os.kill(os.getpid(), signal.SIGINT)
+            os.killpg(process.pid, signal.SIGKILL)
+            return process.communicate(timeout=2)
+
+        first.start()
+        try:
+            with patch.object(agent_launcher, "CODEX_WRAPPER", wrapper), \
+                    patch.object(agent_launcher, "_terminate_process_group", side_effect=interrupt_during_teardown):
+                result = launch("codex", self.project, "hello", self.root / "run", timeout_seconds=5)
+        finally:
+            first.cancel()
+        self.assertEqual((result["status"], result["exit_code"]), ("INTERRUPTED", 130))
+        self.assertEqual(observed_handlers, [signal.SIG_IGN])
+        self.assertNotEqual(signal.getsignal(signal.SIGINT), signal.SIG_IGN)
+        self.assertEqual(json.loads((self.root / "run/launch-result.json").read_text()), result)
         time.sleep(3)
         self.assertFalse(marker.exists())
 

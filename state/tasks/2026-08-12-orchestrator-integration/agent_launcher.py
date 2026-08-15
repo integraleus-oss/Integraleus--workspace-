@@ -30,6 +30,25 @@ def _write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 
 
+def _terminate_process_group(process: subprocess.Popen[str]) -> tuple[str, str]:
+    try:
+        os.killpg(process.pid, signal.SIGTERM)
+    except ProcessLookupError:
+        try:
+            return process.communicate(timeout=2)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            return process.communicate(timeout=2)
+    try:
+        return process.communicate(timeout=2)
+    except subprocess.TimeoutExpired:
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        return process.communicate(timeout=2)
+
+
 def launch(
     role: str,
     project_root: Path,
@@ -68,6 +87,8 @@ def launch(
 
     started = time.monotonic_ns()
     timed_out = False
+    interrupted = False
+    saved_sigint_handler: Any = None
     process: subprocess.Popen[str] | None = None
     try:
         env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
@@ -80,12 +101,7 @@ def launch(
             exit_code = process.returncode
         except subprocess.TimeoutExpired as exc:
             timed_out = True
-            os.killpg(process.pid, signal.SIGTERM)
-            try:
-                stdout, stderr = process.communicate(timeout=2)
-            except subprocess.TimeoutExpired:
-                os.killpg(process.pid, signal.SIGKILL)
-                stdout, stderr = process.communicate(timeout=2)
+            stdout, stderr = _terminate_process_group(process)
             exit_code = 124
             if exc.stdout:
                 partial = exc.stdout.decode(errors="replace") if isinstance(exc.stdout, bytes) else exc.stdout
@@ -95,33 +111,53 @@ def launch(
                 partial = exc.stderr.decode(errors="replace") if isinstance(exc.stderr, bytes) else exc.stderr
                 if not stderr.startswith(partial):
                     stderr = partial + stderr
+        except KeyboardInterrupt:
+            saved_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+            interrupted = True
+            try:
+                stdout, stderr = _terminate_process_group(process)
+            except BaseException as exc:
+                stdout, stderr = "", f"teardown error: {type(exc).__name__}: {exc}\n"
+            exit_code = 130
+    except KeyboardInterrupt:
+        saved_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
+        interrupted = True
+        try:
+            stdout, stderr = _terminate_process_group(process) if process is not None else ("", "")
+        except BaseException as exc:
+            stdout, stderr = "", f"teardown error: {type(exc).__name__}: {exc}\n"
+        exit_code = 130
     except OSError as exc:
         exit_code = 126
         stdout = ""
         stderr = f"{type(exc).__name__}: {exc}\n"
-    ended = time.monotonic_ns()
-    stdout_path.write_text(stdout, encoding="utf-8")
-    stderr_path.write_text(stderr, encoding="utf-8")
-    result = {
-        "document_type": "local_agent_launch_result",
-        "schema_version": "1.0.0",
-        "role": role,
-        "status": "OK" if exit_code == 0 and not timed_out else "FAILED",
-        "exit_code": exit_code,
-        "timed_out": timed_out,
-        "duration_ms": (ended - started) // 1_000_000,
-        "project_root": str(project_root),
-        "wrapper": str(wrapper),
-        "sandbox": "workspace-write" if role == "codex" and codex_write else "read-only",
-        "prompt_digest": _sha256(prompt_path),
-        "stdout_digest": _sha256(stdout_path),
-        "stderr_digest": _sha256(stderr_path),
-    }
-    wrapper_output = run_dir / "wrapper-output.json"
-    if wrapper_output.is_file():
-        result["wrapper_output_digest"] = _sha256(wrapper_output)
-    _write_json(run_dir / "launch-result.json", result)
-    return result
+    try:
+        ended = time.monotonic_ns()
+        stdout_path.write_text(stdout, encoding="utf-8")
+        stderr_path.write_text(stderr, encoding="utf-8")
+        result = {
+            "document_type": "local_agent_launch_result",
+            "schema_version": "1.0.0",
+            "role": role,
+            "status": "INTERRUPTED" if interrupted else "OK" if exit_code == 0 and not timed_out else "FAILED",
+            "exit_code": exit_code,
+            "timed_out": timed_out,
+            "duration_ms": (ended - started) // 1_000_000,
+            "project_root": str(project_root),
+            "wrapper": str(wrapper),
+            "sandbox": "workspace-write" if role == "codex" and codex_write else "read-only",
+            "prompt_digest": _sha256(prompt_path),
+            "stdout_digest": _sha256(stdout_path),
+            "stderr_digest": _sha256(stderr_path),
+        }
+        wrapper_output = run_dir / "wrapper-output.json"
+        if wrapper_output.is_file():
+            result["wrapper_output_digest"] = _sha256(wrapper_output)
+        _write_json(run_dir / "launch-result.json", result)
+        return result
+    finally:
+        if saved_sigint_handler is not None:
+            signal.signal(signal.SIGINT, saved_sigint_handler)
 
 
 def extract_claude_verdict(run_dir: Path, verdict_path: Path) -> dict[str, Any]:

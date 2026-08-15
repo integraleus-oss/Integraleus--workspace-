@@ -80,7 +80,7 @@ def run_cycle(
         result = {
             "document_type": "local_live_review_cycle_result",
             "schema_version": "1.0.0",
-            "status": "FAILED_LAUNCH",
+            "status": "INTERRUPTED" if launch_result["status"] == "INTERRUPTED" else "FAILED_LAUNCH",
             "launch": launch_result,
             "decision": None,
         }
@@ -128,6 +128,11 @@ def run_cycle(
                 timeout_seconds=timeout_seconds,
             )
             if format_retry_launch["status"] != "OK":
+                if format_retry_launch["status"] == "INTERRUPTED":
+                    result = {"document_type": "local_live_review_cycle_result", "schema_version": "1.0.0",
+                              "status": "INTERRUPTED", "launch": format_retry_launch, "decision": None}
+                    _write_json(cycle_root / "cycle-result.json", result)
+                    return result
                 raise agent_launcher.LaunchError("Claude format-only retry failed")
             if pre_admission_verify is not None:
                 pre_admission_verify()
@@ -163,6 +168,11 @@ def run_cycle(
                 timeout_seconds=timeout_seconds,
             )
             if contract_retry_launch["status"] != "OK":
+                if contract_retry_launch["status"] == "INTERRUPTED":
+                    result = {"document_type": "local_live_review_cycle_result", "schema_version": "1.0.0",
+                              "status": "INTERRUPTED", "launch": contract_retry_launch, "decision": None}
+                    _write_json(cycle_root / "cycle-result.json", result)
+                    return result
                 raise agent_launcher.LaunchError("Claude contract-only retry failed")
             if pre_admission_verify is not None:
                 pre_admission_verify()
@@ -187,6 +197,12 @@ def run_cycle(
                     timeout_seconds=timeout_seconds,
                 )
                 if contract_format_retry_launch["status"] != "OK":
+                    if contract_format_retry_launch["status"] == "INTERRUPTED":
+                        result = {"document_type": "local_live_review_cycle_result", "schema_version": "1.0.0",
+                                  "status": "INTERRUPTED", "launch": contract_format_retry_launch,
+                                  "decision": None}
+                        _write_json(cycle_root / "cycle-result.json", result)
+                        return result
                     raise agent_launcher.LaunchError("Claude contract-repair format-only retry failed")
                 if pre_admission_verify is not None:
                     pre_admission_verify()

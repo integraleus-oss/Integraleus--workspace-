@@ -187,6 +187,18 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertIsNone(result["decision"])
         self.assertFalse((self.root / "cycle/policy-runs").exists())
 
+    def test_interrupted_claude_launch_is_terminal_and_never_runs_policy(self) -> None:
+        bundle = self.helper._run_bundle("interrupted-review")
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review.")
+        launch = {"document_type": "local_agent_launch_result", "status": "INTERRUPTED", "exit_code": 130}
+        with patch.object(agent_launcher, "launch", return_value=launch):
+            result = run_cycle(self.root, prompt, bundle, self.root / "cycle")
+        self.assertEqual(result["status"], "INTERRUPTED")
+        self.assertEqual(result["launch"]["exit_code"], 130)
+        self.assertFalse((self.root / "cycle/policy-runs").exists())
+
     def test_invalid_verdict_writes_failed_admission_record(self) -> None:
         bundle = self.helper._run_bundle("bad-admission")
         Path(self.root / "inputs/verdict.json").unlink()

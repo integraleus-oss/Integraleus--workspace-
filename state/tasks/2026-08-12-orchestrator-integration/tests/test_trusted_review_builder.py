@@ -215,15 +215,39 @@ class TrustedReviewBuilderTests(unittest.TestCase):
     def test_attempt_two_carries_schema_valid_decision_and_targets_prior_findings(self):
         (self.repo / "src/app.py").write_text("print('new')\n")
         finding_id = "fnd_" + "1" * 32
+        prior_detail = {"occurrence_id": "occ_" + "2" * 32,
+            "finding_id": finding_id, "status": "open", "title": "Valid path is untested",
+            "severity": "major", "category": "test_gap", "criterion_id": "AC-1",
+            "confidence": "high", "proposed_disposition": "none",
+            "location": {"path": "src/app.py", "start_line": 1, "end_line": 1,
+                "symbol": "main", "diff_side": "head"},
+            "rationale": "The acceptance path lacks a deterministic assertion.",
+            "failure_scenario": "A regression can pass the suite.",
+            "suggested_remediation": "Add an acceptance-path test.",
+            "evidence": [{"evidence_id": "ev_" + "1" * 32, "kind": "file_excerpt",
+                "description": "Observed test gap.", "excerpt": "no acceptance assertion",
+                "excerpt_truncated": False}],
+            "reproduction": [{"index": 1, "action": "Run the acceptance path.",
+                "expected": "The path is asserted.", "observed": "No assertion exists.",
+                "command": None, "evidence_ids": ["ev_" + "1" * 32]}], "tags": ["test-gap"],
+            "fingerprint": {"fingerprint_version": 1, "category": "test_gap",
+                "criterion_id": "AC-1", "normalized_path": "src/app.py",
+                "normalized_symbol": "main", "normalized_title": "valid path is untested"}}
         context = {"budgets_after": {"rework_used": 1, "infra_total_used": 0,
             "infra_used_by_signature": {}, "final_full_used": 0, "no_progress_streak": 0},
             "seen_nonces": ["run_builder-test.attempt-1-nonce"],
             "finding_registry": {"document_type": "finding_registry", "schema_version": "1.0.0",
                 "findings": [{"finding_id": finding_id, "status": "open", "effective_severity": "major",
                     "occurrence_count": 1, "resolved_at": None, "history": []}]},
+            "prior_finding_details": {finding_id: prior_detail},
             "prior_attempts": [], "last_decision": {"progress_identity": "sha256:" + "2" * 64,
                 "decision_digest": "sha256:" + "3" * 64, "outcome": "REWORK",
                 "rule_id": "R11_OPEN_FINDINGS"}}
+        incomplete = json.loads(json.dumps(context))
+        incomplete["prior_finding_details"][finding_id].pop("fingerprint")
+        with self.assertRaisesRegex(BuilderError, "details are incomplete"):
+            build_review_inputs(self.repo, self.root / "attempt-2-incomplete", self.baseline,
+                                self.config, 2, incomplete)
         built = build_review_inputs(self.repo, self.root / "attempt-2", self.baseline, self.config, 2, context)
         inputs = built["input_dir"]
         policy = json.loads((inputs / "policy.json").read_text())
@@ -234,7 +258,7 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         self.assertEqual(policy["ledger"]["prior_attempts"][0]["decision_digest"], "sha256:" + "3" * 64)
         self.assertEqual(bundle["prior_findings"], "prior-findings.json")
         self.assertEqual(json.loads((inputs / "prior-findings.json").read_text())["findings"],
-                         [{"finding_id": finding_id, "status": "open"}])
+                         [prior_detail])
         context = json.loads((inputs / "review-context.json").read_text())
         expected = hashlib.sha256(json.dumps(
             json.loads((inputs / "prior-findings.json").read_text()), sort_keys=True,

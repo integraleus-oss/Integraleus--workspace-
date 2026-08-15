@@ -6,7 +6,7 @@ from unittest.mock import patch
 from io import StringIO
 
 import production_cycle_cli
-from production_cycle_cli import PacketError, load_packet, main, run_packet
+from production_cycle_cli import PacketError, _load_prior_finding_details, load_packet, main, run_packet
 
 
 class ProductionCycleCliTests(unittest.TestCase):
@@ -51,6 +51,29 @@ class ProductionCycleCliTests(unittest.TestCase):
         loaded = load_packet(self.packet_path)
         self.assertEqual(loaded["project_root"], self.project)
         self.assertEqual(len(loaded["reviews"]), 2)
+
+    @patch("production_cycle_cli.review_projection.normalize_derived_review_ids")
+    def test_prior_finding_details_use_canonical_derived_ids(self, normalize):
+        decision_dir = self.root / "decision"
+        decision_dir.mkdir()
+        (decision_dir / "input-review_verdict.json").write_text(
+            json.dumps({"findings": [{"finding_id": "fnd_" + "1" * 32, "title": "raw"}]}),
+            encoding="utf-8",
+        )
+        canonical_id = "fnd_" + "2" * 32
+        normalize.return_value = {"findings": [{"finding_id": canonical_id, "title": "canonical"}]}
+        verdict_path = decision_dir / "input-review_verdict.json"
+        digest = "sha256:" + production_cycle_cli.hashlib.sha256(verdict_path.read_bytes()).hexdigest()
+        details = _load_prior_finding_details(decision_dir, digest)
+        self.assertEqual(details, {canonical_id: {"finding_id": canonical_id,
+                                                  "title": "canonical", "status": "open"}})
+
+    def test_prior_finding_details_reject_digest_mismatch(self):
+        decision_dir = self.root / "decision"
+        decision_dir.mkdir()
+        (decision_dir / "input-review_verdict.json").write_text(json.dumps({"findings": []}))
+        with self.assertRaises(PacketError):
+            _load_prior_finding_details(decision_dir, "sha256:" + "0" * 64)
 
     def test_rejects_path_escape_and_existing_run(self):
         self.packet["task_note"] = "../outside.md"
@@ -129,6 +152,14 @@ class ProductionCycleCliTests(unittest.TestCase):
         result = run_packet(self.packet_path)
         self.assertEqual(result["status"], "ESCALATED")
 
+    @patch("production_cycle_cli.agent_launcher.launch")
+    def test_codex_operator_interrupt_is_preserved(self, launch):
+        launch.return_value = {"status": "INTERRUPTED", "exit_code": 130, "timed_out": False}
+        result = run_packet(self.packet_path)
+        implementation = result["history"][0]["implementation"]
+        self.assertEqual(result["status"], "INTERRUPTED")
+        self.assertNotIn("classification", implementation)
+
     @patch("production_cycle_cli.admit_live_review", side_effect=RuntimeError("bad digest"))
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
     @patch("production_cycle_cli.agent_launcher.launch", return_value={"status": "OK"})
@@ -153,7 +184,8 @@ class ProductionCycleCliTests(unittest.TestCase):
         return code, json.loads(stdout.getvalue())
 
     def test_main_exit_contract(self):
-        for status, expected in (("ACCEPTED", 0), ("FAILED_INFRA", 3), ("ESCALATED", 4)):
+        for status, expected in (("ACCEPTED", 0), ("FAILED_INFRA", 3),
+                                 ("ESCALATED", 4), ("INTERRUPTED", 130)):
             with self.subTest(status=status):
                 code, output = self.invoke_main([str(self.packet_path)], {"status": status})
                 self.assertEqual(code, expected)

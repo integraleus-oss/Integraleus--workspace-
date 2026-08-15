@@ -113,6 +113,25 @@ class ManagedOneCycleTests(unittest.TestCase):
         self.assertEqual(result["status"], "ESCALATED")
         self.assertTrue((self.root / "cycle-result.json").is_file())
 
+    def test_operator_interrupt_writes_terminal_record(self):
+        result = run_managed_cycle(
+            self.root,
+            lambda a, c, d: (_ for _ in ()).throw(KeyboardInterrupt()),
+            lambda a, d: {},
+        )
+        self.assertEqual(result["status"], "INTERRUPTED")
+        self.assertEqual(result["history"][-1]["error"]["type"], "KeyboardInterrupt")
+        self.assertEqual(json.loads((self.root / "cycle-result.json").read_text()), result)
+
+    def test_interrupted_review_result_writes_terminal_record(self):
+        result = run_managed_cycle(
+            self.root,
+            self.ok,
+            lambda a, d: {"document_type": "local_live_review_cycle_result", "status": "INTERRUPTED"},
+        )
+        self.assertEqual(result["status"], "INTERRUPTED")
+        self.assertEqual(result["history"][-1]["review"]["status"], "INTERRUPTED")
+
     def test_result_round_trip_and_rework_size_bound(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("REWORK", rework_packet="x" * 8193))
         self.assertEqual(result["status"], "ESCALATED")

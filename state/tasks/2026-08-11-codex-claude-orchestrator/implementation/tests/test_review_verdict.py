@@ -456,6 +456,54 @@ class ReviewVerdictContractTests(unittest.TestCase):
         self.assertIn("prior_findings_invalid", codes)
         self.assertNotIn("schema_validation", codes)
 
+    def test_detailed_prior_finding_is_admitted_as_trusted_tool_input(self) -> None:
+        prior = self._load("fixtures/trusted/prior_findings_targeted.json")
+        finding = self._load("fixtures/valid/targeted_verification.json")["findings"][0]
+        prior["findings"] = [{**finding, "status": "open"}]
+        verdict = self._load("fixtures/valid/targeted_verification.json")
+        digest = validator._canonical_digest(prior)
+        verdict["review"]["inputs_digest"]["prior_findings_digest"] = digest
+        verdict["verification"]["prior_findings_digest"] = digest
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            result = validator.validate_document(
+                self._write(temp, "verdict.json", verdict),
+                trusted_manifest_path=TARGETED_MANIFEST,
+                prior_findings_path=self._write(temp, "prior.json", prior),
+            )
+        self.assertTrue(result["contract_valid"], result)
+
+    def test_advisory_prior_finding_may_omit_major_only_details(self) -> None:
+        prior = self._load("fixtures/trusted/prior_findings_targeted.json")
+        source = self._load("fixtures/valid/targeted_verification.json")["findings"][0]
+        advisory = {key: value for key, value in source.items()
+                    if key not in {"rationale", "evidence", "location", "location_absent_reason"}}
+        advisory["severity"] = "nit"
+        advisory["category"] = "test_gap"
+        advisory["fingerprint"]["category"] = "test_gap"
+        prior["findings"] = [{**advisory, "status": "open"}]
+        errors = []
+        self.assertTrue(validator._validate_prior_findings_structure(prior, errors), errors)
+
+    def test_major_prior_finding_without_evidence_is_rejected(self) -> None:
+        prior = self._load("fixtures/trusted/prior_findings_targeted.json")
+        finding = self._load("fixtures/valid/targeted_verification.json")["findings"][0]
+        finding.pop("evidence")
+        prior["findings"] = [{**finding, "status": "open"}]
+        verdict = self._load("fixtures/valid/targeted_verification.json")
+        digest = validator._canonical_digest(prior)
+        verdict["review"]["inputs_digest"]["prior_findings_digest"] = digest
+        verdict["verification"]["prior_findings_digest"] = digest
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            result = validator.validate_document(
+                self._write(temp, "verdict.json", verdict),
+                trusted_manifest_path=TARGETED_MANIFEST,
+                prior_findings_path=self._write(temp, "prior.json", prior),
+            )
+        self.assertFalse(result["contract_valid"])
+        self.assertIn("prior_findings_invalid", {item["code"] for item in result["errors"]})
+
     def test_trusted_manifest_container_enum_outputs_one_json_object_and_exit_2(self) -> None:
         cases = [
             ("expected_review_mode", []),

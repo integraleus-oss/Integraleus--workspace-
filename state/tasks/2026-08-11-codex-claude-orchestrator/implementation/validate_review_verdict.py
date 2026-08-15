@@ -35,6 +35,24 @@ REQUIRED_MANIFEST_SUBJECT_KEYS = (
 REVIEW_MODES = {"initial_full", "targeted_verification", "final_full"}
 COVERAGE_SCOPES = {"full", "targeted"}
 PRIOR_FINDING_STATUSES = {"open", "fixed", "superseded", "not_verifiable", "no_longer_applicable"}
+PRIOR_FINDING_DETAIL_KEYS = {
+    "occurrence_id", "finding_id", "fingerprint", "title", "severity", "category",
+    "criterion_id", "rationale", "failure_scenario", "reproduction", "evidence",
+    "location", "location_absent_reason", "confidence", "suggested_remediation",
+    "proposed_disposition", "proposal_rationale", "supersedes_finding_id", "tags", "status",
+}
+PRIOR_FINDING_DETAIL_REQUIRED = {
+    "occurrence_id", "finding_id", "status", "fingerprint", "title", "severity",
+    "category", "criterion_id", "confidence", "proposed_disposition",
+}
+MAJOR_CATEGORIES = {
+    "acceptance_criterion_violation", "regression", "build_failure", "runtime_failure",
+    "security", "data_loss",
+}
+LOCATION_ABSENT_REASONS = {
+    "no_source_location", "cross_cutting", "missing_artifact", "external_dependency",
+    "runtime_only", "absent_code",
+}
 
 
 class TransportError(ValueError):
@@ -358,9 +376,47 @@ def _validate_prior_findings_structure(prior_findings: dict[str, Any], errors: l
         if not isinstance(item, dict):
             _tool_error(errors, "prior_findings_invalid", "prior findings entries must be objects", pointer)
             continue
-        extra_keys = set(item) - {"finding_id", "status"}
+        extra_keys = set(item) - PRIOR_FINDING_DETAIL_KEYS
         if extra_keys:
             _tool_error(errors, "prior_findings_invalid", "prior findings entries contain unsupported keys", pointer)
+        has_details = set(item) != {"finding_id", "status"}
+        if has_details:
+            missing = PRIOR_FINDING_DETAIL_REQUIRED - set(item)
+            if missing:
+                _tool_error(errors, "prior_findings_invalid", "detailed prior finding is incomplete", pointer)
+            if not isinstance(item.get("title"), str) or not item.get("title", "").strip():
+                _tool_error(errors, "prior_findings_invalid", "detailed prior finding title is invalid", f"{pointer}/title")
+            if item.get("severity") not in {"blocker", "major", "nit"}:
+                _tool_error(errors, "prior_findings_invalid", "detailed prior finding severity is invalid", f"{pointer}/severity")
+            if not isinstance(item.get("fingerprint"), dict):
+                _tool_error(errors, "prior_findings_invalid", "detailed prior finding fingerprint is invalid", f"{pointer}/fingerprint")
+            severity = item.get("severity")
+            if item.get("category") in MAJOR_CATEGORIES and severity not in {"blocker", "major"}:
+                _tool_error(errors, "prior_findings_invalid", "prior finding category requires major severity", pointer)
+            if severity in {"blocker", "major"}:
+                if not isinstance(item.get("rationale"), str) or not item.get("rationale", "").strip():
+                    _tool_error(errors, "prior_findings_invalid", "major prior finding rationale is invalid", f"{pointer}/rationale")
+                if not isinstance(item.get("evidence"), list) or not item.get("evidence"):
+                    _tool_error(errors, "prior_findings_invalid", "major prior finding evidence is invalid", f"{pointer}/evidence")
+                if not isinstance(item.get("failure_scenario"), str) or not item.get("failure_scenario", "").strip():
+                    _tool_error(errors, "prior_findings_invalid", "major prior finding failure_scenario is invalid",
+                                f"{pointer}/failure_scenario")
+                if not isinstance(item.get("reproduction"), list) or not item.get("reproduction"):
+                    _tool_error(errors, "prior_findings_invalid", "major prior finding reproduction is invalid",
+                                f"{pointer}/reproduction")
+                if item.get("location") is None and item.get("location_absent_reason") not in LOCATION_ABSENT_REASONS:
+                    _tool_error(errors, "prior_findings_invalid", "major prior finding location is invalid", pointer)
+            elif "rationale" in item and (not isinstance(item["rationale"], str) or not item["rationale"].strip()):
+                _tool_error(errors, "prior_findings_invalid", "prior finding rationale is invalid", f"{pointer}/rationale")
+            if "evidence" in item and not isinstance(item["evidence"], list):
+                _tool_error(errors, "prior_findings_invalid", "prior finding evidence is invalid", f"{pointer}/evidence")
+            if "location" in item and item["location"] is not None and not isinstance(item["location"], dict):
+                _tool_error(errors, "prior_findings_invalid", "prior finding location is invalid", f"{pointer}/location")
+            if "location_absent_reason" in item and item["location_absent_reason"] not in LOCATION_ABSENT_REASONS:
+                _tool_error(errors, "prior_findings_invalid", "prior finding location_absent_reason is invalid",
+                            f"{pointer}/location_absent_reason")
+            if item.get("location") is not None and "location_absent_reason" in item:
+                _tool_error(errors, "prior_findings_invalid", "prior finding location fields are mutually exclusive", pointer)
         finding_id = item.get("finding_id")
         if not _is_finding_id(finding_id):
             _tool_error(errors, "prior_findings_invalid", "prior findings entries require a valid finding_id", f"{pointer}/finding_id")

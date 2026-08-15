@@ -50,10 +50,17 @@ def run_managed_cycle(
             attempt_dir.mkdir()
             implementation = implement(attempt, rework_context, attempt_dir / "codex")
             if implementation.get("status") != "OK":
-                final = "FAILED_INFRA" if implementation.get("classification") == "KNOWN_INFRA" else "ESCALATED"
+                final = ("INTERRUPTED" if implementation.get("status") == "INTERRUPTED"
+                         else "FAILED_INFRA" if implementation.get("classification") == "KNOWN_INFRA"
+                         else "ESCALATED")
                 history.append({"attempt": attempt, "implementation": implementation, "review": None, "outcome": final})
                 break
             verdict = review(attempt, attempt_dir / "claude")
+            if verdict.get("status") == "INTERRUPTED":
+                final = "INTERRUPTED"
+                history.append({"attempt": attempt, "implementation": implementation,
+                                "review": verdict, "outcome": final})
+                break
             rule_id = verdict.get("rule_id") if verdict.get("document_type") == "local_orchestrator_run_result" else None
             outcome = RULE_OUTCOMES.get(rule_id, "ESCALATED")
             if verdict.get("outcome") != outcome:
@@ -63,6 +70,12 @@ def run_managed_cycle(
                 final_dir = root / "review-only-final-full"
                 final_dir.mkdir()
                 final_verdict = review(max_attempts + 1, final_dir / "claude")
+                if final_verdict.get("status") == "INTERRUPTED":
+                    final = "INTERRUPTED"
+                    history.append({"attempt": max_attempts + 1,
+                                    "implementation": {"status": "SKIPPED_REVIEW_ONLY"},
+                                    "review": final_verdict, "outcome": final})
+                    break
                 final_rule = (final_verdict.get("rule_id")
                               if final_verdict.get("document_type") == "local_orchestrator_run_result" else None)
                 final_outcome = RULE_OUTCOMES.get(final_rule, "ESCALATED")
@@ -83,8 +96,8 @@ def run_managed_cycle(
             if outcome == "REWORK":
                 history[-1]["outcome"] = final
             break
-    except Exception as exc:
-        final = "ESCALATED"
+    except (KeyboardInterrupt, Exception) as exc:
+        final = "INTERRUPTED" if isinstance(exc, KeyboardInterrupt) else "ESCALATED"
         history.append({"attempt": len(history) + 1, "implementation": None, "review": None, "outcome": final,
                         "error": {"type": type(exc).__name__, "message": str(exc)}})
     result = {

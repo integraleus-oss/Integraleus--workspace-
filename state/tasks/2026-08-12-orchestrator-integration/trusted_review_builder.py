@@ -22,6 +22,35 @@ WORKSPACE = Path(__file__).resolve().parents[3]
 REVIEW_VERDICT_SCHEMA = (
     WORKSPACE / "state/tasks/2026-08-11-codex-claude-orchestrator/implementation/review-verdict.schema.json"
 )
+PRIOR_DETAIL_BASE_REQUIRED = {
+    "occurrence_id", "finding_id", "fingerprint", "title", "severity", "category",
+    "criterion_id", "confidence", "proposed_disposition", "status",
+}
+PRIOR_DETAIL_MAJOR_REQUIRED = {
+    "rationale", "failure_scenario", "reproduction", "evidence",
+}
+
+
+def _prior_detail_complete(value: Any, finding_id: str) -> bool:
+    if not isinstance(value, dict) or value.get("finding_id") != finding_id:
+        return False
+    if not PRIOR_DETAIL_BASE_REQUIRED.issubset(value):
+        return False
+    if not all(isinstance(value.get(key), str) and value[key].strip()
+               for key in ("occurrence_id", "finding_id", "title", "severity", "category",
+                           "confidence", "proposed_disposition")):
+        return False
+    if not isinstance(value.get("fingerprint"), dict):
+        return False
+    if value.get("severity") in {"blocker", "major"}:
+        return (PRIOR_DETAIL_MAJOR_REQUIRED.issubset(value)
+                and isinstance(value.get("rationale"), str) and bool(value["rationale"].strip())
+                and isinstance(value.get("failure_scenario"), str) and bool(value["failure_scenario"].strip())
+                and isinstance(value.get("reproduction"), list) and bool(value["reproduction"])
+                and isinstance(value.get("evidence"), list) and bool(value["evidence"])
+                and (isinstance(value.get("location"), dict)
+                     or isinstance(value.get("location_absent_reason"), str)))
+    return value.get("severity") == "nit"
 
 
 def _digest_bytes(data: bytes) -> str:
@@ -300,10 +329,18 @@ def build_review_inputs(
     prior_findings_name = None
     if review_mode == "targeted_verification":
         registry_findings = previous.get("finding_registry", {}).get("findings", [])
+        detail_by_id = previous.get("prior_finding_details", {})
+        if not isinstance(detail_by_id, dict):
+            raise BuilderError("prior finding details are invalid")
+        open_ids = [item.get("finding_id") for item in registry_findings
+                    if item.get("status") == "open" and isinstance(item.get("finding_id"), str)]
+        if any(finding_id not in detail_by_id for finding_id in open_ids):
+            raise BuilderError("targeted verification requires complete prior finding details")
+        if any(not _prior_detail_complete(detail_by_id[finding_id], finding_id)
+               for finding_id in open_ids):
+            raise BuilderError("targeted verification prior finding details are incomplete")
         prior_findings = {"document_type": "prior_findings", "schema_version": "1.0.0",
-                          "findings": [{"finding_id": item["finding_id"], "status": "open"}
-                                       for item in registry_findings
-                                       if item.get("status") == "open" and isinstance(item.get("finding_id"), str)]}
+                          "findings": [detail_by_id[finding_id] for finding_id in open_ids]}
         if not prior_findings["findings"]:
             raise BuilderError("targeted verification requires open prior findings")
         prior_findings_name = "prior-findings.json"
