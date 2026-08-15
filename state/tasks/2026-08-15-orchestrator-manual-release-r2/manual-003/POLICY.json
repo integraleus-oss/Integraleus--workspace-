@@ -1,0 +1,12 @@
+{
+  "task_policy": {
+    "budgets": {
+      "rework": 1,
+      "infra_total": 1,
+      "infra_per_signature": {},
+      "final_full": 1,
+      "no_progress": 1
+    },
+    "infra_signature_allowlist": []
+  }
+}
