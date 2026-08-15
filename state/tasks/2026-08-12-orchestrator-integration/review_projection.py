@@ -103,6 +103,13 @@ def build_projection(
     projection_binding_path: Path,
     prior_findings_path: Path | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
+    transport_validation = VALIDATOR.validate_document(
+        verdict_path,
+        trusted_manifest_path=trusted_manifest_path,
+        prior_findings_path=prior_findings_path,
+    )
+    if transport_validation.get("layers", {}).get("transport") is False:
+        raise ContractValidationError(transport_validation)
     raw_verdict = _load_json(verdict_path)
     normalized_verdict = normalize_derived_review_ids(raw_verdict)
     validation_path = verdict_path

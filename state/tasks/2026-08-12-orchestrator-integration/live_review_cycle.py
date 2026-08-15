@@ -16,10 +16,31 @@ from review_projection import ContractValidationError, ProjectionError
 
 CONTROL_CHARACTER_GUIDANCE = (
     "Every JSON string must contain no decoded U+0000 through U+001F control "
-    "characters. Encode intended line breaks as the two characters \\n or replace "
-    "them with ` | `; encode intended tabs as the two characters \\t or replace "
-    "them with a single space. Never emit literal tabs, newlines, or other controls inside "
-    "a JSON string value."
+    "characters. Do not use JSON \\n or \\t escape sequences because decoding them "
+    "creates forbidden control characters. Replace intended line breaks with ` | ` "
+    "and replace intended tabs with a single ordinary space. Never emit literal tabs, "
+    "newlines, or other controls inside a JSON string value."
+)
+
+EVIDENCE_REFERENCE_GUIDANCE = (
+    "Every evidence_id referenced by criteria_coverage[].evidence_ids, "
+    "limitations[].evidence_ids, or a reproduction step must exactly match an "
+    "evidence_id defined in this same verdict under findings[].evidence, "
+    "verification.results[].evidence, or infra_symptoms[].evidence. Never invent "
+    "a bare evidence reference or use a gate/request/artifact identifier as an "
+    "evidence_id. Before returning JSON, build the set of evidence IDs from those "
+    "three evidence carriers and check every reference against it. During contract "
+    "repair, preserve truthful evidence objects; remove a dangling unsupported "
+    "reference rather than fabricating evidence."
+)
+
+EVIDENCE_OBJECT_GUIDANCE = (
+    "For every evidence object, if artifact_ref is present then content_digest "
+    "must also be present and must be the verified sha256 digest for that exact "
+    "sealed artifact. gate_artifact and artifact_reference evidence always require "
+    "both fields. If no verified artifact digest is available, omit artifact_ref "
+    "and use a truthful non-empty excerpt or command-backed evidence form permitted "
+    "by the sealed schema; never guess a digest."
 )
 
 
@@ -41,7 +62,16 @@ def run_cycle(
     if cycle_root.exists():
         raise ProjectionError("cycle directory already exists")
     cycle_root.mkdir(parents=True)
-    prompt = prompt_path.read_text(encoding="utf-8").rstrip() + "\n\n" + CONTROL_CHARACTER_GUIDANCE + "\n"
+    prompt = (
+        prompt_path.read_text(encoding="utf-8").rstrip()
+        + "\n\n"
+        + CONTROL_CHARACTER_GUIDANCE
+        + "\n\n"
+        + EVIDENCE_REFERENCE_GUIDANCE
+        + "\n\n"
+        + EVIDENCE_OBJECT_GUIDANCE
+        + "\n"
+    )
     launch_result = agent_launcher.launch(
         "claude", project_root, prompt, cycle_root / "claude-launch",
         timeout_seconds=timeout_seconds,

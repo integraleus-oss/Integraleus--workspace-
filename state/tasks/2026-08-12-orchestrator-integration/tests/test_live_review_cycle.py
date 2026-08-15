@@ -69,6 +69,61 @@ class LiveReviewCycleTests(unittest.TestCase):
         path.chmod(path.stat().st_mode | stat.S_IXUSR)
         return path
 
+    def evidence_reference_retry_wrapper(self, verdict: dict) -> tuple[Path, str]:
+        path = self.root / "claude-evidence-reference-retry-wrapper"
+        dangling_id = "ev_99999999999999999999999999999999"
+        invalid = json.loads(json.dumps(verdict))
+        invalid["conclusion"].pop("unable_to_complete_reason", None)
+        invalid["criteria_coverage"][0]["evidence_ids"].append(dangling_id)
+        first = json.dumps({"result": json.dumps(invalid)})
+        retry = json.dumps({"result": json.dumps(verdict)})
+        path.write_text(
+            "#!/bin/sh\nset -eu\n"
+            + "case \"$2\" in\n"
+            + f"  *claude-contract-retry*) printf '%s' {json.dumps(retry)} > \"$3\" ;;\n"
+            + f"  *) printf '%s' {json.dumps(first)} > \"$3\" ;;\n"
+            + "esac\n",
+            encoding="utf-8",
+        )
+        path.chmod(path.stat().st_mode | stat.S_IXUSR)
+        return path, dangling_id
+
+    def initial_transport_retry_wrapper(self, verdict: dict) -> Path:
+        path = self.root / "claude-initial-transport-retry-wrapper"
+        invalid = json.loads(json.dumps(verdict))
+        invalid["conclusion"]["summary"] += "\ttransport"
+        first = json.dumps({"result": json.dumps(invalid)})
+        retry = json.dumps({"result": json.dumps(verdict)})
+        path.write_text(
+            "#!/bin/sh\nset -eu\n"
+            + "case \"$2\" in\n"
+            + f"  *claude-contract-retry*) printf '%s' {json.dumps(retry)} > \"$3\" ;;\n"
+            + f"  *) printf '%s' {json.dumps(first)} > \"$3\" ;;\n"
+            + "esac\n",
+            encoding="utf-8",
+        )
+        path.chmod(path.stat().st_mode | stat.S_IXUSR)
+        return path
+
+    def evidence_digest_retry_wrapper(self, verdict: dict) -> Path:
+        path = self.root / "claude-evidence-digest-retry-wrapper"
+        invalid = json.loads(json.dumps(verdict))
+        evidence = invalid["findings"][0]["evidence"][0]
+        evidence["artifact_ref"] = "gates/example/stdout.log"
+        evidence.pop("content_digest", None)
+        first = json.dumps({"result": json.dumps(invalid)})
+        retry = json.dumps({"result": json.dumps(verdict)})
+        path.write_text(
+            "#!/bin/sh\nset -eu\n"
+            + "case \"$2\" in\n"
+            + f"  *claude-contract-retry*) printf '%s' {json.dumps(retry)} > \"$3\" ;;\n"
+            + f"  *) printf '%s' {json.dumps(first)} > \"$3\" ;;\n"
+            + "esac\n",
+            encoding="utf-8",
+        )
+        path.chmod(path.stat().st_mode | stat.S_IXUSR)
+        return path
+
     def contract_retry_with_prose_wrapper(
         self, verdict: dict, *, final_exact: bool = True, repair_control_character: bool = False
     ) -> Path:
@@ -107,7 +162,7 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertTrue((self.root / "cycle/claude-launch/launch-result.json").exists())
         initial_prompt = (self.root / "cycle/claude-launch/input-prompt.md").read_text()
         self.assertIn("no decoded U+0000 through U+001F", initial_prompt)
-        self.assertIn("replace them with a single space", initial_prompt)
+        self.assertIn("replace intended tabs with a single ordinary space", initial_prompt)
 
     def test_policy_decision_is_admitted_with_derived_rework_packet(self) -> None:
         bundle = self.helper._run_bundle("managed-live-rework")
@@ -222,6 +277,72 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertIn("schema_validation", retry_prompt)
         self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
         self.assertIn("Never emit literal tabs", retry_prompt)
+        self.assertFalse((self.root / "inputs/verdict.json").exists())
+
+    def test_contract_retry_removes_dangling_evidence_reference(self) -> None:
+        bundle = self.helper._run_bundle("evidence-reference-retry")
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        wrapper, dangling_id = self.evidence_reference_retry_wrapper(self.verdict)
+        with patch.object(agent_launcher, "CLAUDE_WRAPPER", wrapper):
+            result = run_cycle(
+                self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+            )
+        self.assertEqual(result["status"], "DECIDED")
+        first = json.loads((self.root / "cycle/contract-repair-first-verdict.json").read_text())
+        self.assertIn(dangling_id, first["criteria_coverage"][0]["evidence_ids"])
+        retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
+        self.assertIn("Every evidence_id referenced", retry_prompt)
+        self.assertIn("three evidence carriers", retry_prompt)
+        self.assertIn("remove a dangling unsupported reference", retry_prompt)
+        admitted = json.loads(
+            (Path(result["decision_dir"]) / "input-review_verdict.json").read_text()
+        )
+        self.assertNotIn(dangling_id, admitted["criteria_coverage"][0]["evidence_ids"])
+        self.assertFalse((self.root / "inputs/verdict.json").exists())
+
+    def test_initial_transport_failure_gets_bounded_contract_retry(self) -> None:
+        bundle = self.helper._run_bundle("initial-transport-retry")
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.initial_transport_retry_wrapper(self.verdict)
+        ):
+            result = run_cycle(
+                self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+            )
+        self.assertEqual(result["status"], "DECIDED")
+        first_error = json.loads(
+            (self.root / "cycle/contract-repair-first-admission/run-error.json").read_text()
+        )
+        self.assertEqual(first_error["error"]["type"], "ContractValidationError")
+        self.assertIn("disallowed_control_character", first_error["error"]["message"])
+        retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
+        self.assertIn("Do not use JSON \\n or \\t escape sequences", retry_prompt)
+        self.assertIn("replace intended tabs with a single ordinary space", retry_prompt)
+        self.assertFalse((self.root / "inputs/verdict.json").exists())
+
+    def test_missing_artifact_digest_gets_bounded_contract_retry(self) -> None:
+        bundle = self.helper._run_bundle("evidence-digest-retry")
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.evidence_digest_retry_wrapper(self.verdict)
+        ):
+            result = run_cycle(
+                self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+            )
+        self.assertEqual(result["status"], "DECIDED")
+        first_error = json.loads(
+            (self.root / "cycle/contract-repair-first-admission/run-error.json").read_text()
+        )
+        self.assertIn("evidence_digest_required", first_error["error"]["message"])
+        retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
+        self.assertIn("if artifact_ref is present then content_digest", retry_prompt)
+        self.assertIn("never guess a digest", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
 
     def test_contract_retry_is_single_and_second_invalid_reply_fails_closed(self) -> None:
