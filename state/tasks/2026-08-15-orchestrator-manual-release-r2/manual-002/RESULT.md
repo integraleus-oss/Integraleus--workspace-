@@ -30,3 +30,9 @@ use a new evidence root. It may inspect or correct only the same three allowed
 files. A repeated Claude limit/failure, path expansion, or any unknown failure
 is terminal. No result may be transferred without `R17_ACCEPT` and a separate
 explicit source-transfer decision.
+
+The first retry packet was rejected before any agent launch with
+`BuilderError: project baseline is not clean`, because it pointed at the
+retained implementation worktree. This consumed no Codex or Claude attempt.
+The corrected retry uses a new clean detached worktree and a new evidence root;
+the failed preflight evidence remains preserved.
