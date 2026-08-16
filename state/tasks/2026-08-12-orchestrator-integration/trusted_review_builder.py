@@ -12,6 +12,8 @@ import time
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+import requirements_traceability
+
 
 class BuilderError(RuntimeError):
     pass
@@ -184,7 +186,7 @@ def _run_gate(root: Path, gate: dict[str, Any], out: Path, timeout: int) -> dict
 
 def build_review_inputs(
     project_root: Path, output_dir: Path, baseline: dict[str, Any], config: dict[str, Any], attempt: int,
-    prior_context: dict[str, Any] | None = None,
+    prior_context: dict[str, Any] | None = None, proof_chain: dict[str, Any] | None = None,
 ) -> dict[str, Path]:
     root, out = project_root.resolve(), output_dir.resolve()
     if out.exists():
@@ -279,6 +281,21 @@ def build_review_inputs(
                       "review_verdict_schema": _digest(out / "review-verdict.schema.json")},
         "gates": gates,
     }
+    proof_artifacts: dict[str, str] = {}
+    if proof_chain is not None:
+        try:
+            requirements_traceability.validate_preflight(
+                proof_chain["manifest"], proof_chain["specification"], proof_chain["task_map"]
+            )
+        except (KeyError, requirements_traceability.TraceabilityError) as exc:
+            raise BuilderError(f"requirements proof-chain is invalid: {exc}") from exc
+        for name, key in (("requirements-manifest.json", "manifest"),
+                          ("requirements-specification.json", "specification"),
+                          ("requirements-task-map.json", "task_map")):
+            _write_json(out / name, proof_chain[key])
+            proof_artifacts[name] = _digest(out / name)
+        evidence["requirements_manifest_digest"] = requirements_traceability.canonical_digest(proof_chain["manifest"])
+        evidence["artifacts"].update(proof_artifacts)
     for name, value in (("manifest.json", manifest), ("binding.json", binding), ("evidence.json", evidence)):
         _write_json(out / name, value)
     try:
@@ -361,6 +378,7 @@ def build_review_inputs(
                                                     "binding.json", "evidence.json", "policy.json", "bundle.json",
                                                     "review-instructions.md", "review-verdict.schema.json",
                                                     "review-context.json")}
+    seal.update(proof_artifacts)
     if prior_findings_name:
         seal[prior_findings_name] = _digest(out / prior_findings_name)
     _write_json(out / "seal.json", seal)

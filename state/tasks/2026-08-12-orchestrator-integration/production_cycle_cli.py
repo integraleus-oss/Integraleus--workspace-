@@ -13,6 +13,7 @@ from typing import Any
 
 import agent_launcher
 import live_review_cycle
+import requirements_traceability
 import review_projection
 import trusted_review_builder
 from managed_one_cycle import run_managed_cycle
@@ -117,9 +118,10 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         "codex_timeout_seconds", "claude_timeout_seconds", "reviews",
     }
     builder_fields = (legacy_fields - {"reviews"}) | {"builder"}
-    if schema_version not in {"1.0.0", "1.1.0"} or set(packet) != (
-        legacy_fields if schema_version == "1.0.0" else builder_fields
-    ):
+    proof_fields = builder_fields | {"requirements_manifest", "requirements_specification", "requirements_task_map"}
+    expected_fields = (legacy_fields if schema_version == "1.0.0" else builder_fields
+                       if schema_version == "1.1.0" else proof_fields)
+    if schema_version not in {"1.0.0", "1.1.0", "1.2.0"} or set(packet) != expected_fields:
         raise PacketError("task packet fields or schema version are invalid")
     base = packet_path.parent
     if not isinstance(packet["project_root"], str) or not packet["project_root"].strip():
@@ -171,6 +173,23 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         builder["review_instructions"] = str(_inside(base, builder["review_instructions"]))
         builder["policy_fixture"] = str(_inside(base, builder["policy_fixture"]))
         normalized_reviews = [{"prompt_text": _bounded_text(Path(builder["review_instructions"]))} for _ in range(3)]
+    proof_chain = None
+    if schema_version == "1.2.0":
+        manifest_path = _inside(base, packet["requirements_manifest"])
+        specification_path = _inside(base, packet["requirements_specification"])
+        task_map_path = _inside(base, packet["requirements_task_map"])
+        manifest = _read_json(manifest_path)
+        specification = _read_json(specification_path)
+        task_map = _read_json(task_map_path)
+        try:
+            requirements_traceability.validate_preflight(manifest, specification, task_map)
+        except requirements_traceability.TraceabilityError as exc:
+            raise PacketError(f"requirements proof-chain preflight failed: {exc}") from exc
+        proof_chain = {
+            "manifest_path": manifest_path, "specification_path": specification_path,
+            "task_map_path": task_map_path, "manifest": manifest,
+            "specification": specification, "task_map": task_map,
+        }
     return {
         **packet,
         "packet_path": packet_path,
@@ -179,6 +198,7 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         "task_note": task_note,
         "reviews": normalized_reviews,
         "builder": builder,
+        "proof_chain": proof_chain,
     }
 
 
@@ -211,7 +231,8 @@ def _run_loaded_packet(packet: dict[str, Any]) -> dict[str, Any]:
         leg = packet["reviews"][attempt - 1]
         if packet["builder"]:
             built = trusted_review_builder.build_review_inputs(
-                packet["project_root"], run_dir / "review-inputs", baseline, packet["builder"], attempt, prior_context
+                packet["project_root"], run_dir / "review-inputs", baseline, packet["builder"], attempt,
+                prior_context, packet["proof_chain"],
             )
             trusted_review_builder.verify_seal(built["input_dir"], packet["project_root"])
             copied_inputs, bundle = built["input_dir"], built["bundle"]

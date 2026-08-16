@@ -52,6 +52,45 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertEqual(loaded["project_root"], self.project)
         self.assertEqual(len(loaded["reviews"]), 2)
 
+    def test_v12_requires_complete_requirements_proof_chain(self):
+        from requirements_traceability import canonical_digest, generate_manifest
+        policy = self.packet_dir / "policy.json"
+        policy.write_text("{}", encoding="utf-8")
+        manifest = generate_manifest("proof-task", "Build the requested behavior.", ["Build the behavior."])
+        manifest["requirements"][0]["state"] = "implementing"
+        digest = canonical_digest(manifest)
+        documents = {
+            "manifest.json": manifest,
+            "spec.json": {"document_type": "requirements_specification", "schema_version": "1.0.0",
+                          "manifest_digest": digest, "requirements": [
+                              {"requirement_id": "R01", "specification": "Behavior is observable."}]},
+            "tasks.json": {"document_type": "requirements_task_map", "schema_version": "1.0.0",
+                           "manifest_digest": digest, "tasks": [
+                               {"task_id": "implement-behavior", "requirement_ids": ["R01"]}]},
+        }
+        for name, value in documents.items():
+            (self.packet_dir / name).write_text(json.dumps(value), encoding="utf-8")
+        self.packet = {
+            "document_type": "production_cycle_task", "schema_version": "1.2.0",
+            "project_root": str(self.project), "task_note": "task.md", "run_root": str(self.root / "run"),
+            "codex_timeout_seconds": 30, "claude_timeout_seconds": 30,
+            "requirements_manifest": "manifest.json", "requirements_specification": "spec.json",
+            "requirements_task_map": "tasks.json",
+            "builder": {"task_id": "task", "repo_id": "fixture", "allowed_paths": ["app.py"],
+                        "gates": [{"id": "syntax", "argv": ["python3", "-c", "pass"]}],
+                        "gate_timeout_seconds": 10,
+                        "acceptance_criteria": [{"id": "AC-1", "statement": "Behavior works."}],
+                        "review_instructions": "review-1.md", "policy_fixture": "policy.json",
+                        "review_verdict": "verdict.json"},
+        }
+        self.write_packet()
+        loaded = load_packet(self.packet_path)
+        self.assertEqual(loaded["proof_chain"]["manifest"]["manifest_id"], "proof-task")
+        documents["tasks.json"]["tasks"] = []
+        (self.packet_dir / "tasks.json").write_text(json.dumps(documents["tasks.json"]), encoding="utf-8")
+        with self.assertRaisesRegex(PacketError, "proof-chain preflight"):
+            load_packet(self.packet_path)
+
     @patch("production_cycle_cli.review_projection.normalize_derived_review_ids")
     def test_prior_finding_details_use_canonical_derived_ids(self, normalize):
         decision_dir = self.root / "decision"
