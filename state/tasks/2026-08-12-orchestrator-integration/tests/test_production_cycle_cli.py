@@ -52,13 +52,17 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertEqual(loaded["project_root"], self.project)
         self.assertEqual(len(loaded["reviews"]), 2)
 
+    def test_legacy_packet_is_not_executable_by_default(self):
+        with self.assertRaisesRegex(PacketError, "validation/replay-only"):
+            run_packet(self.packet_path)
+
     def test_v12_requires_complete_requirements_proof_chain(self):
         from requirements_traceability import canonical_digest, generate_manifest
         policy = self.packet_dir / "policy.json"
         policy.write_text("{}", encoding="utf-8")
         manifest = generate_manifest("proof-task", "Build the requested behavior.", ["Build the behavior."])
         manifest["requirements"][0]["state"] = "implementing"
-        digest = canonical_digest(manifest)
+        digest = manifest["immutable_core_digest"]
         documents = {
             "manifest.json": manifest,
             "spec.json": {"document_type": "requirements_specification", "schema_version": "1.0.0",
@@ -70,10 +74,14 @@ class ProductionCycleCliTests(unittest.TestCase):
         }
         for name, value in documents.items():
             (self.packet_dir / name).write_text(json.dumps(value), encoding="utf-8")
+        brief = self.packet_dir / "brief.txt"
+        brief.write_text(manifest["original_brief"], encoding="utf-8")
         self.packet = {
             "document_type": "production_cycle_task", "schema_version": "1.2.0",
             "project_root": str(self.project), "task_note": "task.md", "run_root": str(self.root / "run"),
             "codex_timeout_seconds": 30, "claude_timeout_seconds": 30,
+            "original_brief": "brief.txt", "original_brief_digest": manifest["original_brief_digest"],
+            "previous_requirements_manifest": None,
             "requirements_manifest": "manifest.json", "requirements_specification": "spec.json",
             "requirements_task_map": "tasks.json",
             "builder": {"task_id": "task", "repo_id": "fixture", "allowed_paths": ["app.py"],
@@ -86,6 +94,14 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.write_packet()
         loaded = load_packet(self.packet_path)
         self.assertEqual(loaded["proof_chain"]["manifest"]["manifest_id"], "proof-task")
+        brief.write_text("Rewritten brief.", encoding="utf-8")
+        self.packet["original_brief_digest"] = __import__("requirements_traceability").digest_text("Rewritten brief.")
+        self.write_packet()
+        with self.assertRaisesRegex(PacketError, "not bound"):
+            load_packet(self.packet_path)
+        brief.write_text(manifest["original_brief"], encoding="utf-8")
+        self.packet["original_brief_digest"] = manifest["original_brief_digest"]
+        self.write_packet()
         documents["tasks.json"]["tasks"] = []
         (self.packet_dir / "tasks.json").write_text(json.dumps(documents["tasks.json"]), encoding="utf-8")
         with self.assertRaisesRegex(PacketError, "proof-chain preflight"):
@@ -163,7 +179,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         admit.return_value = {
             "document_type": "local_orchestrator_run_result", "outcome": "ACCEPTED", "rule_id": "R17_ACCEPT"
         }
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 1)
         self.assertTrue((self.root / "run" / "cycle-result.json").is_file())
@@ -179,7 +195,7 @@ class ProductionCycleCliTests(unittest.TestCase):
              "rule_id": "R11_OPEN_FINDINGS", "rework_packet": "Fix F-1"},
             {"document_type": "local_orchestrator_run_result", "outcome": "ACCEPTED", "rule_id": "R17_ACCEPT"},
         ]
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 2)
         self.assertIn("Policy-authenticated rework:\nFix F-1", launch.call_args_list[1].args[2])
@@ -188,13 +204,13 @@ class ProductionCycleCliTests(unittest.TestCase):
     @patch("production_cycle_cli.agent_launcher.launch")
     def test_codex_timeout_escalates(self, launch):
         launch.return_value = {"status": "FAILED", "timed_out": True}
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ESCALATED")
 
     @patch("production_cycle_cli.agent_launcher.launch")
     def test_codex_operator_interrupt_is_preserved(self, launch):
         launch.return_value = {"status": "INTERRUPTED", "exit_code": 130, "timed_out": False}
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         implementation = result["history"][0]["implementation"]
         self.assertEqual(result["status"], "INTERRUPTED")
         self.assertNotIn("classification", implementation)
@@ -203,7 +219,7 @@ class ProductionCycleCliTests(unittest.TestCase):
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
     @patch("production_cycle_cli.agent_launcher.launch", return_value={"status": "OK"})
     def test_admission_error_escalates(self, launch, live, admit):
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ESCALATED")
         self.assertEqual(result["history"][-1]["error"]["message"], "bad digest")
 
@@ -294,7 +310,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         live.side_effect = inspect_bundle
         admit.return_value = {"document_type": "local_orchestrator_run_result", "outcome": "ACCEPTED",
                               "rule_id": "R17_ACCEPT"}
-        result = run_packet(self.packet_path)
+        result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
 
 

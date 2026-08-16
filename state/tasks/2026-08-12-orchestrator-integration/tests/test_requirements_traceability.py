@@ -3,7 +3,7 @@ import unittest
 
 from requirements_traceability import (
     TraceabilityError, canonical_digest, generate_manifest, validate_acceptance_completeness,
-    validate_manifest, validate_preflight,
+    validate_manifest, validate_preflight, validate_transition,
 )
 
 
@@ -12,7 +12,7 @@ class RequirementsTraceabilityTests(unittest.TestCase):
         self.manifest = generate_manifest("pilot-proof", "Build A and preserve B.", ["Build A.", "Preserve B."])
         self.manifest["requirements"][0]["state"] = "implementing"
         self.manifest["requirements"][1]["state"] = "implemented"
-        digest = canonical_digest(self.manifest)
+        digest = self.manifest["immutable_core_digest"]
         self.spec = {"document_type": "requirements_specification", "schema_version": "1.0.0",
                      "manifest_digest": digest, "requirements": [
                          {"requirement_id": "R01", "specification": "A has observable behavior."},
@@ -54,6 +54,28 @@ class RequirementsTraceabilityTests(unittest.TestCase):
         with self.assertRaises(TraceabilityError):
             validate_manifest(broken)
 
+    def test_revision_chain_blocks_removal_and_state_regression(self):
+        previous = copy.deepcopy(self.manifest)
+        current = copy.deepcopy(previous)
+        current["revision"] = 2
+        current["previous_manifest_digest"] = canonical_digest(previous)
+        current["requirements"][0]["state"] = "implemented"
+        validate_transition(previous, current)
+        removed = copy.deepcopy(current)
+        removed["requirements"].pop()
+        with self.assertRaises(TraceabilityError):
+            validate_transition(previous, removed)
+        regressed = copy.deepcopy(current)
+        regressed["requirements"][1]["state"] = "accepted"
+        with self.assertRaisesRegex(TraceabilityError, "regression"):
+            validate_transition(previous, regressed)
+
+    def test_ids_do_not_support_renumbering_boundary(self):
+        manifest = generate_manifest("max-proof", "Many requirements.", [f"Requirement {i}" for i in range(99)])
+        self.assertEqual(manifest["requirements"][-1]["requirement_id"], "R99")
+        with self.assertRaises(TraceabilityError):
+            generate_manifest("too-many", "Too many.", [str(i) for i in range(100)])
+
     def test_user_disposition_is_mandatory_and_explicit(self):
         broken = copy.deepcopy(self.manifest)
         broken["requirements"][0]["state"] = "removed_by_user"
@@ -78,10 +100,26 @@ class RequirementsTraceabilityTests(unittest.TestCase):
         with self.assertRaisesRegex(TraceabilityError, "lack tasks"):
             validate_preflight(self.manifest, self.spec, broken)
 
+    def test_every_active_requirement_requires_task(self):
+        manifest = generate_manifest("accepted-proof", "Do it.", ["Do it."])
+        digest = manifest["immutable_core_digest"]
+        spec = {"document_type": "requirements_specification", "schema_version": "1.0.0",
+                "manifest_digest": digest, "requirements": [{"requirement_id": "R01", "specification": "Done."}]}
+        tasks = {"document_type": "requirements_task_map", "schema_version": "1.0.0",
+                 "manifest_digest": digest, "tasks": []}
+        with self.assertRaisesRegex(TraceabilityError, "lack tasks"):
+            validate_preflight(manifest, spec, tasks)
+
     def test_acceptance_must_cover_every_active_requirement(self):
         broken = copy.deepcopy(self.acceptance)
         broken["results"].pop()
         with self.assertRaisesRegex(TraceabilityError, "lack acceptance"):
+            validate_acceptance_completeness(self.manifest, broken)
+
+    def test_active_requirement_cannot_be_reported_removed(self):
+        broken = copy.deepcopy(self.acceptance)
+        broken["results"][0]["outcome"] = "removed"
+        with self.assertRaisesRegex(TraceabilityError, "incompatible"):
             validate_acceptance_completeness(self.manifest, broken)
 
 

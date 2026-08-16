@@ -30,8 +30,10 @@ SAFE_PROJECT_BASES = (
 )
 
 
-def _read_json(path: Path) -> Any:
+def _read_json(path: Path, limit: int | None = None) -> Any:
     try:
+        if limit is not None and path.stat().st_size > limit:
+            raise PacketError(f"JSON packet exceeds size limit: {path}")
         return json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise PacketError(f"cannot read JSON packet: {path}") from exc
@@ -118,9 +120,11 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         "codex_timeout_seconds", "claude_timeout_seconds", "reviews",
     }
     builder_fields = (legacy_fields - {"reviews"}) | {"builder"}
-    proof_fields = builder_fields | {"requirements_manifest", "requirements_specification", "requirements_task_map"}
-    expected_fields = (legacy_fields if schema_version == "1.0.0" else builder_fields
-                       if schema_version == "1.1.0" else proof_fields)
+    proof_fields = builder_fields | {"original_brief", "original_brief_digest", "requirements_manifest",
+                                     "previous_requirements_manifest",
+                                     "requirements_specification", "requirements_task_map"}
+    versions = {"1.0.0": legacy_fields, "1.1.0": builder_fields, "1.2.0": proof_fields}
+    expected_fields = versions.get(schema_version)
     if schema_version not in {"1.0.0", "1.1.0", "1.2.0"} or set(packet) != expected_fields:
         raise PacketError("task packet fields or schema version are invalid")
     base = packet_path.parent
@@ -175,18 +179,37 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         normalized_reviews = [{"prompt_text": _bounded_text(Path(builder["review_instructions"]))} for _ in range(3)]
     proof_chain = None
     if schema_version == "1.2.0":
+        brief_path = _inside(base, packet["original_brief"])
+        brief = _bounded_text(brief_path, 65536)
+        if (not isinstance(packet["original_brief_digest"], str)
+                or packet["original_brief_digest"] != requirements_traceability.digest_text(brief)):
+            raise PacketError("externally anchored original brief digest mismatch")
         manifest_path = _inside(base, packet["requirements_manifest"])
         specification_path = _inside(base, packet["requirements_specification"])
         task_map_path = _inside(base, packet["requirements_task_map"])
-        manifest = _read_json(manifest_path)
-        specification = _read_json(specification_path)
-        task_map = _read_json(task_map_path)
+        manifest = _read_json(manifest_path, 262144)
+        specification = _read_json(specification_path, 262144)
+        task_map = _read_json(task_map_path, 262144)
+        if manifest.get("original_brief") != brief or manifest.get("original_brief_digest") != packet["original_brief_digest"]:
+            raise PacketError("requirements manifest is not bound to the original brief artifact")
+        previous_manifest = None
+        if packet["previous_requirements_manifest"] is None:
+            if manifest.get("revision") != 1:
+                raise PacketError("non-initial requirements manifest lacks its previous revision")
+        else:
+            previous_path = _inside(base, packet["previous_requirements_manifest"])
+            previous_manifest = _read_json(previous_path, 262144)
+            try:
+                requirements_traceability.validate_transition(previous_manifest, manifest)
+            except requirements_traceability.TraceabilityError as exc:
+                raise PacketError(f"requirements manifest revision chain failed: {exc}") from exc
         try:
             requirements_traceability.validate_preflight(manifest, specification, task_map)
         except requirements_traceability.TraceabilityError as exc:
             raise PacketError(f"requirements proof-chain preflight failed: {exc}") from exc
         proof_chain = {
-            "manifest_path": manifest_path, "specification_path": specification_path,
+            "brief_path": brief_path, "brief": brief, "manifest_path": manifest_path,
+            "previous_manifest": previous_manifest,
             "task_map_path": task_map_path, "manifest": manifest,
             "specification": specification, "task_map": task_map,
         }
@@ -202,7 +225,9 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
     }
 
 
-def _run_loaded_packet(packet: dict[str, Any]) -> dict[str, Any]:
+def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) -> dict[str, Any]:
+    if packet["proof_chain"] is None and not allow_legacy:
+        raise PacketError("legacy task packets are validation/replay-only; execution requires schema 1.2.0 proof-chain")
     task_text = _bounded_text(packet["task_note"], 65536)
     baseline = trusted_review_builder.capture_clean_baseline(packet["project_root"]) if packet["builder"] else None
     prior_context: dict[str, Any] | None = None
@@ -256,6 +281,11 @@ def _run_loaded_packet(packet: dict[str, Any]) -> dict[str, Any]:
                             "inferred review schema. Include every schema-required property even when its value "
                             "is null (including conclusion.unable_to_complete_reason when applicable). Return "
                             "only the exact JSON document as your final response.\n")
+            if packet["proof_chain"] is not None:
+                prompt_text += ("The sealed requirements-manifest.json, requirements-specification.json, and "
+                                "requirements-task-map.json are mandatory review inputs. Check the implementation "
+                                "against every active Rxx and do not omit a requirement because it is absent from "
+                                "the implementation task prose.\n")
         prompt.write_text(prompt_text, encoding="utf-8")
         prompt.chmod(0o444)
         live_root = run_dir / "live-review"
@@ -303,8 +333,8 @@ def _run_loaded_packet(packet: dict[str, Any]) -> dict[str, Any]:
     return run_managed_cycle(packet["run_root"], implement, review)
 
 
-def run_packet(packet_path: Path) -> dict[str, Any]:
-    return _run_loaded_packet(load_packet(packet_path))
+def run_packet(packet_path: Path, *, allow_legacy: bool = False) -> dict[str, Any]:
+    return _run_loaded_packet(load_packet(packet_path), allow_legacy=allow_legacy)
 
 
 def main() -> int:

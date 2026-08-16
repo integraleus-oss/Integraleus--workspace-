@@ -294,7 +294,7 @@ def build_review_inputs(
                           ("requirements-task-map.json", "task_map")):
             _write_json(out / name, proof_chain[key])
             proof_artifacts[name] = _digest(out / name)
-        evidence["requirements_manifest_digest"] = requirements_traceability.canonical_digest(proof_chain["manifest"])
+        evidence["requirements_manifest_digest"] = proof_chain["manifest"]["immutable_core_digest"]
         evidence["artifacts"].update(proof_artifacts)
     for name, value in (("manifest.json", manifest), ("binding.json", binding), ("evidence.json", evidence)):
         _write_json(out / name, value)

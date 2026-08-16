@@ -29,10 +29,15 @@ Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
 - [x] Added explicit owner disposition for deferred/removed requirements.
 - [x] Added spec completeness, bidirectional requirement/task, and acceptance completeness validators.
 - [x] Added production packet `1.2.0` admission and sealed review-input copies.
-- [x] Full integration suite: 103/103 tests passed.
+- [x] Initial integration suite: 103/103 tests passed.
+- [x] Initial Claude review: `REWORK` (2 blockers, 4 majors, nits).
+- [x] Reworked: external brief anchor, immutable-core digest, revision chain,
+  fixed R01..R99 namespace, executed JSON Schema, legacy execution block,
+  stricter task/acceptance consistency, and sealed-artifact coverage.
+- [x] Post-rework integration suite: 109/109 tests passed.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
-- [ ] Independent review.
+- [ ] Independent closure review.
 - [ ] Scoped commit.
 
 ## Files Created Or Changed

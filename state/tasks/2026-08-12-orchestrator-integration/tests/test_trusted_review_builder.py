@@ -8,6 +8,7 @@ from pathlib import Path
 from trusted_review_builder import BuilderError, build_review_inputs, capture_clean_baseline, verify_seal
 import local_orchestrator_runner
 import review_projection
+from requirements_traceability import generate_manifest
 
 
 class TrustedReviewBuilderTests(unittest.TestCase):
@@ -71,6 +72,31 @@ class TrustedReviewBuilderTests(unittest.TestCase):
                          "sha256:" + hashlib.sha256(schema.read_bytes()).hexdigest())
         self.assertIsNone(context["prior_findings_canonical_digest"])
         self.assertEqual((built["input_dir"] / "manifest.json").stat().st_mode & 0o777, 0o444)
+
+    def test_proof_chain_is_sealed_and_tampering_is_detected(self):
+        manifest = generate_manifest("builder-proof", "Build it.", ["Build it."])
+        manifest["requirements"][0]["state"] = "implementing"
+        digest = manifest["immutable_core_digest"]
+        proof = {
+            "manifest": manifest,
+            "specification": {"document_type": "requirements_specification", "schema_version": "1.0.0",
+                              "manifest_digest": digest, "requirements": [
+                                  {"requirement_id": "R01", "specification": "It is built."}]},
+            "task_map": {"document_type": "requirements_task_map", "schema_version": "1.0.0",
+                         "manifest_digest": digest, "tasks": [
+                             {"task_id": "build-it", "requirement_ids": ["R01"]}]},
+        }
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        built = build_review_inputs(self.repo, self.root / "proof-inputs", self.baseline, self.config, 1,
+                                    proof_chain=proof)
+        verify_seal(built["input_dir"], self.repo)
+        evidence = json.loads((built["input_dir"] / "evidence.json").read_text())
+        self.assertEqual(evidence["requirements_manifest_digest"], digest)
+        target = built["input_dir"] / "requirements-manifest.json"
+        target.chmod(0o644)
+        target.write_text("{}\n")
+        with self.assertRaisesRegex(BuilderError, "digest mismatch"):
+            verify_seal(built["input_dir"])
 
     def test_rejects_dirty_baseline(self):
         (self.repo / "src/app.py").write_text("dirty\n")
