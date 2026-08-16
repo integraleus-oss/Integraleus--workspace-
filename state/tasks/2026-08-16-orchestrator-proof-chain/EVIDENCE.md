@@ -75,6 +75,12 @@ Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
 - [x] Fixed symlink and unsafe artifact-link handling.
 - [x] `strict` vs `normal` now changes admitted reviewer verification methods.
 - [x] Full suite after rework: 118/118 tests passed.
+- [x] First closure review: `REWORK` (7 majors, no blockers).
+- [x] Bound internal per-R derivation to the admitted reviewer verdict digest.
+- [x] Added single-use owner authorization bound to packet digest and source message.
+- [x] Applied the fixed global lock to legacy and current executions.
+- [x] Added structured internal-acceptance failure and broader interrupt evidence.
+- [x] Added ignored-file mutation tracking and persisted failed blind gate records.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.

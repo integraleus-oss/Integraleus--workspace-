@@ -368,7 +368,13 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
         admitted = admit_live_review(result, live_root)
         if packet["proof_chain"] is not None and admitted.get("outcome") == "ACCEPTED":
             decision_dir = Path(result["decision_dir"])
-            verdict_data = _read_json(decision_dir / "input-review_verdict.json", 1048576)
+            verdict_path = decision_dir / "input-review_verdict.json"
+            expected_verdict_digest = result.get("decision", {}).get("input_digests", {}).get("review_verdict")
+            if not isinstance(expected_verdict_digest, str) or _sha256(verdict_path) != expected_verdict_digest:
+                raise PacketError("sealed internal reviewer verdict digest mismatch")
+            if not isinstance(packet.get("builder"), dict):
+                raise PacketError("requirements acceptance requires a trusted builder")
+            verdict_data = _read_json(verdict_path, 1048576)
             coverage = {item.get("criterion_id"): item for item in verdict_data.get("review", {}).get("criteria_coverage", [])
                         if isinstance(item, dict) and isinstance(item.get("criterion_id"), str)}
             acceptance_results = []
@@ -431,14 +437,32 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
                             if item["state"] in requirements_traceability.ACTIVE_STATES]
             result.update(_render_dashboard(packet, result, result["status"], requirements, None))
         return result
-    accepted_reviews = [item.get("review") for item in result.get("history", [])
-                        if item.get("outcome") == "ACCEPTED" and isinstance(item.get("review"), dict)]
-    internal = accepted_reviews[-1].get("requirements_acceptance") if accepted_reviews else None
-    if not isinstance(internal, dict):
-        raise PacketError("accepted cycle lacks sealed per-requirement internal acceptance")
-    requirements_traceability.validate_acceptance_completeness(packet["proof_chain"]["manifest"], internal)
-    if any(item["outcome"] != "pass" for item in internal["results"]):
-        raise PacketError("internal per-requirement acceptance is not fully passing")
+    try:
+        accepted_reviews = [item.get("review") for item in result.get("history", [])
+                            if item.get("outcome") == "ACCEPTED" and isinstance(item.get("review"), dict)]
+        internal = accepted_reviews[-1].get("requirements_acceptance") if accepted_reviews else None
+        if not isinstance(internal, dict):
+            raise PacketError("accepted cycle lacks sealed per-requirement internal acceptance")
+        requirements_traceability.validate_acceptance_completeness(packet["proof_chain"]["manifest"], internal)
+        if any(item["outcome"] != "pass" for item in internal["results"]):
+            raise PacketError("internal per-requirement acceptance is not fully passing")
+    except BaseException as exc:
+        status = "INTERRUPTED" if isinstance(exc, KeyboardInterrupt) else "ESCALATED"
+        requirements = ([] if not isinstance(locals().get("internal"), dict)
+                        else internal.get("results", []))
+        if not requirements:
+            requirements = [{"requirement_id": item["requirement_id"], "outcome": "not_assessed",
+                             "evidence": str(exc)} for item in packet["proof_chain"]["manifest"]["requirements"]
+                            if item["state"] in requirements_traceability.ACTIVE_STATES]
+        failure = {**result, "status": status,
+                   "internal_acceptance_error": {"type": type(exc).__name__, "message": str(exc)}}
+        failure_path = packet["run_root"] / "final-result.json"
+        failure_path.write_text(json.dumps(failure, sort_keys=True, separators=(",", ":")) + "\n",
+                                encoding="utf-8")
+        failure.update(_render_dashboard(packet, result, status, requirements, None))
+        failure_path.write_text(json.dumps(failure, sort_keys=True, separators=(",", ":")) + "\n",
+                                encoding="utf-8")
+        return failure
     _write_path = packet["run_root"] / "internal-requirements-acceptance.json"
     _write_path.write_text(json.dumps(internal, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
     try:
@@ -450,27 +474,28 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
         final_status = "INTERRUPTED" if blind.get("status") == "INTERRUPTED" else "ACCEPTED"
     except BaseException as exc:
         final_status = "INTERRUPTED" if isinstance(exc, KeyboardInterrupt) else "ESCALATED"
-        blind = {"status": final_status, "error": {"type": type(exc).__name__, "message": str(exc)}}
+        blind = {"status": final_status, "error": {"type": type(exc).__name__, "message": str(exc)},
+                 "verification_gates": blind_acceptance.load_verification_records(
+                     packet["run_root"] / "blind-acceptance")}
     final = {**result, "status": final_status, "internal_acceptance": str(_write_path), "blind_acceptance": blind}
+    final_path = packet["run_root"] / "final-result.json"
+    final_path.write_text(json.dumps(final, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
     final.update(_render_dashboard(packet, result, final_status, internal["results"], blind))
-    (packet["run_root"] / "final-result.json").write_text(
-        json.dumps(final, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
+    final_path.write_text(json.dumps(final, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
     return final
 
 
 def run_packet(packet_path: Path, *, allow_legacy: bool = False, foreground_authorized: bool = False) -> dict[str, Any]:
     packet = load_packet(packet_path)
     if packet.get("schema_version") == "1.3.0" and not foreground_authorized:
-        raise PacketError("manual schema-1.3 execution requires the foreground adapter or an interactive CLI")
-    if allow_legacy:
-        return _run_loaded_packet(packet, allow_legacy=True)
+        raise PacketError("manual schema-1.3 execution requires a single-use foreground adapter authorization")
     FOREGROUND_LOCK.parent.mkdir(parents=True, exist_ok=True)
     with FOREGROUND_LOCK.open("a+", encoding="utf-8") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise PacketError("another orchestrator task is already running") from exc
-        return _run_loaded_packet(packet)
+        return _run_loaded_packet(packet, allow_legacy=allow_legacy)
 
 
 def main() -> int:
@@ -481,13 +506,15 @@ def main() -> int:
     try:
         packet = load_packet(args.packet)
         result = ({"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only
-                  else run_packet(args.packet, foreground_authorized=sys.stdin.isatty()))
+                  else run_packet(args.packet, foreground_authorized=False))
         code = (0 if result["status"] in {"VALID", "ACCEPTED"}
                 else 3 if result["status"] == "FAILED_INFRA"
                 else 130 if result["status"] == "INTERRUPTED" else 4)
-    except Exception as exc:
-        result = {"status": "ERROR", "error": {"type": type(exc).__name__, "message": str(exc)}}
-        code = 2
+    except BaseException as exc:
+        interrupted = isinstance(exc, KeyboardInterrupt)
+        result = {"status": "INTERRUPTED" if interrupted else "ERROR",
+                  "error": {"type": type(exc).__name__, "message": str(exc)}}
+        code = 130 if interrupted else 2
     print(json.dumps(result, sort_keys=True, separators=(",", ":")))
     return code
 

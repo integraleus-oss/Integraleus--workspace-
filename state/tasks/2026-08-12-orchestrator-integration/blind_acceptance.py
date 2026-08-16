@@ -40,6 +40,16 @@ def project_state(project_root: Path) -> str:
         path = project_root / raw[3:].decode("utf-8")
         if path.is_file() and not path.is_symlink():
             digest.update(raw + b"\0" + path.read_bytes())
+    ignored = subprocess.run(["git", "-C", str(project_root), "ls-files", "--others", "--ignored",
+                              "--exclude-standard", "-z"], capture_output=True, check=False)
+    if ignored.returncode:
+        raise BlindAcceptanceError("cannot capture ignored worktree state")
+    for raw in ignored.stdout.split(b"\0"):
+        if not raw:
+            continue
+        path = project_root / raw.decode("utf-8")
+        digest.update(raw + b"\0")
+        digest.update(path.read_bytes() if path.is_file() and not path.is_symlink() else b"<special>")
     return "sha256:" + digest.hexdigest()
 
 
@@ -71,6 +81,18 @@ def run_verification_commands(project_root: Path, run_dir: Path, commands: list[
             raise BlindAcceptanceError(f"blind verification command failed: blind-{index}")
     if project_state(project_root) != before:
         raise BlindAcceptanceError("blind verification commands mutated the worktree")
+    return records
+
+
+def load_verification_records(run_dir: Path) -> list[dict[str, Any]]:
+    records = []
+    for path in sorted((run_dir / "verification").glob("gate-*/result.json")):
+        try:
+            value = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(value, dict):
+            records.append(value)
     return records
 
 
