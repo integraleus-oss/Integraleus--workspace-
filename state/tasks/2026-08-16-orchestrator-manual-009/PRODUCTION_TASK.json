@@ -1,0 +1,31 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One exported deeply frozen capability-grant grammar pins an exact complete capability-grant Schema contract."},
+      {"id":"AC-2","statement":"Schema covers and requires every always-emitted runtime property including requestedModelClass and closes top-level and allowedExternal objects."},
+      {"id":"AC-3","statement":"Schema and runtime agree on arrays, external read domains/methods, model class, modelPolicy, booleans, and approval identifiers without unsupported strictness claims."},
+      {"id":"AC-4","statement":"Previously accepted external-read, model-class, and deep-immutability behavior remains unchanged."},
+      {"id":"AC-5","statement":"A dependency-free deterministic contract harness accepts representative emitted grants and rejects the required missing, extra, type, method, model-class, and array negatives."},
+      {"id":"AC-6","statement":"Tests prove exact schema/grammar equality and deep freezing of both the exported grammar and compiled grants."},
+      {"id":"AC-7","statement":"Exactly the three allowed files change; npm test and git diff --check pass without dependency, network, transfer, commit, or external changes."}
+    ],
+    "allowed_paths": ["src/core/policy.js", "schemas/capability-grant.schema.json", "test/policy.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-009",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-009"
+  },
+  "claude_timeout_seconds": 900,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-009-capability-grant",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-009-capability-grant-run",
+  "schema_version": "1.1.0",
+  "task_note": "IMPLEMENTATION_TASK.md"
+}
