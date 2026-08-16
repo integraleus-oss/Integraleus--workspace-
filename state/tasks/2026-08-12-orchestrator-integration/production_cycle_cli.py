@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import shutil
@@ -30,6 +31,7 @@ SAFE_PROJECT_BASES = (
     Path("/home/stanislav/projects"),
     Path("/home/stanislav/agent-runs/orchestrator-worktrees"),
 )
+FOREGROUND_LOCK = Path("/home/stanislav/agent-runs/orchestrator-foreground.lock")
 
 
 def _read_json(path: Path, limit: int | None = None) -> Any:
@@ -48,6 +50,37 @@ def _sha256(path: Path) -> str:
 def _canonical_digest(value: Any) -> str:
     data = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return "sha256:" + hashlib.sha256(data).hexdigest()
+
+
+def _render_dashboard(packet: dict[str, Any], result: dict[str, Any], status: str,
+                      requirements: list[dict[str, Any]], blind: dict[str, Any] | None) -> dict[str, str]:
+    root = packet["run_root"]
+    tests = [] if blind is None else [
+        {"gate_id": gate["gate_id"], "status": "PASS" if gate["exit_code"] == 0 else "FAIL",
+         "details": json.dumps(gate["argv"])} for gate in blind.get("verification_gates", [])
+    ]
+    reason = status if blind is None else blind.get("error", {}).get("message", status)
+    dashboard_evidence = {
+        "stage": "managed_cycle" if blind is None else "blind_acceptance", "terminal_state": status,
+        "attempts": result.get("attempts_used", 0), "cycles": len(result.get("history", [])),
+        "duration_ms": sum(item.get("implementation", {}).get("duration_ms", 0)
+                           for item in result.get("history", []) if isinstance(item.get("implementation"), dict)),
+        "requirements": requirements,
+        "tasks": [{**item, "status": "traceability_covered"}
+                  for item in packet["proof_chain"]["task_map"]["tasks"]],
+        "tests": tests,
+        "review_findings": ([] if status == "ACCEPTED" else [{"finding_id": "terminal",
+            "severity": "major", "status": "open", "reason": reason}]),
+        "artifacts": [{"label": "cycle result", "path": "cycle-result.json"}],
+    }
+    source = root / "dashboard-evidence.json"
+    source.write_text(json.dumps(dashboard_evidence, sort_keys=True, separators=(",", ":")) + "\n",
+                      encoding="utf-8")
+    source_digest = evidence_dashboard.file_digest(source)
+    dashboard = root / "dashboard.html"
+    evidence_dashboard.generate_dashboard(source, dashboard, source_digest)
+    return {"dashboard_evidence_digest": source_digest,
+            "dashboard_digest": evidence_dashboard.file_digest(dashboard)}
 
 
 def _load_prior_finding_details(
@@ -233,6 +266,16 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
             if (not isinstance(argv, list) or not argv or not all(isinstance(item, str) and item for item in argv)
                     or Path(argv[0]).name not in trusted_review_builder.ALLOWED_GATE_PROGRAMS):
                 raise PacketError("blind acceptance command is not allowlisted")
+        active_ids = {item["requirement_id"] for item in proof_chain["manifest"]["requirements"]
+                      if item["state"] in requirements_traceability.ACTIVE_STATES}
+        mapped: set[str] = set()
+        for criterion in builder["acceptance_criteria"]:
+            ids = criterion.get("requirement_ids") if isinstance(criterion, dict) else None
+            if not isinstance(ids, list) or not ids or any(req_id not in active_ids for req_id in ids):
+                raise PacketError("schema-1.3 acceptance criteria require valid requirement_ids")
+            mapped.update(ids)
+        if mapped != active_ids:
+            raise PacketError("acceptance criteria do not cover every active requirement")
     return {
         **packet,
         "packet_path": packet_path,
@@ -323,6 +366,34 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
         if result.get("status") == "INTERRUPTED":
             return result
         admitted = admit_live_review(result, live_root)
+        if packet["proof_chain"] is not None and admitted.get("outcome") == "ACCEPTED":
+            decision_dir = Path(result["decision_dir"])
+            verdict_data = _read_json(decision_dir / "input-review_verdict.json", 1048576)
+            coverage = {item.get("criterion_id"): item for item in verdict_data.get("review", {}).get("criteria_coverage", [])
+                        if isinstance(item, dict) and isinstance(item.get("criterion_id"), str)}
+            acceptance_results = []
+            active = [item for item in packet["proof_chain"]["manifest"]["requirements"]
+                      if item["state"] in requirements_traceability.ACTIVE_STATES]
+            for requirement in active:
+                linked = [criterion for criterion in packet["builder"]["acceptance_criteria"]
+                          if requirement["requirement_id"] in criterion.get("requirement_ids", [])]
+                observed = [coverage.get(criterion["id"]) for criterion in linked]
+                if not observed or any(item is None for item in observed):
+                    outcome = "unable_to_verify"
+                elif all(item.get("status") == "satisfied" for item in observed):
+                    allowed_methods = ({"executed_test", "manual_execution", "gate_artifact_review", "static_analysis"}
+                                       if packet.get("depth") == "strict" else
+                                       {"executed_test", "manual_execution", "gate_artifact_review", "static_analysis", "code_inspection"})
+                    outcome = "pass" if all(item.get("verification_method") in allowed_methods for item in observed) else "unable_to_verify"
+                else:
+                    outcome = "fail"
+                acceptance_results.append({"requirement_id": requirement["requirement_id"], "outcome": outcome,
+                                           "evidence": ",".join(criterion["id"] for criterion in linked)})
+            admitted["requirements_acceptance"] = {
+                "document_type": "requirements_acceptance", "schema_version": "1.0.0",
+                "manifest_digest": packet["proof_chain"]["manifest"]["immutable_core_digest"],
+                "results": acceptance_results,
+            }
         if packet["builder"] and result.get("status") == "DECIDED" and admitted.get("outcome") == "REWORK":
             decision_dir = Path(result["decision_dir"])
             decision = _read_json(decision_dir / "decision.json")
@@ -353,13 +424,21 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
 
     result = run_managed_cycle(packet["run_root"], implement, review)
     if result["status"] != "ACCEPTED" or packet["blind_config"] is None:
+        if packet["proof_chain"] is not None:
+            requirements = [{"requirement_id": item["requirement_id"], "outcome": "not_assessed",
+                             "evidence": "managed cycle did not reach acceptance"}
+                            for item in packet["proof_chain"]["manifest"]["requirements"]
+                            if item["state"] in requirements_traceability.ACTIVE_STATES]
+            result.update(_render_dashboard(packet, result, result["status"], requirements, None))
         return result
-    active = [item for item in packet["proof_chain"]["manifest"]["requirements"]
-              if item["state"] in requirements_traceability.ACTIVE_STATES]
-    internal = {"document_type": "requirements_acceptance", "schema_version": "1.0.0",
-                "manifest_digest": packet["proof_chain"]["manifest"]["immutable_core_digest"],
-                "results": [{"requirement_id": item["requirement_id"], "outcome": "pass",
-                             "evidence": "internal sealed policy outcome R17_ACCEPT"} for item in active]}
+    accepted_reviews = [item.get("review") for item in result.get("history", [])
+                        if item.get("outcome") == "ACCEPTED" and isinstance(item.get("review"), dict)]
+    internal = accepted_reviews[-1].get("requirements_acceptance") if accepted_reviews else None
+    if not isinstance(internal, dict):
+        raise PacketError("accepted cycle lacks sealed per-requirement internal acceptance")
+    requirements_traceability.validate_acceptance_completeness(packet["proof_chain"]["manifest"], internal)
+    if any(item["outcome"] != "pass" for item in internal["results"]):
+        raise PacketError("internal per-requirement acceptance is not fully passing")
     _write_path = packet["run_root"] / "internal-requirements-acceptance.json"
     _write_path.write_text(json.dumps(internal, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
     try:
@@ -369,37 +448,29 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
             packet["blind_config"]["verification_commands"], packet["blind_config"]["timeout_seconds"],
         )
         final_status = "INTERRUPTED" if blind.get("status") == "INTERRUPTED" else "ACCEPTED"
-    except Exception as exc:
-        blind = {"status": "ESCALATED", "error": {"type": type(exc).__name__, "message": str(exc)}}
-        final_status = "ESCALATED"
+    except BaseException as exc:
+        final_status = "INTERRUPTED" if isinstance(exc, KeyboardInterrupt) else "ESCALATED"
+        blind = {"status": final_status, "error": {"type": type(exc).__name__, "message": str(exc)}}
     final = {**result, "status": final_status, "internal_acceptance": str(_write_path), "blind_acceptance": blind}
+    final.update(_render_dashboard(packet, result, final_status, internal["results"], blind))
     (packet["run_root"] / "final-result.json").write_text(
         json.dumps(final, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
-    dashboard_evidence = {
-        "stage": "blind_acceptance", "terminal_state": final_status,
-        "attempts": result.get("attempts_used", 0), "cycles": len(result.get("history", [])),
-        "duration_ms": sum(item.get("implementation", {}).get("duration_ms", 0)
-                           for item in result.get("history", [])
-                           if isinstance(item.get("implementation"), dict)),
-        "requirements": internal["results"],
-        "tasks": [{**item, "status": "completed" if final_status == "ACCEPTED" else "review_required"}
-                  for item in packet["proof_chain"]["task_map"]["tasks"]],
-        "tests": [],
-        "review_findings": ([] if final_status == "ACCEPTED" else [{"finding_id": "terminal",
-            "severity": "major", "status": "open", "reason": blind.get("error", {}).get("message", final_status)}]),
-        "artifacts": [{"label": "final result", "path": "final-result.json"},
-                      {"label": "internal acceptance", "path": "internal-requirements-acceptance.json"}],
-    }
-    dashboard_json = packet["run_root"] / "dashboard-evidence.json"
-    dashboard_json.write_text(json.dumps(dashboard_evidence, sort_keys=True, separators=(",", ":")) + "\n",
-                              encoding="utf-8")
-    evidence_dashboard.generate_dashboard(dashboard_json, packet["run_root"] / "dashboard.html",
-                                          evidence_dashboard.file_digest(dashboard_json))
     return final
 
 
-def run_packet(packet_path: Path, *, allow_legacy: bool = False) -> dict[str, Any]:
-    return _run_loaded_packet(load_packet(packet_path), allow_legacy=allow_legacy)
+def run_packet(packet_path: Path, *, allow_legacy: bool = False, foreground_authorized: bool = False) -> dict[str, Any]:
+    packet = load_packet(packet_path)
+    if packet.get("schema_version") == "1.3.0" and not foreground_authorized:
+        raise PacketError("manual schema-1.3 execution requires the foreground adapter or an interactive CLI")
+    if allow_legacy:
+        return _run_loaded_packet(packet, allow_legacy=True)
+    FOREGROUND_LOCK.parent.mkdir(parents=True, exist_ok=True)
+    with FOREGROUND_LOCK.open("a+", encoding="utf-8") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as exc:
+            raise PacketError("another orchestrator task is already running") from exc
+        return _run_loaded_packet(packet)
 
 
 def main() -> int:
@@ -409,7 +480,8 @@ def main() -> int:
     args = parser.parse_args()
     try:
         packet = load_packet(args.packet)
-        result = {"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only else _run_loaded_packet(packet)
+        result = ({"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only
+                  else run_packet(args.packet, foreground_authorized=sys.stdin.isatty()))
         code = (0 if result["status"] in {"VALID", "ACCEPTED"}
                 else 3 if result["status"] == "FAILED_INFRA"
                 else 130 if result["status"] == "INTERRUPTED" else 4)

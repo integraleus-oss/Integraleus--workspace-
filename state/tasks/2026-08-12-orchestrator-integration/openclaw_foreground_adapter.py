@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import fcntl
 import json
 from pathlib import Path
 from typing import Any
@@ -17,32 +16,27 @@ class AdapterError(RuntimeError):
 
 
 APPROVED_PACKET_ROOT = Path("/home/stanislav/.openclaw/workspace/agents/main/state/tasks")
-DEFAULT_LOCK = Path("/home/stanislav/agent-runs/orchestrator-foreground.lock")
 
 
 def _inside_packet_root(path: Path) -> Path:
+    if path.is_symlink():
+        raise AdapterError("packet symlinks are forbidden")
     resolved = path.resolve()
     root = APPROVED_PACKET_ROOT.resolve()
-    if resolved.is_symlink() or not resolved.is_file() or not resolved.is_relative_to(root):
+    if not resolved.is_file() or not resolved.is_relative_to(root):
         raise AdapterError("packet is outside the approved task root")
     return resolved
 
 
-def run_one(packet_path: Path, lock_path: Path = DEFAULT_LOCK) -> dict[str, Any]:
+def run_one(packet_path: Path) -> dict[str, Any]:
     packet_path = _inside_packet_root(packet_path)
     packet = production_cycle_cli.load_packet(packet_path)
     if packet.get("schema_version") != "1.3.0" or packet.get("control_mode") != "manual":
         raise AdapterError("foreground adapter requires a manual schema-1.3 packet")
-    lock_path.parent.mkdir(parents=True, exist_ok=True)
-    with lock_path.open("a+", encoding="utf-8") as lock:
-        try:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError as exc:
-            raise AdapterError("another orchestrator task is already running") from exc
-        result = production_cycle_cli.run_packet(packet_path)
-        if result.get("status") not in {"ACCEPTED", "ESCALATED", "FAILED_INFRA", "INTERRUPTED"}:
-            raise AdapterError("orchestrator returned an invalid terminal status")
-        return result
+    result = production_cycle_cli.run_packet(packet_path, foreground_authorized=True)
+    if result.get("status") not in {"ACCEPTED", "ESCALATED", "FAILED_INFRA", "INTERRUPTED"}:
+        raise AdapterError("orchestrator returned an invalid terminal status")
+    return result
 
 
 def main() -> int:

@@ -1,5 +1,6 @@
 import copy
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -16,7 +17,13 @@ class BlindAcceptanceTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.project = self.root / "project"
         self.project.mkdir()
-        self.manifest = generate_manifest("blind-proof", "Build A without changing B.",
+        subprocess.run(["git", "init", "-q", self.project], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.email", "test@example.invalid"], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.name", "Test"], check=True)
+        (self.project / "app.txt").write_text("baseline\n")
+        subprocess.run(["git", "-C", self.project, "add", "."], check=True)
+        subprocess.run(["git", "-C", self.project, "commit", "-qm", "baseline"], check=True)
+        self.manifest = generate_manifest("blind-proof", "Build A.\nDo not change B.",
                                           ["Build A.", "Do not change B."])
         self.internal = {"document_type": "requirements_acceptance", "schema_version": "1.0.0",
                          "manifest_digest": self.manifest["immutable_core_digest"], "results": [
@@ -53,12 +60,6 @@ class BlindAcceptanceTests(unittest.TestCase):
                     "manifest_digest": self.manifest["immutable_core_digest"], "results": self.internal["results"]}
         extract.side_effect = fake_extract
         run = self.root / "run"
-        (run / "agent").mkdir(parents=True)
-        (run / "agent/input-prompt.md").write_text("prompt")
-        # Mock launcher normally creates the directory; remove it so the call contract remains realistic.
-        for child in (run / "agent").iterdir():
-            child.unlink()
-        (run / "agent").rmdir()
 
         def fake_launch(role, project, prompt, launch_dir, **kwargs):
             launch_dir.mkdir(parents=True)
@@ -66,7 +67,7 @@ class BlindAcceptanceTests(unittest.TestCase):
             return {"status": "OK"}
         launch.side_effect = fake_launch
         result = run_blind_acceptance(self.project, run, self.manifest, self.internal,
-                                      [["python3", "-m", "unittest"]], 30)
+                                      [["python3", "-c", "pass"]], 30)
         self.assertEqual(result["status"], "ACCEPTED")
         self.assertFalse(launch.call_args.kwargs["codex_write"])
 

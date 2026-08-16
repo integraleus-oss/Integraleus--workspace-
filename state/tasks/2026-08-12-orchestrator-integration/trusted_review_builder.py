@@ -234,15 +234,18 @@ def build_review_inputs(
         raise BuilderError("trusted builder input is missing")
     criteria = config["acceptance_criteria"]
     if (not isinstance(criteria, list) or not criteria
-            or not all(isinstance(x, dict) and set(x) == {"id", "statement"}
+            or not all(isinstance(x, dict) and set(x) in ({"id", "statement"}, {"id", "statement", "requirement_ids"})
                        and isinstance(x["id"], str) and re.fullmatch(r"AC-[0-9]{1,3}", x["id"])
-                       and isinstance(x["statement"], str) and x["statement"] for x in criteria)):
+                       and isinstance(x["statement"], str) and x["statement"]
+                       and ("requirement_ids" not in x or isinstance(x["requirement_ids"], list)) for x in criteria)):
         raise BuilderError("acceptance criteria are invalid")
     spec_bytes = b"\n".join((x["id"] + "\0" + x["statement"]).encode() for x in criteria)
     criteria_document = {
         "document_type": "trusted_acceptance_criteria", "schema_version": "1.0.0",
         "criteria": [{"criterion_id": x["id"], "statement": x["statement"],
-                     "statement_digest": _digest_bytes(x["statement"].encode())} for x in criteria],
+                     "statement_digest": _digest_bytes(x["statement"].encode()),
+                     **({"requirement_ids": x["requirement_ids"]} if "requirement_ids" in x else {})}
+                    for x in criteria],
     }
     _write_json(out / "acceptance-criteria.json", criteria_document)
     if not REVIEW_VERDICT_SCHEMA.is_file():

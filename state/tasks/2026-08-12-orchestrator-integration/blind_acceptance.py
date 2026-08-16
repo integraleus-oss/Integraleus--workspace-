@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,54 @@ def _digest(path: Path) -> str:
 def _write(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False) + "\n",
                     encoding="utf-8")
+
+
+def project_state(project_root: Path) -> str:
+    status = subprocess.run(["git", "-C", str(project_root), "status", "--porcelain=v1", "-z",
+                            "--untracked-files=all"], capture_output=True, check=False)
+    diff = subprocess.run(["git", "-C", str(project_root), "diff", "--binary", "HEAD"],
+                          capture_output=True, check=False)
+    if status.returncode or diff.returncode:
+        raise BlindAcceptanceError("cannot capture blind acceptance worktree state")
+    digest = hashlib.sha256(status.stdout + b"\0" + diff.stdout)
+    for raw in status.stdout.split(b"\0"):
+        if len(raw) < 4 or raw[:2] != b"??":
+            continue
+        path = project_root / raw[3:].decode("utf-8")
+        if path.is_file() and not path.is_symlink():
+            digest.update(raw + b"\0" + path.read_bytes())
+    return "sha256:" + digest.hexdigest()
+
+
+def run_verification_commands(project_root: Path, run_dir: Path, commands: list[list[str]],
+                              timeout_seconds: int) -> list[dict[str, Any]]:
+    records = []
+    before = project_state(project_root)
+    gates = run_dir / "verification"
+    gates.mkdir(parents=True)
+    for index, argv in enumerate(commands, 1):
+        try:
+            result = subprocess.run(argv, cwd=project_root, capture_output=True, timeout=timeout_seconds, check=False)
+            timed_out = False
+        except subprocess.TimeoutExpired as exc:
+            result = None
+            timed_out = True
+            stdout, stderr, exit_code = exc.stdout or b"", exc.stderr or b"", 124
+        else:
+            stdout, stderr, exit_code = result.stdout, result.stderr, result.returncode
+        gate = gates / f"gate-{index}"
+        gate.mkdir()
+        (gate / "stdout.log").write_bytes(stdout)
+        (gate / "stderr.log").write_bytes(stderr)
+        record = {"gate_id": f"blind-{index}", "argv": argv, "exit_code": exit_code, "timed_out": timed_out,
+                  "stdout_digest": _digest(gate / "stdout.log"), "stderr_digest": _digest(gate / "stderr.log")}
+        _write(gate / "result.json", record)
+        records.append(record)
+        if timed_out or exit_code != 0:
+            raise BlindAcceptanceError(f"blind verification command failed: blind-{index}")
+    if project_state(project_root) != before:
+        raise BlindAcceptanceError("blind verification commands mutated the worktree")
+    return records
 
 
 def build_prompt(manifest: dict[str, Any], verification_commands: list[list[str]]) -> str:
@@ -72,6 +121,9 @@ def compare_acceptance(manifest: dict[str, Any], internal: dict[str, Any], blind
 def run_blind_acceptance(project_root: Path, run_dir: Path, manifest: dict[str, Any],
                          internal: dict[str, Any], verification_commands: list[list[str]],
                          timeout_seconds: int) -> dict[str, Any]:
+    run_dir.mkdir(parents=True)
+    before = project_state(project_root)
+    gates = run_verification_commands(project_root, run_dir, verification_commands, timeout_seconds)
     prompt = build_prompt(manifest, verification_commands)
     launch_dir = run_dir / "agent"
     launch = agent_launcher.launch("claude", project_root, prompt, launch_dir,
@@ -83,10 +135,20 @@ def run_blind_acceptance(project_root: Path, run_dir: Path, manifest: dict[str, 
     raw = agent_launcher.extract_claude_verdict(launch_dir, run_dir / "blind-verdict.json")
     if raw.get("document_type") == "blind_acceptance_verdict":
         raw = {**raw, "document_type": "requirements_acceptance"}
+        _write(run_dir / "blind-verdict.json", raw)
+    try:
+        persisted = json.loads((run_dir / "blind-verdict.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise BlindAcceptanceError("persisted blind verdict is invalid") from exc
+    if persisted != raw:
+        raise BlindAcceptanceError("persisted blind verdict differs from admitted verdict")
     compare_acceptance(manifest, internal, raw)
+    if project_state(project_root) != before:
+        raise BlindAcceptanceError("blind acceptance mutated the worktree")
     record = {"document_type": "blind_acceptance_result", "schema_version": "1.0.0",
               "status": "ACCEPTED", "manifest_digest": manifest["immutable_core_digest"],
               "prompt_digest": _digest(launch_dir / "input-prompt.md"),
-              "verdict_digest": _digest(run_dir / "blind-verdict.json")}
+              "verdict_digest": _digest(run_dir / "blind-verdict.json"), "verification_gates": gates,
+              "worktree_state": before}
     _write(run_dir / "result.json", record)
     return record

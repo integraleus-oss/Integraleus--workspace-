@@ -60,7 +60,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         from requirements_traceability import canonical_digest, generate_manifest
         policy = self.packet_dir / "policy.json"
         policy.write_text("{}", encoding="utf-8")
-        manifest = generate_manifest("proof-task", "Build the requested behavior.", ["Build the behavior."])
+        manifest = generate_manifest("proof-task", "Build the behavior.", ["Build the behavior."])
         manifest["requirements"][0]["state"] = "implementing"
         digest = manifest["immutable_core_digest"]
         documents = {
@@ -97,12 +97,17 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.packet.update({"schema_version": "1.3.0", "control_mode": "manual", "depth": "strict",
                             "blind_acceptance": {"timeout_seconds": 30,
                                                  "verification_commands": [["python3", "-m", "unittest"]]}})
+        self.packet["builder"]["acceptance_criteria"][0]["requirement_ids"] = ["R01"]
         self.write_packet()
         loaded_v13 = load_packet(self.packet_path)
         self.assertEqual(loaded_v13["blind_config"]["timeout_seconds"], 30)
         loaded_v13["run_root"].mkdir()
         with (patch("production_cycle_cli.trusted_review_builder.capture_clean_baseline", return_value={}),
-              patch("production_cycle_cli.run_managed_cycle", return_value={"status": "ACCEPTED"}),
+              patch("production_cycle_cli.run_managed_cycle", return_value={"status": "ACCEPTED", "history": [
+                  {"outcome": "ACCEPTED", "review": {"requirements_acceptance": {
+                      "document_type": "requirements_acceptance", "schema_version": "1.0.0",
+                      "manifest_digest": manifest["immutable_core_digest"], "results": [
+                          {"requirement_id": "R01", "outcome": "pass", "evidence": "AC-1"}]}}}] }),
               patch("production_cycle_cli.blind_acceptance.run_blind_acceptance",
                     return_value={"status": "ACCEPTED"}) as blind):
             result = _run_loaded_packet(loaded_v13)

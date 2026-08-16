@@ -23,8 +23,10 @@ def _safe(value: Any) -> str:
 
 
 def generate_dashboard(evidence_path: Path, output_path: Path, expected_digest: str) -> None:
+    if evidence_path.is_symlink() or output_path.is_symlink():
+        raise DashboardError("dashboard paths cannot be symlinks")
     evidence_path, output_path = evidence_path.resolve(), output_path.resolve()
-    if not evidence_path.is_file() or evidence_path.is_symlink():
+    if not evidence_path.is_file():
         raise DashboardError("evidence path is invalid")
     actual = file_digest(evidence_path)
     if actual != expected_digest:
@@ -47,10 +49,13 @@ def generate_dashboard(evidence_path: Path, output_path: Path, expected_digest: 
         "<tr>" + "".join(f"<td>{_safe(item.get(key, ''))}</td>" for key in keys) + "</tr>"
         for item in values if isinstance(item, dict)
     )
-    links = "".join(
-        f'<li><a href="{_safe(item.get("path", "#"))}">{_safe(item.get("label", "artifact"))}</a></li>'
-        for item in artifacts if isinstance(item, dict)
-    )
+    links = ""
+    for item in artifacts:
+        if not isinstance(item, dict):
+            continue
+        raw = item.get("path", "")
+        target = raw if isinstance(raw, str) and raw and ":" not in raw and not raw.startswith(("/", "//")) else "#"
+        links += f'<li><a href="{_safe(target)}">{_safe(item.get("label", "artifact"))}</a></li>'
     document = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Orchestrator evidence dashboard</title><style>
@@ -68,7 +73,7 @@ th,td{{border:1px solid #ccd;padding:7px;text-align:left}}code{{background:#eef;
 <h2>Review findings / stop reasons</h2><table><tr><th>ID</th><th>Severity</th><th>Status</th><th>Reason</th></tr>{rows(findings, ('finding_id','severity','status','reason'))}</table>
 <h2>Artifacts</h2><ul>{links}</ul>
 </body></html>"""
-    if output_path.exists() or output_path.is_symlink():
+    if output_path.exists():
         raise DashboardError("dashboard output must be new")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(document, encoding="utf-8")

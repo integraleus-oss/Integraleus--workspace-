@@ -64,7 +64,17 @@ Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
 
 ### Current verification
 
-- [x] Full suite: 118/118 tests passed before the final integration assertion.
+- [x] Initial final review: `REWORK` (2 blockers, 10 majors).
+- [x] Reworked internal acceptance to derive per-R outcomes from the sealed
+  reviewer criterion coverage and explicit AC↔R mapping.
+- [x] Added fixed global execution lock and explicit foreground authorization.
+- [x] Blind verification commands now execute and worktree state is checked before/after.
+- [x] Blind source excerpts must be exact substrings of the anchored brief.
+- [x] Dashboard now covers failed managed cycles, shows actual blind gates, and
+  records source/dashboard digests in final evidence.
+- [x] Fixed symlink and unsafe artifact-link handling.
+- [x] `strict` vs `normal` now changes admitted reviewer verification methods.
+- [x] Full suite after rework: 118/118 tests passed.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.

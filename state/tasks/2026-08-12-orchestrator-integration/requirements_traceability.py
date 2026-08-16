@@ -112,6 +112,8 @@ def validate_manifest(manifest: Any) -> dict[str, dict[str, Any]]:
         text = item["original_text"]
         if not isinstance(text, str) or not text or len(text) > 8192 or item["original_text_digest"] != digest_text(text):
             raise TraceabilityError(f"requirement text digest mismatch: {expected_id}")
+        if text not in brief:
+            raise TraceabilityError(f"requirement is not an exact excerpt of original brief: {expected_id}")
         state, disposition = item["state"], item["owner_disposition"]
         if state not in ALL_STATES:
             raise TraceabilityError(f"requirement state is invalid: {expected_id}")

@@ -9,7 +9,7 @@ from requirements_traceability import (
 
 class RequirementsTraceabilityTests(unittest.TestCase):
     def setUp(self):
-        self.manifest = generate_manifest("pilot-proof", "Build A and preserve B.", ["Build A.", "Preserve B."])
+        self.manifest = generate_manifest("pilot-proof", "Build A.\nPreserve B.", ["Build A.", "Preserve B."])
         self.manifest["requirements"][0]["state"] = "implementing"
         self.manifest["requirements"][1]["state"] = "implemented"
         digest = self.manifest["immutable_core_digest"]
@@ -34,7 +34,7 @@ class RequirementsTraceabilityTests(unittest.TestCase):
         validate_acceptance_completeness(self.manifest, self.acceptance)
 
     def test_generator_retains_exact_brief_and_stable_ids(self):
-        self.assertEqual(self.manifest["original_brief"], "Build A and preserve B.")
+        self.assertEqual(self.manifest["original_brief"], "Build A.\nPreserve B.")
         self.assertEqual([item["requirement_id"] for item in self.manifest["requirements"]], ["R01", "R02"])
         validate_manifest(self.manifest)
 
@@ -71,7 +71,8 @@ class RequirementsTraceabilityTests(unittest.TestCase):
             validate_transition(previous, regressed)
 
     def test_ids_do_not_support_renumbering_boundary(self):
-        manifest = generate_manifest("max-proof", "Many requirements.", [f"Requirement {i}" for i in range(99)])
+        texts = [f"Requirement {i}" for i in range(99)]
+        manifest = generate_manifest("max-proof", "\n".join(texts), texts)
         self.assertEqual(manifest["requirements"][-1]["requirement_id"], "R99")
         with self.assertRaises(TraceabilityError):
             generate_manifest("too-many", "Too many.", [str(i) for i in range(100)])
