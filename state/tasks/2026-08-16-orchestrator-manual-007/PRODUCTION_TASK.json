@@ -1,0 +1,31 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One exported deeply frozen run-log grammar drives runtime validation and an exact complete run-log schema-subtree equality test."},
+      {"id":"AC-2","statement":"runId matches only the generated ID grammar and rejects traversal, separators, control characters, whitespace, extensions, and case variants."},
+      {"id":"AC-3","statement":"event is a bounded lowercase ASCII identifier, now is a valid Date, and data is a detached schema-compatible plain JSON object."},
+      {"id":"AC-4","statement":"Validation and serialization finish before any filesystem mutation; rejected input creates no directory/file and appends no partial line."},
+      {"id":"AC-5","statement":"Valid and repeated appends write newline-terminated JSON objects to the exact runs/YYYY-MM-DD/runId.jsonl path and preserve parseable JSONL."},
+      {"id":"AC-6","statement":"Tests cover fixed createRunId, schema agreement, path/control/date/event/data rejects, no-side-effect failures, successful writes, repeated writes, and cleanup."},
+      {"id":"AC-7","statement":"Exactly the three allowed files change; npm test and git diff --check pass without dependency, network, transfer, commit, or external changes."}
+    ],
+    "allowed_paths": ["schemas/run-log.schema.json", "src/core/run-log.js", "test/run-log.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-007",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-007"
+  },
+  "claude_timeout_seconds": 600,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-007-run-log",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-007-run-log-run",
+  "schema_version": "1.1.0",
+  "task_note": "IMPLEMENTATION_TASK.md"
+}
