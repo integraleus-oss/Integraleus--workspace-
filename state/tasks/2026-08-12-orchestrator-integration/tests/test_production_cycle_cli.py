@@ -6,7 +6,7 @@ from unittest.mock import patch
 from io import StringIO
 
 import production_cycle_cli
-from production_cycle_cli import PacketError, _load_prior_finding_details, load_packet, main, run_packet
+from production_cycle_cli import PacketError, _load_prior_finding_details, _run_loaded_packet, load_packet, main, run_packet
 
 
 class ProductionCycleCliTests(unittest.TestCase):
@@ -94,6 +94,34 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.write_packet()
         loaded = load_packet(self.packet_path)
         self.assertEqual(loaded["proof_chain"]["manifest"]["manifest_id"], "proof-task")
+        self.packet.update({"schema_version": "1.3.0", "control_mode": "manual", "depth": "strict",
+                            "blind_acceptance": {"timeout_seconds": 30,
+                                                 "verification_commands": [["python3", "-m", "unittest"]]}})
+        self.write_packet()
+        loaded_v13 = load_packet(self.packet_path)
+        self.assertEqual(loaded_v13["blind_config"]["timeout_seconds"], 30)
+        loaded_v13["run_root"].mkdir()
+        with (patch("production_cycle_cli.trusted_review_builder.capture_clean_baseline", return_value={}),
+              patch("production_cycle_cli.run_managed_cycle", return_value={"status": "ACCEPTED"}),
+              patch("production_cycle_cli.blind_acceptance.run_blind_acceptance",
+                    return_value={"status": "ACCEPTED"}) as blind):
+            result = _run_loaded_packet(loaded_v13)
+        self.assertEqual(result["status"], "ACCEPTED")
+        blind.assert_called_once()
+        self.assertTrue((loaded_v13["run_root"] / "dashboard.html").is_file())
+        self.assertTrue((loaded_v13["run_root"] / "dashboard-evidence.json").is_file())
+        self.packet["run_root"] = str(self.root / "run-modes")
+        self.packet["control_mode"] = "automatic"
+        self.write_packet()
+        with self.assertRaisesRegex(PacketError, "manual"):
+            load_packet(self.packet_path)
+        self.packet["control_mode"] = "manual"
+        self.packet["depth"] = "deep"
+        self.write_packet()
+        with self.assertRaisesRegex(PacketError, "strict/normal"):
+            load_packet(self.packet_path)
+        self.packet["depth"] = "strict"
+        self.write_packet()
         brief.write_text("Rewritten brief.", encoding="utf-8")
         self.packet["original_brief_digest"] = __import__("requirements_traceability").digest_text("Rewritten brief.")
         self.write_packet()

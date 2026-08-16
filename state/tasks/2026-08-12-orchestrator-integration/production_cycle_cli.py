@@ -12,6 +12,8 @@ from pathlib import Path
 from typing import Any
 
 import agent_launcher
+import blind_acceptance
+import evidence_dashboard
 import live_review_cycle
 import requirements_traceability
 import review_projection
@@ -123,9 +125,11 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
     proof_fields = builder_fields | {"original_brief", "original_brief_digest", "requirements_manifest",
                                      "previous_requirements_manifest",
                                      "requirements_specification", "requirements_task_map"}
-    versions = {"1.0.0": legacy_fields, "1.1.0": builder_fields, "1.2.0": proof_fields}
+    blind_fields = proof_fields | {"control_mode", "depth", "blind_acceptance"}
+    versions = {"1.0.0": legacy_fields, "1.1.0": builder_fields, "1.2.0": proof_fields,
+                "1.3.0": blind_fields}
     expected_fields = versions.get(schema_version)
-    if schema_version not in {"1.0.0", "1.1.0", "1.2.0"} or set(packet) != expected_fields:
+    if schema_version not in versions or set(packet) != expected_fields:
         raise PacketError("task packet fields or schema version are invalid")
     base = packet_path.parent
     if not isinstance(packet["project_root"], str) or not packet["project_root"].strip():
@@ -178,7 +182,7 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         builder["policy_fixture"] = str(_inside(base, builder["policy_fixture"]))
         normalized_reviews = [{"prompt_text": _bounded_text(Path(builder["review_instructions"]))} for _ in range(3)]
     proof_chain = None
-    if schema_version == "1.2.0":
+    if schema_version in {"1.2.0", "1.3.0"}:
         brief_path = _inside(base, packet["original_brief"])
         brief = _bounded_text(brief_path, 65536)
         if (not isinstance(packet["original_brief_digest"], str)
@@ -213,6 +217,22 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
             "task_map_path": task_map_path, "manifest": manifest,
             "specification": specification, "task_map": task_map,
         }
+    blind_config = None
+    if schema_version == "1.3.0":
+        if packet["control_mode"] != "manual" or packet["depth"] not in {"strict", "normal"}:
+            raise PacketError("controlled pilot permits only manual + strict/normal")
+        blind_config = packet["blind_acceptance"]
+        if (not isinstance(blind_config, dict)
+                or set(blind_config) != {"timeout_seconds", "verification_commands"}
+                or not isinstance(blind_config["timeout_seconds"], int)
+                or not 1 <= blind_config["timeout_seconds"] <= 1800
+                or not isinstance(blind_config["verification_commands"], list)
+                or not blind_config["verification_commands"]):
+            raise PacketError("blind acceptance configuration is invalid")
+        for argv in blind_config["verification_commands"]:
+            if (not isinstance(argv, list) or not argv or not all(isinstance(item, str) and item for item in argv)
+                    or Path(argv[0]).name not in trusted_review_builder.ALLOWED_GATE_PROGRAMS):
+                raise PacketError("blind acceptance command is not allowlisted")
     return {
         **packet,
         "packet_path": packet_path,
@@ -222,12 +242,13 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         "reviews": normalized_reviews,
         "builder": builder,
         "proof_chain": proof_chain,
+        "blind_config": blind_config,
     }
 
 
 def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) -> dict[str, Any]:
-    if packet["proof_chain"] is None and not allow_legacy:
-        raise PacketError("legacy task packets are validation/replay-only; execution requires schema 1.2.0 proof-chain")
+    if (packet["proof_chain"] is None or packet["blind_config"] is None) and not allow_legacy:
+        raise PacketError("pre-1.3 task packets are validation/replay-only; execution requires proof-chain and blind acceptance")
     task_text = _bounded_text(packet["task_note"], 65536)
     baseline = trusted_review_builder.capture_clean_baseline(packet["project_root"]) if packet["builder"] else None
     prior_context: dict[str, Any] | None = None
@@ -330,7 +351,51 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
             }
         return admitted
 
-    return run_managed_cycle(packet["run_root"], implement, review)
+    result = run_managed_cycle(packet["run_root"], implement, review)
+    if result["status"] != "ACCEPTED" or packet["blind_config"] is None:
+        return result
+    active = [item for item in packet["proof_chain"]["manifest"]["requirements"]
+              if item["state"] in requirements_traceability.ACTIVE_STATES]
+    internal = {"document_type": "requirements_acceptance", "schema_version": "1.0.0",
+                "manifest_digest": packet["proof_chain"]["manifest"]["immutable_core_digest"],
+                "results": [{"requirement_id": item["requirement_id"], "outcome": "pass",
+                             "evidence": "internal sealed policy outcome R17_ACCEPT"} for item in active]}
+    _write_path = packet["run_root"] / "internal-requirements-acceptance.json"
+    _write_path.write_text(json.dumps(internal, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
+    try:
+        blind = blind_acceptance.run_blind_acceptance(
+            packet["project_root"], packet["run_root"] / "blind-acceptance",
+            packet["proof_chain"]["manifest"], internal,
+            packet["blind_config"]["verification_commands"], packet["blind_config"]["timeout_seconds"],
+        )
+        final_status = "INTERRUPTED" if blind.get("status") == "INTERRUPTED" else "ACCEPTED"
+    except Exception as exc:
+        blind = {"status": "ESCALATED", "error": {"type": type(exc).__name__, "message": str(exc)}}
+        final_status = "ESCALATED"
+    final = {**result, "status": final_status, "internal_acceptance": str(_write_path), "blind_acceptance": blind}
+    (packet["run_root"] / "final-result.json").write_text(
+        json.dumps(final, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
+    dashboard_evidence = {
+        "stage": "blind_acceptance", "terminal_state": final_status,
+        "attempts": result.get("attempts_used", 0), "cycles": len(result.get("history", [])),
+        "duration_ms": sum(item.get("implementation", {}).get("duration_ms", 0)
+                           for item in result.get("history", [])
+                           if isinstance(item.get("implementation"), dict)),
+        "requirements": internal["results"],
+        "tasks": [{**item, "status": "completed" if final_status == "ACCEPTED" else "review_required"}
+                  for item in packet["proof_chain"]["task_map"]["tasks"]],
+        "tests": [],
+        "review_findings": ([] if final_status == "ACCEPTED" else [{"finding_id": "terminal",
+            "severity": "major", "status": "open", "reason": blind.get("error", {}).get("message", final_status)}]),
+        "artifacts": [{"label": "final result", "path": "final-result.json"},
+                      {"label": "internal acceptance", "path": "internal-requirements-acceptance.json"}],
+    }
+    dashboard_json = packet["run_root"] / "dashboard-evidence.json"
+    dashboard_json.write_text(json.dumps(dashboard_evidence, sort_keys=True, separators=(",", ":")) + "\n",
+                              encoding="utf-8")
+    evidence_dashboard.generate_dashboard(dashboard_json, packet["run_root"] / "dashboard.html",
+                                          evidence_dashboard.file_digest(dashboard_json))
+    return final
 
 
 def run_packet(packet_path: Path, *, allow_legacy: bool = False) -> dict[str, Any]:

@@ -21,6 +21,13 @@ to bounded local agent launches without changing OpenClaw runtime configuration.
 - `managed_policy_review.py` admits only digest-matched durable policy output
   from a live-review directory and derives bounded rework instructions solely
   from policy-selected findings in the trusted projection.
+- `requirements_traceability.py` anchors the owner's exact brief and hard-gates
+  the immutable R01..R99 requirement/spec/task/acceptance proof chain.
+- `blind_acceptance.py` runs read-only final acceptance without internal spec,
+  task tracker, prior review prose, or orchestrator rationale.
+- `evidence_dashboard.py` renders digest-verified evidence as static display-only HTML.
+- `openclaw_foreground_adapter.py` runs one prebuilt manual packet in foreground;
+  it has no commit, transfer, push, deploy, activation, cron, or Gateway capability.
 - `tests/test_integration.py` covers all four policy outcomes and fail-closed
   integration boundaries.
 
@@ -72,6 +79,17 @@ python3 local_orchestrator_runner.py run-bundle.json --runs-root runs
 Every `run_name` is single-use. Existing run directories are never overwritten.
 Input snapshots are marked read-only for the local single-user workflow, and the directory contains validator output,
 the projection, policy decision, and content digests.
+
+## Production task packet generations
+
+- `1.0.0` and `1.1.0`: legacy validation/replay only.
+- `1.2.0`: requirements proof-chain validation/replay only.
+- `1.3.0`: controlled execution with an anchored brief, manifest/spec/task
+  proof chain, `manual + strict|normal`, and blind acceptance.
+
+For revisions above one, the supplied previous manifest is a trusted packet
+input and its immediate digest link is checked. The stateless runner does not
+claim to reconstruct deeper history; durable owners retain all sealed revisions.
 
 ## Verification
 
