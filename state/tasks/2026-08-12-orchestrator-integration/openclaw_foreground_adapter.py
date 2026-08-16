@@ -17,6 +17,8 @@ class AdapterError(RuntimeError):
 
 
 APPROVED_PACKET_ROOT = Path("/home/stanislav/.openclaw/workspace/agents/main/state/tasks")
+AUTHORIZATION_REGISTRY = Path("/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-16-orchestrator-proof-chain/manual-authorizations.json")
+AUTHORIZATION_LEDGER = Path("/home/stanislav/agent-runs/orchestrator-authorizations-used")
 
 
 def _inside_packet_root(path: Path) -> Path:
@@ -47,11 +49,26 @@ def _admit_authorization(packet_path: Path, authorization_path: Path) -> Path:
             or value["approved_by"] != "Stanislav Pavlovskiy"
             or not isinstance(value["source_message_id"], str) or not value["source_message_id"].strip()):
         raise AdapterError("manual authorization does not match the packet and owner")
-    used = authorization_path.with_suffix(authorization_path.suffix + ".used")
+    try:
+        registry = json.loads(AUTHORIZATION_REGISTRY.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AdapterError("trusted manual authorization registry is unavailable") from exc
+    authorization_digest = _digest(authorization_path)
+    allowed = registry.get("authorizations") if isinstance(registry, dict) else None
+    if (not isinstance(allowed, list) or not any(
+            isinstance(item, dict) and item.get("authorization_digest") == authorization_digest
+            and item.get("packet_digest") == value["packet_digest"]
+            and item.get("source_message_id") == value["source_message_id"] for item in allowed)):
+        raise AdapterError("manual authorization is not admitted by the trusted registry")
+    AUTHORIZATION_LEDGER.mkdir(parents=True, exist_ok=True)
+    identity = hashlib.sha256((authorization_digest + "\0" + value["packet_digest"] + "\0" +
+                               value["source_message_id"]).encode("utf-8")).hexdigest()
+    used = AUTHORIZATION_LEDGER / f"{identity}.json"
     try:
         with used.open("x", encoding="utf-8") as marker:
-            marker.write(json.dumps({"authorization_digest": _digest(authorization_path),
-                                     "packet_digest": _digest(packet_path)}, sort_keys=True) + "\n")
+            marker.write(json.dumps({"authorization_digest": authorization_digest,
+                                     "packet_digest": _digest(packet_path),
+                                     "source_message_id": value["source_message_id"]}, sort_keys=True) + "\n")
     except FileExistsError as exc:
         raise AdapterError("manual authorization is already used") from exc
     return used

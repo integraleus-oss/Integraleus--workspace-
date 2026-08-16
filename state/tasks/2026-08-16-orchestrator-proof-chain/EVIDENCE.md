@@ -81,6 +81,11 @@ Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
 - [x] Applied the fixed global lock to legacy and current executions.
 - [x] Added structured internal-acceptance failure and broader interrupt evidence.
 - [x] Added ignored-file mutation tracking and persisted failed blind gate records.
+- [x] Second closure review: `REWORK` (2 majors, 2 major-risk findings).
+- [x] Replaced filename-based authorization consumption with a fixed trusted
+  registry and global content-identity ledger keyed by authorization digest,
+  packet digest, and source message ID.
+- [x] Added copied-authorization replay test; suite now 119/119.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.

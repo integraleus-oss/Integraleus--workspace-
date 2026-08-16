@@ -49,7 +49,12 @@ def project_state(project_root: Path) -> str:
             continue
         path = project_root / raw.decode("utf-8")
         digest.update(raw + b"\0")
-        digest.update(path.read_bytes() if path.is_file() and not path.is_symlink() else b"<special>")
+        if path.is_file() and not path.is_symlink():
+            with path.open("rb") as source:
+                while chunk := source.read(1024 * 1024):
+                    digest.update(chunk)
+        else:
+            digest.update(b"<special>")
     return "sha256:" + digest.hexdigest()
 
 
