@@ -1,6 +1,6 @@
 # Manual-004 — external-read contract closure
 
-Status: ACCEPTED / R17_ACCEPT; INSPECTION ONLY; NOT YET TRANSFERRED
+Status: ACCEPTED / R17_ACCEPT; TRANSFERRED; LOCAL COMMIT ONLY
 
 - Source: `/home/stanislav/projects/home-agent-factory` at
   `3d9c27e6901fc98f8fbaaf3819eac5a33225e73f`.
@@ -42,3 +42,8 @@ Status: ACCEPTED / R17_ACCEPT; INSPECTION ONLY; NOT YET TRANSFERRED
 - [x] Managed cycle completed.
 - [x] Independent checks and path audit completed.
 - [x] Result recorded.
+- [x] Explicit transfer authorization received.
+- [x] Accepted three-file diff transferred byte-for-byte to source.
+- [x] Source checks repeated: 12/12 tests and `git diff --check` passed.
+- [x] Local source commit created: `6e56761`.
+- [x] Source worktree verified clean; no push, deploy, or activation performed.

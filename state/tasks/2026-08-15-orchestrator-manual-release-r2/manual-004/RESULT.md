@@ -1,6 +1,6 @@
 # Manual-004 result
 
-Status: `ACCEPTED / R17_ACCEPT`; inspection only; not yet transferred
+Status: `ACCEPTED / R17_ACCEPT`; transferred and committed locally
 
 ## Managed result
 
@@ -34,10 +34,18 @@ clone/validation helper as the surrounding grant fields. This does not violate
 the sealed criteria and did not block `R17_ACCEPT`; it should be addressed in a
 later small hardening task or before expanding accepted input types.
 
-## Transfer boundary
+## Controlled transfer
 
-The accepted diff remains only in the detached worktree. No target-project
-commit, source transfer, dependency/network change, push, deploy, Gateway,
-cron, systemd, daemon, unattended, or system change occurred. Applying the
-accepted three-file diff to the source repository requires a separate explicit
-decision.
+- Stanislav explicitly authorized the separate transfer step on 2026-08-16.
+- The accepted three-file diff was applied to
+  `/home/stanislav/projects/home-agent-factory` from the unchanged source base
+  `3d9c27e6901fc98f8fbaaf3819eac5a33225e73f`.
+- All three transferred files match the accepted detached-worktree versions
+  byte-for-byte.
+- Repeated `npm test`: PASS — 12 tests, 0 failures.
+- Repeated `git diff --check`: PASS.
+- Local target-project commit:
+  `6e56761 fix: harden external read policy contract`.
+- The target-project worktree is clean after the commit.
+- No dependency/network change, push, deploy, Gateway, cron, systemd, daemon,
+  unattended, or system change occurred.
