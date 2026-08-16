@@ -1,0 +1,31 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One focused synchronous loader and stable error type handle all CLI pack and instance JSON reads without raw stack traces."},
+      {"id":"AC-2","statement":"Only non-empty project-relative paths resolving lexically and by realpath inside the real project root are accepted; absolute, traversal, final-symlink, and ancestor-symlink escapes fail closed."},
+      {"id":"AC-3","statement":"The loader opens and reads only a regular file, enforces a 1 MiB bound, uses fatal UTF-8 decoding, parses JSON, and accepts only plain-object roots."},
+      {"id":"AC-4","statement":"Loader failures expose stable controlled codes and non-secret messages; the CLI emits one controlled line with exit code 2 while preserving PolicyError handling."},
+      {"id":"AC-5","statement":"The implementation uses Node 22 built-ins and minimizes path-swap exposure without making an unsupported complete-TOCTOU-safety claim."},
+      {"id":"AC-6","statement":"Deterministic temporary-directory tests cover valid input and every required negative class, CLI formatting/import behavior, stable codes, and message non-disclosure with cleanup."},
+      {"id":"AC-7","statement":"Exactly the three allowed files change; npm test and git diff --check pass without dependency, network, transfer, commit, or external changes."}
+    ],
+    "allowed_paths": ["src/cli/factory.js", "src/core/json-file.js", "test/json-file.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-008",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-008"
+  },
+  "claude_timeout_seconds": 900,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-008-json-instance",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-008-json-instance-run",
+  "schema_version": "1.1.0",
+  "task_note": "IMPLEMENTATION_TASK.md"
+}
