@@ -1,6 +1,6 @@
 # Task Packet: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: active
+Status: blocked at external authorization boundary
 Risk: MEDIUM
 Owner: main agent
 Date: 2026-08-16
@@ -70,6 +70,12 @@ Forbidden without a new explicit approval:
 
 Fail closed. Record a deterministic error/evidence artifact and stop the
 current increment. Do not weaken a hard gate merely to reach `ACCEPTED`.
+
+Current blocker: a local user-writable adapter cannot prove that its manual
+authorization registry/ledger was not authored, altered, or replay-enabled by
+the same agent it constrains. Closing this requires a separately approved
+owner-controlled signer or trusted OpenClaw/Gateway invocation nonce. No pilot
+through the adapter may run until that boundary exists.
 
 ## Commit Rule
 

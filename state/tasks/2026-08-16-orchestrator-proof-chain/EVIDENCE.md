@@ -86,6 +86,24 @@ Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
   registry and global content-identity ledger keyed by authorization digest,
   packet digest, and source message ID.
 - [x] Added copied-authorization replay test; suite now 119/119.
+- [x] Third closure review: `REJECT` because registry/ledger remain writable by
+  the constrained principal; packet TOCTOU and untracked-file streaming were
+  also identified.
+- [ ] Controlled pilot — blocked; deliberately not run.
+- [ ] Foreground adapter activation — not authorized and not performed.
+
+### External authorization blocker
+
+The proof-chain, blind acceptance, dashboard, mode admission, fixed execution
+lock, and adapter shell exist locally. However, a user-writable registry cannot
+serve as evidence of owner authorization against that same user-level agent.
+The remaining sound options are:
+
+1. a trusted OpenClaw/Gateway nonce bound to inbound message metadata and packet digest; or
+2. an owner/root-controlled signing key/service whose private material is not available to the agent.
+
+Both cross the separately protected runtime/security boundary. No Gateway,
+config, root service, activation, cron, push, or deploy was performed.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.
