@@ -1,0 +1,29 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"requestedModelClass accepts only primitive strings exactly equal to local or cloud and rejects all other types and values with controlled PolicyError."},
+      {"id":"AC-2","statement":"Selection precedence remains requestContext.modelClass, then pack.modelPolicy.default, then local fallback, with validation before approval logic."},
+      {"id":"AC-3","statement":"Cloud/private-data approval behavior is preserved and invalid values cannot bypass or enter approval decisions."},
+      {"id":"AC-4","statement":"Tests cover both sources, fallback, precedence, accepted values, invalid types, empty/unknown/case-variant values, and existing regressions."},
+      {"id":"AC-5","statement":"Only src/core/policy.js and test/policy.test.js change; npm test and git diff --check pass without dependencies or external changes."}
+    ],
+    "allowed_paths": ["src/core/policy.js", "test/policy.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-005",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-005"
+  },
+  "claude_timeout_seconds": 600,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-005-model-class",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-005-model-class-run",
+  "schema_version": "1.1.0",
+  "task_note": "IMPLEMENTATION_TASK.md"
+}
