@@ -1,6 +1,6 @@
 # Manual-006 result
 
-Status: `ACCEPTED / R17_ACCEPT`; inspection only; not transferred
+Status: `ACCEPTED / R17_ACCEPT`; transferred and committed locally
 
 ## Managed result
 
@@ -38,12 +38,21 @@ The final-full review recorded zero blocker, zero major, and four nits:
 All AC-1 through AC-6 criteria were reported satisfied. The nits did not block
 mechanical acceptance and should be handled only in a later bounded cleanup.
 
-## Transfer boundary
+## Controlled transfer
 
-The result remains only in the detached worktree. No source transfer, target
-commit, push, deploy, Gateway, cron, systemd, daemon, unattended, dependency,
-network, or system change occurred. Transfer requires a separate explicit
-decision.
+- Stanislav explicitly authorized the separate transfer step on 2026-08-16.
+- The accepted three-file diff was applied to
+  `/home/stanislav/projects/home-agent-factory` from the unchanged source base
+  `6e56761030812f0387dbbe570a199b37c3088ca5`.
+- All transferred files match the accepted detached-worktree versions
+  byte-for-byte.
+- Repeated source `npm test`: PASS — 24 tests, 0 failures.
+- Repeated source `git diff --check`: PASS.
+- Local target-project commit:
+  `f25e001 fix: align model class runtime and schema`.
+- The target-project worktree is clean after commit.
+- No push, deploy, Gateway, cron, systemd, daemon, unattended, dependency,
+  network, or system change occurred.
 
 ## Checklist
 
@@ -51,3 +60,4 @@ decision.
 - [x] Changed-path scope and gates independently verified.
 - [x] Source repository unchanged.
 - [x] Transfer decision kept separate.
+- [x] Controlled transfer completed under separate authorization.

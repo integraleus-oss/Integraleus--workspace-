@@ -1,6 +1,6 @@
 # Manual-006 — model-class runtime/schema closure
 
-Status: ACCEPTED / R17_ACCEPT; INSPECTION ONLY; NOT TRANSFERRED
+Status: ACCEPTED / R17_ACCEPT; TRANSFERRED; LOCAL COMMIT ONLY
 
 ## Goal
 
@@ -53,3 +53,6 @@ unaccepted `manual-005` diff.
 - [x] Managed production cycle completed with `R17_ACCEPT`.
 - [x] Evidence, paths, tests, and source state independently verified.
 - [x] Result recorded; transfer remains a separate decision.
+- [x] Separate transfer authorization received from Stanislav.
+- [x] Three accepted files transferred byte-for-byte and source checks repeated.
+- [x] Local source commit created: `f25e001`.
