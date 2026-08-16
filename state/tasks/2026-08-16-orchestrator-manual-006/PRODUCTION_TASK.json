@@ -1,0 +1,30 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One exported deeply frozen model-class grammar defines exactly local and cloud and is used by runtime validation."},
+      {"id":"AC-2","statement":"Runtime preserves request-context then pack-default then local precedence; consulted invalid values fail with stable controlled PolicyError before approval logic."},
+      {"id":"AC-3","statement":"A valid explicit request class short-circuits an invalid unconsulted pack default, while undefined is documented and tested as source absence."},
+      {"id":"AC-4","statement":"The complete modelPolicy JSON Schema subtree is pinned exactly against the exported runtime grammar, including the default enum, preventing drift."},
+      {"id":"AC-5","statement":"One shared invalid corpus covers both sources and tests accepted values, fallback, precedence, invalid types and values, and cloud/private-data approval regressions."},
+      {"id":"AC-6","statement":"Exactly the three allowed files change; npm test and git diff --check pass without dependencies, network, transfer, commit, or external changes."}
+    ],
+    "allowed_paths": ["schemas/agent-pack.schema.json", "src/core/policy.js", "test/policy.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-006",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-006"
+  },
+  "claude_timeout_seconds": 600,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-006-model-class-schema",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-006-model-class-schema-run",
+  "schema_version": "1.1.0",
+  "task_note": "IMPLEMENTATION_TASK.md"
+}
