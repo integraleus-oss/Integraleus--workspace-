@@ -97,6 +97,70 @@ def normalize_derived_review_ids(verdict: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def normalize_transport_defects(
+    verdict: dict[str, Any],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Repair only bounded, meaning-preserving reviewer transport defects."""
+    normalized = copy.deepcopy(verdict)
+    changes: list[dict[str, Any]] = []
+
+    for index, finding in enumerate(normalized.get("findings", [])):
+        if not isinstance(finding, dict):
+            continue
+        title = finding.get("title")
+        if isinstance(title, str) and len(title) > 160:
+            finding["title"] = title[:160]
+            changes.append({
+                "operation": "truncate_finding_title",
+                "pointer": f"/findings/{index}/title",
+                "original_length": len(title),
+                "normalized_length": 160,
+            })
+
+    defined_evidence: set[str] = set()
+    carriers: list[Any] = []
+    for finding in normalized.get("findings", []):
+        if isinstance(finding, dict):
+            carriers.extend(finding.get("evidence", []))
+    verification = normalized.get("verification")
+    if isinstance(verification, dict):
+        for result in verification.get("results", []):
+            if isinstance(result, dict):
+                carriers.extend(result.get("evidence", []))
+    for symptom in normalized.get("infra_symptoms", []):
+        if isinstance(symptom, dict):
+            carriers.extend(symptom.get("evidence", []))
+    for evidence in carriers:
+        if isinstance(evidence, dict) and isinstance(evidence.get("evidence_id"), str):
+            defined_evidence.add(evidence["evidence_id"])
+
+    for collection_name in ("criteria_coverage", "limitations"):
+        for index, item in enumerate(normalized.get(collection_name, [])):
+            if not isinstance(item, dict) or not isinstance(item.get("evidence_ids"), list):
+                continue
+            original = item["evidence_ids"]
+            retained = [value for value in original if value in defined_evidence]
+            removed = [value for value in original if value not in defined_evidence]
+            if not removed:
+                continue
+            item["evidence_ids"] = retained
+            changes.append({
+                "operation": "remove_undefined_evidence_ids",
+                "pointer": f"/{collection_name}/{index}/evidence_ids",
+                "removed": removed,
+            })
+            if collection_name == "criteria_coverage" and item.get("status") == "satisfied":
+                item["status"] = "not_verifiable"
+                item["verification_method"] = "not_attempted"
+                item["notes"] = "Evidence references were undefined; criterion is not verifiable."
+                changes.append({
+                    "operation": "mark_criterion_not_verifiable",
+                    "pointer": f"/criteria_coverage/{index}/status",
+                    "reason": "undefined_evidence_reference_removed",
+                })
+    return normalized, changes
+
+
 def build_projection(
     verdict_path: Path,
     trusted_manifest_path: Path,
@@ -111,7 +175,8 @@ def build_projection(
     if transport_validation.get("layers", {}).get("transport") is False:
         raise ContractValidationError(transport_validation)
     raw_verdict = _load_json(verdict_path)
-    normalized_verdict = normalize_derived_review_ids(raw_verdict)
+    transport_normalized, transport_normalizations = normalize_transport_defects(raw_verdict)
+    normalized_verdict = normalize_derived_review_ids(transport_normalized)
     validation_path = verdict_path
     temporary_path: Path | None = None
     try:
@@ -131,6 +196,7 @@ def build_projection(
             temporary_path.unlink(missing_ok=True)
     if not validation.get("contract_valid"):
         raise ContractValidationError(validation)
+    validation["transport_normalizations"] = transport_normalizations
 
     verdict = normalized_verdict
     binding = _load_json(projection_binding_path)

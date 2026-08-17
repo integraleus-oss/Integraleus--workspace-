@@ -205,6 +205,41 @@ class LocalIntegrationTests(unittest.TestCase):
         self.assertFalse((self.root / "runs/run-invalid-review/decision.json").exists())
         self.assertTrue((self.root / "runs/run-invalid-review/run-error.json").exists())
 
+    def test_overlong_finding_title_is_truncated_without_changing_rationale(self) -> None:
+        verdict = copy.deepcopy(self.verdict)
+        original_rationale = verdict["findings"][0]["rationale"]
+        verdict["findings"][0]["title"] = "T" * 200
+        verdict_path = self.root / "overlong-title.json"
+        write_json(verdict_path, verdict)
+        value, validation = projection.build_projection(
+            verdict_path, self.manifest_path, self.binding_path
+        )
+        self.assertEqual(value["findings"][0]["message"], "T" * 160)
+        self.assertEqual(verdict["findings"][0]["rationale"], original_rationale)
+        self.assertEqual(
+            validation["transport_normalizations"][0]["operation"],
+            "truncate_finding_title",
+        )
+
+    def test_dangling_criterion_evidence_fails_closed_as_not_verifiable(self) -> None:
+        verdict, manifest = self._nonblocking_final_verdict_and_manifest()
+        verdict["criteria_coverage"][0]["evidence_ids"] = ["ev_missing_001"]
+        verdict_path = self.root / "dangling-evidence.json"
+        manifest_path = self.root / "dangling-evidence-manifest.json"
+        write_json(verdict_path, verdict)
+        write_json(manifest_path, manifest)
+        with self.assertRaisesRegex(
+            projection.ProjectionError, "full review has incomplete criteria coverage"
+        ):
+            projection.build_projection(verdict_path, manifest_path, self.binding_path)
+
+        normalized, changes = projection.normalize_transport_defects(verdict)
+        coverage = normalized["criteria_coverage"][0]
+        self.assertEqual(coverage["status"], "not_verifiable")
+        self.assertEqual(coverage["verification_method"], "not_attempted")
+        self.assertEqual(coverage["evidence_ids"], [])
+        self.assertEqual(len(changes), 2)
+
     def test_blocking_limitation_cannot_project(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
         verdict["limitations"] = [{
