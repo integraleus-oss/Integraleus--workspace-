@@ -1,6 +1,6 @@
 # Task Packet: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: owner-authorized trusted-boundary implementation and pilot
+Status: owner-authorized; OS guard returned for two-phase prepare/run rework
 Risk: HIGH
 Owner: main agent
 Date: 2026-08-16

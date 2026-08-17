@@ -23,5 +23,13 @@ Standards axis:
 - root service attack surface, filesystem permissions and systemd hardening;
 - evidence leakage, partial failure state, interruption and test gaps.
 
-The change is not installed. Assess whether it is safe to install for one
-controlled pilot. Do not edit files.
+Threat model clarification: the installed root-owned plugin and live Gateway
+process are trusted computing-base components. The model can invoke only the
+registered tool; it cannot execute arbitrary JavaScript inside Gateway. The
+guard must resist the model, ordinary user-space adapter calls, replay, packet
+swaps, and arbitrary same-UID non-Gateway processes. It is not required to
+resist a malicious replacement of OpenClaw itself by the host administrator.
+
+The change is not installed. Review `e5db7c4` as closure against the prior
+`a9a830e` review and assess whether the combined result is safe to install for
+one controlled pilot. Do not edit files.

@@ -126,6 +126,28 @@ config, root service, activation, cron, push, or deploy was performed.
 - Fail-closed result: plugin was not installed or enabled; Gateway was not
   restarted; no pilot ran; no source transfer, push, deploy, cron, or unattended
   mode was performed.
+
+### 2026-08-17 OS-guard authorization
+
+- Explicit root/system approval received in Telegram message `3301`.
+- Created local commits `a9a830e` and `e5db7c4`; no root files or services were installed.
+- Replaced the user-space adapter with a permanent fail-closed shim and added
+  parent-PID/cgroup enforcement to the root-owned runtime entry.
+- Proposed exact owner command binding: `RUN ORCHESTRATOR PILOT <digest>`.
+- Verification passed: plugin 3/3, guard 5/5, integration 118/118, Python
+  compilation, TypeScript build, and whitespace checks.
+- First OS review: REWORK (3 blockers, 8 majors).
+- Closure review after owner-command binding, root staging, socket framing,
+  socket-activation checks, and service hardening: REWORK. Remaining blockers:
+  staged files are not traversable after privilege drop, and recursive copying
+  of a model-writable directory is unsafe/unbounded. It also requires binding
+  every consumed input rather than only the packet JSON.
+- Fail-closed result: no system user, `/opt` files, systemd units, plugin
+  installation, Gateway restart, or pilot was performed.
+- Required architecture revision: two-phase prepare/run. The root guard safely
+  snapshots and hashes all consumed inputs during PREPARE; the later owner
+  command approves the immutable root-owned snapshot id/digest. This necessarily
+  requires a fresh post-install owner message for PREPARE and another for RUN.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.
