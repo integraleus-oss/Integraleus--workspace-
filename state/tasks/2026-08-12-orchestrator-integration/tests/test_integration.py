@@ -223,6 +223,7 @@ class LocalIntegrationTests(unittest.TestCase):
 
     def test_dangling_criterion_evidence_fails_closed_as_not_verifiable(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
+        original_notes = verdict["criteria_coverage"][0]["notes"]
         verdict["criteria_coverage"][0]["evidence_ids"] = ["ev_missing_001"]
         verdict_path = self.root / "dangling-evidence.json"
         manifest_path = self.root / "dangling-evidence-manifest.json"
@@ -238,6 +239,7 @@ class LocalIntegrationTests(unittest.TestCase):
         self.assertEqual(coverage["status"], "not_verifiable")
         self.assertEqual(coverage["verification_method"], "not_attempted")
         self.assertEqual(coverage["evidence_ids"], [])
+        self.assertTrue(coverage["notes"].startswith(original_notes + " | "))
         self.assertEqual(len(changes), 2)
 
     def test_blocking_limitation_cannot_project(self) -> None:

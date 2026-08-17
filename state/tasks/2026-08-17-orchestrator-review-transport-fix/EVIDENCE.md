@@ -10,3 +10,5 @@ Status: IN PROGRESS
 - `git diff --check`: PASS.
 - Claude `claude-review-diff` and `claude-review-slice-readonly` both exited 0
   with empty output; neither is accepted as review evidence.
+- Independent Codex review of `b8711ba` found one P2: normalization overwrote
+  reviewer-authored criterion notes. Fixed by preserving and appending to notes.
