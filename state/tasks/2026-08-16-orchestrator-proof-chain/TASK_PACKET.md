@@ -96,6 +96,19 @@ commit/transfer/push/deploy, and broader Gateway/config changes remain forbidden
 - [ ] Independent read-only review passes before activation.
 - [ ] One controlled foreground pilot runs; no accepted diff is transferred automatically.
 
+### Two-phase closure
+
+- [x] PREPARE and RUN are separate fresh owner messages.
+- [x] PREPARE snapshots the bounded packet directory using descriptor-relative
+  no-follow reads, file/depth/byte limits, and a whole-tree digest.
+- [x] RUN accepts no packet path and consumes only the prepared snapshot id
+  whose digest appears verbatim in the owner command.
+- [x] Snapshot files are root-owned and group-readable by the demoted runner.
+- [x] Replay is consumed atomically before snapshot side effects.
+- [x] Timeout terminates the complete runner process group.
+- [ ] Closure review admits the combined change.
+- [ ] Root install and controlled pilot.
+
 ## Commit Rule
 
 Create one scoped local commit per completed increment when the workspace is

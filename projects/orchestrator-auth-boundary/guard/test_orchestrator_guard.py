@@ -1,4 +1,6 @@
 import importlib.util
+import os
+import socket
 import tempfile
 import time
 import unittest
@@ -11,63 +13,78 @@ guard = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(guard)
 
 
-class GuardValidationTests(unittest.TestCase):
+class GuardTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
-        self.root = Path(self.temp.name)
-        self.packet = self.root / "packet.json"
-        self.packet.write_text("{}")
-        self.root_patch = patch.object(guard, "PACKET_ROOT", self.root)
-        self.root_patch.start()
-        self.now = int(time.time())
-        self.request = {
-            "action": "run_one", "accountId": "default", "channelId": "telegram",
-            "chatId": guard.CHAT_ID, "topicId": guard.TOPIC_ID, "messageId": "3301",
-            "senderId": guard.OWNER_ID, "timestamp": self.now,
-            "packetPath": str(self.packet), "packetDigest": guard._digest(self.packet),
-        }
-        self.request["content"] = f'RUN ORCHESTRATOR PILOT {self.request["packetDigest"]}'
+        self.temp = tempfile.TemporaryDirectory(); self.root = Path(self.temp.name)
+        self.packet_dir = self.root / "packet"; self.packet_dir.mkdir()
+        self.packet = self.packet_dir / "packet.json"; self.packet.write_text("{}")
+        (self.packet_dir / "task.md").write_text("task")
+        self.patches = [patch.object(guard, "PACKET_ROOT", self.root),
+                        patch.object(guard, "SNAPSHOT_ROOT", self.root / "snapshots"),
+                        patch.object(guard, "USED_ROOT", self.root / "used")]
+        for item in self.patches: item.start()
+        guard.SNAPSHOT_ROOT.mkdir()
+        guard.prepared.clear(); self.now = int(time.time())
+        self.base = {"accountId": "default", "channelId": "telegram", "chatId": guard.CHAT_ID,
+                     "topicId": guard.TOPIC_ID, "messageId": "3301", "senderId": guard.OWNER_ID,
+                     "timestamp": self.now}
 
     def tearDown(self):
-        self.root_patch.stop()
+        for item in reversed(self.patches): item.stop()
         self.temp.cleanup()
 
-    def test_accepts_exact_fresh_owner_request(self):
-        self.assertEqual(guard._validate(self.request, self.now), self.packet.resolve())
+    def prepare_request(self):
+        return {**self.base, "action": "prepare", "content": "PREPARE ORCHESTRATOR PILOT",
+                "packetPath": str(self.packet), "packetDigest": guard._digest(self.packet)}
 
-    def test_rejects_wrong_owner_chat_topic_digest_and_expiry(self):
-        cases = {
-            "senderId": "1", "chatId": "-1001", "topicId": "1",
-            "packetDigest": "sha256:" + "0" * 64, "timestamp": self.now - 121,
-        }
-        for field, value in cases.items():
-            request = dict(self.request, **{field: value})
+    def test_prepare_creates_readable_immutable_snapshot_and_run_command(self):
+        response = guard._prepare(self.prepare_request(), self.now)
+        record = guard.prepared[response["snapshotId"]]
+        self.assertEqual(record["packet"].read_text(), "{}")
+        self.assertEqual((record["packet"].parent / "task.md").read_text(), "task")
+        self.assertEqual(response["runCommand"], f'RUN ORCHESTRATOR PILOT {response["snapshotDigest"]}')
+
+    def test_snapshot_digest_changes_when_any_input_changes(self):
+        first = guard._prepare(self.prepare_request(), self.now)["snapshotDigest"]
+        self.base["messageId"] = "3302"; (self.packet_dir / "task.md").write_text("changed")
+        second = guard._prepare(self.prepare_request(), self.now)["snapshotDigest"]
+        self.assertNotEqual(first, second)
+
+    def test_prepare_rejects_symlink_and_size_limit(self):
+        (self.packet_dir / "link").symlink_to("/etc/passwd")
+        with self.assertRaises(guard.GuardError): guard._prepare(self.prepare_request(), self.now)
+        (self.packet_dir / "link").unlink(); (self.packet_dir / "large").write_bytes(b"x" * (guard.MAX_BYTES + 1))
+        self.base["messageId"] = "3302"
+        with self.assertRaises(guard.GuardError): guard._prepare(self.prepare_request(), self.now)
+
+    def test_metadata_and_replay_fail_closed(self):
+        for field, value in {"senderId": "1", "chatId": "-1", "topicId": "1",
+                             "timestamp": self.now - 121}.items():
             with self.subTest(field=field), self.assertRaises(guard.GuardError):
-                guard._validate(request, self.now)
+                guard._prepare(dict(self.prepare_request(), **{field: value}), self.now)
+        request = self.prepare_request(); guard._prepare(request, self.now)
+        with self.assertRaisesRegex(guard.GuardError, "already consumed"): guard._prepare(request, self.now)
 
-    def test_rejects_command_not_bound_to_digest(self):
-        with self.assertRaises(guard.GuardError):
-            guard._validate(dict(self.request, content="Разрешаю"), self.now)
+    def test_run_consumes_only_matching_prepared_snapshot(self):
+        prepared = guard._prepare(self.prepare_request(), self.now)
+        run = {**dict(self.base, messageId="3302"), "action": "run", "snapshotId": prepared["snapshotId"],
+               "content": prepared["runCommand"]}
+        with patch.object(guard, "_run_child", return_value={"status": "ACCEPTED"}) as child:
+            result = guard._run_prepared(run, self.now)
+        self.assertEqual(result["result"]["status"], "ACCEPTED"); child.assert_called_once()
+        with self.assertRaises(guard.GuardError): guard._run_prepared(run, self.now)
 
-    def test_rejects_symlink_and_outside_packet(self):
-        link = self.root / "link.json"
-        link.symlink_to(self.packet)
-        request = dict(self.request, packetPath=str(link))
-        with self.assertRaises(guard.GuardError):
-            guard._validate(request, self.now)
-        outside = self.root.parent / "outside-guard.json"
-        outside.write_text("{}")
+    def test_framing_supports_split_stream_and_rejects_multiple_records(self):
+        left, right = socket.socketpair()
         try:
-            request = dict(self.request, packetPath=str(outside), packetDigest=guard._digest(outside))
-            with self.assertRaises(guard.GuardError):
-                guard._validate(request, self.now)
-        finally:
-            outside.unlink()
+            right.sendall(b'{"action":"prepare"}\n')
+            self.assertEqual(guard._read_request(left)["action"], "prepare")
+        finally: left.close(); right.close()
+        left, right = socket.socketpair()
+        try:
+            right.sendall(b'{}\n{}\n')
+            with self.assertRaises(guard.GuardError): guard._read_request(left)
+        finally: left.close(); right.close()
 
-    def test_rejects_extra_fields(self):
-        with self.assertRaises(guard.GuardError):
-            guard._validate(dict(self.request, injected=True), self.now)
 
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == "__main__": unittest.main()

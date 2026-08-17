@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Root-owned local authorization guard for one controlled orchestrator run."""
+"""Root-owned two-phase authorization guard for one controlled orchestrator run."""
 
 from __future__ import annotations
 
@@ -7,30 +7,41 @@ import hashlib
 import json
 import os
 import pwd
-import shutil
+import secrets
+import signal
 import socket
+import stat
 import struct
 import subprocess
 import time
 from pathlib import Path
 
-SOCKET_PATH = Path("/run/orchestrator-guard/guard.sock")
 PACKET_ROOT = Path("/home/stanislav/.openclaw/workspace/agents/main/state/tasks")
 RUNNER = Path("/opt/orchestrator-guard/runtime/production_cycle_cli.py")
 AUDIT = Path("/var/log/orchestrator-guard/audit.jsonl")
-OWNER_ID = "109592643"
-CHAT_ID = "-1004417478336"
-TOPIC_ID = "2922"
-MAX_AGE_SECONDS = 120
-MAX_REQUEST = 65536
+SNAPSHOT_ROOT = Path("/run/orchestrator-guard/snapshots")
+USED_ROOT = Path("/var/lib/orchestrator-guard/used")
+OWNER_ID, CHAT_ID, TOPIC_ID = "109592643", "-1004417478336", "2922"
+MAX_AGE_SECONDS, SNAPSHOT_TTL_SECONDS = 120, 1800
+MAX_REQUEST, MAX_FILES, MAX_BYTES, MAX_DEPTH = 65536, 64, 4 * 1024 * 1024, 6
+prepared: dict[str, dict] = {}
 
 
 class GuardError(RuntimeError):
     pass
 
 
+def _snapshot_owner(path: Path) -> None:
+    if os.geteuid() == 0:
+        os.chown(path, 0, pwd.getpwnam("stanislav").pw_gid)
+
+
+def _digest_bytes(value: bytes) -> str:
+    return "sha256:" + hashlib.sha256(value).hexdigest()
+
+
 def _digest(path: Path) -> str:
-    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
+    return _digest_bytes(path.read_bytes())
 
 
 def _gateway_peer(conn: socket.socket) -> int:
@@ -47,50 +58,164 @@ def _gateway_peer(conn: socket.socket) -> int:
     return pid
 
 
-def _packet(value: str, expected_digest: str) -> Path:
-    requested = Path(value)
+def _metadata(request: dict, now: int) -> None:
+    if (request.get("accountId") != "default" or request.get("channelId") != "telegram"
+            or request.get("chatId") != CHAT_ID or request.get("topicId") != TOPIC_ID
+            or request.get("senderId") != OWNER_ID or not str(request.get("messageId", "")).isdigit()):
+        raise GuardError("trusted inbound metadata mismatch")
+    try:
+        timestamp = int(request["timestamp"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise GuardError("message timestamp is invalid") from exc
+    if timestamp > now + 5 or now - timestamp > MAX_AGE_SECONDS:
+        raise GuardError("owner message is not fresh")
+
+
+def _consume_message(request: dict) -> None:
+    identity = f'{request["chatId"]}:{request["topicId"]}:{request["messageId"]}:{request["action"]}'
+    USED_ROOT.mkdir(mode=0o700, parents=True, exist_ok=True)
+    marker = USED_ROOT / hashlib.sha256(identity.encode()).hexdigest()
+    try:
+        fd = os.open(marker, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        os.close(fd)
+    except FileExistsError as exc:
+        raise GuardError("owner message was already consumed") from exc
+
+
+def _open_packet_dir(packet_value: str, expected_digest: str) -> tuple[int, str]:
+    requested = Path(packet_value)
     if requested.is_symlink() or not requested.is_file():
         raise GuardError("packet must be a regular non-symlink file")
     canonical = requested.resolve(strict=True)
     root = PACKET_ROOT.resolve(strict=True)
     if not canonical.is_relative_to(root):
         raise GuardError("packet is outside approved root")
-    if _digest(canonical) != expected_digest:
-        raise GuardError("packet digest mismatch")
-    return canonical
+    directory_fd = os.open(canonical.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    packet_fd = os.open(canonical.name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=directory_fd)
+    try:
+        with os.fdopen(packet_fd, "rb", closefd=False) as stream:
+            if _digest_bytes(stream.read(MAX_BYTES + 1)) != expected_digest:
+                raise GuardError("packet digest mismatch")
+    finally:
+        os.close(packet_fd)
+    return directory_fd, canonical.name
 
 
-def _validate(request: dict, now: int) -> Path:
+def _copy_tree(src_fd: int, target: Path, rel: str = "", depth: int = 0,
+               budget: dict | None = None) -> list[tuple[str, str]]:
+    if depth > MAX_DEPTH:
+        raise GuardError("snapshot directory depth exceeds limit")
+    budget = budget if budget is not None else {"files": 0, "bytes": 0}
+    target.mkdir(mode=0o750, parents=True, exist_ok=False if depth == 0 else True)
+    _snapshot_owner(target)
+    manifest: list[tuple[str, str]] = []
+    for name in sorted(os.listdir(src_fd)):
+        if name in {"__pycache__", ".git"}:
+            continue
+        info = os.stat(name, dir_fd=src_fd, follow_symlinks=False)
+        child_rel = f"{rel}/{name}" if rel else name
+        destination = target / name
+        if stat.S_ISDIR(info.st_mode):
+            child_fd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=src_fd)
+            try:
+                manifest.extend(_copy_tree(child_fd, destination, child_rel, depth + 1, budget))
+            finally:
+                os.close(child_fd)
+        elif stat.S_ISREG(info.st_mode):
+            budget["files"] += 1
+            budget["bytes"] += info.st_size
+            if budget["files"] > MAX_FILES or budget["bytes"] > MAX_BYTES:
+                raise GuardError("snapshot exceeds file or byte limit")
+            source = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=src_fd)
+            try:
+                current = os.fstat(source)
+                if current.st_ino != info.st_ino or current.st_dev != info.st_dev:
+                    raise GuardError("snapshot source changed during open")
+                data = b""
+                while len(data) <= info.st_size:
+                    chunk = os.read(source, min(65536, info.st_size + 1 - len(data)))
+                    if not chunk:
+                        break
+                    data += chunk
+                if len(data) != info.st_size:
+                    raise GuardError("snapshot source changed during read")
+            finally:
+                os.close(source)
+            fd = os.open(destination, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o640)
+            try:
+                os.write(fd, data)
+            finally:
+                os.close(fd)
+            _snapshot_owner(destination)
+            manifest.append((child_rel, _digest_bytes(data)))
+        else:
+            raise GuardError("snapshot contains a non-regular entry")
+    return manifest
+
+
+def _prepare(request: dict, now: int) -> dict:
     required = {"action", "accountId", "channelId", "chatId", "topicId", "messageId",
                 "senderId", "timestamp", "content", "packetPath", "packetDigest"}
-    if set(request) != required or request.get("action") != "run_one":
-        raise GuardError("request shape is invalid")
-    if (request["accountId"] != "default" or request["channelId"] != "telegram"
-            or request["chatId"] != CHAT_ID or request["topicId"] != TOPIC_ID
-            or request["senderId"] != OWNER_ID):
-        raise GuardError("trusted inbound metadata mismatch")
-    if not str(request["messageId"]).isdigit():
-        raise GuardError("message id is invalid")
-    if request["content"].strip() != f'RUN ORCHESTRATOR PILOT {request["packetDigest"]}':
-        raise GuardError("owner command is not bound to the packet digest")
-    timestamp = int(request["timestamp"])
-    if timestamp > now + 5 or now - timestamp > MAX_AGE_SECONDS:
-        raise GuardError("owner message is not fresh")
-    return _packet(str(request["packetPath"]), str(request["packetDigest"]))
+    if set(request) != required or request["action"] != "prepare" or request["content"].strip() != "PREPARE ORCHESTRATOR PILOT":
+        raise GuardError("prepare request is invalid")
+    _metadata(request, now)
+    _consume_message(request)
+    source_fd, packet_name = _open_packet_dir(str(request["packetPath"]), str(request["packetDigest"]))
+    snapshot_id = secrets.token_hex(16)
+    target = SNAPSHOT_ROOT / snapshot_id
+    try:
+        manifest = _copy_tree(source_fd, target)
+    finally:
+        os.close(source_fd)
+    tree = json.dumps(manifest, separators=(",", ":"), ensure_ascii=False).encode()
+    snapshot_digest = _digest_bytes(tree)
+    staged_packet = target / packet_name
+    if _digest(staged_packet) != request["packetDigest"]:
+        raise GuardError("staged packet digest mismatch")
+    prepared[snapshot_id] = {"packet": staged_packet, "digest": snapshot_digest, "created": now}
+    return {"ok": True, "phase": "PREPARED", "snapshotId": snapshot_id,
+            "snapshotDigest": snapshot_digest, "runCommand": f"RUN ORCHESTRATOR PILOT {snapshot_digest}"}
 
 
-def _stage_packet(packet: Path, digest: str) -> Path:
-    source_dir = packet.parent
-    if any(path.is_symlink() for path in source_dir.rglob("*")):
-        raise GuardError("packet directory contains a symlink")
-    target = Path("/var/lib/orchestrator-guard/staged") / digest.removeprefix("sha256:")
-    if target.exists():
-        shutil.rmtree(target)
-    shutil.copytree(source_dir, target, symlinks=False)
-    staged = target / packet.name
-    if _digest(staged) != digest:
-        raise GuardError("root-owned staged packet digest mismatch")
-    return staged
+def _run_child(packet: Path) -> dict:
+    user = pwd.getpwnam("stanislav")
+    def demote() -> None:
+        os.setgroups([]); os.setgid(user.pw_gid); os.setuid(user.pw_uid)
+    process = subprocess.Popen(
+        ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"], cwd=str(RUNNER.parent),
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, preexec_fn=demote, start_new_session=True,
+        env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir, "USER": user.pw_name, "LOGNAME": user.pw_name})
+    try:
+        stdout, _stderr = process.communicate(timeout=1800)
+    except subprocess.TimeoutExpired as exc:
+        os.killpg(process.pid, signal.SIGTERM)
+        process.communicate(timeout=10)
+        raise GuardError("runner timed out and its process group was terminated") from exc
+    terminal = stdout.strip().splitlines()[-1] if stdout.strip() else ""
+    try:
+        result = json.loads(terminal)
+    except json.JSONDecodeError as exc:
+        raise GuardError("runner did not produce structured terminal evidence") from exc
+    if process.returncode not in {0, 3, 4, 130}:
+        raise GuardError(f"runner failed with exit {process.returncode}")
+    return result
+
+
+def _run_prepared(request: dict, now: int) -> dict:
+    required = {"action", "accountId", "channelId", "chatId", "topicId", "messageId",
+                "senderId", "timestamp", "content", "snapshotId"}
+    if set(request) != required or request["action"] != "run":
+        raise GuardError("run request is invalid")
+    _metadata(request, now)
+    record = prepared.get(str(request["snapshotId"]))
+    if not record or now - record["created"] > SNAPSHOT_TTL_SECONDS:
+        raise GuardError("prepared snapshot is missing or expired")
+    if request["content"].strip() != f'RUN ORCHESTRATOR PILOT {record["digest"]}':
+        raise GuardError("run command is not bound to the prepared snapshot")
+    _consume_message(request)
+    del prepared[str(request["snapshotId"])]
+    result = _run_child(record["packet"])
+    return {"ok": True, "phase": "TERMINAL", "snapshotDigest": record["digest"], "result": result}
 
 
 def _audit(record: dict) -> None:
@@ -100,68 +225,33 @@ def _audit(record: dict) -> None:
     os.chmod(AUDIT, 0o640)
 
 
-def _run(packet: Path) -> dict:
-    user = pwd.getpwnam("stanislav")
-    def demote() -> None:
-        os.setgroups([])
-        os.setgid(user.pw_gid)
-        os.setuid(user.pw_uid)
-    completed = subprocess.run(
-        ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"],
-        cwd=str(RUNNER.parent), capture_output=True, text=True, timeout=1800,
-        preexec_fn=demote, start_new_session=True,
-        env={"PATH": "/home/stanislav/.local/bin:/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
-             "USER": user.pw_name, "LOGNAME": user.pw_name},
-    )
-    terminal = completed.stdout.strip().splitlines()[-1] if completed.stdout.strip() else ""
-    try:
-        result = json.loads(terminal)
-    except json.JSONDecodeError as exc:
-        raise GuardError("runner did not produce structured terminal evidence") from exc
-    if completed.returncode not in {0, 3, 4, 130}:
-        raise GuardError(f"runner failed with exit {completed.returncode}")
-    return result
+def _read_request(conn: socket.socket) -> dict:
+    conn.settimeout(5); chunks = []; size = 0
+    while True:
+        chunk = conn.recv(min(4096, MAX_REQUEST + 1 - size))
+        if not chunk: break
+        chunks.append(chunk); size += len(chunk)
+        if size > MAX_REQUEST or b"\n" in chunk: break
+    raw = b"".join(chunks)
+    if len(raw) > MAX_REQUEST or raw.count(b"\n") != 1 or not raw.endswith(b"\n"):
+        raise GuardError("request framing is invalid")
+    value = json.loads(raw)
+    if not isinstance(value, dict): raise GuardError("request must be an object")
+    return value
 
 
 def handle(conn: socket.socket) -> dict:
-    gateway_pid = _gateway_peer(conn)
-    conn.settimeout(5)
-    chunks = []
-    size = 0
-    while True:
-        chunk = conn.recv(min(4096, MAX_REQUEST + 1 - size))
-        if not chunk:
-            break
-        chunks.append(chunk)
-        size += len(chunk)
-        if size > MAX_REQUEST or b"\n" in chunk:
-            break
-    raw = b"".join(chunks)
-    if len(raw) > MAX_REQUEST or not raw.endswith(b"\n"):
-        raise GuardError("request framing is invalid")
-    request = json.loads(raw)
-    now = int(time.time())
-    packet = _validate(request, now)
-    packet = _stage_packet(packet, request["packetDigest"])
-    identity = f'{request["chatId"]}:{request["topicId"]}:{request["messageId"]}'
-    used = Path("/var/lib/orchestrator-guard/used") / hashlib.sha256(identity.encode()).hexdigest()
-    used.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-    try:
-        fd = os.open(used, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
-        os.close(fd)
-    except FileExistsError as exc:
-        raise GuardError("owner message was already consumed") from exc
-    _audit({"event": "admitted", "at": now, "gatewayPid": gateway_pid, "messageId": request["messageId"],
-            "packetDigest": request["packetDigest"]})
-    result = _run(packet)
-    _audit({"event": "terminal", "at": int(time.time()), "messageId": request["messageId"],
-            "packetDigest": request["packetDigest"], "status": result.get("status")})
-    return {"ok": True, "result": result, "messageId": request["messageId"], "packetDigest": request["packetDigest"]}
+    gateway_pid = _gateway_peer(conn); request = _read_request(conn); now = int(time.time())
+    response = _prepare(request, now) if request.get("action") == "prepare" else _run_prepared(request, now)
+    _audit({"event": response["phase"], "at": now, "gatewayPid": gateway_pid,
+            "messageId": request["messageId"], "snapshotDigest": response["snapshotDigest"]})
+    return response
 
 
 def main() -> int:
     if os.environ.get("LISTEN_PID") != str(os.getpid()) or os.environ.get("LISTEN_FDS") != "1":
         raise SystemExit("guard requires exactly one systemd-activated socket")
+    SNAPSHOT_ROOT.mkdir(mode=0o750, parents=True, exist_ok=True)
     listener = socket.fromfd(3, socket.AF_UNIX, socket.SOCK_STREAM)
     while True:
         conn, _ = listener.accept()
@@ -170,8 +260,10 @@ def main() -> int:
                 response = handle(conn)
             except Exception as exc:
                 response = {"ok": False, "error": type(exc).__name__, "message": str(exc)}
-                _audit({"event": "rejected", "at": int(time.time()), "error": type(exc).__name__, "message": str(exc)})
-            conn.sendall(json.dumps(response, sort_keys=True, separators=(",", ":")).encode() + b"\n")
+                try: _audit({"event": "REJECTED", "at": int(time.time()), "error": type(exc).__name__})
+                except Exception: pass
+            try: conn.sendall(json.dumps(response, sort_keys=True, separators=(",", ":")).encode() + b"\n")
+            except OSError: pass
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ type Inbound = {
 };
 
 const inboundBySession = new Map<string, Inbound>();
+const preparedBySession = new Map<string, { snapshotId: string; snapshotDigest: string }>();
 
 function sha256(value: Buffer): string {
   return `sha256:${createHash("sha256").update(value).digest("hex")}`;
@@ -45,7 +46,7 @@ function callGuard(request: Record<string, unknown>): Promise<Record<string, unk
     socket.setEncoding("utf8");
     socket.on("connect", () => socket.write(`${JSON.stringify(request)}\n`));
     socket.on("data", (chunk) => { data += chunk; if (data.length > 1_000_000) socket.destroy(new Error("guard response too large")); });
-    socket.on("error", reject);
+    socket.on("error", (error) => { clearTimeout(timer); reject(error); });
     socket.on("end", () => {
       clearTimeout(timer);
       try {
@@ -57,7 +58,7 @@ function callGuard(request: Record<string, unknown>): Promise<Record<string, unk
   });
 }
 
-export const testing = { inboundBySession, inspectPacket, purge };
+export const testing = { inboundBySession, preparedBySession, inspectPacket, purge };
 
 const plugin = definePluginEntry({
   id: "orchestrator-auth-boundary",
@@ -67,7 +68,7 @@ const plugin = definePluginEntry({
     api.on("inbound_claim", (event, ctx) => {
       purge();
       const sessionKey = ctx.sessionKey ?? event.sessionKey;
-      const senderId = ctx.senderId ?? event.senderId;
+      const senderId = String(ctx.senderId ?? event.senderId ?? "");
       const messageId = ctx.messageId ?? event.messageId;
       const conversation = ctx.conversationId ?? event.conversationId ?? "";
       const chatMatch = String(conversation).match(/(-100\d+)/);
@@ -79,15 +80,15 @@ const plugin = definePluginEntry({
         sessionKey, accountId: event.accountId ?? ctx.accountId ?? "", channelId: ctx.channelId,
         chatId: CHAT_ID, topicId, messageId: String(messageId), senderId: String(senderId),
         timestamp: rawTimestamp > 10_000_000_000 ? Math.floor(rawTimestamp / 1000) : Math.floor(rawTimestamp),
-        content: event.content,
+        content: String(event.content ?? ""),
         observedAt: Date.now(),
       });
     }, { priority: 100, timeoutMs: 1_000 });
 
     api.registerTool((ctx) => ({
-      name: "orchestrator_run_guarded_pilot",
-      label: "Run guarded orchestrator pilot",
-      description: "Run one exact task packet through the root-owned foreground guard from the current owner message.",
+      name: "orchestrator_prepare_guarded_pilot",
+      label: "Prepare guarded orchestrator pilot",
+      description: "Create one immutable root-owned snapshot from a fresh owner PREPARE command.",
       parameters: Type.Object({ packetPath: Type.String() }, { additionalProperties: false }),
       execute: async (_id, rawParams) => {
         purge();
@@ -96,11 +97,36 @@ const plugin = definePluginEntry({
         if (!inbound || inbound.senderId !== ctx.requesterSenderId) throw new Error("no fresh trusted inbound owner metadata");
         inboundBySession.delete(ctx.sessionKey);
         const packet = await inspectPacket(String((rawParams as { packetPath: string }).packetPath));
-        if (inbound.content.trim() !== `RUN ORCHESTRATOR PILOT ${packet.digest}`) {
-          throw new Error("owner message must contain the exact pilot command and packet digest");
+        if (inbound.content.trim() !== "PREPARE ORCHESTRATOR PILOT") {
+          throw new Error("owner message must be the exact PREPARE command");
         }
-        const response = await callGuard({ action: "run_one", ...inbound, sessionKey: undefined,
+        const response = await callGuard({ action: "prepare", ...inbound, sessionKey: undefined,
           observedAt: undefined, packetPath: packet.path, packetDigest: packet.digest });
+        if (typeof response.snapshotId !== "string" || typeof response.snapshotDigest !== "string") {
+          throw new Error("guard returned an invalid prepared snapshot");
+        }
+        preparedBySession.set(ctx.sessionKey, { snapshotId: response.snapshotId, snapshotDigest: response.snapshotDigest });
+        return { content: [{ type: "text", text: JSON.stringify(response) }], details: response };
+      },
+    }), { name: "orchestrator_prepare_guarded_pilot" });
+
+    api.registerTool((ctx) => ({
+      name: "orchestrator_run_guarded_pilot",
+      label: "Run guarded orchestrator pilot",
+      description: "Run the previously prepared immutable snapshot from an exact owner RUN command.",
+      parameters: Type.Object({}, { additionalProperties: false }),
+      execute: async () => {
+        purge();
+        if (!ctx.senderIsOwner || ctx.requesterSenderId !== OWNER_ID || !ctx.sessionKey) throw new Error("trusted owner turn required");
+        const inbound = inboundBySession.get(ctx.sessionKey);
+        const snapshot = preparedBySession.get(ctx.sessionKey);
+        if (!inbound || !snapshot) throw new Error("no fresh owner metadata or prepared snapshot");
+        if (inbound.content.trim() !== `RUN ORCHESTRATOR PILOT ${snapshot.snapshotDigest}`) {
+          throw new Error("owner message is not bound to the prepared snapshot");
+        }
+        inboundBySession.delete(ctx.sessionKey); preparedBySession.delete(ctx.sessionKey);
+        const response = await callGuard({ action: "run", ...inbound, sessionKey: undefined,
+          observedAt: undefined, snapshotId: snapshot.snapshotId });
         return { content: [{ type: "text", text: JSON.stringify(response) }], details: response };
       },
     }), { name: "orchestrator_run_guarded_pilot" });

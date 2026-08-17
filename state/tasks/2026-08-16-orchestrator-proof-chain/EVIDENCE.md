@@ -148,6 +148,18 @@ config, root service, activation, cron, push, or deploy was performed.
   snapshots and hashes all consumed inputs during PREPARE; the later owner
   command approves the immutable root-owned snapshot id/digest. This necessarily
   requires a fresh post-install owner message for PREPARE and another for RUN.
+
+### Two-phase rework
+
+- Implemented separate `prepare` and `run` guard actions and OpenClaw tools.
+- Snapshot copy uses directory descriptors, `O_NOFOLLOW`, inode/device
+  re-verification, regular-file-only policy, and hard limits: 64 files, 4 MiB,
+  depth 6.
+- Whole snapshot digest covers every relative path and content digest.
+- RUN carries no packet path; it consumes only the in-memory prepared snapshot.
+- Verification: plugin 3/3, guard 6/6, orchestrator integration 118/118,
+  TypeScript build, Python compilation, and whitespace checks passed.
+- Root install remains blocked until closure review.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.

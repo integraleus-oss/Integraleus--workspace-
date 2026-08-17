@@ -1,12 +1,12 @@
 # Orchestrator Auth Boundary
 
-Gateway-owned, in-memory authorization boundary for one foreground orchestrator packet.
+Two-phase authorization boundary for one foreground orchestrator snapshot.
 
-It captures trusted owner metadata before the model, mints a short-lived opaque
-grant for an exact packet digest, and atomically consumes that grant through a
-Gateway RPC. Grants never persist to the agent-writable task tree and disappear
-on restart. This is not an unattended runner and provides no commit, transfer,
-push, deploy, cron, or rollback capability.
+`PREPARE ORCHESTRATOR PILOT` creates a bounded root-owned snapshot through
+descriptor-relative, no-follow reads and returns its digest. A later exact
+`RUN ORCHESTRATOR PILOT <snapshot-digest>` message consumes that snapshot once.
+Prepared state disappears on restart. This is not an unattended runner and
+provides no commit, transfer, push, deploy, cron, or rollback capability.
 
 ## Build
 
