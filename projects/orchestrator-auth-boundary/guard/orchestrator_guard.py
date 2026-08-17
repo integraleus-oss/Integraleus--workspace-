@@ -7,12 +7,14 @@ import hashlib
 import json
 import os
 import pwd
+import resource
 import secrets
 import signal
 import socket
 import stat
 import struct
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 
@@ -61,7 +63,9 @@ def _gateway_peer(conn: socket.socket) -> int:
 def _metadata(request: dict, now: int) -> None:
     if (request.get("accountId") != "default" or request.get("channelId") != "telegram"
             or request.get("chatId") != CHAT_ID or request.get("topicId") != TOPIC_ID
-            or request.get("senderId") != OWNER_ID or not str(request.get("messageId", "")).isdigit()):
+            or request.get("senderId") != OWNER_ID
+            or not str(request.get("messageId", "")).isascii()
+            or not str(request.get("messageId", "")).isdigit()):
         raise GuardError("trusted inbound metadata mismatch")
     try:
         timestamp = int(request["timestamp"])
@@ -84,21 +88,37 @@ def _consume_message(request: dict) -> None:
 
 def _open_packet_dir(packet_value: str, expected_digest: str) -> tuple[int, str]:
     requested = Path(packet_value)
-    if requested.is_symlink() or not requested.is_file():
-        raise GuardError("packet must be a regular non-symlink file")
-    canonical = requested.resolve(strict=True)
-    root = PACKET_ROOT.resolve(strict=True)
-    if not canonical.is_relative_to(root):
-        raise GuardError("packet is outside approved root")
-    directory_fd = os.open(canonical.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-    packet_fd = os.open(canonical.name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=directory_fd)
     try:
-        with os.fdopen(packet_fd, "rb", closefd=False) as stream:
-            if _digest_bytes(stream.read(MAX_BYTES + 1)) != expected_digest:
+        relative = requested.relative_to(PACKET_ROOT)
+    except ValueError as exc:
+        raise GuardError("packet is outside approved root") from exc
+    if not relative.parts or any(part in {"", ".", ".."} for part in relative.parts):
+        raise GuardError("packet path is invalid")
+    directory_fd = os.open("/", os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        for part in PACKET_ROOT.parts[1:]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = child
+        for part in relative.parts[:-1]:
+            child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=directory_fd)
+            os.close(directory_fd)
+            directory_fd = child
+        packet_name = relative.parts[-1]
+        packet_fd = os.open(packet_name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=directory_fd)
+        try:
+            info = os.fstat(packet_fd)
+            if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_BYTES:
+                raise GuardError("packet is not a bounded regular file")
+            data = os.read(packet_fd, info.st_size + 1)
+            if len(data) != info.st_size or _digest_bytes(data) != expected_digest:
                 raise GuardError("packet digest mismatch")
-    finally:
-        os.close(packet_fd)
-    return directory_fd, canonical.name
+        finally:
+            os.close(packet_fd)
+        return directory_fd, packet_name
+    except Exception:
+        os.close(directory_fd)
+        raise
 
 
 def _copy_tree(src_fd: int, target: Path, rel: str = "", depth: int = 0,
@@ -156,9 +176,13 @@ def _copy_tree(src_fd: int, target: Path, rel: str = "", depth: int = 0,
 def _prepare(request: dict, now: int) -> dict:
     required = {"action", "accountId", "channelId", "chatId", "topicId", "messageId",
                 "senderId", "timestamp", "content", "packetPath", "packetDigest"}
-    if set(request) != required or request["action"] != "prepare" or request["content"].strip() != "PREPARE ORCHESTRATOR PILOT":
+    if set(request) != required or request["action"] != "prepare":
         raise GuardError("prepare request is invalid")
     _metadata(request, now)
+    relative = Path(str(request["packetPath"])).relative_to(PACKET_ROOT).as_posix()
+    expected_command = f'PREPARE ORCHESTRATOR PILOT {request["packetDigest"]} {relative}'
+    if request["content"].strip() != expected_command:
+        raise GuardError("prepare command is not bound to packet path and digest")
     _consume_message(request)
     source_fd, packet_name = _open_packet_dir(str(request["packetPath"]), str(request["packetDigest"]))
     snapshot_id = secrets.token_hex(16)
@@ -180,17 +204,28 @@ def _prepare(request: dict, now: int) -> dict:
 def _run_child(packet: Path) -> dict:
     user = pwd.getpwnam("stanislav")
     def demote() -> None:
-        os.setgroups([]); os.setgid(user.pw_gid); os.setuid(user.pw_uid)
-    process = subprocess.Popen(
-        ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"], cwd=str(RUNNER.parent),
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, preexec_fn=demote, start_new_session=True,
-        env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir, "USER": user.pw_name, "LOGNAME": user.pw_name})
-    try:
-        stdout, _stderr = process.communicate(timeout=1800)
-    except subprocess.TimeoutExpired as exc:
-        os.killpg(process.pid, signal.SIGTERM)
-        process.communicate(timeout=10)
-        raise GuardError("runner timed out and its process group was terminated") from exc
+        resource.setrlimit(resource.RLIMIT_FSIZE, (1_048_576, 1_048_576))
+        os.setgroups([])
+        os.setgid(user.pw_gid)
+        os.setuid(user.pw_uid)
+    with tempfile.TemporaryFile(mode="w+t") as stdout_file, tempfile.TemporaryFile(mode="w+t") as stderr_file:
+        process = subprocess.Popen(
+            ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"], cwd=str(RUNNER.parent),
+            stdout=stdout_file, stderr=stderr_file, text=True, preexec_fn=demote, start_new_session=True,
+            env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
+                 "USER": user.pw_name, "LOGNAME": user.pw_name})
+        try:
+            process.wait(timeout=1800)
+        except subprocess.TimeoutExpired as exc:
+            os.killpg(process.pid, signal.SIGTERM)
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.wait(timeout=10)
+            raise GuardError("runner timed out and its process group was terminated") from exc
+        stdout_file.seek(0)
+        stdout = stdout_file.read(1_048_577)
     terminal = stdout.strip().splitlines()[-1] if stdout.strip() else ""
     try:
         result = json.loads(terminal)
@@ -214,7 +249,14 @@ def _run_prepared(request: dict, now: int) -> dict:
         raise GuardError("run command is not bound to the prepared snapshot")
     _consume_message(request)
     del prepared[str(request["snapshotId"])]
-    result = _run_child(record["packet"])
+    _audit({"event": "ADMITTED", "at": now, "messageId": request["messageId"],
+            "snapshotDigest": record["digest"]})
+    try:
+        result = _run_child(record["packet"])
+    except Exception as exc:
+        _audit({"event": "FAILED", "at": int(time.time()), "messageId": request["messageId"],
+                "snapshotDigest": record["digest"], "error": type(exc).__name__})
+        raise
     return {"ok": True, "phase": "TERMINAL", "snapshotDigest": record["digest"], "result": result}
 
 
@@ -252,6 +294,7 @@ def main() -> int:
     if os.environ.get("LISTEN_PID") != str(os.getpid()) or os.environ.get("LISTEN_FDS") != "1":
         raise SystemExit("guard requires exactly one systemd-activated socket")
     SNAPSHOT_ROOT.mkdir(mode=0o750, parents=True, exist_ok=True)
+    _snapshot_owner(SNAPSHOT_ROOT)
     listener = socket.fromfd(3, socket.AF_UNIX, socket.SOCK_STREAM)
     while True:
         conn, _ = listener.accept()
@@ -260,7 +303,8 @@ def main() -> int:
                 response = handle(conn)
             except Exception as exc:
                 response = {"ok": False, "error": type(exc).__name__, "message": str(exc)}
-                try: _audit({"event": "REJECTED", "at": int(time.time()), "error": type(exc).__name__})
+                try:
+                    _audit({"event": "REJECTED", "at": int(time.time()), "error": type(exc).__name__})
                 except Exception: pass
             try: conn.sendall(json.dumps(response, sort_keys=True, separators=(",", ":")).encode() + b"\n")
             except OSError: pass

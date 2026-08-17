@@ -21,7 +21,8 @@ class GuardTests(unittest.TestCase):
         (self.packet_dir / "task.md").write_text("task")
         self.patches = [patch.object(guard, "PACKET_ROOT", self.root),
                         patch.object(guard, "SNAPSHOT_ROOT", self.root / "snapshots"),
-                        patch.object(guard, "USED_ROOT", self.root / "used")]
+                        patch.object(guard, "USED_ROOT", self.root / "used"),
+                        patch.object(guard, "AUDIT", self.root / "audit" / "audit.jsonl")]
         for item in self.patches: item.start()
         guard.SNAPSHOT_ROOT.mkdir()
         guard.prepared.clear(); self.now = int(time.time())
@@ -34,14 +35,18 @@ class GuardTests(unittest.TestCase):
         self.temp.cleanup()
 
     def prepare_request(self):
-        return {**self.base, "action": "prepare", "content": "PREPARE ORCHESTRATOR PILOT",
-                "packetPath": str(self.packet), "packetDigest": guard._digest(self.packet)}
+        digest = guard._digest(self.packet)
+        return {**self.base, "action": "prepare",
+                "content": f"PREPARE ORCHESTRATOR PILOT {digest} packet/packet.json",
+                "packetPath": str(self.packet), "packetDigest": digest}
 
     def test_prepare_creates_readable_immutable_snapshot_and_run_command(self):
         response = guard._prepare(self.prepare_request(), self.now)
         record = guard.prepared[response["snapshotId"]]
         self.assertEqual(record["packet"].read_text(), "{}")
         self.assertEqual((record["packet"].parent / "task.md").read_text(), "task")
+        self.assertEqual(record["packet"].stat().st_mode & 0o777, 0o640)
+        self.assertEqual(record["packet"].parent.stat().st_mode & 0o777, 0o750)
         self.assertEqual(response["runCommand"], f'RUN ORCHESTRATOR PILOT {response["snapshotDigest"]}')
 
     def test_snapshot_digest_changes_when_any_input_changes(self):

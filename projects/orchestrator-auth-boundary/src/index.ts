@@ -97,8 +97,9 @@ const plugin = definePluginEntry({
         if (!inbound || inbound.senderId !== ctx.requesterSenderId) throw new Error("no fresh trusted inbound owner metadata");
         inboundBySession.delete(ctx.sessionKey);
         const packet = await inspectPacket(String((rawParams as { packetPath: string }).packetPath));
-        if (inbound.content.trim() !== "PREPARE ORCHESTRATOR PILOT") {
-          throw new Error("owner message must be the exact PREPARE command");
+        const relativePacket = packet.path.slice(`${PACKET_ROOT}/`.length);
+        if (inbound.content.trim() !== `PREPARE ORCHESTRATOR PILOT ${packet.digest} ${relativePacket}`) {
+          throw new Error("owner message must bind the exact packet digest and relative path");
         }
         const response = await callGuard({ action: "prepare", ...inbound, sessionKey: undefined,
           observedAt: undefined, packetPath: packet.path, packetDigest: packet.digest });
