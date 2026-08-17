@@ -104,6 +104,28 @@ The remaining sound options are:
 
 Both cross the separately protected runtime/security boundary. No Gateway,
 config, root service, activation, cron, push, or deploy was performed.
+
+### 2026-08-17 trusted-boundary attempt
+
+- Owner approval received in Telegram topic `2922`, message `3296`.
+- Scaffolded `projects/orchestrator-auth-boundary/` and replaced the adapter's
+  user-writable registry/ledger with a proposed in-memory Gateway mint/consume flow.
+- Plugin TypeScript build passed; plugin unit test passed.
+- Existing orchestrator integration suite passed 119/119; Python compilation
+  and `git diff --check` passed.
+- `openclaw plugins validate` is inapplicable to this hook/RPC plugin because
+  that command currently accepts only `defineToolPlugin` metadata; runtime
+  inspection was intentionally not attempted before review admission.
+- Initial Claude read-only review timed out at 300 seconds with no verdict.
+- First reduced diff retry correctly refused an accidentally empty staged diff.
+- Second reduced diff review returned `REWORK`: 3 blockers and 5 majors.
+  Principal blockers were that local `foreground_authorized=True` remains
+  bypassable, the token crosses argv, and required owner/digest/expiry/replay/
+  restart negative tests were absent from the reviewed packet. It also found
+  response-envelope, TOCTOU, coverage, and evidence-minimization majors.
+- Fail-closed result: plugin was not installed or enabled; Gateway was not
+  restarted; no pilot ran; no source transfer, push, deploy, cron, or unattended
+  mode was performed.
 - [x] Python compile checks passed.
 - [x] `git diff --check` passed.
 - [ ] Final independent review.

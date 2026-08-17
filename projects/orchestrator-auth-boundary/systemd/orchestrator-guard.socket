@@ -1,0 +1,12 @@
+[Unit]
+Description=Orchestrator authorization guard socket
+
+[Socket]
+ListenStream=/run/orchestrator-guard/guard.sock
+SocketMode=0660
+SocketUser=orchestrator-guard
+SocketGroup=stanislav
+RemoveOnStop=yes
+
+[Install]
+WantedBy=sockets.target

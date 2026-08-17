@@ -1,7 +1,7 @@
 # Task Packet: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: blocked at external authorization boundary
-Risk: MEDIUM
+Status: owner-authorized trusted-boundary implementation and pilot
+Risk: HIGH
 Owner: main agent
 Date: 2026-08-16
 
@@ -32,7 +32,8 @@ Allowed:
 
 Forbidden without a new explicit approval:
 
-- OpenClaw/Gateway/config/runtime changes or adapter activation;
+- OpenClaw/Gateway/config/runtime changes beyond the narrowly approved
+  foreground authorization plugin and its activation;
 - cron, heartbeat automation, unattended execution, or background drift;
 - automatic commit, accepted-diff transfer, push, deploy, or rollback;
 - third-party Autopilot installation;
@@ -76,6 +77,24 @@ authorization registry/ledger was not authored, altered, or replay-enabled by
 the same agent it constrains. Closing this requires a separately approved
 owner-controlled signer or trusted OpenClaw/Gateway invocation nonce. No pilot
 through the adapter may run until that boundary exists.
+
+Owner approval received in Telegram topic `2922`, message `3296`, on
+2026-08-17: create a Gateway-owned one-time nonce bound to trusted inbound
+metadata and the task-packet digest, finish the adapter, and run one controlled
+pilot. This authorizes only that boundary, plugin activation/restart needed to
+load it, and one foreground pilot. Cron, unattended execution, automatic
+commit/transfer/push/deploy, and broader Gateway/config changes remain forbidden.
+
+## Trusted Boundary Increment
+
+- [ ] Gateway plugin captures owner/channel/conversation/thread/message/sender/run metadata before the model.
+- [ ] A tool may mint exactly one opaque authorization for the same owner turn and exact packet digest.
+- [ ] A Gateway RPC atomically validates and consumes the authorization.
+- [ ] Authorizations are short-lived, in-memory, single-use, and invalidated by Gateway restart.
+- [ ] Adapter re-hashes the packet immediately before consume and immediately before execution.
+- [ ] Negative tests cover wrong owner, run, metadata, digest, expiry, replay, and restart state.
+- [ ] Independent read-only review passes before activation.
+- [ ] One controlled foreground pilot runs; no accepted diff is transferred automatically.
 
 ## Commit Rule
 

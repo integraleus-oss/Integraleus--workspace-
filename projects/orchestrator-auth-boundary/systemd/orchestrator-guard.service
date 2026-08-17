@@ -1,0 +1,27 @@
+[Unit]
+Description=Root-owned orchestrator authorization guard
+Requires=orchestrator-guard.socket
+After=orchestrator-guard.socket
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/orchestrator-guard/orchestrator_guard.py
+User=root
+Group=root
+RuntimeDirectory=orchestrator-guard
+RuntimeDirectoryMode=0750
+StateDirectory=orchestrator-guard
+StateDirectoryMode=0700
+LogsDirectory=orchestrator-guard
+LogsDirectoryMode=0750
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/orchestrator-guard /var/log/orchestrator-guard /home/stanislav/agent-runs
+RestrictAddressFamilies=AF_UNIX
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native

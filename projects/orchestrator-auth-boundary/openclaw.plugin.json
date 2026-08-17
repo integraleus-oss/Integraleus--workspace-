@@ -1,0 +1,9 @@
+{
+  "id": "orchestrator-auth-boundary",
+  "name": "Orchestrator Auth Boundary",
+  "description": "Owner-turn bridge to the root-owned foreground orchestrator guard.",
+  "version": "0.1.0",
+  "configSchema": { "type": "object", "additionalProperties": false, "properties": {} },
+  "activation": { "onStartup": true },
+  "contracts": { "tools": ["orchestrator_run_guarded_pilot"] }
+}

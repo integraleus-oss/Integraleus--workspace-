@@ -7,6 +7,7 @@ import argparse
 import fcntl
 import hashlib
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -32,6 +33,20 @@ SAFE_PROJECT_BASES = (
     Path("/home/stanislav/agent-runs/orchestrator-worktrees"),
 )
 FOREGROUND_LOCK = Path("/home/stanislav/agent-runs/orchestrator-foreground.lock")
+
+
+def _guard_parent_authorized() -> bool:
+    """True only for a child exec'd by the root-owned system guard service."""
+    try:
+        parent = os.getppid()
+        parent_status = Path(f"/proc/{parent}/status").read_text(encoding="utf-8")
+        parent_cmdline = Path(f"/proc/{parent}/cmdline").read_bytes().replace(b"\0", b" ")
+        own_cgroup = Path("/proc/self/cgroup").read_text(encoding="utf-8")
+    except OSError:
+        return False
+    return ("Uid:\t0\t0\t0\t0" in parent_status
+            and b"/opt/orchestrator-guard/orchestrator_guard.py" in parent_cmdline
+            and "orchestrator-guard.service" in own_cgroup)
 
 
 def _read_json(path: Path, limit: int | None = None) -> Any:
@@ -502,11 +517,14 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("packet", type=Path)
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--guard-authorized", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     try:
         packet = load_packet(args.packet)
+        if args.guard_authorized and not _guard_parent_authorized():
+            raise PacketError("guard authorization requires the root-owned guard parent and cgroup")
         result = ({"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only
-                  else run_packet(args.packet, foreground_authorized=False))
+                  else run_packet(args.packet, foreground_authorized=args.guard_authorized))
         code = (0 if result["status"] in {"VALID", "ACCEPTED"}
                 else 3 if result["status"] == "FAILED_INFRA"
                 else 130 if result["status"] == "INTERRUPTED" else 4)

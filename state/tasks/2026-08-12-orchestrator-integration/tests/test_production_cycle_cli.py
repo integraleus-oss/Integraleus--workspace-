@@ -287,6 +287,17 @@ class ProductionCycleCliTests(unittest.TestCase):
         code, output = self.invoke_main([str(self.packet_path)])
         self.assertEqual((code, output["status"]), (2, "ERROR"))
 
+    def test_guard_flag_requires_root_guard_parent_and_cgroup(self):
+        with patch("production_cycle_cli._guard_parent_authorized", return_value=False):
+            code, output = self.invoke_main([str(self.packet_path), "--guard-authorized"], {"status": "ACCEPTED"})
+        self.assertEqual((code, output["status"]), (2, "ERROR"))
+        self.assertIn("root-owned guard", output["error"]["message"])
+
+    def test_guard_flag_admits_only_after_parent_check(self):
+        with patch("production_cycle_cli._guard_parent_authorized", return_value=True):
+            code, output = self.invoke_main([str(self.packet_path), "--guard-authorized"], {"status": "ACCEPTED"})
+        self.assertEqual((code, output["status"]), (0, "ACCEPTED"))
+
     @patch("production_cycle_cli.admit_live_review")
     @patch("production_cycle_cli.live_review_cycle.run_cycle")
     @patch("production_cycle_cli.agent_launcher.launch")
