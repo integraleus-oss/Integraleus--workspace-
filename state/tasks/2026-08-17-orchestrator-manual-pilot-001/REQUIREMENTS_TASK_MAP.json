@@ -1,0 +1,6 @@
+{
+  "document_type":"requirements_task_map",
+  "schema_version":"1.0.0",
+  "manifest_digest":"sha256:1606b34c646ce4110ad1830b4db88c6dc7738a5d093b755f69331645eed4cc36",
+  "tasks":[{"task_id":"capability-grant-contract","requirement_ids":["R01","R02","R03"]}]
+}

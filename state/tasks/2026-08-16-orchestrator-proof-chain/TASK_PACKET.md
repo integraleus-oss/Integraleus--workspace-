@@ -1,6 +1,6 @@
 # Task Packet: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: BLOCKED; combined OS/plugin boundary rejected before installation
+Status: FROZEN RESEARCH PROTOTYPE; installation no longer required for manual use
 Risk: HIGH
 Owner: main agent
 Date: 2026-08-16
@@ -116,6 +116,12 @@ current `/proc` peer check therefore cannot distinguish them. A real boundary
 requires a distinct, non-assumable OS/LSM identity for the trusted Gateway side
 and separate execution identity for model tools. That is a broader OpenClaw
 runtime isolation change and is not installed or assumed by this packet.
+
+Owner disposition, Telegram message `3321` on 2026-08-17: the machine is local
+to the home network and accessible only by Stanislav, so the administrator and
+current OpenClaw are trusted for controlled manual use. OS-level authorization
+is deferred unless external/multi-user access, unattended operation, or
+automatic high-impact actions are introduced.
 
 ## Commit Rule
 

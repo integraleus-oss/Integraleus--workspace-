@@ -1,0 +1,3 @@
+Align the capability-grant runtime and Schema contract completely.
+Reject non-string or empty selected output-channel types before emitting a grant.
+Preserve existing external-read, model-class, immutability, scope, and no-transfer boundaries.

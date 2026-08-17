@@ -1,0 +1,44 @@
+{
+  "builder": {
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One exported deeply frozen capability-grant grammar pins an exact complete capability-grant Schema contract.","requirement_ids":["R01"]},
+      {"id":"AC-2","statement":"Schema covers and requires every always-emitted runtime property including requestedModelClass and closes top-level and allowedExternal objects.","requirement_ids":["R01"]},
+      {"id":"AC-3","statement":"Runtime validates the selected channel type as a non-empty primitive string and cannot emit a non-string allowedOutputChannels entry.","requirement_ids":["R02"]},
+      {"id":"AC-4","statement":"Schema and runtime agree on arrays, external read domains/methods, model class, modelPolicy, booleans, approval identifiers, and output channels.","requirement_ids":["R01","R02"]},
+      {"id":"AC-5","statement":"Previously accepted external-read, model-class, and deep-immutability behavior remains unchanged.","requirement_ids":["R03"]},
+      {"id":"AC-6","statement":"A dependency-free deterministic contract harness accepts representative emitted grants and rejects required missing, extra, type, method, model-class, array, and channel negatives.","requirement_ids":["R01","R02"]},
+      {"id":"AC-7","statement":"Tests prove exact schema/grammar equality and deep freezing of both exported grammar and compiled grants.","requirement_ids":["R01"]},
+      {"id":"AC-8","statement":"Exactly the three allowed files change; npm test and git diff --check pass without dependency, network, commit, transfer, or external changes.","requirement_ids":["R03"]}
+    ],
+    "allowed_paths": ["src/core/policy.js", "schemas/capability-grant.schema.json", "test/policy.test.js"],
+    "gate_timeout_seconds": 60,
+    "gates": [
+      {"argv":["bash","-c","npm test"],"id":"node-tests"},
+      {"argv":["git","diff","--check"],"id":"diff-check"}
+    ],
+    "policy_fixture": "POLICY.json",
+    "repo_id": "home-agent-factory-manual-pilot-001",
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "review_verdict": "verdict.json",
+    "task_id": "home-agent-factory-manual-pilot-001"
+  },
+  "claude_timeout_seconds": 900,
+  "codex_timeout_seconds": 600,
+  "document_type": "production_cycle_task",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-pilot-001-capability-grant",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/manual-pilot-001-capability-grant-run",
+  "schema_version": "1.3.0",
+  "task_note": "IMPLEMENTATION_TASK.md",
+  "original_brief": "ORIGINAL_BRIEF.txt",
+  "original_brief_digest": "sha256:68b05985d395b5b0dac15a550da9c57ee9f8367dff9e002a43da6234c9e89ad2",
+  "requirements_manifest": "REQUIREMENTS_MANIFEST.json",
+  "previous_requirements_manifest": null,
+  "requirements_specification": "REQUIREMENTS_SPECIFICATION.json",
+  "requirements_task_map": "REQUIREMENTS_TASK_MAP.json",
+  "control_mode": "manual",
+  "depth": "strict",
+  "blind_acceptance": {
+    "timeout_seconds": 120,
+    "verification_commands": [["bash","-c","npm test"],["git","diff","--check"]]
+  }
+}

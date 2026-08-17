@@ -517,6 +517,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("packet", type=Path)
     parser.add_argument("--validate-only", action="store_true")
+    parser.add_argument("--controlled-manual", action="store_true",
+                        help="run one foreground packet under the trusted local-administrator threat model")
     parser.add_argument("--guard-authorized", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     try:
@@ -524,7 +526,8 @@ def main() -> int:
         if args.guard_authorized and not _guard_parent_authorized():
             raise PacketError("guard authorization requires the root-owned guard parent and cgroup")
         result = ({"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only
-                  else run_packet(args.packet, foreground_authorized=args.guard_authorized))
+                  else run_packet(args.packet,
+                                  foreground_authorized=args.guard_authorized or args.controlled_manual))
         code = (0 if result["status"] in {"VALID", "ACCEPTED"}
                 else 3 if result["status"] == "FAILED_INFRA"
                 else 130 if result["status"] == "INTERRUPTED" else 4)

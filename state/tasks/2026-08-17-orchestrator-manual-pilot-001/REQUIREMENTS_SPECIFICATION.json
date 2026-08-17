@@ -1,0 +1,10 @@
+{
+  "document_type":"requirements_specification",
+  "schema_version":"1.0.0",
+  "manifest_digest":"sha256:1606b34c646ce4110ad1830b4db88c6dc7738a5d093b755f69331645eed4cc36",
+  "requirements":[
+    {"requirement_id":"R01","specification":"The exported frozen grammar, emitted grant, JSON Schema, and deterministic contract tests describe one complete exact contract."},
+    {"requirement_id":"R02","specification":"Channel selection preserves request-over-instance precedence but rejects every selected value that is not a non-empty primitive string before grant emission."},
+    {"requirement_id":"R03","specification":"Only the three allowed files change; existing external-read/model-class/immutability behavior remains green and no transfer or external action occurs."}
+  ]
+}

@@ -298,6 +298,12 @@ class ProductionCycleCliTests(unittest.TestCase):
             code, output = self.invoke_main([str(self.packet_path), "--guard-authorized"], {"status": "ACCEPTED"})
         self.assertEqual((code, output["status"]), (0, "ACCEPTED"))
 
+    def test_controlled_manual_flag_admits_without_guard_parent(self):
+        with patch("production_cycle_cli._guard_parent_authorized", return_value=False):
+            code, output = self.invoke_main([str(self.packet_path), "--controlled-manual"],
+                                            {"status": "ACCEPTED"})
+        self.assertEqual((code, output["status"]), (0, "ACCEPTED"))
+
     @patch("production_cycle_cli.admit_live_review")
     @patch("production_cycle_cli.live_review_cycle.run_cycle")
     @patch("production_cycle_cli.agent_launcher.launch")
