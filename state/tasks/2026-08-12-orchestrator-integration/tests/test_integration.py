@@ -242,6 +242,16 @@ class LocalIntegrationTests(unittest.TestCase):
         self.assertTrue(coverage["notes"].startswith(original_notes + " | "))
         self.assertEqual(len(changes), 2)
 
+    def test_unsupported_evidence_shape_remains_contract_failure(self) -> None:
+        verdict = copy.deepcopy(self.verdict)
+        verdict["findings"][0]["evidence"] = None
+        verdict_path = self.root / "bad-evidence-shape.json"
+        write_json(verdict_path, verdict)
+        with self.assertRaises(projection.ContractValidationError):
+            projection.build_projection(
+                verdict_path, self.manifest_path, self.binding_path
+            )
+
     def test_blocking_limitation_cannot_project(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
         verdict["limitations"] = [{

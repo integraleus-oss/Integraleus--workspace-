@@ -121,15 +121,21 @@ def normalize_transport_defects(
     carriers: list[Any] = []
     for finding in normalized.get("findings", []):
         if isinstance(finding, dict):
-            carriers.extend(finding.get("evidence", []))
+            evidence = finding.get("evidence", [])
+            if isinstance(evidence, list):
+                carriers.extend(evidence)
     verification = normalized.get("verification")
     if isinstance(verification, dict):
         for result in verification.get("results", []):
             if isinstance(result, dict):
-                carriers.extend(result.get("evidence", []))
+                evidence = result.get("evidence", [])
+                if isinstance(evidence, list):
+                    carriers.extend(evidence)
     for symptom in normalized.get("infra_symptoms", []):
         if isinstance(symptom, dict):
-            carriers.extend(symptom.get("evidence", []))
+            evidence = symptom.get("evidence", [])
+            if isinstance(evidence, list):
+                carriers.extend(evidence)
     for evidence in carriers:
         if isinstance(evidence, dict) and isinstance(evidence.get("evidence_id"), str):
             defined_evidence.add(evidence["evidence_id"])
