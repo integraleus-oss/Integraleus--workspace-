@@ -1,6 +1,6 @@
 # Review slice: root guard snapshot and consume
 
-Review commit `8fe2ccc` as closure of `GUARD_SLICE_OUTPUT.md`, only for
+Review commit `5c528ad` as closure of `GUARD_SLICE_CLOSURE.md`, only for
 blocker/major defects in the Python guard.
 Verify safe bounded no-follow snapshot, whole-tree binding, PREPARE/RUN separation,
 fresh owner metadata, replay/expiry, snapshot readability/immutability, framing,

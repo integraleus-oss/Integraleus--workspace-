@@ -9,11 +9,12 @@ import os
 import pwd
 import secrets
 import signal
+import shutil
 import socket
 import stat
 import struct
 import subprocess
-import tempfile
+import threading
 import time
 from pathlib import Path
 
@@ -195,6 +196,9 @@ def _prepare(request: dict, now: int) -> dict:
     target = SNAPSHOT_ROOT / snapshot_id
     try:
         manifest = _copy_tree(source_fd, target)
+    except Exception:
+        shutil.rmtree(target, ignore_errors=True)
+        raise
     finally:
         os.close(source_fd)
     tree = json.dumps(manifest, separators=(",", ":"), ensure_ascii=False).encode()
@@ -207,42 +211,71 @@ def _prepare(request: dict, now: int) -> dict:
             "snapshotDigest": snapshot_digest, "runCommand": f"RUN ORCHESTRATOR PILOT {snapshot_digest}"}
 
 
+def _bounded_drain(stream, output: bytearray, overflow: threading.Event) -> None:
+    while True:
+        chunk = stream.read(65536)
+        if not chunk:
+            return
+        remaining = 1_048_576 - len(output)
+        if remaining > 0:
+            output.extend(chunk[:remaining])
+        if len(chunk) > remaining:
+            overflow.set()
+
+
+def _terminate_group(pid: int) -> None:
+    try:
+        os.killpg(pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    time.sleep(0.2)
+    try:
+        os.killpg(pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+
+
+def _wait_without_reaping(process: subprocess.Popen, timeout: int, overflow: threading.Event) -> int:
+    deadline = time.monotonic() + timeout
+    while True:
+        result = os.waitid(os.P_PID, process.pid, os.WEXITED | os.WNOHANG | os.WNOWAIT)
+        if result is not None and result.si_pid == process.pid:
+            _terminate_group(process.pid)
+            _pid, status = os.waitpid(process.pid, 0)
+            process.returncode = os.waitstatus_to_exitcode(status)
+            return process.returncode
+        if overflow.is_set():
+            _terminate_group(process.pid)
+            _pid, status = os.waitpid(process.pid, 0)
+            process.returncode = os.waitstatus_to_exitcode(status)
+            raise GuardError("runner output exceeded capture limit")
+        if time.monotonic() >= deadline:
+            _terminate_group(process.pid)
+            _pid, status = os.waitpid(process.pid, 0)
+            process.returncode = os.waitstatus_to_exitcode(status)
+            raise GuardError("runner timed out and its process group was terminated")
+        time.sleep(0.05)
+
+
 def _run_child(packet: Path) -> dict:
     user = pwd.getpwnam("stanislav")
     def demote() -> None:
         os.setgroups([])
         os.setgid(user.pw_gid)
         os.setuid(user.pw_uid)
-    with tempfile.TemporaryFile(mode="w+t") as stdout_file, tempfile.TemporaryFile(mode="w+t") as stderr_file:
-        process = subprocess.Popen(
-            ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"], cwd=str(RUNNER.parent),
-            stdout=stdout_file, stderr=stderr_file, text=True, preexec_fn=demote, start_new_session=True,
-            env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
-                 "USER": user.pw_name, "LOGNAME": user.pw_name})
-        timed_out = False
-        try:
-            process.wait(timeout=1800)
-        except subprocess.TimeoutExpired as exc:
-            timed_out = True
-            os.killpg(process.pid, signal.SIGTERM)
-            try:
-                process.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                os.killpg(process.pid, signal.SIGKILL)
-                process.wait(timeout=10)
-            raise GuardError("runner timed out and its process group was terminated") from exc
-        finally:
-            if not timed_out:
-                try:
-                    os.killpg(process.pid, signal.SIGTERM)
-                    time.sleep(0.2)
-                    os.killpg(process.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-        stdout_file.seek(0)
-        stdout = stdout_file.read(1_048_577)
-        if len(stdout) > 1_048_576:
-            raise GuardError("runner stdout exceeded capture limit")
+    process = subprocess.Popen(
+        ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"], cwd=str(RUNNER.parent),
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=demote, start_new_session=True,
+        env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
+             "USER": user.pw_name, "LOGNAME": user.pw_name})
+    stdout_data, stderr_data = bytearray(), bytearray()
+    overflow = threading.Event()
+    threads = [threading.Thread(target=_bounded_drain, args=(process.stdout, stdout_data, overflow), daemon=True),
+               threading.Thread(target=_bounded_drain, args=(process.stderr, stderr_data, overflow), daemon=True)]
+    for thread in threads: thread.start()
+    _wait_without_reaping(process, 1800, overflow)
+    for thread in threads: thread.join(timeout=2)
+    stdout = stdout_data.decode(errors="replace")
     terminal = stdout.strip().splitlines()[-1] if stdout.strip() else ""
     try:
         result = json.loads(terminal)
@@ -268,12 +301,15 @@ def _run_prepared(request: dict, now: int) -> dict:
     del prepared[str(request["snapshotId"])]
     _audit({"event": "ADMITTED", "at": now, "messageId": request["messageId"],
             "snapshotDigest": record["digest"]})
+    snapshot_dir = record["packet"].parent
     try:
         result = _run_child(record["packet"])
     except Exception as exc:
         _audit({"event": "FAILED", "at": int(time.time()), "messageId": request["messageId"],
                 "snapshotDigest": record["digest"], "error": type(exc).__name__})
         raise
+    finally:
+        shutil.rmtree(snapshot_dir, ignore_errors=True)
     return {"ok": True, "phase": "TERMINAL", "snapshotDigest": record["digest"], "result": result}
 
 
@@ -299,8 +335,16 @@ def _read_request(conn: socket.socket) -> dict:
     return value
 
 
+def _purge_expired(now: int) -> None:
+    for snapshot_id, record in list(prepared.items()):
+        if now - record["created"] > SNAPSHOT_TTL_SECONDS:
+            shutil.rmtree(record["packet"].parent, ignore_errors=True)
+            del prepared[snapshot_id]
+
+
 def handle(conn: socket.socket) -> dict:
     gateway_pid = _gateway_peer(conn); request = _read_request(conn); now = int(time.time())
+    _purge_expired(now)
     response = _prepare(request, now) if request.get("action") == "prepare" else _run_prepared(request, now)
     _audit({"event": response["phase"], "at": now, "gatewayPid": gateway_pid,
             "messageId": request["messageId"], "snapshotDigest": response["snapshotDigest"]})

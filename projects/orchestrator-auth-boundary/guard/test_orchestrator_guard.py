@@ -1,6 +1,8 @@
 import importlib.util
+import io
 import os
 import socket
+import subprocess
 import tempfile
 import time
 import unittest
@@ -100,6 +102,26 @@ class GuardTests(unittest.TestCase):
             right.sendall(b'{"action":"prepare"}\n')
             self.assertEqual(guard._read_request(left)["action"], "prepare")
         finally: left.close(); right.close()
+
+    def test_bounded_drain_caps_output(self):
+        output = bytearray(); overflow = guard.threading.Event()
+        guard._bounded_drain(io.BytesIO(b"x" * 1_100_000), output, overflow)
+        self.assertEqual(len(output), 1_048_576)
+        self.assertTrue(overflow.is_set())
+
+    def test_wait_kills_background_process_group_before_reap(self):
+        process = subprocess.Popen(["/bin/sh", "-c", "sleep 30 & exit 0"], start_new_session=True)
+        code = guard._wait_without_reaping(process, 5, guard.threading.Event())
+        self.assertEqual(code, 0)
+        with self.assertRaises(ProcessLookupError):
+            os.killpg(process.pid, 0)
+
+    def test_expired_snapshot_is_removed(self):
+        response = guard._prepare(self.prepare_request(), self.now)
+        target = guard.prepared[response["snapshotId"]]["packet"].parent
+        guard._purge_expired(self.now + guard.SNAPSHOT_TTL_SECONDS + 1)
+        self.assertFalse(target.exists())
+        self.assertNotIn(response["snapshotId"], guard.prepared)
         left, right = socket.socketpair()
         try:
             right.sendall(b'{}\n{}\n')
