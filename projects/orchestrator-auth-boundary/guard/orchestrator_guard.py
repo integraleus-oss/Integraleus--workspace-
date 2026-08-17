@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import pwd
+import shutil
 import socket
 import struct
 import subprocess
@@ -61,7 +62,7 @@ def _packet(value: str, expected_digest: str) -> Path:
 
 def _validate(request: dict, now: int) -> Path:
     required = {"action", "accountId", "channelId", "chatId", "topicId", "messageId",
-                "senderId", "timestamp", "packetPath", "packetDigest"}
+                "senderId", "timestamp", "content", "packetPath", "packetDigest"}
     if set(request) != required or request.get("action") != "run_one":
         raise GuardError("request shape is invalid")
     if (request["accountId"] != "default" or request["channelId"] != "telegram"
@@ -70,10 +71,26 @@ def _validate(request: dict, now: int) -> Path:
         raise GuardError("trusted inbound metadata mismatch")
     if not str(request["messageId"]).isdigit():
         raise GuardError("message id is invalid")
+    if request["content"].strip() != f'RUN ORCHESTRATOR PILOT {request["packetDigest"]}':
+        raise GuardError("owner command is not bound to the packet digest")
     timestamp = int(request["timestamp"])
     if timestamp > now + 5 or now - timestamp > MAX_AGE_SECONDS:
         raise GuardError("owner message is not fresh")
     return _packet(str(request["packetPath"]), str(request["packetDigest"]))
+
+
+def _stage_packet(packet: Path, digest: str) -> Path:
+    source_dir = packet.parent
+    if any(path.is_symlink() for path in source_dir.rglob("*")):
+        raise GuardError("packet directory contains a symlink")
+    target = Path("/var/lib/orchestrator-guard/staged") / digest.removeprefix("sha256:")
+    if target.exists():
+        shutil.rmtree(target)
+    shutil.copytree(source_dir, target, symlinks=False)
+    staged = target / packet.name
+    if _digest(staged) != digest:
+        raise GuardError("root-owned staged packet digest mismatch")
+    return staged
 
 
 def _audit(record: dict) -> None:
@@ -92,26 +109,40 @@ def _run(packet: Path) -> dict:
     completed = subprocess.run(
         ["/usr/bin/python3", str(RUNNER), str(packet), "--guard-authorized"],
         cwd=str(RUNNER.parent), capture_output=True, text=True, timeout=1800,
-        preexec_fn=demote, env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir},
+        preexec_fn=demote, start_new_session=True,
+        env={"PATH": "/home/stanislav/.local/bin:/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
+             "USER": user.pw_name, "LOGNAME": user.pw_name},
     )
     terminal = completed.stdout.strip().splitlines()[-1] if completed.stdout.strip() else ""
     try:
         result = json.loads(terminal)
     except json.JSONDecodeError as exc:
         raise GuardError("runner did not produce structured terminal evidence") from exc
-    if completed.returncode not in {0, 4, 130}:
+    if completed.returncode not in {0, 3, 4, 130}:
         raise GuardError(f"runner failed with exit {completed.returncode}")
     return result
 
 
 def handle(conn: socket.socket) -> dict:
     gateway_pid = _gateway_peer(conn)
-    raw = conn.recv(MAX_REQUEST + 1)
+    conn.settimeout(5)
+    chunks = []
+    size = 0
+    while True:
+        chunk = conn.recv(min(4096, MAX_REQUEST + 1 - size))
+        if not chunk:
+            break
+        chunks.append(chunk)
+        size += len(chunk)
+        if size > MAX_REQUEST or b"\n" in chunk:
+            break
+    raw = b"".join(chunks)
     if len(raw) > MAX_REQUEST or not raw.endswith(b"\n"):
         raise GuardError("request framing is invalid")
     request = json.loads(raw)
     now = int(time.time())
     packet = _validate(request, now)
+    packet = _stage_packet(packet, request["packetDigest"])
     identity = f'{request["chatId"]}:{request["topicId"]}:{request["messageId"]}'
     used = Path("/var/lib/orchestrator-guard/used") / hashlib.sha256(identity.encode()).hexdigest()
     used.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -129,6 +160,8 @@ def handle(conn: socket.socket) -> dict:
 
 
 def main() -> int:
+    if os.environ.get("LISTEN_PID") != str(os.getpid()) or os.environ.get("LISTEN_FDS") != "1":
+        raise SystemExit("guard requires exactly one systemd-activated socket")
     listener = socket.fromfd(3, socket.AF_UNIX, socket.SOCK_STREAM)
     while True:
         conn, _ = listener.accept()

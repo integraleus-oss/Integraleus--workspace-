@@ -14,7 +14,7 @@ const TTL_MS = 120_000;
 
 type Inbound = {
   sessionKey: string; accountId: string; channelId: string; chatId: string;
-  topicId: string; messageId: string; senderId: string; timestamp: number; observedAt: number;
+  topicId: string; messageId: string; senderId: string; timestamp: number; content: string; observedAt: number;
 };
 
 const inboundBySession = new Map<string, Inbound>();
@@ -79,6 +79,7 @@ const plugin = definePluginEntry({
         sessionKey, accountId: event.accountId ?? ctx.accountId ?? "", channelId: ctx.channelId,
         chatId: CHAT_ID, topicId, messageId: String(messageId), senderId: String(senderId),
         timestamp: rawTimestamp > 10_000_000_000 ? Math.floor(rawTimestamp / 1000) : Math.floor(rawTimestamp),
+        content: event.content,
         observedAt: Date.now(),
       });
     }, { priority: 100, timeoutMs: 1_000 });
@@ -95,6 +96,9 @@ const plugin = definePluginEntry({
         if (!inbound || inbound.senderId !== ctx.requesterSenderId) throw new Error("no fresh trusted inbound owner metadata");
         inboundBySession.delete(ctx.sessionKey);
         const packet = await inspectPacket(String((rawParams as { packetPath: string }).packetPath));
+        if (inbound.content.trim() !== `RUN ORCHESTRATOR PILOT ${packet.digest}`) {
+          throw new Error("owner message must contain the exact pilot command and packet digest");
+        }
         const response = await callGuard({ action: "run_one", ...inbound, sessionKey: undefined,
           observedAt: undefined, packetPath: packet.path, packetDigest: packet.digest });
         return { content: [{ type: "text", text: JSON.stringify(response) }], details: response };

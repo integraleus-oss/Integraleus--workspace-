@@ -1,21 +1,27 @@
-# Independent review: Gateway authorization boundary
+# Independent review: OS orchestrator authorization guard
 
-Review the current uncommitted changes for the owner-controlled foreground
-orchestrator authorization boundary. Read only these files and their directly
-used OpenClaw SDK types:
+Review commit `a9a830e` read-only. Return ACCEPT only with zero blocker and zero
+major; otherwise REWORK with file/line findings.
 
-- `projects/orchestrator-auth-boundary/src/index.ts`
-- `projects/orchestrator-auth-boundary/openclaw.plugin.json`
-- `projects/orchestrator-auth-boundary/package.json`
-- `state/tasks/2026-08-12-orchestrator-integration/openclaw_foreground_adapter.py`
-- `state/tasks/2026-08-12-orchestrator-integration/tests/test_openclaw_foreground_adapter.py`
-- `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
+Spec axis:
 
-Spec axis: verify trusted owner metadata, exact packet path/digest binding,
-short TTL, single use, restart invalidation, atomic consume, replay resistance,
-fail-closed behavior, and no autonomous commit/transfer/push/deploy capability.
+- only a fresh owner message from Telegram account `default`, fixed chat/topic,
+  owner sender id, and exact packet digest may start one run;
+- root guard must verify the real OpenClaw Gateway peer PID/UID/executable/cmdline/cgroup;
+- exact request shape, freshness, canonical non-symlink path, digest, and replay
+  identity fail closed;
+- root-owned snapshot is launched once in foreground; the old user-space adapter
+  and direct hidden CLI flag fail closed outside the guard parent/cgroup;
+- no token crosses argv; no cron, commit, transfer, push, or deploy capability;
+- systemd unit minimizes root exposure and has a practical rollback.
 
-Standards axis: check OpenClaw plugin API correctness, races/TOCTOU, unsafe path
-handling, response parsing, secret/token exposure, cleanup, error handling, and
-test gaps. Return ACCEPT only with zero blocker and zero major; otherwise REWORK
-with precise file/line findings. Do not edit files.
+Standards axis:
+
+- OpenClaw hook/tool API correctness and actual inbound metadata availability;
+- Unix socket framing, SO_PEERCRED use, PID/cgroup races, replay atomicity,
+  TOCTOU, privilege drop, environment, subprocess and timeout behavior;
+- root service attack surface, filesystem permissions and systemd hardening;
+- evidence leakage, partial failure state, interruption and test gaps.
+
+The change is not installed. Assess whether it is safe to install for one
+controlled pilot. Do not edit files.

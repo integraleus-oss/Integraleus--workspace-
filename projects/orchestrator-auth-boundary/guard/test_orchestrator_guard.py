@@ -26,6 +26,7 @@ class GuardValidationTests(unittest.TestCase):
             "senderId": guard.OWNER_ID, "timestamp": self.now,
             "packetPath": str(self.packet), "packetDigest": guard._digest(self.packet),
         }
+        self.request["content"] = f'RUN ORCHESTRATOR PILOT {self.request["packetDigest"]}'
 
     def tearDown(self):
         self.root_patch.stop()
@@ -43,6 +44,10 @@ class GuardValidationTests(unittest.TestCase):
             request = dict(self.request, **{field: value})
             with self.subTest(field=field), self.assertRaises(guard.GuardError):
                 guard._validate(request, self.now)
+
+    def test_rejects_command_not_bound_to_digest(self):
+        with self.assertRaises(guard.GuardError):
+            guard._validate(dict(self.request, content="Разрешаю"), self.now)
 
     def test_rejects_symlink_and_outside_packet(self):
         link = self.root / "link.json"
