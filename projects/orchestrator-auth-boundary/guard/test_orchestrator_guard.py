@@ -102,6 +102,11 @@ class GuardTests(unittest.TestCase):
             right.sendall(b'{"action":"prepare"}\n')
             self.assertEqual(guard._read_request(left)["action"], "prepare")
         finally: left.close(); right.close()
+        left, right = socket.socketpair()
+        try:
+            right.sendall(b'{}\n{}\n')
+            with self.assertRaises(guard.GuardError): guard._read_request(left)
+        finally: left.close(); right.close()
 
     def test_bounded_drain_caps_output(self):
         output = bytearray(); overflow = guard.threading.Event()
@@ -122,11 +127,17 @@ class GuardTests(unittest.TestCase):
         guard._purge_expired(self.now + guard.SNAPSHOT_TTL_SECONDS + 1)
         self.assertFalse(target.exists())
         self.assertNotIn(response["snapshotId"], guard.prepared)
-        left, right = socket.socketpair()
-        try:
-            right.sendall(b'{}\n{}\n')
-            with self.assertRaises(guard.GuardError): guard._read_request(left)
-        finally: left.close(); right.close()
+
+    def test_run_child_reclaims_process_if_thread_start_fails(self):
+        process = subprocess.Popen(["/bin/sh", "-c", "sleep 30"], start_new_session=True,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        with patch.object(guard.subprocess, "Popen", return_value=process), \
+                patch.object(guard.threading.Thread, "start", side_effect=RuntimeError("thread failure")):
+            with self.assertRaisesRegex(RuntimeError, "thread failure"):
+                guard._run_child(self.packet)
+        self.assertIsNotNone(process.returncode)
+        with self.assertRaises(ProcessLookupError):
+            os.killpg(process.pid, 0)
 
 
 if __name__ == "__main__": unittest.main()

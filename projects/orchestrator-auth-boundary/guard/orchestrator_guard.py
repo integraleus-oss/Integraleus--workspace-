@@ -272,9 +272,21 @@ def _run_child(packet: Path) -> dict:
     overflow = threading.Event()
     threads = [threading.Thread(target=_bounded_drain, args=(process.stdout, stdout_data, overflow), daemon=True),
                threading.Thread(target=_bounded_drain, args=(process.stderr, stderr_data, overflow), daemon=True)]
-    for thread in threads: thread.start()
-    _wait_without_reaping(process, 1800, overflow)
-    for thread in threads: thread.join(timeout=2)
+    try:
+        for thread in threads:
+            thread.start()
+        _wait_without_reaping(process, 1800, overflow)
+        for thread in threads:
+            thread.join(timeout=2)
+    except BaseException:
+        if process.returncode is None:
+            _terminate_group(process.pid)
+            try:
+                _pid, status = os.waitpid(process.pid, 0)
+                process.returncode = os.waitstatus_to_exitcode(status)
+            except ChildProcessError:
+                pass
+        raise
     stdout = stdout_data.decode(errors="replace")
     terminal = stdout.strip().splitlines()[-1] if stdout.strip() else ""
     try:
