@@ -46,6 +46,98 @@ def _load_module(name: str, path: Path) -> Any:
 
 VALIDATOR = _load_module("review_contract_validator", CORE / "validate_review_verdict.py")
 EVIDENCE_ID_RE = re.compile(r"^ev_[0-9a-f]{32}$")
+COMMAND_EVIDENCE_KINDS = frozenset({"command_output", "test_result", "build_log"})
+PRESERVED_VERIFICATION_STATUSES = frozenset({"still_open", "not_verifiable"})
+POSITIVE_VERIFICATION_STATUSES = frozenset({"appears_fixed", "no_longer_applicable"})
+EXPECTED_VERIFICATION_STATUSES = (
+    PRESERVED_VERIFICATION_STATUSES | POSITIVE_VERIFICATION_STATUSES
+)
+EXPECTED_CRITERIA_STATUSES = frozenset({
+    "satisfied", "violated", "partially_satisfied", "not_verifiable", "not_reviewed"
+})
+EVIDENCE_DEPENDENT_CRITERIA_STATUSES = frozenset({
+    "satisfied", "partially_satisfied"
+})
+EXPECTED_VERIFICATION_METHODS = frozenset({
+    "executed_test", "manual_execution", "code_inspection", "static_analysis",
+    "gate_artifact_review", "not_attempted",
+})
+
+
+def _derive_fingerprint_keys(schema: dict[str, Any]) -> frozenset[str]:
+    try:
+        fingerprint = schema["$defs"]["fingerprint"]
+        if not isinstance(fingerprint, dict):
+            raise TypeError("fingerprint schema must be an object")
+        properties = fingerprint["properties"]
+        required = fingerprint["required"]
+    except (KeyError, TypeError) as exc:
+        raise RuntimeError("accepted fingerprint schema is unreadable") from exc
+    allowed_schema_keys = {"type", "properties", "required", "additionalProperties"}
+    if (
+        set(fingerprint) != allowed_schema_keys
+        or fingerprint.get("type") != "object"
+        or not isinstance(properties, dict)
+        or not isinstance(required, list)
+        or fingerprint.get("additionalProperties") is not False
+        or len(required) != len(set(required))
+        or set(required) != set(properties)
+    ):
+        raise RuntimeError("accepted fingerprint schema is not a flat closed object")
+    return frozenset(properties)
+
+
+def _load_accepted_schema() -> dict[str, Any]:
+    try:
+        schema = json.loads(VALIDATOR.DEFAULT_SCHEMA.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError("accepted review schema is unreadable") from exc
+    if not isinstance(schema, dict):
+        raise RuntimeError("accepted review schema is unreadable")
+    return schema
+
+
+def _derive_positive_verification_statuses(schema: dict[str, Any]) -> frozenset[str]:
+    try:
+        statuses = schema["$defs"]["verification"]["properties"]["results"][
+            "items"
+        ]["properties"]["observed_status"]["enum"]
+    except (KeyError, TypeError) as exc:
+        raise RuntimeError("accepted verification status schema is unreadable") from exc
+    if (
+        not isinstance(statuses, list)
+        or any(not isinstance(item, str) for item in statuses)
+        or len(statuses) != len(set(statuses))
+        or set(statuses) != EXPECTED_VERIFICATION_STATUSES
+    ):
+        raise RuntimeError("accepted verification status schema is unsupported")
+    return POSITIVE_VERIFICATION_STATUSES
+
+
+def _assert_criteria_contract_enums(schema: dict[str, Any]) -> None:
+    try:
+        properties = schema["$defs"]["criterion_coverage"]["properties"]
+        statuses = properties["status"]["enum"]
+        methods = properties["verification_method"]["enum"]
+    except (KeyError, TypeError) as exc:
+        raise RuntimeError("accepted criteria schema is unreadable") from exc
+    if (
+        not isinstance(statuses, list)
+        or not isinstance(methods, list)
+        or set(statuses) != EXPECTED_CRITERIA_STATUSES
+        or len(statuses) != len(set(statuses))
+        or set(methods) != EXPECTED_VERIFICATION_METHODS
+        or len(methods) != len(set(methods))
+    ):
+        raise RuntimeError("accepted criteria schema is unsupported")
+
+
+ACCEPTED_SCHEMA = _load_accepted_schema()
+FINGERPRINT_KEYS = _derive_fingerprint_keys(ACCEPTED_SCHEMA)
+SCHEMA_POSITIVE_VERIFICATION_STATUSES = _derive_positive_verification_statuses(
+    ACCEPTED_SCHEMA
+)
+_assert_criteria_contract_enums(ACCEPTED_SCHEMA)
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -106,14 +198,28 @@ def normalize_derived_review_ids(verdict: dict[str, Any]) -> dict[str, Any]:
 
 def normalize_transport_defects(
     verdict: dict[str, Any],
+    validation_errors: list[dict[str, Any]],
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Repair only bounded, meaning-preserving reviewer transport defects."""
     normalized = copy.deepcopy(verdict)
     changes: list[dict[str, Any]] = []
+    raw_errors = validation_errors
+    verification = normalized.get("verification")
 
     for index, finding in enumerate(_list_items(normalized.get("findings", []))):
         if not isinstance(finding, dict):
             continue
+        fingerprint = finding.get("fingerprint")
+        if isinstance(fingerprint, dict):
+            unknown_keys = sorted(set(fingerprint) - FINGERPRINT_KEYS)
+            if unknown_keys:
+                for key in unknown_keys:
+                    del fingerprint[key]
+                changes.append({
+                    "operation": "remove_unknown_fingerprint_properties",
+                    "pointer": f"/findings/{index}/fingerprint",
+                    "removed": unknown_keys,
+                })
         title = finding.get("title")
         if isinstance(title, str) and len(title) > 160:
             finding["title"] = title[:160]
@@ -124,25 +230,95 @@ def normalize_transport_defects(
                 "normalized_length": 160,
             })
 
+    def discard_commandless_evidence(owner: dict[str, Any], pointer: str) -> bool:
+        evidence = owner.get("evidence")
+        if not isinstance(evidence, list):
+            return False
+        retained: list[Any] = []
+        pending_changes: list[dict[str, Any]] = []
+        for evidence_index, item in enumerate(evidence):
+            item_pointer = f"{pointer}/{evidence_index}"
+            item_errors = [
+                error for error in raw_errors
+                if isinstance(error.get("pointer"), str)
+                and (
+                    error["pointer"] == item_pointer
+                    or error["pointer"].startswith(item_pointer + "/")
+                )
+            ]
+            missing_command_errors = [
+                error for error in item_errors
+                if error.get("layer") == "semantic"
+                and error.get("code") == "kind_inconsistent_evidence"
+                and error.get("pointer") == item_pointer + "/command"
+            ]
+            secondary_missing_command_errors = [
+                error for error in item_errors
+                if error.get("layer") == "semantic"
+                and error.get("code") == "weak_appears_fixed_evidence"
+                and error.get("pointer") == item_pointer
+            ]
+            only_missing_command = (
+                isinstance(item, dict)
+                and item.get("kind") in COMMAND_EVIDENCE_KINDS
+                and "command" not in item
+                and len(missing_command_errors) == 1
+                and len(secondary_missing_command_errors) <= 1
+                and len(item_errors) == (
+                    len(missing_command_errors) + len(secondary_missing_command_errors)
+                )
+            )
+            if only_missing_command:
+                pending_changes.append({
+                    "operation": "discard_evidence_without_required_command",
+                    "pointer": f"{pointer}/{evidence_index}",
+                    "evidence_id": item.get("evidence_id"),
+                    "kind": item.get("kind"),
+                })
+                continue
+            retained.append(item)
+        removed_any = bool(pending_changes) and bool(retained)
+        if removed_any:
+            owner["evidence"] = retained
+            changes.extend(pending_changes)
+        return removed_any
+
+    for index, finding in enumerate(_list_items(normalized.get("findings", []))):
+        if isinstance(finding, dict):
+            discard_commandless_evidence(finding, f"/findings/{index}/evidence")
+    if isinstance(verification, dict):
+        for index, result in enumerate(_list_items(verification.get("results", []))):
+            if isinstance(result, dict):
+                removed = discard_commandless_evidence(
+                    result, f"/verification/results/{index}/evidence"
+                )
+                if (
+                    removed
+                    and result.get("observed_status")
+                    in SCHEMA_POSITIVE_VERIFICATION_STATUSES
+                ):
+                    result["observed_status"] = "not_verifiable"
+                    changes.append({
+                        "operation": "mark_verification_not_verifiable",
+                        "pointer": f"/verification/results/{index}",
+                        "reason": "invalid_command_evidence_discarded",
+                    })
+    for index, symptom in enumerate(_list_items(normalized.get("infra_symptoms", []))):
+        if isinstance(symptom, dict):
+            discard_commandless_evidence(symptom, f"/infra_symptoms/{index}/evidence")
+
     defined_evidence: set[str] = set()
     carriers: list[Any] = []
     for finding in _list_items(normalized.get("findings", [])):
-        if isinstance(finding, dict):
-            evidence = finding.get("evidence", [])
-            if isinstance(evidence, list):
-                carriers.extend(evidence)
-    verification = normalized.get("verification")
+        if isinstance(finding, dict) and isinstance(finding.get("evidence"), list):
+            carriers.extend(finding["evidence"])
     if isinstance(verification, dict):
         for result in _list_items(verification.get("results", [])):
-            if isinstance(result, dict):
-                evidence = result.get("evidence", [])
-                if isinstance(evidence, list):
-                    carriers.extend(evidence)
+            if isinstance(result, dict) and isinstance(result.get("evidence"), list):
+                carriers.extend(result["evidence"])
     for symptom in _list_items(normalized.get("infra_symptoms", [])):
-        if isinstance(symptom, dict):
-            evidence = symptom.get("evidence", [])
-            if isinstance(evidence, list):
-                carriers.extend(evidence)
+        if isinstance(symptom, dict) and isinstance(symptom.get("evidence"), list):
+            carriers.extend(symptom["evidence"])
     for evidence in carriers:
         if isinstance(evidence, dict) and isinstance(evidence.get("evidence_id"), str):
             defined_evidence.add(evidence["evidence_id"])
@@ -167,7 +343,10 @@ def normalize_transport_defects(
                 "pointer": f"/{collection_name}/{index}/evidence_ids",
                 "removed": removed,
             })
-            if collection_name == "criteria_coverage" and item.get("status") == "satisfied":
+            if (
+                collection_name == "criteria_coverage"
+                and item.get("status") in EVIDENCE_DEPENDENT_CRITERIA_STATUSES
+            ):
                 item["status"] = "not_verifiable"
                 item["verification_method"] = "not_attempted"
                 normalization_note = (
@@ -198,7 +377,9 @@ def build_projection(
     if transport_validation.get("layers", {}).get("transport") is False:
         raise ContractValidationError(transport_validation)
     raw_verdict = _load_json(verdict_path)
-    transport_normalized, transport_normalizations = normalize_transport_defects(raw_verdict)
+    transport_normalized, transport_normalizations = normalize_transport_defects(
+        raw_verdict, transport_validation.get("errors", [])
+    )
     normalized_verdict = normalize_derived_review_ids(transport_normalized)
     validation_path = verdict_path
     temporary_path: Path | None = None
