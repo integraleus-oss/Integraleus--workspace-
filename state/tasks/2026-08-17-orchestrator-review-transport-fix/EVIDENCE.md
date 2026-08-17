@@ -1,6 +1,6 @@
 # Evidence
 
-Status: IN PROGRESS
+Status: COMPLETE
 
 - Source failures: dangling evidence references and `findings[].title` over 160 characters.
 - Capability-grant diff is frozen at SHA-256 `98f3f457cfdb83fb97f6e1af97a0c13ad57774891187a675537ac891b7dccf51`.
@@ -24,3 +24,20 @@ Status: IN PROGRESS
 - Fifth Codex review through `5bcde6a` found one P2: appending a normalization
   suffix could overflow the 2,000-character notes limit. Existing notes are now
   preserved byte-for-byte; the separate normalization log carries the reason.
+- Final independent Codex review through `435278e`: zero findings; patch correct;
+  confidence 0.91.
+- Final transport verification: integration 125/125 PASS; policy core 87/87 PASS;
+  `git diff --check` PASS.
+- Fresh sealed capability-grant review root:
+  `/home/stanislav/agent-runs/orchestrator-worktrees/manual-pilot-001-capability-grant-review-retry-2`.
+- Fresh review launch: OK, no format or contract retry, contract-valid verdict.
+- Policy outcome: `REWORK / R11_OPEN_FINDINGS`.
+- Findings: 1 blocker, 0 major, 2 nit. Blocker: runtime can emit a
+  `modelPolicy` shape rejected by the new capability-grant schema.
+- Post-review diff SHA-256 remains
+  `98f3f457cfdb83fb97f6e1af97a0c13ad57774891187a675537ac891b7dccf51`;
+  exactly the same three files are modified; implementation tests 46/46 PASS.
+- Source `home-agent-factory` remains clean at `8985b8e`. No transfer, source
+  commit, push, deploy, Gateway, systemd, cron, or background process occurred.
+- Capability-grant transfer remains prohibited pending a separate authorized
+  REWORK implementation and subsequent review.

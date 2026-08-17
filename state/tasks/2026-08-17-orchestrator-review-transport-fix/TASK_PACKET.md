@@ -1,6 +1,6 @@
 # Reviewer transport normalization
 
-Status: IN PROGRESS
+Status: COMPLETE — transport ACCEPT; pilot REWORK
 Risk: MEDIUM
 
 ## Goal
@@ -32,6 +32,6 @@ undefined evidence IDs.
 - [x] Implementation
 - [x] Regression tests
 - [x] Full tests
-- [ ] Independent review
-- [ ] Unchanged capability-grant review retry
-- [ ] Final evidence and commit
+- [x] Independent review
+- [x] Unchanged capability-grant review retry
+- [x] Final evidence and commit
