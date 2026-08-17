@@ -174,11 +174,8 @@ def normalize_transport_defects(
                     "Evidence references were undefined; criterion is not verifiable."
                 )
                 prior_notes = item.get("notes")
-                item["notes"] = (
-                    f"{prior_notes} | {normalization_note}"
-                    if isinstance(prior_notes, str) and prior_notes
-                    else normalization_note
-                )
+                if not isinstance(prior_notes, str) or not prior_notes:
+                    item["notes"] = normalization_note
                 changes.append({
                     "operation": "mark_criterion_not_verifiable",
                     "pointer": f"/criteria_coverage/{index}/status",

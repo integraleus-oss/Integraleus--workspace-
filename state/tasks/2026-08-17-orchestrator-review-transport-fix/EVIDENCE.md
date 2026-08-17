@@ -21,3 +21,6 @@ Status: IN PROGRESS
   leaves every malformed array untouched for contract rejection.
 - The first post-fix run exposed an invalid regression fixture (`ev_missing_001`);
   corrected to a schema-shaped but undefined ID before final verification.
+- Fifth Codex review through `5bcde6a` found one P2: appending a normalization
+  suffix could overflow the 2,000-character notes limit. Existing notes are now
+  preserved byte-for-byte; the separate normalization log carries the reason.

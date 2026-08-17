@@ -239,8 +239,15 @@ class LocalIntegrationTests(unittest.TestCase):
         self.assertEqual(coverage["status"], "not_verifiable")
         self.assertEqual(coverage["verification_method"], "not_attempted")
         self.assertEqual(coverage["evidence_ids"], [])
-        self.assertTrue(coverage["notes"].startswith(original_notes + " | "))
+        self.assertEqual(coverage["notes"], original_notes)
         self.assertEqual(len(changes), 2)
+
+    def test_max_length_criterion_notes_are_preserved(self) -> None:
+        verdict, _ = self._nonblocking_final_verdict_and_manifest()
+        verdict["criteria_coverage"][0]["notes"] = "N" * 2000
+        verdict["criteria_coverage"][0]["evidence_ids"] = ["ev_" + "0" * 32]
+        normalized, _ = projection.normalize_transport_defects(verdict)
+        self.assertEqual(normalized["criteria_coverage"][0]["notes"], "N" * 2000)
 
     def test_unsupported_evidence_shape_remains_contract_failure(self) -> None:
         verdict = copy.deepcopy(self.verdict)
