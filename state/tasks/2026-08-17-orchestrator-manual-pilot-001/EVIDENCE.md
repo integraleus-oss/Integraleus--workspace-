@@ -25,3 +25,15 @@
 - Gateway, systemd, cron, push, deploy and unattended execution were untouched.
 - Run evidence:
   `/home/stanislav/agent-runs/orchestrator-worktrees/manual-pilot-001-capability-grant-run`.
+
+## Review-only retry
+
+- Owner authorized one bounded retry in Telegram message `3326`.
+- Codex was not launched; diff stayed byte-for-byte fixed at SHA-256
+  `98f3f457cfdb83fb97f6e1af97a0c13ad57774891187a675537ac891b7dccf51`.
+- Initial review contained dangling evidence references. The bounded repair
+  introduced a new schema error: an over-length finding title.
+- No deterministic decision was admitted. Final status remains `ESCALATED` and
+  transfer remains prohibited.
+- Repeated verification: 46/46 tests and `git diff --check` PASS.
+- Detailed result: `../2026-08-17-orchestrator-manual-pilot-001-review-retry/RESULT.md`.
