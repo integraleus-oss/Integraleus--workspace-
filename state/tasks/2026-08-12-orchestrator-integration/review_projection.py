@@ -58,6 +58,11 @@ def _digest(value: Any) -> str:
     return "sha256:" + hashlib.sha256(raw).hexdigest()
 
 
+def _list_items(value: Any) -> list[Any]:
+    """Return list members without masking a malformed value from validation."""
+    return value if isinstance(value, list) else []
+
+
 def normalize_derived_review_ids(verdict: dict[str, Any]) -> dict[str, Any]:
     """Canonicalize contract-derived IDs without changing review substance."""
     normalized = copy.deepcopy(verdict)
@@ -80,13 +85,13 @@ def normalize_derived_review_ids(verdict: dict[str, Any]) -> dict[str, Any]:
             occurrence_map[old_occurrence] = new_occurrence
         finding["finding_id"] = new_finding
         finding["occurrence_id"] = new_occurrence
-    for coverage in normalized.get("criteria_coverage", []):
+    for coverage in _list_items(normalized.get("criteria_coverage", [])):
         if isinstance(coverage, dict) and isinstance(coverage.get("linked_occurrence_ids"), list):
             coverage["linked_occurrence_ids"] = [occurrence_map.get(item, item)
                                                    for item in coverage["linked_occurrence_ids"]]
     verification = normalized.get("verification")
     if isinstance(verification, dict):
-        for result in verification.get("results", []):
+        for result in _list_items(verification.get("results", [])):
             if not isinstance(result, dict):
                 continue
             if isinstance(result.get("finding_id"), str):
@@ -104,7 +109,7 @@ def normalize_transport_defects(
     normalized = copy.deepcopy(verdict)
     changes: list[dict[str, Any]] = []
 
-    for index, finding in enumerate(normalized.get("findings", [])):
+    for index, finding in enumerate(_list_items(normalized.get("findings", []))):
         if not isinstance(finding, dict):
             continue
         title = finding.get("title")
@@ -119,19 +124,19 @@ def normalize_transport_defects(
 
     defined_evidence: set[str] = set()
     carriers: list[Any] = []
-    for finding in normalized.get("findings", []):
+    for finding in _list_items(normalized.get("findings", [])):
         if isinstance(finding, dict):
             evidence = finding.get("evidence", [])
             if isinstance(evidence, list):
                 carriers.extend(evidence)
     verification = normalized.get("verification")
     if isinstance(verification, dict):
-        for result in verification.get("results", []):
+        for result in _list_items(verification.get("results", [])):
             if isinstance(result, dict):
                 evidence = result.get("evidence", [])
                 if isinstance(evidence, list):
                     carriers.extend(evidence)
-    for symptom in normalized.get("infra_symptoms", []):
+    for symptom in _list_items(normalized.get("infra_symptoms", [])):
         if isinstance(symptom, dict):
             evidence = symptom.get("evidence", [])
             if isinstance(evidence, list):
@@ -141,7 +146,7 @@ def normalize_transport_defects(
             defined_evidence.add(evidence["evidence_id"])
 
     for collection_name in ("criteria_coverage", "limitations"):
-        for index, item in enumerate(normalized.get(collection_name, [])):
+        for index, item in enumerate(_list_items(normalized.get(collection_name, []))):
             if not isinstance(item, dict) or not isinstance(item.get("evidence_ids"), list):
                 continue
             original = item["evidence_ids"]

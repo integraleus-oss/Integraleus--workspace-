@@ -252,6 +252,24 @@ class LocalIntegrationTests(unittest.TestCase):
                 verdict_path, self.manifest_path, self.binding_path
             )
 
+    def test_unsupported_collection_shapes_remain_contract_failures(self) -> None:
+        cases = (
+            ("findings", lambda value: value.__setitem__("findings", None)),
+            ("criteria", lambda value: value.__setitem__("criteria_coverage", None)),
+            ("limitations", lambda value: value.__setitem__("limitations", None)),
+            ("infra", lambda value: value.__setitem__("infra_symptoms", None)),
+        )
+        for name, mutate in cases:
+            with self.subTest(name=name):
+                verdict = copy.deepcopy(self.verdict)
+                mutate(verdict)
+                verdict_path = self.root / f"bad-{name}-shape.json"
+                write_json(verdict_path, verdict)
+                with self.assertRaises(projection.ContractValidationError):
+                    projection.build_projection(
+                        verdict_path, self.manifest_path, self.binding_path
+                    )
+
     def test_blocking_limitation_cannot_project(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
         verdict["limitations"] = [{
