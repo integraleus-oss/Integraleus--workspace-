@@ -62,6 +62,21 @@ class GuardTests(unittest.TestCase):
         self.base["messageId"] = "3302"
         with self.assertRaises(guard.GuardError): guard._prepare(self.prepare_request(), self.now)
 
+    def test_prepare_rejects_unbound_command_and_directory_fanout(self):
+        request = self.prepare_request()
+        with self.assertRaises(guard.GuardError):
+            guard._prepare(dict(request, content="PREPARE ORCHESTRATOR PILOT"), self.now)
+        self.base["messageId"] = "3302"
+        for index in range(guard.MAX_ENTRIES + 1):
+            (self.packet_dir / f"d{index}").mkdir()
+        with self.assertRaisesRegex(guard.GuardError, "entry count"):
+            guard._prepare(self.prepare_request(), self.now)
+
+    def test_prepare_rejects_hardlinked_input(self):
+        os.link(self.packet_dir / "task.md", self.packet_dir / "hardlink.md")
+        with self.assertRaisesRegex(guard.GuardError, "link count"):
+            guard._prepare(self.prepare_request(), self.now)
+
     def test_metadata_and_replay_fail_closed(self):
         for field, value in {"senderId": "1", "chatId": "-1", "topicId": "1",
                              "timestamp": self.now - 121}.items():

@@ -7,7 +7,6 @@ import hashlib
 import json
 import os
 import pwd
-import resource
 import secrets
 import signal
 import socket
@@ -25,7 +24,7 @@ SNAPSHOT_ROOT = Path("/run/orchestrator-guard/snapshots")
 USED_ROOT = Path("/var/lib/orchestrator-guard/used")
 OWNER_ID, CHAT_ID, TOPIC_ID = "109592643", "-1004417478336", "2922"
 MAX_AGE_SECONDS, SNAPSHOT_TTL_SECONDS = 120, 1800
-MAX_REQUEST, MAX_FILES, MAX_BYTES, MAX_DEPTH = 65536, 64, 4 * 1024 * 1024, 6
+MAX_REQUEST, MAX_ENTRIES, MAX_BYTES, MAX_DEPTH = 65536, 64, 4 * 1024 * 1024, 6
 prepared: dict[str, dict] = {}
 
 
@@ -125,16 +124,22 @@ def _copy_tree(src_fd: int, target: Path, rel: str = "", depth: int = 0,
                budget: dict | None = None) -> list[tuple[str, str]]:
     if depth > MAX_DEPTH:
         raise GuardError("snapshot directory depth exceeds limit")
-    budget = budget if budget is not None else {"files": 0, "bytes": 0}
+    budget = budget if budget is not None else {"entries": 0, "bytes": 0}
     target.mkdir(mode=0o750, parents=True, exist_ok=False if depth == 0 else True)
     _snapshot_owner(target)
     manifest: list[tuple[str, str]] = []
-    for name in sorted(os.listdir(src_fd)):
+    names = sorted(os.listdir(src_fd))
+    if len(names) > MAX_ENTRIES:
+        raise GuardError("snapshot directory entry count exceeds limit")
+    for name in names:
         if name in {"__pycache__", ".git"}:
             continue
         info = os.stat(name, dir_fd=src_fd, follow_symlinks=False)
         child_rel = f"{rel}/{name}" if rel else name
         destination = target / name
+        budget["entries"] += 1
+        if budget["entries"] > MAX_ENTRIES:
+            raise GuardError("snapshot total entry count exceeds limit")
         if stat.S_ISDIR(info.st_mode):
             child_fd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=src_fd)
             try:
@@ -142,10 +147,11 @@ def _copy_tree(src_fd: int, target: Path, rel: str = "", depth: int = 0,
             finally:
                 os.close(child_fd)
         elif stat.S_ISREG(info.st_mode):
-            budget["files"] += 1
             budget["bytes"] += info.st_size
-            if budget["files"] > MAX_FILES or budget["bytes"] > MAX_BYTES:
+            if budget["bytes"] > MAX_BYTES:
                 raise GuardError("snapshot exceeds file or byte limit")
+            if info.st_uid != pwd.getpwnam("stanislav").pw_uid or info.st_nlink != 1:
+                raise GuardError("snapshot file ownership or link count is unsafe")
             source = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=src_fd)
             try:
                 current = os.fstat(source)
@@ -204,7 +210,6 @@ def _prepare(request: dict, now: int) -> dict:
 def _run_child(packet: Path) -> dict:
     user = pwd.getpwnam("stanislav")
     def demote() -> None:
-        resource.setrlimit(resource.RLIMIT_FSIZE, (1_048_576, 1_048_576))
         os.setgroups([])
         os.setgid(user.pw_gid)
         os.setuid(user.pw_uid)
@@ -214,9 +219,11 @@ def _run_child(packet: Path) -> dict:
             stdout=stdout_file, stderr=stderr_file, text=True, preexec_fn=demote, start_new_session=True,
             env={"PATH": "/usr/local/bin:/usr/bin:/bin", "HOME": user.pw_dir,
                  "USER": user.pw_name, "LOGNAME": user.pw_name})
+        timed_out = False
         try:
             process.wait(timeout=1800)
         except subprocess.TimeoutExpired as exc:
+            timed_out = True
             os.killpg(process.pid, signal.SIGTERM)
             try:
                 process.wait(timeout=10)
@@ -224,8 +231,18 @@ def _run_child(packet: Path) -> dict:
                 os.killpg(process.pid, signal.SIGKILL)
                 process.wait(timeout=10)
             raise GuardError("runner timed out and its process group was terminated") from exc
+        finally:
+            if not timed_out:
+                try:
+                    os.killpg(process.pid, signal.SIGTERM)
+                    time.sleep(0.2)
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
         stdout_file.seek(0)
         stdout = stdout_file.read(1_048_577)
+        if len(stdout) > 1_048_576:
+            raise GuardError("runner stdout exceeded capture limit")
     terminal = stdout.strip().splitlines()[-1] if stdout.strip() else ""
     try:
         result = json.loads(terminal)
@@ -293,7 +310,9 @@ def handle(conn: socket.socket) -> dict:
 def main() -> int:
     if os.environ.get("LISTEN_PID") != str(os.getpid()) or os.environ.get("LISTEN_FDS") != "1":
         raise SystemExit("guard requires exactly one systemd-activated socket")
+    os.umask(0o027)
     SNAPSHOT_ROOT.mkdir(mode=0o750, parents=True, exist_ok=True)
+    os.chmod(SNAPSHOT_ROOT, 0o750)
     _snapshot_owner(SNAPSHOT_ROOT)
     listener = socket.fromfd(3, socket.AF_UNIX, socket.SOCK_STREAM)
     while True:
