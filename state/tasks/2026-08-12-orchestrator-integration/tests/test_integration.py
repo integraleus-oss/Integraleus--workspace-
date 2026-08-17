@@ -224,7 +224,7 @@ class LocalIntegrationTests(unittest.TestCase):
     def test_dangling_criterion_evidence_fails_closed_as_not_verifiable(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
         original_notes = verdict["criteria_coverage"][0]["notes"]
-        verdict["criteria_coverage"][0]["evidence_ids"] = ["ev_missing_001"]
+        verdict["criteria_coverage"][0]["evidence_ids"] = ["ev_" + "0" * 32]
         verdict_path = self.root / "dangling-evidence.json"
         manifest_path = self.root / "dangling-evidence-manifest.json"
         write_json(verdict_path, verdict)

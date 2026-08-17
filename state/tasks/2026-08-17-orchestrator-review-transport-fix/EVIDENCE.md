@@ -19,3 +19,5 @@ Status: IN PROGRESS
 - Fourth Codex review through `5e4fb1e` found one P1 fail-open: malformed evidence
   IDs could be filtered out. Normalization now accepts only schema-shaped IDs and
   leaves every malformed array untouched for contract rejection.
+- The first post-fix run exposed an invalid regression fixture (`ev_missing_001`);
+  corrected to a schema-shaped but undefined ID before final verification.
