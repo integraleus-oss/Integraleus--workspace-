@@ -270,6 +270,19 @@ class LocalIntegrationTests(unittest.TestCase):
                         verdict_path, self.manifest_path, self.binding_path
                     )
 
+    def test_malformed_evidence_id_is_not_normalized_away(self) -> None:
+        verdict = copy.deepcopy(self.verdict)
+        verdict["criteria_coverage"][0]["evidence_ids"] = [42]
+        verdict_path = self.root / "malformed-evidence-id.json"
+        write_json(verdict_path, verdict)
+        normalized, changes = projection.normalize_transport_defects(verdict)
+        self.assertEqual(normalized["criteria_coverage"][0]["evidence_ids"], [42])
+        self.assertEqual(changes, [])
+        with self.assertRaises(projection.ContractValidationError):
+            projection.build_projection(
+                verdict_path, self.manifest_path, self.binding_path
+            )
+
     def test_blocking_limitation_cannot_project(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()
         verdict["limitations"] = [{

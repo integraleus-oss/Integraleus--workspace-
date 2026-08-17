@@ -16,3 +16,6 @@ Status: IN PROGRESS
   could raise `TypeError`. Fixed with list guards and a contract-failure regression.
 - Third Codex review through `0abe47e` found the same risk on top-level malformed
   collections. Fixed all traversals with a non-mutating list guard and regression cases.
+- Fourth Codex review through `5e4fb1e` found one P1 fail-open: malformed evidence
+  IDs could be filtered out. Normalization now accepts only schema-shaped IDs and
+  leaves every malformed array untouched for contract rejection.

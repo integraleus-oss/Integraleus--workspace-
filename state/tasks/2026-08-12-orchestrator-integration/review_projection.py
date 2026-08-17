@@ -8,6 +8,7 @@ import copy
 import hashlib
 import importlib.util
 import json
+import re
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -44,6 +45,7 @@ def _load_module(name: str, path: Path) -> Any:
 
 
 VALIDATOR = _load_module("review_contract_validator", CORE / "validate_review_verdict.py")
+EVIDENCE_ID_RE = re.compile(r"^ev_[0-9a-f]{32}$")
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -150,6 +152,11 @@ def normalize_transport_defects(
             if not isinstance(item, dict) or not isinstance(item.get("evidence_ids"), list):
                 continue
             original = item["evidence_ids"]
+            if any(
+                not isinstance(value, str) or EVIDENCE_ID_RE.fullmatch(value) is None
+                for value in original
+            ):
+                continue
             retained = [value for value in original if value in defined_evidence]
             removed = [value for value in original if value not in defined_evidence]
             if not removed:
