@@ -165,6 +165,26 @@ config, root service, activation, cron, push, or deploy was performed.
 - [ ] Final independent review.
 - [ ] Controlled local pilot.
 
+### 2026-08-17 final boundary review
+
+- Guard commit `e0a3f5d` received independent `ACCEPT`: 0 blockers, 0 majors.
+- Closed the accepted review's child-cleanup/test-structure nits; guard now
+  passes 12/12 and plugin passes 3/3. Local commit: `3da82db`.
+- Full current plugin/systemd read-only review returned `REJECT`: 1 blocker,
+  3 majors. Evidence: `PLUGIN_SYSTEMD_REVIEW_OUTPUT.md`.
+- Blocker: the model's command processes share uid `stanislav` and the
+  `openclaw-gateway.service` cgroup with the Gateway. They can therefore reach
+  the group-readable guard socket and forge the current executable/cmdline/
+  cgroup peer heuristic, bypassing trusted inbound-message capture.
+- Majors: socket lifetime conflicts with `RuntimeDirectory`, the proposed
+  socket owner is not provisioned by the units, and root ownership/mode of
+  installed guard/runtime files is not asserted by the service.
+- Fail-closed result: no system user, `/opt` tree, systemd unit, plugin,
+  Gateway change/restart, or pilot was performed.
+- Required next architecture: give the trusted Gateway side an OS/LSM identity
+  that model tools cannot assume, and run model tools under a distinct
+  principal/container. This is broader than installing a separate guard user.
+
 ## Files Created Or Changed
 
 - `TASK_PACKET.md` — scope, gates, acceptance, and commit rules.

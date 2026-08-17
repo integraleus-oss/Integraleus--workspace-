@@ -1,6 +1,6 @@
 # Task Packet: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: owner-authorized; OS guard returned for two-phase prepare/run rework
+Status: BLOCKED; combined OS/plugin boundary rejected before installation
 Risk: HIGH
 Owner: main agent
 Date: 2026-08-16
@@ -106,8 +106,16 @@ commit/transfer/push/deploy, and broader Gateway/config changes remain forbidden
 - [x] Snapshot files are root-owned and group-readable by the demoted runner.
 - [x] Replay is consumed atomically before snapshot side effects.
 - [x] Timeout terminates the complete runner process group.
-- [ ] Closure review admits the combined change.
+- [x] Python guard review: ACCEPT, 0 blocker / 0 major.
+- [ ] Combined plugin/systemd review: REJECT, 1 blocker / 3 major.
 - [ ] Root install and controlled pilot.
+
+Current blocker: the Gateway and model-spawned commands both run as
+`stanislav` inside `openclaw-gateway.service`. Unix socket permissions and the
+current `/proc` peer check therefore cannot distinguish them. A real boundary
+requires a distinct, non-assumable OS/LSM identity for the trusted Gateway side
+and separate execution identity for model tools. That is a broader OpenClaw
+runtime isolation change and is not installed or assumed by this packet.
 
 ## Commit Rule
 
