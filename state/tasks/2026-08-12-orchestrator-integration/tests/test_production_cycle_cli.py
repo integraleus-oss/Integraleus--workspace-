@@ -6,7 +6,8 @@ from unittest.mock import patch
 from io import StringIO
 
 import production_cycle_cli
-from production_cycle_cli import PacketError, _load_prior_finding_details, _run_loaded_packet, load_packet, main, run_packet
+from production_cycle_cli import (PacketError, _load_prior_finding_details, _requirements_acceptance,
+                                  _run_loaded_packet, _targeted_closure_verified, load_packet, main, run_packet)
 
 
 class ProductionCycleCliTests(unittest.TestCase):
@@ -303,6 +304,33 @@ class ProductionCycleCliTests(unittest.TestCase):
             code, output = self.invoke_main([str(self.packet_path), "--controlled-manual"],
                                             {"status": "ACCEPTED"})
         self.assertEqual((code, output["status"]), (0, "ACCEPTED"))
+
+    def test_light_review_profile_is_forwarded(self):
+        stdout = StringIO()
+        with patch.object(production_cycle_cli.sys, "argv", [
+                "production_cycle_cli.py", str(self.packet_path), "--controlled-manual",
+                "--review-profile", "light"]), patch("sys.stdout", stdout), \
+                patch("production_cycle_cli._run_loaded_packet", return_value={"status": "ACCEPTED"}) as run:
+            code = main()
+        self.assertEqual(code, 0)
+        self.assertEqual(run.call_args.kwargs["review_profile"], "light")
+
+    def test_targeted_closure_requires_merged_passing_coverage_and_clean_registry(self):
+        packet = {"depth": "strict", "proof_chain": {"manifest": {
+            "immutable_core_digest": "sha256:test", "requirements": [
+                {"requirement_id": "R01", "state": "implementing"}]}},
+            "builder": {"acceptance_criteria": [
+                {"id": "AC-1", "statement": "works", "requirement_ids": ["R01"]}]}}
+        passing = {"AC-1": {"status": "satisfied", "verification_method": "executed_test"}}
+        admitted = {"rule_id": "R15_NEED_FULL_REVIEW",
+                    "requirements_acceptance": _requirements_acceptance(packet, passing)}
+        self.assertTrue(_targeted_closure_verified(admitted, {"findings": []}))
+        failing = {"AC-1": {"status": "violated", "verification_method": "executed_test"}}
+        admitted["requirements_acceptance"] = _requirements_acceptance(packet, failing)
+        self.assertFalse(_targeted_closure_verified(admitted, {"findings": []}))
+        admitted["requirements_acceptance"] = _requirements_acceptance(packet, passing)
+        self.assertFalse(_targeted_closure_verified(admitted, {"findings": [
+            {"finding_id": "F-1", "status": "open", "severity": "major"}]}))
 
     @patch("production_cycle_cli.admit_live_review")
     @patch("production_cycle_cli.live_review_cycle.run_cycle")

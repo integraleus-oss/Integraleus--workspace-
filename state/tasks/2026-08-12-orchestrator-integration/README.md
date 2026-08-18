@@ -50,6 +50,21 @@ before the policy call. Findings without a source location receive a stable
 Reviewer `infra_symptoms` and `injection_attempts_observed` are deliberately not
 projected because the accepted policy core has no corresponding trusted fields.
 
+## Review-loop policy
+
+Acceptance criteria are sealed before implementation and remain bound by their
+digest through rework. The standard profile permits one initial full review and
+one targeted closure review; it never starts an automatic third full review.
+The targeted pass may open a new blocker or major only for a frozen-criterion
+violation or a regression caused by rework. Other newly noticed concerns are
+recorded as advisory follow-ups. If blocking work remains at the ceiling, the
+cycle escalates with `follow_up_required=true` instead of looping.
+
+Small controlled-manual tasks may use `--review-profile light`: all normal
+scope, evidence, test, and transfer gates remain, but only one substantive
+review is allowed. `ACCEPTED` remains impossible when policy reports any open
+blocker or major.
+
 ## Run bundle
 
 The runner accepts one JSON object:

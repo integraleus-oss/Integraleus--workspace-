@@ -73,6 +73,25 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         self.assertIsNone(context["prior_findings_canonical_digest"])
         self.assertEqual((built["input_dir"] / "manifest.json").stat().st_mode & 0o777, 0o444)
 
+    def test_rework_rejects_changed_acceptance_criteria(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        first = build_review_inputs(self.repo, self.root / "first", self.baseline, self.config, 1)
+        binding = json.loads((first["input_dir"] / "binding.json").read_text())
+        context = {
+            "frozen_acceptance_criteria_digest": binding["spec_digest"],
+            "finding_registry": {"document_type": "finding_registry", "schema_version": "1.0.0",
+                                 "findings": [{"finding_id": "F-1", "status": "open"}]},
+            "prior_finding_details": {"F-1": {"finding_id": "F-1", "severity": "major",
+                                                  "title": "Defect", "description": "Fix it",
+                                                  "fingerprint": {"path": "src/app.py", "line_start": 1,
+                                                                  "line_end": 1, "symbol": None,
+                                                                  "excerpt_hash": None}}},
+        }
+        changed = dict(self.config)
+        changed["acceptance_criteria"] = [{"id": "AC-1", "statement": "Expanded scope."}]
+        with self.assertRaisesRegex(BuilderError, "acceptance criteria changed"):
+            build_review_inputs(self.repo, self.root / "second", self.baseline, changed, 2, context)
+
     def test_proof_chain_is_sealed_and_tampering_is_detected(self):
         manifest = generate_manifest("builder-proof", "Build it.", ["Build it."])
         manifest["requirements"][0]["state"] = "implementing"

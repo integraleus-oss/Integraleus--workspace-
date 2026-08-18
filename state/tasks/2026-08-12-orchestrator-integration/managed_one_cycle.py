@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic bounded coordinator for at most one Codex rework."""
+"""Deterministic coordinator with a hard two-review ceiling."""
 
 from __future__ import annotations
 
@@ -34,9 +34,11 @@ def run_managed_cycle(
     review: Callable[[int, Path], dict[str, Any]],
     *,
     max_attempts: int = 2,
+    review_profile: str = "standard",
 ) -> dict[str, Any]:
-    if max_attempts != 2:
-        raise CycleError("managed cycle permits exactly two attempts")
+    expected_attempts = 1 if review_profile == "light" else 2
+    if review_profile not in {"light", "standard"} or max_attempts != expected_attempts:
+        raise CycleError("review profile and attempt budget are inconsistent")
     root = root.resolve()
     if root.exists():
         raise CycleError("cycle root already exists")
@@ -63,28 +65,25 @@ def run_managed_cycle(
                 break
             rule_id = verdict.get("rule_id") if verdict.get("document_type") == "local_orchestrator_run_result" else None
             outcome = RULE_OUTCOMES.get(rule_id, "ESCALATED")
-            if verdict.get("outcome") != outcome:
+            premature_targeted_closure = attempt == 1 and rule_id == "R15_NEED_FULL_REVIEW"
+            targeted_closure = (attempt == 2 and rule_id == "R15_NEED_FULL_REVIEW"
+                                and verdict.get("outcome") == "REWORK"
+                                and verdict.get("closure_verified") is True)
+            if premature_targeted_closure:
                 outcome = "ESCALATED"
-            history.append({"attempt": attempt, "implementation": implementation, "review": verdict, "outcome": outcome})
-            if outcome == "REWORK" and rule_id == "R15_NEED_FULL_REVIEW":
-                final_dir = root / "review-only-final-full"
-                final_dir.mkdir()
-                final_verdict = review(max_attempts + 1, final_dir / "claude")
-                if final_verdict.get("status") == "INTERRUPTED":
-                    final = "INTERRUPTED"
-                    history.append({"attempt": max_attempts + 1,
-                                    "implementation": {"status": "SKIPPED_REVIEW_ONLY"},
-                                    "review": final_verdict, "outcome": final})
-                    break
-                final_rule = (final_verdict.get("rule_id")
-                              if final_verdict.get("document_type") == "local_orchestrator_run_result" else None)
-                final_outcome = RULE_OUTCOMES.get(final_rule, "ESCALATED")
-                if final_verdict.get("outcome") != final_outcome or final_outcome == "REWORK":
-                    final_outcome = "ESCALATED"
-                history.append({"attempt": max_attempts + 1, "implementation": {"status": "SKIPPED_REVIEW_ONLY"},
-                                "review": final_verdict, "outcome": final_outcome})
-                final = final_outcome
-                break
+            elif targeted_closure:
+                # R15 proves the policy registry has no open blocker/major and
+                # requested only the legacy third full review. The two-pass
+                # profile deliberately admits that state without another loop.
+                outcome = "ACCEPTED"
+            elif verdict.get("outcome") != outcome:
+                outcome = "ESCALATED"
+            trusted_rework = (rule_id in RULE_OUTCOMES and RULE_OUTCOMES[rule_id] == "REWORK"
+                              and verdict.get("outcome") == "REWORK")
+            history.append({"attempt": attempt, "implementation": implementation, "review": verdict,
+                            "outcome": outcome,
+                            "trusted_rework": trusted_rework,
+                            **({"acceptance_basis": "targeted_closure_ceiling"} if targeted_closure else {})})
             if outcome == "REWORK" and attempt < max_attempts:
                 rework_context = verdict.get("rework_packet")
                 if not isinstance(rework_context, str) or not rework_context.strip() or len(rework_context.encode()) > 8192:
@@ -102,9 +101,24 @@ def run_managed_cycle(
                         "error": {"type": type(exc).__name__, "message": str(exc)}})
     result = {
         "document_type": "managed_one_cycle_result",
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "status": final,
+        "review_profile": review_profile,
+        "review_ceiling": expected_attempts,
         "attempts_used": len(history),
+        "terminal_reason": (
+            "accepted" if final == "ACCEPTED" else "interrupted" if final == "INTERRUPTED"
+            else "review_ceiling_exhausted"
+            if (final == "ESCALATED" and len(history) == max_attempts
+                and history[-1].get("review") and history[-1].get("outcome") == "ESCALATED"
+                and history[-1].get("trusted_rework") is True)
+            else "policy_or_runtime_escalation"
+        ),
+        "follow_up_required": bool(
+            final == "ESCALATED" and len(history) == max_attempts
+            and history[-1].get("review") and history[-1].get("outcome") == "ESCALATED"
+            and history[-1].get("trusted_rework") is True
+        ),
         "history": history,
     }
     _write(root / "cycle-result.json", result)

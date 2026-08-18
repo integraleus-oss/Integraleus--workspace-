@@ -47,8 +47,10 @@ class ManagedOneCycleTests(unittest.TestCase):
     def test_second_rework_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("REWORK", rework_packet="fix"))
         self.assertEqual(result["status"], "ESCALATED")
+        self.assertEqual(result["terminal_reason"], "review_ceiling_exhausted")
+        self.assertTrue(result["follow_up_required"])
 
-    def test_second_review_can_request_bounded_review_only_final_full(self):
+    def test_second_targeted_closure_is_accepted_without_third_review(self):
         implemented = []
         def implement(attempt, context, run_dir):
             implemented.append(attempt)
@@ -58,25 +60,55 @@ class ManagedOneCycleTests(unittest.TestCase):
                 return self.decision("REWORK", rework_packet="fix F-1")
             if attempt == 2:
                 return self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
-                                     rework_packet="required final full review only")
-            return self.decision("ACCEPTED")
+                                     rework_packet="required final full review only", closure_verified=True)
+            raise AssertionError("third review must not run")
         result = run_managed_cycle(self.root, implement, review)
-        self.assertEqual((result["status"], result["attempts_used"]), ("ACCEPTED", 3))
+        self.assertEqual((result["status"], result["attempts_used"]), ("ACCEPTED", 2))
         self.assertEqual(implemented, [1, 2])
-        self.assertEqual(result["history"][2]["implementation"]["status"], "SKIPPED_REVIEW_ONLY")
+        self.assertEqual(result["history"][1]["acceptance_basis"], "targeted_closure_ceiling")
 
-    def test_first_review_can_request_final_full_without_second_codex_attempt(self):
+    def test_first_review_cannot_skip_directly_to_legacy_final_full(self):
         implemented = []
         def implement(attempt, context, run_dir):
             implemented.append(attempt)
             return self.ok(attempt, context, run_dir)
         def review(attempt, run_dir):
-            return (self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
-                                  rework_packet="required final full review only")
-                    if attempt == 1 else self.decision("ACCEPTED"))
+            return self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
+                                 rework_packet="required final full review only")
         result = run_managed_cycle(self.root, implement, review)
-        self.assertEqual(result["status"], "ACCEPTED")
+        self.assertEqual(result["status"], "ESCALATED")
         self.assertEqual(implemented, [1])
+
+    def test_second_targeted_closure_without_verified_evidence_escalates(self):
+        def review(attempt, run_dir):
+            if attempt == 1:
+                return self.decision("REWORK", rework_packet="fix F-1")
+            return self.decision("REWORK", rule_id="R15_NEED_FULL_REVIEW",
+                                 rework_packet="required final full review only")
+        result = run_managed_cycle(self.root, self.ok, review)
+        self.assertEqual(result["status"], "ESCALATED")
+        self.assertTrue(result["follow_up_required"])
+
+    def test_light_profile_has_one_review_and_no_rework_loop(self):
+        result = run_managed_cycle(
+            self.root,
+            self.ok,
+            lambda a, d: self.decision("ACCEPTED"),
+            max_attempts=1,
+            review_profile="light",
+        )
+        self.assertEqual((result["status"], result["attempts_used"]), ("ACCEPTED", 1))
+        self.assertEqual((result["review_profile"], result["review_ceiling"]), ("light", 1))
+
+    def test_light_profile_rework_escalates_without_second_review(self):
+        result = run_managed_cycle(
+            self.root,
+            self.ok,
+            lambda a, d: self.decision("REWORK", rework_packet="follow up"),
+            max_attempts=1,
+            review_profile="light",
+        )
+        self.assertEqual((result["status"], result["attempts_used"]), ("ESCALATED", 1))
 
     def test_missing_rework_packet_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("REWORK"))
@@ -99,6 +131,8 @@ class ManagedOneCycleTests(unittest.TestCase):
             run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("ACCEPTED"))
         with self.assertRaises(CycleError):
             run_managed_cycle(self.root.with_name("other"), self.ok, lambda a, d: {}, max_attempts=3)
+        with self.assertRaises(CycleError):
+            run_managed_cycle(self.root.with_name("light-bad"), self.ok, lambda a, d: {}, review_profile="light")
 
     def test_untrusted_review_result_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: {"outcome": "ACCEPTED"})
@@ -107,6 +141,15 @@ class ManagedOneCycleTests(unittest.TestCase):
     def test_rule_outcome_mismatch_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: self.decision("ACCEPTED", rule_id="R11_OPEN_FINDINGS"))
         self.assertEqual(result["status"], "ESCALATED")
+
+    def test_second_review_contract_mismatch_is_not_ceiling_exhaustion(self):
+        def review(attempt, run_dir):
+            if attempt == 1:
+                return self.decision("REWORK", rework_packet="fix")
+            return self.decision("REWORK", rule_id="R17_ACCEPT")
+        result = run_managed_cycle(self.root, self.ok, review)
+        self.assertEqual(result["terminal_reason"], "policy_or_runtime_escalation")
+        self.assertFalse(result["follow_up_required"])
 
     def test_exception_writes_terminal_record(self):
         result = run_managed_cycle(self.root, lambda a, c, d: (_ for _ in ()).throw(RuntimeError("boom")), lambda a, d: {})

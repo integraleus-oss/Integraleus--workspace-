@@ -240,6 +240,11 @@ def build_review_inputs(
                        and ("requirement_ids" not in x or isinstance(x["requirement_ids"], list)) for x in criteria)):
         raise BuilderError("acceptance criteria are invalid")
     spec_bytes = b"\n".join((x["id"] + "\0" + x["statement"]).encode() for x in criteria)
+    frozen_digest = _digest_bytes(spec_bytes)
+    if (attempt > 1 and isinstance(prior_context, dict)
+            and "frozen_acceptance_criteria_digest" in prior_context
+            and prior_context["frozen_acceptance_criteria_digest"] != frozen_digest):
+        raise BuilderError("acceptance criteria changed after the initial review")
     criteria_document = {
         "document_type": "trusted_acceptance_criteria", "schema_version": "1.0.0",
         "criteria": [{"criterion_id": x["id"], "statement": x["statement"],
@@ -265,13 +270,13 @@ def build_review_inputs(
                     "gate_run_id_pre": "run_builder-baseline", "gate_run_id_post": run_id},
         "expected_review_mode": review_mode,
         "expected_coverage_scope": "targeted" if review_mode == "targeted_verification" else "full",
-        "acceptance_criteria_digest": _digest_bytes(spec_bytes),
+        "acceptance_criteria_digest": frozen_digest,
         "review_instructions_digest": _digest(instructions),
         "criteria": [{"criterion_id": x["id"], "statement_digest": _digest_bytes(x["statement"].encode())} for x in criteria],
     }
     binding = {
         "document_type": "review_projection_binding", "schema_version": "1.0.0",
-        "task_id": config["task_id"], "spec_digest": _digest_bytes(spec_bytes), "run_id": run_id,
+        "task_id": config["task_id"], "spec_digest": frozen_digest, "run_id": run_id,
         "attempt_epoch": attempt, "reviewed_tree_digest": tree_digest, "covered_paths": paths,
     }
     evidence = {

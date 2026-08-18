@@ -304,7 +304,43 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
     }
 
 
-def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) -> dict[str, Any]:
+def _requirements_acceptance(packet: dict[str, Any], coverage: dict[str, Any]) -> dict[str, Any]:
+    acceptance_results = []
+    active = [item for item in packet["proof_chain"]["manifest"]["requirements"]
+              if item["state"] in requirements_traceability.ACTIVE_STATES]
+    for requirement in active:
+        linked = [criterion for criterion in packet["builder"]["acceptance_criteria"]
+                  if requirement["requirement_id"] in criterion.get("requirement_ids", [])]
+        observed = [coverage.get(criterion["id"]) for criterion in linked]
+        if not observed or any(item is None for item in observed):
+            outcome = "unable_to_verify"
+        elif all(item.get("status") == "satisfied" for item in observed):
+            allowed_methods = ({"executed_test", "manual_execution", "gate_artifact_review", "static_analysis"}
+                               if packet.get("depth") == "strict" else
+                               {"executed_test", "manual_execution", "gate_artifact_review", "static_analysis", "code_inspection"})
+            outcome = "pass" if all(item.get("verification_method") in allowed_methods for item in observed) else "unable_to_verify"
+        else:
+            outcome = "fail"
+        acceptance_results.append({"requirement_id": requirement["requirement_id"], "outcome": outcome,
+                                   "evidence": ",".join(criterion["id"] for criterion in linked)})
+    return {"document_type": "requirements_acceptance", "schema_version": "1.0.0",
+            "manifest_digest": packet["proof_chain"]["manifest"]["immutable_core_digest"],
+            "results": acceptance_results}
+
+
+def _targeted_closure_verified(admitted: dict[str, Any], registry: dict[str, Any]) -> bool:
+    results = admitted.get("requirements_acceptance", {}).get("results")
+    return bool(
+        admitted.get("rule_id") == "R15_NEED_FULL_REVIEW"
+        and not any(item.get("status") == "open" and item.get("severity") in {"blocker", "major"}
+                    for item in registry.get("findings", []))
+        and results and all(item.get("outcome") == "pass" for item in results)
+    )
+
+
+def _run_loaded_packet(
+    packet: dict[str, Any], *, allow_legacy: bool = False, review_profile: str = "standard",
+) -> dict[str, Any]:
     if (packet["proof_chain"] is None or packet["blind_config"] is None) and not allow_legacy:
         raise PacketError("pre-1.3 task packets are validation/replay-only; execution requires proof-chain and blind acceptance")
     task_text = _bounded_text(packet["task_note"], 65536)
@@ -365,6 +401,14 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
                                 "requirements-task-map.json are mandatory review inputs. Check the implementation "
                                 "against every active Rxx and do not omit a requirement because it is absent from "
                                 "the implementation task prose.\n")
+            if attempt == 2:
+                prompt_text += (
+                    "This is the single targeted closure review and the final substantive review pass. "
+                    "Verify every carried prior blocker/major and any regression caused by the bounded rework. "
+                    "A newly noticed concern may be blocker/major only when it violates the frozen acceptance "
+                    "criteria or is a regression caused by this rework. Record other useful new concerns as "
+                    "advisory nits/follow-up; do not expand the frozen task scope.\n"
+                )
         prompt.write_text(prompt_text, encoding="utf-8")
         prompt.chmod(0o444)
         live_root = run_dir / "live-review"
@@ -381,7 +425,9 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
         if result.get("status") == "INTERRUPTED":
             return result
         admitted = admit_live_review(result, live_root)
-        if packet["proof_chain"] is not None and admitted.get("outcome") == "ACCEPTED":
+        admitted.pop("closure_verified", None)
+        merged_coverage: dict[str, Any] = {}
+        if packet["proof_chain"] is not None and result.get("status") == "DECIDED":
             decision_dir = Path(result["decision_dir"])
             verdict_path = decision_dir / "input-review_verdict.json"
             expected_verdict_digest = result.get("decision", {}).get("input_digests", {}).get("review_verdict")
@@ -390,31 +436,11 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
             if not isinstance(packet.get("builder"), dict):
                 raise PacketError("requirements acceptance requires a trusted builder")
             verdict_data = _read_json(verdict_path, 1048576)
-            coverage = {item.get("criterion_id"): item for item in verdict_data.get("review", {}).get("criteria_coverage", [])
+            coverage = {item.get("criterion_id"): item for item in verdict_data.get("criteria_coverage", [])
                         if isinstance(item, dict) and isinstance(item.get("criterion_id"), str)}
-            acceptance_results = []
-            active = [item for item in packet["proof_chain"]["manifest"]["requirements"]
-                      if item["state"] in requirements_traceability.ACTIVE_STATES]
-            for requirement in active:
-                linked = [criterion for criterion in packet["builder"]["acceptance_criteria"]
-                          if requirement["requirement_id"] in criterion.get("requirement_ids", [])]
-                observed = [coverage.get(criterion["id"]) for criterion in linked]
-                if not observed or any(item is None for item in observed):
-                    outcome = "unable_to_verify"
-                elif all(item.get("status") == "satisfied" for item in observed):
-                    allowed_methods = ({"executed_test", "manual_execution", "gate_artifact_review", "static_analysis"}
-                                       if packet.get("depth") == "strict" else
-                                       {"executed_test", "manual_execution", "gate_artifact_review", "static_analysis", "code_inspection"})
-                    outcome = "pass" if all(item.get("verification_method") in allowed_methods for item in observed) else "unable_to_verify"
-                else:
-                    outcome = "fail"
-                acceptance_results.append({"requirement_id": requirement["requirement_id"], "outcome": outcome,
-                                           "evidence": ",".join(criterion["id"] for criterion in linked)})
-            admitted["requirements_acceptance"] = {
-                "document_type": "requirements_acceptance", "schema_version": "1.0.0",
-                "manifest_digest": packet["proof_chain"]["manifest"]["immutable_core_digest"],
-                "results": acceptance_results,
-            }
+            merged_coverage = dict((prior_context or {}).get("criteria_coverage", {}))
+            merged_coverage.update(coverage)
+            admitted["requirements_acceptance"] = _requirements_acceptance(packet, merged_coverage)
         if packet["builder"] and result.get("status") == "DECIDED" and admitted.get("outcome") == "REWORK":
             decision_dir = Path(result["decision_dir"])
             decision = _read_json(decision_dir / "decision.json")
@@ -426,12 +452,18 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
             if (manifest.get("registry_digest_file") != _sha256(decision_dir / "registry-after.json")
                     or decision.get("registry_digest_after") != _canonical_digest(registry)):
                 raise PacketError("carried finding registry digest mismatch")
+            if _targeted_closure_verified(admitted, registry):
+                admitted["closure_verified"] = True
             carried_attempts = [] if prior_context is None else list(prior_context.get("prior_attempts", []))
             if prior_context and prior_context.get("last_decision"):
                 carried_attempts.append({"attempt_epoch": attempt - 1, **prior_context["last_decision"]})
             seen_nonces = [] if prior_context is None else list(prior_context.get("seen_nonces", []))
             seen_nonces.append(f"run_{packet['builder']['task_id']}.attempt-{attempt}-nonce")
             prior_context = {
+                "frozen_acceptance_criteria_digest": _read_json(
+                    copied_inputs / "binding.json"
+                )["spec_digest"],
+                "criteria_coverage": merged_coverage,
                 "budgets_after": decision.get("budgets_after", {}),
                 "progress_identity": decision.get("progress_identity"),
                 "finding_registry": registry,
@@ -443,7 +475,11 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
             }
         return admitted
 
-    result = run_managed_cycle(packet["run_root"], implement, review)
+    result = run_managed_cycle(
+        packet["run_root"], implement, review,
+        max_attempts=1 if review_profile == "light" else 2,
+        review_profile=review_profile,
+    )
     if result["status"] != "ACCEPTED" or packet["blind_config"] is None:
         if packet["proof_chain"] is not None:
             requirements = [{"requirement_id": item["requirement_id"], "outcome": "not_assessed",
@@ -500,7 +536,10 @@ def _run_loaded_packet(packet: dict[str, Any], *, allow_legacy: bool = False) ->
     return final
 
 
-def run_packet(packet_path: Path, *, allow_legacy: bool = False, foreground_authorized: bool = False) -> dict[str, Any]:
+def run_packet(
+    packet_path: Path, *, allow_legacy: bool = False, foreground_authorized: bool = False,
+    review_profile: str = "standard",
+) -> dict[str, Any]:
     packet = load_packet(packet_path)
     if packet.get("schema_version") == "1.3.0" and not foreground_authorized:
         raise PacketError("manual schema-1.3 execution requires a single-use foreground adapter authorization")
@@ -510,7 +549,7 @@ def run_packet(packet_path: Path, *, allow_legacy: bool = False, foreground_auth
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise PacketError("another orchestrator task is already running") from exc
-        return _run_loaded_packet(packet, allow_legacy=allow_legacy)
+        return _run_loaded_packet(packet, allow_legacy=allow_legacy, review_profile=review_profile)
 
 
 def main() -> int:
@@ -519,6 +558,8 @@ def main() -> int:
     parser.add_argument("--validate-only", action="store_true")
     parser.add_argument("--controlled-manual", action="store_true",
                         help="run one foreground packet under the trusted local-administrator threat model")
+    parser.add_argument("--review-profile", choices=("standard", "light"), default="standard",
+                        help="standard: initial plus targeted closure; light: one substantive review")
     parser.add_argument("--guard-authorized", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     try:
@@ -527,7 +568,8 @@ def main() -> int:
             raise PacketError("guard authorization requires the root-owned guard parent and cgroup")
         result = ({"status": "VALID", "run_root": str(packet["run_root"])} if args.validate_only
                   else run_packet(args.packet,
-                                  foreground_authorized=args.guard_authorized or args.controlled_manual))
+                                  foreground_authorized=args.guard_authorized or args.controlled_manual,
+                                  review_profile=args.review_profile))
         code = (0 if result["status"] in {"VALID", "ACCEPTED"}
                 else 3 if result["status"] == "FAILED_INFRA"
                 else 130 if result["status"] == "INTERRUPTED" else 4)
