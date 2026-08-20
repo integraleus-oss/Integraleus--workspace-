@@ -69,6 +69,21 @@ class LiveReviewCycleTests(unittest.TestCase):
         path.chmod(path.stat().st_mode | stat.S_IXUSR)
         return path
 
+    def incomplete_coverage_retry_wrapper(self, initial: dict, repaired: dict) -> Path:
+        path = self.root / "claude-incomplete-coverage-retry-wrapper"
+        first = json.dumps({"result": json.dumps(initial)})
+        retry = json.dumps({"result": json.dumps(repaired)})
+        path.write_text(
+            "#!/bin/sh\nset -eu\n"
+            + "case \"$2\" in\n"
+            + f"  *claude-contract-retry*) printf '%s' {json.dumps(retry)} > \"$3\" ;;\n"
+            + f"  *) printf '%s' {json.dumps(first)} > \"$3\" ;;\n"
+            + "esac\n",
+            encoding="utf-8",
+        )
+        path.chmod(path.stat().st_mode | stat.S_IXUSR)
+        return path
+
     def evidence_reference_retry_wrapper(self, verdict: dict) -> tuple[Path, str]:
         path = self.root / "claude-evidence-reference-retry-wrapper"
         dangling_id = "ev_99999999999999999999999999999999"
@@ -290,6 +305,81 @@ class LiveReviewCycleTests(unittest.TestCase):
         self.assertIn("no decoded U+0000 through U+001F", retry_prompt)
         self.assertIn("Never emit literal tabs", retry_prompt)
         self.assertFalse((self.root / "inputs/verdict.json").exists())
+
+    def test_incomplete_full_coverage_gets_one_contract_only_retry(self) -> None:
+        repaired, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        initial = json.loads(json.dumps(repaired))
+        initial["criteria_coverage"][0]["status"] = "not_reviewed"
+        initial["criteria_coverage"][0]["verification_method"] = "not_attempted"
+        initial["criteria_coverage"][0].pop("evidence_ids", None)
+        initial["criteria_coverage"][0].pop("linked_occurrence_ids", None)
+        bundle = self.helper._run_bundle(
+            "incomplete-coverage-retry", verdict=initial, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.incomplete_coverage_retry_wrapper(initial, repaired)
+        ):
+            result = run_cycle(
+                self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+            )
+        self.assertEqual(result["status"], "DECIDED")
+        self.assertIsNotNone(result["contract_retry_launch"])
+        first_error = json.loads(
+            (self.root / "cycle/contract-repair-first-admission/run-error.json").read_text()
+        )
+        self.assertEqual(first_error["error"]["type"], "ProjectionError")
+        retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
+        self.assertIn("incomplete_criteria_coverage", retry_prompt)
+        self.assertIn("complete criteria_coverage for every trusted criterion", retry_prompt)
+        self.assertIn("never invent evidence", retry_prompt)
+        self.assertIn("retain the honest incomplete status", retry_prompt)
+
+    def test_other_projection_errors_do_not_get_contract_retry(self) -> None:
+        verdict, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        verdict["limitations"] = [{
+            "code": "environment_unavailable",
+            "description": "The review environment was unavailable.",
+            "blocking": True,
+            "affected_criteria": ["AC-1"],
+            "evidence_ids": [],
+        }]
+        bundle = self.helper._run_bundle(
+            "blocking-limitation-no-retry", verdict=verdict, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(agent_launcher, "CLAUDE_WRAPPER", self.wrapper_for(verdict)):
+            with self.assertRaisesRegex(Exception, "blocking limitation"):
+                run_cycle(
+                    self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+                )
+        self.assertFalse((self.root / "cycle/claude-contract-retry").exists())
+        self.assertFalse((self.root / "cycle/contract-repair-first-verdict.json").exists())
+        self.assertFalse((self.root / "cycle/contract-repair-first-admission").exists())
+
+    def test_second_incomplete_coverage_reply_fails_closed(self) -> None:
+        verdict, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        verdict["criteria_coverage"][0]["status"] = "not_reviewed"
+        verdict["criteria_coverage"][0]["verification_method"] = "not_attempted"
+        verdict["criteria_coverage"][0].pop("evidence_ids", None)
+        verdict["criteria_coverage"][0].pop("linked_occurrence_ids", None)
+        bundle = self.helper._run_bundle(
+            "second-incomplete-coverage", verdict=verdict, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        wrapper = self.incomplete_coverage_retry_wrapper(verdict, verdict)
+        with patch.object(agent_launcher, "CLAUDE_WRAPPER", wrapper):
+            with self.assertRaisesRegex(Exception, "incomplete criteria coverage"):
+                run_cycle(
+                    self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+                )
+        self.assertTrue((self.root / "cycle/claude-contract-retry/launch-result.json").is_file())
 
     def test_contract_retry_removes_dangling_evidence_reference(self) -> None:
         bundle = self.helper._run_bundle("evidence-reference-retry")

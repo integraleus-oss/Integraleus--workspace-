@@ -48,6 +48,20 @@ def _write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 
 
+def _repair_report(exc: ContractValidationError | ProjectionError) -> dict[str, Any]:
+    if isinstance(exc, ContractValidationError):
+        return exc.validation
+    if str(exc) != "full review has incomplete criteria coverage":
+        raise exc
+    return {
+        "admission_valid": False,
+        "errors": [{
+            "code": "incomplete_criteria_coverage",
+            "message": str(exc),
+        }],
+    }
+
+
 def run_cycle(
     project_root: Path,
     prompt_path: Path,
@@ -139,9 +153,14 @@ def run_cycle(
             agent_launcher.extract_claude_verdict(active_launch_root, verdict_path)
         try:
             decision_dir, manifest = local_orchestrator_runner.run(bundle_path, cycle_root / "policy-runs")
-        except ContractValidationError as exc:
+        except ProjectionError as exc:
             if not allow_contract_retry:
                 raise
+            repair_report = _repair_report(exc)
+            repair_report_label = (
+                "Exact contract validator report" if isinstance(exc, ContractValidationError)
+                else "Exact admission validator report"
+            )
             first_verdict = cycle_root / "contract-repair-first-verdict.json"
             shutil.copyfile(verdict_path, first_verdict)
             first_verdict.chmod(0o444)
@@ -152,14 +171,29 @@ def run_cycle(
             verdict_path.unlink()
             if pre_admission_verify is not None:
                 pre_admission_verify()
+            if repair_report.get("errors", [{}])[0].get("code") == "incomplete_criteria_coverage":
+                repair_scope = (
+                    "Preserve every substantive finding, evidence item, digest, and conclusion meaning. "
+                    "Using only the same sealed inputs, complete criteria_coverage for every trusted criterion "
+                    "with a projectable status. Use violated or partially_satisfied when the evidence does not "
+                    "support satisfied; never invent evidence or hide an existing finding. Change no other "
+                    "substantive field. If no projectable status is truthfully supported by the sealed evidence, "
+                    "retain the honest incomplete status so this single retry fails closed. "
+                )
+            else:
+                repair_scope = (
+                    "Preserve every substantive finding, status, evidence item, digest, and conclusion meaning. "
+                    "Change only fields required to satisfy the sealed review-verdict.schema.json. "
+                )
             retry_prompt = (
                 prompt
                 + "\n\nCONTRACT-ONLY REPAIR (one retry maximum): The prior exact-JSON verdict was "
-                  "rejected by the deterministic contract validator. Preserve every substantive finding, "
-                  "status, evidence item, digest, and conclusion meaning. Change only fields required to "
-                  "satisfy the sealed review-verdict.schema.json. Return exactly one JSON object with no prose.\n"
-                  "Exact validator report:\n"
-                + json.dumps(exc.validation, sort_keys=True, separators=(",", ":"))
+                  "rejected by the deterministic admission validator. "
+                + repair_scope
+                + "Return exactly one JSON object with no prose.\n"
+                + repair_report_label
+                + ":\n"
+                + json.dumps(repair_report, sort_keys=True, separators=(",", ":"))
                 + "\n"
             )
             active_launch_root = cycle_root / "claude-contract-retry"

@@ -136,6 +136,50 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(BuilderError, "not allowlisted"):
             build_review_inputs(self.repo, self.root / "bad-program", self.baseline, config, 1)
 
+    def test_optional_expected_test_count_accepts_matching_tap_summary(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        config = dict(self.config)
+        config["gates"] = [{
+            "id": "tests",
+            "argv": ["python3", "-c", "print('# tests 2')"],
+            "expected_test_count": 2,
+        }]
+        built = build_review_inputs(self.repo, self.root / "matching-count", self.baseline, config, 1)
+        result = json.loads((built["input_dir"] / "gates/tests/result.json").read_text())
+        self.assertEqual(result["expected_test_count"], 2)
+        self.assertEqual(result["observed_test_count"], 2)
+
+    def test_optional_expected_test_count_fails_on_mismatch_or_missing_summary(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        for name, output in (("mismatch", "# tests 1"), ("missing", "all good"),
+                             ("ambiguous", "# tests 2\n# tests 2")):
+            config = dict(self.config)
+            config["gates"] = [{
+                "id": "tests",
+                "argv": ["python3", "-c", f"print({output!r})"],
+                "expected_test_count": 2,
+            }]
+            with self.assertRaisesRegex(BuilderError, "test count"):
+                build_review_inputs(self.repo, self.root / name, self.baseline, config, 1)
+
+    def test_optional_expected_test_count_rejects_invalid_values(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        for index, value in enumerate((None, 0, -1, True, "2")):
+            config = dict(self.config)
+            config["gates"] = [{
+                "id": "tests",
+                "argv": ["python3", "-c", "print('# tests 2')"],
+                "expected_test_count": value,
+            }]
+            with self.assertRaisesRegex(BuilderError, "expected test count"):
+                build_review_inputs(self.repo, self.root / f"invalid-{index}", self.baseline, config, 1)
+
+    def test_gate_without_expected_count_preserves_record_shape(self):
+        built = self.build()
+        result = json.loads((built["input_dir"] / "gates/syntax/result.json").read_text())
+        self.assertNotIn("expected_test_count", result)
+        self.assertNotIn("observed_test_count", result)
+
     def test_rejects_empty_or_duplicate_gates(self):
         (self.repo / "src/app.py").write_text("print('new')\n")
         for gates, message in (([], "at least one"),

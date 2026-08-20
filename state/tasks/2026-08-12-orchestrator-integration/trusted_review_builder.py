@@ -149,13 +149,21 @@ def _tree_digest(root: Path, paths: list[str]) -> str:
 
 
 def _run_gate(root: Path, gate: dict[str, Any], out: Path, timeout: int) -> dict[str, Any]:
-    if not isinstance(gate, dict) or set(gate) != {"id", "argv"}:
+    if (not isinstance(gate, dict)
+            or set(gate) not in ({"id", "argv"}, {"id", "argv", "expected_test_count"})):
         raise BuilderError("gate definition is invalid")
     gate_id, argv = gate["id"], gate["argv"]
+    has_expected_test_count = "expected_test_count" in gate
+    expected_test_count = gate.get("expected_test_count")
     if not isinstance(gate_id, str) or not gate_id or not gate_id.replace("-", "").replace("_", "").isalnum():
         raise BuilderError("gate id is invalid")
     if not isinstance(argv, list) or not argv or not all(isinstance(x, str) and x for x in argv):
         raise BuilderError("gate argv is invalid")
+    if has_expected_test_count and (
+        not isinstance(expected_test_count, int) or isinstance(expected_test_count, bool)
+        or expected_test_count < 1
+    ):
+        raise BuilderError("gate expected test count is invalid")
     if Path(argv[0]).name not in ALLOWED_GATE_PROGRAMS:
         raise BuilderError("gate program is not allowlisted")
     started = time.monotonic_ns()
@@ -178,9 +186,18 @@ def _run_gate(root: Path, gate: dict[str, Any], out: Path, timeout: int) -> dict
         "stdout_digest": _digest(gate_dir / "stdout.log"),
         "stderr_digest": _digest(gate_dir / "stderr.log"),
     }
+    if has_expected_test_count:
+        observed = re.findall(rb"(?m)^# tests ([0-9]+)\r?$", stdout)
+        observed_test_count = int(observed[0]) if len(observed) == 1 else None
+        record.update({
+            "expected_test_count": expected_test_count,
+            "observed_test_count": observed_test_count,
+        })
     _write_json(gate_dir / "result.json", record)
     if exit_code != 0 or timed_out:
         raise BuilderError(f"required gate failed: {gate_id}")
+    if has_expected_test_count and observed_test_count != expected_test_count:
+        raise BuilderError(f"required gate test count mismatch: {gate_id}")
     return record
 
 

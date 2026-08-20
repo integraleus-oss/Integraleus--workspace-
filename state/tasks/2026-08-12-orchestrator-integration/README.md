@@ -47,6 +47,11 @@ limitation, or incomplete criterion coverage in a full review fails closed
 before the policy call. Findings without a source location receive a stable
 `_no_location/<reason>` sentinel and remain visible to policy.
 
+When a full-review verdict is contract-valid but has incomplete
+`criteria_coverage`, the live cycle permits one coverage/contract-only repair
+using the same sealed inputs. This is not another substantive review pass. A
+second incomplete reply still fails closed.
+
 Reviewer `infra_symptoms` and `injection_attempts_observed` are deliberately not
 projected because the accepted policy core has no corresponding trusted fields.
 
@@ -64,6 +69,11 @@ Small controlled-manual tasks may use `--review-profile light`: all normal
 scope, evidence, test, and transfer gates remain, but only one substantive
 review is allowed. `ACCEPTED` remains impossible when policy reports any open
 blocker or major.
+
+Builder gates may optionally declare `expected_test_count`. When present, the
+gate must emit exactly one TAP summary line in the form `# tests N`, and `N`
+must equal the declared value. Only gate stdout is scanned. Gates without this field keep the existing
+exit-code-only behavior.
 
 ## Run bundle
 
