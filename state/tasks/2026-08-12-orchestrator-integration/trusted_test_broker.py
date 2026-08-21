@@ -105,8 +105,7 @@ def run_sealed_gate(
             "TMPDIR": str(broker_tmp),
             "PYTHONDONTWRITEBYTECODE": "1",
             "ORCHESTRATOR_PROJECT_ROOT": str(root),
-            "ORCHESTRATOR_FIXTURE_ROOT": str((fixture_root or (root / "examples" if (root / "examples").is_dir()
-                                                               else root)).resolve()),
+            "ORCHESTRATOR_FIXTURE_ROOT": str((fixture_root or root).resolve()),
             "ORCHESTRATOR_RUN_ID": run_id or out.parent.name,
         }
         if artifact_root is not None:

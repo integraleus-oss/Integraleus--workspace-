@@ -198,7 +198,7 @@ def build_review_inputs(
     reset_writable_dirs(reset_dirs)
     run_id = f"run_{config['task_id']}.attempt-{attempt}"
     artifact_root = reset_dirs[0] if reset_dirs else None
-    fixture_root = root / "examples" if (root / "examples").is_dir() else root
+    fixture_root = root
     gates = [_run_gate(root, gate, out, config["gate_timeout_seconds"], run_id=run_id,
                        fixture_root=fixture_root, artifact_root=artifact_root) for gate in config["gates"]]
     after_paths = _changed_paths(root, baseline["head"])

@@ -23,6 +23,15 @@ class TrustedTestBrokerTests(unittest.TestCase):
         record = run_sealed_gate(self.root, gate, self.out, 10)
         self.assertEqual((record["exit_code"], record["timed_out"]), (0, False))
 
+    def test_fixture_root_does_not_change_when_examples_directory_appears(self):
+        gate = {"id": "before", "argv": ["python3", "-c",
+            "import os,sys; sys.exit(0 if os.environ['ORCHESTRATOR_FIXTURE_ROOT'] == os.getcwd() else 1)"]}
+        run_sealed_gate(self.root, gate, self.out, 10)
+        (self.root / "examples").mkdir()
+        second = Path(self.temp.name) / "second-evidence"
+        gate["id"] = "after"
+        run_sealed_gate(self.root, gate, second, 10)
+
     def test_exit_one_is_repairable_and_evidence_is_bounded(self):
         gate = {"id": "focused", "argv": ["python3", "-c",
             "import sys; print('assertion failed'); sys.exit(1)"]}
