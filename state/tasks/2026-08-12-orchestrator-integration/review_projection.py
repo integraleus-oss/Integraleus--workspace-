@@ -35,6 +35,14 @@ class ContractValidationError(ProjectionError):
         )
 
 
+class CriteriaCoverageError(ProjectionError):
+    """Full-review coverage became incomplete during bounded normalization."""
+
+    def __init__(self, diagnostics: dict[str, Any]) -> None:
+        self.diagnostics = diagnostics
+        super().__init__("full review has incomplete criteria coverage")
+
+
 def _load_module(name: str, path: Path) -> Any:
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
@@ -423,7 +431,66 @@ def build_projection(
     if review.get("review_mode") in ("initial_full", "final_full"):
         complete_statuses = {"satisfied", "violated", "partially_satisfied"}
         if any(item.get("status") not in complete_statuses for item in verdict.get("criteria_coverage", [])):
-            raise ProjectionError("full review has incomplete criteria coverage")
+            incomplete = [
+                {"criterion_id": item.get("criterion_id"), "status": item.get("status")}
+                for item in verdict.get("criteria_coverage", [])
+                if item.get("status") not in complete_statuses
+            ]
+            incomplete_pointers = {
+                f"/criteria_coverage/{index}"
+                for index, item in enumerate(verdict.get("criteria_coverage", []))
+                if item.get("status") not in complete_statuses
+            }
+            criterion_changes = [
+                change for change in transport_normalizations
+                if isinstance(change.get("pointer"), str)
+                and any(
+                    change["pointer"] == pointer or change["pointer"].startswith(pointer + "/")
+                    for pointer in incomplete_pointers
+                )
+            ]
+            removed_ids = {
+                evidence_id for change in criterion_changes
+                if isinstance(change.get("removed"), list)
+                for evidence_id in change["removed"] if isinstance(evidence_id, str)
+            }
+            discard_changes = [
+                change for change in transport_normalizations
+                if change.get("operation") == "discard_evidence_without_required_command"
+                and change.get("evidence_id") in removed_ids
+            ]
+            discard_pointers = {
+                change.get("pointer") for change in discard_changes
+                if isinstance(change.get("pointer"), str)
+            }
+            relevant_errors_all = [
+                {"code": error.get("code"), "pointer": error.get("pointer")}
+                for error in transport_validation.get("errors", [])
+                if isinstance(error.get("pointer"), str)
+                and any(
+                    error["pointer"] == pointer or error["pointer"].startswith(pointer + "/")
+                    for pointer in incomplete_pointers | discard_pointers
+                )
+            ]
+            unlocatable_error_count = sum(
+                1 for error in transport_validation.get("errors", [])
+                if not isinstance(error.get("pointer"), str)
+            )
+            relevant_normalizations_all = [
+                {key: change[key] for key in ("operation", "pointer", "evidence_id", "removed", "reason")
+                 if key in change}
+                for change in discard_changes + criterion_changes
+            ]
+            limit = 64
+            raise CriteriaCoverageError({
+                "semantic_errors_before_normalization": relevant_errors_all[:limit],
+                "relevant_transport_normalizations": relevant_normalizations_all[:limit],
+                "incomplete_criteria_after_normalization": incomplete,
+                "truncated": len(relevant_errors_all) > limit or len(relevant_normalizations_all) > limit,
+                "omitted_semantic_error_count": max(0, len(relevant_errors_all) - limit),
+                "omitted_normalization_count": max(0, len(relevant_normalizations_all) - limit),
+                "unlocatable_semantic_error_count": unlocatable_error_count,
+            })
     checks = (
         (binding["task_id"], subject.get("task_id"), "task_id"),
         (binding["run_id"], subject.get("run_id"), "run_id"),

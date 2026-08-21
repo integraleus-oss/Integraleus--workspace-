@@ -422,8 +422,13 @@ class LocalIntegrationTests(unittest.TestCase):
         write_json(verdict_path, verdict)
         with self.assertRaisesRegex(
             projection.ProjectionError, "full review has incomplete criteria coverage"
-        ):
+        ) as raised:
             projection.build_projection(verdict_path, manifest_path, self.binding_path)
+
+        self.assertIsInstance(raised.exception, projection.CriteriaCoverageError)
+        self.assertTrue(raised.exception.diagnostics["semantic_errors_before_normalization"])
+        self.assertTrue(raised.exception.diagnostics["relevant_transport_normalizations"])
+        self.assertFalse(raised.exception.diagnostics["truncated"])
 
     def test_partially_satisfied_claim_losing_evidence_becomes_unverified(self) -> None:
         verdict, manifest = self._nonblocking_final_verdict_and_manifest()

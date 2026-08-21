@@ -11,7 +11,7 @@ from typing import Any, Callable
 
 import agent_launcher
 import local_orchestrator_runner
-from review_projection import ContractValidationError, ProjectionError
+from review_projection import ContractValidationError, CriteriaCoverageError, ProjectionError
 
 
 CONTROL_CHARACTER_GUIDANCE = (
@@ -51,7 +51,7 @@ def _write_json(path: Path, value: Any) -> None:
 def _repair_report(exc: ContractValidationError | ProjectionError) -> dict[str, Any]:
     if isinstance(exc, ContractValidationError):
         return exc.validation
-    if str(exc) != "full review has incomplete criteria coverage":
+    if not isinstance(exc, CriteriaCoverageError):
         raise exc
     return {
         "admission_valid": False,
@@ -59,7 +59,42 @@ def _repair_report(exc: ContractValidationError | ProjectionError) -> dict[str, 
             "code": "incomplete_criteria_coverage",
             "message": str(exc),
         }],
+        "coverage_diagnostics": exc.diagnostics,
     }
+
+
+def _command_evidence(value: Any) -> dict[str, str]:
+    if not isinstance(value, dict):
+        raise ProjectionError("review verdict root must be an object")
+    carriers: list[Any] = []
+    for finding in value.get("findings", []):
+        if isinstance(finding, dict):
+            carriers.extend(finding.get("evidence", []))
+    verification = value.get("verification")
+    if isinstance(verification, dict):
+        for result in verification.get("results", []):
+            if isinstance(result, dict):
+                carriers.extend(result.get("evidence", []))
+    for symptom in value.get("infra_symptoms", []):
+        if isinstance(symptom, dict):
+            carriers.extend(symptom.get("evidence", []))
+    return {
+        item["evidence_id"]: json.dumps(item["command"], sort_keys=True, separators=(",", ":"))
+        for item in carriers
+        if isinstance(item, dict)
+        and isinstance(item.get("evidence_id"), str)
+        and isinstance(item.get("command"), dict)
+    }
+
+
+def _reject_new_command_evidence(first_verdict_path: Path, repaired_verdict_path: Path) -> None:
+    first = json.loads(first_verdict_path.read_text(encoding="utf-8"))
+    repaired = json.loads(repaired_verdict_path.read_text(encoding="utf-8"))
+    first_commands = _command_evidence(first)
+    repaired_commands = _command_evidence(repaired)
+    if any(first_commands.get(evidence_id) != command
+           for evidence_id, command in repaired_commands.items()):
+        raise ProjectionError("contract repair introduced or changed command evidence")
 
 
 def run_cycle(
@@ -171,13 +206,17 @@ def run_cycle(
             verdict_path.unlink()
             if pre_admission_verify is not None:
                 pre_admission_verify()
-            if repair_report.get("errors", [{}])[0].get("code") == "incomplete_criteria_coverage":
+            if isinstance(exc, CriteriaCoverageError):
                 repair_scope = (
                     "Preserve every substantive finding, evidence item, digest, and conclusion meaning. "
                     "Using only the same sealed inputs, complete criteria_coverage for every trusted criterion "
                     "with a projectable status. Use violated or partially_satisfied when the evidence does not "
                     "support satisfied; never invent evidence or hide an existing finding. Change no other "
-                    "substantive field. If no projectable status is truthfully supported by the sealed evidence, "
+                    "substantive field. The validator report may identify evidence that was discarded because "
+                    "its required command block was absent. Do not reconstruct, synthesize, or add a command "
+                    "block during contract repair. Remove unsupported references and reduce the affected "
+                    "criterion honestly using only the remaining valid evidence. If no projectable status "
+                    "is truthfully supported by the sealed evidence, "
                     "retain the honest incomplete status so this single retry fails closed. "
                 )
             else:
@@ -241,6 +280,7 @@ def run_cycle(
                 if pre_admission_verify is not None:
                     pre_admission_verify()
                 agent_launcher.extract_claude_verdict(active_launch_root, verdict_path)
+            _reject_new_command_evidence(first_verdict, verdict_path)
             decision_dir, manifest = local_orchestrator_runner.run(bundle_path, cycle_root / "policy-runs")
     except Exception as exc:
         verdict_path.unlink(missing_ok=True)

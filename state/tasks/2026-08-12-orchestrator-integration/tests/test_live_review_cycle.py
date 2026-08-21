@@ -330,12 +330,108 @@ class LiveReviewCycleTests(unittest.TestCase):
         first_error = json.loads(
             (self.root / "cycle/contract-repair-first-admission/run-error.json").read_text()
         )
-        self.assertEqual(first_error["error"]["type"], "ProjectionError")
+        self.assertEqual(first_error["error"]["type"], "CriteriaCoverageError")
         retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
         self.assertIn("incomplete_criteria_coverage", retry_prompt)
         self.assertIn("complete criteria_coverage for every trusted criterion", retry_prompt)
+        self.assertIn("Do not reconstruct, synthesize, or add a command block", retry_prompt)
         self.assertIn("never invent evidence", retry_prompt)
         self.assertIn("retain the honest incomplete status", retry_prompt)
+
+    def test_normalization_caused_coverage_loss_reports_exact_discard(self) -> None:
+        repaired, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        initial = json.loads(json.dumps(repaired))
+        invalid_evidence_id = "ev_" + "0" * 32
+        initial["findings"][0]["evidence"].append({
+            "evidence_id": invalid_evidence_id,
+            "kind": "test_result",
+            "description": "Claimed result without the required command block.",
+            "excerpt": "tests passed",
+            "excerpt_truncated": False,
+        })
+        initial["criteria_coverage"][0]["evidence_ids"].append(invalid_evidence_id)
+        bundle = self.helper._run_bundle(
+            "normalization-coverage-retry", verdict=initial, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.incomplete_coverage_retry_wrapper(initial, repaired)
+        ):
+            result = run_cycle(
+                self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+            )
+        self.assertEqual(result["status"], "DECIDED")
+        retry_prompt = (self.root / "cycle/claude-contract-retry/input-prompt.md").read_text()
+        self.assertIn("discard_evidence_without_required_command", retry_prompt)
+        self.assertIn("kind_inconsistent_evidence", retry_prompt)
+        self.assertIn("Do not reconstruct, synthesize, or add a command block", retry_prompt)
+        self.assertNotIn("Claimed result without the required command block", retry_prompt)
+        self.assertIn('"truncated":false', retry_prompt)
+
+    def test_contract_retry_cannot_rehydrate_discarded_command_evidence(self) -> None:
+        repaired, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        initial = json.loads(json.dumps(repaired))
+        invalid_evidence_id = "ev_" + "0" * 32
+        invalid = {
+            "evidence_id": invalid_evidence_id,
+            "kind": "test_result",
+            "description": "Claimed result without the required command block.",
+            "excerpt": "tests passed",
+            "excerpt_truncated": False,
+        }
+        initial["findings"][0]["evidence"].append(invalid)
+        initial["criteria_coverage"][0]["evidence_ids"].append(invalid_evidence_id)
+        rehydrated = json.loads(json.dumps(initial))
+        rehydrated["findings"][0]["evidence"][-1]["command"] = {
+            "argv": ["false-claimed-command"], "exit_code": 0,
+        }
+        bundle = self.helper._run_bundle(
+            "rehydrated-command-evidence", verdict=initial, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.incomplete_coverage_retry_wrapper(initial, rehydrated)
+        ):
+            with self.assertRaisesRegex(
+                Exception, "contract repair introduced or changed command evidence"
+            ):
+                run_cycle(
+                    self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+                )
+
+    def test_contract_retry_cannot_add_command_evidence_under_new_id(self) -> None:
+        repaired, manifest = self.helper._nonblocking_final_verdict_and_manifest()
+        initial = json.loads(json.dumps(repaired))
+        initial["criteria_coverage"][0]["status"] = "not_reviewed"
+        initial["criteria_coverage"][0]["verification_method"] = "not_attempted"
+        initial["criteria_coverage"][0].pop("evidence_ids", None)
+        initial["criteria_coverage"][0].pop("linked_occurrence_ids", None)
+        injected = json.loads(json.dumps(repaired))
+        injected["findings"][0]["evidence"].append({
+            "evidence_id": "ev_" + "9" * 32,
+            "kind": "test_result",
+            "description": "New claimed command evidence.",
+            "command": {"argv": ["false-claimed-command"], "exit_code": 0},
+        })
+        bundle = self.helper._run_bundle(
+            "new-command-evidence", verdict=initial, manifest=manifest,
+        )
+        Path(self.root / "inputs/verdict.json").unlink()
+        prompt = self.root / "prompt.md"
+        prompt.write_text("Review and obey the sealed contract.")
+        with patch.object(
+            agent_launcher, "CLAUDE_WRAPPER", self.incomplete_coverage_retry_wrapper(initial, injected)
+        ):
+            with self.assertRaisesRegex(
+                Exception, "contract repair introduced or changed command evidence"
+            ):
+                run_cycle(
+                    self.root, prompt, bundle, self.root / "cycle", allow_contract_retry=True,
+                )
 
     def test_other_projection_errors_do_not_get_contract_retry(self) -> None:
         verdict, manifest = self.helper._nonblocking_final_verdict_and_manifest()
