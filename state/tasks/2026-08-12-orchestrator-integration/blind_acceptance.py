@@ -11,6 +11,7 @@ from typing import Any
 
 import agent_launcher
 import requirements_traceability
+from trusted_test_broker import GateFailure, reset_writable_dirs, run_sealed_gate
 
 
 class BlindAcceptanceError(RuntimeError):
@@ -59,31 +60,24 @@ def project_state(project_root: Path) -> str:
 
 
 def run_verification_commands(project_root: Path, run_dir: Path, commands: list[list[str]],
-                              timeout_seconds: int) -> list[dict[str, Any]]:
+                              timeout_seconds: int, broker_reset_dirs: list[Path] | None = None) -> list[dict[str, Any]]:
     records = []
     before = project_state(project_root)
     gates = run_dir / "verification"
     gates.mkdir(parents=True)
+    reset_dirs = broker_reset_dirs or []
+    reset_writable_dirs(reset_dirs)
     for index, argv in enumerate(commands, 1):
         try:
-            result = subprocess.run(argv, cwd=project_root, capture_output=True, timeout=timeout_seconds, check=False)
-            timed_out = False
-        except subprocess.TimeoutExpired as exc:
-            result = None
-            timed_out = True
-            stdout, stderr, exit_code = exc.stdout or b"", exc.stderr or b"", 124
-        else:
-            stdout, stderr, exit_code = result.stdout, result.stderr, result.returncode
-        gate = gates / f"gate-{index}"
-        gate.mkdir()
-        (gate / "stdout.log").write_bytes(stdout)
-        (gate / "stderr.log").write_bytes(stderr)
-        record = {"gate_id": f"blind-{index}", "argv": argv, "exit_code": exit_code, "timed_out": timed_out,
-                  "stdout_digest": _digest(gate / "stdout.log"), "stderr_digest": _digest(gate / "stderr.log")}
-        _write(gate / "result.json", record)
+            record = run_sealed_gate(
+                project_root, {"id": f"blind-{index}", "argv": argv}, gates, timeout_seconds,
+                run_id=f"blind-{run_dir.name}",
+                fixture_root=(project_root / "examples" if (project_root / "examples").is_dir() else project_root),
+                artifact_root=reset_dirs[0] if reset_dirs else None,
+            )
+        except GateFailure as exc:
+            raise BlindAcceptanceError(f"blind verification command failed: blind-{index}") from exc
         records.append(record)
-        if timed_out or exit_code != 0:
-            raise BlindAcceptanceError(f"blind verification command failed: blind-{index}")
     if project_state(project_root) != before:
         raise BlindAcceptanceError("blind verification commands mutated the worktree")
     return records
@@ -91,7 +85,7 @@ def run_verification_commands(project_root: Path, run_dir: Path, commands: list[
 
 def load_verification_records(run_dir: Path) -> list[dict[str, Any]]:
     records = []
-    for path in sorted((run_dir / "verification").glob("gate-*/result.json")):
+    for path in sorted((run_dir / "verification/gates").glob("blind-*/result.json")):
         try:
             value = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -147,10 +141,11 @@ def compare_acceptance(manifest: dict[str, Any], internal: dict[str, Any], blind
 
 def run_blind_acceptance(project_root: Path, run_dir: Path, manifest: dict[str, Any],
                          internal: dict[str, Any], verification_commands: list[list[str]],
-                         timeout_seconds: int) -> dict[str, Any]:
+                         timeout_seconds: int, broker_reset_dirs: list[Path] | None = None) -> dict[str, Any]:
     run_dir.mkdir(parents=True)
     before = project_state(project_root)
-    gates = run_verification_commands(project_root, run_dir, verification_commands, timeout_seconds)
+    gates = run_verification_commands(project_root, run_dir, verification_commands, timeout_seconds,
+                                      broker_reset_dirs)
     prompt = build_prompt(manifest, verification_commands)
     launch_dir = run_dir / "agent"
     launch = agent_launcher.launch("claude", project_root, prompt, launch_dir,

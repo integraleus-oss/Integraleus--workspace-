@@ -92,6 +92,31 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(BuilderError, "acceptance criteria changed"):
             build_review_inputs(self.repo, self.root / "second", self.baseline, changed, 2, context)
 
+    def test_builder_repair_failure_artifacts_are_sealed_into_next_review(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        source = self.root / "prior-gate"
+        source.mkdir()
+        (source / "stdout.log").write_text("assertion failed\n")
+        (source / "stderr.log").write_text("")
+        record = {"gate_id": "syntax", "argv": ["python3", "-c", "pass"], "exit_code": 1,
+                  "timed_out": False, "duration_ms": 1,
+                  "stdout_digest": "sha256:" + hashlib.sha256((source / "stdout.log").read_bytes()).hexdigest(),
+                  "stderr_digest": "sha256:" + hashlib.sha256((source / "stderr.log").read_bytes()).hexdigest()}
+        (source / "result.json").write_text(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
+        context = {"builder_repair": True,
+                   "builder_failure": {"classification": "IMPLEMENTATION_FAILURE",
+                                       "record": record, "source_dir": str(source)},
+                   "budgets_after": {"rework_used": 1, "infra_total_used": 0,
+                                     "infra_used_by_signature": {}, "final_full_used": 0,
+                                     "no_progress_streak": 0}}
+        built = build_review_inputs(self.repo, self.root / "repair-inputs", self.baseline,
+                                    self.config, 2, context, force_initial_review=True)
+        verify_seal(built["input_dir"], self.repo)
+        evidence = json.loads((built["input_dir"] / "evidence.json").read_text())
+        self.assertEqual(evidence["prior_builder_failure"]["record"]["exit_code"], 1)
+        self.assertEqual((built["input_dir"] / "prior-builder-failure/stdout.log").read_text(),
+                         "assertion failed\n")
+
     def test_proof_chain_is_sealed_and_tampering_is_detected(self):
         manifest = generate_manifest("builder-proof", "Build it.", ["Build it."])
         manifest["requirements"][0]["state"] = "implementing"

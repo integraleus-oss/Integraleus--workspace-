@@ -1,0 +1,48 @@
+{
+  "document_type": "production_cycle_task",
+  "schema_version": "1.4.0",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/orchestrator-dotnet-qualification",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/orchestrator-dotnet-qualification-run-r2",
+  "codex_add_dirs": ["/tmp/orchestrator-dotnet-qualification-artifacts"],
+  "codex_timeout_seconds": 900,
+  "claude_timeout_seconds": 900,
+  "task_note": "QUALIFICATION_IMPLEMENTATION.md",
+  "original_brief": "QUALIFICATION_ORIGINAL_BRIEF.txt",
+  "original_brief_digest": "sha256:3ead61638d66726e61988e32d6ff9c694ab00cec6304b2cf8705864b09beccae",
+  "requirements_manifest": "QUALIFICATION_REQUIREMENTS_MANIFEST.json",
+  "previous_requirements_manifest": null,
+  "requirements_specification": "QUALIFICATION_REQUIREMENTS_SPECIFICATION.json",
+  "requirements_task_map": "QUALIFICATION_REQUIREMENTS_TASK_MAP.json",
+  "control_mode": "manual",
+  "depth": "strict",
+  "builder": {
+    "task_id": "orchestrator-dotnet-broker-qualification-r2",
+    "repo_id": "orchestrator-dotnet-qualification",
+    "allowed_paths": ["Program.cs"],
+    "gates": [
+      {"id":"restore","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-21-orchestrator-test-broker-repair/QUALIFICATION_HARNESS.sh restore"]},
+      {"id":"focused","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-21-orchestrator-test-broker-repair/QUALIFICATION_HARNESS.sh focused"]},
+      {"id":"diff-check","argv":["git","diff","--check"]}
+    ],
+    "gate_timeout_seconds": 300,
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"One real bounded standard-profile qualification executes end to end.","requirement_ids":["R01"]},
+      {"id":"AC-2","statement":"The declared cwd defect produces exact repairable exit code 1 at the first focused trusted gate.","requirement_ids":["R02"]},
+      {"id":"AC-3","statement":"Exactly one authenticated repair changes Program.cs to use ORCHESTRATOR_FIXTURE_ROOT and fail closed.","requirement_ids":["R03"]},
+      {"id":"AC-4","statement":"Final restore, focused, and diff gates pass before independent review accepts.","requirement_ids":["R04"]},
+      {"id":"AC-5","statement":"Only Program.cs changes.","requirement_ids":["R05"]},
+      {"id":"AC-6","statement":"No Alpha BPR execution, commit, push, deploy, or network access occurs.","requirement_ids":["R06"]}
+    ],
+    "review_instructions": "QUALIFICATION_REVIEW.md",
+    "policy_fixture": "QUALIFICATION_POLICY.json",
+    "review_verdict": "qualification-r2-verdict.json"
+  },
+  "blind_acceptance": {
+    "timeout_seconds": 300,
+    "verification_commands": [
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-21-orchestrator-test-broker-repair/QUALIFICATION_HARNESS.sh restore"],
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-21-orchestrator-test-broker-repair/QUALIFICATION_HARNESS.sh focused"],
+      ["git","diff","--check"]
+    ]
+  }
+}

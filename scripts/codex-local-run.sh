@@ -11,6 +11,7 @@ Options:
   --cd DIR             Run Codex from DIR. Default: current directory.
   --read-only          Use read-only sandbox. Default.
   --write              Use workspace-write sandbox scoped to --cd DIR.
+  --add-dir DIR        Add a bounded writable directory (repeatable).
   --danger             Use danger-full-access sandbox. Avoid unless explicitly approved.
   --model MODEL        Pass an explicit Codex model.
   --no-route-check     Skip OpenAI VPN route check.
@@ -28,6 +29,7 @@ workdir="$PWD"
 sandbox="read-only"
 model=""
 route_check=1
+add_dirs=()
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -43,6 +45,11 @@ while [[ $# -gt 0 ]]; do
     --write)
       sandbox="workspace-write"
       shift
+      ;;
+    --add-dir)
+      [[ $# -ge 2 ]] || { echo "ERROR: --add-dir needs a directory" >&2; exit 2; }
+      add_dirs+=("$2")
+      shift 2
       ;;
     --danger)
       sandbox="danger-full-access"
@@ -116,6 +123,13 @@ if [[ "$route_check" -eq 1 ]]; then
 fi
 
 cmd=("$codex_local" exec --cd "$workdir" --sandbox "$sandbox" --skip-git-repo-check)
+for add_dir in "${add_dirs[@]}"; do
+  [[ -d "$add_dir" ]] || { echo "ERROR: add-dir does not exist: $add_dir" >&2; exit 2; }
+  [[ ! -L "$add_dir" ]] || { echo "ERROR: add-dir must not be a symlink: $add_dir" >&2; exit 2; }
+  resolved_add_dir="$(realpath "$add_dir")"
+  [[ "$resolved_add_dir" == /tmp/* ]] || { echo "ERROR: add-dir must be below /tmp: $add_dir" >&2; exit 2; }
+  cmd+=(--add-dir "$resolved_add_dir")
+done
 if [[ -n "$model" ]]; then
   cmd+=(--model "$model")
 fi

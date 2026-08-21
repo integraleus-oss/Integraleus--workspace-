@@ -1,0 +1,1 @@
+Review the final qualification diff. Accept only if `Program.cs` uses the sealed `ORCHESTRATOR_FIXTURE_ROOT` contract, validates it fail-closed, reads only `expected.txt`, and the restore/focused/diff gates passed after exactly one builder-triggered repair. Reject any cwd-based lookup, fallback search, additional file changes, network access, or weakened validation.

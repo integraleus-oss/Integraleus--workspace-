@@ -1,0 +1,1 @@
+{"document_type":"requirements_task_map","schema_version":"1.0.0","manifest_digest":"sha256:bbde972f6f9759a5006c663ae3b4081a7373d6786f7e532a665eef6d42e518fa","tasks":[{"task_id":"broker-repair-qualification","requirement_ids":["R01","R02","R03","R04","R05","R06"]}]}

@@ -1,0 +1,8 @@
+{"document_type":"requirements_specification","schema_version":"1.0.0","manifest_digest":"sha256:bbde972f6f9759a5006c663ae3b4081a7373d6786f7e532a665eef6d42e518fa","requirements":[
+  {"requirement_id":"R01","specification":"Execute one real, bounded, standard-profile end-to-end qualification."},
+  {"requirement_id":"R02","specification":"The first Codex result deliberately uses cwd and the focused gate records a repairable failure."},
+  {"requirement_id":"R03","specification":"One authenticated repair changes only Program.cs and uses the sealed fixture-root environment contract."},
+  {"requirement_id":"R04","specification":"All final gates pass before independent review accepts."},
+  {"requirement_id":"R05","specification":"Git scope is exactly Program.cs."},
+  {"requirement_id":"R06","specification":"The run stays isolated from Alpha BPR and performs no commit, push, deploy, or network operation."}
+]}

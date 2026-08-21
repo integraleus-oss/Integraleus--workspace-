@@ -1,4 +1,5 @@
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -102,6 +103,19 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.write_packet()
         loaded_v13 = load_packet(self.packet_path)
         self.assertEqual(loaded_v13["blind_config"]["timeout_seconds"], 30)
+        add_dir = Path(tempfile.mkdtemp(prefix="orchestrator-v14-", dir="/tmp"))
+        self.addCleanup(shutil.rmtree, add_dir, ignore_errors=True)
+        self.packet.update({"schema_version": "1.4.0", "codex_add_dirs": [str(add_dir)]})
+        self.write_packet()
+        loaded_v14 = load_packet(self.packet_path)
+        self.assertEqual(loaded_v14["codex_add_dirs"], [add_dir.resolve()])
+        self.packet["codex_add_dirs"] = ["/tmp"]
+        self.write_packet()
+        with self.assertRaisesRegex(PacketError, "bounded directories"):
+            load_packet(self.packet_path)
+        self.packet.update({"schema_version": "1.3.0"})
+        self.packet.pop("codex_add_dirs")
+        self.write_packet()
         loaded_v13["run_root"].mkdir()
         with (patch("production_cycle_cli.trusted_review_builder.capture_clean_baseline", return_value={}),
               patch("production_cycle_cli.run_managed_cycle", return_value={"status": "ACCEPTED", "history": [
@@ -233,7 +247,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertEqual(result["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 2)
         self.assertIn("Policy-authenticated rework:\nFix F-1", launch.call_args_list[1].args[2])
-        self.assertNotIn("Make the focused change.", launch.call_args_list[1].args[2])
+        self.assertIn("ORIGINAL_SEALED_TASK:\nMake the focused change.", launch.call_args_list[1].args[2])
 
     @patch("production_cycle_cli.agent_launcher.launch")
     def test_codex_timeout_escalates(self, launch):
@@ -390,6 +404,54 @@ class ProductionCycleCliTests(unittest.TestCase):
                               "rule_id": "R17_ACCEPT"}
         result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
+
+    @patch("production_cycle_cli.admit_live_review")
+    @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
+    @patch("production_cycle_cli.agent_launcher.launch")
+    def test_repairable_builder_failure_gets_one_authenticated_repair(self, launch, live, admit):
+        (self.project / ".git").rmdir()
+        import subprocess
+        subprocess.run(["git", "init", "-q", self.project], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.email", "test@example.invalid"], check=True)
+        subprocess.run(["git", "-C", self.project, "config", "user.name", "Test"], check=True)
+        (self.project / "app.py").write_text("VALUE = 1\n")
+        subprocess.run(["git", "-C", self.project, "add", "."], check=True)
+        subprocess.run(["git", "-C", self.project, "commit", "-qm", "baseline"], check=True)
+        policy = self.packet_dir / "policy.json"
+        policy.write_text(json.dumps({"task_policy": {"budgets": {"rework": 1, "infra_total": 1,
+            "infra_per_signature": {}, "final_full": 1, "no_progress": 1},
+            "infra_signature_allowlist": []}}))
+        self.packet = {
+            "document_type": "production_cycle_task", "schema_version": "1.1.0",
+            "project_root": str(self.project), "task_note": "task.md", "run_root": str(self.root / "run"),
+            "codex_timeout_seconds": 30, "claude_timeout_seconds": 30,
+            "builder": {"task_id": "repair-test", "repo_id": "fixture", "allowed_paths": ["app.py"],
+                "gates": [{"id": "value", "argv": ["python3", "-c",
+                    "import pathlib,sys; sys.exit(0 if 'VALUE = 3' in pathlib.Path('app.py').read_text() else 1)"]}],
+                "gate_timeout_seconds": 10,
+                "acceptance_criteria": [{"id": "AC-1", "statement": "VALUE is 3."}],
+                "review_instructions": "review-1.md", "policy_fixture": "policy.json",
+                "review_verdict": "verdict.json"},
+        }
+        self.write_packet()
+
+        def implement(role, project, prompt, run_dir, **kwargs):
+            attempt = len(launch.call_args_list)
+            (self.project / "app.py").write_text("VALUE = 2\n" if attempt == 1 else "VALUE = 3\n")
+            return {"status": "OK"}
+        launch.side_effect = implement
+        admit.return_value = {"document_type": "local_orchestrator_run_result", "outcome": "ACCEPTED",
+                              "rule_id": "R17_ACCEPT"}
+
+        result = run_packet(self.packet_path, allow_legacy=True)
+
+        self.assertEqual((result["status"], result["attempts_used"]), ("ACCEPTED", 2))
+        self.assertEqual(live.call_count, 1)
+        repair_prompt = launch.call_args_list[1].args[2]
+        self.assertIn("Policy-authenticated rework:", repair_prompt)
+        self.assertIn("ORIGINAL_SEALED_TASK:", repair_prompt)
+        self.assertIn("Make the focused change.", repair_prompt)
+        self.assertIn("Trusted builder gate `value` failed", repair_prompt)
 
 
 if __name__ == "__main__":

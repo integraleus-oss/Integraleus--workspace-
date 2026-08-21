@@ -5,21 +5,24 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
 import re
 import subprocess
-import time
 from pathlib import Path, PurePosixPath
 from typing import Any
 
 import requirements_traceability
+from trusted_test_broker import (ALLOWED_GATE_PROGRAMS, GateFailure as BrokerGateFailure,
+                                 reset_writable_dirs, run_sealed_gate)
 
 
 class BuilderError(RuntimeError):
     pass
 
 
-ALLOWED_GATE_PROGRAMS = {"bash", "git", "python", "python3"}
+class GateFailure(BrokerGateFailure, BuilderError):
+    pass
+
+
 WORKSPACE = Path(__file__).resolve().parents[3]
 REVIEW_VERDICT_SCHEMA = (
     WORKSPACE / "state/tasks/2026-08-11-codex-claude-orchestrator/implementation/review-verdict.schema.json"
@@ -148,62 +151,21 @@ def _tree_digest(root: Path, paths: list[str]) -> str:
     return "sha256:" + digest.hexdigest()
 
 
-def _run_gate(root: Path, gate: dict[str, Any], out: Path, timeout: int) -> dict[str, Any]:
-    if (not isinstance(gate, dict)
-            or set(gate) not in ({"id", "argv"}, {"id", "argv", "expected_test_count"})):
-        raise BuilderError("gate definition is invalid")
-    gate_id, argv = gate["id"], gate["argv"]
-    has_expected_test_count = "expected_test_count" in gate
-    expected_test_count = gate.get("expected_test_count")
-    if not isinstance(gate_id, str) or not gate_id or not gate_id.replace("-", "").replace("_", "").isalnum():
-        raise BuilderError("gate id is invalid")
-    if not isinstance(argv, list) or not argv or not all(isinstance(x, str) and x for x in argv):
-        raise BuilderError("gate argv is invalid")
-    if has_expected_test_count and (
-        not isinstance(expected_test_count, int) or isinstance(expected_test_count, bool)
-        or expected_test_count < 1
-    ):
-        raise BuilderError("gate expected test count is invalid")
-    if Path(argv[0]).name not in ALLOWED_GATE_PROGRAMS:
-        raise BuilderError("gate program is not allowlisted")
-    started = time.monotonic_ns()
+def _run_gate(root: Path, gate: dict[str, Any], out: Path, timeout: int, *, run_id: str | None = None,
+              fixture_root: Path | None = None, artifact_root: Path | None = None) -> dict[str, Any]:
     try:
-        env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
-        result = subprocess.run(argv, cwd=root, capture_output=True, timeout=timeout, check=False, env=env)
-        timed_out = False
-        exit_code = result.returncode
-        stdout, stderr = result.stdout, result.stderr
-    except subprocess.TimeoutExpired as exc:
-        timed_out, exit_code = True, 124
-        stdout, stderr = exc.stdout or b"", exc.stderr or b""
-    gate_dir = out / "gates" / gate_id
-    gate_dir.mkdir(parents=True)
-    (gate_dir / "stdout.log").write_bytes(stdout)
-    (gate_dir / "stderr.log").write_bytes(stderr)
-    record = {
-        "gate_id": gate_id, "argv": argv, "exit_code": exit_code, "timed_out": timed_out,
-        "duration_ms": (time.monotonic_ns() - started) // 1_000_000,
-        "stdout_digest": _digest(gate_dir / "stdout.log"),
-        "stderr_digest": _digest(gate_dir / "stderr.log"),
-    }
-    if has_expected_test_count:
-        observed = re.findall(rb"(?m)^# tests ([0-9]+)\r?$", stdout)
-        observed_test_count = int(observed[0]) if len(observed) == 1 else None
-        record.update({
-            "expected_test_count": expected_test_count,
-            "observed_test_count": observed_test_count,
-        })
-    _write_json(gate_dir / "result.json", record)
-    if exit_code != 0 or timed_out:
-        raise BuilderError(f"required gate failed: {gate_id}")
-    if has_expected_test_count and observed_test_count != expected_test_count:
-        raise BuilderError(f"required gate test count mismatch: {gate_id}")
-    return record
+        return run_sealed_gate(root, gate, out, timeout, run_id=run_id, fixture_root=fixture_root,
+                               artifact_root=artifact_root)
+    except BrokerGateFailure as exc:
+        raise GateFailure(
+            str(exc), classification=exc.classification, record=exc.record, repair_packet=exc.repair_packet,
+        ) from exc
 
 
 def build_review_inputs(
     project_root: Path, output_dir: Path, baseline: dict[str, Any], config: dict[str, Any], attempt: int,
     prior_context: dict[str, Any] | None = None, proof_chain: dict[str, Any] | None = None,
+    broker_reset_dirs: list[Path] | None = None, force_initial_review: bool = False,
 ) -> dict[str, Path]:
     root, out = project_root.resolve(), output_dir.resolve()
     if out.exists():
@@ -232,7 +194,13 @@ def build_review_inputs(
     paths = _changed_paths(root, baseline["head"])
     _validate_scope(root, paths, config["allowed_paths"])
     pre_gate_tree = _tree_digest(root, paths)
-    gates = [_run_gate(root, gate, out, config["gate_timeout_seconds"]) for gate in config["gates"]]
+    reset_dirs = broker_reset_dirs or []
+    reset_writable_dirs(reset_dirs)
+    run_id = f"run_{config['task_id']}.attempt-{attempt}"
+    artifact_root = reset_dirs[0] if reset_dirs else None
+    fixture_root = root / "examples" if (root / "examples").is_dir() else root
+    gates = [_run_gate(root, gate, out, config["gate_timeout_seconds"], run_id=run_id,
+                       fixture_root=fixture_root, artifact_root=artifact_root) for gate in config["gates"]]
     after_paths = _changed_paths(root, baseline["head"])
     if (_head(root) != baseline["head"] or after_paths != paths or _ignored_state(root) != baseline.get("ignored")
             or _tree_digest(root, after_paths) != pre_gate_tree):
@@ -274,10 +242,10 @@ def build_review_inputs(
         raise BuilderError("accepted review verdict schema is missing")
     (out / "review-verdict.schema.json").write_bytes(REVIEW_VERDICT_SCHEMA.read_bytes())
     tree_digest = pre_gate_tree
-    run_id = f"run_{config['task_id']}.attempt-{attempt}"
     if len(run_id.removeprefix("run_")) > 64:
         raise BuilderError("generated run id is not reviewer-contract compatible")
-    review_mode = "initial_full" if attempt == 1 else "targeted_verification" if attempt == 2 else "final_full"
+    review_mode = ("initial_full" if attempt == 1 or force_initial_review else
+                   "targeted_verification" if attempt == 2 else "final_full")
     manifest = {
         "document_type": "trusted_review_manifest", "schema_version": "1.0.0",
         "subject": {"task_id": config["task_id"], "run_id": run_id, "attempt": attempt,
@@ -306,6 +274,33 @@ def build_review_inputs(
                       "review_verdict_schema": _digest(out / "review-verdict.schema.json")},
         "gates": gates,
     }
+    prior_builder_failure_name = None
+    if attempt > 1 and isinstance(prior_context, dict) and prior_context.get("builder_repair"):
+        failure = prior_context.get("builder_failure")
+        if (not isinstance(failure, dict) or set(failure) != {"classification", "record", "source_dir"}
+                or failure["classification"] != "IMPLEMENTATION_FAILURE"
+                or not isinstance(failure["record"], dict)):
+            raise BuilderError("prior builder failure evidence is invalid")
+        source = Path(failure["source_dir"])
+        if not source.is_absolute() or source.is_symlink() or not source.is_dir():
+            raise BuilderError("prior builder failure source is invalid")
+        prior_dir = out / "prior-builder-failure"
+        prior_dir.mkdir()
+        for name in ("result.json", "stdout.log", "stderr.log"):
+            source_file = source / name
+            if source_file.is_symlink() or not source_file.is_file():
+                raise BuilderError("prior builder failure artifact is missing")
+            (prior_dir / name).write_bytes(source_file.read_bytes())
+        if json.loads((prior_dir / "result.json").read_text(encoding="utf-8")) != failure["record"]:
+            raise BuilderError("prior builder failure record mismatch")
+        metadata = {"classification": failure["classification"], "record": failure["record"]}
+        _write_json(prior_dir / "metadata.json", metadata)
+        prior_builder_failure_name = "prior-builder-failure"
+        evidence["prior_builder_failure"] = {
+            "classification": failure["classification"], "record": failure["record"],
+            "artifacts": {name: _digest(prior_dir / name) for name in
+                          ("metadata.json", "result.json", "stdout.log", "stderr.log")},
+        }
     proof_artifacts: dict[str, str] = {}
     if proof_chain is not None:
         try:
@@ -406,6 +401,10 @@ def build_review_inputs(
     seal.update(proof_artifacts)
     if prior_findings_name:
         seal[prior_findings_name] = _digest(out / prior_findings_name)
+    if prior_builder_failure_name:
+        for name in ("metadata.json", "result.json", "stdout.log", "stderr.log"):
+            relative = f"{prior_builder_failure_name}/{name}"
+            seal[relative] = _digest(out / relative)
     _write_json(out / "seal.json", seal)
     for path in out.rglob("*"):
         if path.is_file():

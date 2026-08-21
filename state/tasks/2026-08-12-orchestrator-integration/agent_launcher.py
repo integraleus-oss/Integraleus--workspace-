@@ -57,6 +57,7 @@ def launch(
     *,
     timeout_seconds: int = 300,
     codex_write: bool = False,
+    codex_add_dirs: list[Path] | None = None,
 ) -> dict[str, Any]:
     if role not in ROLES:
         raise LaunchError("unsupported agent role")
@@ -81,7 +82,10 @@ def launch(
     stderr_path = run_dir / "stderr.log"
 
     if role == "codex":
-        argv = [str(wrapper), "--cd", str(project_root), "--write" if codex_write else "--read-only", "--", prompt]
+        argv = [str(wrapper), "--cd", str(project_root), "--write" if codex_write else "--read-only"]
+        for add_dir in codex_add_dirs or []:
+            argv.extend(["--add-dir", str(add_dir)])
+        argv.extend(["--", prompt])
     else:
         argv = [str(wrapper), str(project_root), str(prompt_path), str(run_dir / "wrapper-output.json"), str(timeout_seconds)]
 

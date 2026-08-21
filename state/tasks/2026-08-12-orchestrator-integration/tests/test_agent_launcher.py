@@ -42,6 +42,22 @@ class AgentLauncherTests(unittest.TestCase):
         self.assertTrue((run_dir / "launch-result.json").is_file())
         self.assertEqual(stat.S_IMODE((run_dir / "input-prompt.md").stat().st_mode), 0o444)
 
+    def test_codex_adds_bounded_writable_directories(self) -> None:
+        wrapper = self.wrapper('printf "%s\\n" "$@"\n')
+        writable = self.root / "artifacts"
+        writable.mkdir()
+        run_dir = self.root / "run"
+        with patch.object(agent_launcher, "CODEX_WRAPPER", wrapper):
+            result = launch(
+                "codex", self.project, "hello", run_dir,
+                codex_write=True, codex_add_dirs=[writable],
+            )
+        self.assertEqual(result["status"], "OK")
+        self.assertEqual(
+            (run_dir / "stdout.log").read_text().splitlines()[:7],
+            ["--cd", str(self.project), "--write", "--add-dir", str(writable), "--", "hello"],
+        )
+
     def test_nonzero_fails_closed_but_keeps_logs(self) -> None:
         wrapper = self.wrapper('echo bad >&2\nexit 7\n')
         with patch.object(agent_launcher, "CODEX_WRAPPER", wrapper):
