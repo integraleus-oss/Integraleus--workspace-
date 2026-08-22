@@ -49,6 +49,11 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         (self.repo / "src/app.py").write_text("print('new')\n")
         return build_review_inputs(self.repo, self.root / "inputs", self.baseline, self.config, 1)
 
+    def acceptance_digest(self):
+        return "sha256:" + hashlib.sha256(
+            b"AC-1\0The focused change is correct."
+        ).hexdigest()
+
     def test_builds_observed_digest_bound_inputs(self):
         built = self.build()
         verify_seal(built["input_dir"], self.repo)
@@ -104,6 +109,7 @@ class TrustedReviewBuilderTests(unittest.TestCase):
                   "stderr_digest": "sha256:" + hashlib.sha256((source / "stderr.log").read_bytes()).hexdigest()}
         (source / "result.json").write_text(json.dumps(record, sort_keys=True, separators=(",", ":")) + "\n")
         context = {"builder_repair": True,
+                   "frozen_acceptance_criteria_digest": self.acceptance_digest(),
                    "builder_failure": {"classification": "IMPLEMENTATION_FAILURE",
                                        "record": record, "source_dir": str(source)},
                    "budgets_after": {"rework_used": 1, "infra_total_used": 0,
@@ -151,6 +157,17 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         (self.repo / "outside.txt").write_text("no\n")
         with self.assertRaisesRegex(BuilderError, "outside allowed scope"):
             build_review_inputs(self.repo, self.root / "inputs", self.baseline, self.config, 1)
+
+    def test_untracked_directory_is_resolved_to_individual_allowed_file(self):
+        exact = dict(self.config)
+        exact["allowed_paths"] = ["docs/evidence/report.md"]
+        (self.repo / "docs/evidence").mkdir(parents=True)
+        (self.repo / "docs/evidence/report.md").write_text("proof\n")
+        exact["gates"] = [{"id": "content", "argv": ["python3", "-c",
+            "from pathlib import Path; assert Path('docs/evidence/report.md').read_text() == 'proof\\n'"]}]
+        built = build_review_inputs(self.repo, self.root / "exact-untracked", self.baseline, exact, 1)
+        paths = json.loads((built["input_dir"] / "changed-paths.json").read_text())
+        self.assertEqual(paths, ["docs/evidence/report.md"])
 
     def test_rejects_failed_or_unallowlisted_gate(self):
         (self.repo / "src/app.py").write_text("not python !!!\n")
@@ -278,15 +295,16 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(BuilderError, "HEAD changed"):
             build_review_inputs(self.repo, self.root / "head", self.baseline, self.config, 1)
 
-    def test_builder_bundle_reaches_policy_acceptance_with_contract_valid_verdict(self):
+    def test_initial_builder_bundle_never_impersonates_removed_third_review(self):
         (self.repo / "src/app.py").write_text("print('new')\n")
-        built = build_review_inputs(self.repo, self.root / "accepted-inputs", self.baseline, self.config, 3)
+        built = build_review_inputs(self.repo, self.root / "accepted-inputs", self.baseline, self.config, 1)
         inputs = built["input_dir"]
         manifest = json.loads((inputs / "manifest.json").read_text())
         fixture_path = (Path(__file__).parents[2] / "2026-08-12-orchestrator-one-cycle/live-provenance-trial/"
                         "closure-inputs/expected-accepted-verdict.json")
         verdict = json.loads(fixture_path.read_text())
         verdict["subject"] = manifest["subject"]
+        verdict["review"]["review_mode"] = manifest["expected_review_mode"]
         verdict["review"]["inputs_digest"]["acceptance_criteria_digest"] = manifest["acceptance_criteria_digest"]
         verdict["review"]["inputs_digest"]["review_instructions_digest"] = manifest["review_instructions_digest"]
         finding = verdict["findings"][0]
@@ -306,7 +324,8 @@ class TrustedReviewBuilderTests(unittest.TestCase):
             verdict_path, trusted_manifest_path=inputs / "manifest.json")
         self.assertTrue(validation["contract_valid"], validation)
         run_dir, result = local_orchestrator_runner.run(built["bundle"], self.root / "policy-runs")
-        self.assertEqual((result["outcome"], result["rule_id"]), ("ACCEPTED", "R17_ACCEPT"))
+        self.assertEqual((result["outcome"], result["rule_id"]),
+                         ("REWORK", "R15_NEED_FULL_REVIEW"))
         self.assertTrue((run_dir / "registry-after.json").is_file())
 
     def test_projection_canonicalizes_only_derived_review_ids(self):
@@ -347,7 +366,8 @@ class TrustedReviewBuilderTests(unittest.TestCase):
             "fingerprint": {"fingerprint_version": 1, "category": "test_gap",
                 "criterion_id": "AC-1", "normalized_path": "src/app.py",
                 "normalized_symbol": "main", "normalized_title": "valid path is untested"}}
-        context = {"budgets_after": {"rework_used": 1, "infra_total_used": 0,
+        context = {"frozen_acceptance_criteria_digest": self.acceptance_digest(),
+            "budgets_after": {"rework_used": 1, "infra_total_used": 0,
             "infra_used_by_signature": {}, "final_full_used": 0, "no_progress_streak": 0},
             "seen_nonces": ["run_builder-test.attempt-1-nonce"],
             "finding_registry": {"document_type": "finding_registry", "schema_version": "1.0.0",
@@ -379,22 +399,18 @@ class TrustedReviewBuilderTests(unittest.TestCase):
             separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
         self.assertEqual(context["prior_findings_canonical_digest"], "sha256:" + expected)
 
-    def test_attempt_three_is_final_full_and_keeps_prior_decisions(self):
+    def test_attempt_three_is_rejected_without_creating_evidence(self):
         (self.repo / "src/app.py").write_text("print('new')\n")
-        prior = {"attempt_epoch": 1, "progress_identity": "sha256:" + "2" * 64,
-                 "decision_digest": "sha256:" + "3" * 64, "outcome": "REWORK", "rule_id": "R11_OPEN_FINDINGS"}
-        context = {"budgets_after": {"rework_used": 1, "infra_total_used": 0,
-            "infra_used_by_signature": {}, "final_full_used": 1, "no_progress_streak": 0},
-            "seen_nonces": ["run_builder-test.attempt-1-nonce", "run_builder-test.attempt-2-nonce"],
-            "finding_registry": {"document_type": "finding_registry", "schema_version": "1.0.0", "findings": []},
-            "prior_attempts": [prior], "last_decision": {"progress_identity": "sha256:" + "4" * 64,
-                "decision_digest": "sha256:" + "5" * 64, "outcome": "REWORK",
-                "rule_id": "R15_NEED_FULL_REVIEW"}}
-        built = build_review_inputs(self.repo, self.root / "attempt-3", self.baseline, self.config, 3, context)
-        inputs = built["input_dir"]
-        self.assertEqual(json.loads((inputs / "manifest.json").read_text())["expected_review_mode"], "final_full")
-        self.assertIsNone(json.loads((inputs / "bundle.json").read_text())["prior_findings"])
-        self.assertEqual(len(json.loads((inputs / "policy.json").read_text())["ledger"]["prior_attempts"]), 2)
+        output = self.root / "attempt-3"
+        with self.assertRaisesRegex(BuilderError, "attempt must be 1 or 2"):
+            build_review_inputs(self.repo, output, self.baseline, self.config, 3, {})
+        self.assertFalse(output.exists())
+
+    def test_attempt_two_requires_frozen_acceptance_digest(self):
+        (self.repo / "src/app.py").write_text("print('new')\n")
+        with self.assertRaisesRegex(BuilderError, "lacks frozen acceptance"):
+            build_review_inputs(self.repo, self.root / "attempt-2-missing-freeze",
+                                self.baseline, self.config, 2, {})
 
 
 if __name__ == "__main__":

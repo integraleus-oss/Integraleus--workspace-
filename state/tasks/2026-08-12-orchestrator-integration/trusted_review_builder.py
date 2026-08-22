@@ -70,6 +70,13 @@ def _canonical_digest(value: Any) -> str:
     return _digest_bytes(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode())
 
 
+def acceptance_criteria_digest(criteria: list[dict[str, Any]]) -> str:
+    """Return the frozen digest used by every implementation/review attempt."""
+    return _digest_bytes(b"\n".join(
+        (item["id"] + "\0" + item["statement"]).encode() for item in criteria
+    ))
+
+
 def _write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8")
 
@@ -168,6 +175,8 @@ def build_review_inputs(
     broker_reset_dirs: list[Path] | None = None, force_initial_review: bool = False,
 ) -> dict[str, Path]:
     root, out = project_root.resolve(), output_dir.resolve()
+    if attempt not in {1, 2}:
+        raise BuilderError("review attempt must be 1 or 2")
     if out.exists():
         raise BuilderError("review input directory already exists")
     if _head(root) != baseline.get("head"):
@@ -224,12 +233,13 @@ def build_review_inputs(
                        and isinstance(x["statement"], str) and x["statement"]
                        and ("requirement_ids" not in x or isinstance(x["requirement_ids"], list)) for x in criteria)):
         raise BuilderError("acceptance criteria are invalid")
-    spec_bytes = b"\n".join((x["id"] + "\0" + x["statement"]).encode() for x in criteria)
-    frozen_digest = _digest_bytes(spec_bytes)
-    if (attempt > 1 and isinstance(prior_context, dict)
-            and "frozen_acceptance_criteria_digest" in prior_context
-            and prior_context["frozen_acceptance_criteria_digest"] != frozen_digest):
-        raise BuilderError("acceptance criteria changed after the initial review")
+    frozen_digest = acceptance_criteria_digest(criteria)
+    if attempt > 1:
+        if (not isinstance(prior_context, dict)
+                or "frozen_acceptance_criteria_digest" not in prior_context):
+            raise BuilderError("prior context lacks frozen acceptance criteria digest")
+        if prior_context["frozen_acceptance_criteria_digest"] != frozen_digest:
+            raise BuilderError("acceptance criteria changed after the initial review")
     criteria_document = {
         "document_type": "trusted_acceptance_criteria", "schema_version": "1.0.0",
         "criteria": [{"criterion_id": x["id"], "statement": x["statement"],
@@ -245,7 +255,7 @@ def build_review_inputs(
     if len(run_id.removeprefix("run_")) > 64:
         raise BuilderError("generated run id is not reviewer-contract compatible")
     review_mode = ("initial_full" if attempt == 1 or force_initial_review else
-                   "targeted_verification" if attempt == 2 else "final_full")
+                   "targeted_verification")
     manifest = {
         "document_type": "trusted_review_manifest", "schema_version": "1.0.0",
         "subject": {"task_id": config["task_id"], "run_id": run_id, "attempt": attempt,

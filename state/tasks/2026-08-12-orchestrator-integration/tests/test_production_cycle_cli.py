@@ -96,6 +96,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.write_packet()
         loaded = load_packet(self.packet_path)
         self.assertEqual(loaded["proof_chain"]["manifest"]["manifest_id"], "proof-task")
+        self.assertEqual(len(loaded["reviews"]), 2)
         self.packet.update({"schema_version": "1.3.0", "control_mode": "manual", "depth": "strict",
                             "blind_acceptance": {"timeout_seconds": 30,
                                                  "verification_commands": [["python3", "-m", "unittest"]]}})
@@ -108,6 +109,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.packet.update({"schema_version": "1.4.0", "codex_add_dirs": [str(add_dir)]})
         self.write_packet()
         loaded_v14 = load_packet(self.packet_path)
+        self.assertEqual(len(loaded_v14["reviews"]), 2)
         self.assertEqual(loaded_v14["codex_add_dirs"], [add_dir.resolve()])
         self.packet["codex_add_dirs"] = ["/tmp"]
         self.write_packet()

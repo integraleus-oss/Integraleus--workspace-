@@ -245,7 +245,7 @@ def load_packet(packet_path: Path) -> dict[str, Any]:
         builder = dict(builder)
         builder["review_instructions"] = str(_inside(base, builder["review_instructions"]))
         builder["policy_fixture"] = str(_inside(base, builder["policy_fixture"]))
-        normalized_reviews = [{"prompt_text": _bounded_text(Path(builder["review_instructions"]))} for _ in range(3)]
+        normalized_reviews = [{"prompt_text": _bounded_text(Path(builder["review_instructions"]))} for _ in range(2)]
     proof_chain = None
     if schema_version in {"1.2.0", "1.3.0", "1.4.0"}:
         brief_path = _inside(base, packet["original_brief"])
@@ -404,7 +404,12 @@ def _run_loaded_packet(
                         or not isinstance(exc.repair_packet, str) or not exc.repair_packet.strip()):
                     raise
                 builder_repair_pending = True
-                prior_context = {"builder_repair": True, "budgets_after": {
+                prior_context = {"builder_repair": True,
+                    "frozen_acceptance_criteria_digest":
+                        trusted_review_builder.acceptance_criteria_digest(
+                            packet["builder"]["acceptance_criteria"]
+                        ),
+                    "budgets_after": {
                     "rework_used": 1, "infra_total_used": 0, "infra_used_by_signature": {},
                     "final_full_used": 0, "no_progress_streak": 0,
                 }, "builder_failure": {
