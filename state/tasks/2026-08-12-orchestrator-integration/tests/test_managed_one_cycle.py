@@ -134,6 +134,24 @@ class ManagedOneCycleTests(unittest.TestCase):
         with self.assertRaises(CycleError):
             run_managed_cycle(self.root.with_name("light-bad"), self.ok, lambda a, d: {}, review_profile="light")
 
+    def test_precreated_root_allows_only_regular_run_evidence(self):
+        root = self.root.with_name("precreated")
+        root.mkdir()
+        (root / "RUN_EVIDENCE.jsonl").write_text("evidence\n")
+        result = run_managed_cycle(
+            root, self.ok, lambda a, d: self.decision("ACCEPTED"),
+            precreated_evidence=True,
+        )
+        self.assertEqual(result["status"], "ACCEPTED")
+
+        bad = self.root.with_name("precreated-bad")
+        bad.mkdir()
+        (bad / "RUN_EVIDENCE.jsonl").write_text("evidence\n")
+        (bad / "extra").write_text("unexpected\n")
+        with self.assertRaisesRegex(CycleError, "already exists"):
+            run_managed_cycle(bad, self.ok, lambda a, d: self.decision("ACCEPTED"),
+                              precreated_evidence=True)
+
     def test_untrusted_review_result_escalates(self):
         result = run_managed_cycle(self.root, self.ok, lambda a, d: {"outcome": "ACCEPTED"})
         self.assertEqual(result["status"], "ESCALATED")

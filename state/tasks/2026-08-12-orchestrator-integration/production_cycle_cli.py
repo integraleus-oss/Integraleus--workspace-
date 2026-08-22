@@ -19,6 +19,7 @@ import evidence_dashboard
 import live_review_cycle
 import requirements_traceability
 import review_projection
+import run_evidence
 import trusted_review_builder
 from managed_one_cycle import run_managed_cycle
 from managed_policy_review import admit_live_review
@@ -358,6 +359,7 @@ def _targeted_closure_verified(admitted: dict[str, Any], registry: dict[str, Any
 
 def _run_loaded_packet(
     packet: dict[str, Any], *, allow_legacy: bool = False, review_profile: str = "standard",
+    evidence: run_evidence.EvidenceStream | None = None,
 ) -> dict[str, Any]:
     if (packet["proof_chain"] is None or packet["blind_config"] is None) and not allow_legacy:
         raise PacketError("pre-1.3 task packets are validation/replay-only; execution requires proof-chain and blind acceptance")
@@ -387,6 +389,12 @@ def _run_loaded_packet(
         if result["status"] not in {"OK", "INTERRUPTED"}:
             result = dict(result)
             result["classification"] = "UNKNOWN"
+        if evidence is not None:
+            evidence.append("agent_launch", {
+                "role": "codex", "attempt": attempt, "status": result.get("status", "UNKNOWN"),
+                "exit_code": result.get("exit_code"), "timed_out": result.get("timed_out"),
+                "duration_ms": result.get("duration_ms"),
+            })
         return result
 
     def review(attempt: int, run_dir: Path) -> dict[str, Any]:
@@ -400,6 +408,13 @@ def _run_loaded_packet(
                     force_initial_review=builder_repair_pending,
                 )
             except trusted_review_builder.GateFailure as exc:
+                if evidence is not None:
+                    evidence.append("gate", {
+                        "attempt": attempt, "gate_id": exc.record.get("gate_id"),
+                        "status": "FAIL", "classification": exc.classification,
+                        "exit_code": exc.record.get("exit_code"),
+                        "timed_out": exc.record.get("timed_out"),
+                    })
                 if (review_profile != "standard" or exc.classification != "IMPLEMENTATION_FAILURE" or attempt >= 2
                         or not isinstance(exc.repair_packet, str) or not exc.repair_packet.strip()):
                     raise
@@ -430,6 +445,17 @@ def _run_loaded_packet(
             trusted_review_builder.verify_seal(built["input_dir"], packet["project_root"])
             copied_inputs, bundle = built["input_dir"], built["bundle"]
             anchored_seal_digest = _sha256(built["seal"])
+            if evidence is not None:
+                changed_paths = _read_json(copied_inputs / "changed-paths.json")
+                evidence.append("changed_paths", {"attempt": attempt, "paths": changed_paths})
+                builder_evidence = _read_json(copied_inputs / "evidence.json")
+                for gate in builder_evidence.get("gates", []):
+                    evidence.append("gate", {
+                        "attempt": attempt, "gate_id": gate.get("gate_id"),
+                        "status": "PASS" if gate.get("exit_code") == 0 else "FAIL",
+                        "exit_code": gate.get("exit_code"), "timed_out": gate.get("timed_out"),
+                        "duration_ms": gate.get("duration_ms"),
+                    })
         else:
             copied_inputs = run_dir / "review-inputs"
             anchored_seal_digest = None
@@ -476,6 +502,8 @@ def _run_loaded_packet(
             allow_contract_retry=bool(packet["builder"]),
         )
         if result.get("status") == "INTERRUPTED":
+            if evidence is not None:
+                evidence.append("review", {"attempt": attempt, "status": "INTERRUPTED"})
             return result
         admitted = admit_live_review(result, live_root)
         admitted.pop("closure_verified", None)
@@ -526,12 +554,18 @@ def _run_loaded_packet(
                 "last_decision": {key: decision[key] for key in
                                   ("progress_identity", "decision_digest", "outcome", "rule_id")},
             }
+        if evidence is not None:
+            evidence.append("review", {
+                "attempt": attempt, "status": result.get("status"),
+                "rule_id": admitted.get("rule_id"), "outcome": admitted.get("outcome"),
+            })
         return admitted
 
     result = run_managed_cycle(
         packet["run_root"], implement, review,
         max_attempts=1 if review_profile == "light" else 2,
         review_profile=review_profile,
+        precreated_evidence=evidence is not None,
     )
     if result["status"] != "ACCEPTED" or packet["blind_config"] is None:
         if packet["proof_chain"] is not None:
@@ -603,7 +637,26 @@ def run_packet(
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError as exc:
             raise PacketError("another orchestrator task is already running") from exc
-        return _run_loaded_packet(packet, allow_legacy=allow_legacy, review_profile=review_profile)
+        task_id = packet["builder"]["task_id"] if packet["builder"] else packet["task_note"].stem
+        evidence = run_evidence.EvidenceStream.create(
+            packet["run_root"] / "RUN_EVIDENCE.jsonl", task_id=task_id, profile=review_profile,
+        )
+        try:
+            result = _run_loaded_packet(
+                packet, allow_legacy=allow_legacy, review_profile=review_profile, evidence=evidence,
+            )
+        except BaseException as exc:
+            interrupted = isinstance(exc, KeyboardInterrupt)
+            evidence.append("terminal", {
+                "status": "INTERRUPTED" if interrupted else "ERROR",
+                "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
+            })
+            raise
+        evidence.append("terminal", {
+            "status": result.get("status", "ERROR"), "attempts_used": result.get("attempts_used"),
+            "terminal_reason": result.get("terminal_reason"),
+        })
+        return result
 
 
 def main() -> int:

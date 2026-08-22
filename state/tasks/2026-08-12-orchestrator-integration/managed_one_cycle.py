@@ -35,14 +35,22 @@ def run_managed_cycle(
     *,
     max_attempts: int = 2,
     review_profile: str = "standard",
+    precreated_evidence: bool = False,
 ) -> dict[str, Any]:
     expected_attempts = 1 if review_profile == "light" else 2
     if review_profile not in {"light", "standard"} or max_attempts != expected_attempts:
         raise CycleError("review profile and attempt budget are inconsistent")
     root = root.resolve()
     if root.exists():
-        raise CycleError("cycle root already exists")
-    root.mkdir(parents=True)
+        contents = list(root.iterdir())
+        if (not precreated_evidence or len(contents) != 1
+                or contents[0].name != "RUN_EVIDENCE.jsonl"
+                or contents[0].is_symlink() or not contents[0].is_file()):
+            raise CycleError("cycle root already exists")
+    else:
+        if precreated_evidence:
+            raise CycleError("precreated evidence root is missing")
+        root.mkdir(parents=True)
     history: list[dict[str, Any]] = []
     rework_context: str | None = None
     final = "ESCALATED"

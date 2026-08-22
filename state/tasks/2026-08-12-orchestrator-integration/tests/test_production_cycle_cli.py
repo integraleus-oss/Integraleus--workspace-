@@ -231,6 +231,11 @@ class ProductionCycleCliTests(unittest.TestCase):
         }
         result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual([item["event"] for item in events],
+                         ["start", "agent_launch", "review", "terminal"])
+        self.assertEqual(events[-1]["payload"]["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 1)
         self.assertTrue((self.root / "run" / "cycle-result.json").is_file())
 
@@ -247,6 +252,11 @@ class ProductionCycleCliTests(unittest.TestCase):
         ]
         result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual([item["event"] for item in events],
+                         ["start", "agent_launch", "review", "agent_launch", "review", "terminal"])
+        self.assertEqual(events[-1]["payload"]["status"], "ACCEPTED")
         self.assertEqual(result["attempts_used"], 2)
         self.assertIn("Policy-authenticated rework:\nFix F-1", launch.call_args_list[1].args[2])
         self.assertIn("ORIGINAL_SEALED_TASK:\nMake the focused change.", launch.call_args_list[1].args[2])
@@ -264,6 +274,21 @@ class ProductionCycleCliTests(unittest.TestCase):
         implementation = result["history"][0]["implementation"]
         self.assertEqual(result["status"], "INTERRUPTED")
         self.assertNotIn("classification", implementation)
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual(events[-1]["payload"]["status"], "INTERRUPTED")
+        self.assertEqual([item["event"] for item in events], ["start", "agent_launch", "terminal"])
+
+    @patch("production_cycle_cli._run_loaded_packet", side_effect=RuntimeError("synthetic failure"))
+    def test_run_packet_persists_error_terminal_event(self, run):
+        with self.assertRaisesRegex(RuntimeError, "synthetic failure"):
+            run_packet(self.packet_path, allow_legacy=True)
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual([item["event"] for item in events], ["start", "terminal"])
+        self.assertEqual(events[-1]["payload"], {
+            "status": "ERROR", "error_type": "RuntimeError", "exit_code": 2,
+        })
 
     @patch("production_cycle_cli.admit_live_review", side_effect=RuntimeError("bad digest"))
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
@@ -292,6 +317,7 @@ class ProductionCycleCliTests(unittest.TestCase):
         for status, expected in (("ACCEPTED", 0), ("FAILED_INFRA", 3),
                                  ("ESCALATED", 4), ("INTERRUPTED", 130)):
             with self.subTest(status=status):
+                shutil.rmtree(self.packet["run_root"], ignore_errors=True)
                 code, output = self.invoke_main([str(self.packet_path)], {"status": status})
                 self.assertEqual(code, expected)
                 self.assertEqual(output["status"], status)
@@ -406,6 +432,12 @@ class ProductionCycleCliTests(unittest.TestCase):
                               "rule_id": "R17_ACCEPT"}
         result = run_packet(self.packet_path, allow_legacy=True)
         self.assertEqual(result["status"], "ACCEPTED")
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual([item["event"] for item in events],
+                         ["start", "agent_launch", "changed_paths", "gate", "review", "terminal"])
+        self.assertEqual(events[2]["payload"]["paths"], ["app.py"])
+        self.assertEqual(events[-1]["payload"]["status"], "ACCEPTED")
 
     @patch("production_cycle_cli.admit_live_review")
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
