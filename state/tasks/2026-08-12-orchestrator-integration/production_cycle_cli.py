@@ -658,8 +658,11 @@ def run_packet(
                     "status": "INTERRUPTED" if interrupted else "ERROR",
                     "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
                 })
-            except Exception:
-                pass
+            except Exception as evidence_exc:
+                print(
+                    "WARNING: terminal evidence append failed: " + type(evidence_exc).__name__,
+                    file=sys.stderr,
+                )
             raise
         evidence.append("terminal", {
             "status": result.get("status", "ERROR"), "attempts_used": result.get("attempts_used"),

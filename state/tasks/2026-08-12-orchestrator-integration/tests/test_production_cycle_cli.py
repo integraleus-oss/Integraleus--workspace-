@@ -316,9 +316,13 @@ class ProductionCycleCliTests(unittest.TestCase):
                 raise production_cycle_cli.run_evidence.EvidenceError("disk failure")
             return original(stream, event, payload)
 
-        with patch.object(production_cycle_cli.run_evidence.EvidenceStream, "append", new=append):
+        stderr = StringIO()
+        with patch.object(production_cycle_cli.run_evidence.EvidenceStream, "append", new=append), \
+                patch("sys.stderr", stderr):
             with self.assertRaises(KeyboardInterrupt):
                 run_packet(self.packet_path, allow_legacy=True)
+        self.assertEqual(stderr.getvalue(),
+                         "WARNING: terminal evidence append failed: EvidenceError\n")
 
     @patch("production_cycle_cli.admit_live_review", side_effect=RuntimeError("bad digest"))
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
