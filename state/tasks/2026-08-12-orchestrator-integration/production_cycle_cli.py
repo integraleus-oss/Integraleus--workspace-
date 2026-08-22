@@ -658,7 +658,7 @@ def run_packet(
                     "status": "INTERRUPTED" if interrupted else "ERROR",
                     "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
                 })
-            except run_evidence.EvidenceError:
+            except Exception:
                 pass
             raise
         evidence.append("terminal", {

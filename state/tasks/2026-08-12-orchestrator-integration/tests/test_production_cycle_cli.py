@@ -525,6 +525,21 @@ class ProductionCycleCliTests(unittest.TestCase):
             "source": "builder_gate",
         })
         self.assertEqual(reviews[1]["payload"]["outcome"], "ACCEPTED")
+        self.assertEqual([item["payload"]["status"] for item in events if item["event"] == "gate"],
+                         ["FAIL", "PASS"])
+
+        shutil.rmtree(self.packet["run_root"])
+        (self.project / "app.py").write_text("VALUE = 1\n")
+        launch.reset_mock()
+        live.reset_mock()
+        result = run_packet(self.packet_path, allow_legacy=True, review_profile="light")
+        self.assertEqual(result["status"], "ESCALATED")
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        self.assertEqual([item["event"] for item in events],
+                         ["start", "agent_launch", "gate", "terminal"])
+        self.assertEqual(events[2]["payload"]["status"], "FAIL")
+        self.assertEqual(events[-1]["payload"]["status"], "ESCALATED")
 
 
 if __name__ == "__main__":
