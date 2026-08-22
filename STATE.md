@@ -334,3 +334,12 @@ _Обновляется из любой сессии после значимых
 - Final focused gates passed 52/52; Python compilation and `git diff --check` passed; independent final review reported 0 blocker / 0 major after fixes.
 - Alpha BPR worktree was clean after commit. Push and deploy were not performed.
 - Next vertical: stage 6 browse-assisted generation of Customer Integration Profile drafts with engineer confirmation and mandatory validate/dry-run gates.
+
+## Automatic orchestrator RUN_EVIDENCE — 2026-08-22
+
+- Accepted under `D-2026-08-22-03`; evidence: `state/tasks/2026-08-22-orchestrator-run-evidence/EVIDENCE.md`.
+- Admitted production runs automatically write schema `1.0.0` events for start, agent launch, changed paths, gates, review, and terminal outcome.
+- The stream is append-only, monotonically sequenced, SHA-256 hash-chained, symlink-safe, and fail-closed on malformed/external modification or post-terminal writes.
+- Final verification: focused 57/57, full orchestrator 186/186, `git diff --check` PASS, independent closure review `ACCEPTED` with 0 blocker / 0 major.
+- Final evidence commit: `e0b7b9de`. Push/deploy and product-repository changes were not performed.
+- Next orchestrator increment: programmatically constrained `review-only`, `safe-fix`, and `sealed-pilot` profiles.
