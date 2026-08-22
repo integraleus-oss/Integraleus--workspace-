@@ -516,6 +516,15 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertIn("ORIGINAL_SEALED_TASK:", repair_prompt)
         self.assertIn("Make the focused change.", repair_prompt)
         self.assertIn("Trusted builder gate `value` failed", repair_prompt)
+        events = [json.loads(line) for line in
+                  (Path(self.packet["run_root"]) / "RUN_EVIDENCE.jsonl").read_text().splitlines()]
+        reviews = [item for item in events if item["event"] == "review"]
+        self.assertEqual(len(reviews), 2)
+        self.assertEqual(reviews[0]["payload"], {
+            "attempt": 1, "outcome": "REWORK", "rule_id": "R09_GATE_FAIL",
+            "source": "builder_gate",
+        })
+        self.assertEqual(reviews[1]["payload"]["outcome"], "ACCEPTED")
 
 
 if __name__ == "__main__":

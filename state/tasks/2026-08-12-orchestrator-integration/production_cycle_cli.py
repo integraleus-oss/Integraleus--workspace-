@@ -415,13 +415,14 @@ def _run_loaded_packet(
                         "exit_code": exc.record.get("exit_code"),
                         "timed_out": exc.record.get("timed_out"),
                     })
+                if (review_profile != "standard" or exc.classification != "IMPLEMENTATION_FAILURE" or attempt >= 2
+                        or not isinstance(exc.repair_packet, str) or not exc.repair_packet.strip()):
+                    raise
+                if evidence is not None:
                     evidence.append("review", {
                         "attempt": attempt, "outcome": "REWORK",
                         "rule_id": "R09_GATE_FAIL", "source": "builder_gate",
                     })
-                if (review_profile != "standard" or exc.classification != "IMPLEMENTATION_FAILURE" or attempt >= 2
-                        or not isinstance(exc.repair_packet, str) or not exc.repair_packet.strip()):
-                    raise
                 builder_repair_pending = True
                 prior_context = {"builder_repair": True,
                     "frozen_acceptance_criteria_digest":
@@ -657,7 +658,7 @@ def run_packet(
                     "status": "INTERRUPTED" if interrupted else "ERROR",
                     "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
                 })
-            except Exception:
+            except run_evidence.EvidenceError:
                 pass
             raise
         evidence.append("terminal", {
