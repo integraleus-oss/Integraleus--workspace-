@@ -290,6 +290,36 @@ class ProductionCycleCliTests(unittest.TestCase):
             "status": "ERROR", "error_type": "RuntimeError", "exit_code": 2,
         })
 
+    @patch("production_cycle_cli._run_loaded_packet", return_value={"status": "ACCEPTED"})
+    def test_run_packet_rejects_existing_or_symlink_run_root_without_mutation(self, run):
+        root = Path(self.packet["run_root"])
+        root.mkdir()
+        marker = root / "historical.json"
+        marker.write_text("{}\n", encoding="utf-8")
+        with self.assertRaisesRegex(Exception, "run_root must be new|run root already exists"):
+            run_packet(self.packet_path, allow_legacy=True)
+        self.assertEqual(list(root.iterdir()), [marker])
+        shutil.rmtree(root)
+        target = self.root / "target"
+        target.mkdir()
+        root.symlink_to(target, target_is_directory=True)
+        with self.assertRaisesRegex(Exception, "run_root must be new|run root already exists"):
+            run_packet(self.packet_path, allow_legacy=True)
+        self.assertEqual(list(target.iterdir()), [])
+
+    @patch("production_cycle_cli._run_loaded_packet", side_effect=KeyboardInterrupt)
+    def test_terminal_evidence_failure_does_not_mask_interrupt(self, run):
+        original = production_cycle_cli.run_evidence.EvidenceStream.append
+
+        def append(stream, event, payload):
+            if event == "terminal":
+                raise production_cycle_cli.run_evidence.EvidenceError("disk failure")
+            return original(stream, event, payload)
+
+        with patch.object(production_cycle_cli.run_evidence.EvidenceStream, "append", new=append):
+            with self.assertRaises(KeyboardInterrupt):
+                run_packet(self.packet_path, allow_legacy=True)
+
     @patch("production_cycle_cli.admit_live_review", side_effect=RuntimeError("bad digest"))
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
     @patch("production_cycle_cli.agent_launcher.launch", return_value={"status": "OK"})

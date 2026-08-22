@@ -415,6 +415,10 @@ def _run_loaded_packet(
                         "exit_code": exc.record.get("exit_code"),
                         "timed_out": exc.record.get("timed_out"),
                     })
+                    evidence.append("review", {
+                        "attempt": attempt, "outcome": "REWORK",
+                        "rule_id": "R09_GATE_FAIL", "source": "builder_gate",
+                    })
                 if (review_profile != "standard" or exc.classification != "IMPLEMENTATION_FAILURE" or attempt >= 2
                         or not isinstance(exc.repair_packet, str) or not exc.repair_packet.strip()):
                     raise
@@ -446,9 +450,9 @@ def _run_loaded_packet(
             copied_inputs, bundle = built["input_dir"], built["bundle"]
             anchored_seal_digest = _sha256(built["seal"])
             if evidence is not None:
-                changed_paths = _read_json(copied_inputs / "changed-paths.json")
+                changed_paths = _read_json(copied_inputs / "changed-paths.json", 1048576)
                 evidence.append("changed_paths", {"attempt": attempt, "paths": changed_paths})
-                builder_evidence = _read_json(copied_inputs / "evidence.json")
+                builder_evidence = _read_json(copied_inputs / "evidence.json", 1048576)
                 for gate in builder_evidence.get("gates", []):
                     evidence.append("gate", {
                         "attempt": attempt, "gate_id": gate.get("gate_id"),
@@ -640,6 +644,7 @@ def run_packet(
         task_id = packet["builder"]["task_id"] if packet["builder"] else packet["task_note"].stem
         evidence = run_evidence.EvidenceStream.create(
             packet["run_root"] / "RUN_EVIDENCE.jsonl", task_id=task_id, profile=review_profile,
+            exclusive_parent=True,
         )
         try:
             result = _run_loaded_packet(
@@ -647,10 +652,13 @@ def run_packet(
             )
         except BaseException as exc:
             interrupted = isinstance(exc, KeyboardInterrupt)
-            evidence.append("terminal", {
-                "status": "INTERRUPTED" if interrupted else "ERROR",
-                "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
-            })
+            try:
+                evidence.append("terminal", {
+                    "status": "INTERRUPTED" if interrupted else "ERROR",
+                    "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
+                })
+            except Exception:
+                pass
             raise
         evidence.append("terminal", {
             "status": result.get("status", "ERROR"), "attempts_used": result.get("attempts_used"),

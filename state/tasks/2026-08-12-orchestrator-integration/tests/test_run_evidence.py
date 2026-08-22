@@ -36,7 +36,8 @@ class RunEvidenceTests(unittest.TestCase):
 
     def test_payload_rejects_secrets_prompts_and_unsupported_values(self):
         stream = EvidenceStream.create(self.path, task_id="task-1", profile="standard")
-        for payload in ({"prompt": "private"}, {"api_key": "secret"}, {"value": object()}):
+        for payload in ({"prompt": "private"}, {"api_key": "secret"}, {"value": object()},
+                        {"value": float("nan")}):
             with self.subTest(payload=payload):
                 with self.assertRaises(EvidenceError):
                     stream.append("agent_launch", payload)

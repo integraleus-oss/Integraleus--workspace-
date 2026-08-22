@@ -27,7 +27,9 @@ class EvidenceError(RuntimeError):
 
 def _canonical(value: Any) -> bytes:
     try:
-        return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+        return json.dumps(
+            value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False,
+        ).encode("utf-8")
     except (TypeError, ValueError) as exc:
         raise EvidenceError("evidence payload is not JSON serializable") from exc
 
@@ -107,16 +109,32 @@ class EvidenceStream:
         self._sealed = events[-1]["event"] == "terminal"
 
     @classmethod
-    def create(cls, path: Path, *, task_id: str, profile: str) -> "EvidenceStream":
+    def create(
+        cls, path: Path, *, task_id: str, profile: str, exclusive_parent: bool = False,
+    ) -> "EvidenceStream":
         path = Path(path)
         if path.is_symlink():
             raise EvidenceError("evidence path must not be a symlink")
-        path.parent.mkdir(parents=True, exist_ok=True)
+        if exclusive_parent:
+            try:
+                os.mkdir(path.parent, 0o700)
+            except OSError as exc:
+                raise EvidenceError("run root already exists or cannot be created") from exc
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
         try:
             descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         except OSError as exc:
             raise EvidenceError("evidence stream already exists or cannot be created") from exc
         os.close(descriptor)
+        try:
+            parent_descriptor = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+                os.fsync(parent_descriptor)
+            finally:
+                os.close(parent_descriptor)
+        except OSError as exc:
+            raise EvidenceError("cannot make evidence creation durable") from exc
         stream = cls.__new__(cls)
         stream.path = path
         stream._sequence = 0
@@ -135,7 +153,7 @@ class EvidenceStream:
     def append(self, event: str, payload: dict[str, Any]) -> dict[str, Any]:
         if self._sealed:
             raise EvidenceError("evidence stream is sealed")
-        if event not in ALLOWED_EVENTS or event == "start" and self._sequence:
+        if event not in ALLOWED_EVENTS or (event == "start" and self._sequence):
             raise EvidenceError("evidence event type is invalid")
         if not isinstance(payload, dict):
             raise EvidenceError("evidence payload must be an object")
