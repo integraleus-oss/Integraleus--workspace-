@@ -319,3 +319,18 @@ _Обновляется из любой сессии после значимых
 - Track F release-audit orchestrator pilot is closed under `D-2026-08-20-01`. R1 exposed missing absolute path binding; R2 exposed nondeterministic shell membership checks under `pipefail`. The corrected closure harness passed 10/10, the frozen three-file audit digest remained `97349e91b94762f384a924555c2022841854b625f4eadbd991744860e8739912`, and independent closure review returned `ACCEPTED` with 0 blocker and 0 major. The audit itself remains `DEFER`; no product transfer, commit, push, deploy, VM, service, Gateway, system, or network change was authorized. Future sealed runs require repeated deterministic harness preflight and absolute path binding. Evidence: `state/tasks/2026-08-20-alpha-bpr-track-f-release-audit-closure/`.
 - Under `D-2026-08-21-01`, the orchestrator .NET profile requires a Trusted Test Broker execution adapter, typed gate failures, deterministic project/fixture execution-context paths, and at most one authenticated builder-repair attempt inside the existing sealed-cycle budget. The broker is not an OS security boundary: under the trusted local-administrator threat model it runs only operator-sealed commands, which may execute agent-authored tests. Agent-writable external artifacts are cleared before trusted gates and blind acceptance, and gate processes receive a scrubbed minimal environment. Infrastructure, safety, scope, test-count, and ignored-state failures remain fail-closed. Runtime nondeterminism detection remains a PREPARE-time repeated-run requirement. No Alpha BPR product run, transfer, commit, push, deploy, Gateway/runtime activation, or unattended use was authorized. Evidence: `state/tasks/2026-08-21-orchestrator-test-broker-repair/`.
 - The encrypted Synology backup for `7fa0a0b` was created after explicit approval and verified by external SHA-256, decryption, relative internal SHA-256, `git bundle verify`, and exact `refs/heads/main` commit match. Runtime/config changes, unattended activation, cron, deploy, and automatic commit/push remain separate approval gates.
+## Alpha BPR TRIZ P3 — 2026-08-22
+
+- Current verified local baseline: `061fcc8 feat: add P3 recipe approval proof summary`.
+- TRIZ P3 is closed: the recipe approval screen exposes lifecycle, audit, ontology, diff, report readiness, and mode/source in one reviewer proof-summary, protected by fail-closed UI/BFF guards.
+- Acceptance evidence: P3 27/27, full suite 367/367, build 0 errors / 0 warnings, Chromium smoke PASS, independent review PASS with 0 blocker / 0 major.
+- Push and deploy were not performed.
+- Next stage: Track E read-first plan/fact and deviation lane.
+
+## Alpha BPR read-only Integration Wizard — 2026-08-22
+
+- Roadmap stage 5 is accepted under `D-2026-08-22-02` at local commit `f21247a feat: add read-only integration wizard`.
+- The visible path covers connection, bounded OPC UA browse, mapping, compiled validation, compiled gateway dry-run, and one-use exact-profile activation. Only readable Variables are selectable; curated/public remains isolated and NO WRITE / NO METHODS is preserved.
+- Final focused gates passed 52/52; Python compilation and `git diff --check` passed; independent final review reported 0 blocker / 0 major after fixes.
+- Alpha BPR worktree was clean after commit. Push and deploy were not performed.
+- Next vertical: stage 6 browse-assisted generation of Customer Integration Profile drafts with engineer confirmation and mandatory validate/dry-run gates.
