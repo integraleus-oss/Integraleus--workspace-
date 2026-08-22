@@ -1,6 +1,6 @@
 # Automatic RUN_EVIDENCE task packet
 
-Status: REVIEW_BLOCKED
+Status: ACCEPTED
 Risk: MEDIUM
 Owner: Stanislav
 Baseline: workspace commit `9f8cf849`
@@ -39,7 +39,7 @@ state, changed paths when available, and terminal status. Evidence must survive
 - [x] Agent/review/gate summaries avoid raw prompt and secret content.
 - [x] Malformed/tampered existing streams fail closed.
 - [x] Unit and integration tests pass, including abrupt exception paths.
-- [ ] Independent read-only review has 0 blocker/major.
+- [x] Independent read-only review has 0 blocker/major.
 - [x] Scoped local commit created; push/deploy remain forbidden.
 
 ## Checklist
@@ -48,6 +48,6 @@ state, changed paths when available, and terminal status. Evidence must survive
 - [x] Add red tests
 - [x] Implement writer and lifecycle integration
 - [x] Run focused and full suites
-- [ ] Independent review (review transports returned no terminal verdict)
-- [ ] Fix blocker/major and rerun closure
+- [x] Independent review
+- [x] Fix blocker/major and rerun closure
 - [x] Provisional commit and report

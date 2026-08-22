@@ -1,6 +1,6 @@
 # Automatic RUN_EVIDENCE evidence
 
-Status: REVIEW_BLOCKED
+Status: ACCEPTED
 Implementation commit: `3d8ed15c`
 Baseline: `9f8cf849`
 
@@ -28,19 +28,19 @@ Baseline: `9f8cf849`
 
 ## Review gate
 
-The implementation is not accepted for production use yet. Independent review
-attempts did not produce a usable terminal verdict:
+- Initial independent review: REWORK, 2 major. It found run-root creation race
+  risks and possible masking of the original interrupt/error.
+- Closure review found a false `REWORK` evidence event on non-repairable builder
+  failures; this was corrected and pinned with an escalation-path test.
+- Terminal-evidence diagnostic was hardened so neither evidence failure nor a
+  broken stderr can replace the original exception.
+- Final independent closure review: ACCEPTED, 0 blocker, 0 major.
+- Final focused closure: `57 passed`.
+- Final full orchestrator suite: `186 passed in 19.853s`.
+- Final `git diff --check`: PASS.
 
-- Claude read-only wrapper: empty result.
-- Codex staged-diff and commit review: inspected the slice but emitted no final
-  verdict.
-- Claude commit-diff wrapper: empty result.
-- Local Qwen bounded review: did not terminate with a verdict and was stopped.
-
-These are review-transport failures, not PASS results. The provisional commit
-keeps the exact reviewed candidate reproducible. It must not be pushed,
-deployed, or used to qualify Alpha BPR until an independent review returns
-`0 blocker / 0 major` and the closure tests are rerun.
+Implementation and closure commits: `3d8ed15c`, `217daab5`, `3168c0a4`,
+`3d60ce70`, `c4823ff8`, `3d2857c5`. No push or deploy was performed.
 
 ## Scope audit
 
