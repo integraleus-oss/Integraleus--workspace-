@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import fcntl
 import hashlib
 import json
@@ -659,10 +660,11 @@ def run_packet(
                     "error_type": type(exc).__name__, "exit_code": 130 if interrupted else 2,
                 })
             except Exception as evidence_exc:
-                print(
-                    "WARNING: terminal evidence append failed: " + type(evidence_exc).__name__,
-                    file=sys.stderr,
-                )
+                with contextlib.suppress(Exception):
+                    print(
+                        "WARNING: terminal evidence append failed: " + type(evidence_exc).__name__,
+                        file=sys.stderr,
+                    )
             raise
         evidence.append("terminal", {
             "status": result.get("status", "ERROR"), "attempts_used": result.get("attempts_used"),

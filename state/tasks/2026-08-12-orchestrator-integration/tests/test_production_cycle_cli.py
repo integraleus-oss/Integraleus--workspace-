@@ -324,6 +324,20 @@ class ProductionCycleCliTests(unittest.TestCase):
         self.assertEqual(stderr.getvalue(),
                          "WARNING: terminal evidence append failed: EvidenceError\n")
 
+        shutil.rmtree(self.packet["run_root"])
+
+        class BrokenStderr:
+            def write(self, value):
+                raise OSError("stderr unavailable")
+
+            def flush(self):
+                raise OSError("stderr unavailable")
+
+        with patch.object(production_cycle_cli.run_evidence.EvidenceStream, "append", new=append), \
+                patch("sys.stderr", BrokenStderr()):
+            with self.assertRaises(KeyboardInterrupt):
+                run_packet(self.packet_path, allow_legacy=True)
+
     @patch("production_cycle_cli.admit_live_review", side_effect=RuntimeError("bad digest"))
     @patch("production_cycle_cli.live_review_cycle.run_cycle", return_value={"status": "DECIDED"})
     @patch("production_cycle_cli.agent_launcher.launch", return_value={"status": "OK"})
