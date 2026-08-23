@@ -343,3 +343,12 @@ _Обновляется из любой сессии после значимых
 - Final verification: focused 57/57, full orchestrator 186/186, `git diff --check` PASS, independent closure review `ACCEPTED` with 0 blocker / 0 major.
 - Final evidence commit: `e0b7b9de`. Push/deploy and product-repository changes were not performed.
 - Next orchestrator increment: programmatically constrained `review-only`, `safe-fix`, and `sealed-pilot` profiles.
+
+## Alpha BPR Universal Recipe Testbed — 2026-08-23
+
+- Accepted under `D-2026-08-23-01` as a separate project at `/home/stanislav/projects/alpha-bpr-universal-testbed`.
+- First demonstration process: universal reactor/mixer with dosing, heating, holding, and discharge.
+- Bootstrap contains configurable signal and recipe schemas, one 13-signal reactor catalog, three distinct recipes, and a generator for native Alpha.Server and Alpha.Imitator projects.
+- Model and generated-source checks pass; both native units compile and rebuild successfully in Alpha.DevStudio.
+- No live deployment, service restart, license/system change, or real PLC write has been performed. These remain separate explicit approval gates.
+- Next implementation slice: native Alpha.HMI tracer screen and local `HMI -> command -> Alpha.Imitator -> readback` proof.
