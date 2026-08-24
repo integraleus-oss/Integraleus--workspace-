@@ -362,3 +362,12 @@ _Обновляется из любой сессии после значимых
 - Exactly seven manifest files were published after backup; FTPS SHA-256 matched 7/7 and all target/control checks passed HTTP 200. Rollback was not required.
 - `/lk/**`, forms, PHP/MySQL, uploads, DNS and Synology were not changed.
 - Next stage: operate the workflow with a second material or separately design hosted CMS/preview infrastructure.
+
+## Alpha BPR Universal Recipe Testbed Phase 3 — 2026-08-24
+
+- Accepted under `D-2026-08-24-03` as a compile-only baseline; project source remains `/home/stanislav/projects/alpha-bpr-universal-testbed`.
+- Alpha.Server and Alpha.Imitator now generate 21 configurable signals with fail-closed command validation, correlation IDs, batch identity, TTL metadata, duplicate protection, explicit ACK/reject/completed/reset states and running readback.
+- Native Alpha.HMI exposes separate START/RESET controls and visible ACK, rejection reason, READY, interlock, readback and compile-only quality state.
+- Four focused checks, Alpha.DevStudio compile/rebuild, Alpha.HMI compile/BINOM export, 1440x900 Viewer render and `git diff --check` passed.
+- No deployment, service restart, license/system mutation, PLC connection or live write occurred.
+- Next gate: dynamic per-request ID generation and actual local `HMI -> Alpha.Server -> Alpha.Imitator -> readback` proof, only after explicit deploy approval.
