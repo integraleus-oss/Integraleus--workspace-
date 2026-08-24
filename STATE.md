@@ -352,3 +352,13 @@ _Обновляется из любой сессии после значимых
 - Model and generated-source checks pass; both native units compile and rebuild successfully in Alpha.DevStudio.
 - No live deployment, service restart, license/system change, or real PLC write has been performed. These remain separate explicit approval gates.
 - Next implementation slice: native Alpha.HMI tracer screen and local `HMI -> command -> Alpha.Imitator -> readback` proof.
+## Spectech WordPress MVP — 2026-08-24
+
+- Release preparation was accepted under `D-2026-08-24-01` at local `spectech-sites` commit `7b6cc55`.
+- The first production release is accepted under `D-2026-08-24-02`; production evidence and pinned curl/FTPS pipeline are committed as `5446b59`.
+- First vertical material: «Чек-лист исходных данных для обследования и модернизации SCADA».
+- Both site indexes and sitemaps are prepared; seven-file release manifest and guarded backup/deploy/smoke/rollback pipeline are ready.
+- Verification passed: contract tests 2/2, release validation 0 failures, Astro build 18 pages, clean repository.
+- Exactly seven manifest files were published after backup; FTPS SHA-256 matched 7/7 and all target/control checks passed HTTP 200. Rollback was not required.
+- `/lk/**`, forms, PHP/MySQL, uploads, DNS and Synology were not changed.
+- Next stage: operate the workflow with a second material or separately design hosted CMS/preview infrastructure.

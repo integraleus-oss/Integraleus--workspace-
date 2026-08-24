@@ -665,3 +665,19 @@ DATE: 2026-08-23
 TITLE: Start Alpha BPR Universal Recipe Testbed on Home
 CONTENT: Develop a separate configurable Alpha BPR Universal Recipe Testbed on the Home Alpha stand, beginning with a universal reactor/mixer covering dosing, heating, holding, and discharge. The initial native Alpha.Server and Alpha.Imitator projects are generated from configurable signal and recipe models and compile successfully in Alpha.DevStudio. Live deployment, service restarts, license changes, system changes, and any write to a real PLC remain separate explicit approval gates.
 RATIONALE: Stanislav explicitly authorized the separate project, identified Home as the licensed local Alpha stand, selected the first demonstration process, and approved this Memory Candidate in Telegram topic `HOME:14` on 2026-08-23. The bootstrap verification passed model validation, generated-source validation, and native Alpha.DevStudio compile/build without deployment.
+---
+### ID: D-2026-08-24-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-24
+TITLE: WordPress MVP content package is ready for a separately approved production release
+CONTENT: Treat `spectech-sites` commit `7b6cc55` (`Prepare WordPress MVP content release`) as the accepted release-preparation baseline for the first WordPress vertical scenario, «Чек-лист исходных данных для обследования и модернизации SCADA». The material is included in the blog/news indexes of both sites, both URLs are included in sitemap output, the pages are release-ready with canonical, Article JSON-LD and `index, follow`, and the seven-file release manifest is guarded by backup, explicit deploy approval, smoke checks, and separately approved rollback. Contract tests passed 2/2, release validation passed with zero failures, Astro built 18 pages, and the repository was clean after the commit. Production, Reg.ru, DNS, Synology, `/lk/**`, PHP/MySQL, forms, and uploads were not changed. This decision records readiness only; production backup and publication remain a separate explicit approval gate.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:990` on 2026-08-24 after receiving the release-preparation result and commit `7b6cc55`.
+---
+### ID: D-2026-08-24-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-24
+TITLE: Accept the first WordPress MVP production release
+CONTENT: Treat the first WordPress MVP vertical release for «Чек-лист исходных данных для обследования и модернизации SCADA» as successfully published and verified in production. The released source baseline is `spectech-sites` commit `7b6cc55`; production evidence and the hardened curl/FTPS transport with a pinned REG.RU server public key are recorded in commit `5446b59`. A complete pre-release backup was created, exactly seven manifest files were uploaded, FTPS SHA-256 matched local sources for all 7/7 files, all target URLs and control URLs returned HTTP 200, canonical/robots/JSON-LD/index cards/sitemaps/CSS were verified, deprecated Alpha names were absent, and rollback was not required. `/lk/**`, forms, PHP/MySQL, uploads, DNS, and Synology were not changed. Future materials and any CMS infrastructure changes remain separate controlled increments.
+RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-24 after separately authorizing the production release and receiving its complete verification report.
