@@ -1,0 +1,82 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alpha-BPR — архитектура самодоказывающегося производства</title>
+<style>
+  :root {
+    --bg:#07111f; --panel:#0d1b2d; --panel2:#10243a; --fg:#f3f7fb; --muted:#9fb1c5;
+    --line:#55708d; --cyan:#47c7df; --blue:#4d8dff; --green:#4fd1a1; --amber:#f1bd63;
+    --violet:#a48bff; --red:#ef7b7b;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.35 Inter,Segoe UI,Arial,sans-serif}
+  main{max-width:1600px;margin:0 auto;padding:28px}.title{font-size:31px;font-weight:760;fill:var(--fg)}
+  .subtitle{font-size:15px;fill:var(--muted)} .section{font-size:13px;font-weight:750;letter-spacing:1.5px;fill:var(--muted)}
+  .label{font-size:17px;font-weight:720;fill:var(--fg)} .body{font-size:13px;fill:var(--muted)}
+  .tiny{font-size:11px;fill:var(--muted)} .node{stroke-width:1.3}.edge{fill:none;stroke:var(--line);stroke-width:2}
+  .flow{fill:none;stroke:var(--cyan);stroke-width:3}.proof{fill:none;stroke:var(--green);stroke-width:2.3;stroke-dasharray:7 6}
+  .zone{fill:var(--panel);stroke:#29415c;stroke-width:1.4}.pill{fill:#132b44;stroke:#355573;stroke-width:1}
+  .core{fill:#173d59;stroke:var(--cyan)}.validation{fill:#2a2d5b;stroke:var(--violet)}
+  .evidence{fill:#123f38;stroke:var(--green)}.platform{fill:#3a2e1e;stroke:var(--amber)}
+  .external{fill:#2a3542;stroke:#71869c}.agent{fill:#2d244b;stroke:var(--violet)}
+  .caption{font-size:18px;font-weight:700;fill:#dce7f2}.ifr{font-size:20px;font-weight:760;fill:#dffff3}
+</style>
+<main>
+<svg viewBox="0 0 1540 1040" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">Архитектура Alpha-BPR, переосмысленная через ТРИЗ</title>
+  <desc id="desc">Связь регулируемого производства, Alpha Platform, ядра Alpha-BPR, валидации, аудита, доказательств и агентной разработки.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#55708d"/></marker>
+    <marker id="arrowC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#47c7df"/></marker>
+    <marker id="arrowG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4fd1a1"/></marker>
+  </defs>
+
+  <text x="20" y="42" class="title">Alpha-BPR — архитектура самодоказывающегося производства</text>
+  <text x="20" y="70" class="subtitle">TRIZ-образ: не «ещё один экран batch record», а машина снятия противоречия между быстрым исполнением и регуляторной доказуемостью</text>
+
+  <!-- connectors first -->
+  <path d="M210 310 H310" class="flow" marker-end="url(#arrowC)"/>
+  <path d="M590 310 H665" class="flow" marker-end="url(#arrowC)"/>
+  <path d="M965 310 H1035" class="flow" marker-end="url(#arrowC)"/>
+  <path d="M1315 310 H1415" class="flow" marker-end="url(#arrowC)"/>
+  <path d="M805 402 V480" class="proof" marker-end="url(#arrowG)"/>
+  <path d="M490 555 H655" class="proof" marker-end="url(#arrowG)"/>
+  <path d="M955 555 H1105" class="proof" marker-end="url(#arrowG)"/>
+  <path d="M1245 625 V720 H855" class="proof" marker-end="url(#arrowG)"/>
+  <path d="M805 720 V650" class="proof" marker-end="url(#arrowG)"/>
+  <path d="M400 790 V665" class="edge" marker-end="url(#arrow)"/>
+  <path d="M770 790 V665" class="edge" marker-end="url(#arrow)"/>
+  <path d="M1135 790 V665" class="edge" marker-end="url(#arrow)"/>
+
+  <!-- top context -->
+  <text x="20" y="116" class="section">НАДСИСТЕМА И ЦЕННОСТЬ</text>
+  <rect x="20" y="135" width="1500" height="92" rx="16" class="zone"/>
+  <g><rect x="45" y="157" width="275" height="48" rx="24" class="pill"/><text x="182" y="178" text-anchor="middle" class="label">Технолог / мастер-данные</text><text x="182" y="195" text-anchor="middle" class="tiny">рецепт • версия • процедура</text></g>
+  <g><rect x="340" y="157" width="245" height="48" rx="24" class="pill"/><text x="462" y="178" text-anchor="middle" class="label">Оператор</text><text x="462" y="195" text-anchor="middle" class="tiny">исполнение • отклонения</text></g>
+  <g><rect x="605" y="157" width="245" height="48" rx="24" class="pill"/><text x="727" y="178" text-anchor="middle" class="label">QA</text><text x="727" y="195" text-anchor="middle" class="tiny">review • release • причины</text></g>
+  <g><rect x="870" y="157" width="290" height="48" rx="24" class="pill"/><text x="1015" y="178" text-anchor="middle" class="label">Аудитор / валидатор</text><text x="1015" y="195" text-anchor="middle" class="tiny">прослеживаемость • evidence</text></g>
+  <g><rect x="1180" y="157" width="315" height="48" rx="24" class="pill"/><text x="1337" y="178" text-anchor="middle" class="label">Заказчик / пилот</text><text x="1337" y="195" text-anchor="middle" class="tiny">понятная ценность без ложных claims</text></g>
+
+  <!-- main value stream -->
+  <text x="20" y="268" class="section">ОСНОВНОЙ ПОТОК ЦЕННОСТИ</text>
+  <g><rect x="20" y="285" width="190" height="92" rx="16" class="external node"/><text x="115" y="316" text-anchor="middle" class="label">Физический процесс</text><text x="115" y="340" text-anchor="middle" class="body">сигналы • фазы</text><text x="115" y="358" text-anchor="middle" class="body">команды • readback</text></g>
+  <g><rect x="310" y="275" width="280" height="112" rx="16" class="platform node"/><text x="450" y="305" text-anchor="middle" class="label">Alpha Platform</text><text x="450" y="329" text-anchor="middle" class="body">Alpha.Server • Alpha.Historian</text><text x="450" y="348" text-anchor="middle" class="body">исполнение и технологический факт</text><text x="450" y="369" text-anchor="middle" class="tiny">ресурс надсистемы, не дублируется в BPR</text></g>
+  <g><rect x="665" y="260" width="300" height="142" rx="18" class="core node"/><text x="815" y="292" text-anchor="middle" class="caption">Workflow Core</text><text x="815" y="319" text-anchor="middle" class="body">Recipe → Submit → Approve → Effective</text><text x="815" y="340" text-anchor="middle" class="body">Batch → EBR → QA Review → Release</text><text x="815" y="366" text-anchor="middle" class="tiny">типизированные переходы • единая истина</text><text x="815" y="384" text-anchor="middle" class="tiny">никакого UI-only состояния</text></g>
+  <g><rect x="1035" y="275" width="280" height="112" rx="16" class="core node"/><text x="1175" y="305" text-anchor="middle" class="label">HMI / BFF boundary</text><text x="1175" y="329" text-anchor="middle" class="body">curated ↔ live-sandbox</text><text x="1175" y="349" text-anchor="middle" class="body">честные badges • write guards</text><text x="1175" y="369" text-anchor="middle" class="tiny">без скрытого fake success</text></g>
+  <g><rect x="1415" y="285" width="105" height="92" rx="16" class="platform node"/><text x="1467" y="315" text-anchor="middle" class="label">Alpha.HMI</text><text x="1467" y="337" text-anchor="middle" class="tiny">WebViewer</text><text x="1467" y="356" text-anchor="middle" class="tiny">оператор • QA</text></g>
+
+  <!-- self proof loop -->
+  <text x="20" y="450" class="section">КОНТУР «ЗАПИСЬ ДОКАЗЫВАЕТ СЕБЯ»</text>
+  <g><rect x="145" y="485" width="345" height="140" rx="18" class="validation node"/><text x="317" y="518" text-anchor="middle" class="caption">Validation Intelligence</text><text x="317" y="546" text-anchor="middle" class="body">ontology-lite • blocker rules</text><text x="317" y="568" text-anchor="middle" class="body">объяснение нарушения • rule runs</text><text x="317" y="592" text-anchor="middle" class="tiny">минимум сложности, максимум доменного смысла</text></g>
+  <g><rect x="655" y="480" width="300" height="170" rx="20" class="evidence node"/><text x="805" y="514" text-anchor="middle" class="caption">Audit &amp; Evidence Spine</text><text x="805" y="543" text-anchor="middle" class="body">audit events • guard registry</text><text x="805" y="565" text-anchor="middle" class="body">tests • monitors • API/UI evidence</text><text x="805" y="587" text-anchor="middle" class="body">r2 packages • SHA-256</text><text x="805" y="616" text-anchor="middle" class="tiny">доказательство проектируется до реализации</text></g>
+  <g><rect x="1105" y="485" width="280" height="140" rx="18" class="platform node"/><text x="1245" y="518" text-anchor="middle" class="caption">Выход и наблюдаемость</text><text x="1245" y="546" text-anchor="middle" class="body">Alpha.Reports</text><text x="1245" y="568" text-anchor="middle" class="body">Alpha.Security • Alpha.Diagnostics</text><text x="1245" y="592" text-anchor="middle" class="tiny">отчёт • роли • диагностика / аудит</text></g>
+
+  <!-- enablers -->
+  <text x="20" y="760" class="section">РЕСУРСЫ РАЗВИТИЯ</text>
+  <g><rect x="145" y="790" width="510" height="145" rx="18" class="agent node"/><text x="400" y="823" text-anchor="middle" class="caption">Agentic Delivery Layer</text><text x="400" y="851" text-anchor="middle" class="body">PM • Domain • TRIZ • Critic • Evidence • UX</text><text x="400" y="875" text-anchor="middle" class="body">task packet → реализация → независимый review</text><text x="400" y="901" text-anchor="middle" class="tiny">согласие агентов ≠ доказательство; итог — файл, тест, monitor или blocker</text></g>
+  <g><rect x="690" y="790" width="365" height="145" rx="18" class="external node"/><text x="872" y="823" text-anchor="middle" class="caption">Evidence-first delivery</text><text x="872" y="851" text-anchor="middle" class="body">Feature → Guard → Evidence → Owner</text><text x="872" y="875" text-anchor="middle" class="body">малые доказанные инкременты</text><text x="872" y="901" text-anchor="middle" class="tiny">глубина доказательства важнее ширины меню</text></g>
+  <g><rect x="1090" y="790" width="295" height="145" rx="18" class="external node"/><text x="1237" y="823" text-anchor="middle" class="caption">Границы утверждений</text><text x="1237" y="851" text-anchor="middle" class="body">demo ≠ production</text><text x="1237" y="875" text-anchor="middle" class="body">pilot ≠ QMS / Part 11 sign-off</text><text x="1237" y="901" text-anchor="middle" class="tiny">явное owner approval для production</text></g>
+
+  <rect x="300" y="968" width="940" height="52" rx="26" fill="#10382f" stroke="#4fd1a1" stroke-width="1.5"/>
+  <text x="770" y="1001" text-anchor="middle" class="ifr">ИКР: процесс сам ведёт, блокирует, объясняет, аудитит и формирует доказательства</text>
+</svg>
+</main>
