@@ -435,3 +435,13 @@ _Обновляется из любой сессии после значимых
 - Phase 3–5 regression, Alpha.DevStudio compile/rebuild, Alpha.HMI BINOM export, real Viewer interactions and independent OPC UA readback remain green.
 - The isolated Alpha.Net/Alpha.Domain, Alpha.Server and Alpha.Historian contour is stopped after the gate; test ports are closed, standard Alpha services and listeners `11010/11020` are restored.
 - Secrets remain local outside Git. The testbed worktree is clean; push, PLC, customer and production systems were not changed.
+
+## Alpha BPR Universal Recipe Testbed Phase 7 — 2026-08-25
+
+- Accepted under `D-2026-08-25-11` at local testbed commit `4fc05ce feat: prove multi-mapping recipe universality`.
+- Three canonical recipes pass two generated mappings: `R-101/M-101` and `BV-201/AG-201`, for six successful combinations without application-code edits between profiles.
+- Both profiles pass commands, setpoints, interlocks, expiry/idempotency, real Viewer navigation/readback, alarms/ACK, Historian/charts, Security roles and Reports export/rollback.
+- Mapping-specific native Alpha and HMI artifacts differ by SHA-256; the Viewer shows the selected equipment tags and profile.
+- `./scripts/run_phase7_gate.sh` is the one-command proof. It uses isolated local Alpha.DevStudio build-output activation because changed-config deploy through the isolated Domain cannot resolve the system service executable path (`Unknown error -1`); deploy success is not claimed.
+- The isolated contour is stopped, test ports are closed and standard Alpha services are restored. Push, PLC, customer and production systems remain untouched.
+- Next stage: Phase 8 test PLC or explicitly approved PLC simulator gate; requires separate authorization.
