@@ -427,3 +427,11 @@ _Обновляется из любой сессии после значимых
 - The complete `./scripts/run_live_gate.sh` proof passes generation, validators, native compile/rebuild, BINOM export, three recipes, negative scenarios, Viewer navigation/clicks and rollback.
 - Screenshot review at 1280x900 passed after correcting right-edge clipping. Isolated runtimes are stopped, test ports are closed, and standard Alpha services remain active.
 - Phase 6 remains open for actual Alpha.HMI.Alarms, alpha.hmi.charts/Alpha.Historian, Alpha.Security and Alpha.Reports integration. Push, PLC, customer and production systems remain untouched.
+
+## Alpha BPR Universal Recipe Testbed Phase 6 — 2026-08-25
+
+- Accepted under `D-2026-08-25-10` at local testbed commit `65d5f87 feat: add native phase 6 operations`.
+- The one-command `./scripts/run_phase6_gate.sh` proof passes native Alpha.HMI.Alarms active/acknowledged handling, Alpha.Historian readback (102 values, 25 distinct), embedded alpha.hmi.charts live mass readback with a 0–150 kg scale, Alpha.Security observer/operator enforcement, and Alpha.Reports render/XLSX/PDF/marker/template rollback.
+- Phase 3–5 regression, Alpha.DevStudio compile/rebuild, Alpha.HMI BINOM export, real Viewer interactions and independent OPC UA readback remain green.
+- The isolated Alpha.Net/Alpha.Domain, Alpha.Server and Alpha.Historian contour is stopped after the gate; test ports are closed, standard Alpha services and listeners `11010/11020` are restored.
+- Secrets remain local outside Git. The testbed worktree is clean; push, PLC, customer and production systems were not changed.
