@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Архитектура сайтов Спецтех с headless WordPress</title>
+<style>
+  :root{color-scheme:light dark;--bg:#f8fafc;--fg:#172033;--muted:#5b6475;--line:#64748b;--input:#bfdbfe;--process:#c7d2fe;--storage:#99f6e4;--external:#fde68a;--risk:#fecaca;--zone:#e2e8f0}
+  @media(prefers-color-scheme:dark){:root{--bg:#0f172a;--fg:#e5e7eb;--muted:#a3adbd;--line:#94a3b8;--input:#1d4ed8;--process:#4338ca;--storage:#0f766e;--external:#92400e;--risk:#991b1b;--zone:#334155}}
+  body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1180px;margin:28px auto;padding:0 18px}svg{width:100%;height:auto;display:block}.title{font-size:22px;font-weight:700;fill:var(--fg)}.subtitle{font-size:13px;fill:var(--muted)}.label{font-size:14px;font-weight:650;fill:var(--fg)}.small{font-size:12px;fill:var(--muted)}.node{stroke:var(--line);stroke-width:1}.input{fill:var(--input)}.process{fill:var(--process)}.storage{fill:var(--storage)}.external{fill:var(--external)}.risk{fill:var(--risk)}.zone{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:7 5}.zone-label{font-size:12px;font-weight:650;fill:var(--muted)}.edge{stroke:var(--line);stroke-width:1.6;fill:none}.approval{stroke:#b45309;stroke-width:2;stroke-dasharray:5 4;fill:none}.edge-label{font-size:11px;fill:var(--muted)}
+</style>
+<main>
+<svg viewBox="0 0 1160 760" role="img" aria-labelledby="t d">
+  <title id="t">Headless WordPress для двух сайтов Спецтех</title>
+  <desc id="d">WordPress хранит контент, управляющий генератор создаёт и проверяет черновики, а два адаптера публикуют их в существующие сайты после согласования.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--line)"/></marker></defs>
+
+  <!-- Connectors behind nodes -->
+  <path class="edge" marker-end="url(#arrow)" d="M190 160H260"/>
+  <path class="edge" marker-end="url(#arrow)" d="M430 160H500"/>
+  <path class="edge" marker-end="url(#arrow)" d="M580 215V282"/>
+  <path class="edge" marker-end="url(#arrow)" d="M690 345H760"/>
+  <path class="approval" marker-end="url(#arrow)" d="M870 405V475"/>
+  <path class="edge" marker-end="url(#arrow)" d="M870 545V590H695"/>
+  <path class="edge" marker-end="url(#arrow)" d="M695 625H750"/>
+  <path class="edge" marker-end="url(#arrow)" d="M695 685H750"/>
+  <path class="edge" marker-end="url(#arrow)" d="M470 625H415"/>
+  <path class="edge" marker-end="url(#arrow)" d="M470 685H415"/>
+  <path class="edge" marker-end="url(#arrow)" d="M950 625H1040V370H990"/>
+  <path class="edge" marker-end="url(#arrow)" d="M950 685H1080V370H990"/>
+
+  <text x="24" y="38" class="title">Управляемая публикация через headless WordPress</text>
+  <text x="24" y="62" class="subtitle">WordPress — редакционная система, но не публичный фронтенд. Текущие сайты, калькуляторы, формы и ЛК сохраняются.</text>
+
+  <rect x="20" y="90" width="430" height="160" rx="14" class="zone"/>
+  <text x="38" y="114" class="zone-label">РЕДАКЦИОННЫЙ КОНТУР</text>
+  <rect x="40" y="130" width="150" height="60" rx="10" class="node input"/>
+  <text x="115" y="154" text-anchor="middle" class="label">Редактор / агент</text><text x="115" y="174" text-anchor="middle" class="small">задача и источники</text>
+  <rect x="260" y="125" width="170" height="70" rx="10" class="node storage"/>
+  <text x="345" y="151" text-anchor="middle" class="label">WordPress CMS</text><text x="345" y="171" text-anchor="middle" class="small">черновики · медиа · версии</text>
+
+  <rect x="480" y="90" width="500" height="360" rx="14" class="zone"/>
+  <text x="498" y="114" class="zone-label">УПРАВЛЯЮЩИЙ КОНТУР</text>
+  <rect x="500" y="125" width="160" height="90" rx="10" class="node process"/>
+  <text x="580" y="151" text-anchor="middle" class="label">Генератор</text><text x="580" y="172" text-anchor="middle" class="small">шаблон · SEO · JSON-LD</text><text x="580" y="191" text-anchor="middle" class="small">кросс-публикация</text>
+  <rect x="500" y="282" width="190" height="126" rx="10" class="node process"/>
+  <text x="595" y="307" text-anchor="middle" class="label">Автопроверки</text><text x="595" y="330" text-anchor="middle" class="small">факты Alpha · ссылки · HTML</text><text x="595" y="350" text-anchor="middle" class="small">mobile · accessibility · формы</text><text x="595" y="370" text-anchor="middle" class="small">canonical · sitemap · секреты</text><text x="595" y="390" text-anchor="middle" class="small">лицензии: отдельный preflight</text>
+  <rect x="760" y="282" width="220" height="126" rx="10" class="node external"/>
+  <text x="870" y="307" text-anchor="middle" class="label">Preview без индексации</text><text x="870" y="330" text-anchor="middle" class="small">diff + desktop/mobile</text><text x="870" y="350" text-anchor="middle" class="small">скриншоты + отчёт проверок</text><text x="870" y="382" text-anchor="middle" class="small">решение человека</text>
+
+  <rect x="760" y="475" width="220" height="70" rx="10" class="node risk"/>
+  <text x="870" y="501" text-anchor="middle" class="label">Явное согласование</text><text x="870" y="523" text-anchor="middle" class="small">approve / reject / правки</text>
+
+  <rect x="450" y="570" width="520" height="150" rx="14" class="zone"/>
+  <text x="468" y="594" class="zone-label">ПУБЛИКАЦИЯ ПОСЛЕ APPROVE</text>
+  <rect x="470" y="605" width="225" height="42" rx="9" class="node process"/><text x="582" y="631" text-anchor="middle" class="label">Адаптер specialtechnology.ru</text>
+  <rect x="470" y="665" width="225" height="42" rx="9" class="node process"/><text x="582" y="691" text-anchor="middle" class="label">Адаптер special-tech.ru</text>
+  <rect x="750" y="605" width="200" height="42" rx="9" class="node external"/><text x="850" y="631" text-anchor="middle" class="label">Статический SEO-сайт</text>
+  <rect x="750" y="665" width="200" height="42" rx="9" class="node external"/><text x="850" y="691" text-anchor="middle" class="label">Astro + формы + PHP ЛК</text>
+
+  <rect x="20" y="555" width="395" height="175" rx="14" class="zone"/>
+  <text x="38" y="579" class="zone-label">БЕЗОПАСНОСТЬ И ВОССТАНОВЛЕНИЕ</text>
+  <rect x="40" y="605" width="170" height="42" rx="9" class="node storage"/><text x="125" y="631" text-anchor="middle" class="label">Git + журнал релиза</text>
+  <rect x="230" y="605" width="165" height="42" rx="9" class="node storage"/><text x="312" y="631" text-anchor="middle" class="label">Backup перед deploy</text>
+  <rect x="40" y="665" width="170" height="42" rx="9" class="node process"/><text x="125" y="691" text-anchor="middle" class="label">Post-deploy smoke</text>
+  <rect x="230" y="665" width="165" height="42" rx="9" class="node risk"/><text x="312" y="691" text-anchor="middle" class="label">Rollback при ошибке</text>
+
+  <text x="207" y="151" class="edge-label">REST API</text><text x="443" y="151" class="edge-label">черновик</text><text x="705" y="335" class="edge-label">PASS</text><text x="885" y="444" class="edge-label">только вручную</text>
+</svg>
+</main>
