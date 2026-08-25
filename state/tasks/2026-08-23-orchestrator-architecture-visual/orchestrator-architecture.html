@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Архитектура управляемого оркестратора</title>
+<style>
+  :root { --bg:#f6f8fb; --fg:#172033; --muted:#5b6475; --line:#718096; --input:#dbeafe; --process:#e0e7ff; --storage:#ccfbf1; --external:#fef3c7; --risk:#fee2e2; --ok:#dcfce7; --white:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }
+  main { max-width:1440px; margin:24px auto; padding:0 18px; }
+  svg { width:100%; height:auto; display:block; background:var(--white); border:1px solid #d8dee9; border-radius:18px; }
+  .title { font-size:26px; font-weight:750; fill:var(--fg); }
+  .subtitle { font-size:14px; fill:var(--muted); }
+  .zone-title { font-size:14px; font-weight:750; fill:var(--fg); letter-spacing:.04em; }
+  .label { font-size:16px; font-weight:720; fill:var(--fg); }
+  .body { font-size:13px; fill:var(--fg); }
+  .small { font-size:12px; fill:var(--muted); }
+  .tiny { font-size:11px; fill:var(--muted); }
+  .node { stroke:var(--line); stroke-width:1.2; rx:12; }
+  .zone { fill:none; stroke:#a0aec0; stroke-width:1.2; stroke-dasharray:7 6; rx:18; }
+  .edge { stroke:var(--line); stroke-width:1.8; fill:none; marker-end:url(#arrow); }
+  .edge-soft { stroke:#94a3b8; stroke-width:1.4; fill:none; stroke-dasharray:5 5; marker-end:url(#arrowSoft); }
+  .edge-stop { stroke:#dc2626; stroke-width:1.6; fill:none; marker-end:url(#arrowRed); }
+  .input { fill:var(--input); } .process { fill:var(--process); } .storage { fill:var(--storage); }
+  .external { fill:var(--external); } .risk { fill:var(--risk); } .ok { fill:var(--ok); } .neutral { fill:#edf2f7; }
+  .pill { stroke-width:1; rx:15; }
+</style>
+<main>
+<svg viewBox="0 0 1400 1040" role="img" aria-labelledby="title desc">
+  <title id="title">Архитектура управляемого локального оркестратора Codex–Claude</title>
+  <desc id="desc">Task packet проходит admission, выбирает один из трёх ограниченных профилей, затем управляемый цикл выполняет агента, доверенные gates и review, сохраняя hash-chained evidence. Любое нарушение завершается fail-closed.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#718096"/></marker>
+    <marker id="arrowSoft" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/></marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/></marker>
+  </defs>
+
+  <text x="54" y="58" class="title">Управляемый локальный оркестратор Codex–Claude</text>
+  <text x="54" y="84" class="subtitle">Один bounded state machine · три программных профиля · evidence-first · fail-closed</text>
+
+  <!-- connectors behind nodes -->
+  <path class="edge" d="M 260 210 H 330"/>
+  <path class="edge" d="M 570 210 H 640"/>
+  <path class="edge" d="M 920 210 H 1010"/>
+  <path class="edge" d="M 1135 282 V 338"/>
+  <path class="edge" d="M 410 465 H 495"/>
+  <path class="edge" d="M 735 465 H 820"/>
+  <path class="edge" d="M 1060 465 H 1145"/>
+  <path class="edge" d="M 1260 520 V 595 H 980"/>
+  <path class="edge-soft" d="M 615 520 V 650 H 470"/>
+  <path class="edge-soft" d="M 940 520 V 650 H 700"/>
+  <path class="edge-soft" d="M 1260 520 V 650 H 930"/>
+  <path class="edge" d="M 790 714 H 860"/>
+  <path class="edge" d="M 1100 714 H 1170"/>
+  <path class="edge-stop" d="M 700 780 V 850 H 375"/>
+  <path class="edge" d="M 980 780 V 850 H 1040"/>
+  <path class="edge-soft" d="M 1220 235 H 1310 V 905 H 1170"/>
+
+  <!-- zones -->
+  <rect x="34" y="112" width="1332" height="198" class="zone"/>
+  <text x="54" y="137" class="zone-title">1 · ДОПУСК И НЕИЗМЕНЯЕМАЯ ОБЛАСТЬ ЗАДАЧИ</text>
+
+  <rect x="34" y="332" width="1332" height="228" class="zone"/>
+  <text x="54" y="357" class="zone-title">2 · ЕДИНЫЙ УПРАВЛЯЕМЫЙ ЦИКЛ</text>
+
+  <rect x="34" y="590" width="1332" height="210" class="zone"/>
+  <text x="54" y="615" class="zone-title">3 · ДОКАЗАТЕЛЬСТВА И РЕШЕНИЕ</text>
+
+  <rect x="34" y="834" width="1332" height="166" class="zone"/>
+  <text x="54" y="859" class="zone-title">4 · ТЕРМИНАЛЬНАЯ ГРАНИЦА</text>
+
+  <!-- admission -->
+  <rect x="60" y="158" width="200" height="104" class="node input"/>
+  <text x="84" y="187" class="label">TASK_PACKET</text>
+  <text x="84" y="211" class="body">baseline · allowed paths</text>
+  <text x="84" y="231" class="body">gates · budgets · profile</text>
+
+  <rect x="330" y="158" width="240" height="104" class="node process"/>
+  <text x="354" y="187" class="label">Admission / PREPARE</text>
+  <text x="354" y="211" class="body">schema · clean state · scope</text>
+  <text x="354" y="231" class="body">red → synthetic green → restore</text>
+
+  <rect x="640" y="151" width="280" height="118" class="node neutral"/>
+  <text x="664" y="180" class="label">Центральная матрица профилей</text>
+  <rect x="664" y="196" width="72" height="28" class="pill node external"/><text x="676" y="215" class="tiny">review-only</text>
+  <rect x="745" y="196" width="68" height="28" class="pill node process"/><text x="759" y="215" class="tiny">safe-fix</text>
+  <rect x="822" y="196" width="74" height="28" class="pill node storage"/><text x="833" y="215" class="tiny">sealed-pilot</text>
+  <text x="664" y="248" class="small">task packet не может ослабить ограничения</text>
+
+  <rect x="1010" y="145" width="250" height="137" class="node storage"/>
+  <text x="1034" y="174" class="label">Замороженный контекст</text>
+  <text x="1034" y="198" class="body">baseline + scope + gates</text>
+  <text x="1034" y="218" class="body">packet SHA-256 для pilot</text>
+  <text x="1034" y="245" class="small">фиксированная точка проверки</text>
+
+  <!-- cycle -->
+  <rect x="170" y="405" width="240" height="115" class="node process"/>
+  <text x="194" y="435" class="label">Codex builder</text>
+  <text x="194" y="460" class="body">0 попыток: review-only</text>
+  <text x="194" y="480" class="body">≤ 2 попыток: safe-fix / pilot</text>
+  <text x="194" y="502" class="small">только изолированный worktree</text>
+
+  <rect x="495" y="405" width="240" height="115" class="node external"/>
+  <text x="519" y="435" class="label">Trusted Test Broker</text>
+  <text x="519" y="460" class="body">операторские sealed gates</text>
+  <text x="519" y="480" class="body">timeout · scrubbed env</text>
+  <text x="519" y="502" class="small">не является OS sandbox</text>
+
+  <rect x="820" y="405" width="240" height="115" class="node process"/>
+  <text x="844" y="435" class="label">Claude reviewer</text>
+  <text x="844" y="460" class="body">schema + semantic admission</text>
+  <text x="844" y="480" class="body">bounded contract repair</text>
+  <text x="844" y="502" class="small">final-full только review-only</text>
+
+  <rect x="1145" y="405" width="215" height="115" class="node neutral"/>
+  <text x="1169" y="435" class="label">State machine</text>
+  <text x="1169" y="460" class="body">маршрут и лимиты</text>
+  <text x="1169" y="480" class="body">REWORK / ACCEPT / STOP</text>
+  <text x="1169" y="502" class="small">никаких скрытых попыток</text>
+
+  <!-- evidence -->
+  <rect x="180" y="650" width="290" height="128" class="node storage"/>
+  <text x="204" y="680" class="label">RUN_EVIDENCE.jsonl</text>
+  <text x="204" y="704" class="body">schema 1.0.0 · append-only</text>
+  <text x="204" y="724" class="body">sequence + SHA-256 hash-chain</text>
+  <text x="204" y="744" class="body">start · launch · gate · review · terminal</text>
+  <text x="204" y="764" class="small">сохраняется при ERROR / INTERRUPTED</text>
+
+  <rect x="550" y="650" width="240" height="128" class="node input"/>
+  <text x="574" y="680" class="label">Policy proof</text>
+  <text x="574" y="704" class="body">profile · packet digest</text>
+  <text x="574" y="724" class="body">changed paths · attempt type</text>
+  <text x="574" y="744" class="body">точная причина остановки</text>
+
+  <rect x="860" y="650" width="240" height="128" class="node ok"/>
+  <text x="884" y="680" class="label">Authenticated verdict</text>
+  <text x="884" y="704" class="body">ACCEPTED / REWORK</text>
+  <text x="884" y="724" class="body">blocker / major / evidence refs</text>
+  <text x="884" y="744" class="small">строгий контракт, fail-closed</text>
+
+  <rect x="1170" y="650" width="170" height="128" class="node neutral"/>
+  <text x="1194" y="680" class="label">Operator</text>
+  <text x="1194" y="704" class="body">foreground</text>
+  <text x="1194" y="724" class="body">supervised</text>
+  <text x="1194" y="744" class="small">явное решение дальше</text>
+
+  <!-- terminal -->
+  <rect x="100" y="882" width="550" height="84" class="node risk"/>
+  <text x="124" y="912" class="label">FAIL-CLOSED TERMINAL</text>
+  <text x="124" y="937" class="body">SCOPE_VIOLATION · INFRASTRUCTURE_FAILURE · ERROR · INTERRUPTED · ESCALATED</text>
+  <text x="124" y="957" class="small">terminal event ровно один · repair/автопродолжение запрещены</text>
+
+  <rect x="780" y="882" width="390" height="84" class="node ok"/>
+  <text x="804" y="912" class="label">ACCEPTED RESULT</text>
+  <text x="804" y="937" class="body">проверенный diff или review verdict + полное evidence</text>
+  <text x="804" y="957" class="small">результат ещё не перенос и не deploy</text>
+
+  <rect x="1200" y="882" width="140" height="84" class="node external"/>
+  <text x="1224" y="912" class="label">Отдельный gate</text>
+  <text x="1224" y="937" class="body">transfer / commit</text>
+  <text x="1224" y="957" class="body">push / deploy</text>
+
+  <!-- boundary note -->
+  <text x="54" y="1020" class="small">За пределами архитектуры без отдельного разрешения: Gateway · cron/systemd · unattended execution · automatic commit/transfer/push/deploy · продуктовые репозитории</text>
+</svg>
+</main>
+</html>
