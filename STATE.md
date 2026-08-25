@@ -400,3 +400,12 @@ _Обновляется из любой сессии после значимых
 - The live command architecture now uses a second isolated Alpha.Server as the online process simulator; the HMI-facing Alpha.Server remains the only HMI endpoint.
 - Alpha.Imitator is retained for history replay/recalculation scenarios, not the always-online command handshake.
 - Production, PLC, customer systems and pre-existing Alpha services remain outside the test scope.
+
+## Alpha BPR Universal Recipe Testbed Phase 4 — 2026-08-25
+
+- Accepted under `D-2026-08-25-07` at local testbed commit `8a32d3a feat: execute data-driven recipe batches`.
+- One compiled two-Alpha.Server runtime executes all three canonical recipes from data through native Alpha.Link without rebuilds between recipes.
+- Pause/resume, operator approval, abort/reset, audit sequencing, invalid recipe/version/operation/parameter handling, and the complete Phase 3 regression matrix pass.
+- Real Alpha.HMI Viewer START/RESET clicks and independent OPC UA readback pass; the complete proof is repeatable with `./scripts/run_live_gate.sh`.
+- Isolated runtimes are stopped after verification; `alpha.server`, `alpha.imitator`, and `alpha.domain` remain active. Push, PLC, customer, and production changes were not performed.
+- Next stage: Phase 5 native Alpha.HMI hierarchy and rendered-screen verification.
