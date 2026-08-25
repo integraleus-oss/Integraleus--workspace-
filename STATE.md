@@ -445,3 +445,12 @@ _Обновляется из любой сессии после значимых
 - `./scripts/run_phase7_gate.sh` is the one-command proof. It uses isolated local Alpha.DevStudio build-output activation because changed-config deploy through the isolated Domain cannot resolve the system service executable path (`Unknown error -1`); deploy success is not claimed.
 - The isolated contour is stopped, test ports are closed and standard Alpha services are restored. Push, PLC, customer and production systems remain untouched.
 - Next stage: Phase 8 test PLC or explicitly approved PLC simulator gate; requires separate authorization.
+
+## Alpha BPR Universal Recipe Testbed Phase 8 — 2026-08-25
+
+- Accepted under `D-2026-08-25-12` at local testbed commit `154aa80 feat: close native Modbus PLC simulator gate`.
+- A loopback-only Modbus TCP PLC simulator at `127.0.0.1:15020`, unit ID 1, is connected through native Alpha.Server `ModbusTcpMaster`.
+- Real Alpha.HMI Viewer START/RESET commands and independent OPC UA readback pass together with TTL, NOT_READY, interlock and duplicate/idempotency checks.
+- Loss of the Modbus endpoint produces `BadNoCommunication`; Viewer explicitly shows `BAD / НЕТ СВЯЗИ`, and connection recovery occurs automatically without restarting Viewer.
+- `./scripts/run_phase8_gate.sh` is the repeatable proof. Test ports are closed afterward and standard Alpha services remain active.
+- Push, external PLC, customer and production systems remain untouched.
