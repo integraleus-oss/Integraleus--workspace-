@@ -371,3 +371,19 @@ _Обновляется из любой сессии после значимых
 - Four focused checks, Alpha.DevStudio compile/rebuild, Alpha.HMI compile/BINOM export, 1440x900 Viewer render and `git diff --check` passed.
 - No deployment, service restart, license/system mutation, PLC connection or live write occurred.
 - Next gate: dynamic per-request ID generation and actual local `HMI -> Alpha.Server -> Alpha.Imitator -> readback` proof, only after explicit deploy approval.
+
+## Spectech WordPress MVP second vertical — 2026-08-25
+
+- Accepted under `D-2026-08-25-01` at local `spectech-sites` commit `174ec8a`.
+- Material: «Типовые ошибки при составлении ТЗ на SCADA».
+- Two `noindex` previews, a PNG infographic, and a two-page PDF checklist were created; the generator supports multiple materials.
+- Verification passed 3/3 tests, Astro build with 19 pages, and 6/6 local HTTP checks; the repository was clean.
+- Production and Reg.ru were not changed. Publication remains a separate explicit approval gate.
+
+## Alpha BPR Universal Recipe Testbed native transport — 2026-08-25
+
+- Accepted under `D-2026-08-25-02` as a compile/rebuild baseline; project source is `/home/stanislav/projects/alpha-bpr-universal-testbed`.
+- One typed `BPR_Process` is hosted by Alpha.Imitator; Alpha.Server exposes `BPR_ServerView` through 21 directed bindings and its native OPC UA client link to `Alpha.Imitator.UaServer`.
+- Command execution exists only in Alpha.Imitator; Alpha.HMI addresses the Alpha.Server representation at `Application.ReactorMixer`.
+- Four focused validators, native runtime compile/rebuild `0.1.0.d6`, Alpha.HMI compile/BINOM export, and `git diff --check` passed.
+- Live deploy remains open: DevStudio has no Alpha.Domain central-node connection. No runtime service or tag was changed, and the transport increment is not yet committed.

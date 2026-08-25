@@ -689,3 +689,19 @@ DATE: 2026-08-24
 TITLE: Accept compile-only Phase 3 command handshake for Universal Recipe Testbed
 CONTENT: Treat the compile-only Phase 3 increment of `/home/stanislav/projects/alpha-bpr-universal-testbed` as the accepted design and verification baseline for a fail-closed correlated command handshake. The generated Alpha.Server and Alpha.Imitator units expose 21 configurable signals and implement request validation, accepted/rejected/completed/reset states, command ID and batch ID correlation, TTL metadata, duplicate-command protection, READY/interlock checks, independent running readback and explicit rejection reasons. Native Alpha.HMI provides separate START and RESET actions plus ACK, rejection reason, readback, permissive, interlock and compile-only quality state. Focused validators, Alpha.DevStudio compile/rebuild, Alpha.HMI compile/BINOM export, Viewer render and `git diff --check` passed. This acceptance is compile-only: dynamic per-request ID generation, deployment, service changes and actual HMI-to-runtime live write/readback remain separate explicit approval gates.
 RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:14` on 2026-08-24 after receiving the Phase 3 implementation and verification report. No deploy, service restart, license change, PLC connection or live write was performed.
+---
+### ID: D-2026-08-25-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-25
+TITLE: Accept the second local WordPress vertical with media and PDF
+CONTENT: Treat `spectech-sites` commit `174ec8a` as the accepted local baseline for the second WordPress vertical scenario, «Типовые ошибки при составлении ТЗ на SCADA». The scenario proves the content workflow is repeatable across multiple materials and includes two `noindex` previews, a PNG infographic, a two-page PDF checklist, and generator support for multiple materials. Verification passed 3/3 tests, an Astro build of 19 pages, and 6/6 local HTTP checks; the repository was clean after the commit. Production and Reg.ru were not changed. Any publication, backup/deploy operation, or hosted CMS/preview infrastructure remains a separate explicit approval gate.
+RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-25 after receiving the local preview, PDF, verification results, commit `174ec8a`, and confirmation that production was untouched.
+---
+### ID: D-2026-08-25-02
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-25
+TITLE: Accept the native Alpha.Server to Alpha.Imitator transport baseline
+CONTENT: Treat the native transport remediation in `/home/stanislav/projects/alpha-bpr-universal-testbed` as the accepted compile/rebuild baseline for Phase 3. The generated Alpha.DevStudio solution now uses one typed `BPR_Process` contract hosted by Alpha.Imitator, one Alpha.Server-facing `BPR_ServerView`, 21 directed bindings, and a native Alpha.Server OPC UA client link to `Alpha.Imitator.UaServer`; the fail-closed command handshake executes only in Alpha.Imitator. Alpha.HMI connects to Alpha.Server at `Application.ReactorMixer`. Four focused validators, native Alpha.Server/Alpha.Imitator compile and rebuild `0.1.0.d6`, Alpha.HMI compile/BINOM export, and `git diff --check` passed. This acceptance does not claim live operation: DevStudio deployment remains blocked by the missing Alpha.Domain central-node connection, and no service restart, tag write, PLC connection, production change, push, or commit was performed.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:14` on 2026-08-25 after receiving the implemented native transport architecture, verification results, and remaining live-deployment boundary.
