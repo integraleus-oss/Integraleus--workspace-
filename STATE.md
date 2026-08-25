@@ -409,3 +409,12 @@ _Обновляется из любой сессии после значимых
 - Real Alpha.HMI Viewer START/RESET clicks and independent OPC UA readback pass; the complete proof is repeatable with `./scripts/run_live_gate.sh`.
 - Isolated runtimes are stopped after verification; `alpha.server`, `alpha.imitator`, and `alpha.domain` remain active. Push, PLC, customer, and production changes were not performed.
 - Next stage: Phase 5 native Alpha.HMI hierarchy and rendered-screen verification.
+
+## Alpha BPR Universal Recipe Testbed Phase 5 — 2026-08-25
+
+- Accepted under `D-2026-08-25-08` at local testbed commit `9da2c84 feat: add native hmi screen hierarchy`.
+- Native Alpha.HMI now has four real Viewer-navigable levels: L1 overview, L2 control, L3 detail and L4 diagnostics.
+- L1 has no process commands; L2 START/RESET retains independent OPC UA readback through the two-Alpha.Server native Alpha.Link runtime.
+- The complete `./scripts/run_live_gate.sh` proof passes generation, validators, native compile/rebuild, BINOM export, three recipes, negative scenarios, Viewer navigation/clicks and rollback.
+- Screenshot review at 1280x900 passed after correcting right-edge clipping. Isolated runtimes are stopped, test ports are closed, and standard Alpha services remain active.
+- Phase 6 remains open for actual Alpha.HMI.Alarms, alpha.hmi.charts/Alpha.Historian, Alpha.Security and Alpha.Reports integration. Push, PLC, customer and production systems remain untouched.
