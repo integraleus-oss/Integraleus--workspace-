@@ -392,3 +392,11 @@ _Обновляется из любой сессии после значимых
 - Command execution exists only in Alpha.Imitator; Alpha.HMI addresses the Alpha.Server representation at `Application.ReactorMixer`.
 - Four focused validators, native runtime compile/rebuild `0.1.0.d6`, Alpha.HMI compile/BINOM export, and `git diff --check` passed.
 - Live deploy remains open: DevStudio has no Alpha.Domain central-node connection. No runtime service or tag was changed, and the transport increment is not yet committed.
+
+## Alpha BPR Universal Recipe Testbed online runtime correction — 2026-08-25
+
+- Accepted under `D-2026-08-25-06` after an isolated local runtime probe.
+- Native Alpha.Link was proven live between Alpha.Server HUB and Alpha.Imitator TCP Server, but Alpha.Imitator returned `BadWaitingForInitialData` outside a configured history simulation session.
+- The live command architecture now uses a second isolated Alpha.Server as the online process simulator; the HMI-facing Alpha.Server remains the only HMI endpoint.
+- Alpha.Imitator is retained for history replay/recalculation scenarios, not the always-online command handshake.
+- Production, PLC, customer systems and pre-existing Alpha services remain outside the test scope.
