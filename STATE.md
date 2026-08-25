@@ -385,6 +385,15 @@ _Обновляется из любой сессии после значимых
 - REG.RU CMS/preview architecture is accepted under `D-2026-08-25-05` at audit commit `222290e`: isolate WordPress at proposed `cms.specialtechnology.ru`, reuse `test.special-tech.ru` as authenticated/noindex static preview, and keep both public sites static behind the guarded manifest release path.
 - Deployment remains blocked pending panel-owner confirmation of free site/database/disk/cron capacity, PHP 8.3 and Let's Encrypt. No hosting, DNS or production mutation was authorized by the architecture decision.
 
+## Spectech hosted WordPress third vertical — 2026-08-25
+
+- Accepted under `D-2026-08-25-09` as a completed production release.
+- Material: «КИИ и российские SCADA: что проверить до выбора платформы».
+- Source commit `1e5aa54`; production evidence commit `02425ed`.
+- Backup preserved 5 existing files and recorded 6 absent targets; exactly 11 manifest files were published and FTPS SHA-256 matched 11/11.
+- Both article variants, cards, sitemaps, PNG/PDF assets, CSS and control URLs passed production checks; rollback was not required.
+- Hosted CMS remains protected; `/lk/**`, forms, PHP/MySQL, WordPress, uploads, DNS, Synology and non-manifest files were not changed.
+
 ## Alpha BPR Universal Recipe Testbed native transport — 2026-08-25
 
 - Accepted under `D-2026-08-25-02` as a compile/rebuild baseline; project source is `/home/stanislav/projects/alpha-bpr-universal-testbed`.
