@@ -30,6 +30,18 @@ docs/tabler-icons-*.zip
 *.tmp
 *.pid
 **/__pycache__/
+
+# Local Blender/hozblok working assets and generated prototypes
+/hozblok-3d-exact.mjs
+/hozblok-3d-exact.svg
+/hozblok-empty-dimensioned.html
+/state/tasks/2026-08-15-hozblok-blender/assets/carbon-frame-bike-source/
+/state/tasks/2026-08-15-hozblok-blender/assets/carbon_frame_bike/README.md
+/state/tasks/2026-08-15-hozblok-blender/assets/polyhaven/
+/state/tasks/2026-08-15-hozblok-blender/*.blend1
+/state/tasks/2026-08-15-hozblok-blender/hozblok_furnished.blend
+/state/tasks/2026-08-15-hozblok-blender/hozblok_furnished_wall_views.blend
+/state/tasks/2026-08-15-hozblok-blender/hozblok_photoreal_high_axono.blend
 calc_log.txt
 work_summary.md
 
