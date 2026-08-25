@@ -698,6 +698,14 @@ TITLE: Accept the second local WordPress vertical with media and PDF
 CONTENT: Treat `spectech-sites` commit `174ec8a` as the accepted local baseline for the second WordPress vertical scenario, «Типовые ошибки при составлении ТЗ на SCADA». The scenario proves the content workflow is repeatable across multiple materials and includes two `noindex` previews, a PNG infographic, a two-page PDF checklist, and generator support for multiple materials. Verification passed 3/3 tests, an Astro build of 19 pages, and 6/6 local HTTP checks; the repository was clean after the commit. Production and Reg.ru were not changed. Any publication, backup/deploy operation, or hosted CMS/preview infrastructure remains a separate explicit approval gate.
 RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-25 after receiving the local preview, PDF, verification results, commit `174ec8a`, and confirmation that production was untouched.
 ---
+### ID: D-2026-08-25-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-25
+TITLE: Second WordPress material is ready for a separately approved production release
+CONTENT: Treat `spectech-sites` commit `24648b2` (`Prepare second WordPress content release`) as the accepted release-ready baseline for «Типовые ошибки при составлении ТЗ на SCADA». Both site indexes and sitemaps include the material, both article variants use `index, follow`, publication dates and Article metadata are aligned to 2026-08-25, and the bounded release manifest contains exactly 11 files including the PNG infographic and PDF checklist for both sites. The guarded release script supports the separate release ID `wordpress-scada-specification-mistakes` with backup, deploy, smoke, and rollback gates. Verification passed 5/5 tests, release validation, an Astro build of 19 pages, manifest checks for 11/11 files, 6/6 local HTTP smoke checks, and `git diff --check`; the repository was clean after commit. Production and Reg.ru were not changed. Backup and publication remain a separate explicit approval gate.
+RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-25 after receiving the release-preparation result, commit `24648b2`, manifest scope, verification report, and confirmation that production was untouched.
+---
 ### ID: D-2026-08-25-02
 TYPE: DECISION
 STATUS: ACTIVE
@@ -705,3 +713,19 @@ DATE: 2026-08-25
 TITLE: Accept the native Alpha.Server to Alpha.Imitator transport baseline
 CONTENT: Treat the native transport remediation in `/home/stanislav/projects/alpha-bpr-universal-testbed` as the accepted compile/rebuild baseline for Phase 3. The generated Alpha.DevStudio solution now uses one typed `BPR_Process` contract hosted by Alpha.Imitator, one Alpha.Server-facing `BPR_ServerView`, 21 directed bindings, and a native Alpha.Server OPC UA client link to `Alpha.Imitator.UaServer`; the fail-closed command handshake executes only in Alpha.Imitator. Alpha.HMI connects to Alpha.Server at `Application.ReactorMixer`. Four focused validators, native Alpha.Server/Alpha.Imitator compile and rebuild `0.1.0.d6`, Alpha.HMI compile/BINOM export, and `git diff --check` passed. This acceptance does not claim live operation: DevStudio deployment remains blocked by the missing Alpha.Domain central-node connection, and no service restart, tag write, PLC connection, production change, push, or commit was performed.
 RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:14` on 2026-08-25 after receiving the implemented native transport architecture, verification results, and remaining live-deployment boundary.
+---
+### ID: D-2026-08-25-04
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-25
+TITLE: Accept the second WordPress production release
+CONTENT: Treat the second WordPress vertical, «Типовые ошибки при составлении ТЗ на SCADA», as successfully published and verified in production. The accepted release source is `spectech-sites` commit `24648b2`; production evidence is recorded in commit `892ccb1`. A complete pre-release backup preserved five existing files and recorded six absent targets for rollback. Exactly 11 manifest files were uploaded through pinned FTPS, and remote SHA-256 matched local sources for all 11/11 files. All target URLs returned HTTP 200; both article variants have correct canonical, `index, follow`, and Article JSON-LD; both cards and sitemap entries are present; PNG/PDF assets on both sites have correct MIME types; referenced CSS and control URLs for both home pages, `/lk/`, and the corporate calculator returned HTTP 200. Deprecated Alpha names were absent and rollback was not required. `/lk/**`, forms, PHP/MySQL, uploads, DNS, Synology, and non-manifest production files were not changed.
+RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-25 after separately authorizing the production release and receiving the complete backup, deploy, hash, HTTP, SEO, media, boundary, and evidence-commit report.
+---
+### ID: D-2026-08-25-05
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-25
+TITLE: Adopt the isolated REG.RU CMS and preview architecture baseline
+CONTENT: Accept the read-only REG.RU audit and the isolated CMS/preview architecture recorded in `spectech-sites` commit `222290e`. The intended target is a separate `cms.specialtechnology.ru` WordPress website with its own document root and database, while the existing `test.special-tech.ru` remains the static authenticated/noindex preview. Both public sites remain static and production publication continues only through explicit approval, pre-release backup, bounded manifest, pinned FTPS, remote SHA-256 verification, smoke checks, and separately approved rollback. Do not install the new editorial CMS over the existing WordPress/static mixture in the `specialtechnology.ru` production root. Before deployment, the panel owner must confirm one free independent-site slot, one MySQL database, PHP 8.3, Let's Encrypt, sufficient disk quota, and one user cron slot. This decision accepts the architecture only; it does not authorize DNS, ISPmanager, database, certificate, cron, WordPress, preview, production, or hosting mutations.
+RATIONALE: Stanislav explicitly approved this Memory Candidate in Telegram topic `HOME:990` on 2026-08-25 after receiving the evidence-backed read-only audit, identified production-root collision risk, open tariff-capacity gate, recommended isolated topology, architecture artifacts, and commit `222290e`.

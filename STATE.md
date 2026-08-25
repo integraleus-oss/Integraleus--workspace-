@@ -379,6 +379,11 @@ _Обновляется из любой сессии после значимых
 - Two `noindex` previews, a PNG infographic, and a two-page PDF checklist were created; the generator supports multiple materials.
 - Verification passed 3/3 tests, Astro build with 19 pages, and 6/6 local HTTP checks; the repository was clean.
 - Production and Reg.ru were not changed. Publication remains a separate explicit approval gate.
+- Release preparation is accepted under `D-2026-08-25-03` at commit `24648b2`: both indexes/sitemaps are wired, pages are `index, follow`, and the guarded manifest contains 11 files including PNG/PDF assets for both sites.
+- Verification passed 5/5 tests, release validation, Astro build of 19 pages, manifest check 11/11, local HTTP smoke 6/6, and `git diff --check`; production backup/publication remains a separate explicit gate.
+- Production release is accepted under `D-2026-08-25-04`: source commit `24648b2`, evidence commit `892ccb1`, backup complete, exactly 11 files published, FTPS SHA-256 11/11, and all target/control checks passed. Rollback was not required.
+- REG.RU CMS/preview architecture is accepted under `D-2026-08-25-05` at audit commit `222290e`: isolate WordPress at proposed `cms.specialtechnology.ru`, reuse `test.special-tech.ru` as authenticated/noindex static preview, and keep both public sites static behind the guarded manifest release path.
+- Deployment remains blocked pending panel-owner confirmation of free site/database/disk/cron capacity, PHP 8.3 and Let's Encrypt. No hosting, DNS or production mutation was authorized by the architecture decision.
 
 ## Alpha BPR Universal Recipe Testbed native transport — 2026-08-25
 
