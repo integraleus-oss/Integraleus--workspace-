@@ -1,0 +1,21 @@
+I verified all seven items statically against the code, schema, and accepted policy core. Note up front: **I could not execute the test suite** — Bash `python3`/`unittest` calls were denied by the current permission mode — so test verification is by reading the tests plus confirming their premises hold in the schema and validator (e.g. that the "incomplete coverage" fixture is genuinely contract-valid, so it really exercises the `ProjectionError` path rather than the contract path).
+
+**Per-item results**
+
+1. **Coverage repair permits honest incomplete / fail-closed** — Closed. `live_review_cycle.py:170-178` branches on `incomplete_criteria_coverage` and instructs "use violated or partially_satisfied when the evidence does not support satisfied; never invent evidence… If no projectable status is truthfully supported… retain the honest incomplete status so this single retry fails closed."
+2. **Blocking limitations and non-target ProjectionErrors non-retryable** — Closed. `_repair_report` (`:51-62`) re-raises any non-`ContractValidationError` whose message isn't the exact coverage string, and it runs *before* any repair artifact is created (`:159` precedes the first-verdict copy at `:160`). `ContractValidationError` subclasses `ProjectionError` (`review_projection.py:23-27`), so the widened `except` doesn't lose the old path. Regression test at `tests/test_live_review_cycle.py:329`; the blocking-limitation fixture is schema-valid and has no semantic rule against it, so it does reach the projection check at `review_projection.py:422`.
+3. **Second incomplete reply fails closed** — Closed. The post-retry `local_orchestrator_runner.run` (`:239`) sits outside the inner handler, so a repeat `ProjectionError` propagates to the `FAILED_ADMISSION` writer and re-raises. Test at `tests/test_live_review_cycle.py:352` asserts both the raise and that the retry actually launched.
+4. **Message describes deterministic admission** — Closed in prose (`:187`), with one minor residue (below).
+5. **Invalid `expected_test_count` values fail closed** — Closed. Explicit `null` still lands in the allowed key-set, so `has_expected_test_count` is true and `None`/bool/str/0/negative all hit `trusted_review_builder.py:162-166`. `isinstance(..., bool)` is checked before the int test, so `True`/`False` fail.
+6. **TAP summary missing / mismatched / ambiguous fail; match passes** — Closed. `re.findall` at `:190` requires exactly one `^# tests N$`; anything else yields `observed_test_count = None` → `:199` raises. `re` is imported (`:9`).
+7. **Gates without `expected_test_count` keep record shape** — Closed. Both keys are added only under `if has_expected_test_count` (`:189-195`); test asserts absence.
+
+Also confirmed the feature isn't blocked upstream: `production_cycle_cli.py` validates only the top-level builder key set, not per-gate keys, so declared counts flow through.
+
+**Counts** — blocker 0, major 0, minor 1, nit 2.
+
+Minor — `live_review_cycle.py:56-62` / `:190`: the synthesized repair report sets `"contract_valid": false` and is handed to the model under the header "Exact validator report:", but on the incomplete-coverage path the verdict *did* pass contract validation and was rejected by the projection admission check. The prose above it is now correct, so the model is well-directed, but the JSON payload still asserts contract invalidity. Bounded remedy would be a distinct key (e.g. `"admission_valid": false`) and header wording for the synthesized case.
+
+Nits — (a) `tests/test_live_review_cycle.py:349` proves only that `claude-contract-retry` is absent; asserting `contract-repair-first-verdict.json` and `contract-repair-first-admission` are also absent would pin the artifact-side guarantee. (b) README `:73-76` says the gate "must emit exactly one TAP summary line" without stating that only stdout is scanned; stderr summaries are silently ignored.
+
+**Verdict: closure confirmed.** All seven items are satisfied by the implementation, with regression tests present for items 2, 3, 5, 6, and 7. The single minor is a message-fidelity residue inside item 4's scope, not a fail-open path. Everything else I noticed is a follow-up, not a finding — and the test run itself remains unverified pending permission to execute it.
