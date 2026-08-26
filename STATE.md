@@ -465,3 +465,13 @@ _Обновляется из любой сессии после значимых
 - Two consecutive pilot-package builds are identical; SHA-256 is `26390c7fa2df2bb1c8c4db301182e1a476094235c25a12ad0420f57177cca18b`.
 - Test services and ports are closed and standard Alpha services are active. Push was not performed.
 - This is not customer/plant acceptance, production deployment or proof with a physical PLC; those remain separate explicit gates.
+
+## Alpha BPR Phase 9 Dark UI RC2 — 2026-08-26
+
+- Accepted under `D-2026-08-26-02` as the internal Home baseline for the current dark Alpha BPR interface.
+- Tag `alpha-bpr-phase9-dark-ui-rc2` points to RC manifest commit `0c105f4`; lifecycle/runtime/docs commits are `3c55f6f`, `7bc7bb3`, and `846804d`.
+- The actual dark UI passed recipe → approval/return → effective → batch → EBR → QA release through `live-api`.
+- Native Alpha.Server OPC UA RESET/START, independent command readback, Operator/QA role enforcement, interlock, explicit `BAD / НЕТ СВЯЗИ`, disabled commands and reconnect without reload passed.
+- All 11 routes passed desktop and mobile review (22/22). The updated guide, quick start, operator checklist and 91-second H.264 dark-UI video are the accepted internal training set; old July-interface footage is superseded.
+- Synology backup `Documents/openclaw-backups/alpha-bpr/phase9-dark-ui-rc2-20260826-1730` contains 10 files / 79 MiB; all SHA-256 checks and Git bundle verification passed.
+- Physical-PLC FAT, object SAT, production acceptance, QMS validation and electronic signature remain outside this acceptance. Two unrelated TRIZ artifacts remain excluded.
