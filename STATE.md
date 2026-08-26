@@ -454,3 +454,14 @@ _Обновляется из любой сессии после значимых
 - Loss of the Modbus endpoint produces `BadNoCommunication`; Viewer explicitly shows `BAD / НЕТ СВЯЗИ`, and connection recovery occurs automatically without restarting Viewer.
 - `./scripts/run_phase8_gate.sh` is the repeatable proof. Test ports are closed afterward and standard Alpha services remain active.
 - Push, external PLC, customer and production systems remain untouched.
+
+## Alpha BPR Universal Recipe Testbed Phase 9 — 2026-08-26
+
+- Accepted under `D-2026-08-26-01` as an internal Home pilot candidate.
+- Track F v2 is reviewed and committed in the main Alpha BPR repository at `9a899bc`; the testbed deploy correction is at `0cd0d27`, restart/recovery/soak implementation at `eeb9a08`, and evidence at `6660c51` and `b3af2f7`.
+- Standard Alpha.Domain deploy now activates Mapping B as `0.1.0.d24`.
+- PLC and Alpha.Server restart/recovery pass without duplicate START execution. The 1800-second soak produced 360/360 successful samples, no task-count growth and a 2.16% memory decrease.
+- Phase 3–8 regression, Viewer, Historian, alarms, roles and reports pass in the same gate.
+- Two consecutive pilot-package builds are identical; SHA-256 is `26390c7fa2df2bb1c8c4db301182e1a476094235c25a12ad0420f57177cca18b`.
+- Test services and ports are closed and standard Alpha services are active. Push was not performed.
+- This is not customer/plant acceptance, production deployment or proof with a physical PLC; those remain separate explicit gates.
