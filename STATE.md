@@ -475,3 +475,12 @@ _Обновляется из любой сессии после значимых
 - All 11 routes passed desktop and mobile review (22/22). The updated guide, quick start, operator checklist and 91-second H.264 dark-UI video are the accepted internal training set; old July-interface footage is superseded.
 - Synology backup `Documents/openclaw-backups/alpha-bpr/phase9-dark-ui-rc2-20260826-1730` contains 10 files / 79 MiB; all SHA-256 checks and Git bundle verification passed.
 - Physical-PLC FAT, object SAT, production acceptance, QMS validation and electronic signature remain outside this acceptance. Two unrelated TRIZ artifacts remain excluded.
+
+## Alpha BPR Phase 9 Dark UI RC2.1 — 2026-08-26
+
+- Accepted under `D-2026-08-26-03` as the internal interactive training release layered on RC2.
+- Tag `alpha-bpr-phase9-dark-ui-rc2.1` resolves to `caaa9f4`; interactive recorder/video commit is `46fe55b`.
+- The 127-second H.264 1280×720 walkthrough visibly shows pointer movement, click target, field edits, selections and current-dark-UI navigation.
+- Full decode passed for 3048/3048 frames; full-timeline visual review and SHA-256 `ac84668f…818b58f` passed.
+- Synology package `Documents/openclaw-backups/alpha-bpr/phase9-dark-ui-rc2.1-20260826-1844`: 12 files, 86 MiB; SHA-256, Git bundle verification, clean clone, tag checkout and restored-video checksum all passed.
+- The video does not save teaching master data. Physical-PLC FAT, object SAT, production, QMS and electronic-signature acceptance remain open separate gates.
