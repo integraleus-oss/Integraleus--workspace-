@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "runId": "615b4aff67ae4b29ab7a9e97529d76b1",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-09-01T19:11:30+03:00",
+  "lastVerified": "2026-09-01T19:11:30+03:00",
+  "finishedAt": "2026-09-01T19:11:30+03:00",
+  "pid": 193191,
+  "exitCode": 0,
+  "command": [
+    "bash",
+    "-lc",
+    "printf managed-route-ok"
+  ],
+  "timeoutSeconds": 30.0,
+  "evidencePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-private/EVIDENCE.md",
+  "statePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-private/execution-supervisor-state.json",
+  "terminalEvidencePath": null,
+  "outboxPath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-private/outbox.jsonl",
+  "notificationId": "exec-615b4aff67ae4b29ab7a9e97529d76b1-succeeded",
+  "notificationDelivered": true,
+  "owner": "main",
+  "flowId": "43429179-c081-45a6-bf5a-bb50676a2511",
+  "disablePath": "SIGINT or terminate foreground supervisor",
+  "sessionKey": "agent:main:main",
+  "deliveryContext": {
+    "channel": "telegram",
+    "to": "telegram:109592643",
+    "accountId": "default"
+  },
+  "deliveredAt": "2026-09-01T19:11:32+03:00"
+}

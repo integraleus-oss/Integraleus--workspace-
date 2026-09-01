@@ -41,5 +41,15 @@ class SupervisorTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(SCRIPT), "ack", "--state", str(self.state), "--notification-id", event["id"]])
         self.assertEqual(0, result.returncode); self.assertTrue(json.loads(self.state.read_text())["notificationDelivered"])
 
+    def test_delivery_context_is_persisted(self):
+        delivery = {"channel": "telegram", "accountId": "default", "to": "telegram:-100:topic:14", "threadId": 14}
+        command = [sys.executable, str(SCRIPT), "run", "--evidence", str(self.evidence), "--state", str(self.state),
+                   "--outbox", str(self.outbox), "--timeout", "2", "--owner", "test",
+                   "--session-key", "agent:main:test", "--delivery-json", json.dumps(delivery),
+                   "--", sys.executable, "-c", "pass"]
+        result = subprocess.run(command, capture_output=True, text=True, timeout=8)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(delivery, json.loads(self.state.read_text())["deliveryContext"])
+
 
 if __name__ == "__main__": unittest.main()

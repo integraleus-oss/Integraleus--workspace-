@@ -115,6 +115,7 @@ def run(args: argparse.Namespace) -> int:
              "notificationDelivered": False, "owner": args.owner,
              "flowId": args.flow_id, "disablePath": "SIGINT or terminate foreground supervisor"}
     state["sessionKey"] = args.session_key
+    state["deliveryContext"] = json.loads(args.delivery_json) if args.delivery_json else None
     process = subprocess.Popen(args.command, start_new_session=True)
     state["pid"] = process.pid; atomic_json(args.state, state); update_evidence(args.evidence, state)
     started = time.monotonic()
@@ -170,6 +171,7 @@ def parser() -> argparse.ArgumentParser:
     launch.add_argument("--outbox", type=Path, required=True); launch.add_argument("--terminal-evidence", type=Path)
     launch.add_argument("--timeout", type=float, required=True); launch.add_argument("--poll", type=float, default=.25)
     launch.add_argument("--run-id"); launch.add_argument("--owner", required=True); launch.add_argument("--flow-id"); launch.add_argument("--session-key")
+    launch.add_argument("--delivery-json")
     launch.add_argument("command", nargs=argparse.REMAINDER)
     recovery = sub.add_parser("recover"); recovery.set_defaults(func=recover); recovery.add_argument("--state", type=Path, required=True)
     ack_parser = sub.add_parser("ack"); ack_parser.set_defaults(func=acknowledge); ack_parser.add_argument("--state", type=Path, required=True); ack_parser.add_argument("--notification-id", required=True)

@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "runId": "f50397e9141b4de792e2376f809ea1c6",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-09-01T19:09:18+03:00",
+  "lastVerified": "2026-09-01T19:09:18+03:00",
+  "finishedAt": "2026-09-01T19:09:18+03:00",
+  "pid": 187795,
+  "exitCode": 0,
+  "command": [
+    "bash",
+    "-lc",
+    "printf global-managed-current-topic-ok"
+  ],
+  "timeoutSeconds": 30.0,
+  "evidencePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-current/EVIDENCE.md",
+  "statePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-current/execution-supervisor-state.json",
+  "terminalEvidencePath": null,
+  "outboxPath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-current/outbox.jsonl",
+  "notificationId": "exec-f50397e9141b4de792e2376f809ea1c6-succeeded",
+  "notificationDelivered": true,
+  "owner": "main",
+  "flowId": "c0e7e39b-3d41-4b63-8131-f674072419f6",
+  "disablePath": "SIGINT or terminate foreground supervisor",
+  "sessionKey": "agent:main:telegram:group:-1004417478336:topic:2922",
+  "deliveryContext": {
+    "channel": "telegram",
+    "to": "telegram:-1004417478336",
+    "accountId": "default",
+    "threadId": "2922"
+  },
+  "deliveredAt": "2026-09-01T19:09:20+03:00"
+}

@@ -27,7 +27,8 @@ def main() -> int:
         if state.get("notificationId") and not state.get("notificationDelivered"):
             pending.append({"statePath": str(state_path), "notificationId": state["notificationId"],
                             "status": state["status"], "evidencePath": state["evidencePath"],
-                            "flowId": state.get("flowId"), "sessionKey": state.get("sessionKey")})
+                            "flowId": state.get("flowId"), "sessionKey": state.get("sessionKey"),
+                            "deliveryContext": state.get("deliveryContext")})
     for item in pending: print("PENDING_NOTIFICATION " + json.dumps(item, ensure_ascii=False))
     if not failures and not pending: print("SUPERVISOR_RECOVERY_OK")
     return 2 if failures else (1 if pending else 0)

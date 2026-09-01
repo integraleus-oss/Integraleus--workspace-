@@ -14,6 +14,12 @@
         "items": { "type": "string" },
         "uniqueItems": true
       },
+      "authorizedSessionPrefixes": {
+        "type": "array",
+        "items": { "type": "string" },
+        "uniqueItems": true,
+        "default": ["agent:main:telegram:"]
+      },
       "delivery": {
         "type": "object",
         "additionalProperties": false,
