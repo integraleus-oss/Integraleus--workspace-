@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "runId": "697bffd6588241ffa6bfe7b296e86612",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-09-01T16:02:30+03:00",
+  "lastVerified": "2026-09-01T16:02:33+03:00",
+  "finishedAt": "2026-09-01T16:02:33+03:00",
+  "pid": 4014255,
+  "exitCode": 0,
+  "command": [
+    "/bin/sh",
+    "-c",
+    "sleep 2; exit 0"
+  ],
+  "timeoutSeconds": 30.0,
+  "evidencePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/live-taskflow-auto/EVIDENCE.md",
+  "statePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/live-taskflow-auto/execution-supervisor-state.json",
+  "terminalEvidencePath": null,
+  "outboxPath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/live-taskflow-auto/notification-outbox.jsonl",
+  "notificationId": "exec-697bffd6588241ffa6bfe7b296e86612-succeeded",
+  "notificationDelivered": true,
+  "owner": "main",
+  "flowId": "a20717e4-295b-4502-9c77-023fa70fbab2",
+  "disablePath": "SIGINT or terminate foreground supervisor",
+  "sessionKey": "agent:main:telegram:group:-1004417478336:topic:2922",
+  "deliveredAt": "2026-09-01T16:05:25+03:00"
+}

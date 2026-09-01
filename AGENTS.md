@@ -88,6 +88,37 @@ Mandatory rules:
 If these rules conflict with a desire to keep investigating, make the artifact
 first and continue investigation from that checkpoint.
 
+### Execution Truth Protocol (non-overridable)
+
+These rules apply to legacy, current, queued, new, and future work:
+
+1. `RUNNING` is an execution state, never a synonym for planned, queued,
+   discussed, authorized, or partially prepared work.
+2. A task may be reported as started only when a durable task artifact exists
+   and records its owner, start time, execution mechanism, and expected output.
+3. A task may remain `RUNNING` only while all three proofs exist: a material
+   artifact, a live foreground process or managed job, and evidence refreshed
+   within the task's declared heartbeat/timeout window.
+4. Any promise to continue beyond the current turn must be backed by a managed
+   TaskFlow/cron/session/watcher with an ID, owner, timeout, failure mode,
+   notification target, and disable path. Otherwise finish in the current turn
+   or state clearly that the work is not running.
+5. Before every progress claim, verify and report the artifact path, live
+   process/job identity, last evidence timestamp, checks completed, and current
+   commit/dirty-worktree boundary when relevant.
+6. If process/job proof disappears, evidence becomes stale, timeout expires,
+   or terminal evidence appears, replace `RUNNING` immediately with a truthful
+   terminal or paused state (`SUCCEEDED`, `FAILED`, `CRASHED`, `INTERRUPTED`,
+   `ESCALATED`, `BLOCKED`, or `STALE`) and emit at most one notification.
+7. At most one primary deliverable and one explicitly managed background
+   infrastructure/health track may be active. Additional work is queued or
+   explicitly replaces an active track.
+8. Heartbeat must audit execution truth. Unsupported `RUNNING` is an alert,
+   not a harmless documentation discrepancy.
+
+No task packet, project rule, agent prompt, or optimistic status report may
+weaken this protocol.
+
 ## Workspace Reference Docs
 
 `AGENTS.md` is the live entry point. Keep it concise and route specialized

@@ -16,6 +16,22 @@
 - Any new sessions from unknown sources?
 - Check error count in recent logs
 
+### 2c. Execution-truth audit (EVERY heartbeat — mandatory)
+- Run `python3 scripts/execution-truth-watch.py --root state/tasks`.
+- Run `python3 scripts/execution-supervisor-recover-all.py --root state/tasks`.
+- If it reports unsupported or stale `RUNNING`, alert Stanislav once with the
+  task path and detected outcome.
+- For each `PENDING_NOTIFICATION`, send one alert to its recorded owner context,
+  then acknowledge only after successful delivery with
+  `python3 scripts/execution-supervisor.py ack --state <statePath> --notification-id <id>`.
+- When the TaskFlow plugin is active, call `execution_supervisor_recover` for
+  terminal states carrying `flowId` so TaskFlow and its delivery ledger reach
+  the same terminal outcome.
+- Never preserve `RUNNING` merely because an evidence file says so; require a
+  material artifact, live PID/managed-job proof, and fresh evidence.
+- This check is read-only by default. Status mutation requires the foreground
+  task owner or an explicitly managed watcher authorized for that task.
+
 ### 2b. AI token/limit monitoring (EVERY heartbeat — mandatory)
 - Run `scripts/heartbeat-token-limits.sh`.
 - Alert Станислав if the script prints `WARN`.

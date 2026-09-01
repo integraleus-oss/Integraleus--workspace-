@@ -1,0 +1,33 @@
+{
+  "id": "execution-supervisor-taskflow",
+  "name": "Execution Supervisor TaskFlow",
+  "description": "Owner-scoped managed TaskFlow bridge for durable foreground execution supervision.",
+  "version": "0.1.0",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "workspaceRoot": { "type": "string" },
+      "supervisorPath": { "type": "string" },
+      "authorizedSessionKeys": {
+        "type": "array",
+        "items": { "type": "string" },
+        "uniqueItems": true
+      },
+      "delivery": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["channel", "to"],
+        "properties": {
+          "channel": { "type": "string" },
+          "accountId": { "type": "string" },
+          "to": { "type": "string" },
+          "threadId": { "type": "string" }
+        }
+      },
+      "pollMs": { "type": "integer", "minimum": 1000, "maximum": 60000 }
+    }
+  },
+  "activation": { "onStartup": true },
+  "contracts": { "tools": ["execution_supervisor_start", "execution_supervisor_recover"] }
+}

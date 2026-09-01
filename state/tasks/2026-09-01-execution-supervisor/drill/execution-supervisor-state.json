@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "runId": "delivery-drill-001",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-09-01T15:40:10+03:00",
+  "lastVerified": "2026-09-01T15:40:10+03:00",
+  "finishedAt": "2026-09-01T15:40:10+03:00",
+  "pid": 3965629,
+  "exitCode": 0,
+  "command": [
+    "python3",
+    "-c",
+    "pass"
+  ],
+  "timeoutSeconds": 5.0,
+  "evidencePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/drill/EVIDENCE.md",
+  "statePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/drill/execution-supervisor-state.json",
+  "terminalEvidencePath": null,
+  "outboxPath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-execution-supervisor/drill/notification-outbox.jsonl",
+  "notificationId": "exec-delivery-drill-001-succeeded",
+  "notificationDelivered": true,
+  "owner": "main",
+  "flowId": null,
+  "disablePath": "SIGINT or terminate foreground supervisor",
+  "sessionKey": null,
+  "deliveredAt": "2026-09-01T15:40:10+03:00"
+}
