@@ -44,7 +44,8 @@ const runtime = {
 const api = {
   pluginConfig: { workspaceRoot: root,
     supervisorPath: "/home/stanislav/.openclaw/workspace/agents/main/scripts/execution-supervisor.py",
-    managedRunnerPath: fakeRunnerPath, managedAgentTimeoutSeconds: 60 },
+    managedRunnerPath: fakeRunnerPath, managedAgentTimeoutSeconds: 60,
+    authorizedSenderIds: ["109592643"] },
   config: {},
   runtime: {
     tasks: { flow: { fromToolContext: () => runtime, bindSession: () => runtime } },
@@ -91,6 +92,23 @@ assert.equal(records.get("flow-test-1").status, "succeeded");
 assert.equal(typeof hooks.get("before_agent_run"), "function");
 assert.equal(typeof hooks.get("before_prompt_build"), "function");
 assert.equal(typeof hooks.get("before_tool_call"), "function");
+assert.equal(typeof hooks.get("before_dispatch"), "function");
+const ingressCtx = { channelId: "telegram", accountId: "default", senderId: "109592643",
+  sessionKey: "agent:main:telegram:group:-100:topic:14", conversationId: "-100" };
+const ingress = await hooks.get("before_dispatch")({
+  content: "Выполни задачу и сообщи по завершении.", channel: "telegram", senderId: "109592643"
+}, ingressCtx);
+assert.equal(ingress.handled, true);
+assert.match(ingress.text, /Managed execution started/);
+const ingressAdmissions = await import("node:fs/promises").then(fs => fs.readdir(join(root, "state", "tasks", "managed-admission")));
+assert.equal(ingressAdmissions.length, 1);
+const ingressRecord = JSON.parse(await readFile(join(root, "state", "tasks", "managed-admission", ingressAdmissions[0], "admission.json"), "utf8"));
+assert.equal(ingressRecord.status, "DISPATCHED");
+assert.equal(ingressRecord.sessionKey, ingressCtx.sessionKey);
+const unauthorizedIngress = await hooks.get("before_dispatch")({
+  content: "Выполни задачу и сообщи по завершении.", senderId: "999"
+}, { ...ingressCtx, senderId: "999" });
+assert.equal(unauthorizedIngress, undefined);
 const managedRunId = "managed-run-1";
 const managedCtx = { ...ctx, runId: managedRunId };
 const gateDecision = await hooks.get("before_agent_run")({
@@ -133,11 +151,11 @@ for (let attempt = 0; attempt < 100; attempt++) {
   await new Promise(resolve => setTimeout(resolve, 20));
 }
 await services[0].stop();
-assert.equal(sends.length, 2);
+assert.equal(sends.length, 3);
 await services[0].start({ config: {}, logger: { error() {} } });
 await new Promise(resolve => setTimeout(resolve, 30));
 await services[0].stop();
-assert.equal(sends.length, 2);
+assert.equal(sends.length, 3);
 
 const privateCtx = { ...ctx, sessionKey: "agent:main:main", runId: "private-managed" };
 await hooks.get("before_agent_run")({ prompt: "Выполни отчёт и сообщи по завершении", senderIsOwner: true }, privateCtx);

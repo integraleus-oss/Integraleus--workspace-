@@ -20,6 +20,7 @@
       "managedAgentTimeoutSeconds": { "type": "integer", "minimum": 60, "maximum": 86400, "default": 3600 },
       "authorizedSessionKeys": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
       "authorizedSessionPrefixes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "default": ["agent:main:telegram:"] },
+      "authorizedSenderIds": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
       "delivery": {
         "type": "object",
         "additionalProperties": false,

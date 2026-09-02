@@ -1,6 +1,6 @@
 # Evidence: managed admission and dispatch
 
-Status: REPAIR_VERIFIED_AWAITING_LIVE_TELEGRAM_DRILL
+Status: GATEWAY_DISPATCH_REPAIR_VERIFIED_AWAITING_LIVE_TELEGRAM_DRILL
 
 - Artifact: `state/tasks/2026-09-02-managed-admission-dispatch/TASK_PACKET.md`
 - Owner: main
@@ -45,3 +45,7 @@ Status: REPAIR_VERIFIED_AWAITING_LIVE_TELEGRAM_DRILL
 - Runtime inspection exposed the registration defect: `openclaw plugins inspect ... --runtime --json` reported `typedHooks: []`, `hookCount: 0`, and the intended lifecycle handlers only under `customHooks`. The plugin used `api.registerHook`; the installed OpenClaw runtime registers typed lifecycle hooks through `api.on`.
 - Repair completed and activated at the 2026-09-02 15:16 Europe/Moscow Gateway restart: admission uses typed `before_agent_run`, prompt injection uses typed `before_prompt_build`, and the gate uses typed `before_tool_call`.
 - Runtime proof: Gateway PID `3100659`, started 2026-09-02 15:16:08 Europe/Moscow; plugin status `loaded`, `hookCount: 3`, typed hooks present, custom hooks absent, all three supervisor tools present; Telegram deep status `OK`.
+- Real Telegram tests at 2026-09-02 15:21 Europe/Moscow failed again: the Codex runtime did not execute the registered agent lifecycle hooks, so both requests ran in foreground and created no admission artifacts.
+- The admission boundary was therefore moved to typed `before_dispatch`, which executes in the Gateway dispatch path before any agent runtime starts. A matching owner request is now handled there: admission artifacts and TaskFlow are created, supervisor is launched, and the immediate reply contains flow/PID/evidence; the original Codex turn is not started.
+- Owner authorization at this boundary is constrained by `authorizedSenderIds`; the focused integration test covers accepted owner sender `109592643` and rejected non-owner sender.
+- Post-repair checks: plugin integration PASS, managed runner PASS, Python supervisor 7/7 PASS, syntax checks PASS, and `git diff --check` PASS.

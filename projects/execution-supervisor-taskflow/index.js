@@ -20,6 +20,7 @@ const PLUGIN_CONFIG_SCHEMA = Type.Object({
   managedAgentTimeoutSeconds: Type.Optional(Type.Integer({ minimum: 60, maximum: 86400, default: 3600 })),
   authorizedSessionKeys: Type.Optional(Type.Array(Type.String(), { uniqueItems: true })),
   authorizedSessionPrefixes: Type.Optional(Type.Array(Type.String(), { uniqueItems: true, default: ["agent:main:telegram:"] })),
+  authorizedSenderIds: Type.Optional(Type.Array(Type.String(), { uniqueItems: true })),
   delivery: Type.Optional(Type.Object({ channel: Type.String(), accountId: Type.Optional(Type.String()),
     to: Type.String(), threadId: Type.Optional(Type.String()) }, { additionalProperties: false })),
   pollMs: Type.Optional(Type.Integer({ minimum: 1000, maximum: 60000 })),
@@ -103,12 +104,13 @@ const plugin = definePluginEntry({
     }
 
     async function createAdmission(event, ctx) {
-      if (!requiresManagedExecution(event.prompt)) return null;
+      const prompt = event.prompt ?? event.content;
+      if (!requiresManagedExecution(prompt)) return null;
       if (typeof ctx.sessionKey === "string" && ctx.sessionKey.startsWith("agent:main:managed:")) return null;
       const id = admissionId(ctx.runId);
       const taskRoot = resolve(workspaceRoot, "state/tasks/managed-admission", id);
       const record = {
-        schemaVersion: 1, admissionId: id, status: "ADMITTED", prompt: event.prompt,
+        schemaVersion: 1, admissionId: id, status: "ADMITTED", prompt,
         runId: ctx.runId ?? null, sessionKey: ctx.sessionKey ?? null,
         createdAt: new Date().toISOString(), timeoutSeconds: config.managedAgentTimeoutSeconds ?? 3600,
         taskRoot, taskPath: resolve(taskRoot, "TASK_PACKET.md"),
@@ -136,6 +138,55 @@ const plugin = definePluginEntry({
       if (ctx.sessionKey) admissionsBySession.set(ctx.sessionKey, record);
       return record;
     }
+
+    function deliveryFromDispatch(event, ctx) {
+      const sessionKey = ctx.sessionKey ?? event.sessionKey ?? "";
+      const topic = sessionKey.match(/:group:(-?\d+):topic:(\d+)$/);
+      if (topic) return { channel: ctx.channelId ?? event.channel ?? "telegram",
+        accountId: ctx.accountId, to: `telegram:${topic[1]}:topic:${topic[2]}`, threadId: topic[2] };
+      const direct = sessionKey.match(/:direct:(\d+)$/);
+      if (direct) return { channel: ctx.channelId ?? event.channel ?? "telegram",
+        accountId: ctx.accountId, to: `telegram:${direct[1]}` };
+      return { channel: ctx.channelId ?? event.channel, accountId: ctx.accountId,
+        to: ctx.conversationId };
+    }
+
+    async function dispatchAdmission(admission, runtime, deliveryContext) {
+      const flow = runtime.createManaged({ controllerId: "execution-supervisor-taskflow/v2", goal: admission.prompt,
+        status: "running", notifyPolicy: "state_changes", currentStep: "managed-agent-runner",
+        stateJson: { admissionId: admission.admissionId, evidencePath: admission.evidencePath,
+          statePath: admission.statePath, outboxPath: admission.outboxPath } });
+      const runner = config.managedRunnerPath ?? resolve(workspaceRoot, "scripts/managed-agent-runner.mjs");
+      const managedSession = `agent:main:managed:${admission.admissionId}`;
+      const argv = [supervisor, "run", "--evidence", admission.evidencePath, "--state", admission.statePath,
+        "--outbox", admission.outboxPath, "--terminal-evidence", admission.resultPath,
+        "--timeout", String(admission.timeoutSeconds), "--owner", "main", "--flow-id", flow.flowId,
+        "--session-key", admission.sessionKey, "--delivery-json", JSON.stringify(deliveryContext ?? {}), "--",
+        process.execPath, runner, "--prompt", admission.taskPath, "--result", admission.resultPath,
+        "--agent-output", admission.runnerOutputPath, "--session-key", managedSession,
+        "--timeout", String(admission.timeoutSeconds)];
+      const child = spawn("python3", argv, { detached: true, stdio: "ignore" }); child.unref();
+      Object.assign(admission, { status: "DISPATCHED", flowId: flow.flowId, supervisorPid: child.pid });
+      if (admission.runId) admissionsByRun.set(admission.runId, admission);
+      if (admission.sessionKey) admissionsBySession.set(admission.sessionKey, admission);
+      await writeFile(resolve(admission.taskRoot, "admission.json"), JSON.stringify(admission, null, 2) + "\n");
+      return { admissionId: admission.admissionId, flowId: flow.flowId, revision: flow.revision,
+        supervisorPid: child.pid, evidencePath: admission.evidencePath, statePath: admission.statePath };
+    }
+
+    api.on("before_dispatch", async (event, ctx) => {
+      if (!requiresManagedExecution(event.content)) return;
+      const allowedSenders = config.authorizedSenderIds ?? [];
+      if (allowedSenders.length > 0 && !allowedSenders.includes(String(ctx.senderId ?? event.senderId ?? ""))) return;
+      if (!isTrustedOwnerContext(ctx, config)) return;
+      const deliveryContext = deliveryFromDispatch(event, ctx);
+      const admission = await createAdmission({ content: event.content, messages: [] }, ctx);
+      if (!admission) return;
+      const runtime = api.runtime.tasks.flow.bindSession({ sessionKey: admission.sessionKey,
+        requesterOrigin: deliveryContext });
+      const details = await dispatchAdmission(admission, runtime, deliveryContext);
+      return { handled: true, text: `Managed execution started. Flow ${details.flowId}; PID ${details.supervisorPid}; evidence ${details.evidencePath}` };
+    });
 
     api.on("before_agent_run", async (event, ctx) => {
       if (!isTrustedOwnerContext({ ...ctx, senderIsOwner: event.senderIsOwner }, config)) return;
@@ -223,31 +274,8 @@ const plugin = definePluginEntry({
         if (!admission) throw new Error("no managed admission for this turn");
         if (admission.status === "DISPATCHED") throw new Error(`admission already dispatched: ${admission.admissionId}`);
         const runtime = api.runtime.tasks.flow.fromToolContext(ctx);
-        const flow = runtime.createManaged({ controllerId: "execution-supervisor-taskflow/v2", goal: admission.prompt,
-          status: "running", notifyPolicy: "state_changes", currentStep: "managed-agent-runner",
-          stateJson: { admissionId: admission.admissionId, evidencePath: admission.evidencePath,
-            statePath: admission.statePath, outboxPath: admission.outboxPath } });
-        const runner = config.managedRunnerPath ?? resolve(workspaceRoot, "scripts/managed-agent-runner.mjs");
-        const managedSession = `agent:main:managed:${admission.admissionId}`;
-        const argv = [supervisor, "run", "--evidence", admission.evidencePath, "--state", admission.statePath,
-          "--outbox", admission.outboxPath, "--terminal-evidence", admission.resultPath,
-          "--timeout", String(admission.timeoutSeconds), "--owner", "main", "--flow-id", flow.flowId,
-          "--session-key", ctx.sessionKey, "--delivery-json", JSON.stringify(ctx.deliveryContext ?? {}), "--",
-          process.execPath, runner, "--prompt", admission.taskPath, "--result", admission.resultPath,
-          "--agent-output", admission.runnerOutputPath, "--session-key", managedSession,
-          "--timeout", String(admission.timeoutSeconds)];
-        const child = spawn("python3", argv, { detached: true, stdio: "ignore" }); child.unref();
-        admission.status = "DISPATCHED";
-        admission.flowId = flow.flowId;
-        admission.supervisorPid = child.pid;
-        admissionsByRun.set(ctx.runId, admission);
-        admissionsBySession.set(ctx.sessionKey, admission);
-        await writeFile(resolve(admission.taskRoot, "admission.json"), JSON.stringify(admission, null, 2) + "\n");
-        return { content: [{ type: "text", text: JSON.stringify({ admissionId: admission.admissionId,
-          flowId: flow.flowId, revision: flow.revision, supervisorPid: child.pid,
-          evidencePath: admission.evidencePath, statePath: admission.statePath }) }],
-          details: { admissionId: admission.admissionId, flowId: flow.flowId, revision: flow.revision,
-            supervisorPid: child.pid, evidencePath: admission.evidencePath, statePath: admission.statePath } };
+        const details = await dispatchAdmission(admission, runtime, ctx.deliveryContext);
+        return { content: [{ type: "text", text: JSON.stringify(details) }], details };
       }
     }), { name: "execution_supervisor_dispatch" });
 
