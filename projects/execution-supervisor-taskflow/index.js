@@ -13,6 +13,17 @@ const DEFAULT_MANAGED_PATTERNS = [
   /(?:run|execute|complete)[\s\S]{0,160}(?:notify|tell)\s+me\s+(?:when|once)\s+(?:done|complete)/iu,
 ];
 const SAFE_PRE_DISPATCH_TOOLS = new Set(["execution_supervisor_dispatch", "execution_supervisor_recover"]);
+const PLUGIN_CONFIG_SCHEMA = Type.Object({
+  workspaceRoot: Type.Optional(Type.String()),
+  supervisorPath: Type.Optional(Type.String()),
+  managedRunnerPath: Type.Optional(Type.String()),
+  managedAgentTimeoutSeconds: Type.Optional(Type.Integer({ minimum: 60, maximum: 86400, default: 3600 })),
+  authorizedSessionKeys: Type.Optional(Type.Array(Type.String(), { uniqueItems: true })),
+  authorizedSessionPrefixes: Type.Optional(Type.Array(Type.String(), { uniqueItems: true, default: ["agent:main:telegram:"] })),
+  delivery: Type.Optional(Type.Object({ channel: Type.String(), accountId: Type.Optional(Type.String()),
+    to: Type.String(), threadId: Type.Optional(Type.String()) }, { additionalProperties: false })),
+  pollMs: Type.Optional(Type.Integer({ minimum: 1000, maximum: 60000 })),
+}, { additionalProperties: false });
 
 export function requiresManagedExecution(prompt, patterns = DEFAULT_MANAGED_PATTERNS) {
   return typeof prompt === "string" && patterns.some(pattern => pattern.test(prompt));
@@ -77,6 +88,7 @@ const plugin = definePluginEntry({
   id: "execution-supervisor-taskflow",
   name: "Execution Supervisor TaskFlow",
   description: "Durable TaskFlow bridge for the execution-truth supervisor.",
+  configSchema: PLUGIN_CONFIG_SCHEMA,
   register(api) {
     const config = api.pluginConfig ?? {};
     const workspaceRoot = config.workspaceRoot ?? DEFAULT_ROOT;

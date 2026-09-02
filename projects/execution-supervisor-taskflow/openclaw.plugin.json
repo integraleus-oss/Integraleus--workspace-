@@ -1,8 +1,15 @@
 {
   "id": "execution-supervisor-taskflow",
   "name": "Execution Supervisor TaskFlow",
-  "description": "Owner-scoped managed TaskFlow bridge for durable foreground execution supervision.",
+  "description": "Durable TaskFlow bridge for the execution-truth supervisor.",
   "version": "0.1.0",
+  "contracts": {
+    "tools": [
+      "execution_supervisor_dispatch",
+      "execution_supervisor_start",
+      "execution_supervisor_recover"
+    ]
+  },
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
@@ -11,17 +18,8 @@
       "supervisorPath": { "type": "string" },
       "managedRunnerPath": { "type": "string" },
       "managedAgentTimeoutSeconds": { "type": "integer", "minimum": 60, "maximum": 86400, "default": 3600 },
-      "authorizedSessionKeys": {
-        "type": "array",
-        "items": { "type": "string" },
-        "uniqueItems": true
-      },
-      "authorizedSessionPrefixes": {
-        "type": "array",
-        "items": { "type": "string" },
-        "uniqueItems": true,
-        "default": ["agent:main:telegram:"]
-      },
+      "authorizedSessionKeys": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+      "authorizedSessionPrefixes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "default": ["agent:main:telegram:"] },
       "delivery": {
         "type": "object",
         "additionalProperties": false,
@@ -36,6 +34,7 @@
       "pollMs": { "type": "integer", "minimum": 1000, "maximum": 60000 }
     }
   },
-  "activation": { "onStartup": true },
-  "contracts": { "tools": ["execution_supervisor_dispatch", "execution_supervisor_start", "execution_supervisor_recover"] }
+  "activation": {
+    "onStartup": true
+  }
 }

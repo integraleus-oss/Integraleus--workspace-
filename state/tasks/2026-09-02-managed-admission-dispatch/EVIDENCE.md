@@ -1,6 +1,6 @@
 # Evidence: managed admission and dispatch
 
-Status: READY_FOR_ACTIVATION
+Status: LIVE_VALIDATION_PARTIAL
 
 - Artifact: `state/tasks/2026-09-02-managed-admission-dispatch/TASK_PACKET.md`
 - Owner: main
@@ -28,7 +28,14 @@ Status: READY_FOR_ACTIVATION
 
 ## Pending runtime gate
 
-- Restart Gateway to load the new hooks/tool.
-- Inspect the live plugin registry after restart.
-- Run one synthetic request from a Telegram topic and one private-session drill.
-- Confirm task artifact precedes flow, foreground bypass is blocked, terminal notification is delivered once, and no recursive admission occurs.
+- [x] Gateway restarted and healthy; Telegram deep probe is OK.
+- [x] Live tool registry exposes `execution_supervisor_dispatch`, `execution_supervisor_start`, and `execution_supervisor_recover`.
+- [x] Manifest tool contract and runtime config schema updated for OpenClaw 2026.7.1-2 compatibility.
+- [ ] Real inbound Telegram topic drill. `sessions_send` now rejects thread-session targets, and `openclaw agent` is a CLI/nested path rather than Telegram ingress; neither is valid evidence for this gate.
+- [ ] Real inbound Telegram private-chat drill for admission, foreground blocking, terminal delivery exactly once, and recursion exclusion.
+
+## Live-test findings
+
+- The first restart rejected agent-tool registration because the manifest lacked `contracts.tools`; this was corrected before the second restart.
+- The second restart loaded the plugin without registration errors, and the three supervisor tools are present in the live OpenClaw tool registry.
+- A CLI topic attempt ended during transcript compaction and created no admission artifact. A nested `sessions_send` direct attempt executed as an internal agent call and also created no admission artifact. These attempts are recorded as invalid ingress simulations, not as passing Telegram drills.
