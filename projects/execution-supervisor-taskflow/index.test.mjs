@@ -51,7 +51,7 @@ const api = {
     channel: { outbound: { loadAdapter: async () => ({ sendText: async input => { sends.push(input); return { messageId: "test-1" }; } }) } }
   },
   registerTool(factory, options) { tools.set(options.name, factory); },
-  registerHook(event, handler) { hooks.set(event, handler); },
+  on(event, handler) { hooks.set(event, handler); },
   registerService(service) { services.push(service); }
 };
 plugin.register(api);
@@ -89,7 +89,7 @@ assert.equal(sends[0].threadId, "14");
 assert.equal(records.get("flow-test-1").status, "succeeded");
 
 assert.equal(typeof hooks.get("before_agent_run"), "function");
-assert.equal(typeof hooks.get("before_agent_start"), "function");
+assert.equal(typeof hooks.get("before_prompt_build"), "function");
 assert.equal(typeof hooks.get("before_tool_call"), "function");
 const managedRunId = "managed-run-1";
 const managedCtx = { ...ctx, runId: managedRunId };
@@ -98,7 +98,7 @@ const gateDecision = await hooks.get("before_agent_run")({
   messages: [{ role: "user", content: "Предыдущая задача — R7" }]
 }, managedCtx);
 assert.equal(gateDecision.outcome, "pass");
-const promptMutation = hooks.get("before_agent_start")({}, managedCtx);
+const promptMutation = hooks.get("before_prompt_build")({}, managedCtx);
 assert.match(promptMutation.prependContext, /execution_supervisor_dispatch/);
 const blocked = hooks.get("before_tool_call")({ toolName: "bash", params: {} }, { ...managedCtx, toolName: "bash" });
 assert.equal(blocked.block, true);
@@ -141,15 +141,15 @@ assert.equal(sends.length, 2);
 
 const privateCtx = { ...ctx, sessionKey: "agent:main:main", runId: "private-managed" };
 await hooks.get("before_agent_run")({ prompt: "Выполни отчёт и сообщи по завершении", senderIsOwner: true }, privateCtx);
-assert.match(hooks.get("before_agent_start")({}, privateCtx).prependContext, /private-managed/);
+assert.match(hooks.get("before_prompt_build")({}, privateCtx).prependContext, /private-managed/);
 
 const nestedCtx = { ...ctx, sessionKey: "agent:main:managed:nested", runId: "nested-managed" };
 await hooks.get("before_agent_run")({ prompt: "Выполни задачу и сообщи по завершении", senderIsOwner: true }, nestedCtx);
-assert.equal(hooks.get("before_agent_start")({}, nestedCtx), undefined);
+assert.equal(hooks.get("before_prompt_build")({}, nestedCtx), undefined);
 
 const foregroundRun = { ...ctx, runId: "foreground-run" };
 await hooks.get("before_agent_run")({ prompt: "Ответь коротко сейчас", senderIsOwner: true }, foregroundRun);
-assert.equal(hooks.get("before_agent_start")({}, foregroundRun), undefined);
+assert.equal(hooks.get("before_prompt_build")({}, foregroundRun), undefined);
 assert.equal(hooks.get("before_tool_call")({ toolName: "bash", params: {} }, { ...foregroundRun, toolName: "bash" }), undefined);
 
 const prefixCtx = { ...ctx, senderIsOwner: false };

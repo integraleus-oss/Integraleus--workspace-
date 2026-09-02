@@ -1,6 +1,6 @@
 # Evidence: managed admission and dispatch
 
-Status: LIVE_VALIDATION_PARTIAL
+Status: REPAIR_VERIFIED_AWAITING_LIVE_TELEGRAM_DRILL
 
 - Artifact: `state/tasks/2026-09-02-managed-admission-dispatch/TASK_PACKET.md`
 - Owner: main
@@ -31,11 +31,17 @@ Status: LIVE_VALIDATION_PARTIAL
 - [x] Gateway restarted and healthy; Telegram deep probe is OK.
 - [x] Live tool registry exposes `execution_supervisor_dispatch`, `execution_supervisor_start`, and `execution_supervisor_recover`.
 - [x] Manifest tool contract and runtime config schema updated for OpenClaw 2026.7.1-2 compatibility.
-- [ ] Real inbound Telegram topic drill. `sessions_send` now rejects thread-session targets, and `openclaw agent` is a CLI/nested path rather than Telegram ingress; neither is valid evidence for this gate.
-- [ ] Real inbound Telegram private-chat drill for admission, foreground blocking, terminal delivery exactly once, and recursion exclusion.
+- [x] Runtime inspection after the repair shows typed hooks for `before_agent_run`, `before_prompt_build`, and `before_tool_call`, with `customHooks: []` and no plugin diagnostics.
+- [x] Focused checks after activation: plugin integration PASS, managed runner PASS, Python supervisor 7/7 PASS, recovery 1/1 PASS, syntax checks PASS, and `git diff --check` PASS.
+- [ ] Repeat the real inbound Telegram topic drill after the typed-hook repair.
+- [ ] Repeat the real inbound Telegram private-chat drill for admission, foreground blocking, terminal delivery exactly once, and recursion exclusion.
 
 ## Live-test findings
 
 - The first restart rejected agent-tool registration because the manifest lacked `contracts.tools`; this was corrected before the second restart.
 - The second restart loaded the plugin without registration errors, and the three supervisor tools are present in the live OpenClaw tool registry.
 - A CLI topic attempt ended during transcript compaction and created no admission artifact. A nested `sessions_send` direct attempt executed as an internal agent call and also created no admission artifact. These attempts are recorded as invalid ingress simulations, not as passing Telegram drills.
+- Real Telegram ingress tests at 2026-09-02 15:11 Europe/Moscow failed in both topic 14 and private chat: each turn invoked `bash` directly, returned a foreground answer, and created no admission/flow/state/evidence artifacts.
+- Runtime inspection exposed the registration defect: `openclaw plugins inspect ... --runtime --json` reported `typedHooks: []`, `hookCount: 0`, and the intended lifecycle handlers only under `customHooks`. The plugin used `api.registerHook`; the installed OpenClaw runtime registers typed lifecycle hooks through `api.on`.
+- Repair completed and activated at the 2026-09-02 15:16 Europe/Moscow Gateway restart: admission uses typed `before_agent_run`, prompt injection uses typed `before_prompt_build`, and the gate uses typed `before_tool_call`.
+- Runtime proof: Gateway PID `3100659`, started 2026-09-02 15:16:08 Europe/Moscow; plugin status `loaded`, `hookCount: 3`, typed hooks present, custom hooks absent, all three supervisor tools present; Telegram deep status `OK`.

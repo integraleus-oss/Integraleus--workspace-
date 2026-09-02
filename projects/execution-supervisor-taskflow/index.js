@@ -137,25 +137,25 @@ const plugin = definePluginEntry({
       return record;
     }
 
-    api.registerHook("before_agent_run", async (event, ctx) => {
+    api.on("before_agent_run", async (event, ctx) => {
       if (!isTrustedOwnerContext({ ...ctx, senderIsOwner: event.senderIsOwner }, config)) return;
       await createAdmission(event, ctx);
       return { outcome: "pass" };
-    }, { name: "execution-supervisor-managed-admission", description: "Admit explicit completion-notification requests before agent work." });
+    });
 
-    api.registerHook("before_agent_start", (_event, ctx) => {
+    api.on("before_prompt_build", (_event, ctx) => {
       const admission = admissionForContext(ctx);
       if (!admission) return;
       return { prependContext: `MANAGED EXECUTION REQUIRED (admission ${admission.admissionId}). Before any task work, call execution_supervisor_dispatch with no arguments. Do not use bash, exec, apply_patch, Codex, subagents, or other work tools in this turn. After dispatch, report the returned flow/run/PID/evidence identifiers and stop.` };
-    }, { name: "execution-supervisor-managed-prompt", description: "Force the managed dispatcher to be the first work action." });
+    });
 
-    api.registerHook("before_tool_call", (event, ctx) => {
+    api.on("before_tool_call", (event, ctx) => {
       const admission = admissionForContext(ctx);
       if (!admission || SAFE_PRE_DISPATCH_TOOLS.has(event.toolName)) return;
       return { block: true, blockReason: admission.status === "DISPATCHED"
         ? `Managed task ${admission.admissionId} is already detached; foreground work is blocked.`
         : `Managed admission ${admission.admissionId} requires execution_supervisor_dispatch before any work tool.` };
-    }, { name: "execution-supervisor-managed-tool-gate", description: "Fail closed until managed dispatch and prevent duplicate foreground work." });
+    });
 
     async function reconcileState(statePath, runtimeConfig) {
       if (activeRecoveries.has(statePath)) return { skipped: "already-running" };

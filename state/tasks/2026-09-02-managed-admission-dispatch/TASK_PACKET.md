@@ -31,3 +31,9 @@
 - [x] `git diff --check` passes.
 - [x] Focused commit created; push not performed.
 - [ ] Gateway activation and cross-session live drill completed after explicit runtime approval.
+
+## Live-gate regression
+
+- 2026-09-02 15:11 Europe/Moscow: real Telegram topic and private-chat drills bypassed managed admission and executed `bash` directly.
+- Root cause: lifecycle handlers were registered with `api.registerHook`, which creates custom hooks; OpenClaw agent runtime consumes these events only from typed hooks registered with `api.on`.
+- Repair gate: runtime inspection must show typed hooks for `before_agent_run`, `before_prompt_build`, and `before_tool_call` before another Telegram drill.
