@@ -9,6 +9,8 @@
     "properties": {
       "workspaceRoot": { "type": "string" },
       "supervisorPath": { "type": "string" },
+      "managedRunnerPath": { "type": "string" },
+      "managedAgentTimeoutSeconds": { "type": "integer", "minimum": 60, "maximum": 86400, "default": 3600 },
       "authorizedSessionKeys": {
         "type": "array",
         "items": { "type": "string" },
@@ -35,5 +37,5 @@
     }
   },
   "activation": { "onStartup": true },
-  "contracts": { "tools": ["execution_supervisor_start", "execution_supervisor_recover"] }
+  "contracts": { "tools": ["execution_supervisor_dispatch", "execution_supervisor_start", "execution_supervisor_recover"] }
 }
