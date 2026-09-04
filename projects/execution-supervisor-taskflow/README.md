@@ -5,7 +5,7 @@ Prepared OpenClaw plugin adapter for `scripts/execution-supervisor.py`.
 It creates an owner-bound managed TaskFlow, launches the durable supervisor,
 and reconciles persisted terminal state after a tool interruption or Gateway
 restart. TaskFlow `state_changes` supplies the managed owner-notification path;
-the supervisor JSONL outbox remains the exactly-once local delivery ledger.
+the supervisor JSONL outbox remains the durable at-least-once delivery ledger.
 
 ## Activation status
 
@@ -21,8 +21,31 @@ id as the durable delivery queue id, and acknowledges the outbox only after the
 provider send succeeds. Static `delivery` config remains legacy-only and is not
 used for new runs.
 
-Owner admission covers every Telegram topic/direct session routed to agent
-`main`, plus its canonical direct session `agent:main:main`. It does not admit
-sessions belonging to other agents. The workspace Execution Truth Protocol
+Owner admission requires an authenticated owner sender or an exact session/sender
+allowlist entry. It does not trust session-key prefixes. The workspace Execution Truth Protocol
 requires any work that continues beyond the current turn to use this managed
 tool; ordinary one-turn replies do not create synthetic background jobs.
+
+## Program completion contract
+
+Managed agent execution is multi-slice. Each slice persists
+`MANAGED_OUTCOME.json` with work packages, acceptance gates, evidence, and the
+next state. `CONTINUE` starts another slice in the same managed session.
+`SUCCEEDED` is accepted only when every package and gate is evidenced as
+passed. `BLOCKED` requires a genuine external dependency, supporting evidence,
+and an explicit owner action. A zero process exit code by itself is not task
+success.
+
+### 0.3 migration note
+
+The arbitrary-command `execution_supervisor_start` tool was removed. Managed
+admission routes only through `managed-agent-runner.mjs`; its terminal envelope
+is bound to a supervisor-generated nonce, and a clean process exit without that
+validated envelope is `FAILED`. Planner, implementation slices, and terminal
+reviewers always use `high` thinking.
+
+Terminal owner notifications use **at-least-once** delivery. The durable
+`notificationId` is reused across retries and concurrent senders are excluded
+by a delivery lease. If a process dies after the provider accepted a message
+but before acknowledgement is persisted, the message may be delivered again;
+losing the terminal result is intentionally considered worse than a duplicate.
