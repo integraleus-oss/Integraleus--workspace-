@@ -12,6 +12,7 @@ const DEFAULT_RUNTIME_ROOT = resolve(homedir(), ".openclaw/runtime/execution-sup
 const ADMISSION_TTL_MS = 5 * 60 * 1000;
 const TERMINAL = new Set(["SUCCEEDED", "TIMED_OUT", "CRASHED", "ESCALATED", "INTERRUPTED", "FAILED", "BLOCKED"]);
 const DEFAULT_MANAGED_PATTERNS = [
+  /(?:запусти|проведи|выполни)\s+(?:контрольный|live|end[- ]to[- ]end)\s+(?:drill|дрилл)/iu,
   /выполни[\s\S]{0,160}сообщи\s+по\s+завершении/iu,
   /сообщи\s+по\s+завершении/iu,
   /(?:run|execute|complete)[\s\S]{0,160}(?:notify|tell)\s+me\s+(?:when|once)\s+(?:done|complete)/iu,

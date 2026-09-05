@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import plugin, { requiresManagedExecution } from "./index.js";
 
 assert.equal(requiresManagedExecution("Выполни задачу и сообщи по завершении."), true);
+assert.equal(requiresManagedExecution("Запусти контрольный drill"), true);
 assert.equal(requiresManagedExecution("Execute this and notify me when done"), true);
 assert.equal(requiresManagedExecution("Ответь коротко сейчас"), false);
 assert.equal(requiresManagedExecution("Реализуй этот план полностью"), true);
