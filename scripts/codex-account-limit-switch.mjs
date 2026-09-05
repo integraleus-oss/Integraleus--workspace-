@@ -77,6 +77,12 @@ function findDistFile(dist, prefix) {
   return path.join(dist, file);
 }
 
+function findNamedFunction(module, name) {
+  const match = Object.values(module).find((value) => typeof value === 'function' && value.name === name);
+  if (!match) throw new Error(`Codex ${name} export not found`);
+  return match;
+}
+
 function remainingFromLimit(limit) {
   if (!limit) return null;
   const primaryUsed = limit.primary?.usedPercent;
@@ -159,10 +165,8 @@ async function main() {
   const dist = findCodexDist();
   const configModule = await import(pathToFileURL(findDistFile(dist, 'config-')).href);
   const requestModule = await import(pathToFileURL(findDistFile(dist, 'request-')).href);
-  const resolveRuntime = configModule.resolveCodexAppServerRuntimeOptions ?? configModule.d ?? configModule.l;
-  const request = requestModule.requestCodexAppServerJson ?? requestModule.t;
-  if (typeof resolveRuntime !== 'function') throw new Error('Codex runtime resolver export not found');
-  if (typeof request !== 'function') throw new Error('Codex request export not found');
+  const resolveRuntime = findNamedFunction(configModule, 'resolveCodexAppServerRuntimeOptions');
+  const request = findNamedFunction(requestModule, 'requestCodexAppServerJson');
   const pluginConfig = config.plugins?.entries?.codex?.config ?? config.plugins?.entries?.codex ?? {};
 
   const summaries = {};

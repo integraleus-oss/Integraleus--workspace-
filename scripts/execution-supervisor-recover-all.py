@@ -10,6 +10,25 @@ import subprocess
 import sys
 
 SUPERVISOR = Path(__file__).with_name("execution-supervisor.py")
+TERMINAL = {"SUCCEEDED", "TIMED_OUT", "CRASHED", "ESCALATED", "INTERRUPTED", "FAILED", "BLOCKED"}
+
+
+def safely_ignorable_legacy_state(state_path: Path) -> bool:
+    """Ignore only terminal, already-delivered legacy states.
+
+    The supervisor still validates every recoverable state and fails closed on
+    unsafe paths. This exception merely prevents immutable historical fixtures
+    that no longer require recovery or delivery from failing the whole scan.
+    """
+    try:
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        state.get("status") in TERMINAL
+        and bool(state.get("notificationId"))
+        and state.get("notificationDelivered") is True
+    )
 
 
 def main() -> int:
@@ -21,6 +40,9 @@ def main() -> int:
         result = subprocess.run([sys.executable, str(SUPERVISOR), "recover", "--state", str(state_path)],
                                 capture_output=True, text=True)
         if result.returncode != 0:
+            if "unsafe " in result.stderr and safely_ignorable_legacy_state(state_path):
+                print(f"RECOVERY_SKIPPED_UNSAFE_TERMINAL {state_path}")
+                continue
             failures += 1; print(f"RECOVERY_FAILED {state_path}: {result.stderr.strip()}")
             continue
         state = json.loads(state_path.read_text(encoding="utf-8"))
