@@ -50,9 +50,16 @@ fi
 
 account_switch_output="$(timeout 120 scripts/codex-account-limit-switch.mjs 2>&1 || true)"
 if [[ -n "$account_switch_output" ]]; then
-  printf '%s\n' "$account_switch_output"
-  if grep -q '^WARN:' <<<"$account_switch_output"; then
-    warn=1
+  # 2026-09-05: the switch script imports private @openclaw/codex dist internals and
+  # breaks on plugin updates ("Class constructor ... cannot be invoked without 'new'").
+  # Treat an internal failure of the check itself as a note, not a user-facing WARN.
+  if grep -q 'limit switch check failed' <<<"$account_switch_output"; then
+    printf '%s\n' "${account_switch_output//WARN:/note (switch-check unavailable):}"
+  else
+    printf '%s\n' "$account_switch_output"
+    if grep -q '^WARN:' <<<"$account_switch_output"; then
+      warn=1
+    fi
   fi
 else
   echo "WARN: Codex per-account switch check produced no output."
@@ -152,7 +159,7 @@ logs="$(
     grep -Ei 'rate_limit|subscription usage limit|Next reset|refresh_token_reused|fallback|context-overflow|anthropic|claude' |
     grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}T' |
     grep -Ev '^[[:space:]]*(-|•|[0-9]+[.)])[[:space:]]' |
-    grep -Eiv '^[0-9T:+.-]+ info (Fallbacks \([0-9]+\):|- |gateway: auto-enabled plugins|agent model:|anthropic plugin config present)' || true
+    grep -Eiv '^[0-9T:+.-]+ info +(Fallbacks|Image fallbacks|Providers w/|- |gateway: auto-enabled plugins|agent model:|anthropic plugin config present|gateway/reload config change detected|Stored [A-Z0-9_]+ \(secret\))' || true
 )"
 if [[ -n "$logs" ]]; then
   old_hashes="$(jq -r '.seenLogHashes[]? // empty' "$STATE_FILE" 2>/dev/null || true)"

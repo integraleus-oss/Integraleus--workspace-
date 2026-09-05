@@ -1,0 +1,22 @@
+{
+  "schema": "openclaw.inbound-timeout-retirement.redacted.v1",
+  "archivedAt": "2026-09-05T19:20:26.703Z",
+  "predicate": {
+    "status": "failed",
+    "failedReason": "handler-timeout",
+    "channelId": "telegram"
+  },
+  "counts": {
+    "archived": 20,
+    "remainingMatching": 0,
+    "otherNonFailedBefore": 1002,
+    "backupMatching": 20
+  },
+  "archivedRecordSetSha256": "25e32d746800e630d27230cbb0d7234bec7df20c18f9aca22ca9aa8908e70749",
+  "integrity": {
+    "sourceAfter": "ok",
+    "backup": "ok"
+  },
+  "replayed": false,
+  "outboundRowsChanged": false
+}

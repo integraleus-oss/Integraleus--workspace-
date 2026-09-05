@@ -16,6 +16,15 @@
 - Any new sessions from unknown sources?
 - Check error count in recent logs
 
+### 2d. Codex child-process lifecycle (EVERY heartbeat — mandatory)
+- Run `scripts/openclaw-codex-process-watch.sh`.
+- Alert Станислав if it prints `WARN`.
+- The monitor warns on app-server parents older than 15 minutes and anonymous
+  cgroup memory. Reclaimable file cache must not be reported as a memory leak.
+- Never kill a process from this monitor. Before cleanup, prove the exact
+  app-server process group is not owned by an active turn/session; preserve
+  user-owned standalone Claude/Codex CLI processes.
+
 ### 2c. Execution-truth audit (EVERY heartbeat — mandatory)
 - Run `python3 scripts/execution-truth-watch.py --root state/tasks`.
 - Run `python3 scripts/execution-supervisor-recover-all.py --root state/tasks`.
@@ -97,10 +106,18 @@ Via SSH (`ssh -o ConnectTimeout=10 root@31.128.32.68 "..."`):
 
 **Auto-failover rule:**
 If a cron job has `lastRunStatus: "error"` and error contains "timed out":
-1. Switch that job's model to `openai-codex/gpt-5.4` via `cron update` (patch payload.model)
+0. Never update or re-run the currently executing job. In particular, exclude
+   `heartbeat-main` and every job with a `declarationKey`; declaration jobs are
+   system-owned and must be repaired at their source configuration.
+1. Switch that job's model to the currently supported Codex model
+   `openai/gpt-5.6-sol` via `cron update` (patch payload.model)
 2. Immediately re-run the job via `cron run`
 3. Alert user: "Задача [name] зависла на Claude, переключил на Codex и перезапустил."
 4. Do NOT switch back automatically — user decides when to try Claude again
+
+Hard stop: a heartbeat must never invoke `cron run` for `heartbeat-main`, its
+own job id, or another heartbeat declaration. A prior heartbeat timeout is a
+diagnostic finding, not work to recursively replay from inside heartbeat.
 
 **Optimal timeout guidance:**
 - Simple checks (status, last, df): 3-5 min is enough

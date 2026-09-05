@@ -32,6 +32,14 @@ def parse_time(value: str) -> dt.datetime | None:
         return None
 
 
+def comparable_now(now: dt.datetime, verified_at: dt.datetime) -> dt.datetime:
+    if verified_at.tzinfo is None:
+        return now.replace(tzinfo=None)
+    if now.tzinfo is None:
+        return now.astimezone().astimezone(verified_at.tzinfo)
+    return now.astimezone(verified_at.tzinfo)
+
+
 def audit_file(path: Path, now: dt.datetime, stale_minutes: int) -> list[str]:
     text = path.read_text(encoding="utf-8", errors="replace")
     status = STATUS_RE.search(text)
@@ -54,7 +62,7 @@ def audit_file(path: Path, now: dt.datetime, stale_minutes: int) -> list[str]:
     verified_at = parse_time(verified.group(1)) if verified else None
     if verified_at is None:
         failures.append("missing/invalid Last verified")
-    elif now - verified_at > dt.timedelta(minutes=stale_minutes):
+    elif comparable_now(now, verified_at) - verified_at > dt.timedelta(minutes=stale_minutes):
         failures.append("stale evidence")
     return failures
 

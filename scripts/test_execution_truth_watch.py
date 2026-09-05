@@ -41,6 +41,13 @@ class ExecutionTruthTests(unittest.TestCase):
         path = self.evidence("Status: RUNNING\nManaged job: taskflow:abc\nLast verified: 2026-09-01 12:00\n")
         self.assertIn("stale evidence", MOD.audit_file(path, self.now, 60))
 
+    def test_timezone_aware_evidence_compares_with_naive_now(self):
+        path = self.evidence(
+            "Status: RUNNING\nManaged job: foreground\n"
+            "Last verified: 2026-09-01T15:20:00+03:00\n"
+        )
+        self.assertEqual([], MOD.audit_file(path, self.now, 60))
+
 
 if __name__ == "__main__":
     unittest.main()
