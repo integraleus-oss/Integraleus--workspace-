@@ -1,7 +1,7 @@
 # Evidence
 
-Status: BLOCKED_ON_OWNER_LIVE_DRILL
-Last evidence: 2026-09-05T08:27:00+03:00
+Status: BLOCKED_ON_FRESH_OWNER_RETRY
+Last evidence: 2026-09-05T08:45:00+03:00
 Heartbeat window: 10 minutes
 Timeout: 2 hours
 Notification target: Telegram `-1004417478336`, topic `2922`
@@ -33,3 +33,5 @@ Disable path: cancel the managed TaskFlow job; if activation has begun, follow `
 A fresh authenticated owner message in Telegram topic `2922` must trigger `execution_supervisor_dispatch`. Acceptance requires durable admission/task paths, TaskFlow ID, supervisor PID, current heartbeat, validated terminal result, and one acknowledged notification back to the same topic. Until then the activation is installed and healthy, but the end-to-end owner-dispatch drill is truthfully blocked rather than `RUNNING`.
 
 - 2026-09-05T08:40:41+03:00: fresh owner message `Запусти контрольный drill` reached Telegram ingress, but no admission was created. `execution_supervisor_dispatch` failed closed with `no managed admission for this turn`; no job was claimed as running. Root cause: the exact operator drill phrase was absent from `DEFAULT_MANAGED_PATTERNS`.
+- 2026-09-05T08:42:18+03:00: commit `fe8c515f` added the exact drill phrase to `DEFAULT_MANAGED_PATTERNS` and its regression test. The Gateway then restarted to load the plugin change; restart recovery resumed the source session (`recovered=1 failed=0 skipped=0`).
+- 2026-09-05T08:45+03:00: post-restart dispatch was attempted and failed closed with `trusted owner required`. The original authenticated owner turn had already passed its admission hook before the phrase patch, while the recovered continuation is deliberately not treated as a fresh owner turn. Therefore no admission path, TaskFlow ID, detached supervisor PID, or heartbeat exists, and the drill is not `RUNNING`.

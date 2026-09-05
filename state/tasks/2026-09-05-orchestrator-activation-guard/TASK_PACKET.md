@@ -1,6 +1,6 @@
 # Orchestrator activation guard
 
-Status: BLOCKED_ON_OWNER_LIVE_DRILL
+Status: BLOCKED_ON_FRESH_OWNER_RETRY
 Owner: Stanislav Pavlovskiy / agent main
 Started: 2026-09-05T08:19:00+03:00
 Execution mechanism: activation completed in foreground-controlled exec session `90986`; Gateway restart recovery resumed the interrupted source session. No detached work is running now.
