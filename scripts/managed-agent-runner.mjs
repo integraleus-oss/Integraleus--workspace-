@@ -5,6 +5,7 @@ import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { createHash, createPrivateKey, randomUUID, sign } from "node:crypto";
 import { closeSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { terminalStatus, validateManagedOutcome } from "./managed-outcome-contract.mjs";
+import { readExistingDirectory } from "./managed-runner-fs.mjs";
 
 function argumentsMap(argv) {
   const result = {};
@@ -53,7 +54,7 @@ async function trustedContextFingerprint(root, promptPath) {
   const names = new Set(["AGENTS.md", "SOUL.md", "USER.md", "CONTEXT.json"]);
   const files = [resolve(promptPath)];
   async function visit(directory) {
-    for (const entry of await readdir(directory, { withFileTypes: true })) {
+    for (const entry of await readExistingDirectory(directory)) {
       if (entry.isDirectory() && [".git", "node_modules", "venv"].includes(entry.name)) continue;
       const absolute = resolve(directory, entry.name);
       if (entry.isDirectory()) await visit(absolute);

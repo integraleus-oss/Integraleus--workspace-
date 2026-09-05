@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { mkdir, readFile, readdir, realpath, rename, stat, unlink, writeFile } from "node:fs/promises";
-import { mkdirSync, realpathSync } from "node:fs";
+import { mkdirSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { createHash, createPublicKey, generateKeyPairSync, randomUUID, verify } from "node:crypto";
 import { Type } from "typebox";
@@ -12,7 +12,7 @@ const DEFAULT_RUNTIME_ROOT = resolve(homedir(), ".openclaw/runtime/execution-sup
 const ADMISSION_TTL_MS = 5 * 60 * 1000;
 const TERMINAL = new Set(["SUCCEEDED", "TIMED_OUT", "CRASHED", "ESCALATED", "INTERRUPTED", "FAILED", "BLOCKED"]);
 const DEFAULT_MANAGED_PATTERNS = [
-  /(?:запусти|проведи|выполни)\s+(?:контрольный|live|end[- ]to[- ]end)\s+(?:drill|дрилл)/iu,
+  /(?:повторно\s+)?(?:запусти|проведи|выполни)\s+(?:(?:повторно|полный|финальный)\s+){0,3}(?:контрольный|live|end[- ]to[- ]end)\s+(?:drill|дрилл)/iu,
   /выполни[\s\S]{0,160}сообщи\s+по\s+завершении/iu,
   /сообщи\s+по\s+завершении/iu,
   /(?:run|execute|complete)[\s\S]{0,160}(?:notify|tell)\s+me\s+(?:when|once)\s+(?:done|complete)/iu,
@@ -155,6 +155,17 @@ const plugin = definePluginEntry({
 
     function admissionForContext(ctx) {
       const admission = (ctx.runId ? admissionsByRun.get(ctx.runId) : undefined) ?? admissionsBySession.get(ctx.sessionKey);
+      if (admission?.status === "DISPATCHED") {
+        try {
+          const persistedState = JSON.parse(readFileSync(admission.statePath, "utf8"));
+          if (TERMINAL.has(persistedState?.status)) {
+            admission.status = persistedState.status;
+            if (admission.runId) admissionsByRun.delete(admission.runId);
+            if (admission.sessionKey) admissionsBySession.delete(admission.sessionKey);
+            return undefined;
+          }
+        } catch {}
+      }
       if (admission?.status === "ADMITTED" && Date.now() - Date.parse(admission.createdAt) > ADMISSION_TTL_MS) {
         if (admission.runId) admissionsByRun.delete(admission.runId);
         if (admission.sessionKey) admissionsBySession.delete(admission.sessionKey);

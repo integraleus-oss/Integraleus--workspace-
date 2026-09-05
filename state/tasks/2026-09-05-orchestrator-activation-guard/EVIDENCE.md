@@ -1,7 +1,7 @@
 # Evidence
 
 Status: BLOCKED_ON_FRESH_OWNER_RETRY
-Last evidence: 2026-09-05T08:45:00+03:00
+Last evidence: 2026-09-05T10:24:11+03:00
 Heartbeat window: 10 minutes
 Timeout: 2 hours
 Notification target: Telegram `-1004417478336`, topic `2922`
@@ -35,3 +35,8 @@ A fresh authenticated owner message in Telegram topic `2922` must trigger `execu
 - 2026-09-05T08:40:41+03:00: fresh owner message `Запусти контрольный drill` reached Telegram ingress, but no admission was created. `execution_supervisor_dispatch` failed closed with `no managed admission for this turn`; no job was claimed as running. Root cause: the exact operator drill phrase was absent from `DEFAULT_MANAGED_PATTERNS`.
 - 2026-09-05T08:42:18+03:00: commit `fe8c515f` added the exact drill phrase to `DEFAULT_MANAGED_PATTERNS` and its regression test. The Gateway then restarted to load the plugin change; restart recovery resumed the source session (`recovered=1 failed=0 skipped=0`).
 - 2026-09-05T08:45+03:00: post-restart dispatch was attempted and failed closed with `trusted owner required`. The original authenticated owner turn had already passed its admission hook before the phrase patch, while the recovered continuation is deliberately not treated as a fresh owner turn. Therefore no admission path, TaskFlow ID, detached supervisor PID, or heartbeat exists, and the drill is not `RUNNING`.
+- 2026-09-05T10:20+03:00: a fresh owner request used the expanded phrase `Повторно проведи полный контрольный drill Оркестратора`. Dispatch failed closed with `no managed admission for this turn`; no job was created and no `RUNNING` claim is made. Reproduction showed the detector accepted only an adjacent verb + `контрольный drill` and did not allow the modifier `полный`.
+- 2026-09-05T10:23+03:00: detector and regression fixture updated to accept bounded drill modifiers (`повторно`, `полный`, `финальный`). Gateway reload and a new authenticated owner turn are required before the end-to-end gate can execute.
+- 2026-09-05T10:22:20+03:00: Gateway restarted cleanly and loaded the updated plugin; restart recovery resumed the interrupted topic session. Post-restart `openclaw status --deep` reports Gateway PID `1181104`, event loop healthy, Telegram 2/2 OK, `main` heartbeat `1h`, and `managed-worker` heartbeat disabled.
+- 2026-09-05T10:24:11+03:00: the recovered system continuation was deliberately rejected by `execution_supervisor_dispatch` with `trusted owner required`. This proves the owner boundary still fails closed after restart, but it cannot satisfy the fresh-owner dispatch gate. No admission, TaskFlow, supervisor PID, or drill heartbeat was created; status remains `BLOCKED_ON_FRESH_OWNER_RETRY`, not `RUNNING`.
+- 2026-09-05T10:24:11+03:00: focused regression passed: TaskFlow plugin integration, managed-runner filesystem handling, Node syntax, plugin doctor, and `git diff --check`. Current OpenClaw task audit has no live task-record errors; two historical stale TaskFlows remain unrelated and were not changed.

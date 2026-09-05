@@ -7,6 +7,7 @@ import plugin, { requiresManagedExecution } from "./index.js";
 
 assert.equal(requiresManagedExecution("Выполни задачу и сообщи по завершении."), true);
 assert.equal(requiresManagedExecution("Запусти контрольный drill"), true);
+assert.equal(requiresManagedExecution("Повторно проведи полный контрольный drill Оркестратора"), true);
 assert.equal(requiresManagedExecution("Execute this and notify me when done"), true);
 assert.equal(requiresManagedExecution("Ответь коротко сейчас"), false);
 assert.equal(requiresManagedExecution("Реализуй этот план полностью"), true);
@@ -131,10 +132,12 @@ const managedTerminal = JSON.parse(await readFile(dispatched.details.statePath, 
 assert.equal(managedTerminal.status, "SUCCEEDED");
 assert.equal(managedTerminal.sessionKey, managedCtx.sessionKey);
 assert.equal(sends.length, 0);
+assert.equal(hooks.get("before_tool_call")({ toolName: "bash", params: {} },
+  { ...managedCtx, toolName: "bash" }), undefined);
 const managedContext = JSON.parse(await readFile(join(root, "state", "tasks", "managed-admission", managedRunId, "CONTEXT.json"), "utf8"));
 assert.equal(managedContext.messages.length, 1);
 assert.equal(hooks.get("before_tool_call")({ toolName: "sessions_spawn", params: {} },
-  { ...managedCtx, toolName: "sessions_spawn" }).block, true);
+  { ...managedCtx, toolName: "sessions_spawn" }), undefined);
 await services[0].start({ config: {}, logger: { error(...args) { console.error(...args); } } });
 for (let attempt = 0; attempt < 100; attempt++) {
   const state = JSON.parse(await readFile(dispatched.details.statePath, "utf8"));

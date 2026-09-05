@@ -3,7 +3,7 @@
 Status: BLOCKED_ON_FRESH_OWNER_RETRY
 Owner: Stanislav Pavlovskiy / agent main
 Started: 2026-09-05T08:19:00+03:00
-Execution mechanism: activation completed in foreground-controlled exec session `90986`; Gateway restart recovery resumed the interrupted source session. No detached work is running now.
+Execution mechanism: activation completed in foreground-controlled exec session `90986`; Gateway restart recovery resumed the interrupted source session. The current source turn is a recovered foreground task only; no detached drill is running.
 Expected output: activated commit `f70913ea`, protected runtime, verified restart/recovery delivery, and a regression guard that forbids unsupported `RUNNING` claims.
 
 ## Goal
@@ -32,6 +32,8 @@ Finish the previously approved controlled activation and prevent a final reply f
 - [x] Unit/integration regression covers stale/crash notification and exactly-once recovery.
 - [ ] Full live drill passes or rollback completes.
 - [x] Evidence and commit/status recorded; owner-originated live dispatch remains open.
+- [x] Expanded drill wording is admitted by regression coverage and the updated plugin is loaded after a clean Gateway restart.
+- [x] Recovered/system continuation is verified fail-closed with `trusted owner required`.
 
 ## Execution truth gate
 
