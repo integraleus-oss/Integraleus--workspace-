@@ -1,10 +1,15 @@
 # Ordered system hardening — evidence
 
-Status: RUNNING
+Status: SUCCEEDED
 
 - Task packet: `TASK_PACKET.md`
 - Managed mechanism: foreground Codex turn
-- Last verified: 2026-09-05T22:18:00+03:00
+- Completed: 2026-09-06T11:30:24+03:00
+- Original execution stopped because the foreground turn ended after activation
+  and scoped commits, before this evidence file and checklist were finalized.
+  The activation helper also invoked `scripts/heartbeat-main-bounded.sh` from
+  the wrong working directory, producing a non-fatal `No such file or
+  directory` line even though the script was committed at `8c18a573`.
 
 ## Heartbeat diagnosis
 
@@ -56,3 +61,30 @@ Status: RUNNING
   filesystem scope, full exec, host-MCP isolation, and the group-channel
   multi-user heuristic.
 - Last verified: 2026-09-05T22:34:00+03:00
+
+## Completion verification
+
+- Scoped implementation commit: `8c18a573` (`fix: bound heartbeat and archive stale ingress`).
+- Activation-verifier commit: `da2b68d6` (`chore: add hardening activation verifier`).
+- Post-restart status recorded Gateway health `true`, Telegram accounts 2/2
+  connected, and security audit 0 critical / 5 warnings / 2 info.
+- Secret audit recorded zero unresolved SecretRefs; remaining findings were
+  classified plaintext/legacy residues rather than failed activation.
+- Final execution-truth, manual heartbeat, deep status, and fresh-log checks
+  were repeated at 2026-09-06T11:30+03:00.
+- `python3 scripts/execution-truth-watch.py --root state/tasks` returned
+  `EXECUTION_TRUTH_OK`; the stale `RUNNING` finding is cleared.
+- Manual managed `heartbeat-main` was enqueued but skipped because the main
+  agent lane was active. The bounded foreground heartbeat then ran every check:
+  Codex process watch `OK`, execution truth `OK`, supervisor recovery `OK`,
+  Gateway status `OK`, and token/account probes completed for both OAuth
+  profiles. Overall result was `HEARTBEAT_MAIN_WARN` only because the existing
+  log classifier mislabeled an informational `agent-turn-timing` line as a new
+  `model_fallback` event.
+- Current `openclaw status --deep`: Gateway reachable on 2026.9.2, Telegram
+  `OK` with accounts 2/2, event loop healthy, security audit 0 critical / 5
+  warnings / 2 info, and no delivery-queue warning.
+- Fresh logs contain repeated non-terminal Codex settled-turn-finalization
+  context warnings. Status still exposes the separate stale update marker
+  `owner_required`; neither warning changes this task's terminal state.
+- Manual heartbeat output: `terminalization-heartbeat.log`.

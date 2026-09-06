@@ -158,6 +158,7 @@ logs="$(
   timeout 30 openclaw logs --plain --limit "$LOG_LIMIT" 2>/dev/null |
     grep -Ei 'rate_limit|subscription usage limit|Next reset|refresh_token_reused|fallback|context-overflow|anthropic|claude' |
     grep -E '^[0-9]{4}-[0-9]{2}-[0-9]{2}T' |
+    grep -Ev '^[^ ]+ info +auto-reply/agent-turn-timing ' |
     grep -Ev '^[[:space:]]*(-|•|[0-9]+[.)])[[:space:]]' |
     grep -Eiv '^[0-9T:+.-]+ info +(Fallbacks|Image fallbacks|Providers w/|- |gateway: auto-enabled plugins|agent model:|anthropic plugin config present|gateway/reload config change detected|Stored [A-Z0-9_]+ \(secret\))' || true
 )"

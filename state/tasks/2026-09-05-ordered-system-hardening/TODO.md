@@ -18,6 +18,6 @@
 - [x] Identify and repair the exact `heartbeat-main` hang step; add bounded execution proof
 - [x] Correct stale `ba667378` activation evidence
 - [x] Archive/remove only the 20 already-backed-up inbound timeout records without replay; verify SQLite
-- [ ] Migrate plaintext configuration secrets to SecretRefs; verify Gateway and Telegram
+- [x] Migrate supported plaintext configuration secrets to SecretRefs; verify Gateway and Telegram
 - [x] Re-run doctor/security checks and classify remaining hardening findings
-- [ ] Create scoped commits and record final evidence
+- [x] Create scoped commits and record final evidence

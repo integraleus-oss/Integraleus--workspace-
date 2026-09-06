@@ -57,7 +57,22 @@ function canonicalProfile(profile, availableProfiles) {
 }
 
 function findCodexDist() {
+  const plugins = runJson('openclaw', ['plugins', 'list', '--json']);
+  const installedCodex = plugins?.plugins?.find((plugin) => plugin.id === 'codex');
+  const installedRoot = installedCodex?.rootDir
+    ?? (installedCodex?.source ? path.dirname(path.dirname(installedCodex.source)) : null);
+  const installedDist = installedRoot ? path.join(installedRoot, 'dist') : null;
+  if (installedDist && fs.existsSync(installedDist)) {
+    const files = fs.readdirSync(installedDist);
+    if (files.some((file) => /^request-.*\.js$/.test(file)) && files.some((file) => /^config-.*\.js$/.test(file))) {
+      return installedDist;
+    }
+  }
+
   const projectsDir = homePath(process.env.OPENCLAW_NPM_PROJECTS_DIR ?? '~/.openclaw/npm/projects');
+  if (!fs.existsSync(projectsDir)) {
+    throw new Error(`Codex plugin root is unavailable (registry root: ${installedRoot ?? 'not reported'}; legacy projects: ${projectsDir})`);
+  }
   const candidates = fs.readdirSync(projectsDir)
     .filter((name) => name.startsWith('openclaw-codex-'))
     .map((name) => path.join(projectsDir, name, 'node_modules/@openclaw/codex/dist'))
@@ -67,7 +82,9 @@ function findCodexDist() {
       return files.some((file) => /^request-.*\.js$/.test(file)) && files.some((file) => /^config-.*\.js$/.test(file));
     })
     .sort();
-  if (candidates.length === 0) throw new Error(`Codex plugin dist not found under ${projectsDir}`);
+  if (candidates.length === 0) {
+    throw new Error(`Codex plugin root is unavailable (registry root: ${installedRoot ?? 'not reported'}; legacy projects: ${projectsDir})`);
+  }
   return candidates[candidates.length - 1];
 }
 
@@ -163,10 +180,13 @@ async function main() {
   if (!other) throw new Error(`could not determine second Codex account profile from: ${activeProfiles.join(', ')}`);
 
   const dist = findCodexDist();
+  const managedModule = await import(pathToFileURL(findDistFile(dist, 'managed-binary-')).href);
   const configModule = await import(pathToFileURL(findDistFile(dist, 'config-')).href);
   const requestModule = await import(pathToFileURL(findDistFile(dist, 'request-')).href);
+  const setManagedPluginRoot = findNamedFunction(managedModule, 'setManagedCodexPluginRoot');
   const resolveRuntime = findNamedFunction(configModule, 'resolveCodexAppServerRuntimeOptions');
   const request = findNamedFunction(requestModule, 'requestCodexAppServerJson');
+  setManagedPluginRoot(path.dirname(dist));
   const pluginConfig = config.plugins?.entries?.codex?.config ?? config.plugins?.entries?.codex ?? {};
 
   const summaries = {};

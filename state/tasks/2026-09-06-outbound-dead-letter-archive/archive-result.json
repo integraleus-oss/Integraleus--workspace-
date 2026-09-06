@@ -1,0 +1,36 @@
+{
+  "schema": "openclaw.delivery-dead-letter-archive-result.v1",
+  "completedAt": "2026-09-06T08:04:47.166Z",
+  "sourcePath": "/home/stanislav/.openclaw/state/openclaw.sqlite",
+  "archiveDir": "/home/stanislav/.openclaw/backups/outbound-dead-letter-archive-2026-09-06",
+  "sourceIntegrityBefore": "ok",
+  "backupIntegrity": "ok",
+  "sourceIntegrityAfter": "ok",
+  "sourceCountsBefore": [
+    {
+      "status": "completed",
+      "count": 3
+    },
+    {
+      "status": "failed",
+      "count": 115
+    }
+  ],
+  "sourceCountsAfter": [
+    {
+      "status": "completed",
+      "count": 3
+    }
+  ],
+  "archivedCount": 115,
+  "deletedCount": 115,
+  "terminalAfter": 0,
+  "failedAfter": 0,
+  "pendingAfter": 0,
+  "backupMode": "0600",
+  "exportMode": "0600",
+  "directoryMode": "0700",
+  "backupSha256": "ac8583fdbb3d0cc572676313211f0b02b2a33b3f8d813f120d16211f1b8de824",
+  "exportSha256": "46e57501c3ab8c5f8a76ad29980bf65c66a2796107ed7d6290d26595eb866a55",
+  "replayPerformed": false
+}
