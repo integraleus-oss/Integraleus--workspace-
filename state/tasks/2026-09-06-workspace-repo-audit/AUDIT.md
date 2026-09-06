@@ -86,3 +86,10 @@ The rules do not untrack existing committed files and do not delete anything.
 - No push or history rewrite.
 - No large artifact movement.
 - No secret values printed or copied.
+
+## Owner continuation — 2026-09-06 11:46 MSK
+
+Stanislav authorized continuation and required all cleanup to use safe,
+evidence-backed archival. No cleanup operation may replay or resend messages.
+The cleanup phase must preserve an exact target list, source metadata, archive
+checksum, archive readability proof, and post-operation worktree evidence.
