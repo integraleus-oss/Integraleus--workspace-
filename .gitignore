@@ -27,9 +27,26 @@ docs/tabler-icons-*.zip
 
 # Temp files
 *.bak
+*.bak-*
 *.tmp
 *.pid
+*.finalize.lock
 **/__pycache__/
+
+# Host-local OpenClaw state and migration remnants
+/.openclaw/workspace-state.json*
+/openclaw-workspace-state.json*
+/=22.22.3
+/docs/INFRA-NOTES.md
+
+# Generated handoff/export trees (already-tracked files remain tracked)
+/exports/
+/out/
+/outbox/
+
+# Ephemeral execution-supervisor runtime state
+/state/tasks/managed-admission/
+/state/topics/
 
 # Local Blender/hozblok working assets and generated prototypes
 /hozblok-3d-exact.mjs
