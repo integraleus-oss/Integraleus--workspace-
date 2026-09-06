@@ -528,8 +528,8 @@ _Обновляется из любой сессии после значимых
 ## Workspace sanitized-history migration — 2026-09-06
 
 - Accepted under `D-2026-09-06-03` as the current local Git-history baseline.
-- Local refs now point to sanitized commits: `main` `3ba0e3e7`, `managed-program-r20-isolated` `1913397c`, and `orchestrator-review-loop-reduction` `56ed73b1`.
-- Seven authorized hozblok/outbox path rules have zero reachable hits from those heads; `main` is 0 behind / 201 ahead of preserved `origin/main`.
+- Sanitized `main` was published and verified at `48f74e72`; local, remote-tracking, and live GitHub `main` matched after publication. Local service refs remain `managed-program-r20-isolated` `1913397c` and `orchestrator-review-loop-reduction` `56ed73b1` and were not published.
+- Seven authorized hozblok/outbox path rules have zero reachable hits from the sanitized heads. The published transfer contained no target blobs, queue/outbox paths, blobs at least 1 MiB, or high-confidence secret signatures.
 - Dirty worktree state and rollback were preserved and restoration-tested. Evidence: `cleanup/2026-09-06-history-rewrite-plan/EVIDENCE.md` and `cleanup/2026-09-06-dirty-worktree-migration/EVIDENCE.md`.
-- Keep the rollback bundle and cleanup archives. Push/force-push remains blocked pending separate owner authorization, a fresh pre-push audit, and exact live remote-tip verification. Replay/resend remains prohibited.
+- Keep the rollback bundle and cleanup archives until separate disposal approval. Publication completed after explicit owner authorization and exact live-tip verification; replay/resend remains prohibited.
 - Ownership boundary: the repository is used by Stanislav and the OpenClaw main agent; Stanislav is the only human user. Check local agent worktrees and active tasks before history publication, while no external collaborator-clone coordination is currently required (`D-2026-09-06-04`).

@@ -38,3 +38,12 @@
 - [x] Backup boundary: leave `state/tasks/2026-09-04-orchestrator-live-recovery/backup/` uncommitted.
 - [x] Review-loop integration: make the fixture self-contained and prove 152/152 plus 87/87 before bringing the reviewed change to `main`.
 - [x] Run the complete pre-push audit against the final exact `main` tip and stop before push.
+
+### Post-push closeout
+
+- [x] Obtain explicit authorization for exact-lease publication of only `main`.
+- [x] Recheck live remote tip, local worktrees, active processes, rollback bundle, and complete range audit.
+- [x] Publish only `main` and verify local, remote-tracking, and live remote SHA equality.
+- [x] Confirm service branches were not published and backup/notification-outbox remained unstaged.
+- [x] Accept publication-branch cleanup procedure point 13 through Skill Workshop.
+- [x] Update durable publication evidence and current state.

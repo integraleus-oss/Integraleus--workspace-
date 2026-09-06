@@ -151,3 +151,23 @@ Fresh range audit at 5e2368919c9151bb4cc4c65ebb02f48322614a00:
 Verdict: main is prepared for a separate push-authorization decision.
 No push, force-push, force-with-lease dry run, replay, resend, prune, or garbage
 collection was performed.
+
+## Post-push verification
+
+The owner explicitly authorized exact-lease publication of only `main`.
+Immediately before push, the complete audit was repeated at
+`48f74e72a0ffcd8a69d3b43ea8ad4cd0343ec194`; the live remote still matched the
+required lease boundary `6c1dddb41f2a728a2b978cfbcb633d3acd50ed65`.
+
+The push command named only `refs/heads/main` and included the exact lease.
+Git reported `6c1dddb4..48f74e72 main -> main` as a fast-forward because the
+sanitized history retained the old remote tip as an ancestor. Post-push checks
+confirmed local `main`, `origin/main`, and live GitHub `main` all at
+`48f74e72a0ffcd8a69d3b43ea8ad4cd0343ec194`. The two service branch names had
+no remote heads. No GitHub workflow directory exists in the published tree.
+
+The rollback bundle remains 673,103,310 bytes with SHA-256
+`a17fc4bb5a479de7f59d8ee271ed2e2614f18ffbcb788241efd2926f82916718`.
+The local backup directory and notification-outbox file remained untracked and
+unstaged. No replay, resend, prune, garbage collection, or service-branch push
+occurred.
