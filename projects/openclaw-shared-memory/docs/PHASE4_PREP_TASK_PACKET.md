@@ -76,4 +76,3 @@ Excluded from Phase 4 runtime exposure:
 - Candidate listing is privacy-filtered.
 - Fallback behavior is specified before runtime wiring.
 - Approval request clearly states the exact runtime files/tools to change later.
-

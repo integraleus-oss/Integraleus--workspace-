@@ -54,4 +54,3 @@ approve Phase 4 runtime read-only MCP wiring
 ```
 
 Without that command, this project remains at DB pilot plus prep documentation.
-

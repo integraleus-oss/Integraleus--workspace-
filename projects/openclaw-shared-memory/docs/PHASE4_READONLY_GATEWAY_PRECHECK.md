@@ -86,4 +86,3 @@ PHASE4_READONLY_PREFLIGHT_OK
 The script checks reader health, role attributes, privacy filtering, candidate
 listing, audit retrieval for allowed smoke data, and direct write denial. It
 does not import real memory and does not change OpenClaw runtime config.
-
