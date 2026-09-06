@@ -905,6 +905,6 @@ RATIONALE: Stanislav explicitly authorized replacement of the three local refs a
 TYPE: DECISION
 STATUS: ACTIVE
 DATE: 2026-09-06
-TITLE: Treat workspace remote main as single-owner history
-CONTENT: The workspace repository and its remote `main` are used only by Stanislav. For planned history rewrites, no coordination with other developers or their clones is required unless that ownership model changes. Continue to use exact force-with-lease, verified rollback, and post-push remote checks; single ownership reduces coordination risk but does not waive technical safety gates.
-RATIONALE: Stanislav explicitly stated that only he uses the repository and approved this Memory Candidate in the direct Telegram conversation on 2026-09-06.
+TITLE: Treat workspace as a shared human-agent repository with one human owner
+CONTENT: The workspace repository is jointly used by Stanislav and the OpenClaw main agent as its local working environment; Stanislav is the only human user. Before rewriting or publishing remote history, inspect local agent worktrees and active tasks, preserve their state when affected, and keep exact force-with-lease, verified rollback, and post-push remote checks. No coordination with other people or developer clones is currently required unless that ownership model changes.
+RATIONALE: Stanislav clarified that the sole OpenClaw agent also uses the repository and explicitly approved this corrected Memory Candidate in the direct Telegram conversation on 2026-09-06.

@@ -532,4 +532,4 @@ _Обновляется из любой сессии после значимых
 - Seven authorized hozblok/outbox path rules have zero reachable hits from those heads; `main` is 0 behind / 201 ahead of preserved `origin/main`.
 - Dirty worktree state and rollback were preserved and restoration-tested. Evidence: `cleanup/2026-09-06-history-rewrite-plan/EVIDENCE.md` and `cleanup/2026-09-06-dirty-worktree-migration/EVIDENCE.md`.
 - Keep the rollback bundle and cleanup archives. Push/force-push remains blocked pending separate owner authorization, a fresh pre-push audit, and exact live remote-tip verification. Replay/resend remains prohibited.
-- Ownership boundary: Stanislav is the sole user of this repository and its remote `main`; no collaborator-clone coordination is currently required for the planned rewrite publication (`D-2026-09-06-04`).
+- Ownership boundary: the repository is used by Stanislav and the OpenClaw main agent; Stanislav is the only human user. Check local agent worktrees and active tasks before history publication, while no external collaborator-clone coordination is currently required (`D-2026-09-06-04`).
