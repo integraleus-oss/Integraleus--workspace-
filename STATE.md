@@ -66,6 +66,8 @@ _Обновляется из любой сессии после значимых
 - **⚠️ UFW может не стартовать после ребута** — проверять!
 
 ### GEEKOM A6 (openclaw-home)
+
+- **Smart-home preparation (accepted 2026-08-28, `D-2026-08-28-01`):** Zigbee2MQTT uses port `18080`; backups target `/mnt/synology/Documents/backups/smarthome/`. Swap is under observation and should only receive read-only diagnostics (`vmstat 5`; `smem -rs swap` if sustained `si/so` appears), with no swap clearing or tuning. Ollama/qwen2.5:3b remains CPU-only; Vulkan/ROCm and Ollama restarts require a separate coordinated window. Pending user-side steps: BIOS, TP-Link IoT network, Home Assistant onboarding, then HACS; Tuya/LocalTuya waits for the clamp devices and Smart Life binding.
 - **OS:** Ubuntu 24.04.4 LTS, kernel 6.17.0-35-generic
 - **CPU:** AMD Ryzen / GEEKOM A6, **RAM:** 58 GiB detected, **SSD:** ~1 ТБ NVMe (12% занято на 2026-07-09)
 - **Tailscale IP:** 100.114.189.16, **LAN:** 192.168.68.125
@@ -201,7 +203,7 @@ _Обновляется из любой сессии после значимых
 - **Next gate:** first spike should be heartbeat alert suppression. Later candidates are Telegram inbound dedupe and active run/task locks.
 
 ### Cross-Session Snapshot — 2026-08-09 07:33 MSK
-- **Alpha-HMI-DEV:** reference-pattern catalog increment is implemented but not committed: 3585/3585 `.omobj` analyzed, 104 duplicate groups, 143 name conflicts, 146 UUID conflicts, 448 unresolved base-type dependencies, 658 quarantined objects, and zero automatic promotions into the canonical registry. Focused checks passed 29/29 and the report is deterministic.
+- **Alpha-HMI-DEV:** primary product identity is fixed under `D-2026-08-29-03`: a universal standards/TZ-driven generator of native Alpha.HMI industrial elements and screens. Strategic expansion `D-2026-08-29-04` adds server-side and complete Alpha Platform project generation from technical specifications; PS01 is the first proving vertical. The next product task is Theme 2 Mnemonic IR reusable types/instances.
 - **Alpha Presale:** the approved existing-project migration intake decision was recorded in project `DECISIONS.md` and `STATE.md` and committed as `e123176 Record approved migration intake decision`.
 - **Alpha BPR / memory search:** OpenClaw memory index was refreshed and verified clean: 573 files, 6093 chunks, Ollama `nomic-embed-text`, 768 dimensions, semantic search working; no gateway restart required.
 - **Home printer:** Windows network printing through the Home/Synology IPP chain should use Microsoft IPP Class Driver. The Pantum PCL6 driver breaks that network queue and is reserved for temporary direct USB calibration.
@@ -219,6 +221,8 @@ _Обновляется из любой сессии после значимых
 
 ### Alpha BPR
 - **Код:** `/home/stanislav/projects/alpha-bpr`
+- **R5 import quarantine:** завершён в topic `HOME:14`, commit `7b38ff4 feat: quarantine master-data imports safely`, push на Synology подтверждён совпадающим SHA. Build 0 warnings/errors, unit 438/438, integration 254 passed / 3 hardware skipped, Chromium and independent review PASS; worktree clean. Production/staging/runtime не менялись. Следующий этап — R6: привязка рецептов к версиям НСИ.
+- **R6 recipe-to-master-data pinning:** завершён локально в topic `HOME:14`, commit `24999bf feat: pin recipes to governed master data`. Build 0 ошибок/0 предупреждений, unit 440/440, integration 262 passed / 3 skipped / 0 failed, hygiene и `git diff --check` PASS; worktree clean. Push и обновление тестового контура не выполнялись и требуют отдельного разрешения.
 - **Home production-pilot closeout:** закрыт до человеческих/внешних границ коммитом `d479a68 Close Alpha BPR production pilot` после backup/restore drill, restart/reboot soak, реального host reboot gate, post-reboot readiness, HMI/BFF, Alpha.Reports, PS01/FILL Historian freshness. Оставшиеся границы: production sign-off, TLS/domain/CA/browser trust, будущие secrets/licenses, go-to-market/show/sell approval.
 - **Home production-pilot release/show package:** baseline `d479a68` локально tagged as `home-production-pilot-2026-06-30`; docs-only package committed as `88ae13c Add Alpha BPR production pilot show package`. Пакет включает release handoff, show route, pre-show checks, boundaries и production-readiness backlog; Alpha BPR repo clean после commit.
 - **Production-readiness docs pack:** committed as `423b12c Add Alpha BPR production readiness pack`; включает readiness checklist, monitoring/backup plan, TLS/sign-off decision sheet и standalone HTML diagrams/charts с architecture, readiness flow, backlog/backup cadence. Alpha BPR repo clean после commit.
@@ -484,3 +488,39 @@ _Обновляется из любой сессии после значимых
 - Full decode passed for 3048/3048 frames; full-timeline visual review and SHA-256 `ac84668f…818b58f` passed.
 - Synology package `Documents/openclaw-backups/alpha-bpr/phase9-dark-ui-rc2.1-20260826-1844`: 12 files, 86 MiB; SHA-256, Git bundle verification, clean clone, tag checkout and restored-video checksum all passed.
 - The video does not save teaching master data. Physical-PLC FAT, object SAT, production, QMS and electronic-signature acceptance remain open separate gates.
+
+## Alpha BPR RC2.1 specialist handoff — 2026-08-26
+
+- The specialist handoff is complete: a 22-section Russian deployment and verification guide, split ZIP delivery, assembly instructions, and integrity/recovery checks were delivered in Telegram topic `HOME:14`.
+- Verification passed for 18 bash blocks, 14 payload files, internal SHA-256 manifests, clean-directory extraction, Git bundle clone/tag checkout, and the Synology copy.
+- Final archive SHA-256: `5385405951f58f4fbd2cbc70d0fc0f5bbea815e9dd564eb2b52d923f730c0e5c`; documentation commits: `5283b70`, `a4cc2c1`.
+- Routes A/B can be executed independently by the specialist. Route C remains gated by a licensed Alpha.Server/OPC UA stand, an approved endpoint, and explicit write authorization.
+
+## Cross-session updates — 2026-08-30
+
+- Alpha BPR R3 governed master-data lifecycle completed at `b91e6bf` and was pushed to Synology; build, 6 domain tests, 241 integration tests plus isolated readiness/API/UI/browser smoke passed. Production runtime, working DB and existing staging were not changed. Residual risk: personal API key lacks a separate re-auth ceremony and remains in `sessionStorage`.
+- Alpha-HMI-DEV Theme 2 ownership model was accepted as `D-2026-08-29-05` and committed at `2f9a249`; next planned increment is `T2-A1`, executable JSON Schema plus Python validation for the complete instance contract.
+- Home automation topic has no newer state change: BIOS, IoT network, Home Assistant onboarding and HACS remain manual next steps.
+
+## Global execution truth — 2026-09-01
+
+- Decision `D-2026-09-01-01` applies to every legacy, current, queued, new, and future work item.
+- A truthful `RUNNING` state requires a durable artifact, live foreground process or managed job, and fresh evidence.
+- `scripts/execution-truth-watch.py` is the read-only workspace audit and is mandatory in every heartbeat.
+- The Alpha BPR R6 pilot record was corrected from unsupported `RUNNING` to `STALE`; the 2026-08-16 proof-chain record was corrected from `active` to `BLOCKED`.
+- No Gateway/runtime/config, cron, daemon, deploy, push, or external-send action was authorized by this decision.
+
+## Cross-session updates — 2026-09-03
+
+- Alpha BPR R9 read-only JSON sandbox adapter is complete at `08eac9e` + `3ac098d` and synchronized with `synology/master`; production/customer/UAT and a persistent adapter service were not changed. Real UAT still requires a confirmed customer source and separate `IntegrationEngineer` credential.
+- The Alpha BPR video-freeze gate is complete after fixing the Engine-mode HTTP 409 path. Full Engine E2E, build, unit, integration and Python checks passed; tag `alpha-bpr-video-freeze-2026-09-02` targets `290f956`. Evidence: `state/tasks/2026-09-02-engine-mode-video-freeze/` in the Alpha BPR repository.
+- A native animated Alpha.HMI pump element matching `PU01.1` was delivered in topic 30 as `AnimatedCentrifugalPump_PU01_reference_r3.zip`; `.binom` export and runtime animation were verified.
+- Managed-program orchestration decision `D-2026-09-03-01` is approved. The implementation adds machine-readable package/gate outcomes, automatic continuation, strict completion evidence, external-only `BLOCKED`, and high-thinking managed slices. Code is pending independent review, scoped commit, Gateway activation, and live drill.
+
+## Orchestrator activation guard — 2026-09-05
+
+- Decision `D-2026-09-05-01` forbids `RUNNING`/continuation claims without artifact, managed job ID, live-process proof, and fresh heartbeat.
+- Hardened orchestrator candidate `f70913ea` is integrated into `main` as `6c03db78` and installed in protected runtime under `~/.openclaw/runtime/execution-supervisor/`.
+- Gateway restart recovery successfully resumed the interrupted Telegram source session without another user message; Gateway and Telegram 2/2 are healthy.
+- Runner, supervisor 22/22, TaskFlow integration, syntax, diff, and plugin-doctor gates pass.
+- Status is `BLOCKED_ON_OWNER_LIVE_DRILL`, not `RUNNING`: a fresh authenticated owner message in topic `2922` is required to prove end-to-end dispatch, validated terminal completion, and exactly-once owner notification.

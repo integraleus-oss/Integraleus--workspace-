@@ -809,3 +809,66 @@ DATE: 2026-08-26
 TITLE: Accept Alpha BPR Phase 9 Dark UI RC2.1 interactive training release
 CONTENT: Accept `/home/stanislav/projects/alpha-bpr` tag `alpha-bpr-phase9-dark-ui-rc2.1` at commit `caaa9f4` as the internal Home training release layered on the accepted RC2 technical baseline. RC2.1 adds the reproducible interactive current-dark-UI walkthrough from commit `46fe55b`: a visible pointer, target highlight, click pulse, character-by-character field changes, list selections, and guided navigation through recipe authoring, procedure, formula, approval, batches, Alpha.Server OPC UA readiness/commands, EBR, QA, audit, master data, and integration. The 127-second H.264 1280×720 video contains 3048 decodable frames; full-timeline contact-sheet review passed and SHA-256 is `ac84668f2f1b1ed1d561a62ed3bf5c2d241837c7c4c93cb8c09d60f6e818b58f`. The complete Git bundle and evidence are stored on Synology at `Documents/openclaw-backups/alpha-bpr/phase9-dark-ui-rc2.1-20260826-1844`: 12 files, 86 MiB, all payload checksums and `git bundle verify` PASS. A clean restoration from that bundle, checkout of the RC2.1 tag, and video checksum verification PASS at commit `caaa9f4`. The walkthrough intentionally does not save its teaching recipe; actual writes and lifecycle remain proven by the accepted RC2 gate. Physical-PLC FAT, object SAT, production, QMS and electronic-signature acceptance remain outside scope.
 RATIONALE: Stanislav explicitly instructed creation of the RC2.1 manifest/tag, bundle rebuild, Synology update, full video review, restoration check and acceptance in Telegram topic `HOME:14` on 2026-08-26. All requested gates passed before this decision was recorded.
+
+---
+### ID: D-2026-08-28-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-28
+TITLE: Adopt the openclaw-home smart-home preparation baseline
+CONTENT: Accept the prepared `openclaw-home` smart-home baseline, including Zigbee2MQTT on port `18080` and the Synology backup target `/mnt/synology/Documents/backups/smarthome/`. Treat the currently occupied swap as an observation item, not a fault by itself: diagnose read-only with approximately three minutes of `vmstat 5`; only if `si/so` show sustained activity, identify swap consumers with `smem -rs swap`. Do not clear swap or change system settings as part of this diagnostic. Keep Ollama/qwen2.5:3b on CPU for now; Vulkan/ROCm experiments and any Ollama restart require a separately coordinated maintenance window because they can affect OpenClaw pipelines. Remaining user-side gates are BIOS setup, the TP-Link IoT network, Home Assistant browser onboarding, then HACS; Tuya/LocalTuya onboarding waits for the clamp devices and Smart Life account binding.
+RATIONALE: Stanislav approved the Memory Candidate in Telegram topic `HOME:2616` on 2026-08-28 and explicitly added the backup path and the open item “swap under observation.”
+
+---
+### ID: D-2026-08-29-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-29
+TITLE: Accept the reconciled Alpha-HMI-DEV source and evidence baseline
+CONTENT: Accept the seven-commit Alpha-HMI-DEV reconciliation sequence as the current product-development baseline: `21bd27a` audit/Gate 0, `221417a` reference-pattern foundation, `91170a6` canonical source and typed evidence contracts, `574d082` architecture/roadmap, `aab42cf` canonical PS01 source, `7c3fbda` canonical NS1 source, and `d87038a` retention/legacy guardrails. Canonical `.omobj` assets now live under `data/alpha_hmi/v2/objects/**`; PS01 and NS1 source builders no longer consume dated `out/**` runs; evidence uses separate reference, artifact/runtime and acceptance axes; exact-path retention rules protect known generated outputs; and the corrupt `out/zizb53FJ` remains local quarantine. Consolidation 27/27, regression 53/53, PS01, NS1, source-only builds, syntax and `git diff --check` passed. Eleven pre-existing generated-report modifications remain deliberately uncommitted and un-reverted. No push, deploy, external transfer or runtime activation was performed. The next product increment is Theme 2: Mnemonic IR reusable types and independently bound instances.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in the direct Telegram conversation on 2026-08-29 after receiving the commit sequence, verification results, residual dirty-worktree boundary and next-step recommendation.
+
+---
+### ID: D-2026-08-29-03
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-29
+TITLE: Define the primary Alpha-HMI-DEV product identity
+CONTENT: Define Alpha-HMI-DEV primarily as a universal engineering generator of standardized native Alpha.HMI elements and HMI screens from standards and technical specifications for industrial automation and dispatching across industrial segments. The core product covers reusable valves, gate valves, pumps, compressors, drives, instruments, piping, vessels, electrical objects and industry-specific equipment, plus controlled composition into HMI screens. Full-project generation for Alpha.Server, Alpha.HMI.Alarms, Alpha.Historian, alpha.hmi.charts, Alpha.Reports and Alpha.Security is an extending integration contour built on top of the element/screen generator, not the primary product identity. PS01 remains a proving vertical for that extended contour. Theme 2 remains the next increment because reusable types and independently bound instances are the foundation of both the component generator and generated screens.
+RATIONALE: Stanislav explicitly corrected the product framing in Telegram topic `HOME:30` on 2026-08-29 and approved the proposed Memory Candidate and roadmap correction.
+
+---
+### ID: D-2026-08-29-04
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-08-29
+TITLE: Adopt full Alpha Platform project generation as the strategic expansion
+CONTENT: After the core generator of native Alpha.HMI elements and HMI screens matures, expand Alpha-HMI-DEV into generation of the server side and complete coherent Alpha Platform projects directly from technical specifications. The expanded product must generate coordinated configuration for Alpha.Server, Alpha.Domain, Alpha.AccessPoint, Alpha.HMI, Alpha.HMI.Alarms, Alpha.Historian, alpha.hmi.charts, Alpha.Reports, Alpha.Security and Alpha.Imitator where required, together with deterministic build, semantic diff, manifest/hashes and evidence-led acceptance. PS01 is the first full vertical proof, not an industry-specific limit; the architecture must support other industries, technical specifications and process topologies.
+RATIONALE: Stanislav explicitly defined this product expansion in Telegram topic `HOME:30` on 2026-08-29 and approved the proposed Memory Candidate and roadmap addition.
+
+---
+### ID: D-2026-09-01-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-09-01
+TITLE: Enforce execution truth for every work item
+CONTENT: Apply the Execution Truth Protocol to all legacy, current, queued, new, and future work. `RUNNING` is valid only when a durable artifact, a live foreground process or managed job, and fresh evidence all exist. Any continuation beyond the current turn requires a named managed mechanism with owner, ID, timeout, failure mode, notification target, and disable path. Missing process proof, stale evidence, timeout, crash, escalation, or terminal evidence must replace `RUNNING` with a truthful status and produce at most one alert. Every progress report must verify artifact path, process/job identity, evidence timestamp, completed checks, and commit/dirty-worktree boundary where relevant. Limit active work to one primary deliverable plus one explicit background infrastructure/health track; queue or explicitly replace additional work. Heartbeat must run the execution-truth audit, and task packets or prompts may not weaken these rules.
+RATIONALE: Stanislav explicitly approved the Memory Candidate and ordered these rules applied to all old, current, ongoing, and future work in Telegram topic `HOME:2922`, message `4623`, on 2026-09-01.
+
+---
+### ID: D-2026-09-03-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-09-03
+TITLE: Require objective-complete managed program execution
+CONTENT: The execution supervisor must treat the owner's complete objective as the unit of completion, not the lifetime or zero exit code of one agent process. Managed execution must persist work packages and acceptance gates with evidence. Partial work must continue automatically through bounded slices. `SUCCEEDED` requires every package and gate to pass with evidence and an explicit objective-complete assertion. `BLOCKED` is valid only for a demonstrated external dependency with evidence and a concrete owner action; task size, remaining implementation, failed tests, review findings, dirty files, and time preference are not blockers.
+RATIONALE: Stanislav explicitly approved this Memory Candidate and authorized implementation, independent review, commit, Gateway activation, and live drill in Telegram topic `HOME:2922`, message `5046`, on 2026-09-03 after the ZSR run exposed process-success/objective-failure divergence.
+
+---
+### ID: D-2026-09-05-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-09-05
+TITLE: Forbid execution claims before durable live dispatch
+CONTENT: A message such as “продолжу”, “запустил”, or status `RUNNING` is allowed only after a durable task artifact, managed job/session ID, verified live process, and fresh heartbeat evidence exist. Work promised beyond the current turn must be dispatched before the reply and must carry owner context, timeout, failure mode, notification target, and disable path. If any proof is absent, use `PLANNED`, `STALE`, `BLOCKED`, or a truthful terminal state. Gateway/restart recovery may resume only durable executions and must never infer a running task from conversational intent alone.
+RATIONALE: Stanislav explicitly approved the proposed Memory Candidate and ordered implementation in Telegram topic `HOME:2922` on 2026-09-05 after the 23:29 continuation promise stopped without a live executor.
