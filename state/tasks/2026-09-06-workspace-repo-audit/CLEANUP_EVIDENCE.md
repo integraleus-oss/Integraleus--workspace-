@@ -60,3 +60,15 @@ remain untouched for semantic review rather than being archived blindly.
 - Syntax, three regression scenarios, config validation, backup dry-run, and
   update dry-run passed.
 - No real update/restart, message replay/resend, SQLite, or queue mutation.
+
+## Next package — AGENTS and skill metadata
+
+- `AGENTS.md` records the 2026.9.2 doctor migration from the removed `TOOLS.md`
+  convention to host-local `docs/INFRA-NOTES.md`.
+- Dashboard and product-calculator changes add only required skill frontmatter.
+- `openclaw skills check --json`: 74 total, 40 eligible/model-visible/command-
+  visible, 0 blocked, 0 missing requirements.
+- Both changed skills are eligible and visible.
+- `git diff --check`: PASS.
+- No archival target was present in this semantic batch; no files were moved.
+- No message/queue/SQLite/replay/resend operation was performed.

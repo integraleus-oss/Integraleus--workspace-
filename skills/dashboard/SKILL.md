@@ -1,3 +1,7 @@
+---
+name: "dashboard"
+description: "Interactive OpenClaw system dashboard with real-time monitoring and control."
+---
 # Dashboard Skill
 
 Interactive OpenClaw system dashboard with real-time monitoring and control capabilities.

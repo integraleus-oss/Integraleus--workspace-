@@ -1,3 +1,7 @@
+---
+name: "product-calculator"
+description: "Universal product pricing calculator with products, variants, and add-ons (Alpha Platform design, generic)."
+---
 # Product Calculator Skill
 
 Universal product pricing calculator with customizable products, variants, and add-ons. Based on the proven Alpha Platform calculator design but made generic for any product line.

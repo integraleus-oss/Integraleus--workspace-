@@ -41,7 +41,7 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - **Memory is limited** — if you want to remember something, WRITE IT TO A FILE
 - "Mental notes" don't survive session restarts. Files do.
 - When someone says "remember this" → update `memory/YYYY-MM-DD.md` or relevant file
-- When you learn a lesson → update AGENTS.md, TOOLS.md, or the relevant skill
+- When you learn a lesson → update AGENTS.md or the relevant skill
 - When you make a mistake → document it so future-you doesn't repeat it
 - **Text > Brain** 📝
 
@@ -234,7 +234,9 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 ## Tools
 
-Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
+### Local notes
+
+Skills define how tools work. Keep environment-specific local notes in this section.
 
 **OpenClaw Codex account order:** for agent `main`, the canonical primary model is `openai/gpt-5.5` with Codex runtime (`agentRuntime.id=codex`). In config, `auth.order.openai` may contain the Codex OAuth profile ids `openai-codex:stasiintegraleus@gmail.com` first, then `openai-codex:integraleus55@gmail.com`; at runtime, `openai/gpt-5.5` uses authProvider `openai-codex`, whose effectiveProfiles must be the same two profiles in that order. The exact switch sequence is `openai/gpt-5.5` + `openai-codex:stasiintegraleus@gmail.com` -> `openai/gpt-5.5` + `openai-codex:integraleus55@gmail.com` -> `ollama/phi3:instruct`. There is no separate third gateway fallback step named `codex/gpt-5.5+oauth`; Codex OAuth is the runtime/authProvider behind `openai/gpt-5.5`. The model fallback list must then fall back directly to `ollama/phi3:instruct`; do not put legacy `codex/gpt-5.5` or `openai-codex/gpt-5.5` in the fallback chain. Compact status may show only `gpt-5.5` with runtime `OpenAI Codex`, not the active OAuth profile. Verify config with `openclaw models status --json`, `openclaw config get auth.order --json`, `openclaw models auth order get --provider openai-codex`, and `openclaw models fallbacks list`; verify the live account separately with `/codex account` when the Gateway command path is responsive.
 
@@ -247,6 +249,10 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 - **Discord/WhatsApp:** No markdown tables! Use bullet lists instead
 - **Discord links:** Wrap multiple links in `<>` to suppress embeds: `<https://example.com>`
 - **WhatsApp:** No headers — use **bold** or CAPS for emphasis
+
+### Local notes (environment)
+
+Environment-specific notes (servers, bots, Synology NAS rules, API keys, TTS, Claude CLI review procedure, gateway management) live in `docs/INFRA-NOTES.md` (not auto-loaded; TOOLS.md was merged by doctor in 2026.9.2) — read it when a task touches infrastructure.
 
 ## 💓 Heartbeats - Be Proactive!
 
