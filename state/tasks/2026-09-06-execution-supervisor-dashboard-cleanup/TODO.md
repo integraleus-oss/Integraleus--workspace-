@@ -15,6 +15,8 @@ previews with hash proof, and updated workspace boundary
 - [x] Archive only proven generated previews with exact manifest and SHA-256
 - [x] Commit source/docs/tests separately
 - [x] Record post-cleanup worktree boundary
+- [x] Inventory and commit untracked task evidence by date
+- [x] Preserve notification/outbox-related and ambiguous groups untouched
 
 ## Safety boundary
 
