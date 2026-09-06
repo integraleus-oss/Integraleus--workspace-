@@ -1,0 +1,103 @@
+2026-09-05T22:06:49+03:00
+readiness_attempt=7
+MainPID=1379734
+ActiveEnterTimestamp=Sat 2026-09-05 22:06:50 MSK
+OpenClaw 2026.9.1 (ba66737)
+OpenClaw status
+
+Overview
+┌──────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Item                 │ Value                                                                                         │
+├──────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────┤
+│ OS                   │ linux 7.0.0-28-generic (x64) · node 22.23.2                                                   │
+│ Dashboard            │ http://127.0.0.1:18789/                                                                       │
+│ Tailscale exposure   │ off                                                                                           │
+│ Channel              │ stable (default)                                                                              │
+│ Update               │ npm · up to date · npm latest 2026.9.1                                                        │
+│ Gateway              │ local · ws://127.0.0.1:18789 (local loopback) · reachable 630ms · auth token · openclaw-home  │
+│                      │ (192.168.68.125) app 2026.9.1 linux 7.0.0-28-generic                                          │
+│ Gateway self         │ openclaw-home (192.168.68.125) app 2026.9.1 linux 7.0.0-28-generic                            │
+│ Gateway service      │ systemd user installed · enabled · running (pid 1379734, state active)                        │
+│ Node service         │ systemd user not installed                                                                    │
+│ Agents               │ 4 · no workspaces bootstrapping · sessions 49                                                 │
+│ Telemetry            │ disabled · update checks only                                                                 │
+│ Memory               │ enabled (plugin memory-core) · not checked                                                    │
+│ Host desktop         │ disabled                                                                                      │
+│ Plugin compatibility │ none                                                                                          │
+│ Probes               │ enabled                                                                                       │
+│ Events               │ none                                                                                          │
+│ Tasks                │ 0 active · 0 queued · 0 running · 29 issues · audit clean · 66 tracked                        │
+│ Backups              │ none recorded                                                                                 │
+│ Heartbeat            │ 1h (main), disabled (home-monitor), disabled (local), disabled (managed-worker)               │
+│ Last heartbeat       │ none                                                                                          │
+│ Sessions             │ 49 active · default gpt-5.6-sol (272k ctx) · 4 stores                                         │
+└──────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────┘
+
+Security audit
+Summary: 0 critical · 6 warn · 2 info
+  WARN Reverse proxy headers are not trusted
+    gateway.bind is loopback and gateway.trustedProxies is empty. If you expose the Control UI through a reverse proxy, configure trusted proxies so local-client c…
+    Fix: Set gateway.trustedProxies to your proxy IPs or keep the Control UI local-only.
+  WARN Insecure or dangerous config flag enabled
+    Detected enabled flag: tools.fs.workspaceOnly=false.
+    Fix: Disable this flag when not actively debugging, or keep deployment scoped to trusted/local-only networks.
+  WARN Exec security=full is configured
+    Full exec trust is enabled for: global, main, home-monitor, local, managed-worker.
+    Fix: Prefer tools.exec.mode="ask" or "allowlist", and reserve "full" for tightly scoped break-glass agents only.
+  WARN Agent skill allowlists do not constrain host exec MCP clients
+    Detected agent skill allowlists on host-exec-capable scopes: - local: agents.entries.*.skills, exec.host=gateway, security=full, ask=off MCP server registries …
+    Fix: For agents that need per-agent MCP isolation, set their exec policy to security="deny" or a tight allowlist, run them in sandbox/container/OS-user isolation where the global MCP registry is not readable, split sensitive MCP servers into a separate gateway/trust boundary, or require per-agent MCP credentials at the server layer.
+  WARN Potential multi-user setup detected (personal-assistant model warning)
+    Heuristic signals indicate this gateway may be reachable by multiple users: - channels.telegram.groupPolicy="allowlist" with configured group targets - channel…
+    Fix: If users may be mutually untrusted, split trust boundaries (separate gateways + credentials, ideally separate OS users/hosts). If you intentionally run shared-user access, set agents.defaults.sandbox.mode="all", keep tools.fs.workspaceOnly=true, deny runtime/fs/web tools unless required, and keep personal/private identities + credentials off that runtime.
+  WARN Plugin index includes unpinned npm specs
+    Unpinned plugin index install records: - codex (@openclaw/codex) - moonshot (@openclaw/moonshot-provider)
+    Fix: Pin install specs to exact versions (for example, `@scope/pkg@1.2.3`) for higher supply-chain stability.
+Full report: openclaw security audit
+Deep probe: openclaw security audit --deep
+
+Channels
+┌──────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────────┐
+│ Channel  │ Enabled │ State  │ Detail                                                                                 │
+├──────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+│ Telegram │ ON      │ OK     │ token config×2 (8649…mSQA · len 46) · accounts 2/2                                     │
+└──────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────────┘
+
+Sessions
+┌──────────────────────────────┬────────┬──────────┬──────────────┬──────────────────┬─────────────────────────────────┐
+│ Key                          │ Kind   │ Age      │ Model        │ Runtime          │ Tokens                          │
+├──────────────────────────────┼────────┼──────────┼──────────────┼──────────────────┼─────────────────────────────────┤
+│ agent:main:main              │ direct │ just now │ gpt-5.6-sol  │ OpenAI Codex     │ 112k/258k (?%) · 🗄️ 100% cached │
+│ agent:managed-               │ direct │ 11h ago  │ gpt-5.5      │ OpenClaw Default │ 15k/272k (?%) · 🗄️ 87% cached   │
+│ worker:sandbox-sm…           │        │          │              │                  │                                 │
+│ agent:main:telegram:group:-  │ group  │ 12h ago  │ gpt-5.6-sol  │ OpenAI Codex     │ 70k/272k (?%)                   │
+│ 1004…                        │        │          │              │                  │                                 │
+│ agent:main:telegram:default: │ direct │ 12h ago  │ gpt-5.6-sol  │ OpenAI Codex     │ 77k/272k (?%)                   │
+│ dir…                         │        │          │              │                  │                                 │
+│ agent:managed-worker:main    │ direct │ 12h ago  │ gpt-5.5      │ OpenClaw Default │ 61k/272k (?%) · 🗄️ 55% cached   │
+│ agent:home-monitor:main      │ direct │ 12h ago  │ gpt-5.6-sol  │ OpenAI Codex     │ 124k/272k (?%) · 🗄️ 100% cached │
+│ agent:local:main             │ direct │ 13h ago  │ qwen3.5:9b   │ OpenClaw Default │ 3.1k/272k (?%)                  │
+│ agent:managed-               │ direct │ 29h ago  │ gpt-5.5      │ OpenClaw Default │ 11k/272k (?%) · 🗄️ 48% cached   │
+│ worker:sandbox-sm…           │        │          │              │                  │                                 │
+│ agent:managed-               │ direct │ 29h ago  │ gpt-5.5      │ OpenClaw Default │ unknown/272k (?%)               │
+│ worker:sandbox-sm…           │        │          │              │                  │                                 │
+│ agent:managed-               │ direct │ 29h ago  │ gpt-5.5      │ OpenClaw Default │ unknown/272k (?%)               │
+│ worker:sandbox-sm…           │        │          │              │                  │                                 │
+└──────────────────────────────┴────────┴──────────┴──────────────┴──────────────────┴─────────────────────────────────┘
+
+Health
+┌────────────────┬───────────┬─────────────────────────────────────────────────────────────────────────────────────────┐
+│ Item           │ Status    │ Detail                                                                                  │
+├────────────────┼───────────┼─────────────────────────────────────────────────────────────────────────────────────────┤
+│ Gateway        │ reachable │ 126ms                                                                                   │
+│ Event loop     │ OK        │ healthy · max 128ms · p99 65ms · util 0.552 · cpu 0.849                                 │
+│ Telegram       │ OK        │ configured                                                                              │
+│ Delivery queue │ WARN      │ warning (dead-lettered entries — inbound telegram/default: 20; oldest 28d ago)          │
+└────────────────┴───────────┴─────────────────────────────────────────────────────────────────────────────────────────┘
+
+FAQ: https://docs.openclaw.ai/faq
+Troubleshooting: https://docs.openclaw.ai/troubleshooting
+Next steps:
+  Need to share?      openclaw status --all
+  Need to debug live? openclaw logs --follow
+  Need to test channels? openclaw status --deep
