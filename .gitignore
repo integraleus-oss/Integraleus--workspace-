@@ -35,6 +35,7 @@ docs/tabler-icons-*.zip
 *.pid
 *.finalize.lock
 **/__pycache__/
+/.venv/
 
 # Host-local OpenClaw state and migration remnants
 /.openclaw/workspace-state.json*
