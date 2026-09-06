@@ -899,3 +899,12 @@ DATE: 2026-09-06
 TITLE: Adopt sanitized local Git history with push remaining gated
 CONTENT: Treat the rewritten local refs `main` at `3ba0e3e72f011be455726b6788baab56ed4cd232`, `managed-program-r20-isolated` at `1913397c7c0b28f0954708f1b96486725a1900a7`, and `orchestrator-review-loop-reduction` at `56ed73b1be448f50dc9febd86035a911a727525c` as the current local history baseline. The isolated sanitized mirror passed target-path/blob, tree-equivalence, connectivity, secret, queue/outbox, large-object, rename-aware, and remote-boundary validation. Dirty state was preserved and migrated independently, including a verified post-ref supplemental snapshot for `main`. Retain the all-refs rollback bundle and cleanup archives until separate disposal approval. Do not push or force-push this rewritten history until Stanislav separately authorizes it after a fresh pre-push audit and exact live remote-tip verification; replay and resend remain prohibited.
 RATIONALE: Stanislav explicitly authorized replacement of the three local refs and then approved this Memory Candidate in the direct Telegram conversation on 2026-09-06. Evidence is recorded in `cleanup/2026-09-06-history-rewrite-plan/EVIDENCE.md` and `cleanup/2026-09-06-dirty-worktree-migration/EVIDENCE.md`; rollback is `/home/stanislav/repository-cleanup-archives/2026-09-06-history-rewrite/pre-history-rewrite-all-refs.bundle`.
+
+---
+### ID: D-2026-09-06-04
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-09-06
+TITLE: Treat workspace remote main as single-owner history
+CONTENT: The workspace repository and its remote `main` are used only by Stanislav. For planned history rewrites, no coordination with other developers or their clones is required unless that ownership model changes. Continue to use exact force-with-lease, verified rollback, and post-push remote checks; single ownership reduces coordination risk but does not waive technical safety gates.
+RATIONALE: Stanislav explicitly stated that only he uses the repository and approved this Memory Candidate in the direct Telegram conversation on 2026-09-06.
