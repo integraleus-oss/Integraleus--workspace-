@@ -300,8 +300,7 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         built = build_review_inputs(self.repo, self.root / "accepted-inputs", self.baseline, self.config, 1)
         inputs = built["input_dir"]
         manifest = json.loads((inputs / "manifest.json").read_text())
-        fixture_path = (Path(__file__).parents[2] / "2026-08-12-orchestrator-one-cycle/live-provenance-trial/"
-                        "closure-inputs/expected-accepted-verdict.json")
+        fixture_path = Path(__file__).parent / "fixtures/expected-accepted-verdict.json"
         verdict = json.loads(fixture_path.read_text())
         verdict["subject"] = manifest["subject"]
         verdict["review"]["review_mode"] = manifest["expected_review_mode"]
@@ -329,8 +328,7 @@ class TrustedReviewBuilderTests(unittest.TestCase):
         self.assertTrue((run_dir / "registry-after.json").is_file())
 
     def test_projection_canonicalizes_only_derived_review_ids(self):
-        fixture_path = (Path(__file__).parents[2] / "2026-08-12-orchestrator-one-cycle/live-provenance-trial/"
-                        "closure-inputs/expected-accepted-verdict.json")
+        fixture_path = Path(__file__).parent / "fixtures/expected-accepted-verdict.json"
         verdict = json.loads(fixture_path.read_text())
         original_title = verdict["findings"][0]["title"]
         verdict["findings"][0]["finding_id"] = "fnd_" + "a" * 32
