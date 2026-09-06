@@ -40,12 +40,12 @@
         <ct:parameter name="PS01_PRESS_SP" uuid="4a2d2b24-a98c-4aa1-bf6e-303f266638e5" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Уставка давления" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_STATION_MODE" uuid="97e771e3-641b-4aa7-bb38-eeecbe790233" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Режим станции" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_LEAD_PUMP" uuid="c9ccbd59-af2a-4cc9-84da-bd29e57af48d" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Ведущий насос" />
@@ -120,7 +120,7 @@
         <ct:parameter name="PS01_HEARTBEAT" uuid="fd757776-680b-4524-b939-cca24628359b" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Сторожевой счётчик" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P1_CURRENT" uuid="bf273535-0b57-469d-aeb4-128860dcca78" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Ток Н1" />
@@ -181,22 +181,22 @@
         <ct:parameter name="PS01_P1_CMD_START" uuid="d3b4c058-94b6-45e1-8d48-414977e1a139" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Пуск Н1" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P1_CMD_STOP" uuid="73d9e7c9-5c2c-4572-81a7-9f61876a4f8b" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Стоп Н1" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P1_CMD_ENABLE" uuid="9bd914bd-f148-402f-8e7b-909d58fcab66" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Разрешить Н1" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P1_CMD_DISABLE" uuid="cdab7240-7fad-425a-a44e-cf51d4313112" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Запретить Н1" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P1_RUNHOURS" uuid="3c941562-654a-4f4a-a451-cc136ae6ef35" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Наработка Н1" />
@@ -267,22 +267,22 @@
         <ct:parameter name="PS01_P2_CMD_START" uuid="23417fcb-74f3-46fa-b121-e3d0d906cae3" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Пуск Н2" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P2_CMD_STOP" uuid="29d0ee37-ed6d-49ad-a11e-15cd29aae312" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Стоп Н2" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P2_CMD_ENABLE" uuid="9da80883-bd30-40f4-acd7-f418372b467f" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Разрешить Н2" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P2_CMD_DISABLE" uuid="d99b54d1-1d17-4862-b3fe-6cdd80f01921" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Запретить Н2" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P2_RUNHOURS" uuid="9d6da83f-664f-4299-80e2-ab6a811f419b" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Наработка Н2" />
@@ -353,22 +353,22 @@
         <ct:parameter name="PS01_P3_CMD_START" uuid="71c0c5fc-dc6b-4a33-beb8-621d5394925e" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Пуск Н3" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P3_CMD_STOP" uuid="2ec162a3-f201-47c8-97e0-2a2a7c7ef118" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Стоп Н3" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P3_CMD_ENABLE" uuid="fe22734a-c246-4a9e-9950-3ae26a22368b" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Разрешить Н3" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P3_CMD_DISABLE" uuid="7efb9c84-2ef7-40c1-a162-d2497d0cdef7" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Запретить Н3" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P3_RUNHOURS" uuid="a339c9cf-2a2d-47a8-86bd-033ffa7f39d9" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Наработка Н3" />
@@ -439,22 +439,22 @@
         <ct:parameter name="PS01_P4_CMD_START" uuid="be5ef2c6-e387-4598-8fc8-7ce26f81bf08" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Пуск Н4" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P4_CMD_STOP" uuid="295f926f-32c2-4e17-956b-fe0d9044d720" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Стоп Н4" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P4_CMD_ENABLE" uuid="5f5caa9a-cf58-417b-9d61-259dcbb07a5a" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Разрешить Н4" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P4_CMD_DISABLE" uuid="e05e0b5c-836d-443a-ae60-bb794a6d1e1b" type="bool" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Запретить Н4" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_P4_RUNHOURS" uuid="2030d809-3de3-4f1f-a9f5-f01f0f8f42e3" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Наработка Н4" />
@@ -469,57 +469,57 @@
         <ct:parameter name="PS01_PID_KP" uuid="224724de-4408-4854-b5c3-835b46928c79" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Kp" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_PID_KI" uuid="a0e081a0-c02f-4d10-a902-5fd64823e9f6" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Ki" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_PID_KD" uuid="65d60585-2bb4-433e-8073-2820004c4597" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Коэффициент ПИД Kd" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_PRESS_HI_LIM" uuid="c0d6746a-003a-4e32-9352-b9f0dcaceb9a" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Верхний предел давления" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_PRESS_LO_LIM" uuid="c4ccf51e-0e02-4017-b115-d5de55ded1db" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Нижний предел давления" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_STAGE_UP_SPEED" uuid="1a8c83cd-a581-432b-b713-5921b9c06a93" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Порог ввода ступени" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_STAGE_DN_SPEED" uuid="e15e6ce0-a93f-4631-902b-014b5d0ff322" type="float32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Порог снятия ступени" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_STAGE_UP_DELAY" uuid="8f341f49-515f-473d-a548-2a2739e849cf" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Задержка ввода ступени" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_STAGE_DN_DELAY" uuid="e1b7933f-39f6-43e2-ad91-ef274c24a026" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Задержка снятия" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_MAX_PUMPS" uuid="be8c61de-7053-404f-9cb8-538cd3317ee7" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Макс. рабочих насосов" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         <ct:parameter name="PS01_ROTATION_PERIOD" uuid="42345277-a978-4d47-b0eb-ef378729fea1" type="int32" direction="in-out" access-level="public">
           <attribute type="unit.System.Attributes.Description" value="Период ротации" />
           <attribute type="unit.System.Attributes.Comment" value="OPC UA ; Modbus " />
-          
+
         </ct:parameter>
         </ct:object><ct:object name="MIX01" uuid="efa513b4-1bfc-5943-a21b-146ff7bb3d7c">
             <ct:object name="info" uuid="c5c15522-04d6-5ce1-ab4a-68d474a796c8">

@@ -119,4 +119,3 @@ mode, automatic commit, push, or deploy requires a new explicit approval.
   final-full leg and no third Codex implementation attempt.
 - The integration suite passed 86/86 on 2026-08-15 immediately before this
   readiness packet was prepared.
-

@@ -9,4 +9,3 @@
 7. Mark the managed job `FAILED` or `CRASHED`; emit one notification to Telegram topic 2922.
 
 Rollback trigger: any failed mandatory check or unverified terminal/delivery behavior.
-

@@ -33,4 +33,3 @@
 - Production, Reg.ru, DNS и Synology не изменялись.
 - Deprecated Alpha-терминология не исправлялась в рамках baseline; она вынесена в отдельный будущий пакет.
 - Remote на Synology не создавался: для root-level изменений NAS требуется отдельное явное разрешение.
-

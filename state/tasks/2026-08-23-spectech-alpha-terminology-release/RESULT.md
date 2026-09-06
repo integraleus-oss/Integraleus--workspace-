@@ -8,4 +8,3 @@
 - `alpha.hmi.charts`: present.
 - `Alpha.Trends` and `Alpha.Alarms 3.30`: absent from the public target.
 - `/lk/**`, DNS, WordPress and other production files were not changed.
-

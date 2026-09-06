@@ -23,4 +23,3 @@
 Commit monorepo: `e40722b Replace deprecated Alpha alarms and trends names`.
 
 Production не изменялся. Для публикации требуется отдельное подтверждение release.
-

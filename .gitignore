@@ -51,6 +51,8 @@ docs/tabler-icons-*.zip
 # Ephemeral execution-supervisor runtime state
 /state/tasks/managed-admission/
 /state/topics/
+/state/tasks/**/outbox.jsonl
+/state/tasks/**/notification-outbox.jsonl
 
 # Local Blender/hozblok working assets and generated prototypes
 /hozblok-3d-exact.mjs
@@ -63,6 +65,10 @@ docs/tabler-icons-*.zip
 /state/tasks/2026-08-15-hozblok-blender/hozblok_furnished.blend
 /state/tasks/2026-08-15-hozblok-blender/hozblok_furnished_wall_views.blend
 /state/tasks/2026-08-15-hozblok-blender/hozblok_photoreal_high_axono.blend
+/state/tasks/2026-08-15-hozblok-blender/hozblok_realistic_bicycles.blend
+/state/tasks/2026-08-15-hozblok-blender/hozblok_interactive.glb
+/state/tasks/2026-08-15-hozblok-blender/hozblok_realistic_assets.blend
+/state/tasks/2026-08-15-hozblok-blender/assets/carbon_frame_bike/CarbonFrameBike.glb
 calc_log.txt
 work_summary.md
 

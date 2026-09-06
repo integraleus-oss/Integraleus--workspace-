@@ -98,4 +98,3 @@
 3. Провести reconciliation 48 локальных изменений `specialtechnology.ru` с production.
 4. Поднять локальный WordPress и тестовый сценарий «один материал → два preview».
 5. Не менять Reg.ru, DNS, Synology и production до отдельного согласования.
-
