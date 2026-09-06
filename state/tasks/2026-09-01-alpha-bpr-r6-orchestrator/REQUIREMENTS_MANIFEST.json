@@ -1,0 +1,61 @@
+{
+  "document_type": "requirements_manifest",
+  "schema_version": "1.0.0",
+  "manifest_id": "alpha-bpr-r6-orchestrator",
+  "revision": 1,
+  "previous_manifest_digest": null,
+  "original_brief": "Complete the existing Alpha BPR R6 recipe-to-master-data-version binding in the isolated worktree using the current partial R6 implementation as the starting point. Persist and bind immutable ontology evidence to the governed baseline and recipe pin without changing existing frozen canonical baseline or set bytes. Make lifecycle compatibility and ontology checks transactional and fail closed, with auditable rejected attempts. Add Draft-only exact re-pin preview and impact diff with optimistic concurrency and no silent baseline substitution. Complete the API/HMI projection, remove only the deprecated POST /publish alias, and preserve governed POST /make-effective. Add focused domain, PostgreSQL API/migration, authorization, negative, and UI tests; finish with build, focused tests, diff/name/secret checks, and independent Standards plus Spec review. A temporary coordinator-created seed commit may represent the pre-existing partial R6 state only inside the isolated worktree; the orchestrated cycle must not create further commits, transfer, push, deploy, modify production/staging/working databases or runtimes, access Synology, or change files outside the allowlist.\n",
+  "original_brief_digest": "sha256:d4557d8c0d95dcd20849b1cf536579ca9a08fbc19d2d384f53fccf7d0b2f7da2",
+  "requirements": [
+    {
+      "requirement_id": "R01",
+      "original_text": "Complete the existing Alpha BPR R6 recipe-to-master-data-version binding in the isolated worktree using the current partial R6 implementation as the starting point.",
+      "original_text_digest": "sha256:205ff6940f4b259bd61e694686b5e1097a29ce153903d3557cb76b6c2797478b",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R02",
+      "original_text": "Persist and bind immutable ontology evidence to the governed baseline and recipe pin without changing existing frozen canonical baseline or set bytes.",
+      "original_text_digest": "sha256:0bd3c7587ebbd94509b09a49319219b581a24d056bec03e9aadea2fabf59f77e",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R03",
+      "original_text": "Make lifecycle compatibility and ontology checks transactional and fail closed, with auditable rejected attempts.",
+      "original_text_digest": "sha256:9a16d5c44c1a291dde9bdf9613b8c13a1aeefa771c51192f4883a3dbcc83fbbd",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R04",
+      "original_text": "Add Draft-only exact re-pin preview and impact diff with optimistic concurrency and no silent baseline substitution.",
+      "original_text_digest": "sha256:582d67743c8389fe6ac5184ff1fb1825f7d7babc7df69975718824751d3b223f",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R05",
+      "original_text": "Complete the API/HMI projection, remove only the deprecated POST /publish alias, and preserve governed POST /make-effective.",
+      "original_text_digest": "sha256:88efe86cb1a8d1b900ce30e9a2da38122c239afaabc41383c162beb54a8ddecd",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R06",
+      "original_text": "Add focused domain, PostgreSQL API/migration, authorization, negative, and UI tests; finish with build, focused tests, diff/name/secret checks, and independent Standards plus Spec review.",
+      "original_text_digest": "sha256:d6649064ec783d3c75135bca097d3a8f34b52efcbb40358735caf348768fe950",
+      "state": "accepted",
+      "owner_disposition": null
+    },
+    {
+      "requirement_id": "R07",
+      "original_text": "A temporary coordinator-created seed commit may represent the pre-existing partial R6 state only inside the isolated worktree; the orchestrated cycle must not create further commits, transfer, push, deploy, modify production/staging/working databases or runtimes, access Synology, or change files outside the allowlist.",
+      "original_text_digest": "sha256:11ed1cc35224d92154a81af59bb1e7b8284174558c39dc3bb3455a06e7884b5e",
+      "state": "accepted",
+      "owner_disposition": null
+    }
+  ],
+  "immutable_core_digest": "sha256:ae8a850d057f3785a49a2e1a4e57b56ddb78f980367882c8508d9c49bc646cd4"
+}

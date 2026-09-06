@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "runId": "2c39eb09048a4f3785d4ea3a6cee831c",
+  "status": "CRASHED",
+  "startedAt": "2026-09-01T16:48:58+03:00",
+  "lastVerified": "2026-09-01T17:08:58+03:00",
+  "finishedAt": "2026-09-01T17:08:58+03:00",
+  "pid": 4105190,
+  "exitCode": 4,
+  "command": [
+    "python3",
+    "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-08-12-orchestrator-integration/production_cycle_cli.py",
+    "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/PRODUCTION_TASK_R3.json",
+    "--controlled-manual",
+    "--review-profile",
+    "standard"
+  ],
+  "timeoutSeconds": 4200.0,
+  "evidencePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/EVIDENCE_R3.md",
+  "statePath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/execution-supervisor-state-r3.json",
+  "terminalEvidencePath": null,
+  "outboxPath": "/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/notification-outbox-r3.jsonl",
+  "notificationId": "exec-2c39eb09048a4f3785d4ea3a6cee831c-crashed",
+  "notificationDelivered": false,
+  "owner": "main",
+  "flowId": "d916302d-2d2d-4e2d-8478-a6c8ea55b263",
+  "disablePath": "SIGINT or terminate foreground supervisor",
+  "sessionKey": "agent:main:telegram:group:-1004417478336:topic:14"
+}

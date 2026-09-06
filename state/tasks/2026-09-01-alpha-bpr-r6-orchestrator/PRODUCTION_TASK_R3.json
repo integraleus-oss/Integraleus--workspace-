@@ -1,0 +1,75 @@
+{
+  "document_type": "production_cycle_task",
+  "schema_version": "1.4.0",
+  "project_root": "/home/stanislav/agent-runs/orchestrator-worktrees/alpha-bpr-r6-continuation-r3",
+  "run_root": "/home/stanislav/agent-runs/orchestrator-worktrees/alpha-bpr-r6-continuation-run-r3",
+  "codex_add_dirs": ["/tmp/alpha-bpr-r6-orchestrator-artifacts"],
+  "codex_timeout_seconds": 1200,
+  "claude_timeout_seconds": 1200,
+  "task_note": "IMPLEMENTATION_TASK.md",
+  "original_brief": "ORIGINAL_BRIEF.txt",
+  "original_brief_digest": "sha256:d4557d8c0d95dcd20849b1cf536579ca9a08fbc19d2d384f53fccf7d0b2f7da2",
+  "requirements_manifest": "REQUIREMENTS_MANIFEST.json",
+  "previous_requirements_manifest": null,
+  "requirements_specification": "REQUIREMENTS_SPECIFICATION.json",
+  "requirements_task_map": "REQUIREMENTS_TASK_MAP.json",
+  "control_mode": "manual",
+  "depth": "strict",
+  "builder": {
+    "task_id": "alpha-bpr-r6-continuation-r3",
+    "repo_id": "alpha-bpr",
+    "allowed_paths": [
+      "src/AlphaBpr.Api/MasterData/MasterDataOntologyEvidenceCodec.cs",
+      "src/AlphaBpr.Api/Ontology/OntologyValidationService.cs",
+      "src/AlphaBpr.Api/Program.cs",
+      "src/AlphaBpr.Api/Recipes/RecipeEndpoints.cs",
+      "src/AlphaBpr.Api/Recipes/RecipeMasterDataCompatibilityService.cs",
+      "src/AlphaBpr.Api/wwwroot/master-data/app.css",
+      "src/AlphaBpr.Api/wwwroot/master-data/app.js",
+      "src/AlphaBpr.Api/wwwroot/master-data/index.html",
+      "src/AlphaBpr.Domain/MasterData/MasterDataOntologyEvidence.cs",
+      "src/AlphaBpr.Domain/Recipes/Recipe.cs",
+      "src/AlphaBpr.Domain/Recipes/RecipeMasterDataPin.cs",
+      "src/AlphaBpr.Infrastructure/Persistence/AlphaBprDbContext.cs",
+      "src/AlphaBpr.Infrastructure/Persistence/Migrations/20260831064832_RecipeMasterDataPinning.cs",
+      "src/AlphaBpr.Infrastructure/Persistence/Migrations/20260831064832_RecipeMasterDataPinning.Designer.cs",
+      "src/AlphaBpr.Infrastructure/Persistence/Migrations/AlphaBprDbContextModelSnapshot.cs",
+      "tests/AlphaBpr.IntegrationTests/BprApiGovernedMasterDataTransitionTests.cs",
+      "tests/AlphaBpr.IntegrationTests/BprApiRecipeMasterDataPinningTests.cs",
+      "tests/AlphaBpr.IntegrationTests/BprApiRecipeV2Tests.cs",
+      "tests/AlphaBpr.IntegrationTests/BprGovernedMasterDataUiTests.cs",
+      "tests/AlphaBpr.IntegrationTests/MasterDataOntologyEvidenceCodecTests.cs",
+      "tests/AlphaBpr.Tests/Recipes/RecipeTests.cs"
+    ],
+    "gates": [
+      {"id":"build","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh build"]},
+      {"id":"recipe-unit","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh unit"]},
+      {"id":"r6-integration","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh integration"]},
+      {"id":"deprecated-names","argv":["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh names"]},
+      {"id":"diff-check","argv":["git","diff","--check"]}
+    ],
+    "gate_timeout_seconds": 900,
+    "acceptance_criteria": [
+      {"id":"AC-1","statement":"The partial R6 implementation is completed in the isolated worktree only.","requirement_ids":["R01"]},
+      {"id":"AC-2","statement":"Exact immutable ontology evidence is persisted and pinned without changing frozen baseline/set canonical bytes.","requirement_ids":["R02"]},
+      {"id":"AC-3","statement":"Lifecycle gates are transactional, fail closed and audit rejected attempts.","requirement_ids":["R03"]},
+      {"id":"AC-4","statement":"Draft re-pin is explicit, preview-bound, impact-aware and concurrency protected.","requirement_ids":["R04"]},
+      {"id":"AC-5","statement":"API/HMI pin state is actionable, POST /publish is absent and POST /make-effective remains governed.","requirement_ids":["R05"]},
+      {"id":"AC-6","statement":"Build, focused tests, hygiene gates and independent Standards plus Spec review pass.","requirement_ids":["R06"]},
+      {"id":"AC-7","statement":"Only allowlisted files change and no commit, transfer, push, deploy, external DB/runtime or Synology action occurs.","requirement_ids":["R07"]}
+    ],
+    "review_instructions": "REVIEW_INSTRUCTIONS.md",
+    "policy_fixture": "POLICY.json",
+    "review_verdict": "review-verdict.json"
+  },
+  "blind_acceptance": {
+    "timeout_seconds": 900,
+    "verification_commands": [
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh build"],
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh unit"],
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh integration"],
+      ["bash","-lc","/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-alpha-bpr-r6-orchestrator/DOTNET_HARNESS_R3.sh names"],
+      ["git","diff","--check"]
+    ]
+  }
+}

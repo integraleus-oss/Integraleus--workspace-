@@ -1,0 +1,9 @@
+{"document_type":"requirements_specification","schema_version":"1.0.0","manifest_digest":"sha256:ae8a850d057f3785a49a2e1a4e57b56ddb78f980367882c8508d9c49bc646cd4","requirements":[
+  {"requirement_id":"R01","specification":"Complete the partial R6 implementation in one isolated controlled-manual worktree."},
+  {"requirement_id":"R02","specification":"Persist immutable ontology evidence and bind its exact identity/hash to governed baseline and recipe provenance without altering frozen canonical bytes."},
+  {"requirement_id":"R03","specification":"Lifecycle compatibility and ontology checks are transactional, fail closed, and leave durable audit evidence for rejection."},
+  {"requirement_id":"R04","specification":"Draft-only re-pin uses an exact preview-bound impact diff, optimistic concurrency, and never silently substitutes a baseline."},
+  {"requirement_id":"R05","specification":"API/HMI exposes actionable pin and compatibility state; deprecated POST /publish is removed and POST /make-effective remains governed."},
+  {"requirement_id":"R06","specification":"Focused domain, PostgreSQL API/migration, authorization, negative and UI tests plus build and hygiene gates pass before independent two-axis review."},
+  {"requirement_id":"R07","specification":"Only the documented coordinator seed commit exists in the isolated worktree; the cycle makes no further commit, transfer, push, deploy, external database/runtime, Synology, or out-of-allowlist mutation."}
+]}
