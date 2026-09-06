@@ -39,7 +39,7 @@ The three non-state Markdown whitespace files remain outside this scoped batch.
 - [x] Normalize whitespace in the nine authorized state files
 - [x] Verify no other dirty state path changed
 - [x] Commit the scoped cleanup
-- [ ] Repeat the complete pre-push audit
+- [x] Repeat the complete pre-push audit
 
 ## Stop conditions
 
