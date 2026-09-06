@@ -1,8 +1,12 @@
 # Evidence: Orchestrator proof chain and controlled OpenClaw pilot adapter
 
-Status: active
+Status: BLOCKED
 Date: 2026-08-16
 Task packet: `state/tasks/2026-08-16-orchestrator-proof-chain/TASK_PACKET.md`
+
+Execution-truth audit 2026-09-01: no live process or managed job exists. The
+document's own external-authorization blocker remains unresolved; it is not an
+active execution.
 
 ## Baseline
 

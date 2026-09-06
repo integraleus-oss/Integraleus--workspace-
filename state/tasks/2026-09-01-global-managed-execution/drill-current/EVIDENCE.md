@@ -1,13 +1,6 @@
 # Execution Evidence
 Status: SUCCEEDED
 
-
-
-
-
-
-
-
 ## Execution Supervisor
 
 - Run ID: `f50397e9141b4de792e2376f809ea1c6`
@@ -20,3 +13,5 @@ Status: SUCCEEDED
 - State file: `/home/stanislav/.openclaw/workspace/agents/main/state/tasks/2026-09-01-global-managed-execution/drill-current/execution-supervisor-state.json`
 - Notification ID: `exec-f50397e9141b4de792e2376f809ea1c6-succeeded`
 - Notification delivered: `True`
+
+## /Execution Supervisor
