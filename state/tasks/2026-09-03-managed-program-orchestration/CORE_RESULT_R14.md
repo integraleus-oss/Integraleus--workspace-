@@ -1,0 +1,37 @@
+I read all four files. Below are the defects I can substantiate.
+
+## HIGH
+
+**1. `scripts/managed-agent-runner.mjs:114` and `:136` — the "independent" planner and plan reviewer use non-unique session keys.**
+Session keys are `${session-key}:planner` and `${session-key}:plan-review`, while the terminal reviewers correctly get a per-run unique key (`:review:${index+1}:${randomUUID()}`, line 205). Because managed runs are retried under the same `--session-key`, run 2's plan-review agent resumes the session that already contains its own run-1 reasoning and verdict on a near-identical plan. Failure scenario: planner emits a narrow plan → reviewer FAILs it (exit 5, line 140) → supervisor retries → the same `:plan-review` session now re-reads a lightly-edited plan with its prior critique in context and rubber-stamps it. Plan independence — the property that stops the objective from being silently narrowed — is not guaranteed across retries.
+
+**2. `scripts/managed-agent-runner.mjs:165` contradicts `:80` and `scripts/managed-outcome-contract.mjs:11-12` — a genuine external blocker can be unreportable.**
+The slice prompt tells the model "blocker evidence uses the same file/command objects", but `evidenceErrors` rejects any `kind !== "file"` ("unsupported evidence kind", line 80) and `validEvidence` only accepts `kind === "file"`. A model that follows the instruction and emits a `command` blocker object gets its BLOCKED outcome rejected; since rejected outcomes only produce more CONTINUE slices, the run exhausts its budget and terminates as `terminalStatus: "FAILED"` at line 226 rather than BLOCKED. This directly undermines "BLOCKED only for a genuine external dependency" from the other side: genuine external blockers can be lost.
+
+**3. `scripts/managed-agent-runner.mjs:76-77` — the two checks that actually resist false success have no test.**
+`evidence predates this managed run` (freshness, line 76) and `evidence is not bound to this managed run` (run-token binding, line 77) are the anti-replay core. The fake agent in `managed-agent-runner.test.mjs:57-58` unconditionally writes fresh files containing the run token, so neither branch is ever exercised, nor is the empty-file branch (line 75). A regression that drops the `mtimeMs`/token comparison keeps the entire suite green. The stale-`sliceToken` guard (line 181) and a malformed (non-JSON) outcome are likewise untested — `FAKE_SKIP_OUTCOME` (test:102) only covers a *missing* file.
+
+**4. `scripts/managed-agent-runner.mjs:105`, `:110` — no test asserts the supervisor terminal capability is withheld from the model.**
+The nonce is protected by exactly two lines: `closeSync(terminalFd)` (105) and `delete childEnv.MANAGED_TERMINAL_FD` (110). The fake openclaw (`managed-agent-runner.test.mjs:45-65`) never inspects its environment or attempts `readFileSync(3)`. "No secret exposed to the model" is an explicit acceptance property with zero coverage; deleting either line passes CI. (The implementation itself is correct as written — the result file carrying the nonce is unlinked at line 86 and only rewritten after the last agent has exited, so the nonce is never on disk while a model process runs.)
+
+**5. `scripts/managed-agent-runner.mjs:117-126` — the planner-failure path is untested and the plan file is never cleared beforehand.**
+Unlike `planReviewPath` (explicitly unlinked at line 134), `planPath` (line 100) is never removed before planning. A stale `*.locked-plan.json` from a prior run is therefore the realistic input, and the only thing rejecting it is the `candidate?.planToken === planToken` compare at line 117 — which no test exercises. The whole exit-5 "planning did not produce a valid complete plan" branch is dead in the suite because the fake always writes a valid plan (test:49). Note also that line 119-120 accepts empty-string `id`/`title`, which then deadlocks every downstream slice into FAILED via `planErrors`.
+
+**6. `scripts/managed-agent-runner.mjs:163` — objective completeness has no machine-checkable anchor.**
+"Commands are never executed from the model-authored contract", and the runner never executes any test, lint, or gate itself. Every structural check (workspace containment, distinctness, hash, freshness, token) is satisfiable by a cooperating model writing two small files containing the run token. With a minimal locked plan (1 package, 1 gate), SUCCEEDED reduces entirely to two same-agent LLM reviewers. The suite's own happy path demonstrates this exact shape: `managed-agent-runner.test.mjs:49` plans one package and one gate, `:57-58` writes two ~12-byte files, and `:82` yields SUCCEEDED. Nothing structural prevents partial work from producing SUCCEEDED (TASK_PACKET.md:26) — only reviewer diligence does.
+
+**7. `state/tasks/2026-09-03-managed-program-orchestration/TASK_PACKET.md:3` vs `:43` — the packet's own record says the objective is not complete.**
+Status reads `RUNNING_R14_COMPLETION`, but the gate at line 43 still reads "R12 core and runtime reviews both returned FAIL. Activation remains forbidden until the HIGH findings are fixed, tests pass, and both reviews return PASS on a fresh revision." All nine acceptance boxes (lines 26-34) are unchecked, including "Independent Standards and Spec reviews complete before activation" (line 34). There is no durable record that the R12 HIGH findings were fixed or that R13/R14 reviews ran. By the packet's own terms this work is not objectively complete.
+
+## Lower severity, worth noting
+
+- `managed-agent-runner.mjs:182` — the "slice 1 must be CONTINUE" guard is bypassed when slice 1 exits nonzero: line 187 discards that slice's `validationErrors` and line 188 `continue`s, so slice 2 can return SUCCEEDED as the first productive slice.
+- `managed-outcome-contract.mjs:61-67` — `terminalStatus()` is exported and returns SUCCEEDED from structure alone; it applies none of the freshness/workspace/token checks. Any other consumer calling it directly would accept forged evidence. (I could not check consumers; out of the inspection scope you set.)
+- `managed-agent-runner.mjs:123,129,140,211,226` — `contractValidated: true` is written unconditionally, including on paths where no contract was ever validated (planning failure, plan-review rejection). It is a constant, so it must not be treated as a signal by the supervisor.
+- BLOCKED is the structurally cheapest terminal exit: BLOCKED packages require no evidence (contract:26 only constrains PASSED) and gates may stay PENDING, so one token-bearing file plus `external: true` satisfies everything. It is not a false *success*, but it is the weakest guarded path.
+
+## Verdict
+
+**FAIL**
+
+The pipeline is well-constructed in its ordering (locked plan → independent plan review → bounded slices with plan-digest re-checks → evidence validation → dual terminal review), it fails closed on malformed output and on crashes, continuation is bounded on all three axes (`maxSlices`, deadline, 3 consecutive failures), and the terminal capability is genuinely kept away from the model. But independence is not run-unique for two of the four review roles, a real external blocker can be silently converted into FAILED by the file/command contradiction, and the specific checks that defeat the ZSR failure mode — freshness, run-token binding, capability isolation, planner rejection — are exactly the ones with no test coverage. Combined with the packet's own unchecked acceptance list and outstanding FAIL gate, this is not ready to be called complete.
