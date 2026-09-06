@@ -1,6 +1,6 @@
 ---
 name: "safe-repository-cleanup"
-description: "Prepare a sanitized publication branch through narrow reviewed commits and exact final-tip audit."
+description: "Prepare, publish, and verify a sanitized branch with reversible evidence and messaging boundaries."
 ---
 
 # Safe Repository Cleanup
@@ -27,3 +27,5 @@ Stop before moving a path when its ownership, retention value, symlink status, o
 12. When the owner authorizes local ref replacement, revalidate the exact old and sanitized commit IDs and compare every old-to-new tree-change path with the current staged, unstaged, and untracked path union; stop on any overlap. For a checked-out dirty branch, move to the sanitized commit with `git reset --keep` rather than changing the ref alone, so the index and worktree follow intentional rewritten-tree deletions while unrelated dirty state remains intact; verify the resulting ref, dirty path/content equivalence, filtered-path absence, unchanged remote configuration, and rollback bundle. Detect files modified after the preservation snapshot and capture a supplemental post-replacement snapshot with isolated restore verification before declaring completion, completing the step when all authorized refs and current dirty state are reproducible without any push, replay, resend, prune, or garbage collection.
 
 13. After local ref replacement, prepare only the publication branch: partition dirty paths into narrow semantic batches, restore accidental or whitespace-only edits, and keep backups plus notification/outbox artifacts explicitly unstaged. Replace cross-task test dependencies with tracked fixtures in the owning test suite, prove the original branch-specific counts and the publication branch's complete suites, commit each reviewed batch separately, and audit the final closeout commit rather than the pre-closeout tip, completing the step when only declared exclusions remain dirty and no push, replay, or resend occurred.
+
+14. After publishing the sanitized branch, verify the live remote SHA, remote-tracking SHA, publication-branch SHA, absence of unintended remote service branches, and retention of the hashed rollback bundle before changing status records. Update durable state and audit evidence from blocked-to-published in a separate closeout commit, preserve excluded backup and notification/outbox paths unstaged, then publish that closeout only as a normal exact-lease fast-forward and repeat remote-SHA verification, completing the step when the published state, recorded evidence, and local boundary agree without replay, resend, prune, or garbage collection.
