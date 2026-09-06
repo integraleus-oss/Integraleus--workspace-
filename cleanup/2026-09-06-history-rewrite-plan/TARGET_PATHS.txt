@@ -1,0 +1,7 @@
+state/tasks/2026-08-15-hozblok-blender/
+state/tasks/2026-09-01-execution-supervisor/drill/notification-outbox.jsonl
+state/tasks/2026-09-01-execution-supervisor/live-taskflow-auto/notification-outbox.jsonl
+state/tasks/2026-09-01-execution-supervisor/live-taskflow-drill/notification-outbox.jsonl
+state/tasks/2026-09-01-global-managed-execution/drill-alpha-bpr/outbox.jsonl
+state/tasks/2026-09-01-global-managed-execution/drill-current/outbox.jsonl
+state/tasks/2026-09-01-global-managed-execution/drill-private/outbox.jsonl
