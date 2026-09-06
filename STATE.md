@@ -524,3 +524,11 @@ _Обновляется из любой сессии после значимых
 - Gateway restart recovery successfully resumed the interrupted Telegram source session without another user message; Gateway and Telegram 2/2 are healthy.
 - Runner, supervisor 22/22, TaskFlow integration, syntax, diff, and plugin-doctor gates pass.
 - Status is `BLOCKED_ON_OWNER_LIVE_DRILL`, not `RUNNING`: a fresh authenticated owner message in topic `2922` is required to prove end-to-end dispatch, validated terminal completion, and exactly-once owner notification.
+
+## Workspace sanitized-history migration — 2026-09-06
+
+- Accepted under `D-2026-09-06-03` as the current local Git-history baseline.
+- Local refs now point to sanitized commits: `main` `3ba0e3e7`, `managed-program-r20-isolated` `1913397c`, and `orchestrator-review-loop-reduction` `56ed73b1`.
+- Seven authorized hozblok/outbox path rules have zero reachable hits from those heads; `main` is 0 behind / 201 ahead of preserved `origin/main`.
+- Dirty worktree state and rollback were preserved and restoration-tested. Evidence: `cleanup/2026-09-06-history-rewrite-plan/EVIDENCE.md` and `cleanup/2026-09-06-dirty-worktree-migration/EVIDENCE.md`.
+- Keep the rollback bundle and cleanup archives. Push/force-push remains blocked pending separate owner authorization, a fresh pre-push audit, and exact live remote-tip verification. Replay/resend remains prohibited.
