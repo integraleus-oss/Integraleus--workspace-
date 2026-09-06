@@ -102,3 +102,52 @@ collection was performed. Before requesting push authorization:
    batches, then rerun this audit against the new exact tip;
 4. re-query the live remote tip and use an exact force-with-lease only after a
    separate owner authorization.
+
+## Main publication-preparation closeout
+
+The owner continued the cleanup with main as the only publication target.
+Five narrow commits were created:
+
+- 68370be0 — remove the three final-tip blank-EOF findings;
+- d4486aa8 — make the review verdict fixture self-contained;
+- 491e8292 — record sanitized-history migration governance and evidence;
+- eb24f02c — reconcile supervisor execution evidence;
+- 5e236891 — add the Alpha BPR R6 orchestrator evidence corpus.
+
+Three accidental empty-line-only changes in execution-supervisor evidence were
+rejected rather than committed. The backup directory and
+notification-outbox-r3.jsonl remain deliberately untracked and were not staged,
+committed, replayed, or sent.
+
+Verification before closeout:
+
+- review-loop service worktree: 152/152 integration and 87/87 core PASS;
+- main with the self-contained fixture: 186/186 integration and 87/87 core
+  PASS (the main line contains 34 additional integration regressions);
+- nine changed JSON documents parsed;
+- three changed shell scripts passed bash -n;
+- dirty-path high-confidence secret-shape counts were all zero;
+- git diff --check passed.
+
+Fresh range audit at 5e2368919c9151bb4cc4c65ebb02f48322614a00:
+
+- live and remote-tracking origin/main both remained
+  6c1dddb41f2a728a2b978cfbcb633d3acd50ed65;
+- divergence 0 behind / 206 ahead; 206 first-parent commits and zero merges;
+- 3,243 rename-aware changed paths;
+- 1,529 transfer blobs / 21,821,193 bytes; largest 325,914 bytes and none at
+  least 1 MiB;
+- authorized target paths 0/7 and target blobs 0/32 reachable from main;
+- queue/outbox paths in the transfer: 0;
+- added-line private-key, GitHub, AWS, Telegram, and JWT signatures: 0;
+- three credential-URL heuristic matches remain the already-classified
+  disposable loopback PostgreSQL fixtures in
+  projects/openclaw-shared-memory/docs/PHASE2_PREP_EVIDENCE.md;
+- final-tip diff whitespace findings: 0;
+- range-wide whitespace findings: the accepted historical debt of 70 findings
+  across 12 files (60 trailing whitespace and 10 blank EOF);
+- git fsck --full: PASS with no output.
+
+Verdict: main is prepared for a separate push-authorization decision.
+No push, force-push, force-with-lease dry run, replay, resend, prune, or garbage
+collection was performed.

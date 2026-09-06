@@ -31,10 +31,10 @@
 
 ### Planned semantic batches
 
-- [ ] Final-tip hygiene: remove the three known blank lines at EOF in `projects/openclaw-shared-memory/docs/PHASE4_*.md`.
-- [ ] Sanitized-history governance: review and commit the cleanup evidence, decision/state records, and safe-cleanup procedure updates.
-- [ ] Supervisor/orchestrator evidence: review changed execution evidence/state separately from product code.
-- [ ] Alpha BPR R6 orchestrator corpus: review the new task corpus while excluding `notification-outbox-r3.jsonl`.
-- [ ] Backup boundary: leave `state/tasks/2026-09-04-orchestrator-live-recovery/backup/` uncommitted.
-- [ ] Review-loop integration: make the fixture self-contained and prove 152/152 plus 87/87 before bringing the reviewed change to `main`.
-- [ ] Run the complete pre-push audit against the final exact `main` tip and stop before push.
+- [x] Final-tip hygiene: remove the three known blank lines at EOF in `projects/openclaw-shared-memory/docs/PHASE4_*.md`.
+- [x] Sanitized-history governance: review and commit the cleanup evidence, decision/state records, and safe-cleanup procedure updates.
+- [x] Supervisor/orchestrator evidence: review changed execution evidence/state separately from product code.
+- [x] Alpha BPR R6 orchestrator corpus: review the new task corpus while excluding `notification-outbox-r3.jsonl`.
+- [x] Backup boundary: leave `state/tasks/2026-09-04-orchestrator-live-recovery/backup/` uncommitted.
+- [x] Review-loop integration: make the fixture self-contained and prove 152/152 plus 87/87 before bringing the reviewed change to `main`.
+- [x] Run the complete pre-push audit against the final exact `main` tip and stop before push.
