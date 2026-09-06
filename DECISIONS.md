@@ -872,3 +872,12 @@ DATE: 2026-09-05
 TITLE: Forbid execution claims before durable live dispatch
 CONTENT: A message such as “продолжу”, “запустил”, or status `RUNNING` is allowed only after a durable task artifact, managed job/session ID, verified live process, and fresh heartbeat evidence exist. Work promised beyond the current turn must be dispatched before the reply and must carry owner context, timeout, failure mode, notification target, and disable path. If any proof is absent, use `PLANNED`, `STALE`, `BLOCKED`, or a truthful terminal state. Gateway/restart recovery may resume only durable executions and must never infer a running task from conversational intent alone.
 RATIONALE: Stanislav explicitly approved the proposed Memory Candidate and ordered implementation in Telegram topic `HOME:2922` on 2026-09-05 after the 23:29 continuation promise stopped without a live executor.
+
+---
+### ID: D-2026-09-06-01
+TYPE: DECISION
+STATUS: ACTIVE
+DATE: 2026-09-06
+TITLE: Define НППА as a federated interoperability ecosystem
+CONTENT: Treat НППА as a federated national ecosystem of demonstrable interoperability and replaceability, not as one product, mandatory technology stack, runtime, or universal information metamodel. Select mature domain specifications according to the industry, object class, and use case; use additional models only for aspects the primary specification does not cover. The НППА-specific core is governance of stable identifiers, mappings, versions, permitted extensions, application and conformance profiles, portable engineering artifacts, and Vendor Exit Tests. The asset owner controls model instances, identifiers, mappings, data, configurations, exports, and recovery artifacts, while vendors may retain their runtime, compiler, libraries, and implementation IP. OPC UA, MQTT/Sparkplug, IEC 61131-3, open source, or any certification label alone does not prove vendor independence. Author-defined VLI thresholds, migration times, savings percentages, and other KPI targets remain hypotheses until a documented method, baseline, and pilot calibration exist. Water-utility models and KPIs are not part of this general baseline and belong only in a separate sector adaptation.
+RATIONALE: Stanislav explicitly approved the Memory Candidate in Telegram topic `HOME:1751` on 2026-09-06 after requesting that the conclusion be abstracted from the water-utility case.
