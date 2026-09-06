@@ -20,7 +20,10 @@ or resend messages as part of repository cleanup.
 - [x] Capture a pre-cleanup system/repository snapshot
 - [x] Archive batch 1 proven generated/temp candidates
 - [x] Verify batch 1 archive paths and checksums before removing originals
-- [ ] Recheck worktree and document the exact retained boundary
+- [x] Recheck worktree and document the exact retained boundary
+
+Next review slice: AGENTS/skill migration and transactional updater. Historical
+execution-supervisor state/outbox files require a separate retention decision.
 
 ## Safety boundary
 
