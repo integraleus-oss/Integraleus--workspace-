@@ -49,3 +49,14 @@ The remaining changes are not proven disposable. They include the AGENTS/skill
 migration, historical execution-supervisor state/evidence, multiple durable task
 records, the execution-supervisor dashboard source, and update tooling. They
 remain untouched for semantic review rather than being archived blindly.
+
+## Next package — transactional updater
+
+- Pre-review HEAD: `9fd55a812a5d2186a4f995471085e8ee414c1010`.
+- Branch divergence before the package: local 177 ahead / 0 behind.
+- Candidate classification: updater scripts and the 2026-09-06 update task are
+  durable source/evidence; old updater/drill material is ambiguous and remains
+  untouched.
+- Syntax, three regression scenarios, config validation, backup dry-run, and
+  update dry-run passed.
+- No real update/restart, message replay/resend, SQLite, or queue mutation.
